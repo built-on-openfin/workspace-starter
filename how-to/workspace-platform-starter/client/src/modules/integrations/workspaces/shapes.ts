@@ -3,6 +3,11 @@
  */
 export interface WorkspacesSettings {
 	/**
+	 * Enable favorites, defaults to true.
+	 */
+	favoritesEnabled?: boolean;
+
+	/**
 	 * Images to display.
 	 */
 	images: {

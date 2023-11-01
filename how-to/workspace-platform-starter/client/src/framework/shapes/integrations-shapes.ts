@@ -53,13 +53,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	setSearchQuery?(query: string): Promise<void>;
 
 	/**
-	 * Get the value of a condition.
-	 * @param conditionId The id of the condition.
-	 * @returns True if the condition is set.
-	 */
-	condition?(conditionId: string): Promise<boolean>;
-
-	/**
 	 * Share data.
 	 * @param options The sharing options.
 	 * @returns Nothing.
@@ -141,6 +134,7 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	getSearchResults?(
@@ -150,6 +144,7 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse>;
 
@@ -169,4 +164,44 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 		result: HomeDispatchedSearchResult,
 		lastResponse: HomeSearchListenerResponse
 	): Promise<boolean>;
+}
+
+/**
+ * A request type for the IntegrationsPreferencesEndpoint that sets a preference
+ */
+export interface EndpointIntegrationsPreferencesSetRequest {
+	/**
+	 * The id of the integration.
+	 */
+	id: string;
+
+	/**
+	 * The preferences for the integration.
+	 */
+	payload: {
+		/**
+		 * Should the integration auto start.
+		 */
+		autoStart: boolean;
+	};
+}
+
+/**
+ * A request type for the IntegrationsPreferencesEndpoint that gets the preferences
+ */
+export interface EndpointIntegrationsPreferencesGetRequest {
+	/**
+	 * The id of the integration.
+	 */
+	id: string;
+}
+
+/**
+ * A response type for the IntegrationsPreferencesEndpoint that gets the preferences
+ */
+export interface EndpointIntegrationsPreferencesGetResponse {
+	/**
+	 * Should the integration auto start.
+	 */
+	autoStart: boolean;
 }

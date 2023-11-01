@@ -33,7 +33,6 @@ async function initializeDOM() {
 	appsContainer = document.querySelector('#app-container');
 	backBtn = document.querySelector('#back');
 	launchBtn = document.querySelector('#launch');
-	launchBtn.disabled = true;
 	cancelAppSelectionBtn = document.querySelector('#cancel');
 
 	const data = await fin.me.getOptions();
@@ -42,7 +41,7 @@ async function initializeDOM() {
 		apps = data.customData.apps;
 		intent = data.customData.intent;
 		intents = data.customData.intents;
-		if (data.customData.unregisteredAppId !== undefined) {
+		if (data.customData.unregisteredAppId !== undefined && Array.isArray(apps)) {
 			// this intent picker does not support instances and an unregistered app entry is a placeholder
 			// for any views/windows that register as intent handlers but are not linked to an app
 			apps = apps.filter((app) => app.appId !== data.customData.unregisteredAppId);

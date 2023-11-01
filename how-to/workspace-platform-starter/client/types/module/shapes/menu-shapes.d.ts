@@ -1,5 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type {
+	ContextMenuItemData,
 	CustomActionSpecifier,
 	GlobalContextMenuItemTemplate,
 	GlobalContextMenuOptionType,
@@ -13,7 +14,37 @@ import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-s
 /**
  * A list of modules that provide menu for different locations.
  */
-export type MenusProviderOptions = ModuleList;
+export interface MenusProviderOptions extends ModuleList {
+	/**
+	 * The location of the HTML to use for custom popup page.
+	 * defaults to http://localhost:8080/common/popups/menu/index.html
+	 */
+	popupHtml?: string;
+	/**
+	 * The font size used in the custom popup menu.
+	 * defaults to 12
+	 */
+	menuFontSize?: number;
+	/**
+	 * The width to display the custom popup menu.
+	 * defaults to 200
+	 */
+	menuWidth?: number;
+	/**
+	 * The height of an item in the custom popup menu.
+	 * defaults to 32.
+	 */
+	menuItemHeight?: number;
+	/**
+	 * The height of a separator in the custom popup menu.
+	 * defaults to 16.
+	 */
+	menuItemSeparatorHeight?: number;
+	/**
+	 * Configured a global default for the popup menu style.
+	 */
+	popupMenuStyle?: PopupMenuStyles;
+}
 /**
  * The module definition for menus.
  */
@@ -112,12 +143,40 @@ export interface MenuEntry<T = unknown> extends MenuEntryDynamic<T> {
 	separator?: MenuSeparatorPosition;
 }
 /**
+ * Custom menu type for tray menus.
+ */
+export interface TrayMenuData extends ContextMenuItemData {
+	/**
+	 * Option types for tray.
+	 */
+	type: TrayMenuOptionType;
+}
+/**
+ * Tray context menu types.
+ */
+export declare enum TrayMenuOptionType {
+	/**
+	 * Custom tray menu entry item.
+	 */
+	Custom = "Custom"
+}
+/**
+ * Custom menu template for tray menus.
+ */
+export interface TrayContextMenuTemplate extends OpenFin.MenuItemTemplate {
+	/**
+	 * The tray item data.
+	 */
+	data?: TrayMenuData;
+}
+/**
  * All the types of menu template.
  */
 export type MenuTemplateType =
 	| GlobalContextMenuItemTemplate
 	| PageTabContextMenuItemTemplate
-	| ViewTabContextMenuTemplate;
+	| ViewTabContextMenuTemplate
+	| TrayContextMenuTemplate;
 /**
  * Which options belong to each menu type.
  */
@@ -125,4 +184,50 @@ export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 	? GlobalContextMenuOptionType
 	: T extends PageTabContextMenuItemTemplate
 	? PageTabContextMenuOptionType
-	: ViewTabMenuOptionType;
+	: T extends ViewTabContextMenuTemplate
+	? ViewTabMenuOptionType
+	: TrayMenuOptionType;
+/**
+ * The styles that can be used to display the popup menus.
+ */
+export type PopupMenuStyles = "platform" | "native" | "custom";
+/**
+ * Specialized version of the menu item template with generic data.
+ */
+export type PopupMenuEntry<T = unknown> = Omit<OpenFin.MenuItemTemplate, "data"> & {
+	data?: T;
+};
+/**
+ * The client providing menu methods
+ */
+export interface MenuClient {
+	/**
+	 * Get the centrally configured popup menu style.
+	 * @returns The popup menu style.
+	 */
+	getPopupMenuStyle(): PopupMenuStyles;
+	/**
+	 * Show a custom menu.
+	 * @param position The position to show the menu.
+	 * @param position.x The x position to show the menu.
+	 * @param position.y The y position to show the menu.
+	 * @param parentIdentity The identity of the parent window.
+	 * @param noEntryText The text to display if there are no entries.
+	 * @param menuEntries The menu entries to display.
+	 * @param options The options for displaying the menu.
+	 * @param options.popupMenuStyle Display as native menu or custom popup.
+	 * @returns The menu entry.
+	 */
+	showPopupMenu<T = unknown>(
+		position: {
+			x: number;
+			y: number;
+		},
+		parentIdentity: OpenFin.Identity,
+		noEntryText: string,
+		menuEntries: PopupMenuEntry<T>[],
+		options?: {
+			popupMenuStyle?: PopupMenuStyles;
+		}
+	): Promise<T | undefined>;
+}

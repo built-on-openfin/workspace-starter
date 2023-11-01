@@ -1,19 +1,22 @@
+import { getCurrentSync } from "@openfin/workspace-platform";
 import { getConnectedApps } from "./connections";
 import { addDirectoryEndpoint, getPlatformApps, init as directoryInit } from "./directory";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
-import type { AppFilterOptions, AppProviderOptions, AppsForIntent, PlatformApp } from "./shapes/app-shapes";
+import type { AppFilterOptions, AppProviderOptions, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import type { AppIntents } from "./shapes/fdc3-2-0-shapes";
 import { isEmpty, isNumber, randomUUID } from "./utils";
 
 const logger = createLogger("Apps");
 
-let lastCacheUpdate: number = 0;
 let cachedApps: PlatformApp[] = [];
-let cacheDuration = 0;
+let cacheDuration: number = 0;
+let cacheRetrievalStrategy: "on-demand" | "interval" = "on-demand";
+let lastCacheUpdate: number = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
+let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
 
 /**
  * Initialize the application provider.
@@ -87,6 +90,21 @@ export async function init(
 			cacheDuration += options?.cacheDurationInMinutes * 60 * 1000;
 		}
 		supportedManifestTypes = options?.manifestTypes ?? [];
+
+		cacheRetrievalStrategy = options?.cacheRetrievalStrategy ?? cacheRetrievalStrategy;
+		if (cacheDuration > 0 && cacheRetrievalStrategy === "interval") {
+			let updateInProgress = false;
+			window.setInterval(async () => {
+				if (!updateInProgress) {
+					updateInProgress = true;
+					try {
+						await getEntries();
+					} finally {
+						updateInProgress = false;
+					}
+				}
+			}, cacheDuration);
+		}
 	}
 }
 
@@ -140,32 +158,74 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
  * @returns The app entries.
  */
 async function getEntries(): Promise<PlatformApp[]> {
-	const now = Date.now();
-	if (now - lastCacheUpdate > cacheDuration) {
-		lastCacheUpdate = now;
+	if (isEmpty(getEntriesResolvers)) {
+		let performRequest = true;
+		if (cacheRetrievalStrategy === "on-demand") {
+			performRequest = false;
 
-		const apps: PlatformApp[] = [];
-		try {
-			logger.info("Getting directory apps.");
-			const directoryApps = await getPlatformApps();
-			apps.push(...directoryApps);
-
-			logger.info("Getting connected apps.");
-			const connectedApps = await getConnectedApps();
-			if (connectedApps.length > 0) {
-				logger.info(
-					`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
-				);
-				apps.push(...connectedApps);
+			const now = Date.now();
+			if (now - lastCacheUpdate > cacheDuration) {
+				lastCacheUpdate = now;
+				performRequest = true;
 			}
-		} catch (error) {
-			logger.error("Error fetching apps.", error);
 		}
 
-		cachedApps = await validateEntries(apps);
+		if (performRequest) {
+			getEntriesResolvers = [];
+
+			logger.info("Apps cache expired refreshing");
+
+			const apps: PlatformApp[] = [];
+			try {
+				logger.info("Getting directory apps.");
+				const directoryApps = await getPlatformApps();
+				apps.push(...directoryApps);
+
+				logger.info("Getting connected apps.");
+				const connectedApps = await getConnectedApps();
+				if (connectedApps.length > 0) {
+					logger.info(
+						`Adding ${connectedApps.length} apps from connected apps to the apps list to be validated`
+					);
+					apps.push(...connectedApps);
+				}
+			} catch (error) {
+				logger.error("Error fetching apps.", error);
+			}
+
+			const lastCachedAppsJson = JSON.stringify(cachedApps);
+
+			cachedApps = await validateEntries(apps);
+
+			if (getEntriesResolvers.length > 0) {
+				logger.info("Resolving getEntry promises");
+
+				for (const getEntriesResolver of getEntriesResolvers) {
+					getEntriesResolver(cachedApps);
+				}
+			}
+
+			getEntriesResolvers = undefined;
+
+			const cachedAppJson = JSON.stringify(cachedApps);
+
+			if (cachedAppJson !== lastCachedAppsJson) {
+				const platform = getCurrentSync();
+				await fireLifecycleEvent(platform, "apps-changed");
+			}
+		}
+
+		return cachedApps;
 	}
 
-	return cachedApps;
+	return new Promise<PlatformApp[]>((resolve) => {
+		if (getEntriesResolvers) {
+			logger.info("Storing getEntry resolver");
+			getEntriesResolvers.push(resolve);
+		} else {
+			resolve(cachedApps);
+		}
+	});
 }
 
 /**
@@ -286,140 +346,6 @@ export async function getApp(appId: string): Promise<PlatformApp | undefined> {
 }
 
 /**
- * Get the application that support the requested intent.
- * @param intent The intent the application must support.
- * @returns The list of application that support the intent.
- */
-export async function getAppsByIntent(intent: string): Promise<PlatformApp[]> {
-	const apps = await getApps();
-	return apps.filter((app) => {
-		const listensFor = app.interop?.intents?.listensFor;
-
-		if (isEmpty(listensFor)) {
-			return false;
-		}
-		const intentNames = Object.keys(listensFor);
-		for (const intentName of intentNames) {
-			if (intentName.toLowerCase() === intent.toLowerCase()) {
-				return true;
-			}
-		}
-		return false;
-	});
-}
-
-/**
- * Get an intent and the apps that support it.
- * @param intent The intent to look for.
- * @param contextType Optional context type to look for.
- * @param resultType Optional result type to look for.
- * @returns The intent and its supporting apps if found.
- */
-export async function getIntent(
-	intent: string,
-	contextType?: string,
-	resultType?: string
-): Promise<AppsForIntent | undefined> {
-	const apps = await getApps();
-
-	if (apps.length === 0) {
-		logger.warn("There was no apps returned so we are unable to find apps that support an intent");
-		return;
-	}
-
-	const intentsMap: { [key: string]: AppsForIntent } = {};
-
-	for (const app of apps) {
-		if (app.interop?.intents?.listensFor) {
-			const supportedIntents = Object.keys(app.interop.intents.listensFor);
-			for (const supportedIntent of supportedIntents) {
-				const appIntent = app.interop.intents.listensFor[supportedIntent];
-				const include = appIntentContains(appIntent, contextType, resultType);
-				if (include) {
-					updateAppIntentsMap(intentsMap, supportedIntent, appIntent.displayName, app);
-				}
-			}
-		}
-	}
-
-	const results = Object.values(intentsMap);
-	if (results.length === 0) {
-		logger.info(
-			`No results found for findIntent for intent ${intent} and context ${contextType} and resultType ${resultType}`
-		);
-		return;
-	} else if (results.length === 1) {
-		return results[0];
-	}
-
-	logger.warn(
-		`Received more than one result for findIntent for intent ${intent} and context ${contextType} and resultType ${resultType}. Returning the first entry.`
-	);
-	return results[0];
-}
-
-/**
- * Get the apps that support intents by the context type.
- * @param contextType The context type the app must support.
- * @param resultType The optional result type to match as well.
- * @returns The apps for the specified intent.
- */
-export async function getIntentsByContext(
-	contextType: string,
-	resultType?: string
-): Promise<AppsForIntent[]> {
-	const apps = await getApps();
-
-	if (apps.length === 0) {
-		logger.warn("Unable to get apps so we can not get apps and intents that support a particular context");
-		return [];
-	}
-
-	const intents: { [key: string]: AppsForIntent } = {};
-
-	for (const app of apps) {
-		const listensFor = app.interop?.intents?.listensFor;
-
-		if (!isEmpty(listensFor)) {
-			const supportedIntents = Object.keys(listensFor);
-			for (const supportedIntent of supportedIntents) {
-				const appIntent = listensFor[supportedIntent];
-				const include = appIntentContains(appIntent, contextType, resultType);
-				if (include) {
-					updateAppIntentsMap(intents, supportedIntent, appIntent.displayName, app);
-				}
-			}
-		}
-	}
-
-	return Object.values(intents);
-}
-
-/**
- * Check to see if the supplied appIntent supports the context and result types.
- * @param appIntent The app intent to check.
- * @param contextType The optional context type to look for.
- * @param resultType The optional result type to look for.
- * @returns True if the app intent matches.
- */
-function appIntentContains(
-	appIntent: AppIntents,
-	contextType: string | undefined,
-	resultType: string | undefined
-): boolean {
-	if (!isEmpty(contextType) && !isEmpty(resultType)) {
-		if (!appIntent?.contexts?.includes(contextType) || !appIntent.resultType?.includes(resultType)) {
-			return false;
-		}
-	} else if (!isEmpty(contextType) && !appIntent?.contexts?.includes(contextType)) {
-		return false;
-	} else if (!isEmpty(resultType) && !appIntent?.resultType?.includes(resultType)) {
-		return false;
-	}
-	return true;
-}
-
-/**
  * Do we have the permissions to launch external processes.
  * @returns True if we have permission.
  */
@@ -447,42 +373,12 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 	let canDownloadAppAssets = false;
 
 	try {
-		const canDownloadAppAssetsResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.downloadAsset"
-		);
+		const canDownloadAppAssetsResponse =
+			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
 		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 	} catch (error) {
 		logger.error("Error while querying for System.downloadAsset permission", error);
 	}
 
 	return canDownloadAppAssets;
-}
-
-/**
- * Update the map containing the intent to apps.
- * @param intentsMap The map to update.
- * @param name The name of the intent.
- * @param displayName The Options display name to update with.
- * @param app The application to update.
- */
-function updateAppIntentsMap(
-	intentsMap: {
-		[key: string]: AppsForIntent;
-	},
-	name: string,
-	displayName: string | undefined,
-	app: PlatformApp
-): void {
-	if (isEmpty(intentsMap[name])) {
-		// in a production app you would either need to ensure that every app was populated with the same name & displayName for an intent from a golden source (e.g. intents table) so picking the first entry wouldn't make a difference.
-		// or you could pull in a golden source of intents from a service and then do a lookup using the intent name to get an object with intent name and official display name.
-		intentsMap[name] = {
-			intent: {
-				name,
-				displayName
-			},
-			apps: []
-		};
-	}
-	intentsMap[name].apps.push(app);
 }

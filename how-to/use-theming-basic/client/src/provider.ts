@@ -148,16 +148,18 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 	await Home.show();
 
-	await Notifications.registerPlatform({
-		id: PLATFORM_ID,
-		icon: PLATFORM_ICON,
-		title: PLATFORM_TITLE
+	await Notifications.register({
+		notificationsPlatformOptions: {
+			id: PLATFORM_ID,
+			icon: PLATFORM_ICON,
+			title: PLATFORM_TITLE
+		}
 	});
 
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async (event) => {
 		await Home.deregister(PLATFORM_ID);
-		await Notifications.deregisterPlatform(PLATFORM_ID);
+		await Notifications.deregister(PLATFORM_ID);
 		await fin.Platform.getCurrentSync().quit();
 	});
 }

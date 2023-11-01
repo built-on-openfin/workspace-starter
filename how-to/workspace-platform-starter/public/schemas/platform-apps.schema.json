@@ -238,6 +238,45 @@
 		"ExternalProcessRequestType": {
 			"$ref": "#/definitions/__type_29"
 		},
+		"HostLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to the host of the content",
+			"properties": {
+				"disableMultiplePages": {
+					"description": "Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.",
+					"type": "boolean"
+				},
+				"disableToolbarOptions": {
+					"description": "Should the toolbar options of a window be hidden if they are available?",
+					"type": "boolean"
+				},
+				"hasHeaders": {
+					"description": "Should the header for the content be hidden",
+					"type": "boolean"
+				},
+				"icon": {
+					"description": "The Icon you would prefer the window shows.",
+					"type": "string"
+				},
+				"pageIcon": {
+					"description": "If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?",
+					"type": "string"
+				},
+				"pageTitle": {
+					"description": "If this host supports multiple layouts what should the layout (e.g page) title be?",
+					"type": "string"
+				},
+				"title": {
+					"description": "If specified it indicates a preference to be used by this type of host.",
+					"type": "string"
+				},
+				"url": {
+					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
 		"Identity": {
 			"$ref": "#/definitions/__type"
 		},
@@ -266,6 +305,41 @@
 		},
 		"LaunchExternalProcessListener": {
 			"$ref": "#/definitions/__type_30"
+		},
+		"LaunchPreference": {
+			"additionalProperties": false,
+			"description": "Are there any preferences you would like to apply when launching this application?",
+			"properties": {
+				"bounds": {
+					"additionalProperties": false,
+					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
+					"properties": {
+						"height": {
+							"type": "number"
+						},
+						"width": {
+							"type": "number"
+						}
+					},
+					"required": ["height", "width"],
+					"type": "object"
+				},
+				"defaultCentered": {
+					"description": "Should the launched UI be positioned in the center of the screen?",
+					"type": "boolean"
+				},
+				"options": {
+					"additionalProperties": false,
+					"description": "Are there any app type specific options you would like to apply?",
+					"properties": {
+						"view": {
+							"$ref": "#/definitions/ViewLaunchPreference"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
 		},
 		"MonitorDetails": {
 			"$ref": "#/definitions/__type_27"
@@ -349,6 +423,10 @@
 				"interop": {
 					"$ref": "#/definitions/PlatformAppInterop",
 					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
+				},
+				"launchPreference": {
+					"$ref": "#/definitions/LaunchPreference",
+					"description": "When launching this defined application are there additional preferences the platform\nshould consider?"
 				},
 				"manifest": {
 					"anyOf": [
@@ -515,6 +593,17 @@
 				}
 			},
 			"required": ["edge", "rect"],
+			"type": "object"
+		},
+		"ViewLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to a view",
+			"properties": {
+				"host": {
+					"$ref": "#/definitions/HostLaunchPreference",
+					"description": "If specified it indicates wish to specify specific host settings for this content."
+				}
+			},
 			"type": "object"
 		},
 		"ViewOptions": {

@@ -3,7 +3,7 @@ import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/lo
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { PlatformStorageMetadata } from "workspace-platform-starter/shapes/platform-shapes";
 import type { PlatformStorage } from "workspace-platform-starter/shapes/platform-storage-shapes";
-import { isEmpty } from "../../../framework/utils";
+import { isEmpty } from "workspace-platform-starter/utils";
 import { PlatformLocalStorage } from "./platform-local-storage";
 
 /**

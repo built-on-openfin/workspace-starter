@@ -1,5 +1,4 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-> OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -59,7 +58,15 @@ An app exists within an array that is returned as part of request.
         "src": "http://localhost:8080/common/images/previews/fdc3-workbench.png"
       }
     ],
-    "tags": ["view", "interop", "fdc3", "contact", "instrument"]
+    "tags": ["view", "interop", "fdc3", "contact", "instrument"],
+    "launchPreference": {
+      "bounds": {
+        "height": 500,
+        "width": 500
+      },
+      "defaultCentered": false,
+      "options": {}
+    }
   }
 ]
 ```
@@ -82,6 +89,20 @@ The following field is custom to this platform and is optional:
 - tooltip - to match fdc3 1.2 and 2.0 definitions
 - moreInfo - to match additional information provided by fdc3 2.0 apps
 - name - not actively used (more as a fallback) but supported for fdc3 1.2 or 2.0 mappings.
+- launchPreference - This is an optional and new setting added to v15 of workspace-platform-starter. This lets the directory owner or the app owner specify a preference that should apply to the application when launching.
+  - bounds - Bounds can optionally be specified. A view is something that exists in a platform/browser window so this allows a preference for height/width to be specified. A classic window can already specify a height and width in it's manifest but you may want a custom height/width for this app entry (especially if the window is defined as an external manifest as opposed to an inline one).
+  - defaultCentered - a particular view/classic window might need to be centered on launch. This allows the app/directory owner to specify that preference.
+  - options - Optional options that are specific to the app/manifest type. Only view/inline-view has supported settings at this time.
+    - view you specify host specific settings.
+      - host - host settings to be used by the page hosting the view
+        - url - lets you specify that this view should be loaded into a specific Platform API window instead of the default browser window. The ability to have Platform API and Browser windows together in the same platform was added in v15 of @openfin/workspace-platform.
+        - title - the title to set on the window and this title is shown if pages are disabled on a browser window
+        - icon - used to replace the menu icon on a browser window (can be used by a platform window if you use the setting)
+        - hasHeaders - specify if you wish to have the view tab in a browser or platform api window
+        - disableMultiplePages - Disable multiple pages in a browser window.
+        - disableToolbarOptions - Remove toolbar buttons from browser window.
+        - pageTitle - provide a custom title (instead of undefined) to the launched page hosting the view if you haven't turned off pages.
+        - pageIcon - an icon to display alongside the page title is the page has no unsaved changes.
 
 The rest of the fields are self explanatory but the intents array deserves more detail.
 
@@ -246,6 +267,16 @@ Our guides show how to:
 - [Configure Dock](./how-to-customize-dock.md)
 - [Configure Home](./how-to-customize-home.md)
 - [Configure Store](./how-to-customize-store.md)
+
+## I don't control the servers that host the app manifest (urls specified in manifest setting). What can I do?
+
+By default we use the built in fetch API to fetch the url specified as `manifest` e.g. a view manifest.
+
+We check to see if the platform has custom behavior when fetching a manifest by running through the following checks:
+
+- Is there a app specific endpoint available? E.g. if a view app has an id of `my-view-app` then we check for `manifest-get-my-view-app`. If the endpoint exists then we will call the request/response function against that endpoint and pass { url: string; appId: string} as the request. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
+- Is there a platform specific endpoint available - `manifest-get` is specified. This gives platform owners the option of providing a hook where they want to manage the fetching of manifests for their platform. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
+- If none of the above endpoints exist we fall back to the default `await fetch(manifestUrl)` behavior.
 
 ## Source Reference
 

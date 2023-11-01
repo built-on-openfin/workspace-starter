@@ -5,7 +5,7 @@ import type {
 	ToolbarButton,
 	ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
-import type { MenuEntry } from "./menu-shapes";
+import type { MenuEntry, PopupMenuStyles } from "./menu-shapes";
 /**
  * Browser Provider Options includes the default window/page and view options.
  */
@@ -13,33 +13,6 @@ export type BrowserProviderOptions = Pick<
 	BrowserInitConfig,
 	"defaultWindowOptions" | "defaultPageOptions" | "defaultViewOptions"
 > & {
-	/**
-	 * deprecated use `defaultWindowOptions` instead to specify settings that will apply to all workspace browser
-	 * windows
-	 * @deprecated use `defaultWindowOptions` instead.
-	 */
-	windowOptions?: {
-		/**
-		 * deprecated use `defaultWindowOptions.workspacePlatform.title` instead.
-		 * @deprecated use `defaultWindowOptions.workspacePlatform.title` instead.
-		 */
-		title?: string;
-		/**
-		 * deprecated use `defaultWindowOptions.icon` instead.
-		 * @deprecated use `defaultWindowOptions.icon` instead.
-		 */
-		icon?: string;
-		/**
-		 * deprecated use `defaultWindowOptions.workspacePlatform.newTabUrl` instead.
-		 * @deprecated use `defaultWindowOptions.workspacePlatform.newTabUrl` instead.
-		 */
-		newTabUrl?: string;
-		/**
-		 * deprecated use `defaultWindowOptions.workspacePlatform.newPageUrl` instead.
-		 * @deprecated use `defaultWindowOptions.workspacePlatform.newPageUrl` instead.
-		 */
-		newPageUrl?: string;
-	};
 	/**
 	 * This setting lets you override the default workspace browser buttons and specify your own.
 	 */
@@ -78,11 +51,35 @@ export type BrowserProviderOptions = Pick<
 			 */
 			viewMenu?: boolean;
 		};
+		/**
+		 * Style the menus, if no options are provided it will use the build in version.
+		 */
+		styles?: {
+			/**
+			 * Override the style for the global menu (top left icon)
+			 */
+			globalMenu?: PopupMenuStyles;
+			/**
+			 * Override the style for the page menu (right click on page tab)
+			 */
+			pageMenu?: PopupMenuStyles;
+			/**
+			 * Override the style for the view menu (right click on view tab)
+			 */
+			viewMenu?: PopupMenuStyles;
+		};
 	};
 	/**
 	 * The strategy for window positioning.
 	 */
 	windowPositioningStrategy?: CascadingWindowOffsetStrategy;
+	/**
+	 * By default we implement a Window Positioning Strategy that will try and position launched windows with an
+	 * offset. The way the windows are offset can be configured by specifying windowPositioningStrategy.
+	 * If you want to turn this off (e.g. automation tests that do not care about the layout of windows) then you
+	 * can set this value to true.
+	 */
+	disableWindowPositioningStrategy?: boolean;
 };
 /**
  * The cascading window strategy for positioning new windows.

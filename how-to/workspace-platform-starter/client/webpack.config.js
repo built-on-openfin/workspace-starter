@@ -1,6 +1,7 @@
 const path = require('path');
 
 const alias = {
+	'workspace-platform-starter': path.resolve(__dirname, '../client/src/framework'),
 	'workspace-platform-starter/utils': path.resolve(__dirname, '../client/src/framework/utils')
 };
 
@@ -644,6 +645,202 @@ const configs = [
 				type: 'module'
 			},
 			path: path.resolve(__dirname, '..', 'public', 'common', 'lib', 'fdc3')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/actions/custom-menu/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'custom-menu.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'actions')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/auth/openid-connect/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'openid-connect.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'auth')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/endpoint/favorite-local-storage/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'favorite-local-storage.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/actions/favorites-menu/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'favorites-menu.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'actions')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/composite/include-in-snapshot/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'include-in-snapshot.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'composite')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/lifecycle/example-notification-service/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'example-notification-service.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'lifecycle')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/init-options/launch-workspace/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'launch-workspace.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'init-options')
 		},
 		experiments: {
 			outputModule: true

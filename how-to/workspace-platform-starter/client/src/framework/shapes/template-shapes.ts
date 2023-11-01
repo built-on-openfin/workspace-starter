@@ -143,13 +143,15 @@ export interface TemplateHelpers {
 	 * @param icon The icon for the template.
 	 * @param bodyFragments The fragments to go in the body.
 	 * @param buttons The buttons for the footer.
+	 * @param headerButtons Icons buttons which can be display in the title.
 	 * @returns The layout fragment.
 	 */
 	createLayout(
 		title: string,
 		icon: string | undefined,
 		bodyFragments: TemplateFragment[],
-		buttons?: { title: string; action: string }[]
+		buttons?: { title: string; action: string }[],
+		headerButtons?: { icon: string; action: string }[]
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	): Promise<{ layout: PlainContainerTemplateFragment; data: any }>;
 
@@ -157,13 +159,15 @@ export interface TemplateHelpers {
 	 * Create a template for an app.
 	 * @param app The app to create the template for.
 	 * @param appIcon The icon for the app.
-	 * @param action The action to launch the app.
+	 * @param action The action to launch the app
+	 * @param headerButtons Icons buttons which can be display in the title.
 	 * @returns The app fragment.
 	 */
 	createApp(
 		app: PlatformApp,
 		appIcon: string,
-		action: string
+		action: string,
+		headerButtons?: { icon: string; action: string }[]
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	): Promise<{ layout: PlainContainerTemplateFragment; data: any }>;
 }

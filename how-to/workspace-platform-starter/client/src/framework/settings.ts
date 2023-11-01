@@ -9,6 +9,8 @@ import { isEmpty } from "./utils";
 let customSettings: CustomSettings | undefined;
 const logger = createLogger("Settings");
 
+const PLATFORM_SETTINGS_ENDPOINT_GET = "platform-settings";
+
 /**
  * Load the customSettings section from the application manifest.
  * @returns The custom settings from the manifest.
@@ -34,10 +36,10 @@ export async function getSettings(): Promise<CustomSettings> {
 			const moduleHelpers: ModuleHelpers = getDefaultHelpers();
 			await endpointProvider.init(customSettings.endpointProvider, moduleHelpers);
 
-			if (endpointProvider.hasEndpoint("platform-settings")) {
-				logger.info("platform-settings endpoint specified. Fetching platform settings.");
+			if (endpointProvider.hasEndpoint(PLATFORM_SETTINGS_ENDPOINT_GET)) {
+				logger.info(`${PLATFORM_SETTINGS_ENDPOINT_GET} endpoint specified. Fetching platform settings.`);
 				const serverSettings = await endpointProvider.requestResponse<unknown, CustomSettings>(
-					"platform-settings"
+					PLATFORM_SETTINGS_ENDPOINT_GET
 				);
 				logger.info("Merging platform-settings over manifest settings.");
 				customSettings = { ...customSettings, ...serverSettings };
@@ -75,8 +77,9 @@ export async function isValidHostForManifest(): Promise<boolean> {
 	const manifestUrl = info.manifestUrl;
 	logger.info(`Source of initial settings: ${manifestUrl}`);
 
-	const sourceUrlHostName = matchUrl(location.href, validHosts);
-	if (sourceUrlHostName) {
+	let sourceUrlHostName = matchUrl(location.href, validHosts);
+	if (isEmpty(sourceUrlHostName)) {
+		sourceUrlHostName = location.hostname;
 		logger.info("Adding current host to the list of valid hosts:", sourceUrlHostName);
 		validHosts.push(sourceUrlHostName);
 	}

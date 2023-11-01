@@ -4,18 +4,23 @@ import {
 	getCurrentSync,
 	type BrowserCreateWindowRequest,
 	type CustomActionPayload,
+	type CustomActionSpecifier,
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
 import { getApp } from "./apps";
 import * as authProvider from "./auth";
 import { updateToolbarButtons } from "./buttons";
+import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
+import { showPopupMenu } from "./menu";
 import { closedownModules, initializeModules, loadModules } from "./modules";
 import { launchView } from "./platform/browser";
-import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
+import type { FavoriteEntry } from "./shapes/favorite-shapes";
+import type { PopupMenuEntry, PopupMenuStyles } from "./shapes/menu-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { showShareOptions } from "./share";
 import { toggleScheme } from "./themes";
 import { isEmpty, isStringValue } from "./utils";
@@ -23,8 +28,9 @@ import { show } from "./workspace/home";
 
 const logger = createLogger("Actions");
 
-let modules: ModuleEntry<Actions>[] = [];
+let modules: ModuleEntry<Actions>[] | undefined;
 const customActionMap: CustomActionsMap = {};
+let platformActionMap: CustomActionsMap | undefined;
 let isInitialized: boolean = false;
 
 /**
@@ -38,21 +44,33 @@ export const PLATFORM_ACTION_IDS = {
 	homeShow: "home-show",
 	notificationToggle: "notification-toggle",
 	share: "share",
+	quit: "quit",
 	logoutAndQuit: "logout-and-quit",
 	launchApp: "launch-app",
 	launchView: "launch-view",
-	toggleScheme: "toggle-scheme"
+	toggleScheme: "toggle-scheme",
+	favoriteAdd: "favorite-add",
+	favoriteRemove: "favorite-remove",
+	popupMenu: "popup-menu"
 };
 
 /**
  * Initialize the actions provider.
  * @param options Options for the actions provider.
  * @param helpers Module helpers to pass to any loaded modules.
+ * @returns The platform action map.
  */
 export async function init(
 	options: ActionsProviderOptions | undefined,
 	helpers: ModuleHelpers
-): Promise<void> {
+): Promise<CustomActionsMap | undefined> {
+	if (isInitialized) {
+		logger.error("The actions can only be used once when configuring the platform");
+		return;
+	}
+
+	isInitialized = true;
+
 	if (options) {
 		logger.info("Initializing with options", options);
 
@@ -65,6 +83,10 @@ export async function init(
 			updateToolbarButtons
 		});
 	}
+
+	await buildActions();
+
+	return platformActionMap;
 }
 
 /**
@@ -75,35 +97,43 @@ export async function closedown(): Promise<void> {
 }
 
 /**
+ * Call an action.
+ * @param id The id of the action to call.
+ * @param payload The payload for the action.
+ * @returns True if the action exists.
+ */
+export async function callAction(id: string, payload: CustomActionPayload): Promise<boolean> {
+	if (!isEmpty(platformActionMap) && platformActionMap[id]) {
+		await platformActionMap[id](payload);
+		return true;
+	}
+	return false;
+}
+
+/**
  * Get all the actions we want to register with the platform.
  * @returns The map of all the custom actions.
  */
-export async function getActions(): Promise<CustomActionsMap | undefined> {
-	if (isInitialized) {
-		logger.error("The actions can only be used once when configuring the platform");
-		return;
-	}
-	isInitialized = true;
-
+async function buildActions(): Promise<void> {
 	// Get the platform actions
-	let platformActionMap: CustomActionsMap = await getPlatformActions();
+	platformActionMap = await getPlatformActions();
 
 	// Merge in any custom actions registered with registerAction
 	platformActionMap = { ...platformActionMap, ...customActionMap };
 
-	// Merge the module actions
-	const platform = getCurrentSync();
-	for (const actionModule of modules) {
-		const modActions = await actionModule.implementation.get(platform);
-		platformActionMap = {
-			...platformActionMap,
-			...modActions
-		};
+	if (!isEmpty(modules)) {
+		// Merge the module actions
+		const platform = getCurrentSync();
+		for (const actionModule of modules) {
+			const modActions = await actionModule.implementation.get(platform);
+			platformActionMap = {
+				...platformActionMap,
+				...modActions
+			};
+		}
 	}
 
 	logger.info("Action Ids", Object.keys(platformActionMap));
-
-	return platformActionMap;
 }
 
 /**
@@ -191,15 +221,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (currentToolbarOptions) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
+				if (currentToolbarOptions) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 
@@ -207,15 +240,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (!isEmpty(currentToolbarOptions)) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
+				if (!isEmpty(currentToolbarOptions)) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 	};
@@ -225,15 +261,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
-			if (!isEmpty(currentToolbarOptions)) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
+				if (!isEmpty(currentToolbarOptions)) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 	};
@@ -252,6 +291,10 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 		}
 	};
 
+	actionMap[PLATFORM_ACTION_IDS.quit] = async (): Promise<void> => {
+		await fin.Platform.getCurrentSync().quit();
+	};
+
 	actionMap[PLATFORM_ACTION_IDS.logoutAndQuit] = async (): Promise<void> => {
 		await authProvider.logout();
 	};
@@ -259,7 +302,8 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 	actionMap[PLATFORM_ACTION_IDS.launchApp] = async (payload: CustomActionPayload): Promise<void> => {
 		if (
 			payload.callerType === CustomActionCallerType.CustomButton ||
-			payload.callerType === CustomActionCallerType.CustomDropdownItem
+			payload.callerType === CustomActionCallerType.CustomDropdownItem ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
 		) {
 			if (payload.customData?.appId) {
 				const app = await getApp(payload.customData.appId as string);
@@ -297,6 +341,62 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			payload.callerType === CustomActionCallerType.CustomDropdownItem
 		) {
 			await toggleScheme();
+		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.favoriteAdd] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
+		) {
+			const favorite: FavoriteEntry = payload.customData;
+			if (isEmpty(favorite)) {
+				logger.error("Can only add to favorites if favorite data is provided in customData");
+			} else {
+				await favoriteProvider.setSavedFavorite(favorite);
+			}
+		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.favoriteRemove] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
+		) {
+			const favorite: FavoriteEntry = payload.customData;
+			if (isEmpty(favorite)) {
+				logger.error("Can only remove from favorites if favorite data is provided in customData");
+			} else {
+				await favoriteProvider.deleteSavedFavorite(favorite.id);
+			}
+		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.popupMenu] = async (payload: CustomActionPayload): Promise<void> => {
+		if (payload.callerType === CustomActionCallerType.CustomButton) {
+			const menuOptions: {
+				source: "dock";
+				noEntryText: string;
+				menuEntries: PopupMenuEntry<CustomActionSpecifier>[];
+				options?: {
+					popupMenuStyle?: PopupMenuStyles;
+				};
+			} = payload.customData;
+
+			const res = await showPopupMenu(
+				menuOptions.source === "dock" ? { x: payload.x, y: 48 } : { x: payload.x, y: payload.y },
+				payload.windowIdentity,
+				menuOptions.noEntryText,
+				menuOptions.menuEntries,
+				menuOptions.options
+			);
+
+			if (!isEmpty(res)) {
+				await callAction(res.id, {
+					...payload,
+					customData: res.customData
+				});
+			}
 		}
 	};
 

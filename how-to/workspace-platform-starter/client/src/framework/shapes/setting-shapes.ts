@@ -8,6 +8,7 @@ import type { ConditionsProviderOptions } from "./conditions-shapes";
 import type { ConnectionProviderOptions } from "./connection-shapes";
 import type { DockProviderOptions } from "./dock-shapes";
 import type { EndpointProviderOptions } from "./endpoint-shapes";
+import type { FavoriteProviderOptions } from "./favorite-shapes";
 import type { HomeProviderOptions } from "./home-shapes";
 import type { InitOptionsProviderOptions } from "./init-options-shapes";
 import type { IntegrationProviderOptions } from "./integrations-shapes";
@@ -20,6 +21,7 @@ import type { PlatformProviderOptions } from "./platform-shapes";
 import type { SplashScreenProviderOptions } from "./splash-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";
 import type { ThemeProviderOptions } from "./theme-shapes";
+import type { TrayProviderOptions } from "./tray-shapes";
 import type { VersionProviderOptions } from "./version-shapes";
 
 /**
@@ -145,4 +147,14 @@ export interface CustomSettings {
 	 * The splash screen provider options.
 	 */
 	splashScreenProvider?: SplashScreenProviderOptions;
+
+	/**
+	 * The settings you need to set if you want to indicate this platform supports favorites
+	 */
+	favoriteProvider?: FavoriteProviderOptions;
+
+	/**
+	 * The settings you need to set if you want to include a tray icon with menu
+	 */
+	trayProvider?: TrayProviderOptions;
 }

@@ -151,6 +151,10 @@
 					"enum": ["multi", "new", "single"],
 					"type": "string"
 				},
+				"launchPreference": {
+					"$ref": "#/definitions/LaunchPreference",
+					"description": "Contains additional information related to the launch of an application."
+				},
 				"private": {
 					"description": "Should this application not be listed in OpenFin Workspace components e.g. Workspace HOME, DOCK or STORE. It may\nbe that this app entry is mainly for responding to intent requests and shouldn't be launched directly.",
 					"type": ["string", "boolean"]
@@ -182,11 +186,11 @@
 					"description": "Metadata that provides information beyond the url path to help identify the format of the response that has been\nreceived.",
 					"properties": {
 						"type": {
-							"enum": ["fdc3"],
+							"const": "fdc3",
 							"type": "string"
 						},
 						"version": {
-							"enum": ["1.2"],
+							"const": "1.2",
 							"type": "string"
 						}
 					},
@@ -195,6 +199,91 @@
 				}
 			},
 			"required": ["$schema", "applications"],
+			"type": "object"
+		},
+		"HostLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to the host of the content",
+			"properties": {
+				"disableMultiplePages": {
+					"description": "Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.",
+					"type": "boolean"
+				},
+				"disableToolbarOptions": {
+					"description": "Should the toolbar options of a window be hidden if they are available?",
+					"type": "boolean"
+				},
+				"hasHeaders": {
+					"description": "Should the header for the content be hidden",
+					"type": "boolean"
+				},
+				"icon": {
+					"description": "The Icon you would prefer the window shows.",
+					"type": "string"
+				},
+				"pageIcon": {
+					"description": "If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?",
+					"type": "string"
+				},
+				"pageTitle": {
+					"description": "If this host supports multiple layouts what should the layout (e.g page) title be?",
+					"type": "string"
+				},
+				"title": {
+					"description": "If specified it indicates a preference to be used by this type of host.",
+					"type": "string"
+				},
+				"url": {
+					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"LaunchPreference": {
+			"additionalProperties": false,
+			"description": "Are there any preferences you would like to apply when launching this application?",
+			"properties": {
+				"bounds": {
+					"additionalProperties": false,
+					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
+					"properties": {
+						"height": {
+							"type": "number"
+						},
+						"width": {
+							"type": "number"
+						}
+					},
+					"required": ["height", "width"],
+					"type": "object"
+				},
+				"defaultCentered": {
+					"description": "Should the launched UI be positioned in the center of the screen?",
+					"type": "boolean"
+				},
+				"options": {
+					"additionalProperties": false,
+					"description": "Are there any app type specific options you would like to apply?",
+					"properties": {
+						"view": {
+							"$ref": "#/definitions/ViewLaunchPreference"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"ViewLaunchPreference": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to a view",
+			"properties": {
+				"host": {
+					"$ref": "#/definitions/HostLaunchPreference",
+					"description": "If specified it indicates wish to specify specific host settings for this content."
+				}
+			},
 			"type": "object"
 		}
 	}

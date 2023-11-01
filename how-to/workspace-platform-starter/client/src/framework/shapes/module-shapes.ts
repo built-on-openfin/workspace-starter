@@ -1,9 +1,14 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import type { ConditionContextTypes } from "./conditions-shapes";
+import type { EndpointClient } from "./endpoint-shapes";
+import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
-import type { LoggerCreator } from "./logger-shapes";
-import type { ColorSchemeMode } from "./theme-shapes";
+import type { Logger, LoggerCreator } from "./logger-shapes";
+import type { MenuClient } from "./menu-shapes";
+import type { NotificationClient } from "./notification-shapes";
+import type { ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 
 /**
@@ -78,28 +83,11 @@ export interface ModuleHelpers {
 	getApps?(): Promise<PlatformApp[]>;
 
 	/**
-	 * Get the current theme id.
-	 * @returns The current theme id.
+	 * Get the app by id.
+	 * @param id The id of the app to get.
+	 * @returns The app id it exists.
 	 */
-	getCurrentThemeId(): Promise<string>;
-
-	/**
-	 * Get the current icon folder.
-	 * @returns the platform icon folder.
-	 */
-	getCurrentIconFolder(): Promise<string>;
-
-	/**
-	 * Get the current palette.
-	 * @returns The current palette.
-	 */
-	getCurrentPalette(): Promise<CustomPaletteSet>;
-
-	/**
-	 * Get the current color scheme.
-	 * @returns The current color scheme.
-	 */
-	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
+	getApp?(id: string): Promise<PlatformApp | undefined>;
 
 	/**
 	 * Get the version information related to the platform you are running in. If you request the version info on
@@ -121,6 +109,38 @@ export interface ModuleHelpers {
 	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
 
 	/**
+	 * If this platform has been configured to support theming it will provide it.
+	 * @returns the theme client.
+	 */
+	getThemeClient(): Promise<ThemeClient>;
+
+	/**
+	 * If this platform has been configured to support menus it will provide it.
+	 * @returns the menu client.
+	 */
+	getMenuClient(): Promise<MenuClient>;
+
+	/**
+	 * If this platform has been configured to support favorites and you are able to receive favorites
+	 * then you will receive a client that will provide you with a number of functions (if supported).
+	 * This can let a module add additional support for favorites if they support the supported favorite types.
+	 * @returns the favorite client.
+	 */
+	getFavoriteClient?(): Promise<FavoriteClient | undefined>;
+
+	/**
+	 * If this platform has been configured to support notification client then it will provide it.
+	 * @returns notification client.
+	 */
+	getNotificationClient?(): Promise<NotificationClient | undefined>;
+
+	/**
+	 * If this platform has been configured to support endpoint client then it will provide it.
+	 * @returns endpoint client.
+	 */
+	getEndpointClient?(): Promise<EndpointClient | undefined>;
+
+	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
@@ -130,11 +150,31 @@ export interface ModuleHelpers {
 
 	/**
 	 * Launch a page in the workspace.
-	 * @param page The page to launch.
-	 * @param bounds The optional bounds for the page.
-	 * @returns The window created.
+	 * @param pageId The page to launch.
+	 * @param options The options for the launch.
+	 * @param options.bounds The optional bounds for the page.
+	 * @param options.targetWindowIdentity The optional target window for the page.
+	 * @param options.createCopyIfExists Create a copy of the page if it exists.
+	 * @param logger Log output from the operation.
+	 * @returns The window created or undefined if the page did not exist.
 	 */
-	launchPage?(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule>;
+	launchPage?(
+		pageId: string,
+		options?: {
+			bounds?: OpenFin.Bounds;
+			targetWindowIdentity?: OpenFin.Identity;
+			createCopyIfExists?: boolean;
+		},
+		logger?: Logger
+	): Promise<BrowserWindowModule | undefined>;
+
+	/**
+	 * Launch a workspace.
+	 * @param workspaceId The id of the workspace to launch.
+	 * @param logger Log output from the operation.
+	 * @returns Was the workspace opened.
+	 */
+	launchWorkspace?(workspaceId: string, logger?: Logger): Promise<boolean>;
 
 	/**
 	 * Subscribe to lifecycle events.
@@ -142,7 +182,10 @@ export interface ModuleHelpers {
 	 * @param lifecycleHandler The handle for the event.
 	 * @returns A subscription id to be used with unsubscribe.
 	 */
-	subscribeLifecycleEvent?(lifecycleEvent: LifecycleEvents, lifecycleHandler: LifecycleHandler): string;
+	subscribeLifecycleEvent?<T = unknown>(
+		lifecycleEvent: LifecycleEvents,
+		lifecycleHandler: LifecycleHandler<T>
+	): string;
 
 	/**
 	 * Unsubscribe from lifecycle events.
@@ -150,6 +193,14 @@ export interface ModuleHelpers {
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
 	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
+
+	/**
+	 * Lets you check to see if a defined condition is true or false.
+	 * @param conditionId The condition to check for.
+	 * @param contextType What is the context for checking this condition.
+	 * @returns whether the condition is true or false
+	 */
+	condition(conditionId: string, contextType?: ConditionContextTypes): Promise<boolean>;
 }
 
 /**

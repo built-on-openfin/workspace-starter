@@ -1,3 +1,6 @@
+import type { DockButton } from "@openfin/workspace";
+import type { Page, Workspace } from "@openfin/workspace-platform";
+import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 /**
  * Platform provider options.
@@ -43,4 +46,213 @@ export interface PlatformStorageMetadata {
 		workspacePlatformClient: string | undefined;
 		platformClient: string | undefined;
 	};
+}
+/**
+ * A request type for the WorkspaceEndpoint that gets all saved workspace entries
+ */
+export interface EndpointWorkspaceListRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * Optional query that limits the workspaces.
+	 */
+	query?: string;
+}
+/**
+ * The response after the request for workspaces was fulfilled
+ */
+export interface EndpointWorkspaceListResponse {
+	/**
+	 * The list of workspace entries with information of what platform versions they were originally saved against
+	 */
+	[key: string]: {
+		metaData: PlatformStorageMetadata;
+		payload: Workspace;
+	};
+}
+/**
+ * A request type for the WorkspaceEndpoint that gets a specific workspace entry
+ */
+export interface EndpointWorkspaceGetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the workspace to get.
+	 */
+	id: string;
+}
+/**
+ * The response after the request for workspace was fulfilled
+ */
+export interface EndpointWorkspaceGetResponse {
+	/**
+	 * The platform versions it was originally saved against
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The workspace entry
+	 */
+	payload: Workspace;
+}
+/**
+ * A request type for the WorkspaceEndpoint that sets a specific workspace entry
+ */
+export interface EndpointWorkspaceSetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the workspace to set.
+	 */
+	id: string;
+	/**
+	 * The platform versions it saving the workspace
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The workspace entry
+	 */
+	payload: Workspace;
+}
+/**
+ * A request type for the WorkspaceEndpoint that removes a specific workspace entry
+ */
+export interface EndpointWorkspaceRemoveRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the workspace to remove.
+	 */
+	id: string;
+}
+/**
+ * A request type for the PageEndpoint that gets all saved pages entries
+ */
+export interface EndpointPageListRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * Optional query that limits the pages.
+	 */
+	query?: string;
+}
+/**
+ * The response after the request for pages was fulfilled
+ */
+export interface EndpointPageListResponse {
+	/**
+	 * The list of page entries with information of what platform versions they were originally saved against
+	 */
+	[key: string]: {
+		metaData: PlatformStorageMetadata;
+		payload: Page;
+	};
+}
+/**
+ * A request type for the PageEndpoint that gets a specific page entry
+ */
+export interface EndpointPageGetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the page to get.
+	 */
+	id: string;
+}
+/**
+ * The response after the request for page was fulfilled
+ */
+export interface EndpointPageGetResponse {
+	/**
+	 * The platform versions it was originally saved against
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The page entry
+	 */
+	payload: Page;
+}
+/**
+ * A request type for the PageEndpoint that sets a specific page entry
+ */
+export interface EndpointPageSetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the page to set.
+	 */
+	id: string;
+	/**
+	 * The platform versions it saving the page
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The page entry
+	 */
+	payload: Page;
+}
+/**
+ * A request type for the PageEndpoint that removes a specific page entry
+ */
+export interface EndpointPageRemoveRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the page to remove.
+	 */
+	id: string;
+}
+/**
+ * A request type for the DockEndpoint that gets the config for an entry
+ */
+export interface EndpointDockGetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the config to get.
+	 */
+	id: string;
+	/**
+	 * The buttons that are available based on current configuration.
+	 */
+	availableButtons: DockButton[];
+}
+/**
+ * A response type for the DockEndpoint that gets the config for an entry
+ */
+export interface EndpointDockGetResponse {
+	/**
+	 * The config.
+	 */
+	config?: DockProviderConfigWithIdentity;
+}
+/**
+ * A request type for the DockEndpoint that sets the config for an entry
+ */
+export interface EndpointDockSetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The config.
+	 */
+	config?: DockProviderConfigWithIdentity;
 }

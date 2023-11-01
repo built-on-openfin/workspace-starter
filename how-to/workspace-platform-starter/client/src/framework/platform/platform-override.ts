@@ -5,33 +5,54 @@ import {
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
+	type GlobalContextMenuItemData,
 	type OpenGlobalContextMenuPayload,
 	type OpenPageTabContextMenuPayload,
 	type OpenViewTabContextMenuPayload,
 	type Page,
+	type PageTabContextMenuItemData,
 	type UpdateSavedPageRequest,
 	type UpdateSavedWorkspaceRequest,
+	type ViewTabMenuData,
 	type Workspace,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
+import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
 import * as analyticsProvider from "../analytics";
-import { getDefaultToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
+import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
 import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
-import { getGlobalMenu, getPageMenu, getViewMenu } from "../menu";
+import * as Menu from "../menu";
+import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
 import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
-import type { CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
+import type { BrowserProviderOptions, CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
 import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
 } from "../shapes/lifecycle-shapes";
-import type { PlatformProviderOptions, PlatformStorageMetadata } from "../shapes/platform-shapes";
+import type {
+	EndpointPageGetRequest,
+	EndpointPageGetResponse,
+	EndpointPageListRequest,
+	EndpointPageListResponse,
+	EndpointPageRemoveRequest,
+	EndpointPageSetRequest,
+	EndpointWorkspaceGetRequest,
+	EndpointWorkspaceGetResponse,
+	EndpointWorkspaceListRequest,
+	EndpointWorkspaceListResponse,
+	EndpointWorkspaceRemoveRequest,
+	EndpointWorkspaceSetRequest,
+	PlatformProviderOptions
+} from "../shapes/platform-shapes";
 import type { VersionInfo } from "../shapes/version-shapes";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { isEmpty } from "../utils";
+import { loadConfig, saveConfig } from "../workspace/dock";
 import { getAllVisibleWindows, getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 import { mapPlatformPageToStorage, mapPlatformWorkspaceToStorage } from "./platform-mapper";
@@ -51,26 +72,47 @@ const logger = createLogger("PlatformOverride");
 let windowDefaultLeft: number | undefined;
 let windowDefaultTop: number | undefined;
 let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
+let disableWindowPositioningStrategy: boolean | undefined;
 let disableStorageMapping: boolean | undefined;
+let globalMenuStyle: PopupMenuStyles | undefined;
+let pageMenuStyle: PopupMenuStyles | undefined;
+let viewMenuStyle: PopupMenuStyles | undefined;
 
 /**
  * Override methods in the platform.
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @param platformProviderSettings The settings for the platform provider.
+ * @param browserProviderSettings The settings for the browser provider.
  * @param versionInfo The app version info.
  * @returns The overridden class.
  */
 export function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>,
 	platformProviderSettings: PlatformProviderOptions | undefined,
+	browserProviderSettings: BrowserProviderOptions | undefined,
 	versionInfo: VersionInfo
 ): WorkspacePlatformProvider {
 	disableStorageMapping = platformProviderSettings?.disableStorageMapping ?? false;
+	globalMenuStyle = browserProviderSettings?.menuOptions?.styles?.globalMenu;
+	pageMenuStyle = browserProviderSettings?.menuOptions?.styles?.pageMenu;
+	viewMenuStyle = browserProviderSettings?.menuOptions?.styles?.viewMenu;
 
 	/**
 	 * Create a class which overrides the platform provider.
 	 */
 	class Override extends WorkspacePlatformProvider {
+		/**
+		 * Supports launching a manifest into a platform.
+		 * @param payload The manifest to load into the platform
+		 * @returns nothing.
+		 */
+		public async launchIntoPlatform(payload: OpenFin.LaunchIntoPlatformPayload): Promise<void> {
+			logger.warn(
+				"launchIntoPlatform called. Please use the initOptionsProvider for loading content into the platform.",
+				payload
+			);
+		}
+
 		/**
 		 * Gets the current state of windows and their views and returns a snapshot object containing that info.
 		 * @param payload Undefined unless you've defined a custom `getSnapshot` protocol.
@@ -113,13 +155,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_LIST)) {
 				logger.info("Requesting saved workspaces from custom storage");
 				const workspacesResponse = await endpointProvider.requestResponse<
-					{ platform: string; query?: string },
-					{
-						[key: string]: {
-							metaData: PlatformStorageMetadata;
-							payload: Workspace;
-						};
-					}
+					EndpointWorkspaceListRequest,
+					EndpointWorkspaceListResponse
 				>(WORKSPACE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 
 				if (workspacesResponse) {
@@ -147,11 +184,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_GET)) {
 				logger.info(`Requesting saved workspace from custom storage for workspace id: ${id}`);
 				const workspaceResponse = await endpointProvider.requestResponse<
-					{ platform: string; id: string },
-					{
-						metaData: PlatformStorageMetadata;
-						payload: Workspace;
-					}
+					EndpointWorkspaceGetRequest,
+					EndpointWorkspaceGetResponse
 				>(WORKSPACE_ENDPOINT_ID_GET, { platform: fin.me.identity.uuid, id });
 				if (workspaceResponse) {
 					logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
@@ -175,22 +209,20 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Workspace;
-				}>(WORKSPACE_ENDPOINT_ID_SET, {
-					platform: fin.me.identity.uuid,
-					id: req.workspace.workspaceId,
-					metaData: {
-						version: {
-							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							platformClient: versionInfo.platformClient
-						}
-					},
-					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
-				});
+				const success = await endpointProvider.action<EndpointWorkspaceSetRequest>(
+					WORKSPACE_ENDPOINT_ID_SET,
+					{
+						platform: fin.me.identity.uuid,
+						id: req.workspace.workspaceId,
+						metaData: {
+							version: {
+								workspacePlatformClient: versionInfo.workspacePlatformClient,
+								platformClient: versionInfo.platformClient
+							}
+						},
+						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+					}
+				);
 				if (success) {
 					logger.info(`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`);
 				} else {
@@ -203,11 +235,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "create",
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -219,22 +251,20 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_SET)) {
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Workspace;
-				}>(WORKSPACE_ENDPOINT_ID_SET, {
-					platform: fin.me.identity.uuid,
-					id: req.workspace.workspaceId,
-					metaData: {
-						version: {
-							workspacePlatformClient: versionInfo.workspacePlatformClient,
-							platformClient: versionInfo.platformClient
-						}
-					},
-					payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
-				});
+				const success = await endpointProvider.action<EndpointWorkspaceSetRequest>(
+					WORKSPACE_ENDPOINT_ID_SET,
+					{
+						platform: fin.me.identity.uuid,
+						id: req.workspace.workspaceId,
+						metaData: {
+							version: {
+								workspacePlatformClient: versionInfo.workspacePlatformClient,
+								platformClient: versionInfo.platformClient
+							}
+						},
+						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+					}
+				);
 				if (success) {
 					logger.info(`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`);
 				} else {
@@ -253,11 +283,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "update",
 				id: req.workspace.workspaceId,
 				workspace: req.workspace
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -269,7 +299,7 @@ export function overrideCallback(
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(WORKSPACE_ENDPOINT_ID_REMOVE)) {
-				const success = await endpointProvider.action<{ platform: string; id: string }>(
+				const success = await endpointProvider.action<EndpointWorkspaceRemoveRequest>(
 					WORKSPACE_ENDPOINT_ID_REMOVE,
 					{ platform: fin.me.identity.uuid, id }
 				);
@@ -285,10 +315,10 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "workspace-changed", {
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "delete",
 				id
-			} as WorkspaceChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -306,13 +336,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_LIST)) {
 				logger.info("Getting saved pages from custom storage");
 				const pagesResponse = await endpointProvider.requestResponse<
-					{ platform: string; query?: string },
-					{
-						[key: string]: {
-							metaData: PlatformStorageMetadata;
-							payload: Page;
-						};
-					}
+					EndpointPageListRequest,
+					EndpointPageListResponse
 				>(PAGE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 				if (pagesResponse) {
 					logger.info("Returning saved pages from custom storage");
@@ -339,11 +364,8 @@ export function overrideCallback(
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
 				logger.info(`Getting saved page from custom storage for page id: ${id}`);
 				const pageResponse = await endpointProvider.requestResponse<
-					{ platform: string; id: string },
-					{
-						metaData: PlatformStorageMetadata;
-						payload: Page;
-					}
+					EndpointPageGetRequest,
+					EndpointPageGetResponse
 				>(PAGE_ENDPOINT_ID_GET, {
 					platform: fin.me.identity.uuid,
 					id
@@ -391,12 +413,7 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Saving page with id: ${req.page.pageId} to custom storage`);
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Page;
-				}>(PAGE_ENDPOINT_ID_SET, {
+				const success = await endpointProvider.action<EndpointPageSetRequest>(PAGE_ENDPOINT_ID_SET, {
 					platform: fin.me.identity.uuid,
 					id: req.page.pageId,
 					metaData: {
@@ -418,11 +435,11 @@ export function overrideCallback(
 				logger.info(`Saved page with id: ${req.page.pageId} to default storage`);
 			}
 
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "create",
 				id: req.page.pageId,
 				page: req.page
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -442,12 +459,7 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_SET}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_SET)) {
 				logger.info(`Updating saved page and saving to custom storage with page id: ${req.page.pageId}`);
-				const success = await endpointProvider.action<{
-					platform: string;
-					id: string;
-					metaData: PlatformStorageMetadata;
-					payload: Page;
-				}>(PAGE_ENDPOINT_ID_SET, {
+				const success = await endpointProvider.action<EndpointPageSetRequest>(PAGE_ENDPOINT_ID_SET, {
 					platform: fin.me.identity.uuid,
 					id: req.page.pageId,
 					metaData: {
@@ -470,11 +482,11 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "update",
 				id: req.page.pageId,
 				page: req.page
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -487,10 +499,10 @@ export function overrideCallback(
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_REMOVE}`);
 			if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_REMOVE)) {
 				logger.info(`deleting saved page from custom storage. PageId: ${id}`);
-				const success = await endpointProvider.action<{ platform: string; id: string }>(
-					PAGE_ENDPOINT_ID_REMOVE,
-					{ platform: fin.me.identity.uuid, id }
-				);
+				const success = await endpointProvider.action<EndpointPageRemoveRequest>(PAGE_ENDPOINT_ID_REMOVE, {
+					platform: fin.me.identity.uuid,
+					id
+				});
 				if (success) {
 					logger.info(`Removed page with id: ${id} from custom storage`);
 				} else {
@@ -502,10 +514,10 @@ export function overrideCallback(
 				logger.info(`Removed page with id: ${id} from custom storage`);
 			}
 			const platform = getCurrentSync();
-			await fireLifecycleEvent(platform, "page-changed", {
+			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "delete",
 				id
-			} as PageChangedLifecyclePayload);
+			});
 		}
 
 		/**
@@ -513,20 +525,35 @@ export function overrideCallback(
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
+		 * @returns Nothing.
 		 */
 		public async openGlobalContextMenu(
 			req: OpenGlobalContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			const template = await getGlobalMenu(req.template, { windowIdentity: req.identity });
-			if (template?.length > 0) {
-				await super.openGlobalContextMenu(
+
+			const popupMenuStyle = globalMenuStyle ?? Menu.getPopupMenuStyle();
+
+			if (popupMenuStyle === "platform") {
+				return super.openGlobalContextMenu(
 					{
 						...req,
 						template
 					},
 					callerIdentity
 				);
+			}
+
+			const result = await showPopupMenu<GlobalContextMenuItemData>(
+				{ x: req.x, y: req.y },
+				req.identity,
+				"",
+				template,
+				{ popupMenuStyle }
+			);
+			if (result) {
+				req.callback(result, req);
 			}
 		}
 
@@ -535,6 +562,7 @@ export function overrideCallback(
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
+		 * @returns Nothing.
 		 */
 		public async openViewTabContextMenu(
 			req: OpenViewTabContextMenuPayload,
@@ -544,14 +572,28 @@ export function overrideCallback(
 				windowIdentity: req.identity,
 				views: req.selectedViews
 			});
-			if (template?.length > 0) {
-				await super.openViewTabContextMenu(
+
+			const popupMenuStyle = viewMenuStyle ?? Menu.getPopupMenuStyle();
+
+			if (popupMenuStyle === "platform") {
+				return super.openViewTabContextMenu(
 					{
 						...req,
 						template
 					},
 					callerIdentity
 				);
+			}
+
+			const result = await showPopupMenu<ViewTabMenuData>(
+				{ x: req.x, y: req.y },
+				req.identity,
+				"",
+				template,
+				{ popupMenuStyle }
+			);
+			if (result) {
+				req.callback(result, req);
 			}
 		}
 
@@ -560,14 +602,18 @@ export function overrideCallback(
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
 		 * @param callerIdentity OF identity of the entity from which the request originated
+		 * @returns Nothing.
 		 */
 		public async openPageTabContextMenu(
 			req: OpenPageTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			const template = await getPageMenu(req.template, { windowIdentity: req.identity, pageId: req.pageId });
-			if (template?.length > 0) {
-				await super.openPageTabContextMenu(
+
+			const popupMenuStyle = pageMenuStyle ?? Menu.getPopupMenuStyle();
+
+			if (popupMenuStyle === "platform") {
+				return super.openPageTabContextMenu(
 					{
 						...req,
 						template
@@ -575,11 +621,22 @@ export function overrideCallback(
 					callerIdentity
 				);
 			}
+
+			const result = await showPopupMenu<PageTabContextMenuItemData>(
+				{ x: req.x, y: req.y },
+				req.identity,
+				"",
+				template,
+				{ popupMenuStyle }
+			);
+			if (result) {
+				req.callback(result, req);
+			}
 		}
 
 		/**
 		 * Closes the current Platform and all child windows and views.
-		 * @param payload Undefined unless you have implemented a custom quite protocol.
+		 * @param payload Undefined unless you have implemented a custom quit protocol.
 		 * @param callerIdentity Identity of the entity that called quit.
 		 * @returns Nothing.
 		 */
@@ -612,90 +669,103 @@ export function overrideCallback(
 				return super.createWindow(options, identity);
 			}
 
-			if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
-				const app = await fin.Application.getCurrent();
-				const platformManifest: OpenFin.Manifest = await app.getManifest();
-				logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
+			if (!disableWindowPositioningStrategy) {
+				if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
+					const settings = await getSettings();
+					disableWindowPositioningStrategy =
+						settings?.browserProvider?.disableWindowPositioningStrategy ?? false;
+					if (disableWindowPositioningStrategy) {
+						logger.info("Window Positioning Strategy is disabled.");
+					} else {
+						const app = await fin.Application.getCurrent();
+						const platformManifest: OpenFin.Manifest = await app.getManifest();
+						logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
+						windowDefaultLeft =
+							settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
+							platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
+							0;
+						windowDefaultTop =
+							settings.browserProvider?.defaultWindowOptions?.defaultTop ??
+							platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
+							0;
 
-				const settings = await getSettings();
-
-				windowDefaultLeft =
-					settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
-					platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
-					0;
-				windowDefaultTop =
-					settings.browserProvider?.defaultWindowOptions?.defaultTop ??
-					platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
-					0;
-
-				windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
-			}
-
-			logger.info("Create Window", options);
-
-			const hasLeft = !isEmpty(options?.defaultLeft);
-			const hasTop = !isEmpty(options?.defaultTop);
-
-			if (!hasLeft || !hasTop) {
-				// Get the available rect for the display so we can take in to account
-				// OS menus, task bar etc
-				const monitorInfo = await fin.System.getMonitorInfo();
-				const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
-				const availableTop = monitorInfo.primaryMonitor.availableRect.top;
-
-				const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
-				const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
-				const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
-
-				const visibleWindows = await getAllVisibleWindows();
-
-				// Get the top left bounds for all the visible windows
-				const topLeftBounds = await Promise.all(
-					visibleWindows.map(async (win) => {
-						const bounds = await win.getBounds();
-						return {
-							left: bounds.left,
-							top: bounds.top,
-							right: bounds.left + windowOffsetsX,
-							bottom: bounds.top + windowOffsetsY
-						};
-					})
-				);
-
-				let minCountVal: number = 1000;
-				let minCountIndex = windowOffsetsMaxIncrements;
-
-				// Now see how many windows appear in each increment slot
-				for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
-					const xPos = i * windowOffsetsX;
-					const yPos = i * windowOffsetsY;
-					const leftPos = windowDefaultLeft + xPos;
-					const topPos = windowDefaultTop + yPos;
-					const foundWins = topLeftBounds.filter(
-						(topLeftWinBounds) =>
-							topLeftWinBounds.left >= leftPos &&
-							topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
-							topLeftWinBounds.top >= topPos &&
-							topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
-					);
-
-					// If this slot has less than the current minimum use this slot
-					if (foundWins.length < minCountVal) {
-						minCountVal = foundWins.length;
-						minCountIndex = i;
+						windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
 					}
 				}
 
-				if (!hasLeft) {
-					const xOffset = minCountIndex * windowOffsetsX;
-					options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
-				}
-				if (!hasTop) {
-					const yOffset = minCountIndex * windowOffsetsY;
-					options.defaultTop = windowDefaultTop + yOffset + availableTop;
+				if (!isEmpty(windowDefaultLeft) && !isEmpty(windowDefaultTop)) {
+					logger.info("Create Window", options);
+
+					const hasLeft = !isEmpty(options?.defaultLeft);
+					const hasTop = !isEmpty(options?.defaultTop);
+
+					if (!hasLeft || !hasTop) {
+						// Get the available rect for the display so we can take in to account
+						// OS menus, task bar etc
+						const monitorInfo = await fin.System.getMonitorInfo();
+						const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
+						const availableTop = monitorInfo.primaryMonitor.availableRect.top;
+						const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
+						const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
+						const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
+						const visibleWindows = await getAllVisibleWindows();
+						// Get the top left bounds for all the visible windows
+						const topLeftBounds = await Promise.all(
+							visibleWindows.map(async (win) => {
+								try {
+									const bounds = await win.getBounds();
+									return {
+										left: bounds.left,
+										top: bounds.top,
+										right: bounds.left + windowOffsetsX,
+										bottom: bounds.top + windowOffsetsY
+									};
+								} catch {
+									// return a dummy entry.
+									return {
+										left: 0,
+										top: 0,
+										right: 0,
+										bottom: 0
+									};
+								}
+							})
+						);
+
+						let minCountVal: number = 1000;
+						let minCountIndex = windowOffsetsMaxIncrements;
+
+						// Now see how many windows appear in each increment slot
+						for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
+							const xPos = i * windowOffsetsX;
+							const yPos = i * windowOffsetsY;
+							const leftPos = windowDefaultLeft + xPos;
+							const topPos = windowDefaultTop + yPos;
+							const foundWins = topLeftBounds.filter(
+								(topLeftWinBounds) =>
+									topLeftWinBounds.left >= leftPos &&
+									topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
+									topLeftWinBounds.top >= topPos &&
+									topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
+							);
+							// If this slot has less than the current minimum use this slot
+							if (foundWins.length < minCountVal) {
+								minCountVal = foundWins.length;
+								minCountIndex = i;
+							}
+						}
+
+						if (!hasLeft) {
+							const xOffset = minCountIndex * windowOffsetsX;
+							options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
+						}
+						if (!hasTop) {
+							const yOffset = minCountIndex * windowOffsetsY;
+							options.defaultTop = windowDefaultTop + yOffset + availableTop;
+						}
+					}
 				}
 			}
-
 			const overrideDefaultButtons = Array.isArray(options?.workspacePlatform?.toolbarOptions?.buttons);
 
 			if (!overrideDefaultButtons) {
@@ -703,15 +773,23 @@ export function overrideCallback(
 				// so we assume we are using the workspace defaults
 				// Since the defaults were created using the theme at startup
 				// we need to replace them with the current set of default
-				// buttons which are theme aware
+				// buttons which are theme and condition aware
 				options.workspacePlatform = options.workspacePlatform ?? {};
 				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
-				options.workspacePlatform.toolbarOptions.buttons = await getDefaultToolbarButtons();
+				const buttons = await getToolbarButtons(options);
+				if (!isEmpty(buttons)) {
+					options.workspacePlatform.toolbarOptions.buttons = buttons;
+				}
 			}
 
 			const window = await super.createWindow(options, identity);
 
-			logger.info("After Create Window", await window.getOptions());
+			try {
+				logger.info("After Create Window", await window.getOptions());
+			} catch {
+				// the logging is for informational purposes during debugging. If it fails
+				// the window may have closed straight after opening (e.g. automation testing)
+			}
 
 			// If the default buttons were overwritten then hopefully the creator
 			// used correctly themed versions, but in case they didn't we send
@@ -757,6 +835,24 @@ export function overrideCallback(
 			}
 
 			return super.handleAnalytics(events);
+		}
+
+		/**
+		 * Implementation for getting the dock provider from persistent storage.
+		 * @param id The id of the dock provider to get.
+		 * @returns The loaded dock provider config.
+		 */
+		public async getDockProviderConfig(id: string): Promise<DockProviderConfigWithIdentity | undefined> {
+			return loadConfig(id, async (providerId) => super.getDockProviderConfig(providerId));
+		}
+
+		/**
+		 * Implementation for saving a dock provider config to persistent storage.
+		 * @param config The new dock config to save to persistent storage.
+		 * @returns Nothing.
+		 */
+		public async saveDockProviderConfig(config: DockProviderConfigWithIdentity): Promise<void> {
+			return saveConfig(config, async (providerConfig) => super.saveDockProviderConfig(providerConfig));
 		}
 	}
 	return new Override();

@@ -117,3 +117,15 @@ export function formatError(err: unknown): string {
 	}
 	return JSON.stringify(err);
 }
+
+/**
+ * A basic string sanitize function that removes angle brackets <> from a string.
+ * @param content the content to sanitize
+ * @returns a string without angle brackets <>
+ */
+export function sanitizeString(content: string): string {
+	if (isString(content)) {
+		return content.replace(/<[^>]*>?/gm, "");
+	}
+	return content;
+}

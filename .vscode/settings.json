@@ -22,7 +22,7 @@
 	"files.eol": "\n",
 	"json.schemas": [
 		{
-			"fileMatch": ["/apps.json", "/*.apps.fin.json"],
+			"fileMatch": ["/apps.json", "/*.apps.fin.json", "/apps-*.json"],
 			"url": "./how-to/workspace-platform-starter/public/schemas/platform-apps.schema.json"
 		},
 		{
@@ -37,5 +37,6 @@
 			"fileMatch": ["/*.snapshot.fin.json"],
 			"url": "./how-to/workspace-platform-starter/public/schemas/snapshot.schema.json"
 		}
-	]
+	],
+	"eslint.execArgv": ["--max-old-space-size=5120"]
 }

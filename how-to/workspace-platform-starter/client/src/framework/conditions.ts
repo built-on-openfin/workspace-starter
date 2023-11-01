@@ -1,7 +1,12 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
-import type { ConditionMap, Conditions, ConditionsProviderOptions } from "./shapes/conditions-shapes";
+import type {
+	ConditionContextTypes,
+	ConditionMap,
+	Conditions,
+	ConditionsProviderOptions
+} from "./shapes/conditions-shapes";
 import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty } from "./utils";
 
@@ -68,15 +73,17 @@ export function registerCondition(
  * Check the condition to see if all of the conditions are true.
  * @param platform The platform.
  * @param conditionIds The conditions to check.
+ * @param context The context of the caller.
  * @returns True if all of the conditions are true.
  */
 export async function checkConditions(
 	platform: WorkspacePlatformModule,
-	conditionIds: string[] | undefined
+	conditionIds: string[] | undefined,
+	context?: ConditionContextTypes
 ): Promise<boolean> {
 	if (Array.isArray(conditionIds)) {
 		for (const conditionId of conditionIds) {
-			if (!(await checkCondition(platform, conditionId))) {
+			if (!(await checkCondition(platform, conditionId, context))) {
 				return false;
 			}
 		}
@@ -89,11 +96,16 @@ export async function checkConditions(
  * Check to see if a single condition is true.
  * @param platform The platform.
  * @param conditionId The condition to check.
+ * @param context The context of the caller.
  * @returns True if the condition is true, or it does not exist.
  */
 export async function checkCondition(
 	platform: WorkspacePlatformModule,
-	conditionId: string
+	conditionId: string,
+	context?: ConditionContextTypes
 ): Promise<boolean> {
-	return allConditions[conditionId](platform) ?? true;
+	if (isEmpty(allConditions[conditionId])) {
+		return false;
+	}
+	return allConditions[conditionId](platform, context);
 }

@@ -7,8 +7,8 @@ import {
 	type Page,
 	type PageLayout
 } from "@openfin/workspace-platform";
-import type { BrowserProviderOptions } from "workspace-platform-starter/shapes";
-import { getDefaultToolbarButtons } from "../buttons";
+import type { BrowserProviderOptions, Logger } from "workspace-platform-starter/shapes";
+import { getToolbarButtons } from "../buttons";
 import { isEmpty, isStringValue } from "../utils";
 
 /**
@@ -19,8 +19,20 @@ import { isEmpty, isStringValue } from "../utils";
 export async function getDefaultWindowOptions(
 	browserProvider: BrowserProviderOptions | undefined
 ): Promise<Partial<BrowserCreateWindowRequest>> {
-	const legacyWindowOptions = browserProvider?.windowOptions ?? {};
-	const defaultWindowOptions = browserProvider?.defaultWindowOptions ?? {};
+	if (isEmpty(browserProvider)) {
+		return {};
+	}
+	const defaultWindowOptions = browserProvider.defaultWindowOptions ?? {};
+	const legacyOptions = browserProvider as unknown as {
+		windowOptions?: {
+			title?: string;
+			icon?: string;
+			newTabUrl?: string;
+			newPageUrl?: string;
+		};
+	};
+
+	const legacyWindowOptions = legacyOptions.windowOptions ?? {};
 
 	let wsPlatform = defaultWindowOptions.workspacePlatform;
 
@@ -32,7 +44,7 @@ export async function getDefaultWindowOptions(
 		};
 	}
 
-	if (wsPlatform) {
+	if (wsPlatform && wsPlatform.windowType !== "platform") {
 		// start backwards compatibility
 		if (isStringValue(legacyWindowOptions.title) && !isStringValue(wsPlatform.title)) {
 			wsPlatform.title = legacyWindowOptions.title;
@@ -51,6 +63,7 @@ export async function getDefaultWindowOptions(
 		}
 
 		if (
+			defaultWindowOptions?.workspacePlatform?.windowType !== "platform" &&
 			isStringValue(defaultWindowOptions?.icon) &&
 			!isStringValue(defaultWindowOptions?.workspacePlatform?.favicon)
 		) {
@@ -58,11 +71,12 @@ export async function getDefaultWindowOptions(
 		}
 		// end backwards compatibility
 
-		if (Array.isArray(browserProvider?.toolbarButtons)) {
-			// we are going to override the ones specified at the workspace platform level
-			// as this is our more flexible extension with conditions
+		// we are going to override the ones specified at the workspace platform level
+		// as this is our more flexible extension with conditions
+		const buttons = await getToolbarButtons();
+		if (!isEmpty(buttons)) {
 			wsPlatform.toolbarOptions = {
-				buttons: await getDefaultToolbarButtons()
+				buttons
 			};
 		}
 
@@ -328,19 +342,105 @@ export async function getPageBounds(
 }
 
 /**
- * Launch a page.
+ * Launch a page in the workspace.
  * @param page The page to launch.
- * @param bounds The bound to launch the page with.
- * @returns The window that the page was launched with.
+ * @param options The options for the launch.
+ * @param options.bounds The optional bounds for the page.
+ * @param options.targetWindowIdentity The optional target window for the page.
+ * @param options.createCopyIfExists Create a copy of the page if it exists.
+ * @param logger Log output from the operation.
+ * @returns The window created.
  */
-export async function launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<BrowserWindowModule> {
-	let customBounds = bounds;
+export async function launchPage(
+	page: Page,
+	options?: {
+		bounds?: OpenFin.Bounds;
+		targetWindowIdentity?: OpenFin.Identity;
+		createCopyIfExists?: boolean;
+	},
+	logger?: Logger
+): Promise<BrowserWindowModule> {
+	if (isEmpty(page)) {
+		logger?.error("Page is empty and cannot be attached to a window.");
+	}
+
+	const platform = getCurrentSync();
+
+	// First find out if the page is already attached to a browser window
+	const attachedPages = await platform.Browser.getAllAttachedPages();
+	const attachedWindowId: OpenFin.Identity | undefined = attachedPages.find((pg) => pg.pageId === page.pageId)
+		?.parentIdentity;
+
+	const targetWindowIdentity = options?.targetWindowIdentity;
+	if (!isEmpty(targetWindowIdentity)) {
+		// If we have a target window identity and its not the same as attached window id
+		// then activate the existing window, unless the createCopy flag is set
+		if (
+			!isEmpty(attachedWindowId) &&
+			attachedWindowId.name !== targetWindowIdentity.name &&
+			!options?.createCopyIfExists
+		) {
+			const attachedWindow = platform.Browser.wrapSync(attachedWindowId);
+			await attachedWindow.setActivePage(page.pageId);
+			logger?.warn("Activating page in window which is not the specified target window", {
+				pageId: page.pageId,
+				attachedWindowId: attachedWindowId.name,
+				targetWindowIdentity: targetWindowIdentity.name
+			});
+			await bringWindowToFront({ identity: attachedWindow.identity });
+			return attachedWindow;
+		}
+
+		const targetWindow = platform.Browser.wrapSync(targetWindowIdentity);
+
+		const pages = await targetWindow.getPages();
+		const hasPage = pages.find((pg) => pg.pageId === page.pageId);
+
+		// The target window either does not already have the page, or we are creating
+		// a copy even it it does exist
+		if (!hasPage || options?.createCopyIfExists) {
+			if (!hasPage) {
+				logger?.info("Page does not exist in target window, adding", {
+					pageId: page.pageId,
+					targetWindowIdentity: targetWindowIdentity.name
+				});
+			} else {
+				logger?.info("Page exists in target window, but createCopyIfExists flag is set, adding", {
+					pageId: page.pageId,
+					targetWindowIdentity: targetWindowIdentity.name
+				});
+			}
+			await targetWindow.addPage(page);
+		} else {
+			logger?.info("Page exists in target window, activating", {
+				pageId: page.pageId,
+				targetWindowIdentity: targetWindowIdentity.name
+			});
+		}
+		await targetWindow.setActivePage(page.pageId);
+		await bringWindowToFront({ identity: targetWindow.identity });
+		return targetWindow;
+	}
+
+	// There was no target specified so if its already attached to a window
+	// we just activate it, unless the create copy flag is set
+	if (!isEmpty(attachedWindowId) && !options?.createCopyIfExists) {
+		const attachedWindow = platform.Browser.wrapSync(attachedWindowId);
+		logger?.info("Page exists in target window, activating", {
+			pageId: page.pageId,
+			attachedWindowId: attachedWindowId.name
+		});
+		await attachedWindow.setActivePage(page.pageId);
+		await bringWindowToFront({ identity: attachedWindow.identity });
+		return attachedWindow;
+	}
+
+	let customBounds = options?.bounds;
 	if (isEmpty(customBounds) && !isEmpty(page.customData?.windowBounds)) {
 		customBounds = page.customData.windowBounds;
 	}
 
-	const platform = getCurrentSync();
-	const newWindow: BrowserCreateWindowRequest = {
+	const newWindowRequest: BrowserCreateWindowRequest = {
 		workspacePlatform: {
 			pages: [page]
 		}
@@ -349,25 +449,32 @@ export async function launchPage(page: Page, bounds?: OpenFin.Bounds): Promise<B
 	if (!isEmpty(customBounds)) {
 		const monitors = await fin.System.getMonitorInfo();
 
-		newWindow.height = customBounds.height;
-		newWindow.width = customBounds.width;
-		newWindow.defaultHeight = customBounds.height;
-		newWindow.defaultWidth = customBounds.width;
+		newWindowRequest.height = customBounds.height;
+		newWindowRequest.width = customBounds.width;
+		newWindowRequest.defaultHeight = customBounds.height;
+		newWindowRequest.defaultWidth = customBounds.width;
 
 		if (!isEmpty(monitors.virtualScreen)) {
 			if (!isEmpty(monitors.virtualScreen.left) && customBounds.left >= monitors.virtualScreen.left) {
-				newWindow.x = customBounds.left;
-				newWindow.defaultLeft = customBounds.left;
+				newWindowRequest.x = customBounds.left;
+				newWindowRequest.defaultLeft = customBounds.left;
 			}
 
 			if (!isEmpty(monitors.virtualScreen.top) && customBounds.top >= monitors.virtualScreen.top) {
-				newWindow.y = customBounds.top;
-				newWindow.defaultTop = customBounds.top;
+				newWindowRequest.y = customBounds.top;
+				newWindowRequest.defaultTop = customBounds.top;
 			}
 		}
 	}
 
-	return platform.Browser.createWindow(newWindow);
+	const newWindow = await platform.Browser.createWindow(newWindowRequest);
+
+	logger?.info("Page does not exist, creating new window and adding page", {
+		pageId: page.pageId,
+		newWindowId: newWindow.identity.name
+	});
+
+	return newWindow;
 }
 
 /**
@@ -399,9 +506,14 @@ export async function getAllVisibleWindows(): Promise<OpenFin.Window[]> {
 	const windows = await platform.Application.getChildWindows();
 	const availableWindows: OpenFin.Window[] = [];
 	for (const currentWindow of windows) {
-		const isShowing = await currentWindow.isShowing();
-		if (isShowing) {
-			availableWindows.push(currentWindow);
+		try {
+			const isShowing = await currentWindow.isShowing();
+			if (isShowing) {
+				availableWindows.push(currentWindow);
+			}
+		} catch {
+			// if the window is destroyed before determining if it is showing then
+			// we should move to the next window but not throw.
 		}
 	}
 	return availableWindows;

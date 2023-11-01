@@ -1,3 +1,4 @@
+import type { PopupMenuStyles } from "./menu-shapes";
 /**
  * Options for the dock provider.
  */
@@ -24,18 +25,40 @@ export interface DockProviderOptions {
 		hideStorefrontButton?: boolean;
 	};
 	/**
-	 * What apps should be made available via the dock
+	 * Disallow rearrangement of dock icons by setting this flag.
 	 */
-	apps?: DockButtonApp[];
+	disableUserRearrangement?: boolean;
 	/**
-	 * What custom actions should be made available via the dock
+	 * What apps, actions or drop downs should be made available via the dock.
 	 */
-	buttons?: (DockButtonAction | DockButtonDropdown)[];
+	entries?: DockButtonTypes[];
+	/**
+	 * What apps should be made available via the dock, this property is deprecated, use entries.
+	 * @deprecated
+	 */
+	apps?: DockButtonAppsByTag[];
+	/**
+	 * What custom actions should be made available via the dock, this property is deprecated, use entries.
+	 * @deprecated
+	 */
+	buttons?: (DockButtonApp | DockButtonAction | DockButtonDropdown)[];
+	/**
+	 * Configured a default for the popup menu style, defaults to platform.
+	 */
+	popupMenuStyle?: PopupMenuStyles;
 }
 /**
  * Shared properties for dock buttons.
  */
 export interface DockButtonBase {
+	/**
+	 * The id for the dock entry.
+	 */
+	id: string;
+	/**
+	 * Is the dock entry visible.
+	 */
+	visible?: boolean;
 	/**
 	 * The tooltip to be shown for this button/entry
 	 */
@@ -44,11 +67,15 @@ export interface DockButtonBase {
 	 * The icon to use to distinguish this entry from others
 	 */
 	iconUrl?: string;
+	/**
+	 * Condition to determine if the item should be shown.
+	 */
+	conditions?: string[];
 }
 /**
- * A single app or a list of apps
+ * A single app or a list of apps that are defined by the tags in the app definitions.
  */
-export interface DockButtonApp extends DockButtonBase {
+export interface DockButtonAppsByTag extends DockButtonBase {
 	/**
 	 * Should this entry show a single app or a group of apps.
 	 */
@@ -58,19 +85,28 @@ export interface DockButtonApp extends DockButtonBase {
 	 * against the tags associated with apps returned from the app data sources.
 	 */
 	tags?: string[];
+	/**
+	 * Text to display if there are no entries because there are no tagged apps.
+	 */
+	noEntries?: string;
 }
 /**
- * A button which launched an app or action.
+ * A button which launches an app by it's id.
+ */
+export interface DockButtonApp extends DockButtonBase {
+	/**
+	 * Launch an app by it's id.
+	 */
+	appId: string;
+}
+/**
+ * A button which launches an app by it's custom action.
  */
 export interface DockButtonAction extends DockButtonBase {
 	/**
-	 * Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)
+	 * Launch an action.
 	 */
-	appId?: string;
-	/**
-	 * If an appId isn't provided then provide details related to the action
-	 */
-	action?: {
+	action: {
 		/**
 		 * The id of the action to fire
 		 */
@@ -78,7 +114,7 @@ export interface DockButtonAction extends DockButtonBase {
 		/**
 		 * data that should be passed to the action
 		 */
-		customData: unknown;
+		customData?: unknown;
 	};
 }
 /**
@@ -88,5 +124,13 @@ export interface DockButtonDropdown extends DockButtonBase {
 	/**
 	 * List of button options
 	 */
-	options: Omit<DockButtonAction, "iconUrl">[];
+	options: (Omit<DockButtonApp, "id"> | Omit<DockButtonAction, "id">)[];
+	/**
+	 * Text to display if there are no entries because conditions have excluded options.
+	 */
+	noEntries?: string;
 }
+/**
+ * All of the button types for the dock.
+ */
+export type DockButtonTypes = DockButtonAppsByTag | DockButtonApp | DockButtonAction | DockButtonDropdown;

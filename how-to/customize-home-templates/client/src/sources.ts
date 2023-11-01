@@ -10,6 +10,7 @@ import type { ISource, ISourceDefinition } from "./shapes";
 import { AsyncContactsSource } from "./sources/async-contacts/async-contacts-source";
 import { EmojiSource } from "./sources/emoji/emoji-source";
 import { QuoteSource } from "./sources/quote/quote-source";
+import { SuggestionSource } from "./sources/suggestions/suggestion-source";
 import { TreeInlineSource } from "./sources/tree-inline/tree-inline-source";
 import { TreeQuerySource } from "./sources/tree-query/tree-query-source";
 
@@ -62,6 +63,12 @@ const SOURCES: {
 			}
 		},
 		instance: new TreeInlineSource()
+	},
+	{
+		definition: {
+			id: "suggestions"
+		},
+		instance: new SuggestionSource()
 	}
 ];
 
@@ -97,19 +104,26 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
  * @param query The query to search for.
  * @param filters The filters to apply.
  * @param lastResponse The last search response used for updating existing results.
+ * @param options Options for the get search results.
+ * @param options.isSuggestion Is the query a suggestion.
  * @returns The list of search results.
  */
 export async function getSearchResults(
 	query: string,
 	filters: CLIFilter[],
-	lastResponse: HomeSearchListenerResponse
+	lastResponse: HomeSearchListenerResponse,
+	options: {
+		isSuggestion: boolean;
+	}
 ): Promise<HomeSearchResponse> {
 	const response: HomeSearchResponse = {
 		results: []
 	};
 
 	for (const element of SOURCES) {
-		const searchResponse = await element.instance.getSearchResults(query, filters, lastResponse);
+		const searchResponse = await element.instance.getSearchResults(query, filters, lastResponse, {
+			isSuggestion: options.isSuggestion
+		});
 		response.results = response.results.concat(searchResponse.results);
 	}
 

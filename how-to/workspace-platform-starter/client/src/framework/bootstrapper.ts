@@ -11,11 +11,13 @@ import { launch } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
-import * as PlatformSplash from "./platform/platform-splash";
+import * as platformSplashProvider from "./platform/platform-splash";
 import { getSettings } from "./settings";
-import type { ModuleHelpers } from "./shapes";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import type { LoggedInLifecyclePayload } from "./shapes/lifecycle-shapes";
+import type { ModuleHelpers } from "./shapes/module-shapes";
+import * as trayProvider from "./tray";
 import { isEmpty } from "./utils";
 import * as versionProvider from "./version";
 import * as dockComponent from "./workspace/dock";
@@ -28,18 +30,6 @@ const logger = createLogger("Bootstrapper");
 
 let bootstrapOptions: BootstrapOptions | undefined;
 let deregistered = false;
-
-/**
- * Used to register home related actions.
- */
-function registerHomeSupportedActions(): void {
-	registerAction("show-home", async () => {
-		await homeComponent.show();
-	});
-	registerAction("hide-home", async () => {
-		await homeComponent.hide();
-	});
-}
 
 /**
  * Bootstrap the workspace components.
@@ -66,7 +56,7 @@ export async function init(): Promise<boolean> {
 	let workspaceMetaInfo: RegistrationMetaInfo | undefined;
 	let notificationMetaInfo: RegistrationMetaInfo | undefined;
 
-	await PlatformSplash.updateProgress("Integrations");
+	await platformSplashProvider.updateProgress("Integrations");
 	logger.info("Registering integrations");
 	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
 		if (homeRegistration?.setSearchQuery) {
@@ -77,7 +67,7 @@ export async function init(): Promise<boolean> {
 	});
 
 	if (bootstrapOptions.home) {
-		await PlatformSplash.updateProgress("Home");
+		await platformSplashProvider.updateProgress("Home");
 
 		// only register search logic once workspace is running
 		homeRegistration = await homeComponent.register(customSettings.homeProvider);
@@ -92,7 +82,7 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.store) {
-		await PlatformSplash.updateProgress("Store");
+		await platformSplashProvider.updateProgress("Store");
 
 		const storeRegistration = await storeComponent.register(customSettings.storefrontProvider);
 		if (storeRegistration) {
@@ -100,17 +90,12 @@ export async function init(): Promise<boolean> {
 				workspaceMetaInfo = storeRegistration;
 			}
 			registeredComponents.push("store");
-			registerAction("show-store", async () => {
-				await storeComponent.show();
-			});
-			registerAction("hide-store", async () => {
-				await storeComponent.hide();
-			});
+			registerStoreSupportedActions();
 		}
 	}
 
 	if (bootstrapOptions.dock) {
-		await PlatformSplash.updateProgress("Dock");
+		await platformSplashProvider.updateProgress("Dock");
 
 		const dockRegistration = await dockComponent.register(customSettings.dockProvider, bootstrapOptions);
 		if (dockRegistration) {
@@ -118,12 +103,7 @@ export async function init(): Promise<boolean> {
 				workspaceMetaInfo = dockRegistration;
 			}
 			registeredComponents.push("dock");
-			registerAction("show-dock", async () => {
-				await dockComponent.show();
-			});
-			registerAction("minimize-dock", async () => {
-				await dockComponent.minimize();
-			});
+			registerDockSupportedActions();
 		}
 	}
 
@@ -135,15 +115,10 @@ export async function init(): Promise<boolean> {
 	}
 
 	if (bootstrapOptions.notifications) {
-		await PlatformSplash.updateProgress("Notifications");
+		await platformSplashProvider.updateProgress("Notifications");
 
-		notificationMetaInfo = await notificationsComponent.register(customSettings.dockProvider);
-		registerAction("show-notifications", async () => {
-			await notificationsComponent.show();
-		});
-		registerAction("hide-notifications", async () => {
-			await notificationsComponent.hide();
-		});
+		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
+		registerNotificationSupportedActions();
 	}
 
 	if (!isEmpty(notificationMetaInfo)) {
@@ -166,7 +141,7 @@ export async function init(): Promise<boolean> {
 		await analyticsProvider.handleAnalytics([analyticsEvent]);
 	}
 
-	await PlatformSplash.updateProgress("Versions");
+	await platformSplashProvider.updateProgress("Versions");
 
 	logger.info("Checking to see if version management is required.");
 	if (await versionProvider.manageVersionStatus(versionStatus)) {
@@ -179,7 +154,7 @@ export async function init(): Promise<boolean> {
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
 
-	await PlatformSplash.updateProgress("Low Code Integrations");
+	await platformSplashProvider.updateProgress("Low Code Integrations");
 
 	// register any instantiated low code integrations that require registering
 	await lowCodeIntegrationProvider.initializeWorkflows();
@@ -213,21 +188,30 @@ export async function init(): Promise<boolean> {
 		}
 	}
 
+	if (!isEmpty(customSettings?.trayProvider) && customSettings.trayProvider.enabled) {
+		await platformSplashProvider.updateProgress("Tray");
+		await trayProvider.init(customSettings?.trayProvider);
+	}
+
 	const platform = getCurrentSync();
 
 	if (isAuthenticationEnabled()) {
 		logger.info("Setting up listeners for authentication events");
 		// platform is instantiated and authentication if required is given. Watch for session
 		// expiry
-		authProvider.subscribe("logged-in", async () => {
+		authProvider.subscribe("logged-in", async (user?: unknown) => {
 			// what behavior do you want to do when someone logs in
 			// potentially the inverse if you hid something on session expiration
-			await fireLifecycleEvent(platform, "auth-logged-in");
+			await fireLifecycleEvent(platform, "auth-logged-in", {
+				user
+			} as LoggedInLifecyclePayload);
 		});
+
 		authProvider.subscribe("session-expired", async () => {
 			// session expired. What do you want to do with the platform when the user needs to log back in.
 			await fireLifecycleEvent(platform, "auth-session-expired");
 		});
+
 		authProvider.subscribe("before-logged-out", async () => {
 			// what behavior do you want to do when someone logs in
 			// do you want to save anything before they log themselves out
@@ -264,7 +248,7 @@ export async function init(): Promise<boolean> {
 async function autoStartApps(): Promise<void> {
 	const apps = await getApps({ autostart: true });
 	if (Array.isArray(apps) && apps.length > 0) {
-		await PlatformSplash.updateProgress("Auto Start Apps");
+		await platformSplashProvider.updateProgress("Auto Start Apps");
 		logger.info(
 			`Apps have been marked that they should autostart after the bootstrapping process and the platform has not set autostartApps to false in the bootstrapping options. ${apps.length} app(s) will be launched.`
 		);
@@ -306,4 +290,52 @@ async function deregister(): Promise<void> {
 		logger.info("Finished deregister.");
 		deregistered = true;
 	}
+}
+
+/**
+ * Used to register home related actions.
+ */
+function registerHomeSupportedActions(): void {
+	registerAction("show-home", async () => {
+		await homeComponent.show();
+	});
+	registerAction("hide-home", async () => {
+		await homeComponent.hide();
+	});
+}
+
+/**
+ * Used to register store related actions.
+ */
+function registerStoreSupportedActions(): void {
+	registerAction("show-store", async () => {
+		await storeComponent.show();
+	});
+	registerAction("hide-store", async () => {
+		await storeComponent.hide();
+	});
+}
+
+/**
+ * Used to register dock related actions.
+ */
+function registerDockSupportedActions(): void {
+	registerAction("show-dock", async () => {
+		await dockComponent.show();
+	});
+	registerAction("minimize-dock", async () => {
+		await dockComponent.minimize();
+	});
+}
+
+/**
+ * Used to register notification related actions.
+ */
+function registerNotificationSupportedActions(): void {
+	registerAction("show-notifications", async () => {
+		await notificationsComponent.show();
+	});
+	registerAction("hide-notifications", async () => {
+		await notificationsComponent.hide();
+	});
 }

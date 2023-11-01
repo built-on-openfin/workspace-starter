@@ -1,5 +1,4 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-> OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -70,7 +69,7 @@ Your window can then use this information to build a list for your user to engag
 Your window needs to expose a function that can be called by the platform:
 
 ```javascript
-// this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
+// this function is called by the intent-resolver-helper.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
 window['getIntentSelection'] = async () => {
   return new Promise((resolve, reject) => {
     // resolveAppSelection and rejectAppSelection can be called anything. They just represent the function names

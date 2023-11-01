@@ -1,5 +1,5 @@
 import { createLogger } from "./logger-provider";
-import { initializeModules, loadModules } from "./modules";
+import { initializeModule, loadModules } from "./modules";
 import type { ModuleHelpers } from "./shapes";
 import type { AuthProvider, AuthProviderOptions } from "./shapes/auth-shapes";
 import { isEmpty } from "./utils";
@@ -8,6 +8,7 @@ const logger = createLogger("Auth");
 
 let authOptions: AuthProviderOptions | undefined;
 let authProvider: AuthProvider;
+let isInitialized: boolean = false;
 let authEnabled = false;
 
 /**
@@ -24,16 +25,19 @@ export async function init(options: AuthProviderOptions | undefined, helpers: Mo
 		return;
 	}
 
-	if (isEmpty(authProvider)) {
+	if (!isInitialized) {
+		isInitialized = true;
+
 		const authModules = await loadModules<AuthProvider>(authOptions, "auth");
-		await initializeModules<AuthProvider>(authModules, helpers);
+		if (authModules.length > 0) {
+			if (authModules.length > 1) {
+				logger.warn("You have more than one auth module enabled, only the first will be used");
+			}
 
-		if (authModules.length > 1) {
-			logger.warn("You have more than one auth module enabled, only the first will be used");
+			await initializeModule<AuthProvider>(authModules[0], helpers);
+			authProvider = authModules[0].implementation;
+			authEnabled = true;
 		}
-
-		authProvider = authModules[0].implementation;
-		authEnabled = true;
 	} else {
 		logger.warn("The auth provider has already been initialized");
 	}
@@ -55,13 +59,36 @@ export function isAuthenticationEnabled(): boolean {
  */
 export function subscribe(
 	to: "logged-in" | "before-logged-out" | "logged-out" | "session-expired",
-	callback: () => Promise<void>
+	callback: (payload?: unknown) => Promise<void>
 ): string | undefined {
 	if (isEmpty(authProvider)) {
 		logger.warn("Please initialize auth before trying to use subscribe");
 		return;
 	}
-	return authProvider.subscribe(to, callback);
+
+	// If the subscription is for logged-in event then we wrap the callback
+	// so that we can optionally pass the user info back to subscribers
+	let wrappedCallback: (() => Promise<void>) | undefined;
+	if (to === "logged-in") {
+		wrappedCallback = async (): Promise<void> => {
+			setTimeout(async () => {
+				await callback(authOptions?.includeLoggedInUserInfo ?? true ? await getUserInfo() : undefined);
+			}, 0);
+		};
+	}
+
+	const subscriptionId = authProvider.subscribe(to, wrappedCallback ?? callback);
+
+	// If we are already logged in then call the method immediately on the next refresh cycle
+	if (to === "logged-in") {
+		setTimeout(async () => {
+			if (wrappedCallback && !(await isAuthenticationRequired())) {
+				await wrappedCallback();
+			}
+		}, 0);
+	}
+
+	return subscriptionId;
 }
 
 /**

@@ -1,6 +1,8 @@
 import type { Workspace } from "@openfin/workspace";
-import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { CustomPaletteSet, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { FavoriteEntry } from "./favorite-shapes";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { ColorSchemeMode } from "./theme-shapes";
 /**
  * Events that can be triggered through the lifecycle.
  */
@@ -12,11 +14,13 @@ export type LifecycleEvents =
 	| "before-quit"
 	| "theme-changed"
 	| "workspace-changed"
-	| "page-changed";
+	| "page-changed"
+	| "apps-changed"
+	| "favorite-changed";
 /**
  * The type for a lifecycle event handler.
  */
-export type LifecycleHandler = (platform: WorkspacePlatformModule, customData?: unknown) => Promise<void>;
+export type LifecycleHandler<T = unknown> = (platform: WorkspacePlatformModule, payload?: T) => Promise<void>;
 /**
  * Map of the lifecycle event handlers.
  */
@@ -71,4 +75,39 @@ export interface PageChangedLifecyclePayload {
 	 * The page data.
 	 */
 	page?: Page;
+}
+/**
+ * Event payload for the favorite changed lifecycle event.
+ */
+export interface FavoriteChangedLifecyclePayload {
+	/**
+	 * The action that happened to the favorite.
+	 */
+	action: "set" | "delete";
+	/**
+	 * The favorite entry.
+	 */
+	favorite: FavoriteEntry;
+}
+/**
+ * Logged in event payload.
+ */
+export interface LoggedInLifecyclePayload {
+	/**
+	 * The user details.
+	 */
+	user?: unknown;
+}
+/**
+ * Theme changed event payload.
+ */
+export interface ThemeChangedLifecyclePayload {
+	/**
+	 * The theme mode.
+	 */
+	schemeType?: ColorSchemeMode;
+	/**
+	 * The payload.
+	 */
+	payload?: CustomPaletteSet;
 }

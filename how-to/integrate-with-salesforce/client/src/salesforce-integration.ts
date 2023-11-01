@@ -270,7 +270,8 @@ export class SalesforceIntegration {
 		if (result.action.trigger === "focus-change") {
 			const data = result.data as SalesforceResultData;
 			if (data.obj && this._integrationHelpers) {
-				const palette = await this._integrationHelpers.getCurrentPalette();
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
 				const resultWithReferences = await this.buildSearchResult(
 					this._integrationHelpers.templateHelpers,
 					palette,
@@ -1055,9 +1056,8 @@ export class SalesforceIntegration {
 		}
 
 		if (batch.length > 0) {
-			const batchedResults = await this.getBatchedResults<
-				SalesforceRestApiQueryResult<SalesforceSearchResult>
-			>(batch);
+			const batchedResults =
+				await this.getBatchedResults<SalesforceRestApiQueryResult<SalesforceSearchResult>>(batch);
 			for (let i = 0; i < referenceMappings.length; i++) {
 				if (batchedResults[i].records?.length > 0) {
 					const result = batchedResults[i].records[0];

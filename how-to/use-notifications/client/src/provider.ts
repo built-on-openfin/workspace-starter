@@ -1,21 +1,5 @@
-import { init, getCurrentSync, ColorSchemeOptionType } from "@openfin/workspace-platform";
-import {
-	ActionBodyClickType,
-	IndicatorColor,
-	VERSION,
-	addEventListener as addNotificationEventListener,
-	create,
-	deregisterPlatform,
-	getNotificationsCount,
-	hide as hideNotificationCenter,
-	provider,
-	registerPlatform,
-	show as showNotificationCenter,
-	update,
-	type NotificationOptions,
-	type TemplateMarkdown,
-	type UpdatableNotificationOptions
-} from "@openfin/workspace/notifications";
+import { ColorSchemeOptionType, getCurrentSync, init } from "@openfin/workspace-platform";
+import * as Notifications from "@openfin/workspace/notifications";
 
 const PLATFORM_ID = "use-notifications";
 const PLATFORM_ICON = "http://localhost:8080/images/icon-dot.png";
@@ -24,7 +8,9 @@ const PLATFORM_TITLE = "Use Notifications";
 const NOTIFICATION_SOUND_URL = "http://localhost:8080/assets/notification.mp3";
 
 // Keep track of notifications we are updating
-const updatableNotifications: { [id: string]: TemplateMarkdown & { customData: { count: number } } } = {};
+const updatableNotifications: {
+	[id: string]: Notifications.TemplateMarkdown & { customData: { count: number } };
+} = {};
 let updatableNotificationTimer: number | undefined;
 
 let loggingElement: HTMLElement | null;
@@ -100,7 +86,7 @@ async function initializeDom(): Promise<void> {
 		return;
 	}
 
-	loggingAddEntry(`Library Version: ${VERSION}`);
+	loggingAddEntry(`Library Version: ${Notifications.VERSION}`);
 
 	const btnLoggingClear = document.querySelector("#btnLoggingClear");
 	if (btnLoggingClear) {
@@ -125,10 +111,10 @@ async function initializeDom(): Promise<void> {
 		btnCodeNotification.addEventListener("click", async () => {
 			try {
 				if (codeElement) {
-					const notificationOptions: NotificationOptions = JSON.parse(codeElement.value);
+					const notificationOptions: Notifications.NotificationOptions = JSON.parse(codeElement.value);
 					notificationOptions.id = randomUUID();
 					codeShowExample(notificationOptions);
-					await create(notificationOptions);
+					await Notifications.create(notificationOptions);
 				}
 			} catch {}
 		});
@@ -150,10 +136,12 @@ async function initializeDom(): Promise<void> {
 	const btnPlatformRegister = document.querySelector("#btnPlatformRegister");
 	if (btnPlatformRegister) {
 		btnPlatformRegister.addEventListener("click", async () => {
-			await registerPlatform({
-				id: PLATFORM_ID,
-				icon: PLATFORM_ICON,
-				title: PLATFORM_TITLE
+			await Notifications.register({
+				notificationsPlatformOptions: {
+					id: PLATFORM_ID,
+					icon: PLATFORM_ICON,
+					title: PLATFORM_TITLE
+				}
 			});
 			loggingAddEntry("Platform registered");
 			activePlatform = PLATFORM_ID;
@@ -163,7 +151,7 @@ async function initializeDom(): Promise<void> {
 	const btnPlatformDeregister = document.querySelector("#btnPlatformDeregister");
 	if (btnPlatformDeregister) {
 		btnPlatformDeregister.addEventListener("click", async () => {
-			await deregisterPlatform(PLATFORM_ID);
+			await Notifications.deregister(PLATFORM_ID);
 			loggingAddEntry("Platform deregistered");
 			activePlatform = undefined;
 		});
@@ -254,7 +242,7 @@ async function initializeDom(): Promise<void> {
 		btnNotificationsCenterShow.addEventListener("click", async () => {
 			try {
 				btnNotificationsCenterShow.disabled = true;
-				await showNotificationCenter();
+				await Notifications.show();
 			} catch (err) {
 				loggingAddEntry(`${err}`);
 			} finally {
@@ -268,7 +256,7 @@ async function initializeDom(): Promise<void> {
 		btnNotificationsCenterHide.addEventListener("click", async () => {
 			try {
 				btnNotificationsCenterHide.disabled = true;
-				await hideNotificationCenter();
+				await Notifications.hide();
 			} catch (err) {
 				loggingAddEntry(`${err}`);
 			} finally {
@@ -289,7 +277,7 @@ async function initializeDom(): Promise<void> {
 		});
 	}
 
-	showNotificationCount(await getNotificationsCount());
+	showNotificationCount(await Notifications.getNotificationsCount());
 }
 
 /**
@@ -297,11 +285,11 @@ async function initializeDom(): Promise<void> {
  */
 async function initializeListeners(): Promise<void> {
 	// Listen for new notifications being created
-	addNotificationEventListener("notification-created", (event) => {
+	await Notifications.addEventListener("notification-created", (event) => {
 		loggingAddEntry(`Created: ${event.notification.id}`);
 	});
 
-	addNotificationEventListener("notification-closed", (event) => {
+	await Notifications.addEventListener("notification-closed", (event) => {
 		loggingAddEntry(`Closed: ${event.notification.id}`);
 
 		if (updatableNotifications[event.notification.id]) {
@@ -313,7 +301,7 @@ async function initializeListeners(): Promise<void> {
 		}
 	});
 
-	addNotificationEventListener("notification-action", async (event) => {
+	await Notifications.addEventListener("notification-action", async (event) => {
 		if (event?.result?.actionId === "open-web-site") {
 			await fin.System.openUrlWithBrowser(event?.result?.url as string);
 		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
@@ -338,17 +326,17 @@ async function initializeListeners(): Promise<void> {
 		console.log(event);
 	});
 
-	addNotificationEventListener("notification-toast-dismissed", (event) => {
+	await Notifications.addEventListener("notification-toast-dismissed", (event) => {
 		loggingAddEntry(`Toast Dismissed: ${event.notification.id}`);
 	});
 
-	addNotificationEventListener("notification-form-submitted", (event) => {
+	await Notifications.addEventListener("notification-form-submitted", (event) => {
 		loggingAddEntry(`\tData: ${event?.form ? JSON.stringify(event.form) : "None"}`);
 		loggingAddEntry(`Form: ${event.notification.id}`);
 		console.log(event);
 	});
 
-	addNotificationEventListener("notifications-count-changed", (event) => {
+	await Notifications.addEventListener("notifications-count-changed", (event) => {
 		showNotificationCount(event.count);
 	});
 
@@ -411,7 +399,7 @@ function showNotificationCount(count: number): void {
  * Display a very basic simple notification.
  */
 async function showSimpleNotification(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification",
 		toast: "transient",
@@ -422,14 +410,14 @@ async function showSimpleNotification(): Promise<void> {
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
  * Show a notification which can be dismissed by clicking on the body.
  */
 async function showSimpleNotificationBodyDismiss(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification that be dismissed by clicking the body",
 		toast: "transient",
@@ -437,18 +425,18 @@ async function showSimpleNotificationBodyDismiss(): Promise<void> {
 		template: "markdown",
 		id: randomUUID(),
 		platform: activePlatform,
-		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT }
+		onSelect: { BODY_CLICK: Notifications.ActionBodyClickType.DISMISS_EVENT }
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
  * Show a notification which can be dismissed by clicking on the body and then trigger a custom action.
  */
 async function showSimpleNotificationBodyDismissAction(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification that be dismissed by clicking the body and trigger custom action",
 		toast: "transient",
@@ -456,7 +444,7 @@ async function showSimpleNotificationBodyDismissAction(): Promise<void> {
 		template: "markdown",
 		id: randomUUID(),
 		platform: activePlatform,
-		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT },
+		onSelect: { BODY_CLICK: Notifications.ActionBodyClickType.DISMISS_EVENT },
 		customData: {
 			action: "custom-action",
 			data: {
@@ -466,7 +454,7 @@ async function showSimpleNotificationBodyDismissAction(): Promise<void> {
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
@@ -474,7 +462,7 @@ async function showSimpleNotificationBodyDismissAction(): Promise<void> {
  * be handled the the notification-action listener.
  */
 async function showActionableNotification(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Actionable Notification",
 		body: "This is a notification that has an action",
 		toast: "transient",
@@ -502,7 +490,7 @@ async function showActionableNotification(): Promise<void> {
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
@@ -510,7 +498,7 @@ async function showActionableNotification(): Promise<void> {
  * be returned to the notification-form-submitted listener.
  */
 async function showFormNotification(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Form Notification",
 		body: "This is a notification that has form data",
 		toast: "transient",
@@ -558,7 +546,7 @@ async function showFormNotification(): Promise<void> {
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
@@ -566,7 +554,7 @@ async function showFormNotification(): Promise<void> {
  */
 async function showUpdatableNotification(): Promise<void> {
 	const id = randomUUID();
-	const notification: NotificationOptions & { customData: { count: number } } = {
+	const notification: Notifications.NotificationOptions & { customData: { count: number } } = {
 		title: "Updatable Notification",
 		body: "This is an updatable notification",
 		toast: "transient",
@@ -583,19 +571,19 @@ async function showUpdatableNotification(): Promise<void> {
 		updatableNotificationTimer = window.setInterval(async () => {
 			for (const notificationId in updatableNotifications) {
 				updatableNotifications[notificationId].customData.count++;
-				const notificationUpdate: UpdatableNotificationOptions = {
+				const notificationUpdate: Notifications.UpdatableNotificationOptions = {
 					template: "markdown",
 					body: `This is an updatable notification ${updatableNotifications[notificationId].customData.count}`,
 					id: notificationId
 				};
 
-				await update(notificationUpdate);
+				await Notifications.update(notificationUpdate);
 			}
 		}, 1000);
 	}
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 
 	updatableNotifications[id] = notification;
 }
@@ -604,7 +592,7 @@ async function showUpdatableNotification(): Promise<void> {
  * Show a notification with custom content.
  */
 async function showCustomNotification(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Custom Notification",
 		toast: "transient",
 		category: "default",
@@ -828,7 +816,7 @@ async function showCustomNotification(): Promise<void> {
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
@@ -836,7 +824,7 @@ async function showCustomNotification(): Promise<void> {
  * @param notificationSoundUrl The url of the sounds file to play.
  */
 async function showSoundNotification(notificationSoundUrl: string): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Sound Notification",
 		body: "This is a notification with sound 🔉",
 		toast: "transient",
@@ -847,7 +835,7 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 	await playNotification(notificationSoundUrl);
 }
 
@@ -855,7 +843,7 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
  * Display a notification that has an indicator bar on the left.
  */
 async function showIndicatorNotification(): Promise<void> {
-	const notification: NotificationOptions = {
+	const notification: Notifications.NotificationOptions = {
 		title: "Indicator Notification",
 		toast: "transient",
 		indicator: {
@@ -889,7 +877,7 @@ async function showIndicatorNotification(): Promise<void> {
 			},
 			indicator: {
 				align: "left",
-				color: IndicatorColor.RED
+				color: Notifications.IndicatorColor.RED
 			}
 		},
 		templateData: {
@@ -898,7 +886,7 @@ async function showIndicatorNotification(): Promise<void> {
 	};
 
 	codeShowExample(notification);
-	await create(notification);
+	await Notifications.create(notification);
 }
 
 /**
@@ -914,10 +902,12 @@ async function playNotification(notificationSoundUrl: string): Promise<void> {
  * Add a listener which checks for the connection changed event.
  * @param callback The callback to call when the connection state changes.
  */
-function addConnectionChangedEventListener(callback: (status: provider.ProviderStatus) => void): void {
+function addConnectionChangedEventListener(
+	callback: (status: Notifications.provider.ProviderStatus) => void
+): void {
 	if (statusIntervalId === undefined) {
 		statusIntervalId = window.setInterval(async () => {
-			const status = await provider.getStatus();
+			const status = await Notifications.provider.getStatus();
 			if (status.connected !== lastConnectionStatus) {
 				lastConnectionStatus = status.connected;
 				callback(status);

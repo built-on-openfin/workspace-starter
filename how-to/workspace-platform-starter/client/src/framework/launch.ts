@@ -1,5 +1,11 @@
 import type OpenFin from "@openfin/core";
-import { getCurrentSync, type BrowserSnapshot } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type BrowserSnapshot,
+	WindowType,
+	type BrowserWorkspacePlatformWindowOptions,
+	type Page
+} from "@openfin/workspace-platform";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
@@ -241,12 +247,60 @@ async function getViewIdentities(
  * @param platformApp The application to get the manifest from.
  * @returns The manifest object.
  */
-function getManifest<T>(platformApp: PlatformApp): T {
+function getInlineManifest<T>(platformApp: PlatformApp): T {
 	if (typeof platformApp.manifest === "string" && platformApp.manifest.startsWith("{")) {
 		return JSON.parse(platformApp.manifest) as T;
 	}
 
 	return platformApp.manifest as T;
+}
+
+/**
+ * Get a manifest from a url.
+ * @param platformApp The application to get the manifest from.
+ * @returns The manifest object.
+ */
+async function getManifest<T>(platformApp: PlatformApp): Promise<T | undefined> {
+	const platformEndpointId = getManifestEndpointId();
+	const appEndpointId = getManifestEndpointId(platformApp.appId);
+	let targetEndpointId: string | undefined;
+
+	if (endpointProvider.hasEndpoint(appEndpointId)) {
+		targetEndpointId = appEndpointId;
+	} else if (endpointProvider.hasEndpoint(platformEndpointId)) {
+		targetEndpointId = platformEndpointId;
+	}
+	try {
+		if (isEmpty(targetEndpointId)) {
+			const manifestResponse = await fetch(platformApp.manifest);
+			const manifest = (await manifestResponse.json()) as T;
+			return manifest;
+		}
+		const endpointManifest = await endpointProvider.requestResponse<{ url: string; appId: string }, T>(
+			targetEndpointId,
+			{ url: platformApp.manifest, appId: platformApp.appId }
+		);
+
+		return endpointManifest;
+	} catch (error) {
+		logger.error(
+			`There was an error while trying to fetch the manifest: ${platformApp.manifest} for appId: ${platformApp.appId}`,
+			error
+		);
+	}
+}
+
+/**
+ * Generates an endpoint id for fetching manifests.
+ * @param appId if an appId is specified then the endpointId is specific for fetching this app's manifest
+ * @returns the Id that should be used for an endpoint lookup
+ */
+function getManifestEndpointId(appId?: string): string {
+	const platformManifestEndpoint = "manifest-get";
+	if (isEmpty(appId)) {
+		return platformManifestEndpoint;
+	}
+	return `${platformManifestEndpoint}-${appId}`;
 }
 
 /**
@@ -269,15 +323,21 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 		);
 		return;
 	}
-	let manifest: OpenFin.WindowOptions;
+	let manifest: OpenFin.WindowOptions | undefined;
 
 	if (windowApp.manifestType === MANIFEST_TYPES.Window.id) {
-		const manifestResponse = await fetch(windowApp.manifest);
-		manifest = await manifestResponse.json();
+		manifest = await getManifest<OpenFin.WindowOptions>(windowApp);
 	} else {
 		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For classic windows we are demonstrating how it could be used
 		// for passing the manifest inline
-		manifest = getManifest(windowApp);
+		manifest = getInlineManifest(windowApp);
+	}
+
+	if (isEmpty(manifest)) {
+		logger.error(
+			`There was a problem encountered while trying to fetch the manifest for app: ${windowApp.appId}. Returning without launching.`
+		);
+		return;
 	}
 
 	let name = manifest.name;
@@ -307,6 +367,12 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 	if (!windowExists) {
 		try {
 			const platform = getCurrentSync();
+			manifest.defaultHeight = windowApp?.launchPreference?.bounds?.height ?? manifest.defaultHeight;
+			manifest.height = windowApp?.launchPreference?.bounds?.height ?? manifest.height;
+			manifest.defaultWidth = windowApp?.launchPreference?.bounds?.width ?? manifest.defaultWidth;
+			manifest.width = windowApp?.launchPreference?.bounds?.width ?? manifest.width;
+			manifest.defaultCentered = windowApp.launchPreference?.defaultCentered ?? manifest.defaultCentered;
+
 			const createdWindow = await platform.createWindow(manifest);
 			identity = createdWindow.identity;
 			await bringWindowToFront({ window: createdWindow });
@@ -338,15 +404,21 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 		);
 		return;
 	}
-	let manifest: OpenFin.ViewOptions;
+	let manifest: OpenFin.ViewOptions | undefined;
 
 	if (viewApp.manifestType === MANIFEST_TYPES.View.id) {
-		const manifestResponse = await fetch(viewApp.manifest);
-		manifest = await manifestResponse.json();
+		manifest = await getManifest<OpenFin.ViewOptions>(viewApp);
 	} else {
 		// conversion because of manifestType. In most use cases manifest is always a path to an executable or to a manifest file. For views we are demonstrating how it could be used
 		// for passing the manifest inline
-		manifest = getManifest(viewApp);
+		manifest = getInlineManifest(viewApp);
+	}
+
+	if (isEmpty(manifest)) {
+		logger.error(
+			`There was a problem encountered while trying to fetch the manifest for app: ${viewApp.appId}. Returning without launching.`
+		);
+		return;
 	}
 
 	let name = manifest.name;
@@ -377,8 +449,99 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 	if (!viewExists) {
 		try {
 			const platform = getCurrentSync();
-			const createdView = await platform.createView(manifest);
-			identity = createdView.identity;
+
+			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options?.view)) {
+				let workspacePlatform:
+					| Partial<BrowserWorkspacePlatformWindowOptions>
+					| { windowType: WindowType.Platform }
+					| undefined = {};
+
+				const layout = {
+					content: [
+						{
+							type: "stack",
+							content: [
+								{
+									type: "component",
+									componentName: "view",
+									componentState: manifest
+								}
+							]
+						}
+					],
+					settings: {
+						hasHeaders: viewApp.launchPreference?.options?.view?.host?.hasHeaders
+					}
+				};
+
+				workspacePlatform = {
+					windowType: !isEmpty(viewApp.launchPreference?.options?.view?.host?.url)
+						? WindowType.Platform
+						: undefined,
+					disableMultiplePages: viewApp.launchPreference?.options?.view?.host?.disableMultiplePages,
+					title: viewApp.launchPreference?.options?.view?.host?.title,
+					favicon: viewApp.launchPreference?.options?.view?.host?.icon
+				};
+				if (
+					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageTitle) ||
+					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageIcon)
+				) {
+					const page: Page = {
+						pageId: `page-${randomUUID()}`,
+						iconUrl: viewApp.launchPreference?.options?.view?.host?.pageIcon,
+						title: await platform.Browser.getUniquePageTitle(
+							viewApp.launchPreference?.options?.view?.host?.pageTitle
+						),
+						layout
+					};
+					workspacePlatform.pages = [page];
+				}
+				if (viewApp.launchPreference?.options?.view?.host?.disableToolbarOptions === true) {
+					workspacePlatform.toolbarOptions = { buttons: [] };
+				}
+
+				if (Object.keys(workspacePlatform).length === 0) {
+					workspacePlatform = undefined;
+				}
+
+				const preferenceWindow = await platform.createWindow({
+					workspacePlatform,
+					url: viewApp.launchPreference?.options?.view?.host?.url,
+					height: viewApp.launchPreference?.bounds?.height,
+					defaultHeight: viewApp.launchPreference?.bounds?.height,
+					defaultWidth: viewApp.launchPreference?.bounds?.width,
+					width: viewApp.launchPreference?.bounds?.width,
+					defaultCentered: viewApp.launchPreference?.defaultCentered,
+					layout
+				});
+
+				const createdViews = await preferenceWindow.getCurrentViews();
+				if (createdViews.length === 1) {
+					if (createdViews[0].identity.name === identity.name) {
+						identity = createdViews[0].identity;
+					} else {
+						logger.warn(
+							`The specified view id: ${identity.name} was not found in the returned view so we will be returning undefined as we cannot confirm the view was created.`
+						);
+						return;
+					}
+				} else {
+					logger.warn(
+						`We expected to create a single view with identity ${identity.name} but a preference was specified and the created window had more than the requested view ${createdViews.length}`
+					);
+					const matchedView = createdViews.find((view) => view.identity.name === identity.name);
+					if (isEmpty(matchedView)) {
+						logger.warn(
+							`The specified view id: ${identity.name} was not found in the list of returned views so we will be returning undefined as we cannot confirm the view was created.`
+						);
+						return;
+					}
+					identity = matchedView.identity;
+				}
+			} else {
+				const createdView = await platform.createView(manifest);
+				identity = createdView.identity;
+			}
 		} catch (err) {
 			logger.error("Error launching view", err);
 			return;
@@ -408,15 +571,21 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 		return;
 	}
 
-	let manifest: BrowserSnapshot;
+	let manifest: BrowserSnapshot | undefined;
 
 	if (snapshotApp.manifestType === MANIFEST_TYPES.Snapshot.id) {
 		logger.info(`Fetching snapshot for app ${snapshotApp.appId} from url: ${snapshotApp.manifest}`);
-		const manifestResponse = await fetch(snapshotApp.manifest);
-		manifest = await manifestResponse.json();
+		manifest = await getManifest<BrowserSnapshot>(snapshotApp);
 	} else {
 		logger.info(`Using snapshot defined in manifest setting of app ${snapshotApp.appId}`);
-		manifest = getManifest(snapshotApp);
+		manifest = getInlineManifest(snapshotApp);
+	}
+
+	if (isEmpty(manifest)) {
+		logger.error(
+			`There was a problem encountered while trying to fetch the manifest for app: ${snapshotApp.appId}. Returning without launching.`
+		);
+		return;
 	}
 
 	const windows = manifest.windows;
@@ -487,7 +656,7 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 	if (appAssetApp.manifestType === MANIFEST_TYPES.Appasset.id) {
 		options.alias = appAssetApp.manifest;
 	} else if (appAssetApp.manifestType === MANIFEST_TYPES.InlineAppAsset.id) {
-		const appAssetInfo: OpenFin.AppAssetInfo = getManifest(appAssetApp);
+		const appAssetInfo: OpenFin.AppAssetInfo = getInlineManifest(appAssetApp);
 		try {
 			await fin.System.downloadAsset(appAssetInfo, (progress) => {
 				const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
@@ -530,7 +699,7 @@ async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIden
 	if (externalApp.manifestType === MANIFEST_TYPES.External.id) {
 		options.path = externalApp.manifest;
 	} else if (externalApp.manifestType === MANIFEST_TYPES.InlineExternal.id) {
-		options = getManifest(externalApp);
+		options = getInlineManifest(externalApp);
 	} else {
 		logger.warn("An external app was passed to launch but it didn't match the supported manifest types.");
 		return;

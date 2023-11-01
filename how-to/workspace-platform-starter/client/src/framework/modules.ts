@@ -1,11 +1,24 @@
 import type OpenFin from "@openfin/core";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type BrowserWindowModule,
+	type WorkspacePlatformModule
+} from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
+import { checkCondition } from "./conditions";
+import { getEndpointClient } from "./endpoint";
+import type { EndpointClient } from "./endpoint-client";
+import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
+import * as Menu from "./menu";
 import { launchPage } from "./platform/browser";
-import type { PlatformApp } from "./shapes";
+import type { PlatformApp } from "./shapes/app-shapes";
+import type { ConditionContextTypes } from "./shapes/conditions-shapes";
+import type { FavoriteClient } from "./shapes/favorite-shapes";
+import type { Logger } from "./shapes/logger-shapes";
+import type { MenuClient } from "./shapes/menu-shapes";
 import type {
 	Module,
 	ModuleDefinition,
@@ -16,14 +29,18 @@ import type {
 	ModuleList,
 	ModuleTypes
 } from "./shapes/module-shapes";
+import type { NotificationClient } from "./shapes/notification-shapes";
+import type { ThemeClient } from "./shapes/theme-shapes";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentIconFolder,
 	getCurrentPalette,
-	getCurrentThemeId
+	getCurrentThemeId,
+	themeUrl
 } from "./themes";
-import { isEmpty } from "./utils";
+import { isEmpty, objectClone } from "./utils";
 import { getVersionInfo } from "./version";
+import { getNotificationClient } from "./workspace/notifications";
 
 const logger = createLogger("Modules");
 let passedSessionId: string;
@@ -160,7 +177,7 @@ export async function loadModule<
  */
 export async function initializeModules<
 	M extends ModuleImplementation<O, H>,
-	H = ModuleHelpers,
+	H extends ModuleHelpers = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(
@@ -184,7 +201,7 @@ export async function initializeModules<
  */
 export async function initializeModule<
 	M extends ModuleImplementation<O, H>,
-	H = ModuleHelpers,
+	H extends ModuleHelpers = ModuleHelpers,
 	O = unknown,
 	D extends ModuleDefinition<O> = ModuleDefinition<O>
 >(moduleEntry: ModuleEntry<M, H, O, D>, helpers: H): Promise<M | undefined> {
@@ -192,7 +209,12 @@ export async function initializeModule<
 		if (moduleEntry.implementation?.initialize) {
 			try {
 				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
-				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, helpers);
+				const moduleHelpers = {
+					...helpers,
+					getNotificationClient: getNotificationClientProxy(moduleEntry.definition),
+					getEndpointClient: getEndpointClientProxy(moduleEntry.definition)
+				};
+				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, moduleHelpers);
 				moduleEntry.isInitialized = true;
 			} catch (err) {
 				logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
@@ -256,12 +278,12 @@ export function getDefaultHelpers(): ModuleHelpers {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
 		},
-		getCurrentThemeId,
-		getCurrentIconFolder,
-		getCurrentPalette,
-		getCurrentColorSchemeMode,
+		getApp,
 		getVersionInfo,
 		getInteropClient,
+		getFavoriteClient,
+		getThemeClient,
+		getMenuClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -273,9 +295,42 @@ export function getDefaultHelpers(): ModuleHelpers {
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
 		},
-		launchPage,
+		launchPage: async (
+			pageId: string,
+			options?: {
+				bounds?: OpenFin.Bounds;
+				targetWindowIdentity?: OpenFin.Identity;
+				createCopyIfExists?: boolean;
+			},
+			providedLogger?: Logger
+		): Promise<BrowserWindowModule | undefined> => {
+			const platform = getCurrentSync();
+			const page = await platform.Storage.getPage(pageId);
+			if (page) {
+				return launchPage(page, options, providedLogger);
+			}
+			if (!isEmpty(providedLogger)) {
+				providedLogger.error(`The passed pageId: ${pageId} does not exist`);
+			} else {
+				logger.error(`The passed pageId: ${pageId} does not exist`);
+			}
+		},
+		launchWorkspace: async (workspaceId): Promise<boolean> => {
+			const platform = getCurrentSync();
+			const workspace = await platform.Storage.getWorkspace(workspaceId);
+			if (workspace) {
+				return platform.applyWorkspace(workspace);
+			}
+
+			logger.warn(`Unable to launch workspace with id ${workspaceId} as it does not exist`);
+			return false;
+		},
 		subscribeLifecycleEvent,
-		unsubscribeLifecycleEvent
+		unsubscribeLifecycleEvent,
+		condition: async (conditionId: string, contextType?: ConditionContextTypes): Promise<boolean> => {
+			const platform = getCurrentSync();
+			return checkCondition(platform, conditionId, contextType);
+		}
 	};
 }
 
@@ -293,4 +348,67 @@ async function getInteropClient(): Promise<OpenFin.InteropClient | undefined> {
 	logger.warn(
 		"A request was made for the interop client before bootstrapping had completed. Please listen for the lifeCycle event 'after-bootstrap' before use."
 	);
+}
+
+/**
+ * Get the favorite client to use with the modules.
+ * @returns The favorite client.
+ */
+async function getFavoriteClient(): Promise<FavoriteClient | undefined> {
+	if (!favoriteProvider.getInfo().isEnabled) {
+		return undefined;
+	}
+	// right now we return all functions but the optional adds scope for deciding who gets the ability to set/remove favorites
+	return favoriteProvider;
+}
+
+/**
+ * Returns a function that generates a notification client lazily using a module definition.
+ * @param definition module definition to use when requesting a notification client
+ * @returns a function that calls the getNotificationClient function using an enclosed module definition.
+ */
+function getNotificationClientProxy(
+	definition: ModuleDefinition
+): () => Promise<NotificationClient | undefined> {
+	const options = objectClone(definition);
+	return async () => getNotificationClient(options);
+}
+
+/**
+ * Returns a function that generates a endpoint client lazily using a module definition.
+ * @param definition module definition to use when requesting a endpoint client
+ * @returns a function that calls the getEndpointClient function using an enclosed module definition.
+ */
+function getEndpointClientProxy(definition: ModuleDefinition): () => Promise<EndpointClient | undefined> {
+	const options = objectClone(definition);
+	return async () => getEndpointClient(options);
+}
+
+/**
+ * Get the theme client to use with the modules.
+ * @returns The theme client.
+ */
+async function getThemeClient(): Promise<ThemeClient> {
+	return {
+		getThemeId: getCurrentThemeId,
+		getIconFolder: getCurrentIconFolder,
+		getPalette: getCurrentPalette,
+		getColorSchemeMode: getCurrentColorSchemeMode,
+		themeUrl: async (url): Promise<string | undefined> => {
+			const iconFolder = await getCurrentIconFolder();
+			const colorScheme = await getCurrentColorSchemeMode();
+			return themeUrl(url, iconFolder, colorScheme);
+		}
+	};
+}
+
+/**
+ * Get the menu client to use with the modules.
+ * @returns The menu client.
+ */
+async function getMenuClient(): Promise<MenuClient> {
+	return {
+		getPopupMenuStyle: Menu.getPopupMenuStyle,
+		showPopupMenu: Menu.showPopupMenu
+	};
 }

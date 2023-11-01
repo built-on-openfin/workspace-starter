@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import { Dock, Home, Storefront, type App } from "@openfin/workspace";
 import { CustomActionCallerType, init } from "@openfin/workspace-platform";
-import { deregisterPlatform } from "@openfin/workspace/notifications";
+import * as Notifications from "@openfin/workspace/notifications";
 import { register as registerDock } from "./dock";
 import { register as registerHome } from "./home";
 import { launchApp } from "./launch";
@@ -75,15 +75,35 @@ async function initializeWorkspaceComponents(
 ): Promise<void> {
 	console.log("Initializing the bootstrapper");
 
+	const apps: App[] = [];
+
+	if (customSettings?.appsUrl) {
+		try {
+			const urlAppsResponse = await fetch(customSettings?.appsUrl);
+			if (urlAppsResponse.ok) {
+				const urlAppsJson = await urlAppsResponse.json();
+				if (Array.isArray(urlAppsJson)) {
+					apps.push(...urlAppsJson);
+				}
+			}
+		} catch (err) {
+			console.error(`Failed loading apps from ${customSettings?.appsUrl}`, err);
+		}
+	}
+
+	if (customSettings?.apps && Array.isArray(customSettings.apps)) {
+		apps.push(...customSettings.apps);
+	}
+
 	// Register with home and show it
-	await registerHome(platformSettings, customSettings?.apps);
+	await registerHome(platformSettings, apps);
 	await Home.show();
 
 	// Register with store
-	await registerStore(platformSettings, customSettings?.apps);
+	await registerStore(platformSettings, apps);
 
 	// Register with dock
-	await registerDock(platformSettings, customSettings?.apps);
+	await registerDock(platformSettings, apps);
 
 	// Register with notifications
 	await registerNotifications(platformSettings);
@@ -94,7 +114,7 @@ async function initializeWorkspaceComponents(
 		await Home.deregister(platformSettings.id);
 		await Storefront.deregister(platformSettings.id);
 		await Dock.deregister();
-		await deregisterPlatform(platformSettings.id);
+		await Notifications.deregister(platformSettings.id);
 		await fin.Platform.getCurrentSync().quit();
 	});
 }

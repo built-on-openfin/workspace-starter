@@ -16,7 +16,7 @@ import type {
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
-import { isEmpty } from "../../../framework/utils";
+import { isEmpty } from "workspace-platform-starter/utils";
 import type { AboutProviderSettings } from "./shapes";
 
 /**
@@ -129,6 +129,7 @@ export class AboutProvider implements IntegrationModule<AboutProviderSettings> {
 	 * @param options Options for the search query.
 	 * @param options.queryMinLength The minimum length before a query is actioned.
 	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(
@@ -138,6 +139,7 @@ export class AboutProvider implements IntegrationModule<AboutProviderSettings> {
 		options: {
 			queryMinLength: number;
 			queryAgainst: string[];
+			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
 		if (query.length < 2 || !AboutProvider._ABOUT_COMMAND.startsWith(query)) {
@@ -147,7 +149,8 @@ export class AboutProvider implements IntegrationModule<AboutProviderSettings> {
 		}
 
 		if (this._integrationHelpers?.getVersionInfo) {
-			const palette = await this._integrationHelpers.getCurrentPalette();
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			const palette = await themeClient.getPalette();
 
 			const versionInfo = await this._integrationHelpers.getVersionInfo();
 

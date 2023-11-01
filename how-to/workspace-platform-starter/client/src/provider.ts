@@ -1,14 +1,14 @@
 import { init as bootstrap } from "./framework/bootstrapper";
 import { createLogger } from "./framework/logger-provider";
 import { init as initializePlatform } from "./framework/platform/platform";
-import * as PlatformSplash from "./framework/platform/platform-splash";
+import * as platformSplashProvider from "./framework/platform/platform-splash";
 
 /**
  * Initialize the provider.
  * @returns True if the provider started successfully.
  */
 export async function init(): Promise<boolean> {
-	await PlatformSplash.open();
+	await platformSplashProvider.open();
 
 	try {
 		return await new Promise<boolean>((resolve, reject) => {
@@ -53,6 +53,6 @@ export async function init(): Promise<boolean> {
 				});
 		});
 	} finally {
-		await PlatformSplash.close();
+		await platformSplashProvider.close();
 	}
 }

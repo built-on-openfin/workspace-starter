@@ -1,3 +1,4 @@
+import type { InitOptionsHandlerOptions } from "workspace-platform-starter/shapes/init-options-shapes";
 import type { MenuPosition } from "workspace-platform-starter/shapes/menu-shapes";
 
 /**
@@ -40,3 +41,18 @@ export interface PageMenuEntry {
 	 */
 	menuPosition?: MenuPosition;
 }
+
+/**
+ * The payload for launching a page.
+ */
+export interface ShowPagePayload {
+	/**
+	 * The page id.
+	 */
+	pageId: string;
+}
+
+/**
+ * Options for the launch page init options.
+ */
+export type ShowPageOptions = InitOptionsHandlerOptions;

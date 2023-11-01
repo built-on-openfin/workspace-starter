@@ -1,5 +1,4 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-> OpenFin Workspace is currently **only supported on Windows** although you can run the sample on a Mac for development purposes.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -67,7 +66,7 @@ As you can see from the snippet above, we have built in fetch support (type: "fe
 
 To learn more about how to modules see [How To Add A Module](./how-to-add-a-module.md).
 
-We include examples of endpoint modules in the modules folder:
+We include examples of endpoint modules in the modules folder (this is a small subset):
 
 - local-storage - shows how you can have an endpoint that can save and fetch from local storage
 - channel - lets you provide endpoint settings that specify a channel api you wish to connect to and whether you wish to pass a payload and return (action) or perform a requestResponse and get something back from the channel
@@ -86,6 +85,128 @@ Endpoints can be defined as:
 - an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported](./what-manifest-types-are-supported.md)
 - version validation - You can configure the versionProvider options to specify an endpointId that should be called. This endpoint will return an object that defines what versions the platform should work against. See - [How To Add Versioning Support](./how-to-add-versioning-support.md)
 - Context Object enrichment (either when a context object is broadcast or a context object is passed when raising an intent or calling fdc3.open) See [How to add context support to your app](./how-to-add-context-support-to-your-app.md) and [How to add intent support to your app](./how-to-add-intent-support-to-your-app.md). The interop broker will check to see if any endpoints match the id of a context type: e.g. **interopbroker.process.fdc3.contact** or **interopbroker.process.org.dayofinterest**. The latter is not an official fdc3 context type. It is an example of an organization specific namespace that takes a date as an id but also has other optional id settings that could be used by other apps. We have created a module [example-context-processor](../client/src/modules/endpoint/example-context-processor/endpoint.ts) and added an entry into the endpoints and endpoint module section of the endpointProvider settings in manifest.fin.json and settings.json found in the public directory.
+
+## How to use an Endpoint from a Module?
+
+Endpoint modules are a nice way of exposing functionality in a loosely coupled way. Endpoints are used by Workspace Platform Starter as a way of configuring where data comes from or goes to. This lets us easily configure where workspaces or pages are saved to for example or where applications come from.
+
+There are offer types of module (see [How to add a module](./how-to-add-a-module.md)) and sometimes a platform owner (or other teams) may wish to create an endpoint module to be used by other modules (e.g. a lifeCycle module). We like to offer the platform owner the option of providing modules the option of getting an endpoint client. The endpoint client can then be allowed to access all or a specific set of endpoints. Endpoint client access is off by default and if enabled a platform owner will still need to specify if modules can access all endpoints "\*" (not recommended) or specific endpoints.
+
+### How to get an endpoint client from a module?
+
+Modules are passed a helpers function via the initialize function of a module.
+
+The helper has an optional getEndpointClient.
+
+```js
+if (
+  !isEmpty(this._helpers?.getEndpointClient) &&
+  isEmpty(this._endpointClient) &&
+  this._endpointClientEnabled
+) {
+  // we want to generate a single instance and re-use it for this module instance
+  this._endpointClient = await this._helpers?.getEndpointClient();
+  // if your module is allowed to get an endpointClient then you will have an instance otherwise the endpoint client
+  // will be undefined
+  this._endpointClientEnabled = this._endpointClient !== undefined;
+}
+```
+
+You can then use the main endpoint client functions:
+
+- hasEndpoint - use this to check to see if you have been given access to the endpoint you are trying to use
+- action - send a fire an forget message to the endpoint you have access to
+- requestResponse - send a message and handle the response from the endpoint you have access to
+
+### How to configure endpoint access from a platform owner perspective
+
+The endpointProvider configuration has been extended to let you define the rules around endpointClient access.
+
+Default behavior: No endpoint clients for modules.
+
+```json
+"endpointProvider": {
+  "modules": [
+   {
+    "enabled": true,
+    "id": "local-storage",
+    "url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
+   }
+  ],
+  "endpoints": [
+   {
+    "id": "integration-preferences-get",
+    "type": "module",
+    "typeId": "local-storage",
+    "options": {
+     "method": "GET",
+     "dataType": "integration-preferences"
+    }
+   },
+   {
+    "id": "integration-preferences-set",
+    "type": "module",
+    "typeId": "local-storage",
+    "options": {
+     "method": "SET",
+     "dataType": "integration-preferences"
+    }
+   }
+  ]
+ }
+```
+
+The following examples would include the modules and endpoints listed above.
+
+Configuration is extended to give every module access to specific endpoints (in this example all modules will be given access to the endpoint integration-preferences-get):
+
+```json
+"endpointProvider": {
+  ...,
+  "endpointClients": {
+    "restrictToListed": false,
+    "defaults": {
+     "endpointIds": ["integration-preferences-get"]
+    }
+   }
+ }
+```
+
+The following example only allows modules that have there id listed and they use the default endpoints.
+
+```json
+"endpointProvider": {
+  ...,
+  "endpointClients": {
+    "restrictToListed": true,
+    "defaults": {
+     "endpointIds": ["integration-preferences-get"]
+    },
+    "clientOptions": [{
+     "id": "apps"
+    }]
+   }
+ }
+```
+
+Client options have an enabled flag (enabled by default) so you can turn off specific entries. You can also override the default endpointIds. You might want to specify that a specific module (your own as a platform owner) can access all endpoints.
+
+```json
+"endpointProvider": {
+  ...,
+  "endpointClients": {
+    "restrictToListed": true,
+    "defaults": {
+     "endpointIds": ["integration-preferences-get"]
+    },
+    "clientOptions": [{
+      "enabled": true,
+      "endpointIds": ["*"],
+      "id": "apps"
+    }]
+   }
+ }
+```
 
 ## Source Reference
 

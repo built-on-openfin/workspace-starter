@@ -100,6 +100,10 @@ export interface StorefrontProviderOptions {
 	 * Secondary buttons added to all store entries.
 	 */
 	secondaryButtons?: StoreButtonConfig[];
+	/**
+	 * Enable favorites, defaults to true.
+	 */
+	favoritesEnabled?: boolean;
 }
 /**
  * A navigation item.

@@ -14,10 +14,8 @@
                     "type": "array"
                 },
                 "type": {
+                    "const": "actions",
                     "description": "The actions connection type allows connections to execute a list of actions that the platform will carry out e.g.\nshow-home",
-                    "enum": [
-                        "actions"
-                    ],
                     "type": "string"
                 }
             },
@@ -27,18 +25,32 @@
             "type": "object"
         },
         "ActionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_3",
+            "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
         },
         "AnalyticsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_6",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
+                "sendToOpenFin": {
+                    "description": "Send analytics to OpenFin.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
         },
         "Api": {
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_42"
+            "$ref": "#/definitions/__type_43"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -229,6 +241,14 @@
                     "description": "Once all apps are fetched and processed from the one or more sources specified, how long should the result be\ncached for in seconds (can be used on it's own or in addition to the minutes setting).",
                     "type": "number"
                 },
+                "cacheRetrievalStrategy": {
+                    "description": "The cache strategy determines when the cache should be checked for expiry.\non-demand means that the cache expiry is checked every time apps are requested in code, this strategy\nreduces the overhead of app requests, but may take longer for app lists to update from dynamic endpoints\ninterval means that the cache expiry is checked by an interval timer, this mode will increase the amount\napp requested performed, but the app lists will be updated more quickly\nThe default is on-demand",
+                    "enum": [
+                        "interval",
+                        "on-demand"
+                    ],
+                    "type": "string"
+                },
                 "endpointIds": {
                     "description": "An array of endpoints that should be used to request a list of apps. The array entry can be a string\n(representing the array id) or an object with an inputId that maps to an endpoint id and gets passed to the\nendpoint specified using the outputId (this is useful for mapping apps from one format to another)",
                     "items": {
@@ -267,10 +287,8 @@
                     "type": "array"
                 },
                 "type": {
+                    "const": "appSource",
                     "description": "The appSource connection type allows connections to provide a list of apps that can show up in home and the\nstore. Apps with manifest type id connection will be send back to the connection on selection (e.g. a child view)",
-                    "enum": [
-                        "appSource"
-                    ],
                     "type": "string"
                 }
             },
@@ -278,9 +296,6 @@
                 "type"
             ],
             "type": "object"
-        },
-        "ApplicationIdentity": {
-            "$ref": "#/definitions/__type_31"
         },
         "Array": {
             "items": {
@@ -316,8 +331,22 @@
             "type": "array"
         },
         "AuthProviderOptions": {
-            "$ref": "#/definitions/ModuleList",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "Auth Provider Options. Specify a single auth module if your application requires authentication before allowing the\nuser to use the platform.",
+            "properties": {
+                "includeLoggedInUserInfo": {
+                    "description": "Include the user information when the logged in event is called",
+                    "type": "boolean"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
         },
         "AutoResizeOptions": {
             "$ref": "#/definitions/__type_24"
@@ -388,10 +417,8 @@
             "description": "Specific type for a broker connection.",
             "properties": {
                 "type": {
+                    "const": "broker",
                     "description": "The broker connection type allows connections to connect to our broker in order to react to context sharing.",
-                    "enum": [
-                        "broker"
-                    ],
                     "type": "string"
                 }
             },
@@ -403,35 +430,29 @@
         "BrowserButtonType": {
             "description": "Types of buttons on browser windows",
             "enum": [
-                "Close",
+                "ShowHideTabs",
                 "ColorLinking",
-                "Custom",
-                "LockUnlockPage",
-                "Maximise",
-                "Minimise",
                 "PresetLayouts",
+                "LockUnlockPage",
                 "SaveMenu",
                 "SavePage",
-                "ShowHideTabs"
-            ],
-            "type": "string"
-        },
-        "BrowserButtonType.Custom": {
-            "enum": [
+                "Minimise",
+                "Maximise",
+                "Close",
                 "Custom"
             ],
             "type": "string"
         },
+        "BrowserButtonType.Custom": {
+            "const": "Custom",
+            "type": "string"
+        },
         "BrowserButtonType.LockUnlockPage": {
-            "enum": [
-                "LockUnlockPage"
-            ],
+            "const": "LockUnlockPage",
             "type": "string"
         },
         "BrowserButtonType.ShowHideTabs": {
-            "enum": [
-                "ShowHideTabs"
-            ],
+            "const": "ShowHideTabs",
             "type": "string"
         },
         "BrowserProviderOptions": {
@@ -448,7 +469,11 @@
                 },
                 "defaultWindowOptions": {
                     "$ref": "#/definitions/Partial",
-                    "description": "Default options for creating a new browser window. Any option not included in WorkspacePlatform.getCurrentSync().Browser.createWindow(options) call will default to the value provided in this field."
+                    "description": "Default options for creating a new Browser window. These options are not applied on any non-Browser windows that get created.  These default options will take precedence over\ndefaultWindowOptions included in the manifest.  Any option not included in WorkspacePlatform.getCurrentSync().Browser.createWindow(options) call will default to the value provided in this field."
+                },
+                "disableWindowPositioningStrategy": {
+                    "description": "By default we implement a Window Positioning Strategy that will try and position launched windows with an\noffset. The way the windows are offset can be configured by specifying windowPositioningStrategy.\nIf you want to turn this off (e.g. automation tests that do not care about the layout of windows) then you\ncan set this value to true.",
+                    "type": "boolean"
                 },
                 "globalMenu": {
                     "description": "This setting lets you customize the default workspace browser main menu and specify your own.",
@@ -479,6 +504,25 @@
                                 }
                             },
                             "type": "object"
+                        },
+                        "styles": {
+                            "additionalProperties": false,
+                            "description": "Style the menus, if no options are provided it will use the build in version.",
+                            "properties": {
+                                "globalMenu": {
+                                    "$ref": "#/definitions/PopupMenuStyles",
+                                    "description": "Override the style for the global menu (top left icon)"
+                                },
+                                "pageMenu": {
+                                    "$ref": "#/definitions/PopupMenuStyles",
+                                    "description": "Override the style for the page menu (right click on page tab)"
+                                },
+                                "viewMenu": {
+                                    "$ref": "#/definitions/PopupMenuStyles",
+                                    "description": "Override the style for the view menu (right click on view tab)"
+                                }
+                            },
+                            "type": "object"
                         }
                     },
                     "type": "object"
@@ -504,34 +548,77 @@
                     },
                     "type": "array"
                 },
-                "windowOptions": {
-                    "additionalProperties": false,
-                    "description": "deprecated use `defaultWindowOptions` instead to specify settings that will apply to all workspace browser\nwindows",
-                    "properties": {
-                        "icon": {
-                            "description": "deprecated use `defaultWindowOptions.icon` instead.",
-                            "type": "string"
-                        },
-                        "newPageUrl": {
-                            "description": "deprecated use `defaultWindowOptions.workspacePlatform.newPageUrl` instead.",
-                            "type": "string"
-                        },
-                        "newTabUrl": {
-                            "description": "deprecated use `defaultWindowOptions.workspacePlatform.newTabUrl` instead.",
-                            "type": "string"
-                        },
-                        "title": {
-                            "description": "deprecated use `defaultWindowOptions.workspacePlatform.title` instead.",
-                            "type": "string"
-                        }
-                    },
-                    "type": "object"
-                },
                 "windowPositioningStrategy": {
                     "$ref": "#/definitions/CascadingWindowOffsetStrategy",
                     "description": "The strategy for window positioning."
                 }
             },
+            "type": "object"
+        },
+        "BrowserWorkspacePlatformWindowOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "disableMultiplePages": {
+                    "description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
+                    "type": "boolean"
+                },
+                "favicon": {
+                    "description": "The favicon to display on the top left of the created browser window.",
+                    "type": "string"
+                },
+                "isLocked": {
+                    "description": "When true, disables the ability to close pages, drag pages within the window,\nand drag pages into/out of the window. False by default.",
+                    "type": "boolean"
+                },
+                "newPageUrl": {
+                    "description": "Landing page that shows up when you add a new page from the plus button that exists in the window frame where the page selector is shown.\nIf you do not provide a newPageUrl, then the new Page plus button will not be shown and you cannot create a new empty Page or Window.",
+                    "type": "string"
+                },
+                "newTabUrl": {
+                    "description": "Landing page that shows up when you add a new tab from the plus button that exists in the tabstrip.\nIf you do not provide a newTabUrl, then the plus button in the tabstrip will not be shown and users cannot create a new empty tab.",
+                    "type": "string"
+                },
+                "pages": {
+                    "description": "The initial set of pages to add to the created browser window.",
+                    "items": {
+                        "$ref": "#/definitions/Page"
+                    },
+                    "type": "array"
+                },
+                "preventPageClose": {
+                    "description": "When true, disables the ability to close pages in the window. False by default.",
+                    "type": "boolean"
+                },
+                "preventPageDrag": {
+                    "description": "When true, page tabs in the window will not be draggable.\nThis includes reordering pages and dragging them out of the window.\nFalse by default.",
+                    "type": "boolean"
+                },
+                "preventPageDragIn": {
+                    "description": "When true, disables the ability to drag pages into the window. False by default.",
+                    "type": "boolean"
+                },
+                "preventPageDragOut": {
+                    "description": "When true, disables the ability to drag pages out of a window. False by default.",
+                    "type": "boolean"
+                },
+                "title": {
+                    "description": "A UI friendly title for the created browser window.",
+                    "type": "string"
+                },
+                "toolbarOptions": {
+                    "$ref": "#/definitions/ToolbarOptions"
+                },
+                "windowStateButtonOptions": {
+                    "$ref": "#/definitions/WindowStateButtonOptions"
+                },
+                "windowType": {
+                    "$ref": "#/definitions/WindowType",
+                    "description": "For internal usage.  Defaults to 'browser' when Browser is enabled when the WorkspacePlatform is initialized.  In order to use\nnon-Browser layout windows ('platform' windows) in a Browser-enabled workspace platform, set windowType to `platform`. In that instance, the other properties\nin the workspacePlatform object are not relevant."
+                }
+            },
+            "required": [
+                "pages"
+            ],
             "type": "object"
         },
         "CascadingWindowOffsetStrategy": {
@@ -554,18 +641,10 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_41"
-        },
-        "ColorSchemeOption": {
-            "enum": [
-                "dark",
-                "light",
-                "system"
-            ],
-            "type": "string"
+            "$ref": "#/definitions/__type_42"
         },
         "ConditionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_4",
+            "$ref": "#/definitions/ModuleList_3",
             "description": "List of modules."
         },
         "Connection": {
@@ -685,7 +764,7 @@
             "$ref": "#/definitions/__type_15"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_38"
+            "$ref": "#/definitions/__type_39"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_8"
@@ -935,6 +1014,10 @@
                     "$ref": "#/definitions/EndpointProviderOptions",
                     "description": "The endpoint provider options."
                 },
+                "favoriteProvider": {
+                    "$ref": "#/definitions/FavoriteProviderOptions",
+                    "description": "The settings you need to set if you want to indicate this platform supports favorites"
+                },
                 "homeProvider": {
                     "$ref": "#/definitions/HomeProviderOptions",
                     "description": "The home provider options."
@@ -983,6 +1066,10 @@
                     "$ref": "#/definitions/ThemeProviderOptions",
                     "description": "The theme provider options."
                 },
+                "trayProvider": {
+                    "$ref": "#/definitions/TrayProviderOptions",
+                    "description": "The settings you need to set if you want to include a tray icon with menu"
+                },
                 "versionProvider": {
                     "$ref": "#/definitions/VersionProviderOptions",
                     "description": "The version provider options."
@@ -991,7 +1078,7 @@
             "type": "object"
         },
         "DeepPartial": {
-            "$ref": "#/definitions/__type_29"
+            "$ref": "#/definitions/__type_31"
         },
         "DipRect": {
             "additionalProperties": false,
@@ -1010,15 +1097,15 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_35"
+            "$ref": "#/definitions/__type_36"
         },
         "DockButtonAction": {
             "additionalProperties": false,
-            "description": "A button which launched an app or action.",
+            "description": "A button which launches an app by it's custom action.",
             "properties": {
                 "action": {
                     "additionalProperties": false,
-                    "description": "If an appId isn't provided then provide details related to the action",
+                    "description": "Launch an action.",
                     "properties": {
                         "customData": {
                             "description": "data that should be passed to the action"
@@ -1029,30 +1116,89 @@
                         }
                     },
                     "required": [
-                        "customData",
                         "id"
                     ],
                     "type": "object"
                 },
-                "appId": {
-                    "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
-                    "type": "string"
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
+            "required": [
+                "action",
+                "id"
+            ],
             "type": "object"
         },
         "DockButtonApp": {
             "additionalProperties": false,
-            "description": "A single app or a list of apps",
+            "description": "A button which launches an app by it's id.",
             "properties": {
+                "appId": {
+                    "description": "Launch an app by it's id.",
+                    "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "appId",
+                "id"
+            ],
+            "type": "object"
+        },
+        "DockButtonAppsByTag": {
+            "additionalProperties": false,
+            "description": "A single app or a list of apps that are defined by the tags in the app definitions.",
+            "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "display": {
                     "description": "Should this entry show a single app or a group of apps.",
                     "enum": [
@@ -1065,6 +1211,14 @@
                     "description": "The icon to use to distinguish this entry from others",
                     "type": "string"
                 },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because there are no tagged apps.",
+                    "type": "string"
+                },
                 "tags": {
                     "description": "The tags to use to find the single app or a collection of apps that need to be listed. This will be compared\nagainst the tags associated with apps returned from the app data sources.",
                     "items": {
@@ -1075,10 +1229,15 @@
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
-                "display"
+                "display",
+                "id"
             ],
             "type": "object"
         },
@@ -1086,42 +1245,89 @@
             "additionalProperties": false,
             "description": "Button type which shows a drop down.",
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "iconUrl": {
                     "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id for the dock entry.",
+                    "type": "string"
+                },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because conditions have excluded options.",
                     "type": "string"
                 },
                 "options": {
                     "description": "List of button options",
                     "items": {
-                        "$ref": "#/definitions/Omit<DockButtonAction,\"iconUrl\">"
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/Omit_1"
+                            },
+                            {
+                                "$ref": "#/definitions/Omit_2"
+                            }
+                        ]
                     },
                     "type": "array"
                 },
                 "tooltip": {
                     "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
                 }
             },
             "required": [
+                "id",
                 "options"
             ],
             "type": "object"
+        },
+        "DockButtonTypes": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/DockButtonAppsByTag"
+                },
+                {
+                    "$ref": "#/definitions/DockButtonApp"
+                },
+                {
+                    "$ref": "#/definitions/DockButtonAction"
+                },
+                {
+                    "$ref": "#/definitions/DockButtonDropdown"
+                }
+            ],
+            "description": "All of the button types for the dock."
         },
         "DockProviderOptions": {
             "additionalProperties": false,
             "description": "Options for the dock provider.",
             "properties": {
                 "apps": {
-                    "description": "What apps should be made available via the dock",
+                    "description": "What apps should be made available via the dock, this property is deprecated, use entries.",
                     "items": {
-                        "$ref": "#/definitions/DockButtonApp"
+                        "$ref": "#/definitions/DockButtonAppsByTag"
                     },
                     "type": "array"
                 },
                 "buttons": {
-                    "description": "What custom actions should be made available via the dock",
+                    "description": "What custom actions should be made available via the dock, this property is deprecated, use entries.",
                     "items": {
                         "anyOf": [
+                            {
+                                "$ref": "#/definitions/DockButtonApp"
+                            },
                             {
                                 "$ref": "#/definitions/DockButtonAction"
                             },
@@ -1132,6 +1338,17 @@
                     },
                     "type": "array"
                 },
+                "disableUserRearrangement": {
+                    "description": "Disallow rearrangement of dock icons by setting this flag.",
+                    "type": "boolean"
+                },
+                "entries": {
+                    "description": "What apps, actions or drop downs should be made available via the dock.",
+                    "items": {
+                        "$ref": "#/definitions/DockButtonTypes"
+                    },
+                    "type": "array"
+                },
                 "icon": {
                     "description": "The icon to show in the dock component",
                     "type": "string"
@@ -1139,6 +1356,10 @@
                 "id": {
                     "description": "The id to use when registering against the dock component",
                     "type": "string"
+                },
+                "popupMenuStyle": {
+                    "$ref": "#/definitions/PopupMenuStyles",
+                    "description": "Configured a default for the popup menu style, defaults to platform."
                 },
                 "title": {
                     "description": "The title for your dock registration",
@@ -1171,6 +1392,67 @@
             ],
             "type": "object"
         },
+        "EndpointClientDefaultOptions": {
+            "additionalProperties": false,
+            "description": "A set of default options that will apply against all endpoint clients unless they\nhave a setting of their own.",
+            "properties": {
+                "endpointIds": {
+                    "description": "The list of specific endpoint Ids that clients should be able to access. * = access to all endpoints. We would recommend being restrictive and only provide * if needed to specific modules.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "EndpointClientOptions": {
+            "additionalProperties": false,
+            "description": "Options that allow you to influence the behavior of the notification client.",
+            "properties": {
+                "enabled": {
+                    "description": "Should this module have a endpoint client. Default is true.",
+                    "type": "boolean"
+                },
+                "endpointIds": {
+                    "description": "The list of specific endpoint Ids that clients should be able to access. * = access to all endpoints. We would recommend being restrictive and only provide * if needed to specific modules.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "description": "The id that acts as the reference to a module id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "EndpointClients": {
+            "additionalProperties": false,
+            "description": "A collection of rules and settings for endpoint clients that fall under this platform.",
+            "properties": {
+                "clientOptions": {
+                    "description": "If restricted to listed is true (the default) then an entry needs to exist for each module id\nthat should be provided with a endpoint client. Otherwise all modules\nwill be provided with a endpoint client using the default rules if provided.\nIf restrictToListed is false the clients list can still be used to disable\nspecific modules by specifying their id and enabled: false. It also allows you\nto specify overrides for specific modules regardless of the restrictToListed setting.",
+                    "items": {
+                        "$ref": "#/definitions/EndpointClientOptions"
+                    },
+                    "type": "array"
+                },
+                "defaults": {
+                    "$ref": "#/definitions/EndpointClientDefaultOptions",
+                    "description": "What default options should be applied against this platform"
+                },
+                "restrictToListed": {
+                    "description": "Should the notification client be passed only to those\nlisted or should all modules receive it but the list acts\nas an override. Default is true.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
         "EndpointDefinition<unknown>": {
             "anyOf": [
                 {
@@ -1188,6 +1470,10 @@
             "additionalProperties": false,
             "description": "Endpoint provider options",
             "properties": {
+                "endpointClients": {
+                    "$ref": "#/definitions/EndpointClients",
+                    "description": "A collection of rules and settings for endpoint clients that fall under this platform."
+                },
                 "endpoints": {
                     "description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
                     "items": {
@@ -1206,7 +1492,51 @@
             "type": "object"
         },
         "ExternalProcessRequestType": {
-            "$ref": "#/definitions/__type_39"
+            "$ref": "#/definitions/__type_40"
+        },
+        "FavoriteProviderOptions": {
+            "additionalProperties": false,
+            "description": "Options for the favorite provider.",
+            "properties": {
+                "enabled": {
+                    "description": "Is the provider enabled, defaults to true.",
+                    "type": "boolean"
+                },
+                "favoriteCommand": {
+                    "description": "What commands should integrations check for if they intent to support the display of favorites",
+                    "type": "string"
+                },
+                "favoriteIcon": {
+                    "description": "The icon that should be used if you want to indicate this is a favorite action",
+                    "type": "string"
+                },
+                "supportedFavoriteTypes": {
+                    "description": "The connection provider can have actions registered against it from the platform. This provides a default list of\nactions that connections should be able to use if actions are enabled for that connection.",
+                    "items": {
+                        "$ref": "#/definitions/FavoriteTypeNames"
+                    },
+                    "type": "array"
+                },
+                "unfavoriteIcon": {
+                    "description": "The icon to use to indicate that this favorite can be unset",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "favoriteIcon",
+                "unfavoriteIcon"
+            ],
+            "type": "object"
+        },
+        "FavoriteTypeNames": {
+            "description": "Names for all the favorite types.",
+            "enum": [
+                "app",
+                "page",
+                "query",
+                "workspace"
+            ],
+            "type": "string"
         },
         "FetchEndpointDefinition": {
             "additionalProperties": false,
@@ -1221,10 +1551,8 @@
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
+                    "const": "fetch",
                     "description": "This uses the built in support for fetch and the options will be the fetch options",
-                    "enum": [
-                        "fetch"
-                    ],
                     "type": "string"
                 }
             },
@@ -1323,24 +1651,25 @@
         "GlobalContextMenuOptionType": {
             "description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
             "enum": [
-                "Appearance",
-                "CloseWindow",
-                "Custom",
-                "DeleteWorkspace",
-                "NewPage",
                 "NewWindow",
-                "OpenStorefront",
+                "NewPage",
+                "SavePage",
+                "SavePageAs",
                 "Print",
                 "PrintAll",
                 "PrintScreen",
-                "Quit",
-                "RenameWorkspace",
+                "CloseWindow",
                 "RestoreChanges",
-                "SavePage",
-                "SavePageAs",
                 "SaveWorkspace",
                 "SaveWorkspaceAs",
-                "SwitchWorkspace"
+                "RenameWorkspace",
+                "SwitchWorkspace",
+                "DeleteWorkspace",
+                "Downloads",
+                "OpenStorefront",
+                "Appearance",
+                "Quit",
+                "Custom"
             ],
             "type": "string"
         },
@@ -1422,11 +1751,50 @@
             ],
             "type": "object"
         },
+        "HostLaunchPreference": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to the host of the content",
+            "properties": {
+                "disableMultiplePages": {
+                    "description": "Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.",
+                    "type": "boolean"
+                },
+                "disableToolbarOptions": {
+                    "description": "Should the toolbar options of a window be hidden if they are available?",
+                    "type": "boolean"
+                },
+                "hasHeaders": {
+                    "description": "Should the header for the content be hidden",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The Icon you would prefer the window shows.",
+                    "type": "string"
+                },
+                "pageIcon": {
+                    "description": "If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?",
+                    "type": "string"
+                },
+                "pageTitle": {
+                    "description": "If this host supports multiple layouts what should the layout (e.g page) title be?",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "If specified it indicates a preference to be used by this type of host.",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
         "Identity": {
             "$ref": "#/definitions/__type_3"
         },
         "Identity_1": {
-            "$ref": "#/definitions/__type_30"
+            "$ref": "#/definitions/__type_32"
         },
         "Image": {
             "additionalProperties": false,
@@ -1451,7 +1819,7 @@
             "type": "object"
         },
         "InitOptionsProviderOptions": {
-            "$ref": "#/definitions/ModuleList_1",
+            "$ref": "#/definitions/ModuleList",
             "description": "List of modules."
         },
         "IntegrationModuleDefinition<unknown>": {
@@ -1556,7 +1924,7 @@
             "description": "Option for the intent.",
             "properties": {
                 "intentTimeout": {
-                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default\nis 5000 (5 seconds)",
+                    "description": "How long should the broker wait after launching a view/window for it to register an intent handler. The default\nis 15000 (15 seconds)",
                     "type": "number"
                 }
             },
@@ -1596,7 +1964,45 @@
             "$ref": "#/definitions/__type_11"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_40"
+            "$ref": "#/definitions/__type_41"
+        },
+        "LaunchPreference": {
+            "additionalProperties": false,
+            "description": "Are there any preferences you would like to apply when launching this application?",
+            "properties": {
+                "bounds": {
+                    "additionalProperties": false,
+                    "description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
+                    "properties": {
+                        "height": {
+                            "type": "number"
+                        },
+                        "width": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "height",
+                        "width"
+                    ],
+                    "type": "object"
+                },
+                "defaultCentered": {
+                    "description": "Should the launched UI be positioned in the center of the screen?",
+                    "type": "boolean"
+                },
+                "options": {
+                    "additionalProperties": false,
+                    "description": "Are there any app type specific options you would like to apply?",
+                    "properties": {
+                        "view": {
+                            "$ref": "#/definitions/ViewLaunchPreference"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
         },
         "LayoutColumn": {
             "additionalProperties": false,
@@ -1628,10 +2034,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "column",
                     "description": "The type of the item. Possible values are 'row', 'column', 'stack', and 'component'.",
-                    "enum": [
-                        "column"
-                    ],
                     "type": "string"
                 },
                 "width": {
@@ -1647,9 +2051,7 @@
             "additionalProperties": false,
             "properties": {
                 "componentName": {
-                    "enum": [
-                        "view"
-                    ],
+                    "const": "view",
                     "type": "string"
                 },
                 "componentState": {
@@ -1731,10 +2133,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "row",
                     "description": "The type of the item. Possible values are 'row', 'column', 'stack', and 'component'.",
-                    "enum": [
-                        "row"
-                    ],
                     "type": "string"
                 },
                 "width": {
@@ -1747,14 +2147,14 @@
             "type": "object"
         },
         "LifecycleProviderOptions": {
-            "$ref": "#/definitions/ModuleList_5",
+            "$ref": "#/definitions/ModuleList_4",
             "description": "List of modules."
         },
         "LockUnlockPageConfig": {
             "$ref": "#/definitions/__type_27"
         },
         "LoggerProviderOptions": {
-            "$ref": "#/definitions/ModuleList_2",
+            "$ref": "#/definitions/ModuleList_1",
             "description": "List of modules."
         },
         "LowCodeIntegrationDefinition": {
@@ -1790,10 +2190,8 @@
                     "type": "string"
                 },
                 "type": {
+                    "const": "ms365",
                     "description": "The types of supported Low Code Integration",
-                    "enum": [
-                        "ms365"
-                    ],
                     "type": "string"
                 }
             },
@@ -1857,6 +2255,10 @@
         "MenuEntry.T_2": {
             "$ref": "#/definitions/ViewTabMenuOptionType",
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
+        },
+        "MenuEntry.T_3": {
+            "$ref": "#/definitions/TrayMenuOptionType.Custom",
+            "description": "Custom tray menu entry item."
         },
         "MenuEntry<GlobalContextMenuOptionType>": {
             "additionalProperties": false,
@@ -1984,6 +2386,84 @@
                 },
                 "position": {
                     "$ref": "#/definitions/MenuPosition_1",
+                    "description": "Where should this menu item be positioned in relation to existing entries"
+                },
+                "separator": {
+                    "$ref": "#/definitions/MenuSeparatorPosition",
+                    "description": "Should a menu separator be added"
+                },
+                "submenu": {
+                    "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
+                    "items": {
+                        "$ref": "#/definitions/MenuItemTemplate"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "description": "Can be `normal`, `separator`, `submenu`, or `checkbox`.\nDefaults to 'normal' unless a 'submenu' key exists",
+                    "enum": [
+                        "checkbox",
+                        "normal",
+                        "separator",
+                        "submenu"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "If false, the menu item will be entirely hidden.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "MenuEntry<TrayMenuOptionType>": {
+            "additionalProperties": false,
+            "description": "How to position a menu.",
+            "properties": {
+                "checked": {
+                    "description": "Should only be specified for `checkbox` type menu items.",
+                    "type": "boolean"
+                },
+                "conditions": {
+                    "description": "If the menu entry is included are there additional conditions that determine whether or not it should be shown (e.g. only show the logout menu entry if the authenticated condition is true)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "additionalProperties": false,
+                    "description": "Data related to the menu option",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/CustomActionSpecifier"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/MenuEntry.T_3"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                "enabled": {
+                    "description": "If false, the menu item will be greyed out and unclickable.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "Image Data URI with image dimensions inferred from the encoded string",
+                    "type": "string"
+                },
+                "include": {
+                    "description": "Should this menu entry definition be included in the list of menu entries",
+                    "type": "boolean"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/MenuPosition_3",
                     "description": "Where should this menu item be positioned in relation to existing entries"
                 },
                 "separator": {
@@ -2181,6 +2661,10 @@
             "$ref": "#/definitions/ViewTabMenuOptionType",
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override."
         },
+        "MenuPosition.T_3": {
+            "$ref": "#/definitions/TrayMenuOptionType.Custom",
+            "description": "Custom tray menu entry item."
+        },
         "MenuPositionOperation": {
             "description": "Operations that can be performed on menus when they are being updated.",
             "enum": [
@@ -2237,6 +2721,28 @@
             ],
             "type": "object"
         },
+        "MenuPosition_3": {
+            "additionalProperties": false,
+            "description": "The position for a menu entry.",
+            "properties": {
+                "customId": {
+                    "description": "If position type is Custom then a customId is required in order to do lookups of this entry in the list of entries",
+                    "type": "string"
+                },
+                "operation": {
+                    "$ref": "#/definitions/MenuPositionOperation",
+                    "description": "What should we do with this menu option"
+                },
+                "type": {
+                    "$ref": "#/definitions/MenuPosition.T_3",
+                    "description": "The type of Menu entry this is"
+                }
+            },
+            "required": [
+                "operation"
+            ],
+            "type": "object"
+        },
         "MenuSeparatorPosition": {
             "description": "Position for adding separators during update operations.",
             "enum": [
@@ -2246,8 +2752,42 @@
             "type": "string"
         },
         "MenusProviderOptions": {
-            "$ref": "#/definitions/ModuleList_7",
-            "description": "List of modules."
+            "additionalProperties": false,
+            "description": "A list of modules that provide menu for different locations.",
+            "properties": {
+                "menuFontSize": {
+                    "description": "The font size used in the custom popup menu.\ndefaults to 12",
+                    "type": "number"
+                },
+                "menuItemHeight": {
+                    "description": "The height of an item in the custom popup menu.\ndefaults to 32.",
+                    "type": "number"
+                },
+                "menuItemSeparatorHeight": {
+                    "description": "The height of a separator in the custom popup menu.\ndefaults to 16.",
+                    "type": "number"
+                },
+                "menuWidth": {
+                    "description": "The width to display the custom popup menu.\ndefaults to 200",
+                    "type": "number"
+                },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
+                "popupHtml": {
+                    "description": "The location of the HTML to use for custom popup page.\ndefaults to http://localhost:8080/common/popups/menu/index.html",
+                    "type": "string"
+                },
+                "popupMenuStyle": {
+                    "$ref": "#/definitions/PopupMenuStyles",
+                    "description": "Configured a global default for the popup menu style."
+                }
+            },
+            "type": "object"
         },
         "Microsoft365ConnectionConfig": {
             "additionalProperties": false,
@@ -2436,10 +2976,8 @@
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
+                    "const": "module",
                     "description": "This indicates that this endpoint depends on a module that needs to be loaded in order for it to work",
-                    "enum": [
-                        "module"
-                    ],
                     "type": "string"
                 },
                 "typeId": {
@@ -2457,7 +2995,7 @@
         },
         "ModuleList": {
             "additionalProperties": false,
-            "description": "Auth Provider Options. Specify a single auth module if your application requires authentication before allowing the\nuser to use the platform.",
+            "description": "InitOptions Provider Options. This is a list of modules that will be loaded and used to handle init params (similar\nto query strings). The module data setting needs to specify \"supportedActions\" and this should be an array of strings\nof the actions this module supports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed a payload (this should be a\nbase64 encoded object when passed via init params).",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2471,7 +3009,7 @@
         },
         "ModuleList_1": {
             "additionalProperties": false,
-            "description": "InitOptions Provider Options. This is a list of modules that will be loaded and used to handle init params (similar\nto query strings). The module data setting needs to specify \"supportedActions\" and this should be an array of strings\nof the actions this module supports. The init params used must specify action (which would map onto the action\nsupported) by your module and optionally payload if your module supports being passed a payload (this should be a\nbase64 encoded object when passed via init params).",
+            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the\nplatform",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2485,7 +3023,7 @@
         },
         "ModuleList_2": {
             "additionalProperties": false,
-            "description": "Logger Provider Options - A list of modules that will act as loggers that can receive logging information sent by the\nplatform",
+            "description": "A list of modules that provide actions that can be used by the platform.",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2499,7 +3037,7 @@
         },
         "ModuleList_3": {
             "additionalProperties": false,
-            "description": "A list of modules that provide actions that can be used by the platform.",
+            "description": "A list of modules that provide a set of conditions. The function for this condition will return true or false to\nindicate if the condition is met. Conditions are used in a number of places (for example menu options)",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
@@ -2513,20 +3051,6 @@
         },
         "ModuleList_4": {
             "additionalProperties": false,
-            "description": "A list of modules that provide a set of conditions. The function for this condition will return true or false to\nindicate if the condition is met. Conditions are used in a number of places (for example menu options)",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_5": {
-            "additionalProperties": false,
             "description": "This is a list of modules that allow you to hook into the lifecycle events exposed by the platform. A good example\nmight be you wish to register a module that is called when an authenticated session is expired",
             "properties": {
                 "modules": {
@@ -2539,39 +3063,82 @@
             },
             "type": "object"
         },
-        "ModuleList_6": {
-            "additionalProperties": false,
-            "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
-        "ModuleList_7": {
-            "additionalProperties": false,
-            "description": "A list of modules that provide menu for different locations.",
-            "properties": {
-                "modules": {
-                    "description": "The list of modules.",
-                    "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
-                    },
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_38"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_33"
+            "$ref": "#/definitions/__type_34"
+        },
+        "NotificationClientDefaultOptions": {
+            "additionalProperties": false,
+            "description": "A set of default options that will apply against all notification clients unless they\nhave a setting of their own.",
+            "properties": {
+                "enforceIcon": {
+                    "description": "Should the icon if provided be used regardless of the icon sent by the client",
+                    "type": "boolean"
+                },
+                "includeInPlatform": {
+                    "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "NotificationClientOptions": {
+            "additionalProperties": false,
+            "description": "Options that allow you to influence the behavior of the notification client.",
+            "properties": {
+                "enabled": {
+                    "description": "Should this module have a notification client. Default is true.",
+                    "type": "boolean"
+                },
+                "enforceIcon": {
+                    "description": "Should the icon if provided be used regardless of the icon sent by the client",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "An icon to enforce at the top of all of the notifications from this client",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The id that acts as the reference to a module id",
+                    "type": "string"
+                },
+                "idPrefix": {
+                    "description": "The prefix to assign to all notification ids for this client. It means you can\nhave an id shared across different module ids as they may come from the same team.\nId is used by default if no prefix is provided.",
+                    "type": "string"
+                },
+                "includeInPlatform": {
+                    "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "NotificationClients": {
+            "additionalProperties": false,
+            "description": "A collection of rules and settings for notification clients that fall under this platform.",
+            "properties": {
+                "clientOptions": {
+                    "description": "If restricted to listed is true then an entry needs to exist for each module id\nthat should be provided with a notification client. Otherwise all modules\nwill be provided with a notification client using the default rules if provided.\nIf restrictToListed is false the clients list can still be used to disable\nspecific modules by specifying their id and enabled: false. It also allows you\nto specify overrides for specific modules regardless of the restrictToListed setting.",
+                    "items": {
+                        "$ref": "#/definitions/NotificationClientOptions"
+                    },
+                    "type": "array"
+                },
+                "defaults": {
+                    "$ref": "#/definitions/NotificationClientDefaultOptions",
+                    "description": "What default options should be applied against this platform"
+                },
+                "restrictToListed": {
+                    "description": "Should the notification client be passed only to those\nlisted or should all modules receive it but the list acts\nas an override. Default is false.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -2585,39 +3152,13 @@
                     "description": "Unique identifier of the platform.",
                     "type": "string"
                 },
-                "scheme": {
-                    "$ref": "#/definitions/ColorSchemeOption",
-                    "description": "This is the scheme associated with this platform."
+                "notificationClients": {
+                    "$ref": "#/definitions/NotificationClients",
+                    "description": "A collection of rules and settings for notification clients that fall under this platform."
                 },
                 "title": {
                     "description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the\ndisplayName of the stream stored in Notification Center.",
                     "type": "string"
-                },
-                "workspacePlatform": {
-                    "additionalProperties": false,
-                    "description": "Workspace platform that registers this platform",
-                    "properties": {
-                        "analytics": {
-                            "additionalProperties": false,
-                            "properties": {
-                                "isSupported": {
-                                    "type": "boolean"
-                                }
-                            },
-                            "required": [
-                                "isSupported"
-                            ],
-                            "type": "object"
-                        },
-                        "identity": {
-                            "$ref": "#/definitions/ApplicationIdentity"
-                        }
-                    },
-                    "required": [
-                        "analytics",
-                        "identity"
-                    ],
-                    "type": "object"
                 }
             },
             "required": [
@@ -2630,33 +3171,30 @@
         "Omit": {
             "$ref": "#/definitions/__type_25"
         },
-        "Omit<DockButtonAction,\"iconUrl\">": {
+        "Omit_1": {
+            "$ref": "#/definitions/__type_29"
+        },
+        "Omit_2": {
+            "$ref": "#/definitions/__type_30"
+        },
+        "OpenOptions": {
             "additionalProperties": false,
+            "description": "Options related to the fdc3 open api",
             "properties": {
-                "action": {
-                    "additionalProperties": false,
-                    "description": "If an appId isn't provided then provide details related to the action",
-                    "properties": {
-                        "customData": {
-                            "description": "data that should be passed to the action"
-                        },
-                        "id": {
-                            "description": "The id of the action to fire",
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "customData",
-                        "id"
+                "connectionTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to connect to the broker. The default\nis 15000 (15 seconds).",
+                    "type": "number"
+                },
+                "contextTimeout": {
+                    "description": "How long should the broker wait after launching a view/window for it to register a context handler. The default\nis 15000 (15 seconds)",
+                    "type": "number"
+                },
+                "openStrategy": {
+                    "description": "When fdc3.open is raised will it only apply to applications that support the intent \"OpenApp\" (context if passed is sent to the intent handler for OpenApp)\nor will it follow the fdc3 approach where all apps can be opened and the defaultContextListener will receive the context if passed.\nThe default is fdc3. The previous behavior was \"intent\" and you can set this setting in order to have fdc3 open only apply to apps that say they support the\nintent \"OpenApp\". This setting is here to let you keep the previous behavior.",
+                    "enum": [
+                        "fdc3",
+                        "intent"
                     ],
-                    "type": "object"
-                },
-                "appId": {
-                    "description": "Should this action launch a specific app (the icon and tooltip will be pulled from the app if possible)",
-                    "type": "string"
-                },
-                "tooltip": {
-                    "description": "The tooltip to be shown for this button/entry",
                     "type": "string"
                 }
             },
@@ -2821,11 +3359,11 @@
             "description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
             "enum": [
                 "Close",
-                "Custom",
                 "Duplicate",
                 "Rename",
                 "Save",
-                "Save As"
+                "Save As",
+                "Custom"
             ],
             "type": "string"
         },
@@ -2985,6 +3523,10 @@
                 "interop": {
                     "$ref": "#/definitions/PlatformAppInterop",
                     "description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
+                },
+                "launchPreference": {
+                    "$ref": "#/definitions/LaunchPreference",
+                    "description": "When launching this defined application are there additional preferences the platform\nshould consider?"
                 },
                 "manifest": {
                     "anyOf": [
@@ -3190,6 +3732,10 @@
                     "$ref": "#/definitions/IntentResolverOptions",
                     "description": "Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the\nplatform"
                 },
+                "openOptions": {
+                    "$ref": "#/definitions/OpenOptions",
+                    "description": "When fdc3.open is used what settings should be applied?"
+                },
                 "unregisteredApp": {
                     "$ref": "#/definitions/PlatformApp",
                     "description": "If an unregistered app is included here then it indicates you wish to support selecting views/windows that are\nnot linked to an app from an intent picker that supports instances. The intents and contexts in this app specify\nwhich you support for unregistered instances. Do not specify a manifest or manifestType for this entry (we don't\nlaunch unregistered apps so there is no need for a manifest as it is existing instances and we specify a custom\nmanifestType for consideration when we are bringing an unregistered web app instance into focus)."
@@ -3233,7 +3779,16 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_34"
+            "$ref": "#/definitions/__type_35"
+        },
+        "PopupMenuStyles": {
+            "description": "The styles that can be used to display the popup menus.",
+            "enum": [
+                "custom",
+                "native",
+                "platform"
+            ],
+            "type": "string"
         },
         "PreDefinedButtonConfig": {
             "additionalProperties": false,
@@ -3286,7 +3841,7 @@
             "$ref": "#/definitions/__type_6"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_36"
+            "$ref": "#/definitions/__type_37"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_10"
@@ -3324,17 +3879,15 @@
             "type": "object"
         },
         "Snapshot": {
-            "$ref": "#/definitions/__type_32"
+            "$ref": "#/definitions/__type_33"
         },
         "SnapshotSourceConnection": {
             "additionalProperties": false,
             "description": "Specific type for a snapshot source connection.",
             "properties": {
                 "type": {
+                    "const": "snapshotSource",
                     "description": "The snapshotSource connection type allows connections to be accepted as a snapshot source",
-                    "enum": [
-                        "snapshotSource"
-                    ],
                     "type": "string"
                 }
             },
@@ -3462,6 +4015,10 @@
             "additionalProperties": false,
             "description": "Store Provider Options",
             "properties": {
+                "favoritesEnabled": {
+                    "description": "Enable favorites, defaults to true.",
+                    "type": "boolean"
+                },
                 "footer": {
                     "$ref": "#/definitions/StorefrontFooter",
                     "description": "The configuration of the footer for the store"
@@ -3778,6 +4335,50 @@
             ],
             "type": "object"
         },
+        "TrayMenuOptionType.Custom": {
+            "const": "Custom",
+            "description": "Custom tray menu entry item.",
+            "type": "string"
+        },
+        "TrayProviderOptions": {
+            "additionalProperties": false,
+            "description": "Tray Provider Options to provide settings for the tray provider",
+            "properties": {
+                "activateButton": {
+                    "description": "Should the menu activate on a left click, right click or any, default to any.",
+                    "enum": [
+                        "any",
+                        "left",
+                        "right"
+                    ],
+                    "type": "string"
+                },
+                "defaultAction": {
+                    "$ref": "#/definitions/CustomActionSpecifier_1",
+                    "description": "Default action if no menu entries provided."
+                },
+                "enabled": {
+                    "description": "Is the tray option enabled.",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "The icon to display in the tray, if not supplied default to platform icon.",
+                    "type": "string"
+                },
+                "menuEntries": {
+                    "description": "The menu entries to display.",
+                    "items": {
+                        "$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
+                    },
+                    "type": "array"
+                },
+                "popupMenuStyle": {
+                    "$ref": "#/definitions/PopupMenuStyles",
+                    "description": "Configured a default for the popup menu style, defaults to platform."
+                }
+            },
+            "type": "object"
+        },
         "VersionInfo": {
             "additionalProperties": false,
             "description": "Information about the version of the platform and it's dependencies",
@@ -3844,6 +4445,17 @@
                 "versionWindow": {
                     "$ref": "#/definitions/Partial_2",
                     "description": "This window will be shown if an endpointId is not specified and min and max criteria has been specified and has\nnot been met. This window will be shown to the user and the bootstrapping process will be stopped."
+                }
+            },
+            "type": "object"
+        },
+        "ViewLaunchPreference": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to a view",
+            "properties": {
+                "host": {
+                    "$ref": "#/definitions/HostLaunchPreference",
+                    "description": "If specified it indicates wish to specify specific host settings for this content."
                 }
             },
             "type": "object"
@@ -4066,19 +4678,19 @@
         "ViewTabMenuOptionType": {
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override.",
             "enum": [
-                "AddToChannel",
-                "Back",
-                "CloseTab",
-                "Custom",
-                "DuplicateView",
-                "Forward",
                 "NewView",
+                "DuplicateView",
                 "OpenWithDefaultBrowser",
+                "ReloadTab",
+                "CloseTab",
+                "AddToChannel",
+                "RemoveFromChannel",
+                "Back",
+                "Forward",
                 "Print",
                 "PrintAll",
                 "PrintScreen",
-                "ReloadTab",
-                "RemoveFromChannel"
+                "Custom"
             ],
             "type": "string"
         },
@@ -4526,6 +5138,17 @@
             ],
             "type": "object"
         },
+        "WindowType": {
+            "enum": [
+                "browser",
+                "platform"
+            ],
+            "type": "string"
+        },
+        "WindowType.Platform": {
+            "const": "platform",
+            "type": "string"
+        },
         "WorkspacePlatformOptions": {
             "$ref": "#/definitions/__type_12"
         },
@@ -4853,67 +5476,25 @@
                     "type": "number"
                 },
                 "workspacePlatform": {
-                    "additionalProperties": false,
-                    "description": "WorkspacePlatform specific window options. These options will not work unless a workspace platform has been initialized.",
-                    "properties": {
-                        "disableMultiplePages": {
-                            "description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
-                            "type": "boolean"
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/BrowserWorkspacePlatformWindowOptions"
                         },
-                        "favicon": {
-                            "description": "The favicon to display on the top left of the created browser window.",
-                            "type": "string"
-                        },
-                        "isLocked": {
-                            "description": "When true, disables the ability to close pages, drag pages within the window,\nand drag pages into/out of the window. False by default.",
-                            "type": "boolean"
-                        },
-                        "newPageUrl": {
-                            "description": "Landing page that shows up when you add a new page from the plus button that exists in the window frame where the page selector is shown.\nIf you do not provide a newPageUrl, then the new Page plus button will not be shown and you cannot create a new empty Page or Window.",
-                            "type": "string"
-                        },
-                        "newTabUrl": {
-                            "description": "Landing page that shows up when you add a new tab from the plus button that exists in the tabstrip.\nIf you do not provide a newTabUrl, then the plus button in the tabstrip will not be shown and users cannot create a new empty tab.",
-                            "type": "string"
-                        },
-                        "pages": {
-                            "description": "The initial set of pages to add to the created browser window.",
-                            "items": {
-                                "$ref": "#/definitions/Page"
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "windowType": {
+                                    "$ref": "#/definitions/WindowType.Platform",
+                                    "description": "For internal usage.  Defaults to 'browser' when Browser is enabled when the WorkspacePlatform is initialized.  In order to use\nnon-Browser layout windows ('platform' windows) in a Browser-enabled workspace platform, set windowType to `platform`. In that instance, the other properties\nin the workspacePlatform object are not relevant."
+                                }
                             },
-                            "type": "array"
-                        },
-                        "preventPageClose": {
-                            "description": "When true, disables the ability to close pages in the window. False by default.",
-                            "type": "boolean"
-                        },
-                        "preventPageDrag": {
-                            "description": "When true, page tabs in the window will not be draggable.\nThis includes reordering pages and dragging them out of the window.\nFalse by default.",
-                            "type": "boolean"
-                        },
-                        "preventPageDragIn": {
-                            "description": "When true, disables the ability to drag pages into the window. False by default.",
-                            "type": "boolean"
-                        },
-                        "preventPageDragOut": {
-                            "description": "When true, disables the ability to drag pages out of a window. False by default.",
-                            "type": "boolean"
-                        },
-                        "title": {
-                            "description": "A UI friendly title for the created browser window.",
-                            "type": "string"
-                        },
-                        "toolbarOptions": {
-                            "$ref": "#/definitions/ToolbarOptions"
-                        },
-                        "windowStateButtonOptions": {
-                            "$ref": "#/definitions/WindowStateButtonOptions"
+                            "required": [
+                                "windowType"
+                            ],
+                            "type": "object"
                         }
-                    },
-                    "required": [
-                        "pages"
                     ],
-                    "type": "object"
+                    "description": "WorkspacePlatform specific window options. These options will not work unless a workspace platform has been initialized."
                 },
                 "x": {
                     "type": "number"
@@ -5987,6 +6568,101 @@
         "__type_29": {
             "additionalProperties": false,
             "properties": {
+                "appId": {
+                    "description": "Launch an app by it's id.",
+                    "type": "string"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "appId"
+            ],
+            "type": "object"
+        },
+        "__type_3": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "The name of the component",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the compenent",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_30": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "additionalProperties": false,
+                    "description": "Launch an action.",
+                    "properties": {
+                        "customData": {
+                            "description": "data that should be passed to the action"
+                        },
+                        "id": {
+                            "description": "The id of the action to fire",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ],
+                    "type": "object"
+                },
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "action"
+            ],
+            "type": "object"
+        },
+        "__type_31": {
+            "additionalProperties": false,
+            "properties": {
                 "clientAPIVersion": {
                     "description": "version of client SDK,  set by the API",
                     "type": "string"
@@ -6042,51 +6718,21 @@
             },
             "type": "object"
         },
-        "__type_3": {
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "description": "The name of the component",
-                    "type": "string"
-                },
-                "uuid": {
-                    "description": "Universally unique identifier of the compenent",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name",
-                "uuid"
-            ],
-            "type": "object"
-        },
-        "__type_30": {
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "description": "The name of the component",
-                    "type": "string"
-                },
-                "uuid": {
-                    "description": "Universally unique identifier of the compenent",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "__type_31": {
-            "additionalProperties": false,
-            "properties": {
-                "uuid": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "uuid"
-            ],
-            "type": "object"
-        },
         "__type_32": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "The name of the component",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the compenent",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_33": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -6133,7 +6779,7 @@
             ],
             "type": "object"
         },
-        "__type_33": {
+        "__type_34": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -6230,7 +6876,7 @@
             ],
             "type": "object"
         },
-        "__type_34": {
+        "__type_35": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -6248,7 +6894,7 @@
             ],
             "type": "object"
         },
-        "__type_35": {
+        "__type_36": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -6264,7 +6910,7 @@
             ],
             "type": "object"
         },
-        "__type_36": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -6288,7 +6934,7 @@
             ],
             "type": "object"
         },
-        "__type_37": {
+        "__type_38": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -6346,7 +6992,7 @@
             ],
             "type": "object"
         },
-        "__type_38": {
+        "__type_39": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -6377,7 +7023,25 @@
             },
             "type": "object"
         },
-        "__type_39": {
+        "__type_4": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
+                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_40": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -6414,29 +7078,11 @@
             },
             "type": "object"
         },
-        "__type_4": {
-            "additionalProperties": false,
-            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-            "properties": {
-                "rules": {
-                    "description": "List of rules for creation of new content.",
-                    "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>",
-                        "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "__type_40": {
-            "additionalProperties": false,
-            "type": "object"
-        },
         "__type_41": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_42": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -6457,7 +7103,7 @@
             },
             "type": "object"
         },
-        "__type_42": {
+        "__type_43": {
             "additionalProperties": false,
             "properties": {
                 "alias": {

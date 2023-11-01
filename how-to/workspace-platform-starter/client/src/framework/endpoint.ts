@@ -1,10 +1,14 @@
+import { EndpointClient } from "./endpoint-client";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import type {
 	Endpoint,
+	EndpointClientDefaultOptions,
+	EndpointClientOptions,
 	EndpointDefinition,
 	EndpointProviderOptions,
-	FetchOptions
+	FetchOptions,
+	EndpointClient as EndpointClientInterface
 } from "./shapes/endpoint-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty, isStringValue, objectClone } from "./utils";
@@ -14,6 +18,12 @@ const SUPPORTED_HTTP_METHODS: string[] = ["GET", "POST", "DELETE", "PUT", "PATCH
 const logger = createLogger("Endpoint");
 const endpointDefinitions: EndpointDefinition[] = [];
 let modules: ModuleEntry<Endpoint>[] = [];
+let isInitialized = false;
+let allowEndpointClientCreation: boolean = true;
+let restrictEndpointClientCreationToListed = true;
+let endpointClientOptions: EndpointClientOptions[];
+let endpointClientDefaults: EndpointClientDefaultOptions;
+let endpointProvider: EndpointClientInterface;
 
 /**
  * Initialize the endpoint provider.
@@ -34,7 +44,61 @@ export async function init(
 
 		modules = await loadModules<never, Endpoint>(options, "endpoint");
 		await initializeModules(modules, helpers);
+		isInitialized = true;
+		restrictEndpointClientCreationToListed = options?.endpointClients?.restrictToListed ?? true;
+		endpointClientOptions = options?.endpointClients?.clientOptions ?? [];
+		endpointClientDefaults = {
+			...options?.endpointClients?.defaults
+		};
+		if (restrictEndpointClientCreationToListed && endpointClientOptions.length === 0) {
+			allowEndpointClientCreation = false;
+		}
+		endpointProvider = {
+			hasEndpoint,
+			action,
+			requestResponse
+		};
 	}
+}
+
+/**
+ * Returns a restricted endpoint client that helps isolate the endpoints that
+ * can be used by a client inside of a platform.
+ * @param options The options to help with the client restriction.
+ * @returns The endpoint client.
+ */
+export async function getEndpointClient(options: EndpointClientOptions): Promise<EndpointClient | undefined> {
+	if (!isInitialized) {
+		logger.warn("A endpoint client was requested before the endpoint provider was registered.", options);
+		return undefined;
+	}
+
+	if (!allowEndpointClientCreation) {
+		logger.warn(
+			"Endpoint client creation is disabled. If you this is not expected please check you Endpoint Provider -> Endpoint Clients settings."
+		);
+		return undefined;
+	}
+
+	const listedClientOptions = endpointClientOptions.find((optionEntry) => optionEntry.id === options.id);
+
+	if (restrictEndpointClientCreationToListed && isEmpty(listedClientOptions)) {
+		logger.warn(
+			`Endpoint client creation is limited to those listed in the endpoint clients section of the endpoint provider. We have been unable to find an entry with the id: ${options.id}. `
+		);
+		return undefined;
+	}
+
+	if (!isEmpty(listedClientOptions) && listedClientOptions.enabled === false) {
+		logger.warn(
+			`The options passed to create a endpoint client was a listed entry and it's enabled setting is set to false so a endpoint client will not be created. Id: ${options.id}`
+		);
+		return undefined;
+	}
+
+	const clientOptions = Object.assign(options, endpointClientDefaults, listedClientOptions ?? {});
+
+	return new EndpointClient(clientOptions, endpointProvider);
 }
 
 /**
@@ -109,8 +173,14 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 	// currently only fetch is supported but you could load different implementations of this intent based on type
 	if (endpointType === "fetch") {
 		const { url, ...options } = endpoint.options;
-		if (url) {
-			const req = getRequestOptions(url, options, request);
+		let targetUrl = url;
+		if (isEmpty(targetUrl)) {
+			const requestClone = objectClone(request) as { [id: string]: string };
+			// was we passed a url in the request?
+			targetUrl = requestClone.url;
+		}
+		if (targetUrl) {
+			const req = getRequestOptions(targetUrl, options, request);
 			if (!isStringValue(req.options.method) || !SUPPORTED_HTTP_METHODS.includes(req.options.method)) {
 				logger.warn(
 					`${endpointId} specifies a type: ${endpointType} with a method ${req.options.method} that is not supported.`

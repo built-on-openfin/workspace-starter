@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
 	type GlobalContextMenuItemTemplate,
@@ -11,7 +12,6 @@ import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import { getSettings } from "./settings";
-import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type {
 	MenuEntry,
 	MenuOptionType,
@@ -20,20 +20,44 @@ import type {
 	MenusProviderOptions,
 	MenuTemplateType,
 	MenuType,
+	PopupMenuEntry,
+	PopupMenuStyles,
 	RelatedMenuId
 } from "./shapes/menu-shapes";
-import { isBoolean, isEmpty } from "./utils";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
+import type { ColorSchemeMode } from "./shapes/theme-shapes";
+import {
+	getCurrentColorSchemeMode,
+	getCurrentIconFolder,
+	getCurrentPalette,
+	getNativeColorSchemeMode,
+	themeUrl
+} from "./themes";
+import { isBoolean, isEmpty, isStringValue, randomUUID } from "./utils";
+import { imageUrlToDataUrl } from "./utils-img";
+import { findMonitorContainingPoint } from "./utils-position";
 
 const logger = createLogger("Menu");
 let modules: ModuleEntry<Menus>[] = [];
+let menuProviderOptions: MenusProviderOptions | undefined;
+let platformRootUrl: string | undefined;
+let activePopupMenuId: string | undefined;
+let activePopupMenuTimerId: number | undefined;
 
 /**
  * Initialize the menu provider.
  * @param options Options for the menu provider.
  * @param helpers Module helpers to pass to any loaded modules.
+ * @param rootUrl The root url for loading content.
  */
-export async function init(options: MenusProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
-	if (options) {
+export async function init(
+	options: MenusProviderOptions | undefined,
+	helpers: ModuleHelpers,
+	rootUrl: string | undefined
+): Promise<void> {
+	if (!isEmpty(options)) {
+		platformRootUrl = rootUrl;
+		menuProviderOptions = options;
 		modules = await loadModules<Menus>(options, "menus");
 		await initializeModules<Menus>(modules, helpers);
 	}
@@ -58,7 +82,10 @@ export async function buildMenu<T extends MenuTemplateType, U extends MenuOption
 			const { position, include, conditions, separator, ...menuItemTemplate } = menuItem;
 
 			if (include ?? isEmpty(include)) {
-				const canShow = await checkConditions(platform, conditions);
+				const canShow = await checkConditions(platform, conditions, {
+					callerType: "menu",
+					customData: menuItem
+				});
 
 				if (canShow) {
 					const insertedIndex = updateMenuEntries(
@@ -198,7 +225,11 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 			);
 
 			if (entryIndex === -1) {
-				logger.warn(`Unable to find menu with entry type: ${positionType} and customId: ${positionCustomId}`);
+				logger.warn(
+					`Unable to find menu with entry type: ${JSON.stringify(
+						positionType
+					)} and customId: ${positionCustomId}`
+				);
 			}
 		} else {
 			entryIndex = menuEntries.findIndex((menuEntry) => menuEntry.data?.type === positionType);
@@ -272,4 +303,329 @@ async function getModuleMenuEntries<T extends MenuOptionType<MenuTemplateType>>(
 		}
 	}
 	return menuEntries;
+}
+
+/**
+ * Get the popup menu style.
+ * @returns The popup menu style.
+ */
+export function getPopupMenuStyle(): PopupMenuStyles {
+	return menuProviderOptions?.popupMenuStyle ?? "platform";
+}
+
+/**
+ * Show a custom menu.
+ * @param position The position to show the menu.
+ * @param position.x The x position to show the menu.
+ * @param position.y The y position to show the menu.
+ * @param parentIdentity The identity of the parent window.
+ * @param noEntryText The text to display if there are no entries.
+ * @param menuEntries The menu entries to display.
+ * @param options The options for displaying the menu.
+ * @param options.popupMenuStyle Display as native menu or custom popup.
+ * @returns The menu entry.
+ */
+export async function showPopupMenu<T = unknown>(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	noEntryText: string,
+	menuEntries: PopupMenuEntry<T>[],
+	options?: {
+		popupMenuStyle?: PopupMenuStyles;
+	}
+): Promise<T | undefined> {
+	const defaultMenuStyle = getPopupMenuStyle();
+	const popupMenuStyle = options?.popupMenuStyle ?? defaultMenuStyle;
+
+	if (popupMenuStyle === "platform" || popupMenuStyle === "native") {
+		return showNativePopupMenu(position, parentIdentity, noEntryText, menuEntries);
+	}
+
+	return showHtmlPopupMenu(
+		{ x: position.x - 16, y: position.y - 8 },
+		parentIdentity,
+		noEntryText,
+		menuEntries
+	);
+}
+
+/**
+ * Show a custom menu using popup window.
+ * @param position The position to show the menu.
+ * @param position.x The x position to show the menu.
+ * @param position.y The y position to show the menu.
+ * @param parentIdentity The identity of the parent window.
+ * @param noEntryText The text to display if there are no entries.
+ * @param menuEntries The menu entries to display.
+ * @returns The menu entry.
+ */
+export async function showHtmlPopupMenu<T = unknown>(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	noEntryText: string,
+	menuEntries: PopupMenuEntry<T>[]
+): Promise<T | undefined> {
+	if (activePopupMenuId) {
+		try {
+			const win = fin.Window.wrapSync({ uuid: fin.me.uuid, name: activePopupMenuId });
+			await win.close();
+		} catch {
+		} finally {
+			activePopupMenuId = undefined;
+		}
+	}
+	if (activePopupMenuTimerId) {
+		window.clearInterval(activePopupMenuTimerId);
+		activePopupMenuTimerId = undefined;
+	}
+
+	const parentWindow = fin.Window.wrapSync(parentIdentity);
+	const parentBounds = await parentWindow.getBounds();
+
+	const platformWindow = fin.Window.wrapSync(fin.me.identity);
+
+	const currentPalette = await getCurrentPalette();
+	const iconFolder = await getCurrentIconFolder();
+	const colorScheme = await getCurrentColorSchemeMode();
+
+	const menuDimensions = calculateMenuInfo(iconFolder, colorScheme, menuEntries, noEntryText);
+
+	let x = Math.floor(parentBounds.left + position.x);
+	let y = Math.floor(parentBounds.top + position.y);
+	const width = menuDimensions.width;
+	const height = menuDimensions.height;
+
+	const monitorInfo = await findMonitorContainingPoint({ x, y });
+
+	if (x + width > monitorInfo.availableRect.right) {
+		x = monitorInfo.availableRect.right - width - 20;
+	}
+	if (y + height > monitorInfo.availableRect.bottom) {
+		y = monitorInfo.availableRect.bottom - height - 20;
+	}
+
+	const bounds = { x, y, width, height };
+
+	const popupUrl = menuProviderOptions?.popupHtml ?? `${platformRootUrl}/common/popups/menu/index.html`;
+
+	activePopupMenuId = randomUUID();
+	// Keep track of the window, so if it closes by a mechanism we don't monitor
+	// we can cleanup the active id.
+	activePopupMenuTimerId = window.setInterval(async () => {
+		try {
+			if (activePopupMenuId) {
+				const win = fin.Window.wrapSync({ uuid: fin.me.identity.uuid, name: activePopupMenuId });
+				const state = await win.getState();
+				if (state !== "normal") {
+					activePopupMenuId = undefined;
+					window.clearInterval(activePopupMenuTimerId);
+					activePopupMenuTimerId = undefined;
+				}
+			}
+		} catch {
+			activePopupMenuId = undefined;
+			window.clearInterval(activePopupMenuTimerId);
+			activePopupMenuTimerId = undefined;
+		}
+	}, 1000);
+
+	return new Promise<T | undefined>((resolve) => {
+		// Do this as a background task so that current events are not held up
+		window.setTimeout(async () => {
+			let ret: T | undefined;
+
+			try {
+				const result = await platformWindow.showPopupWindow({
+					name: activePopupMenuId,
+					initialOptions: {
+						showTaskbarIcon: false,
+						smallWindow: true,
+						contextMenu: false,
+						backgroundColor: currentPalette?.backgroundPrimary,
+						customData: {
+							noEntryText,
+							menuEntries: menuDimensions.entries,
+							palette: currentPalette,
+							colorScheme,
+							menuProviderOptions,
+							popupUrl,
+							monitorRect: monitorInfo,
+							bounds
+						}
+					},
+					url: popupUrl,
+					...bounds,
+					blurBehavior: "modal"
+				});
+
+				activePopupMenuId = undefined;
+				window.clearInterval(activePopupMenuTimerId);
+				activePopupMenuTimerId = undefined;
+
+				if (result.result === "clicked") {
+					ret = result.data as T;
+				}
+			} catch {}
+
+			resolve(ret);
+		}, 100);
+	});
+}
+
+/**
+ * Show the popup menu.
+ * @param position The position to display the menu.
+ * @param position.x The x position to display the menu.
+ * @param position.y The y position to display the menu.
+ * @param parentIdentity The identity of the window to use for showing the popup.
+ * @param noEntryText The text to display if there are no entries.
+ * @param menuEntries The menu entries to display.
+ * @returns The selected entry or undefined if menu was dismissed.
+ */
+export async function showNativePopupMenu<T = unknown>(
+	position: { x: number; y: number },
+	parentIdentity: OpenFin.Identity,
+	noEntryText: string,
+	menuEntries: PopupMenuEntry<T>[]
+): Promise<T | undefined> {
+	const parentWindow = fin.Window.wrapSync(parentIdentity);
+
+	const finalEntries: PopupMenuEntry<T>[] = [];
+
+	const iconFolder = await getCurrentIconFolder();
+	const colorScheme = await getNativeColorSchemeMode();
+
+	for (const menuEntry of menuEntries.filter((m) => m.visible ?? true)) {
+		let iconBase64: string | undefined = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+		if (isStringValue(iconBase64)) {
+			iconBase64 = await imageUrlToDataUrl(iconBase64, 20);
+		}
+		finalEntries.push({
+			...menuEntry,
+			icon: iconBase64
+		});
+	}
+
+	if (isEmpty(finalEntries) || finalEntries.length === 0) {
+		finalEntries.push({
+			label: noEntryText,
+			enabled: false
+		});
+	}
+
+	const r = await parentWindow.showPopupMenu({
+		template: finalEntries,
+		x: position.x,
+		y: position.y
+	});
+
+	if (r.result === "clicked") {
+		return r.data as T;
+	}
+}
+
+/**
+ * Calculate the info for a menu.
+ * @param iconFolder The folder for substituting icons.
+ * @param colorScheme The color scheme for icons.
+ * @param entries The entries to measure.
+ * @param noEntryText The text to display if there are no entries.
+ * @returns The calculated dimensions and finalized entries.
+ */
+function calculateMenuInfo<T>(
+	iconFolder: string,
+	colorScheme: ColorSchemeMode,
+	entries: (PopupMenuEntry<T> & { y?: number; submenuDimensions?: { width: number; height: number } })[],
+	noEntryText: string
+): {
+	entries: (PopupMenuEntry<T> & { y?: number; submenuDimensions?: { width: number; height: number } })[];
+	width: number;
+	height: number;
+} {
+	const finalEntries: (PopupMenuEntry<T> & {
+		y?: number;
+		submenuDimensions?: { width: number; height: number };
+	})[] = [];
+	let longestLabel = "";
+	const itemHeight = menuProviderOptions?.menuItemHeight ?? 24;
+	const separatorHeight = menuProviderOptions?.menuItemSeparatorHeight ?? 12;
+
+	let currentTop = 0;
+	let iconCount = 0;
+	let subMenuCount = 0;
+
+	for (const menuEntry of entries.filter((m) => m.visible ?? true)) {
+		menuEntry.y = currentTop;
+
+		if (isStringValue(menuEntry.icon)) {
+			menuEntry.icon = themeUrl(menuEntry.icon, iconFolder, colorScheme);
+			iconCount++;
+		}
+		if (menuEntry.type === "checkbox" || !isEmpty(menuEntry.checked)) {
+			iconCount++;
+		}
+
+		if (menuEntry.type === "separator") {
+			currentTop += separatorHeight;
+		} else {
+			currentTop += itemHeight;
+		}
+
+		if (menuEntry.type === "submenu" || Array.isArray(menuEntry.submenu)) {
+			subMenuCount++;
+			const submenuDimensions = calculateMenuInfo(
+				iconFolder,
+				colorScheme,
+				menuEntry.submenu ?? [],
+				noEntryText
+			);
+			menuEntry.submenu = submenuDimensions.entries;
+			menuEntry.submenuDimensions = {
+				width: submenuDimensions.width,
+				height: submenuDimensions.height
+			};
+		}
+
+		if (menuEntry.label && menuEntry.label?.length > longestLabel.length) {
+			longestLabel = menuEntry.label;
+		}
+
+		finalEntries.push(menuEntry);
+	}
+
+	if (longestLabel.length === 0) {
+		longestLabel = noEntryText;
+	}
+
+	const menuFontSize = menuProviderOptions?.menuFontSize ?? 12;
+
+	// Use dummy first calculation
+	let calculatedWidth = (longestLabel.length * menuFontSize) / 1.6;
+
+	const canvas = document.createElement("canvas");
+	canvas.width = 1000;
+	document.body.append(canvas);
+	const context = canvas.getContext("2d");
+	if (context) {
+		context.font = `${menuFontSize}px Inter`;
+		calculatedWidth = context.measureText(longestLabel).width;
+		canvas.remove();
+	}
+
+	let extraSpace = 40;
+	if (iconCount > 0) {
+		extraSpace += 28;
+	}
+	if (subMenuCount > 0) {
+		extraSpace += 18;
+	}
+
+	const width = Math.floor(menuProviderOptions?.menuWidth ?? calculatedWidth + extraSpace);
+	const height = Math.floor(currentTop + separatorHeight); // There is space at top and bottom equivalent to separator height
+
+	return {
+		entries: finalEntries,
+		width,
+		height
+	};
 }
