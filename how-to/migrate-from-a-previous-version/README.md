@@ -175,7 +175,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "32.76.20"
+                    "@openfin/core": "33.77.11"
                    }
 ```
 
