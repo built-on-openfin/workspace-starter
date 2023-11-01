@@ -20,11 +20,11 @@
 	"dependencies": {
 		"@openfin/salesforce": "2.2.0",
 		"@openfin/salesforce-lwc": "1.1.1",
-		"@openfin/workspace": "15.0.5",
-		"@openfin/workspace-platform": "15.0.5"
+		"@openfin/workspace": "15.0.6",
+		"@openfin/workspace-platform": "15.0.6"
 	},
 	"devDependencies": {
-		"@openfin/core": "32.76.10",
+		"@openfin/core": "32.76.20",
 		"copy-webpack-plugin": "^11.0.0",
 		"openfin-adapter": "32.76.10",
 		"ts-loader": "^9.5.0",

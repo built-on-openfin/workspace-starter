@@ -20,9 +20,9 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/bloomberg": "^1.2.0",
-		"@openfin/core": "32.76.10",
-		"@openfin/workspace": "15.0.5",
-		"@openfin/workspace-platform": "15.0.5"
+		"@openfin/core": "32.76.20",
+		"@openfin/workspace": "15.0.6",
+		"@openfin/workspace-platform": "15.0.6"
 	},
 	"devDependencies": {
 		"openfin-adapter": "32.76.10",
