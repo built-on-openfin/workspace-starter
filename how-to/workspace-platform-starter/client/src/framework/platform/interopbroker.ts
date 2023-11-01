@@ -571,6 +571,12 @@ export function interopOverride(
 								error
 							);
 						}
+						if (!isEmpty(title)) {
+							// ensure no element tags are provided in the title
+							// we don't know how this information will be used
+							// and title hasn't come from the app directory
+							title = title.replace(/<[^>]*>?/gm, "");
+						}
 						const instanceAppMeta: AppMetadata = {
 							...appMetaData,
 							instanceId: app.instanceId,
