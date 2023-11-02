@@ -52,6 +52,8 @@
   - Added example of how to enable/disable console logging of built in interop broker messages to manifests.
   - Added extra check of view/window title when building a list of intent handler instances.
 - Encourage the use of the initOptionsProvider for loading content into the platform.
+- Added url property to splashScreenProvider so you can provide your own custom location for the html content
+- Change splash screen progress updates are sent using channels so they work cross domain
 
 ## v14
 

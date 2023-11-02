@@ -3928,6 +3928,10 @@
                     "description": "This defaults to manifest.shortcut.name if not provided.",
                     "type": "string"
                 },
+                "url": {
+                    "description": "This url to provide a custom html file to load.",
+                    "type": "string"
+                },
                 "width": {
                     "description": "The width for the splash screen, defaults to 400.",
                     "type": "number"
