@@ -59,6 +59,8 @@
 - Change `launchView` moved from IntegrationsHelpers to ModulesHelpers
 - Added platform override for `applyWorkspace` which triggers the `workspace-changed` lifecycle event
 - Added Dock monitors the `conditions-changed` and refreshes its contents if the condition was used
+- Added url property to splashScreenProvider so you can provide your own custom location for the html content
+- Change splash screen progress updates are sent using channels so they work cross domain
 
 ## v14
 
