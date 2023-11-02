@@ -1,8 +1,10 @@
 import type OpenFin from "@openfin/core";
 import { getManifestCustomSettings } from "../settings";
-import { formatError, isStringValue } from "../utils";
+import { formatError, isStringValue, randomUUID } from "../utils";
 
 let win: OpenFin.Window | undefined;
+const channelName = `splash-${randomUUID()}`;
+let channelClient: OpenFin.ChannelClient | undefined;
 
 /**
  * Open a splash screen.
@@ -25,8 +27,10 @@ export async function open(): Promise<void> {
 	if (!disabled) {
 		try {
 			win = await fin.Window.create({
-				name: "platform-splash",
-				url: `${window.location.href.replace("provider.html", "splash.html")}`,
+				name: `platform-${channelName}`,
+				url:
+					customSettings?.splashScreenProvider?.url ??
+					`${window.location.href.replace("provider.html", "splash.html")}`,
 				alwaysOnTop: true,
 				maximizable: false,
 				minimizable: false,
@@ -38,8 +42,12 @@ export async function open(): Promise<void> {
 				includeInSnapshots: false,
 				resizable: false,
 				saveWindowState: false,
-				showTaskbarIcon: true
+				showTaskbarIcon: true,
+				customData: {
+					channelName
+				}
 			});
+			channelClient = await fin.InterApplicationBus.Channel.connect(channelName);
 		} catch (err) {
 			console.error("Unable to display splash screen", formatError(err));
 		}
@@ -138,13 +146,13 @@ export async function close(): Promise<void> {
  * @param progress The progress text to display.
  */
 export async function updateProgress(progress: string): Promise<void> {
-	if (win) {
-		const webWin = win.getWebWindow();
-		if (webWin) {
-			const elem = webWin.document.querySelector("#progress");
-			if (elem) {
-				elem.textContent = `Initializing ${progress}...`;
-			}
+	if (channelClient) {
+		try {
+			await channelClient.dispatch("progress", {
+				progress
+			});
+		} catch (err) {
+			console.error(err);
 		}
 	}
 }
