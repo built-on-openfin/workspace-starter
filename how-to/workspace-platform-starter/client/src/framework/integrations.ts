@@ -1,4 +1,3 @@
-import type OpenFin from "@openfin/core";
 import {
 	ButtonStyle,
 	CLITemplate,
@@ -8,11 +7,8 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import { getCurrentSync } from "@openfin/workspace-platform";
 import * as endpointProvider from "./endpoint";
-import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
-import { MANIFEST_TYPES } from "./manifest-types";
 import {
 	closedownModule,
 	closedownModules,
@@ -20,7 +16,6 @@ import {
 	initializeModules,
 	loadModules
 } from "./modules";
-import { launchView } from "./platform/browser";
 import * as platformSplashProvider from "./platform/platform-splash";
 import type {
 	EndpointIntegrationsPreferencesGetRequest,
@@ -71,22 +66,9 @@ export async function init(
 		integrationHelpers = {
 			...helpers,
 			templateHelpers,
-			launchView,
-			launchSnapshot: async (manifestUrl): Promise<OpenFin.Identity[]> => {
-				const identities = await launch({
-					manifestType: MANIFEST_TYPES.Snapshot.id,
-					manifest: manifestUrl,
-					appId: "",
-					title: "",
-					icons: [],
-					publisher: ""
-				});
-				return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
-			},
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
 			setSearchQuery,
-			share,
-			getPlatform: getCurrentSync
+			share
 		};
 
 		// Map the old moduleUrl properties to url

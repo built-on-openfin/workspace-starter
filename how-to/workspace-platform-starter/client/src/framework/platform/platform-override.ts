@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
 	type AnalyticsEvent,
+	type ApplyWorkspacePayload,
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
@@ -319,6 +320,24 @@ export function overrideCallback(
 				action: "delete",
 				id
 			});
+		}
+
+		/**
+		 * Apply the workspace to the current platform.
+		 * @param payload The payload for the workspace details.
+		 * @returns True if the workspace was applied.
+		 */
+		public async applyWorkspace(payload: ApplyWorkspacePayload): Promise<boolean> {
+			const applied = await super.applyWorkspace(payload);
+
+			const platform = getCurrentSync();
+			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
+				action: "update",
+				id: payload.workspaceId,
+				workspace: payload
+			});
+
+			return applied;
 		}
 
 		/**

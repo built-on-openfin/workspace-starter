@@ -1,4 +1,4 @@
-import type { ManifestTypes } from "./shapes";
+import type { ManifestTypes } from "./shapes/app-shapes";
 
 export const MANIFEST_TYPES: ManifestTypes = {
 	View: {

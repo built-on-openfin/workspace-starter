@@ -1,4 +1,3 @@
-import type OpenFin from "@openfin/core";
 import type {
 	CLIFilter,
 	HomeDispatchedSearchResult,
@@ -6,7 +5,6 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
@@ -19,24 +17,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * Template helpers.
 	 */
 	templateHelpers: TemplateHelpers;
-
-	/**
-	 * Launch a view in the workspace.
-	 * @param view The view to launch.
-	 * @param targetIdentity The optional target identity of the launch with.
-	 * @returns The launched view.
-	 */
-	launchView?(
-		view: OpenFin.PlatformViewCreationOptions | string,
-		targetIdentity?: OpenFin.Identity
-	): Promise<OpenFin.View>;
-
-	/**
-	 * Launch a snapshot.
-	 * @param snapshotUrl The snapshot url.
-	 * @returns The identities that constitute the snapshot.
-	 */
-	launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
 
 	/**
 	 * Open a url with the browser.
@@ -58,12 +38,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * @returns Nothing.
 	 */
 	share?(options?: ShareCustomData): Promise<void>;
-
-	/**
-	 * Get the current platform.
-	 * @returns The current platform.
-	 */
-	getPlatform?(): WorkspacePlatformModule;
 }
 
 /**
