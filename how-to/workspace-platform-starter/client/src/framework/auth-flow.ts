@@ -2,7 +2,9 @@ import * as authProvider from "./auth";
 import { getDefaultHelpers } from "./modules";
 import * as platformSplashProvider from "./platform/platform-splash";
 import { isValidHostForManifest } from "./settings";
-import type { AuthProviderOptions, Logger, ModuleHelpers } from "./shapes";
+import type { AuthProviderOptions } from "./shapes/auth-shapes";
+import type { Logger } from "./shapes/logger-shapes";
+import type { ModuleHelpers } from "./shapes/module-shapes";
 
 let platformInitialized = false;
 let logger: Logger | undefined;

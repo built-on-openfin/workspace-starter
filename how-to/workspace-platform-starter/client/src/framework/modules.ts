@@ -5,17 +5,18 @@ import {
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
-import { checkCondition } from "./conditions";
+import { checkCondition, conditionChanged } from "./conditions";
 import { getEndpointClient } from "./endpoint";
 import type { EndpointClient } from "./endpoint-client";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
+import { MANIFEST_TYPES } from "./manifest-types";
 import * as Menu from "./menu";
-import { launchPage } from "./platform/browser";
+import { launchPage, launchView } from "./platform/browser";
 import type { PlatformApp } from "./shapes/app-shapes";
-import type { ConditionContextTypes } from "./shapes/conditions-shapes";
+import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
 import type { MenuClient } from "./shapes/menu-shapes";
@@ -274,6 +275,7 @@ export async function closedownModule<
 export function getDefaultHelpers(): ModuleHelpers {
 	return {
 		sessionId: passedSessionId,
+		getPlatform: getCurrentSync,
 		getApps: async (): Promise<PlatformApp[]> => {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
@@ -284,6 +286,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getFavoriteClient,
 		getThemeClient,
 		getMenuClient,
+		getConditionsClient,
 		launchApp: async (appId: string): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -325,12 +328,20 @@ export function getDefaultHelpers(): ModuleHelpers {
 			logger.warn(`Unable to launch workspace with id ${workspaceId} as it does not exist`);
 			return false;
 		},
+		launchView,
+		launchSnapshot: async (manifestUrl): Promise<OpenFin.Identity[]> => {
+			const identities = await launch({
+				manifestType: MANIFEST_TYPES.Snapshot.id,
+				manifest: manifestUrl,
+				appId: "",
+				title: "",
+				icons: [],
+				publisher: ""
+			});
+			return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
+		},
 		subscribeLifecycleEvent,
-		unsubscribeLifecycleEvent,
-		condition: async (conditionId: string, contextType?: ConditionContextTypes): Promise<boolean> => {
-			const platform = getCurrentSync();
-			return checkCondition(platform, conditionId, contextType);
-		}
+		unsubscribeLifecycleEvent
 	};
 }
 
@@ -410,5 +421,19 @@ async function getMenuClient(): Promise<MenuClient> {
 	return {
 		getPopupMenuStyle: Menu.getPopupMenuStyle,
 		showPopupMenu: Menu.showPopupMenu
+	};
+}
+
+/**
+ * Get the conditions client to use with the modules.
+ * @returns The conditions client.
+ */
+async function getConditionsClient(): Promise<ConditionsClient> {
+	return {
+		check: async (conditionId: string, contextType?: ConditionContextTypes): Promise<boolean> => {
+			const platform = getCurrentSync();
+			return checkCondition(platform, conditionId, contextType);
+		},
+		changed: conditionChanged
 	};
 }

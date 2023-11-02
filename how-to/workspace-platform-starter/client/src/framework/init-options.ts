@@ -3,7 +3,6 @@ import { getCurrentSync } from "@openfin/workspace-platform";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
-import type { ModuleHelpers } from "./shapes";
 import type {
 	InitOptionsHandler,
 	InitOptionsHandlerOptions,
@@ -11,6 +10,7 @@ import type {
 	InitOptionsProviderOptions,
 	UserAppConfigArgs
 } from "./shapes/init-options-shapes";
+import type { ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty, randomUUID } from "./utils";
 
 const ACTION_PARAM_NAME = "action";

@@ -112,3 +112,21 @@ export type ConditionCallback = (
 export interface ConditionMap {
 	[id: string]: ConditionCallback;
 }
+/**
+ * Condition client wrapper for module helpers.
+ */
+export interface ConditionsClient {
+	/**
+	 * Lets you check to see if a defined condition is true or false.
+	 * @param conditionId The condition to check for.
+	 * @param contextType What is the context for checking this condition.
+	 * @returns whether the condition is true or false
+	 */
+	check(conditionId: string, contextType?: ConditionContextTypes): Promise<boolean>;
+	/**
+	 * Notify the platform that a condition has changed, a lifecycle event will be triggered.
+	 * @param conditionId The id of the condition that has changed.
+	 * @returns Nothing.
+	 */
+	changed(conditionId?: string): Promise<void>;
+}
