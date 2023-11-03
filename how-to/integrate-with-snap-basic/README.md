@@ -4,6 +4,8 @@
 
 # Integrate with Snap - Basic
 
+> This example is **Windows** only, it will not run on a **Mac**.
+
 OpenFin Workspace empowers you to use our Snap tools, to enable layouts which include native applications.
 
 This example demonstrates connecting to and using layouts with Snap.
@@ -11,8 +13,6 @@ This example demonstrates connecting to and using layouts with Snap.
 The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.com/package/@openfin/snap-sdk).
 
 > The **@openfin/snap-sdk** is currently in beta, this sample requires the Snap Asset Url for the Snap Server. Please ask OpenFin for the url and then replace the `SNAP_ASSET_URL` in `manifest.fin.json` with it.
-
-> This example is **Windows** only, it will not run on a **Mac**.
 
 ## Getting Started
 
