@@ -6,26 +6,29 @@
 		"version": "32.114.76.10"
 	},
 	"platform": {
-		"uuid": "integrate-with-snap-basic",
+		"uuid": "integrate-with-snap",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
-				"launchExternalProcess": {
+				"launchExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
 					"enabled": true,
-					"assets": {
-						"enabled": true
-					},
-					"downloads": {
-						"enabled": false
-					},
-					"executables": {
-						"enabled": true
+					"protocols": ["mailto"]
+				}
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"openUrlWithBrowser": {
+						"enabled": true,
+						"protocols": ["mailto"]
 					}
-				},
-				"downloadAsset": true
+				}
 			}
 		}
 	},
@@ -33,12 +36,12 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with Snap - Basic - v14.0.0",
+		"name": "Integrate With Snap - v14.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
 		"company": "OpenFin",
-		"product": "Workspace Starter - Integrate with Snap - Basic - Client",
+		"product": "Workspace Starter - Integrate With Snap - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
@@ -49,13 +52,9 @@
 			"version": "0.2.0-beta.1",
 			"target": "OpenFinSnap.exe",
 			"mandatory": true
-		},
-		{
-			"src": "http://localhost:8080/apps/snap-native-test-app.zip",
-			"alias": "snap-native-test-app",
-			"version": "1.0.0",
-			"target": "snap-native-test-app.exe",
-			"mandatory": true
 		}
-	]
+	],
+	"snapProvider": {
+		"showDebugWindow": false
+	}
 }
