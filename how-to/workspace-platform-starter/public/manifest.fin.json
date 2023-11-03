@@ -322,6 +322,19 @@
 					}
 				}
 			},
+			"defaultWindowOptions": {
+				"viewVisibility": {
+					"showViewsOnTabDrag": {
+						"enabled": true
+					},
+					"showViewsOnSplitterDrag": {
+						"enabled": true
+					},
+					"showViewsOnWindowResize": {
+						"enabled": true
+					}
+				}
+			},
 			"windowPositioningStrategy": {
 				"x": 30,
 				"y": 30,

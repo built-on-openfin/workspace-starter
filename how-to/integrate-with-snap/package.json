@@ -1,7 +1,7 @@
 {
-	"name": "openfin-workspace--integrate-with-snap-basic",
+	"name": "openfin-workspace--integrate-with-snap",
 	"version": "15.0.0",
-	"description": "OpenFin Workspace -- Integrate with Snap - Basic",
+	"description": "OpenFin Workspace -- Integrate with Snap",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
