@@ -1,4 +1,4 @@
-![OpenFin Workspace Example Application -- Adding your application to Storefront](../../assets/OpenFin-Workspace-Starter.png)
+![OpenFin Workspace Example Application -- Integrating with Snap](../../assets/OpenFin-Workspace-Starter.png)
 
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 
@@ -20,7 +20,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 14.0.22 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 14.1.3 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
