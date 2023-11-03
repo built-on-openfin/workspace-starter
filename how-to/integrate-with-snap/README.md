@@ -4,6 +4,8 @@
 
 # Integrate with Snap
 
+> This example is **Windows** only, it will not run on a **Mac**.
+
 OpenFin Workspace empowers you to use our Snap tools, to enable layouts which include native applications.
 
 This example demonstrates saving and restoring native applications as part of a workspace.
