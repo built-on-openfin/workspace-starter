@@ -60,7 +60,7 @@ Create a json file called **my.view.fin.json** and place it in the [public](./pu
 
 ```json
 {
-   "url": "https://your-url"
+  "url": "https://your-url"
 }
 ```
 
