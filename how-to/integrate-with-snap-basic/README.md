@@ -12,6 +12,8 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 
 > The **@openfin/snap-sdk** is currently in beta, this sample requires the Snap Asset Url for the Snap Server. Please ask OpenFin for the url and then replace the `SNAP_ASSET_URL` in `manifest.fin.json` with it.
 
+> This example is **Windows** only, it will not run on a **Mac**.
+
 ## Getting Started
 
 1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
