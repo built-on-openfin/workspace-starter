@@ -92,17 +92,19 @@ export async function showShareOptions(payload: {
 			}
 		}
 
-		const template: OpenFin.MenuItemTemplate<SharePageData | ShareWorkspaceData>[] = [
-			{
+		const template: OpenFin.MenuItemTemplate<SharePageData | ShareWorkspaceData>[] = [];
+
+		if (!isEmpty(pageId)) {
+			template.push({
 				label: "Share Page",
-				data: { windowIdentity, pageId: pageId ?? "", type: "page" }
-			},
-			{ type: "separator" },
-			{
-				label: "Share Workspace",
-				data: { type: "workspace" }
-			}
-		];
+				data: { windowIdentity, pageId, type: "page" }
+			});
+			template.push({ type: "separator", data: {} });
+		}
+		template.push({
+			label: "Share Workspace",
+			data: { type: "workspace" }
+		});
 
 		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData>({
 			template,
