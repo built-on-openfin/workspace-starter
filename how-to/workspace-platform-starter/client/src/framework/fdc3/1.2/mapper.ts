@@ -1,5 +1,5 @@
 import type { Image } from "@openfin/workspace";
-import type { PlatformApp } from "../../shapes";
+import type { PlatformApp } from "../../shapes/app-shapes";
 import type {
 	AppDefinition,
 	AppIcon,

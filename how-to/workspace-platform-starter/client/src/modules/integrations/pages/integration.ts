@@ -483,8 +483,11 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 		if (this._integrationHelpers && Array.isArray(pages)) {
 			let shareEnabled: boolean = false;
-			if (this._integrationHelpers.condition) {
-				shareEnabled = await this._integrationHelpers.condition("sharing");
+			if (this._integrationHelpers?.getConditionsClient) {
+				const conditionsClient = await this._integrationHelpers.getConditionsClient();
+				if (conditionsClient) {
+					shareEnabled = await conditionsClient.check("sharing");
+				}
 			}
 
 			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
@@ -572,8 +575,11 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 				if (!isEmpty(lastPage)) {
 					let shareEnabled: boolean = false;
-					if (this._integrationHelpers?.condition) {
-						shareEnabled = await this._integrationHelpers.condition("sharing");
+					if (this._integrationHelpers?.getConditionsClient) {
+						const conditionsClient = await this._integrationHelpers.getConditionsClient();
+						if (conditionsClient) {
+							shareEnabled = await conditionsClient.check("sharing");
+						}
 					}
 
 					const rebuilt = await this.getPageTemplate(

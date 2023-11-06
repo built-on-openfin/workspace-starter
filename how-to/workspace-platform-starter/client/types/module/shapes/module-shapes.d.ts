@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
-import type { ConditionContextTypes } from "./conditions-shapes";
+import type { ConditionsClient } from "./conditions-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
@@ -66,6 +66,11 @@ export interface ModuleHelpers {
 	 */
 	sessionId: string;
 	/**
+	 * Get the current platform.
+	 * @returns The current platform.
+	 */
+	getPlatform?(): WorkspacePlatformModule;
+	/**
 	 * Get the list of apps supported by this platform and/or user.
 	 * @returns The list of platform apps available from the module.
 	 */
@@ -121,6 +126,11 @@ export interface ModuleHelpers {
 	 */
 	getEndpointClient?(): Promise<EndpointClient | undefined>;
 	/**
+	 * If this platform has been configured to support conditions then it will provide it.
+	 * @returns conditions client.
+	 */
+	getConditionsClient?(): Promise<ConditionsClient | undefined>;
+	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
@@ -154,6 +164,22 @@ export interface ModuleHelpers {
 	 */
 	launchWorkspace?(workspaceId: string, logger?: Logger): Promise<boolean>;
 	/**
+	 * Launch a view in the workspace.
+	 * @param view The view to launch.
+	 * @param targetIdentity The optional target identity of the launch with.
+	 * @returns The launched view.
+	 */
+	launchView?(
+		view: OpenFin.PlatformViewCreationOptions | string,
+		targetIdentity?: OpenFin.Identity
+	): Promise<OpenFin.View>;
+	/**
+	 * Launch a snapshot.
+	 * @param snapshotUrl The snapshot url.
+	 * @returns The identities that constitute the snapshot.
+	 */
+	launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
+	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
 	 * @param lifecycleHandler The handle for the event.
@@ -169,13 +195,6 @@ export interface ModuleHelpers {
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
 	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
-	/**
-	 * Lets you check to see if a defined condition is true or false.
-	 * @param conditionId The condition to check for.
-	 * @param contextType What is the context for checking this condition.
-	 * @returns whether the condition is true or false
-	 */
-	condition(conditionId: string, contextType?: ConditionContextTypes): Promise<boolean>;
 }
 /**
  * The implementation of the module with generic options and helpers.

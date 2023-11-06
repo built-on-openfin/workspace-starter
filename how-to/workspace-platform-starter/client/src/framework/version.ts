@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import { createLogger } from "./logger-provider";
-import type { EndpointProvider } from "./shapes";
+import type { EndpointProvider } from "./shapes/endpoint-shapes";
 import type {
 	MaximumVersion,
 	MinimumVersion,

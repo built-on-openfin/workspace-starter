@@ -2,7 +2,7 @@ import type OpenFin from "@openfin/core";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { getDefaultHelpers } from "./modules";
-import type { ModuleHelpers } from "./shapes";
+import type { ModuleHelpers } from "./shapes/module-shapes";
 import type { CustomSettings } from "./shapes/setting-shapes";
 import { isEmpty } from "./utils";
 

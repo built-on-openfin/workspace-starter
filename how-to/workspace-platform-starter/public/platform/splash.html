@@ -45,5 +45,26 @@
 				</svg>
 			</div>
 		</main>
+		<script>
+			if (window.fin) {
+				(async () => {
+					try {
+						const options = await fin.me.getOptions();
+						const channelName = options.customData?.channelName;
+						if (channelName) {
+							const channel = await fin.InterApplicationBus.Channel.create(channelName);
+							await channel.register('progress', (payload) => {
+								const progress = document.querySelector('#progress');
+								if (progress) {
+									progress.textContent = `Initializing ${payload.progress}...`;
+								}
+							});
+						}
+					} catch (err) {
+						console.error(err);
+					}
+				})();
+			}
+		</script>
 	</body>
 </html>
