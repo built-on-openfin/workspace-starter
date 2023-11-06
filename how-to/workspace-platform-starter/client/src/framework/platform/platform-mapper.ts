@@ -111,7 +111,9 @@ type ComponentType =
  */
 type ComponentKey =
 	| keyof OpenFin.LayoutItemConfig
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
 	| keyof OpenFin.LayoutRow
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
 	| keyof OpenFin.LayoutColumn
 	| keyof OpenFin.LayoutComponent
 	| "reorderEnabled"

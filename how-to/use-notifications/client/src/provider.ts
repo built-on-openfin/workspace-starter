@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 import { ColorSchemeOptionType, getCurrentSync, init } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 
@@ -71,11 +72,13 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			}
 		]
 	});
-	await Notifications.register({ notificationsPlatformOptions: {
-		icon: PLATFORM_ICON,
-		title: PLATFORM_TITLE,
-		id: PLATFORM_ID
-	} });
+	await Notifications.register({
+		notificationsPlatformOptions: {
+			icon: PLATFORM_ICON,
+			title: PLATFORM_TITLE,
+			id: PLATFORM_ID
+		}
+	});
 }
 
 /**
@@ -266,11 +269,11 @@ async function initializeDom(): Promise<void> {
  */
 async function initializeListeners(): Promise<void> {
 	// Listen for new notifications being created
-	 Notifications.addEventListener("notification-created", (event) => {
+	await Notifications.addEventListener("notification-created", (event) => {
 		loggingAddEntry(`Created: ${event.notification.id}`);
 	});
 
-	 Notifications.addEventListener("notification-closed", (event) => {
+	await Notifications.addEventListener("notification-closed", (event) => {
 		loggingAddEntry(`Closed: ${event.notification.id}`);
 
 		if (updatableNotifications[event.notification.id]) {
@@ -282,7 +285,7 @@ async function initializeListeners(): Promise<void> {
 		}
 	});
 
-	 Notifications.addEventListener("notification-action", async (event) => {
+	await Notifications.addEventListener("notification-action", async (event) => {
 		if (event?.result?.actionId === "open-web-site") {
 			await fin.System.openUrlWithBrowser(event?.result?.url as string);
 		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
@@ -307,17 +310,17 @@ async function initializeListeners(): Promise<void> {
 		console.log(event);
 	});
 
-	 Notifications.addEventListener("notification-toast-dismissed", (event) => {
+	await Notifications.addEventListener("notification-toast-dismissed", (event) => {
 		loggingAddEntry(`Toast Dismissed: ${event.notification.id}`);
 	});
 
-	 Notifications.addEventListener("notification-form-submitted", (event) => {
+	await Notifications.addEventListener("notification-form-submitted", (event) => {
 		loggingAddEntry(`\tData: ${event?.form ? JSON.stringify(event.form) : "None"}`);
 		loggingAddEntry(`Form: ${event.notification.id}`);
 		console.log(event);
 	});
 
-	 Notifications.addEventListener("notifications-count-changed", (event) => {
+	await Notifications.addEventListener("notifications-count-changed", (event) => {
 		showNotificationCount(event.count);
 	});
 

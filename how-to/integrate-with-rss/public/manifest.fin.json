@@ -41,7 +41,7 @@
 		"rss": {
 			"notification": {
 				"icon": "",
-				"title": "" 
+				"title": ""
 			},
 			"icons": {
 				"rss": "http://localhost:8080/icons/rss.svg",

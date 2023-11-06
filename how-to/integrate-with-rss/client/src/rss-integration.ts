@@ -105,7 +105,7 @@ export class RssIntegration {
 			);
 			await this.updateFeeds();
 
-			Notifications.addEventListener(
+			await Notifications.addEventListener(
 				"notification-action",
 				async (event: Notifications.NotificationActionEvent) => {
 					if (event?.result.action === "view-entry") {
