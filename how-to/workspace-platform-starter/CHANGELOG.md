@@ -1,10 +1,14 @@
 # Changelog
 
+## vnext
+
 ## v15
 
 - BREAKING CHANGE: BrowserProvider windowOptions. A number of versions ago we indicated that you should use defaultWindowOptions in the BrowserProvider configuration instead of the old windowOptions setting. We have removed the type from the schema and type and we have updated the main manifest to use defaultWindowOptions(like we did in our other examples as seen in settings.json). Please update your manifest/settings (we will maintain support for window options for the browser configuration for this release but then that backwards compatibility will be removed).
 - BREAKING CHANGE: `ModuleHelpers launchPage` helper function now takes a pageId (and it has to be a valid pageId) instead of asking modules to get the platform, use the storage apis and then send a page. This reduces code and also ensures that only valid pages are launched.
 - BREAKING CHANGE: The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods `getCurrentThemeId`, `getCurrentIconFolder`, `getCurrentPalette`and `getCurrentColorSchemeMode` have been removed but equivalent functions are available by using `getThemeClient`.
+- BREAKING CHANGE: Change ModuleHelpers `condition` method has been encapsulated into a `conditionsClient` retrieved using `getConditionsClient`
+- Added conditionsClient has `changed` method which can notify the platform a condition has changed, a lifecycle event `condition-changed` will be raised
 - Added [Notification Support](./docs/how-to-use-notifications.md) to the platform. You now have a helper getNotificationClient function that returns a notification client to modules and there are rules around whether a module can have this capability and if you wish to isolate notifications between modules.
 - Added an example lifecycle module ExampleNotificationService ([see README.md](./client/src/modules/lifecycle/example-notification-service/README.md)) to the modules folder and added it (enabled:false) to the lifecycleProvider section of the main manifest ([manifest.fin.json](./public/manifest.fin.json)).
 - Updated the way the [notification.ts](./client/src/framework/workspace/notifications.ts) registers against the workspace notification center (The notification center is no longer automatically started and that now happens upon registration which resulted removing the check to see if the notification center was running before registering).
@@ -52,6 +56,13 @@
   - Added example of how to enable/disable console logging of built in interop broker messages to manifests.
   - Added extra check of view/window title when building a list of intent handler instances.
 - Encourage the use of the initOptionsProvider for loading content into the platform.
+- Change `getPlatform` moved from IntegrationsHelpers to ModulesHelpers
+- Change `launchSnapshot` moved from IntegrationsHelpers to ModulesHelpers
+- Change `launchView` moved from IntegrationsHelpers to ModulesHelpers
+- Added platform override for `applyWorkspace` which triggers the `workspace-changed` lifecycle event
+- Added Dock monitors the `conditions-changed` and refreshes its contents if the condition was used
+- Added url property to splashScreenProvider so you can provide your own custom location for the html content
+- Change splash screen progress updates are sent using channels so they work cross domain
 
 ## v14
 

@@ -92,7 +92,7 @@ export async function showShareOptions(payload: {
 			}
 		}
 
-		const template: OpenFin.MenuItemTemplate<SharePageData|ShareWorkspaceData>[] = [
+		const template: OpenFin.MenuItemTemplate<SharePageData | ShareWorkspaceData>[] = [
 			{
 				label: "Share Page",
 				data: { windowIdentity, pageId: pageId ?? "", type: "page" }
@@ -104,7 +104,7 @@ export async function showShareOptions(payload: {
 			}
 		];
 
-		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData|ShareWorkspaceData>({
+		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData>({
 			template,
 			x: payload.x,
 			y: payload.y

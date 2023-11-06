@@ -1,4 +1,5 @@
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import type {
@@ -7,6 +8,7 @@ import type {
 	Conditions,
 	ConditionsProviderOptions
 } from "./shapes/conditions-shapes";
+import type { ConditionChangedLifecyclePayload } from "./shapes/lifecycle-shapes";
 import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty } from "./utils";
 
@@ -108,4 +110,15 @@ export async function checkCondition(
 		return false;
 	}
 	return allConditions[conditionId](platform, context);
+}
+
+/**
+ * Notify the platform that a condition has changed.
+ * @param conditionId The condition that changed, or empty to determine many might have changed.
+ */
+export async function conditionChanged(conditionId?: string): Promise<void> {
+	const platform = getCurrentSync();
+	await fireLifecycleEvent<ConditionChangedLifecyclePayload>(platform, "condition-changed", {
+		conditionId
+	});
 }

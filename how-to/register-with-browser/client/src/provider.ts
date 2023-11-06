@@ -1,5 +1,9 @@
 import type OpenFin from "@openfin/core";
-import type { CustomActionPayload, GlobalContextMenuItemData, WorkspacePlatformProvider } from "@openfin/workspace-platform";
+import type {
+	CustomActionPayload,
+	GlobalContextMenuItemData,
+	WorkspacePlatformProvider
+} from "@openfin/workspace-platform";
 import {
 	CustomActionCallerType,
 	GlobalContextMenuOptionType,

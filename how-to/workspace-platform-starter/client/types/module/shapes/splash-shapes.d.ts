@@ -7,6 +7,10 @@ export interface SplashScreenProviderOptions {
 	 */
 	disabled?: boolean;
 	/**
+	 * This url to provide a custom html file to load.
+	 */
+	url?: string;
+	/**
 	 * This defaults to manifest.shortcut.name if not provided.
 	 */
 	title?: string;

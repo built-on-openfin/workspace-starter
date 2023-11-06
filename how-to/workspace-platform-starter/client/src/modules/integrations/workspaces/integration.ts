@@ -426,8 +426,11 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						await platform.Storage.saveWorkspace(workspace);
 
 						let shareEnabled: boolean = false;
-						if (this._integrationHelpers.condition) {
-							shareEnabled = await this._integrationHelpers.condition("sharing");
+						if (this._integrationHelpers?.getConditionsClient) {
+							const conditionsClient = await this._integrationHelpers.getConditionsClient();
+							if (conditionsClient) {
+								shareEnabled = await conditionsClient.check("sharing");
+							}
 						}
 
 						const { favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_WORKSPACE);
@@ -636,8 +639,11 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			const currentWorkspace = await platform.getCurrentWorkspace();
 			const currentWorkspaceId = currentWorkspace?.workspaceId;
 			let shareEnabled: boolean = false;
-			if (this._integrationHelpers.condition) {
-				shareEnabled = await this._integrationHelpers.condition("sharing");
+			if (this._integrationHelpers?.getConditionsClient) {
+				const conditionsClient = await this._integrationHelpers.getConditionsClient();
+				if (conditionsClient) {
+					shareEnabled = await conditionsClient.check("sharing");
+				}
 			}
 
 			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_WORKSPACE);
@@ -731,8 +737,11 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 				if (!isEmpty(lastWorkspace)) {
 					let shareEnabled: boolean = false;
-					if (this._integrationHelpers.condition) {
-						shareEnabled = await this._integrationHelpers.condition("sharing");
+					if (this._integrationHelpers?.getConditionsClient) {
+						const conditionsClient = await this._integrationHelpers.getConditionsClient();
+						if (conditionsClient) {
+							shareEnabled = await conditionsClient.check("sharing");
+						}
 					}
 
 					const platform = this._integrationHelpers.getPlatform();

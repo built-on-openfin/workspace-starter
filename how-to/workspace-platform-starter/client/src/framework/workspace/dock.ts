@@ -13,6 +13,7 @@ import type {
 	DockButton as PlatformDockButton
 } from "@openfin/workspace-platform/client-api/src";
 import { checkConditions } from "workspace-platform-starter/conditions";
+import type { ConditionChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type {
 	EndpointDockGetRequest,
 	EndpointDockGetResponse,
@@ -47,9 +48,11 @@ const DOCK_ENDPOINT_ID_SET = "dock-set";
 let registration: DockProvider | undefined;
 let registrationInfo: DockProviderRegistration | undefined;
 let dockProviderOptions: DockProviderOptions | undefined;
+const usedConditions: Set<string> = new Set<string>();
 let registeredBootstrapOptions: BootstrapOptions | undefined;
 let themeChangedSubscriptionId: string | undefined;
 let appsChangedSubscriptionId: string | undefined;
+let conditionChangedSubscriptionId: string | undefined;
 let registeredButtons: DockButton[];
 
 /**
@@ -79,6 +82,17 @@ export async function register(
 
 			themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refreshDock());
 			appsChangedSubscriptionId = subscribeLifecycleEvent("apps-changed", async () => refreshDock());
+			conditionChangedSubscriptionId = subscribeLifecycleEvent<ConditionChangedLifecyclePayload>(
+				"condition-changed",
+				async (_, payload) => {
+					if (usedConditions.size > 0) {
+						const conditionId = payload?.conditionId;
+						if (isEmpty(conditionId) || usedConditions.has(conditionId)) {
+							await refreshDock();
+						}
+					}
+				}
+			);
 		}
 	}
 
@@ -97,6 +111,10 @@ export async function deregister(): Promise<void> {
 		themeChangedSubscriptionId = undefined;
 		if (appsChangedSubscriptionId) {
 			unsubscribeLifecycleEvent(appsChangedSubscriptionId, "apps-changed");
+		}
+		conditionChangedSubscriptionId = undefined;
+		if (conditionChangedSubscriptionId) {
+			unsubscribeLifecycleEvent(conditionChangedSubscriptionId, "condition-changed");
 		}
 		appsChangedSubscriptionId = undefined;
 		registrationInfo = undefined;
@@ -149,6 +167,7 @@ async function buildButtons(): Promise<DockButton[]> {
 		if (Array.isArray(dockProviderOptions.buttons)) {
 			entries.push(...dockProviderOptions.buttons);
 		}
+		usedConditions.clear();
 
 		return buildButtonsFromEntries(entries);
 	}
@@ -170,6 +189,11 @@ async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<Dock
 
 	for (const entry of entries) {
 		const visible = entry.visible ?? true;
+		if (Array.isArray(entry.conditions)) {
+			for (const c of entry.conditions) {
+				usedConditions.add(c);
+			}
+		}
 		if (
 			visible &&
 			(await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry }))
@@ -284,6 +308,12 @@ async function addEntriesAsDropdown(
 		const opts: CustomButtonConfig[] = [];
 
 		for (const option of entry.options) {
+			if (Array.isArray(option.conditions)) {
+				for (const c of option.conditions) {
+					usedConditions.add(c);
+				}
+			}
+
 			if (
 				await checkConditions(platform, option.conditions, {
 					callerType: "dock",
