@@ -18,6 +18,7 @@ import type { LowCodeIntegrationProviderOptions } from "./low-code-integration-s
 import type { MenusProviderOptions } from "./menu-shapes";
 import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
+import type { SnapProviderOptions } from "./snap-shapes";
 import type { SplashScreenProviderOptions } from "./splash-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";
 import type { ThemeProviderOptions } from "./theme-shapes";
@@ -131,4 +132,8 @@ export interface CustomSettings {
 	 * The settings you need to set if you want to include a tray icon with menu
 	 */
 	trayProvider?: TrayProviderOptions;
+	/**
+	 * The settings required to enable the Snap features.
+	 */
+	snapProvider?: SnapProviderOptions;
 }

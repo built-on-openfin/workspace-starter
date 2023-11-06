@@ -21,6 +21,7 @@ import { getManifestCustomSettings, getSettings } from "../settings";
 import type { ModuleHelpers } from "../shapes/module-shapes";
 import type { CustomSettings } from "../shapes/setting-shapes";
 import * as shareProvider from "../share";
+import * as snapProvider from "../snap";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { isEmpty, randomUUID } from "../utils";
 import * as versionProvider from "../version";
@@ -161,6 +162,9 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);
 	const integrations = await lowCodeIntegrationProvider.register();
+
+	await snapProvider.init(customSettings?.snapProvider);
+	conditionsProvider.registerCondition("snap", async () => snapProvider.isEnabled(), false);
 
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => {

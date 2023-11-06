@@ -1054,6 +1054,10 @@
                     "$ref": "#/definitions/PlatformProviderOptions",
                     "description": "The platform provider options."
                 },
+                "snapProvider": {
+                    "$ref": "#/definitions/SnapProviderOptions",
+                    "description": "The settings required to enable the Snap features."
+                },
                 "splashScreenProvider": {
                     "$ref": "#/definitions/SplashScreenProviderOptions",
                     "description": "The splash screen provider options."
@@ -3874,6 +3878,29 @@
                 },
                 "paintIntervalMs": {
                     "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "SnapProviderOptions": {
+            "additionalProperties": false,
+            "description": "The options for the snap provider.",
+            "properties": {
+                "enabled": {
+                    "description": "Is snap enabled, defaults to false.",
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "The id to use for launching the server.",
+                    "type": "string"
+                },
+                "serverAssetInfo": {
+                    "$ref": "#/definitions/AppAssetInfo",
+                    "description": "The asset for the Snap server."
+                },
+                "showDebugWindow": {
+                    "description": "Show the snap debug window.",
+                    "type": "boolean"
                 }
             },
             "type": "object"

@@ -50,6 +50,7 @@ import type {
 	PlatformProviderOptions
 } from "../shapes/platform-shapes";
 import type { VersionInfo } from "../shapes/version-shapes";
+import * as snapProvider from "../snap";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { isEmpty } from "../utils";
@@ -121,7 +122,11 @@ export function overrideCallback(
 		 * @returns Snapshot of current platform state.
 		 */
 		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
-			const snapshot = await super.getSnapshot(payload, identity);
+			let snapshot = await super.getSnapshot(payload, identity);
+
+			if (snapProvider.isEnabled()) {
+				snapshot = await snapProvider.decorateSnapshot(snapshot);
+			}
 
 			// Decorate the default snapshot with additional information for connection clients.
 			return decorateSnapshot(snapshot);
@@ -137,8 +142,18 @@ export function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
+			if (snapProvider.isEnabled()) {
+				await snapProvider.prepareToApplyDecoratedSnapshot();
+			}
+
+			await super.applySnapshot(payload, identity);
+
+			if (snapProvider.isEnabled()) {
+				await snapProvider.applyDecoratedSnapshot(payload.snapshot);
+			}
+
 			// Use the decorated snapshot to open any connected clients
-			await Promise.all([super.applySnapshot(payload, identity), applyClientSnapshot(payload.snapshot)]);
+			await applyClientSnapshot(payload.snapshot);
 		}
 
 		/**

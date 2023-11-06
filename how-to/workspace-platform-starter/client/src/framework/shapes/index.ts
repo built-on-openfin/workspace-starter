@@ -24,6 +24,7 @@ export * from "./platform-shapes";
 export * from "./platform-storage-shapes";
 export * from "./setting-shapes";
 export * from "./share-shapes";
+export * from "./snap-shapes";
 export * from "./splash-shapes";
 export * from "./store-shapes";
 export * from "./template-shapes";

@@ -1507,6 +1507,17 @@
 					}
 				}
 			]
+		},
+		"snapProvider": {
+			"enabled": false,
+			"id": "workspace-platform-starter",
+			"serverAssetInfo": {
+				"src": "SNAP_ASSET_URL",
+				"alias": "openfin-snap",
+				"version": "0.2.0",
+				"target": "OpenFinSnap.exe"
+			},
+			"showDebugWindow": false
 		}
 	}
 }
