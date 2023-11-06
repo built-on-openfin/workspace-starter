@@ -4,6 +4,8 @@
 
 # Integrate with Snap
 
+> This example is **Windows** only, it will not run on a **Mac**.
+
 OpenFin Workspace empowers you to use our Snap tools, to enable layouts which include native applications.
 
 This example demonstrates saving and restoring native applications as part of a workspace.
@@ -47,6 +49,87 @@ npm run client
 ```shell
 npm run build
 ```
+
+## Adding your own url/app to this example
+
+This is how you can add your own urls to this example:
+
+### Create a view manifest in the public directory
+
+Create a json file called **my.view.fin.json** and place it in the [public](./public/) directory.
+
+```json
+{
+  "url": "https://your-url"
+}
+```
+
+### Add an app entry to the codebase
+
+Open [apps.ts](./client/src/apps.ts) and add an app entry (e.g. around line 24):
+
+```javascript
+/**
+ * App definition to use for demonstration which shows your content.
+ */
+const MY_APP: PlatformApp = {
+ appId: "my-app",
+ title: "My App",
+ description: "Display information about my app",
+ manifest: "http://localhost:8080/my.view.fin.json",
+ manifestType: "view",
+ icons: [
+  {
+   src: "http://localhost:8080/common/images/icon-blue.png"
+  }
+ ],
+ contactEmail: "contact@example.com",
+ supportEmail: "support@example.com",
+ publisher: "you",
+ intents: [],
+ images: [
+ ],
+ tags: ["view", "you"]
+};
+```
+
+### Add your app definition to the apps array
+
+In [apps.ts](./client/src/apps.ts) update the apps array and add your app.
+
+From:
+
+```javascript
+/**
+ * Get the list of apps to display.
+ * @returns List of app definitions.
+ */
+export async function getApps(): Promise<PlatformApp[]> {
+ return [OPENFIN_INFORMATION_APP, SNAP_NATIVE_TEST_APP];
+}
+```
+
+To:
+
+```javascript
+/**
+ * Get the list of apps to display.
+ * @returns List of app definitions.
+ */
+export async function getApps(): Promise<PlatformApp[]> {
+ return [MY_APP, OPENFIN_INFORMATION_APP, SNAP_NATIVE_TEST_APP];
+}
+```
+
+### Rebuild and start the sample
+
+Run step 5 mentioned above to build the sample. Start the sample using step 4 mentioned above.
+
+### Launch your application through Home
+
+You app should now be listed and you should be able to launch it and snap it with the sample content.
+
+![Launch Your App](my-app.png)
 
 ---
 
