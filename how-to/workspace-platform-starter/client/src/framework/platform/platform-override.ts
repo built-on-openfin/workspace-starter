@@ -78,6 +78,7 @@ let disableStorageMapping: boolean | undefined;
 let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
 let viewMenuStyle: PopupMenuStyles | undefined;
+let workspaceApplied: boolean;
 
 /**
  * Override methods in the platform.
@@ -97,6 +98,7 @@ export function overrideCallback(
 	globalMenuStyle = browserProviderSettings?.menuOptions?.styles?.globalMenu;
 	pageMenuStyle = browserProviderSettings?.menuOptions?.styles?.pageMenu;
 	viewMenuStyle = browserProviderSettings?.menuOptions?.styles?.viewMenu;
+	workspaceApplied = false;
 
 	/**
 	 * Create a class which overrides the platform provider.
@@ -236,6 +238,7 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
+			workspaceApplied = true;
 			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "create",
 				id: req.workspace.workspaceId,
@@ -284,6 +287,7 @@ export function overrideCallback(
 			}
 
 			const platform = getCurrentSync();
+			workspaceApplied = true;
 			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "update",
 				id: req.workspace.workspaceId,
@@ -328,9 +332,27 @@ export function overrideCallback(
 		 * @returns True if the workspace was applied.
 		 */
 		public async applyWorkspace(payload: ApplyWorkspacePayload): Promise<boolean> {
+			const platform = getCurrentSync();
+			if (!workspaceApplied) {
+				let skipPrompt;
+				const currentLayout = await platform.getSnapshot();
+				if (Array.isArray(currentLayout.windows) && currentLayout.windows.length === 0) {
+					skipPrompt = true;
+					if (isEmpty(payload.options)) {
+						payload.options = {
+							skipPrompt
+						};
+					} else if (isEmpty(payload.options.skipPrompt)) {
+						payload.options.skipPrompt = skipPrompt;
+					}
+				}
+			}
 			const applied = await super.applyWorkspace(payload);
 
-			const platform = getCurrentSync();
+			if (applied && !workspaceApplied) {
+				workspaceApplied = true;
+			}
+
 			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
 				action: "update",
 				id: payload.workspaceId,

@@ -103,7 +103,7 @@ export async function showShareOptions(payload: {
 		}
 		template.push({
 			label: "Share Workspace",
-			data: { identity: {}, type: "workspace" }
+			data: { type: "workspace" }
 		});
 
 		const r = await currentWindow.openfinWindow.showPopupMenu({
