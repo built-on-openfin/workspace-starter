@@ -8,6 +8,13 @@ export interface CustomSettings {
 	 * The settings for RSS.
 	 */
 	rss?: RssSettings;
+	/**
+	 * Provide information when registering for notifications.
+	 */
+	notification?: {
+		icon: string;
+		title: string;
+	};
 }
 
 /**

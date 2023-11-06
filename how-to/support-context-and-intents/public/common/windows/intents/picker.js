@@ -1,5 +1,7 @@
 import { createRadioEntry, getSelection, setElementVisibility } from './helper.js';
 
+let rejectAppSelection;
+let resolveAppSelection;
 let backBtn;
 let launchBtn;
 let cancelAppSelectionBtn;
@@ -81,7 +83,10 @@ function setupIntentView(setupIntents) {
 		}
 
 		cancelIntentSelectionBtn.addEventListener('click', async () => {
-			await fin.me.dispatchPopupResult();
+			if (rejectAppSelection !== undefined) {
+				rejectAppSelection('Application selection cancelled.');
+			}
+			fin.me.close(true);
 		});
 
 		nextBtn.addEventListener('click', () => {
@@ -130,17 +135,30 @@ function setupAppView(applications) {
 		});
 
 		cancelAppSelectionBtn.addEventListener('click', async () => {
-			await fin.me.dispatchPopupResult();
+			if (rejectAppSelection !== undefined) {
+				rejectAppSelection('UserCancelledResolution');
+			}
+			fin.me.close(true);
 		});
 
 		launchBtn.addEventListener('click', async () => {
-			await fin.me.dispatchPopupResult({ appId: getSelection(listName), intent });
+			resolveAppSelection({ appId: getSelection(listName), intent });
+			fin.me.close(true);
 		});
 
 		setElementVisibility(intentSelectionContainer, false);
 		setElementVisibility(appSelectionContainer, true);
 	}
 }
+
+// this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
+window['getIntentSelection'] = async () => {
+	launchBtn.disabled = false;
+	return new Promise((resolve, reject) => {
+		resolveAppSelection = resolve;
+		rejectAppSelection = reject;
+	});
+};
 
 document.addEventListener('DOMContentLoaded', () => {
 	initializeDOM();

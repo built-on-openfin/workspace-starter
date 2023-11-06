@@ -39,6 +39,10 @@
 	},
 	"customSettings": {
 		"rss": {
+			"notification": {
+				"icon": "",
+				"title": "" 
+			},
 			"icons": {
 				"rss": "http://localhost:8080/icons/rss.svg",
 				"rssEntry": "http://localhost:8080/icons/rss-entry.svg"
@@ -60,6 +64,10 @@
 				}
 			],
 			"pollingInterval": 60
+		},
+		"notification": {
+			"icon": "https://developer.openfin.co/favicon.ico",
+			"title": "Rss Notification Center"
 		}
 	}
 }

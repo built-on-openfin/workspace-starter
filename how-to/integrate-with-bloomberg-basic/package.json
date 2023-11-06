@@ -25,7 +25,7 @@
 		"@openfin/workspace-platform": "16.0.3"
 	},
 	"devDependencies": {
-		"openfin-adapter": "32.76.10",
+		"@openfin/node-adapter": "33.77.11",
 		"ts-loader": "^9.5.0",
 		"typescript": "^5.2.2",
 		"webpack": "^5.89.0",

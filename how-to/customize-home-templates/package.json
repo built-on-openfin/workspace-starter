@@ -29,7 +29,7 @@
 		"@openfin/core": "33.77.11",
 		"@types/luxon": "^3.3.3",
 		"@types/node-emoji": "^1.8.2",
-		"openfin-adapter": "32.76.10",
+		"@openfin/node-adapter": "33.77.11",
 		"ts-loader": "^9.5.0",
 		"typescript": "^5.2.2",
 		"webpack": "^5.89.0",

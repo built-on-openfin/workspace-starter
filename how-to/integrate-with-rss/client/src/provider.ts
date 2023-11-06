@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 		const customSettings = await getManifestCustomSettings();
 		if (customSettings.rss) {
 			rssIntegration = new RssIntegration();
-			await rssIntegration.initialize(customSettings.rss);
+			await rssIntegration.initialize(customSettings);
 		}
 
 		await initializeWorkspaceComponents();

@@ -14,7 +14,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint",
 		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-fetch,node-emoji,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-emoji,@openfin/core,openfin-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
 		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
 		"common-update": "node ./scripts/common-update.mjs"
 	},
