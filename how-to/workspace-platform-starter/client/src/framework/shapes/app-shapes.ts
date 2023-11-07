@@ -113,7 +113,7 @@ export interface LaunchPreference {
 /**
  * The list of Launch Option Types
  */
-export type LaunchPreferenceOptionsType = "view";
+export type LaunchOptionsType = "view";
 
 /**
  * The base LaunchOption type.
@@ -122,7 +122,7 @@ export interface LaunchOptions {
 	/**
 	 * The type the options are linked to.
 	 */
-	type: LaunchPreferenceOptionsType;
+	type: LaunchOptionsType;
 }
 
 /**
