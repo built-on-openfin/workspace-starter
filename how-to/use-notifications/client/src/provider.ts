@@ -71,6 +71,13 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			}
 		]
 	});
+	await Notifications.register({
+		notificationsPlatformOptions: {
+			id: PLATFORM_ID,
+			icon: PLATFORM_ICON,
+			title: PLATFORM_TITLE
+		}
+	});
 }
 
 /**
@@ -132,30 +139,6 @@ async function initializeDom(): Promise<void> {
 	});
 
 	codeContainer.style.display = "none";
-
-	const btnPlatformRegister = document.querySelector("#btnPlatformRegister");
-	if (btnPlatformRegister) {
-		btnPlatformRegister.addEventListener("click", async () => {
-			await Notifications.register({
-				notificationsPlatformOptions: {
-					id: PLATFORM_ID,
-					icon: PLATFORM_ICON,
-					title: PLATFORM_TITLE
-				}
-			});
-			loggingAddEntry("Platform registered");
-			activePlatform = PLATFORM_ID;
-		});
-	}
-
-	const btnPlatformDeregister = document.querySelector("#btnPlatformDeregister");
-	if (btnPlatformDeregister) {
-		btnPlatformDeregister.addEventListener("click", async () => {
-			await Notifications.deregister(PLATFORM_ID);
-			loggingAddEntry("Platform deregistered");
-			activePlatform = undefined;
-		});
-	}
 
 	const btnToggleTheme = document.querySelector("#btnPlatformToggleTheme");
 	if (btnToggleTheme) {

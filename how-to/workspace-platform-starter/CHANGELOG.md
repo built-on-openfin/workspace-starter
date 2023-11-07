@@ -61,6 +61,7 @@
 - Added Dock monitors the `conditions-changed` and refreshes its contents if the condition was used
 - Added url property to splashScreenProvider so you can provide your own custom location for the html content
 - Change splash screen progress updates are sent using channels so they work cross domain
+- Update applyWorkspace logic so that you are not prompted on whether you wish to save changes if you have never loaded a workspace (you just started a session), and you have not got any windows open that would be included in a snapshot and would be lost.
 
 ## v14
 
