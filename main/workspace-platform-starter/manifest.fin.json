@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "32.114.76.10"
+		"version": "32.114.76.20"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-workspace-platform-starter"
@@ -57,13 +57,23 @@
 					}
 				}
 			}
+		},
+		"interopBrokerConfiguration": {
+			"logging": {
+				"beforeAction": {
+					"enabled": true
+				},
+				"afterAction": {
+					"enabled": true
+				}
+			}
 		}
 	},
 	"shortcut": {
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - v14.0.0",
+		"name": "Workspace Platform Starter - v15.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -91,6 +101,7 @@
 					"fdc3InteropApi": "2.0"
 				},
 				"intentOptions": {},
+				"openOptions": {},
 				"unregisteredApp": {
 					"appId": "unregistered",
 					"title": "Other",
@@ -273,13 +284,15 @@
 			]
 		},
 		"browserProvider": {
-			"windowOptions": {
-				"title": "Browser Starter",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
-				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
-				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html"
-			},
 			"defaultWindowOptions": {
+				"permissions": {
+					"System": {
+						"openUrlWithBrowser": {
+							"enabled": true,
+							"protocols": ["mailto", "msteams", "tel"]
+						}
+					}
+				},
 				"viewVisibility": {
 					"showViewsOnTabDrag": {
 						"enabled": true
@@ -289,6 +302,23 @@
 					},
 					"showViewsOnWindowResize": {
 						"enabled": true
+					}
+				},
+				"workspacePlatform": {
+					"pages": [],
+					"title": "Browser Starter",
+					"favicon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html"
+				}
+			},
+			"defaultViewOptions": {
+				"permissions": {
+					"System": {
+						"openUrlWithBrowser": {
+							"enabled": true,
+							"protocols": ["mailto", "msteams", "tel"]
+						}
 					}
 				}
 			},
@@ -814,33 +844,45 @@
 				"hideNotificationsButton": false,
 				"hideStorefrontButton": false
 			},
-			"apps": [
+			"entries": [
 				{
+					"id": "workspaces",
+					"tooltip": "Workspaces",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/workspace.svg",
+					"action": {
+						"id": "workspaces-menu"
+					},
+					"visible": false
+				},
+				{
+					"id": "dock-apps",
 					"display": "individual",
 					"tags": ["dock"]
 				},
 				{
+					"id": "fdc3-apps",
 					"display": "group",
 					"tooltip": "FDC3",
 					"tags": ["fdc3"]
 				},
 				{
+					"id": "manager-apps",
 					"display": "group",
 					"tooltip": "Manager",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-gradient.png",
 					"tags": ["manager"]
-				}
-			],
-			"buttons": [
+				},
 				{
+					"id": "favorites",
 					"tooltip": "Favorites",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/favorite.svg",
 					"action": {
-						"id": "favorites-menu-app"
+						"id": "favorites-menu"
 					},
-					"conditions": ["favorites-app"]
+					"conditions": ["favorites"]
 				},
 				{
+					"id": "pages",
 					"tooltip": "Pages",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/page.svg",
 					"action": {
@@ -848,6 +890,7 @@
 					}
 				},
 				{
+					"id": "google",
 					"tooltip": "Google",
 					"iconUrl": "https://www.google.com/favicon.ico",
 					"action": {
@@ -858,6 +901,7 @@
 					}
 				},
 				{
+					"id": "social",
 					"tooltip": "Social",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/icons/{theme}/{scheme}/share.svg",
 					"options": [
@@ -882,6 +926,7 @@
 					]
 				},
 				{
+					"id": "windows",
 					"tooltip": "Window Visibility",
 					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/icons/{theme}/{scheme}/windows.svg",
 					"options": [
@@ -904,7 +949,24 @@
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
 			"title": "Workspace Platform Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico"
+			"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+			"notificationClients": {
+				"defaults": {
+					"enforceIcon": false,
+					"includeInPlatform": true
+				},
+				"restrictToListed": false,
+				"clientOptions": [
+					{
+						"enabled": true,
+						"id": "example-notification-service",
+						"idPrefix": "openfin-example-notifications",
+						"enforceIcon": true,
+						"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/favicon-32x32.png",
+						"includeInPlatform": true
+					}
+				]
+			}
 		},
 		"integrationProvider": {
 			"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
@@ -977,7 +1039,8 @@
 								"entryLabel": "Connected App",
 								"actionName": "Launch Connected App"
 							}
-						}
+						},
+						"favoritesEnabled": false
 					}
 				},
 				{
@@ -988,6 +1051,7 @@
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/integrations/workspaces.bundle.js",
 					"data": {
+						"favoritesEnabled": false,
 						"images": {
 							"workspace": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/workspace.svg"
 						}
@@ -1001,6 +1065,7 @@
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/integrations/pages.bundle.js",
 					"data": {
+						"favoritesEnabled": false,
 						"images": {
 							"page": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/page.svg"
 						}
@@ -1008,26 +1073,26 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/js/preload.js",
 						"enableLibLogging": true,
 						"iconMap": {
-							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/salesforce.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/task.svg",
-							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/dashboard.svg",
-							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/phone.svg",
-							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/chat.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/email.svg"
+							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/salesforce.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				},
@@ -1087,6 +1152,24 @@
 							"snapshot",
 							"inline-snapshot"
 						]
+					}
+				},
+				{
+					"enabled": true,
+					"id": "show-page",
+					"title": "Init Options Show Page",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/composite/pages.bundle.js",
+					"data": {
+						"supportedActions": ["show-page"]
+					}
+				},
+				{
+					"enabled": true,
+					"id": "launch-workspace",
+					"title": "Init Options Launch Workspace",
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/init-options/launch-workspace.bundle.js",
+					"data": {
+						"supportedActions": ["launch-workspace"]
 					}
 				}
 			]
@@ -1153,7 +1236,13 @@
 					"title": "Custom Menu",
 					"description": "Custom Menu",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/actions/custom-menu.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/actions/custom-menu.bundle.js",
+					"data": {
+						"images": {
+							"page": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/page.svg",
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/workspace.svg"
+						}
+					}
 				},
 				{
 					"id": "favorites-menu",
@@ -1260,7 +1349,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "14.1.3"
+				"workspace": "15.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -1280,8 +1369,6 @@
 		},
 		"menusProvider": {
 			"popupHtml": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/popups/menu/index.html",
-			"menuWidth": 200,
-			"menuItemHeight": 32,
 			"modules": [
 				{
 					"enabled": true,
@@ -1397,7 +1484,29 @@
 			"favoriteIcon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/favorite.svg",
 			"unfavoriteIcon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/icons/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
-			"supportedFavoriteTypes": ["app"]
+			"supportedFavoriteTypes": ["workspace", "page", "app"]
+		},
+		"lifecycleProvider": {
+			"modules": [
+				{
+					"id": "example-notification-service",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+					"title": "example notification service",
+					"description": "example notification service",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/lifecycle/example-notification-service.bundle.js",
+					"data": {
+						"exampleServerUrl": "http://fake/notifications",
+						"notifyOn": {
+							"pageChanged": true,
+							"workspaceChanged": true,
+							"appsChanged": true,
+							"themeChanged": true,
+							"favoriteChanged": true
+						}
+					}
+				}
+			]
 		}
 	}
 }

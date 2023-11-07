@@ -12,12 +12,12 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/images/previews/view-intents-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/images/previews/view-intents-fdc3.png",
 					"label": "Intents using FDC3"
 				}
 			],
@@ -75,7 +75,7 @@
 			"hostManifests": {
 				"OpenFin": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
 				}
 			}
 		},
@@ -90,12 +90,12 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/images/previews/view-context-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/images/previews/view-context-fdc3.png",
 					"label": "Contexts using FDC3"
 				}
 			],
@@ -104,13 +104,60 @@
 			"publisher": "OpenFin",
 			"type": "other",
 			"details": {
-				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
 			},
 			"interop": {},
 			"hostManifests": {
 				"OpenFin": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
+				}
+			}
+		},
+		{
+			"appId": "fdc3-context-view-2-0-platform",
+			"name": "fdc3-context-view-2-0-platform",
+			"title": "Context using FDC3 (2.0) (Platform)",
+			"description": "This view allows you to experiment with the broadcasting and listening of contexts using the fdc3 api.",
+			"categories": ["developer tools", "tools", "training"],
+			"version": "2.0.0",
+			"tooltip": "Context using FDC3",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/images/previews/view-context-fdc3.png",
+					"label": "Contexts using FDC3"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "other",
+			"details": {
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+			},
+			"interop": {},
+			"hostManifests": {
+				"OpenFin": {
+					"type": "view",
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json",
+					"config": {
+						"launchPreference": {
+							"bounds": {
+								"height": 875,
+								"width": 775
+							},
+							"options": {
+								"type": "view",
+								"host": { "url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/windows/platform/platform-window.html" }
+							}
+						}
+					}
 				}
 			}
 		},

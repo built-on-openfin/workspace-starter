@@ -76,13 +76,6 @@ async function init() {
 	}
 	await setupIntentView(intents);
 
-	if (Array.isArray(apps)) {
-		for (const app of apps) {
-			appLookup[app.appId] = app;
-		}
-		await setupAppView(apps, intent.name);
-	}
-
 	cancelSelectionBtn.addEventListener('click', async () => {
 		if (rejectAppSelection !== undefined) {
 			rejectAppSelection('UserCancelledResolution');
@@ -100,6 +93,13 @@ async function init() {
 		resolveAppSelection({ appId, instanceId, intent });
 		fin.me.close(true);
 	});
+
+	if (Array.isArray(apps)) {
+		for (const app of apps) {
+			appLookup[app.appId] = app;
+		}
+		await setupAppView(apps, intent.name);
+	}
 }
 
 /**

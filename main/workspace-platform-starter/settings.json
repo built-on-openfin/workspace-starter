@@ -36,6 +36,7 @@
 				"fdc3InteropApi": "2.0"
 			},
 			"intentOptions": {},
+			"openOptions": {},
 			"unregisteredApp": {
 				"appId": "unregistered",
 				"title": "Other",
@@ -779,25 +780,27 @@
 			"hideNotificationsButton": false,
 			"hideStorefrontButton": false
 		},
-		"apps": [
+		"entries": [
 			{
+				"id": "dock-apps",
 				"display": "individual",
 				"tags": ["dock"]
 			},
 			{
+				"id": "fdc3-apps",
 				"display": "group",
 				"tooltip": "FDC3",
 				"tags": ["fdc3"]
 			},
 			{
+				"id": "manager-apps",
 				"display": "group",
 				"tooltip": "Manager",
 				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-gradient.png",
 				"tags": ["manager"]
-			}
-		],
-		"buttons": [
+			},
 			{
+				"id": "google",
 				"tooltip": "Google",
 				"iconUrl": "https://www.google.com/favicon.ico",
 				"action": {
@@ -808,6 +811,7 @@
 				}
 			},
 			{
+				"id": "social",
 				"tooltip": "Social",
 				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/icons/{theme}/{scheme}/share.svg",
 				"options": [
@@ -832,6 +836,7 @@
 				]
 			},
 			{
+				"id": "windows",
 				"tooltip": "Window Visibility",
 				"iconUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/icons/{theme}/{scheme}/windows.svg",
 				"options": [
@@ -918,20 +923,20 @@
 			},
 			{
 				"id": "salesforce",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/favicon.ico",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/favicon.ico",
 				"title": "Salesforce",
 				"enabled": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
-					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/js/preload.js",
+					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/js/preload.js",
 					"iconMap": {
-						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/contact.svg",
-						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/account.svg",
-						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/chatter.svg",
-						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/note.svg",
-						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v14.0.0/integrate-with-salesforce/images/task.svg"
+						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/contact.svg",
+						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/account.svg",
+						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/chatter.svg",
+						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/note.svg",
+						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/task.svg"
 					}
 				}
 			},
@@ -1126,7 +1131,7 @@
 	"versionProvider": {
 		"appVersion": "1.0.0",
 		"minVersion": {
-			"workspace": "14.1.3"
+			"workspace": "15.0.0"
 		},
 		"versionWindow": {
 			"name": "versioning",
