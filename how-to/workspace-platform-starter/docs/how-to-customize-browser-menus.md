@@ -123,12 +123,50 @@ If you want to have no menu (i.e. you specify an empty array for globalMenu and 
 ```json
 "browserProvider": {
     "menuOptions": {
-    "includeDefaults": {
-     "globalMenu": false,
-     "pageMenu": false,
-     "viewMenu": false
-    }
+       "includeDefaults": {
+           "globalMenu": false,
+           "pageMenu": false,
+           "viewMenu": false
+       }
    }
+}
+```
+
+## Menu Style
+
+We now have example of using custom HTML to display the menus in a popup window. You can set each menu type to display with a specific mode, the options are explained in the Global Menu Style section of this document. If they are ommited they all default to `platform`
+
+```json
+"browserProvider": {
+    "menuOptions": {
+       "styles": {
+           "globalMenu": "platform",
+           "pageMenu": "native",
+           "viewMenu": "custom"
+       }
+   }
+}
+```
+
+## Global Menu Style
+
+The global menu settings apply across all components that call the `menu.showPopupMenu` method. By default they will display menus in the default way configured for the platform.
+You can set options for the `menusProvider` which can modify the defaults.
+
+The `popupMenuStyle` property can be one of the following options.
+
+- `platform` - Displays the menu style configured for the platform, this is the default if not configured.
+- `native` - Displays native OS menus.
+- `custom` - Displays custom HTML menus, if this options is set the other properties in the `menusProvider` are used, but can be ommited as they have sensible defaults.
+
+```json
+"menusProvider": {
+   "popupMenuStyle": "custom",
+   "popupHtml": "http://localhost:8080/common/popups/menu/index.html", // The HTML file that will get loaded for the custom popup
+   "menuFontSize": 12, // The font size used in the menu, used to calculate the height of the popup window
+   "menuWidth": 200, // Add this if you want a fixed size, if ommited the width will be calculated from the widest text
+   "menuItemHeight": 32, // The height of an item in the menu, used to calculate the height of the popup window
+   "menuItemSeparatorHeight": 16, // The height of a separator in the menu, used to calculate the height of the popup window
 }
 ```
 
