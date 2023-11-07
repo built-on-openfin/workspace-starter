@@ -63,6 +63,7 @@
 - Added url property to splashScreenProvider so you can provide your own custom location for the html content
 - Change splash screen progress updates are sent using channels so they work cross domain
 - Update applyWorkspace logic so that you are not prompted on whether you wish to save changes if you have never loaded a workspace (you just started a session), and you have not got any windows open that would be included in a snapshot and would be lost.
+- Added two lifecycle modules: apply-default-workspace (this module fires after the bootstrap and checks a configured endpoint to see if a default workspace has been specified and if so it applies it), set-default-workspace (this module listens for when a workspace is applied and it sets the default workspace to be the last workspace applied. This module can be disabled if you want to have a different mechanism for setting what the workspace should be.). The endpoint provider in the main manifest was updated to allow these two lifecycle modules to access the relevant endpoints for fetching and setting the default workspace. This will allow the platform to load the last used workspace when it starts up. It is using the local storage endpoint module but the endpoint implementation could be swapped out. Both lifecycle modules are disabled by default but you can easily enable them.
 
 ## v14
 
