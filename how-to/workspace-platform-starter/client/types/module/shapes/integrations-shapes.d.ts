@@ -6,6 +6,7 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { PlatformStorageMetadata } from "./platform-shapes";
 import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 /**
@@ -128,6 +129,14 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
  */
 export interface EndpointIntegrationsPreferencesSetRequest {
 	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
 	 * The id of the integration.
 	 */
 	id: string;
@@ -146,6 +155,10 @@ export interface EndpointIntegrationsPreferencesSetRequest {
  */
 export interface EndpointIntegrationsPreferencesGetRequest {
 	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
 	 * The id of the integration.
 	 */
 	id: string;
@@ -155,7 +168,20 @@ export interface EndpointIntegrationsPreferencesGetRequest {
  */
 export interface EndpointIntegrationsPreferencesGetResponse {
 	/**
-	 * Should the integration auto start.
+	 * The id of the platform making the request
 	 */
-	autoStart: boolean;
+	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The preferences for the integration.
+	 */
+	payload: {
+		/**
+		 * Should the integration auto start.
+		 */
+		autoStart: boolean;
+	};
 }
