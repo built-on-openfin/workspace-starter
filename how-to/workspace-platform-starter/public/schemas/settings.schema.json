@@ -49,9 +49,6 @@
         "Api": {
             "$ref": "#/definitions/__type_14"
         },
-        "AppAssetInfo": {
-            "$ref": "#/definitions/__type_43"
-        },
         "AppEndpointOptions": {
             "anyOf": [
                 {
@@ -349,7 +346,7 @@
             "type": "object"
         },
         "AutoResizeOptions": {
-            "$ref": "#/definitions/__type_24"
+            "$ref": "#/definitions/__type_11"
         },
         "AutoplayPolicyOptions": {
             "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -410,7 +407,7 @@
             "type": "object"
         },
         "Bounds": {
-            "$ref": "#/definitions/__type_23"
+            "$ref": "#/definitions/__type_6"
         },
         "BrokerConnection": {
             "additionalProperties": false,
@@ -748,7 +745,7 @@
                             "$ref": "#/definitions/Partial_2"
                         },
                         {
-                            "$ref": "#/definitions/Partial_9"
+                            "$ref": "#/definitions/Partial_7"
                         }
                     ],
                     "description": "Options for newly-created view or window (if applicable)."
@@ -767,10 +764,10 @@
             "$ref": "#/definitions/__type_39"
         },
         "ContextMenuOptions": {
-            "$ref": "#/definitions/__type_8"
+            "$ref": "#/definitions/__type_13"
         },
         "ContextMenuSettings": {
-            "$ref": "#/definitions/__type_7"
+            "$ref": "#/definitions/__type_12"
         },
         "CustomActionSpecifier": {
             "additionalProperties": false,
@@ -1491,9 +1488,6 @@
             },
             "type": "object"
         },
-        "ExternalProcessRequestType": {
-            "$ref": "#/definitions/__type_40"
-        },
         "FavoriteProviderOptions": {
             "additionalProperties": false,
             "description": "Options for the favorite provider.",
@@ -1751,7 +1745,7 @@
             ],
             "type": "object"
         },
-        "HostLaunchPreference": {
+        "HostLaunchOptions": {
             "additionalProperties": false,
             "description": "Additional options that apply to the host of the content",
             "properties": {
@@ -1961,7 +1955,7 @@
             "type": "object"
         },
         "InteropConfig": {
-            "$ref": "#/definitions/__type_11"
+            "$ref": "#/definitions/__type_16"
         },
         "LaunchExternalProcessListener": {
             "$ref": "#/definitions/__type_41"
@@ -1992,14 +1986,8 @@
                     "type": "boolean"
                 },
                 "options": {
-                    "additionalProperties": false,
-                    "description": "Are there any app type specific options you would like to apply?",
-                    "properties": {
-                        "view": {
-                            "$ref": "#/definitions/ViewLaunchPreference"
-                        }
-                    },
-                    "type": "object"
+                    "$ref": "#/definitions/ViewLaunchOptions",
+                    "description": "Are there any app type specific options you would like to apply?"
                 }
             },
             "type": "object"
@@ -3440,23 +3428,32 @@
         "Partial_1": {
             "$ref": "#/definitions/__type_2"
         },
+        "Partial_10": {
+            "$ref": "#/definitions/__type_33"
+        },
+        "Partial_11": {
+            "$ref": "#/definitions/__type_40"
+        },
+        "Partial_12": {
+            "$ref": "#/definitions/__type_43"
+        },
         "Partial_2": {
             "$ref": "#/definitions/__type_5"
         },
         "Partial_3": {
-            "$ref": "#/definitions/__type_9"
+            "$ref": "#/definitions/__type_7"
         },
         "Partial_4": {
-            "$ref": "#/definitions/__type_13"
+            "$ref": "#/definitions/__type_8"
         },
         "Partial_5": {
-            "$ref": "#/definitions/__type_16"
+            "$ref": "#/definitions/__type_9"
         },
         "Partial_6": {
-            "$ref": "#/definitions/__type_17"
+            "$ref": "#/definitions/__type_10"
         },
         "Partial_7": {
-            "$ref": "#/definitions/__type_18"
+            "$ref": "#/definitions/__type_17"
         },
         "Partial_8": {
             "$ref": "#/definitions/__type_19"
@@ -3531,20 +3528,19 @@
                 "manifest": {
                     "anyOf": [
                         {
-                            "$ref": "#/definitions/ViewOptions",
-                            "description": "User-facing options for a view."
+                            "$ref": "#/definitions/Partial_2"
                         },
                         {
-                            "$ref": "#/definitions/WindowOptions"
+                            "$ref": "#/definitions/Partial_7"
                         },
                         {
-                            "$ref": "#/definitions/Snapshot"
+                            "$ref": "#/definitions/Partial_10"
                         },
                         {
-                            "$ref": "#/definitions/ExternalProcessRequestType"
+                            "$ref": "#/definitions/Partial_11"
                         },
                         {
-                            "$ref": "#/definitions/AppAssetInfo"
+                            "$ref": "#/definitions/Partial_12"
                         },
                         {
                             "type": "string"
@@ -3838,13 +3834,13 @@
             "type": "string"
         },
         "RGB": {
-            "$ref": "#/definitions/__type_6"
+            "$ref": "#/definitions/__type_18"
         },
         "RectangleByEdgePositions": {
             "$ref": "#/definitions/__type_37"
         },
         "ResizeRegion": {
-            "$ref": "#/definitions/__type_10"
+            "$ref": "#/definitions/__type_20"
         },
         "ScoreOrder": {
             "description": "The order to sort scored search results in.",
@@ -3877,9 +3873,6 @@
                 }
             },
             "type": "object"
-        },
-        "Snapshot": {
-            "$ref": "#/definitions/__type_33"
         },
         "SnapshotSourceConnection": {
             "additionalProperties": false,
@@ -4447,21 +4440,29 @@
                     "type": "number"
                 },
                 "versionWindow": {
-                    "$ref": "#/definitions/Partial_2",
+                    "$ref": "#/definitions/Partial_7",
                     "description": "This window will be shown if an endpointId is not specified and min and max criteria has been specified and has\nnot been met. This window will be shown to the user and the bootstrapping process will be stopped."
                 }
             },
             "type": "object"
         },
-        "ViewLaunchPreference": {
+        "ViewLaunchOptions": {
             "additionalProperties": false,
             "description": "Additional options that apply to a view",
             "properties": {
                 "host": {
-                    "$ref": "#/definitions/HostLaunchPreference",
+                    "$ref": "#/definitions/HostLaunchOptions",
                     "description": "If specified it indicates wish to specify specific host settings for this content."
+                },
+                "type": {
+                    "const": "view",
+                    "description": "View options type",
+                    "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "ViewOptions": {
@@ -4470,7 +4471,7 @@
             "properties": {
                 "_internalWorkspaceData": {},
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
+                    "$ref": "#/definitions/Partial_6",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
@@ -4595,7 +4596,7 @@
                     "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_3"
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -4699,10 +4700,10 @@
             "type": "string"
         },
         "ViewVisibilityOption": {
-            "$ref": "#/definitions/__type_21"
+            "$ref": "#/definitions/__type_24"
         },
         "ViewVisibilityOptions": {
-            "$ref": "#/definitions/__type_20"
+            "$ref": "#/definitions/__type_23"
         },
         "WebPermission": {
             "enum": [
@@ -4742,370 +4743,6 @@
                 "tearout"
             ],
             "type": "string"
-        },
-        "WindowOptions": {
-            "additionalProperties": false,
-            "properties": {
-                "_internalWorkspaceData": {},
-                "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
-                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
-                },
-                "alphaMask": {
-                    "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
-                },
-                "alwaysOnTop": {
-                    "type": "boolean"
-                },
-                "api": {
-                    "$ref": "#/definitions/Api",
-                    "description": "Configurations for API injection."
-                },
-                "applicationIcon": {
-                    "type": "string"
-                },
-                "aspectRatio": {
-                    "type": "number"
-                },
-                "autoShow": {
-                    "description": "Automatically show the window when it is created.",
-                    "type": "boolean"
-                },
-                "autoplayPolicy": {
-                    "$ref": "#/definitions/AutoplayPolicyOptions",
-                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
-                },
-                "backgroundColor": {
-                    "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
-                    "type": "string"
-                },
-                "closeOnLastViewRemoved": {
-                    "type": "boolean"
-                },
-                "contentCreation": {
-                    "$ref": "#/definitions/ContentCreationOptions",
-                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
-                },
-                "contentNavigation": {
-                    "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-                },
-                "contentRedirect": {
-                    "$ref": "#/definitions/Partial_5",
-                    "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-                },
-                "contextMenu": {
-                    "type": "boolean"
-                },
-                "contextMenuOptions": {
-                    "$ref": "#/definitions/ContextMenuOptions",
-                    "description": "Configure the context menu when right-clicking on a window."
-                },
-                "contextMenuSettings": {
-                    "$ref": "#/definitions/ContextMenuSettings"
-                },
-                "cornerRounding": {
-                    "$ref": "#/definitions/Partial_3",
-                    "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
-                },
-                "customContext": {
-                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
-                },
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "customRequestHeaders": {
-                    "description": "Custom headers for requests sent by the window.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "Custom headers for requests sent by the window.",
-                        "properties": {
-                            "headers": {
-                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
-                                "items": {
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    },
-                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
-                                    "type": "object"
-                                },
-                                "type": "array"
-                            },
-                            "urlPatterns": {
-                                "description": "The URL patterns for which the headers will be applied.",
-                                "items": {
-                                    "type": "string"
-                                },
-                                "type": "array"
-                            }
-                        },
-                        "required": [
-                            "headers",
-                            "urlPatterns"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "defaultCentered": {
-                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
-                    "type": "boolean"
-                },
-                "defaultHeight": {
-                    "type": "number"
-                },
-                "defaultLeft": {
-                    "type": "number"
-                },
-                "defaultTop": {
-                    "type": "number"
-                },
-                "defaultWidth": {
-                    "type": "number"
-                },
-                "experimental": {},
-                "fdc3InteropApi": {
-                    "type": "string"
-                },
-                "frame": {
-                    "type": "boolean"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "hideOnClose": {
-                    "type": "boolean"
-                },
-                "hotkeys": {
-                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "A hotkey binding.",
-                        "properties": {
-                            "keys": {
-                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
-                                "type": "string"
-                            },
-                            "preventDefault": {
-                                "type": "boolean"
-                            }
-                        },
-                        "required": [
-                            "keys"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "icon": {
-                    "description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
-                    "type": "string"
-                },
-                "ignoreSavedWindowState": {
-                    "description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
-                    "type": "boolean"
-                },
-                "includeInSnapshots": {
-                    "type": "boolean"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "layout": {},
-                "maxHeight": {
-                    "type": "number"
-                },
-                "maxWidth": {
-                    "type": "number"
-                },
-                "maximizable": {
-                    "type": "boolean"
-                },
-                "minHeight": {
-                    "type": "number"
-                },
-                "minWidth": {
-                    "type": "number"
-                },
-                "minimizable": {
-                    "type": "boolean"
-                },
-                "modalParentIdentity": {
-                    "$ref": "#/definitions/Identity",
-                    "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
-                },
-                "name": {
-                    "description": "The name of the window.",
-                    "type": "string"
-                },
-                "opacity": {
-                    "type": "number"
-                },
-                "permissions": {
-                    "$ref": "#/definitions/Partial_6"
-                },
-                "preloadScripts": {
-                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "A script that is run before page load.",
-                        "properties": {
-                            "mandatory": {
-                                "type": "boolean"
-                            },
-                            "state": {
-                                "description": "Preload script execution state.",
-                                "enum": [
-                                    "failed",
-                                    "load-failed",
-                                    "load-started",
-                                    "load-succeeded",
-                                    "succeeded"
-                                ],
-                                "type": "string"
-                            },
-                            "url": {
-                                "description": "The URL from which the script was loaded.",
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "url"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "processAffinity": {
-                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
-                    "type": "string"
-                },
-                "resizable": {
-                    "type": "boolean"
-                },
-                "resizeRegion": {
-                    "$ref": "#/definitions/ResizeRegion",
-                    "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
-                },
-                "saveWindowState": {
-                    "type": "boolean"
-                },
-                "shadow": {
-                    "type": "boolean"
-                },
-                "showBackgroundImages": {
-                    "type": "boolean"
-                },
-                "showTaskbarIcon": {
-                    "type": "boolean"
-                },
-                "smallWindow": {
-                    "type": "boolean"
-                },
-                "state": {
-                    "$ref": "#/definitions/WindowState"
-                },
-                "taskbarIcon": {
-                    "type": "string"
-                },
-                "taskbarIconGroup": {
-                    "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
-                    "type": "string"
-                },
-                "url": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "string"
-                },
-                "viewVisibility": {
-                    "$ref": "#/definitions/ViewVisibilityOptions",
-                    "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
-                },
-                "waitForPageLoad": {
-                    "type": "boolean"
-                },
-                "width": {
-                    "type": "number"
-                },
-                "workspacePlatform": {
-                    "$ref": "#/definitions/WorkspacePlatformOptions"
-                },
-                "x": {
-                    "type": "number"
-                },
-                "y": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "_internalWorkspaceData",
-                "accelerator",
-                "alphaMask",
-                "alwaysOnTop",
-                "api",
-                "applicationIcon",
-                "aspectRatio",
-                "autoShow",
-                "autoplayPolicy",
-                "backgroundColor",
-                "closeOnLastViewRemoved",
-                "contentCreation",
-                "contentNavigation",
-                "contentRedirect",
-                "contextMenu",
-                "contextMenuOptions",
-                "contextMenuSettings",
-                "cornerRounding",
-                "customContext",
-                "customData",
-                "customRequestHeaders",
-                "defaultCentered",
-                "defaultHeight",
-                "defaultLeft",
-                "defaultTop",
-                "defaultWidth",
-                "frame",
-                "height",
-                "hideOnClose",
-                "hotkeys",
-                "icon",
-                "ignoreSavedWindowState",
-                "includeInSnapshots",
-                "interop",
-                "layout",
-                "maxHeight",
-                "maxWidth",
-                "maximizable",
-                "minHeight",
-                "minWidth",
-                "minimizable",
-                "modalParentIdentity",
-                "name",
-                "opacity",
-                "permissions",
-                "preloadScripts",
-                "processAffinity",
-                "resizable",
-                "resizeRegion",
-                "saveWindowState",
-                "shadow",
-                "showBackgroundImages",
-                "showTaskbarIcon",
-                "smallWindow",
-                "state",
-                "taskbarIcon",
-                "taskbarIconGroup",
-                "url",
-                "uuid",
-                "waitForPageLoad",
-                "width",
-                "workspacePlatform",
-                "x",
-                "y"
-            ],
-            "type": "object"
         },
         "WindowState": {
             "description": "Visibility state of a window.",
@@ -5154,7 +4791,7 @@
             "type": "string"
         },
         "WorkspacePlatformOptions": {
-            "$ref": "#/definitions/__type_12"
+            "$ref": "#/definitions/__type_21"
         },
         "WorkspacePlatformToolbarButton": {
             "additionalProperties": false,
@@ -5192,7 +4829,7 @@
             "properties": {
                 "_internalWorkspaceData": {},
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
+                    "$ref": "#/definitions/Partial_6",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "alphaMask": {
@@ -5236,7 +4873,7 @@
                     "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
                 },
                 "contentRedirect": {
-                    "$ref": "#/definitions/Partial_5",
+                    "$ref": "#/definitions/Partial_9",
                     "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
                 },
                 "contextMenu": {
@@ -5250,7 +4887,7 @@
                     "$ref": "#/definitions/ContextMenuSettings"
                 },
                 "cornerRounding": {
-                    "$ref": "#/definitions/Partial_3",
+                    "$ref": "#/definitions/Partial_8",
                     "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
                 },
                 "customContext": {
@@ -5387,7 +5024,7 @@
                     "type": "number"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_3"
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -5554,56 +5191,6 @@
         },
         "__type_10": {
             "additionalProperties": false,
-            "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
-            "properties": {
-                "bottomRightCorner": {
-                    "type": "number"
-                },
-                "sides": {
-                    "additionalProperties": false,
-                    "description": "Enables resizing interaction for each side of the window.",
-                    "properties": {
-                        "bottom": {
-                            "type": "boolean"
-                        },
-                        "left": {
-                            "type": "boolean"
-                        },
-                        "right": {
-                            "type": "boolean"
-                        },
-                        "top": {
-                            "type": "boolean"
-                        }
-                    },
-                    "type": "object"
-                },
-                "size": {
-                    "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "__type_11": {
-            "additionalProperties": false,
-            "properties": {
-                "currentContextGroup": {
-                    "description": "Context Group for the client. (green, yellow, red, etc.).",
-                    "type": "string"
-                },
-                "providerId": {
-                    "description": "When provided, automatically connects the client to the specified provider uuid.",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
-        "__type_12": {
-            "additionalProperties": {},
-            "type": "object"
-        },
-        "__type_13": {
-            "additionalProperties": false,
             "properties": {
                 "devtools": {
                     "description": "If `true`, enables the devtools keyboard shortcut:<br>\n`Ctrl` + `Shift` + `I` _(Toggles Devtools)_",
@@ -5620,6 +5207,64 @@
                 "zoom": {
                     "description": "NOTE: It is not recommended to set this value to true for Windows in Platforms as that may lead to unexpected visual shifts in layout.\nIf `true`, enables the zoom keyboard shortcuts:<br>\n`Ctrl` + `+` _(Zoom In)_<br>\n`Ctrl` + `Shift` + `+` _(Zoom In)_<br>\n`Ctrl` + `NumPad+` _(Zoom In)_<br>\n`Ctrl` + `-` _(Zoom Out)_<br>\n`Ctrl` + `Shift` + `-` _(Zoom Out)_<br>\n`Ctrl` + `NumPad-` _(Zoom Out)_<br>\n`Ctrl` + `Scroll` _(Zoom In & Out)_<br>\n`Ctrl` + `0` _(Restore to 100%)_",
                     "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_11": {
+            "additionalProperties": false,
+            "properties": {
+                "height": {
+                    "description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
+                    "type": "boolean"
+                },
+                "horizontal": {
+                    "description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
+                    "type": "boolean"
+                },
+                "vertical": {
+                    "description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
+                    "type": "boolean"
+                },
+                "width": {
+                    "description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_12": {
+            "additionalProperties": false,
+            "properties": {
+                "devtools": {
+                    "description": "Should the context menu contain a button for opening devtools.",
+                    "type": "boolean"
+                },
+                "enable": {
+                    "description": "Should the context menu display on right click.",
+                    "type": "boolean"
+                },
+                "reload": {
+                    "description": "Should the context menu contain a button for reloading the page.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "enable"
+            ],
+            "type": "object"
+        },
+        "__type_13": {
+            "additionalProperties": false,
+            "description": "Configure the context menu when right-clicking on a window.",
+            "properties": {
+                "enabled": {
+                    "description": "Displays the context menu on right click.",
+                    "type": "boolean"
+                },
+                "template": {
+                    "$ref": "#/definitions/Array_1",
+                    "description": "Context menu items to display on right-click."
                 }
             },
             "type": "object"
@@ -5673,19 +5318,13 @@
         "__type_16": {
             "additionalProperties": false,
             "properties": {
-                "blacklist": {
-                    "description": "Forbidden URLs for redirects.",
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
+                "currentContextGroup": {
+                    "description": "Context Group for the client. (green, yellow, red, etc.).",
+                    "type": "string"
                 },
-                "whitelist": {
-                    "description": "Allowed URLs for redirects.",
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
+                "providerId": {
+                    "description": "When provided, automatically connects the client to the specified provider uuid.",
+                    "type": "string"
                 }
             },
             "type": "object"
@@ -5693,17 +5332,297 @@
         "__type_17": {
             "additionalProperties": false,
             "properties": {
-                "Application": {
-                    "$ref": "#/definitions/Partial_7"
+                "_internalWorkspaceData": {},
+                "accelerator": {
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
-                "System": {
-                    "$ref": "#/definitions/Partial_8"
+                "alphaMask": {
+                    "$ref": "#/definitions/RGB",
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
-                "webAPIs": {
+                "alwaysOnTop": {
+                    "type": "boolean"
+                },
+                "api": {
+                    "$ref": "#/definitions/Api",
+                    "description": "Configurations for API injection."
+                },
+                "applicationIcon": {
+                    "type": "string"
+                },
+                "aspectRatio": {
+                    "type": "number"
+                },
+                "autoShow": {
+                    "description": "Automatically show the window when it is created.",
+                    "type": "boolean"
+                },
+                "autoplayPolicy": {
+                    "$ref": "#/definitions/AutoplayPolicyOptions",
+                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+                },
+                "backgroundColor": {
+                    "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+                    "type": "string"
+                },
+                "closeOnLastViewRemoved": {
+                    "type": "boolean"
+                },
+                "contentCreation": {
+                    "$ref": "#/definitions/ContentCreationOptions",
+                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+                },
+                "contentNavigation": {
+                    "$ref": "#/definitions/ContentNavigation",
+                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                },
+                "contentRedirect": {
+                    "$ref": "#/definitions/Partial_9",
+                    "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                },
+                "contextMenu": {
+                    "type": "boolean"
+                },
+                "contextMenuOptions": {
+                    "$ref": "#/definitions/ContextMenuOptions",
+                    "description": "Configure the context menu when right-clicking on a window."
+                },
+                "contextMenuSettings": {
+                    "$ref": "#/definitions/ContextMenuSettings"
+                },
+                "cornerRounding": {
+                    "$ref": "#/definitions/Partial_8",
+                    "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
+                },
+                "customContext": {
+                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+                },
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "customRequestHeaders": {
+                    "description": "Custom headers for requests sent by the window.",
                     "items": {
-                        "$ref": "#/definitions/WebPermission"
+                        "additionalProperties": false,
+                        "description": "Custom headers for requests sent by the window.",
+                        "properties": {
+                            "headers": {
+                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+                                "items": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "urlPatterns": {
+                                "description": "The URL patterns for which the headers will be applied.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "headers",
+                            "urlPatterns"
+                        ],
+                        "type": "object"
                     },
                     "type": "array"
+                },
+                "defaultCentered": {
+                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
+                    "type": "boolean"
+                },
+                "defaultHeight": {
+                    "type": "number"
+                },
+                "defaultLeft": {
+                    "type": "number"
+                },
+                "defaultTop": {
+                    "type": "number"
+                },
+                "defaultWidth": {
+                    "type": "number"
+                },
+                "experimental": {},
+                "fdc3InteropApi": {
+                    "type": "string"
+                },
+                "frame": {
+                    "type": "boolean"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "hideOnClose": {
+                    "type": "boolean"
+                },
+                "hotkeys": {
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A hotkey binding.",
+                        "properties": {
+                            "keys": {
+                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+                                "type": "string"
+                            },
+                            "preventDefault": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "keys"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "icon": {
+                    "description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+                    "type": "string"
+                },
+                "ignoreSavedWindowState": {
+                    "description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
+                    "type": "boolean"
+                },
+                "includeInSnapshots": {
+                    "type": "boolean"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "layout": {},
+                "maxHeight": {
+                    "type": "number"
+                },
+                "maxWidth": {
+                    "type": "number"
+                },
+                "maximizable": {
+                    "type": "boolean"
+                },
+                "minHeight": {
+                    "type": "number"
+                },
+                "minWidth": {
+                    "type": "number"
+                },
+                "minimizable": {
+                    "type": "boolean"
+                },
+                "modalParentIdentity": {
+                    "$ref": "#/definitions/Identity",
+                    "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
+                },
+                "name": {
+                    "description": "The name of the window.",
+                    "type": "string"
+                },
+                "opacity": {
+                    "type": "number"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/Partial_3"
+                },
+                "preloadScripts": {
+                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A script that is run before page load.",
+                        "properties": {
+                            "mandatory": {
+                                "type": "boolean"
+                            },
+                            "state": {
+                                "description": "Preload script execution state.",
+                                "enum": [
+                                    "failed",
+                                    "load-failed",
+                                    "load-started",
+                                    "load-succeeded",
+                                    "succeeded"
+                                ],
+                                "type": "string"
+                            },
+                            "url": {
+                                "description": "The URL from which the script was loaded.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "url"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "processAffinity": {
+                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+                    "type": "string"
+                },
+                "resizable": {
+                    "type": "boolean"
+                },
+                "resizeRegion": {
+                    "$ref": "#/definitions/ResizeRegion",
+                    "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
+                },
+                "saveWindowState": {
+                    "type": "boolean"
+                },
+                "shadow": {
+                    "type": "boolean"
+                },
+                "showBackgroundImages": {
+                    "type": "boolean"
+                },
+                "showTaskbarIcon": {
+                    "type": "boolean"
+                },
+                "smallWindow": {
+                    "type": "boolean"
+                },
+                "state": {
+                    "$ref": "#/definitions/WindowState"
+                },
+                "taskbarIcon": {
+                    "type": "string"
+                },
+                "taskbarIconGroup": {
+                    "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "viewVisibility": {
+                    "$ref": "#/definitions/ViewVisibilityOptions",
+                    "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
+                },
+                "waitForPageLoad": {
+                    "type": "boolean"
+                },
+                "width": {
+                    "type": "number"
+                },
+                "workspacePlatform": {
+                    "$ref": "#/definitions/WorkspacePlatformOptions"
+                },
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
                 }
             },
             "type": "object"
@@ -5711,175 +5630,31 @@
         "__type_18": {
             "additionalProperties": false,
             "properties": {
-                "getFileDownloadLocation": {
-                    "type": "boolean"
+                "blue": {
+                    "type": "number"
                 },
-                "setFileDownloadLocation": {
-                    "type": "boolean"
+                "green": {
+                    "type": "number"
+                },
+                "red": {
+                    "type": "number"
                 }
             },
+            "required": [
+                "blue",
+                "green",
+                "red"
+            ],
             "type": "object"
         },
         "__type_19": {
             "additionalProperties": false,
             "properties": {
-                "getAllExternalWindows": {
-                    "type": "boolean"
+                "height": {
+                    "type": "number"
                 },
-                "launchExternalProcess": {
-                    "anyOf": [
-                        {
-                            "additionalProperties": false,
-                            "properties": {
-                                "assets": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean"
-                                        },
-                                        "srcRules": {
-                                            "items": {
-                                                "additionalProperties": false,
-                                                "properties": {
-                                                    "behavior": {
-                                                        "enum": [
-                                                            "allow",
-                                                            "block"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    "match": {
-                                                        "items": {
-                                                            "type": "string"
-                                                        },
-                                                        "type": "array"
-                                                    }
-                                                },
-                                                "required": [
-                                                    "behavior",
-                                                    "match"
-                                                ],
-                                                "type": "object"
-                                            },
-                                            "type": "array"
-                                        }
-                                    },
-                                    "required": [
-                                        "enabled"
-                                    ],
-                                    "type": "object"
-                                },
-                                "downloads": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean"
-                                        }
-                                    },
-                                    "required": [
-                                        "enabled"
-                                    ],
-                                    "type": "object"
-                                },
-                                "enabled": {
-                                    "type": "boolean"
-                                },
-                                "executables": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean"
-                                        },
-                                        "pathRules": {
-                                            "items": {
-                                                "additionalProperties": false,
-                                                "properties": {
-                                                    "behavior": {
-                                                        "enum": [
-                                                            "allow",
-                                                            "block"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    "match": {
-                                                        "items": {
-                                                            "type": "string"
-                                                        },
-                                                        "type": "array"
-                                                    }
-                                                },
-                                                "required": [
-                                                    "behavior",
-                                                    "match"
-                                                ],
-                                                "type": "object"
-                                            },
-                                            "type": "array"
-                                        }
-                                    },
-                                    "required": [
-                                        "enabled"
-                                    ],
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "enabled"
-                            ],
-                            "type": "object"
-                        },
-                        {
-                            "type": "boolean"
-                        }
-                    ]
-                },
-                "openUrlWithBrowser": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean"
-                        },
-                        "protocols": {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        }
-                    },
-                    "required": [
-                        "enabled",
-                        "protocols"
-                    ],
-                    "type": "object"
-                },
-                "readRegistryValue": {
-                    "anyOf": [
-                        {
-                            "additionalProperties": false,
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean"
-                                },
-                                "registryKeys": {
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "type": "array"
-                                }
-                            },
-                            "required": [
-                                "enabled",
-                                "registryKeys"
-                            ],
-                            "type": "object"
-                        },
-                        {
-                            "type": "boolean"
-                        }
-                    ]
-                },
-                "terminateExternalProcess": {
-                    "type": "boolean"
+                "width": {
+                    "type": "number"
                 }
             },
             "type": "object"
@@ -5889,7 +5664,7 @@
             "properties": {
                 "_internalWorkspaceData": {},
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
+                    "$ref": "#/definitions/Partial_6",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
@@ -6014,7 +5789,7 @@
                     "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_3"
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -6070,6 +5845,62 @@
         },
         "__type_20": {
             "additionalProperties": false,
+            "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
+            "properties": {
+                "bottomRightCorner": {
+                    "type": "number"
+                },
+                "sides": {
+                    "additionalProperties": false,
+                    "description": "Enables resizing interaction for each side of the window.",
+                    "properties": {
+                        "bottom": {
+                            "type": "boolean"
+                        },
+                        "left": {
+                            "type": "boolean"
+                        },
+                        "right": {
+                            "type": "boolean"
+                        },
+                        "top": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "size": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "__type_21": {
+            "additionalProperties": {},
+            "type": "object"
+        },
+        "__type_22": {
+            "additionalProperties": false,
+            "properties": {
+                "blacklist": {
+                    "description": "Forbidden URLs for redirects.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "whitelist": {
+                    "description": "Allowed URLs for redirects.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "__type_23": {
+            "additionalProperties": false,
             "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
             "properties": {
                 "showViewsOnSplitterDrag": {
@@ -6087,241 +5918,11 @@
             },
             "type": "object"
         },
-        "__type_21": {
+        "__type_24": {
             "additionalProperties": false,
             "description": "Configuration for view visibility settings",
             "properties": {
                 "enabled": {
-                    "type": "boolean"
-                }
-            },
-            "type": "object"
-        },
-        "__type_22": {
-            "additionalProperties": false,
-            "properties": {
-                "_internalWorkspaceData": {},
-                "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
-                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
-                },
-                "api": {
-                    "$ref": "#/definitions/Api",
-                    "description": "Configurations for API injection."
-                },
-                "autoResize": {
-                    "$ref": "#/definitions/AutoResizeOptions"
-                },
-                "autoplayPolicy": {
-                    "$ref": "#/definitions/AutoplayPolicyOptions",
-                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
-                },
-                "backgroundColor": {
-                    "description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
-                    "type": "string"
-                },
-                "bounds": {
-                    "$ref": "#/definitions/Bounds",
-                    "description": "Initial bounds given relative to the window."
-                },
-                "contentCreation": {
-                    "$ref": "#/definitions/ContentCreationOptions",
-                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
-                },
-                "contentNavigation": {
-                    "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-                },
-                "contextMenu": {
-                    "type": "boolean"
-                },
-                "contextMenuOptions": {
-                    "$ref": "#/definitions/ContextMenuOptions",
-                    "description": "Configure the context menu when right-clicking on a window."
-                },
-                "contextMenuSettings": {
-                    "$ref": "#/definitions/ContextMenuSettings"
-                },
-                "customContext": {
-                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
-                },
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "customRequestHeaders": {
-                    "description": "Custom headers for requests sent by the view.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "Custom headers for requests sent by the window.",
-                        "properties": {
-                            "headers": {
-                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
-                                "items": {
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    },
-                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
-                                    "type": "object"
-                                },
-                                "type": "array"
-                            },
-                            "urlPatterns": {
-                                "description": "The URL patterns for which the headers will be applied.",
-                                "items": {
-                                    "type": "string"
-                                },
-                                "type": "array"
-                            }
-                        },
-                        "required": [
-                            "headers",
-                            "urlPatterns"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "detachOnClose": {
-                    "type": "boolean"
-                },
-                "enableBeforeUnload": {
-                    "type": "boolean"
-                },
-                "experimental": {},
-                "fdc3InteropApi": {
-                    "type": "string"
-                },
-                "hotkeys": {
-                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "A hotkey binding.",
-                        "properties": {
-                            "keys": {
-                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
-                                "type": "string"
-                            },
-                            "preventDefault": {
-                                "type": "boolean"
-                            }
-                        },
-                        "required": [
-                            "keys"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "isClosable": {
-                    "type": "boolean"
-                },
-                "manifestUrl": {
-                    "description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "The name of the view.",
-                    "type": "string"
-                },
-                "permissions": {
-                    "$ref": "#/definitions/Partial_6"
-                },
-                "preloadScripts": {
-                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
-                    "items": {
-                        "additionalProperties": false,
-                        "description": "A script that is run before page load.",
-                        "properties": {
-                            "mandatory": {
-                                "type": "boolean"
-                            },
-                            "state": {
-                                "description": "Preload script execution state.",
-                                "enum": [
-                                    "failed",
-                                    "load-failed",
-                                    "load-started",
-                                    "load-succeeded",
-                                    "succeeded"
-                                ],
-                                "type": "string"
-                            },
-                            "url": {
-                                "description": "The URL from which the script was loaded.",
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "url"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                },
-                "preventDragOut": {
-                    "type": "boolean"
-                },
-                "processAffinity": {
-                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
-                    "type": "string"
-                },
-                "target": {
-                    "$ref": "#/definitions/Identity",
-                    "description": "The identity of the window this view should be attached to."
-                },
-                "url": {
-                    "type": "string"
-                },
-                "zoomLevel": {
-                    "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "__type_23": {
-            "additionalProperties": false,
-            "properties": {
-                "height": {
-                    "type": "number"
-                },
-                "left": {
-                    "type": "number"
-                },
-                "top": {
-                    "type": "number"
-                },
-                "width": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "height",
-                "left",
-                "top",
-                "width"
-            ],
-            "type": "object"
-        },
-        "__type_24": {
-            "additionalProperties": false,
-            "properties": {
-                "height": {
-                    "description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
-                    "type": "boolean"
-                },
-                "horizontal": {
-                    "description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
-                    "type": "boolean"
-                },
-                "vertical": {
-                    "description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
-                    "type": "boolean"
-                },
-                "width": {
-                    "description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
                     "type": "boolean"
                 }
             },
@@ -6332,7 +5933,7 @@
             "properties": {
                 "_internalWorkspaceData": {},
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
+                    "$ref": "#/definitions/Partial_6",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
@@ -6453,7 +6054,7 @@
                     "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_3"
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -6778,9 +6379,6 @@
                     "type": "array"
                 }
             },
-            "required": [
-                "windows"
-            ],
             "type": "object"
         },
         "__type_34": {
@@ -7135,11 +6733,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "alias",
-                "src",
-                "version"
-            ],
             "type": "object"
         },
         "__type_5": {
@@ -7147,40 +6740,27 @@
             "properties": {
                 "_internalWorkspaceData": {},
                 "accelerator": {
-                    "$ref": "#/definitions/Partial_4",
+                    "$ref": "#/definitions/Partial_6",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
-                },
-                "alphaMask": {
-                    "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
-                },
-                "alwaysOnTop": {
-                    "type": "boolean"
                 },
                 "api": {
                     "$ref": "#/definitions/Api",
                     "description": "Configurations for API injection."
                 },
-                "applicationIcon": {
-                    "type": "string"
-                },
-                "aspectRatio": {
-                    "type": "number"
-                },
-                "autoShow": {
-                    "description": "Automatically show the window when it is created.",
-                    "type": "boolean"
+                "autoResize": {
+                    "$ref": "#/definitions/AutoResizeOptions"
                 },
                 "autoplayPolicy": {
                     "$ref": "#/definitions/AutoplayPolicyOptions",
                     "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
                 },
                 "backgroundColor": {
-                    "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+                    "description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
                     "type": "string"
                 },
-                "closeOnLastViewRemoved": {
-                    "type": "boolean"
+                "bounds": {
+                    "$ref": "#/definitions/Bounds",
+                    "description": "Initial bounds given relative to the window."
                 },
                 "contentCreation": {
                     "$ref": "#/definitions/ContentCreationOptions",
@@ -7189,10 +6769,6 @@
                 "contentNavigation": {
                     "$ref": "#/definitions/ContentNavigation",
                     "description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-                },
-                "contentRedirect": {
-                    "$ref": "#/definitions/Partial_5",
-                    "description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
                 },
                 "contextMenu": {
                     "type": "boolean"
@@ -7204,10 +6780,6 @@
                 "contextMenuSettings": {
                     "$ref": "#/definitions/ContextMenuSettings"
                 },
-                "cornerRounding": {
-                    "$ref": "#/definitions/Partial_3",
-                    "description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
-                },
                 "customContext": {
                     "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
                 },
@@ -7215,7 +6787,7 @@
                     "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
                 },
                 "customRequestHeaders": {
-                    "description": "Custom headers for requests sent by the window.",
+                    "description": "Custom headers for requests sent by the view.",
                     "items": {
                         "additionalProperties": false,
                         "description": "Custom headers for requests sent by the window.",
@@ -7247,37 +6819,18 @@
                     },
                     "type": "array"
                 },
-                "defaultCentered": {
-                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
+                "detachOnClose": {
                     "type": "boolean"
                 },
-                "defaultHeight": {
-                    "type": "number"
-                },
-                "defaultLeft": {
-                    "type": "number"
-                },
-                "defaultTop": {
-                    "type": "number"
-                },
-                "defaultWidth": {
-                    "type": "number"
+                "enableBeforeUnload": {
+                    "type": "boolean"
                 },
                 "experimental": {},
                 "fdc3InteropApi": {
                     "type": "string"
                 },
-                "frame": {
-                    "type": "boolean"
-                },
-                "height": {
-                    "type": "number"
-                },
-                "hideOnClose": {
-                    "type": "boolean"
-                },
                 "hotkeys": {
-                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
                     "items": {
                         "additionalProperties": false,
                         "description": "A hotkey binding.",
@@ -7297,52 +6850,22 @@
                     },
                     "type": "array"
                 },
-                "icon": {
-                    "description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
-                    "type": "string"
-                },
-                "ignoreSavedWindowState": {
-                    "description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
-                    "type": "boolean"
-                },
-                "includeInSnapshots": {
-                    "type": "boolean"
-                },
                 "interop": {
                     "$ref": "#/definitions/InteropConfig"
                 },
-                "layout": {},
-                "maxHeight": {
-                    "type": "number"
-                },
-                "maxWidth": {
-                    "type": "number"
-                },
-                "maximizable": {
+                "isClosable": {
                     "type": "boolean"
                 },
-                "minHeight": {
-                    "type": "number"
-                },
-                "minWidth": {
-                    "type": "number"
-                },
-                "minimizable": {
-                    "type": "boolean"
-                },
-                "modalParentIdentity": {
-                    "$ref": "#/definitions/Identity",
-                    "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
-                },
-                "name": {
-                    "description": "The name of the window.",
+                "manifestUrl": {
+                    "description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
                     "type": "string"
                 },
-                "opacity": {
-                    "type": "number"
+                "name": {
+                    "description": "The name of the view.",
+                    "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_3"
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -7376,65 +6899,21 @@
                     },
                     "type": "array"
                 },
+                "preventDragOut": {
+                    "type": "boolean"
+                },
                 "processAffinity": {
                     "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
                     "type": "string"
                 },
-                "resizable": {
-                    "type": "boolean"
-                },
-                "resizeRegion": {
-                    "$ref": "#/definitions/ResizeRegion",
-                    "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
-                },
-                "saveWindowState": {
-                    "type": "boolean"
-                },
-                "shadow": {
-                    "type": "boolean"
-                },
-                "showBackgroundImages": {
-                    "type": "boolean"
-                },
-                "showTaskbarIcon": {
-                    "type": "boolean"
-                },
-                "smallWindow": {
-                    "type": "boolean"
-                },
-                "state": {
-                    "$ref": "#/definitions/WindowState"
-                },
-                "taskbarIcon": {
-                    "type": "string"
-                },
-                "taskbarIconGroup": {
-                    "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
-                    "type": "string"
+                "target": {
+                    "$ref": "#/definitions/Identity",
+                    "description": "The identity of the window this view should be attached to."
                 },
                 "url": {
                     "type": "string"
                 },
-                "uuid": {
-                    "type": "string"
-                },
-                "viewVisibility": {
-                    "$ref": "#/definitions/ViewVisibilityOptions",
-                    "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
-                },
-                "waitForPageLoad": {
-                    "type": "boolean"
-                },
-                "width": {
-                    "type": "number"
-                },
-                "workspacePlatform": {
-                    "$ref": "#/definitions/WorkspacePlatformOptions"
-                },
-                "x": {
-                    "type": "number"
-                },
-                "y": {
+                "zoomLevel": {
                     "type": "number"
                 }
             },
@@ -7443,55 +6922,53 @@
         "__type_6": {
             "additionalProperties": false,
             "properties": {
-                "blue": {
+                "height": {
                     "type": "number"
                 },
-                "green": {
+                "left": {
                     "type": "number"
                 },
-                "red": {
+                "top": {
+                    "type": "number"
+                },
+                "width": {
                     "type": "number"
                 }
             },
             "required": [
-                "blue",
-                "green",
-                "red"
+                "height",
+                "left",
+                "top",
+                "width"
             ],
             "type": "object"
         },
         "__type_7": {
             "additionalProperties": false,
             "properties": {
-                "devtools": {
-                    "description": "Should the context menu contain a button for opening devtools.",
-                    "type": "boolean"
+                "Application": {
+                    "$ref": "#/definitions/Partial_4"
                 },
-                "enable": {
-                    "description": "Should the context menu display on right click.",
-                    "type": "boolean"
+                "System": {
+                    "$ref": "#/definitions/Partial_5"
                 },
-                "reload": {
-                    "description": "Should the context menu contain a button for reloading the page.",
-                    "type": "boolean"
+                "webAPIs": {
+                    "items": {
+                        "$ref": "#/definitions/WebPermission"
+                    },
+                    "type": "array"
                 }
             },
-            "required": [
-                "enable"
-            ],
             "type": "object"
         },
         "__type_8": {
             "additionalProperties": false,
-            "description": "Configure the context menu when right-clicking on a window.",
             "properties": {
-                "enabled": {
-                    "description": "Displays the context menu on right click.",
+                "getFileDownloadLocation": {
                     "type": "boolean"
                 },
-                "template": {
-                    "$ref": "#/definitions/Array_1",
-                    "description": "Context menu items to display on right-click."
+                "setFileDownloadLocation": {
+                    "type": "boolean"
                 }
             },
             "type": "object"
@@ -7499,11 +6976,163 @@
         "__type_9": {
             "additionalProperties": false,
             "properties": {
-                "height": {
-                    "type": "number"
+                "getAllExternalWindows": {
+                    "type": "boolean"
                 },
-                "width": {
-                    "type": "number"
+                "launchExternalProcess": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "assets": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        },
+                                        "srcRules": {
+                                            "items": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "behavior": {
+                                                        "enum": [
+                                                            "allow",
+                                                            "block"
+                                                        ],
+                                                        "type": "string"
+                                                    },
+                                                    "match": {
+                                                        "items": {
+                                                            "type": "string"
+                                                        },
+                                                        "type": "array"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "behavior",
+                                                    "match"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "type": "object"
+                                },
+                                "downloads": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "type": "object"
+                                },
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "executables": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        },
+                                        "pathRules": {
+                                            "items": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "behavior": {
+                                                        "enum": [
+                                                            "allow",
+                                                            "block"
+                                                        ],
+                                                        "type": "string"
+                                                    },
+                                                    "match": {
+                                                        "items": {
+                                                            "type": "string"
+                                                        },
+                                                        "type": "array"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "behavior",
+                                                    "match"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "required": [
+                                        "enabled"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "enabled"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "openUrlWithBrowser": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "protocols": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "enabled",
+                        "protocols"
+                    ],
+                    "type": "object"
+                },
+                "readRegistryValue": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "registryKeys": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "enabled",
+                                "registryKeys"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "terminateExternalProcess": {
+                    "type": "boolean"
                 }
             },
             "type": "object"
