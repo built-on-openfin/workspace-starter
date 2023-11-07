@@ -108,9 +108,9 @@ export interface ThemeChangedLifecyclePayload {
 	 */
 	schemeType?: ColorSchemeMode;
 	/**
-	 * The payload.
+	 * The palette.
 	 */
-	payload?: CustomPaletteSet;
+	palette?: CustomPaletteSet;
 }
 /**
  * Condition changed event payload.

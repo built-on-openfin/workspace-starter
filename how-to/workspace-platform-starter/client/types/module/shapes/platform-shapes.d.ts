@@ -239,6 +239,14 @@ export interface EndpointDockGetRequest {
  */
 export interface EndpointDockGetResponse {
 	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
 	 * The config.
 	 */
 	config?: DockProviderConfigWithIdentity;
@@ -251,6 +259,10 @@ export interface EndpointDockSetRequest {
 	 * The id of the platform making the request
 	 */
 	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
 	/**
 	 * The config.
 	 */

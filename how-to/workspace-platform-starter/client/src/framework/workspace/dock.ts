@@ -39,6 +39,7 @@ import type {
 import type { ColorSchemeMode } from "../shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentIconFolder, themeUrl } from "../themes";
 import { isEmpty, isStringValue, objectClone } from "../utils";
+import { getVersionInfo } from "../version";
 
 const logger = createLogger("Dock");
 
@@ -569,8 +570,15 @@ export async function saveConfig(
 
 	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
 		logger.info("Storing dock config in custom storage");
+		const versionInfo = await getVersionInfo();
 		const success = await endpointProvider.action<EndpointDockSetRequest>(DOCK_ENDPOINT_ID_SET, {
 			platform: fin.me.identity.uuid,
+			metaData: {
+				version: {
+					workspacePlatformClient: versionInfo.workspacePlatformClient,
+					platformClient: versionInfo.platformClient
+				}
+			},
 			config
 		});
 		if (success) {

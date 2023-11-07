@@ -90,6 +90,7 @@ export class RssIntegration {
 	 */
 	public async initialize(settings: CustomSettings): Promise<void> {
 		this._settings = settings;
+
 		await Notifications.register({
 			notificationsPlatformOptions: {
 				id: `${fin.me.identity.uuid}-rss`,

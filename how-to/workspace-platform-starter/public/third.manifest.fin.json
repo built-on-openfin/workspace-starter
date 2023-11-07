@@ -316,7 +316,7 @@
 		},
 		"versionProvider": {
 			"minVersion": {
-				"workspace": "16.0.3"
+				"workspace": "16.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",

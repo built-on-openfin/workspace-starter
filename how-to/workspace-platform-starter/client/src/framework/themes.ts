@@ -161,10 +161,10 @@ export async function notifyColorScheme(): Promise<void> {
 	const schemeType = await getCurrentColorSchemeMode();
 	const palette = await getCurrentPalette();
 
-	await fireLifecycleEvent(platform, "theme-changed", {
+	await fireLifecycleEvent<ThemeChangedLifecyclePayload>(platform, "theme-changed", {
 		schemeType,
 		palette
-	} as ThemeChangedLifecyclePayload);
+	});
 
 	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 

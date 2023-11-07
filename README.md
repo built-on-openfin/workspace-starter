@@ -4,7 +4,7 @@
 
 ## OpenFin Workspace vnext
 
-The OpenFin Workspace is a full-featured work environment designed to improve the way you get t`hings done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, a store to aid in the discovery of content and a notification system to surface important moments while they're still important.
+The OpenFin Workspace is a full-featured work environment designed to improve the way you get things done. Built on a secure browsing experience powered by Chromium, the core offering includes a smart digital assistant, a powerful web browser built to support modern application workflows out-of-the-box, a store to aid in the discovery of content and a notification system to surface important moments while they're still important.
 
 [Learn more about openfin.co/workspace](https://www.openfin.co/workspace/)
 
@@ -18,7 +18,7 @@ This repository contains examples showing how to configure core workspace functi
 
 ### Workspace Platform
 
-Want to focus on configuring a workspace platform that can utilize all workspace components, apply your branding and launch your applications? This example is a full platform implementation using all the workspace components and applying patterns to the code. For more digestable examples please consider looking at the other samples which focus on individial aspects of the workspace platform.
+Want to focus on configuring a workspace platform that can utilize all workspace components, apply your branding and launch your applications? This example is a full platform implementation using all the workspace components and applying patterns to the code. For more digestable examples please consider looking at the other samples which focus on individual aspects of the workspace platform.
 
 | Workspace Platform                                                            | Description                                                                                                                                                                                                     | Live Launch                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -59,7 +59,7 @@ There are topics that a workspace platform developer may want to look into in an
 
 ## Automation Testing
 
-OpenFin provides some packages to assist in automation testing of yours apps.
+OpenFin provides some packages to assist in automation testing of your apps.
 
 - [@openfin/automation-cli](https://www.npmjs.com/package/@openfin/automation-cli) - A command line tool for running tests in an OpenFin environment.
 - [@openfin/automation-helpers](https://www.npmjs.com/package/@openfin/automation-helpers) - A package of helper methods for interacting with OpenFin components.
@@ -86,7 +86,7 @@ This section includes samples that utilize the official integrations listed on t
 
 ## Other Integrations
 
-OpenFin is a very easy platform to integrate with. If you need to integrate with something that has a REST API, JavaScript API, .NET API or Java API then then you can create your own integration easily. This section will contain examples of custom integrations to give you an idea of what is possible.
+OpenFin is a very easy platform to integrate with. If you need to integrate with something that has a REST API, JavaScript API, .NET API or Java API then you can create your own integration easily. This section will contain examples of custom integrations to give you an idea of what is possible.
 
 | Example                                                  | Description                                                                                                                   | Live Launch |
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------- |
