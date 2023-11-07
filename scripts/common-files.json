@@ -160,22 +160,22 @@
 		"name": "integrate-with-ms365-low-code",
 		"fileGroups": [
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code/public",
+				"srcFolder": "how-to/workspace-platform-starter/public",
 				"destFolder": "how-to/integrate-with-ms365-low-code/public",
 				"files": ["favicon.ico"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code/public/common",
+				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-ms365-low-code/public/common",
 				"files": ["dos.json"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code/scripts",
+				"srcFolder": "how-to/workspace-platform-starter/scripts",
 				"destFolder": "how-to/integrate-with-ms365-low-code/scripts",
 				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code/client/types",
+				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-ms365-low-code/client/types",
 				"files": ["fin.d.ts"]
 			}
@@ -185,22 +185,22 @@
 		"name": "integrate-with-ms365-low-code-basic",
 		"fileGroups": [
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/public",
+				"srcFolder": "how-to/workspace-platform-starter/public",
 				"destFolder": "how-to/integrate-with-ms365-low-code-basic/public",
 				"files": ["favicon.ico"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/public/common",
+				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-ms365-low-code-basic/public/common",
 				"files": ["dos.json"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/scripts",
+				"srcFolder": "how-to/workspace-platform-starter/scripts",
 				"destFolder": "how-to/integrate-with-ms365-low-code-basic/scripts",
 				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
 			},
 			{
-				"srcFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
+				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
 				"files": ["fin.d.ts"]
 			}

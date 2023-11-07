@@ -31,6 +31,7 @@ import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 import { isEmpty } from "./utils";
+import { getVersionInfo } from "./version";
 
 const logger = createLogger("Integrations");
 
@@ -347,9 +348,21 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
  */
 async function setPreferences(integrationId: string, preferences: { autoStart: boolean }): Promise<void> {
 	if (endpointProvider.hasEndpoint(INTEGRATIONS_PREFERENCE_ENDPOINT_SET)) {
+		const versionInfo = await getVersionInfo();
+
 		const success = await endpointProvider.action<EndpointIntegrationsPreferencesSetRequest>(
 			INTEGRATIONS_PREFERENCE_ENDPOINT_SET,
-			{ id: integrationId, payload: preferences }
+			{
+				platform: fin.me.identity.uuid,
+				metaData: {
+					version: {
+						workspacePlatformClient: versionInfo.workspacePlatformClient,
+						platformClient: versionInfo.platformClient
+					}
+				},
+				id: integrationId,
+				payload: preferences
+			}
 		);
 		if (success) {
 			logger.info(`Saved integration: ${integrationId} preference. AutoStart: ${preferences.autoStart}`);
@@ -371,13 +384,16 @@ async function getPreferences(integrationId: string): Promise<{ autoStart: boole
 		const preferences = await endpointProvider.requestResponse<
 			EndpointIntegrationsPreferencesGetRequest,
 			EndpointIntegrationsPreferencesGetResponse
-		>(INTEGRATIONS_PREFERENCE_ENDPOINT_GET, { id: integrationId });
-		if (!isEmpty(preferences)) {
+		>(INTEGRATIONS_PREFERENCE_ENDPOINT_GET, {
+			platform: fin.me.identity.uuid,
+			id: integrationId
+		});
+		if (!isEmpty(preferences?.payload)) {
 			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {
 			logger.info(`Unable to get preference for integration: ${integrationId}`);
 		}
-		return preferences;
+		return preferences?.payload;
 	}
 }
 
