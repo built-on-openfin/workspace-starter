@@ -1,4 +1,3 @@
-import type OpenFin from "@openfin/core";
 import {
 	ButtonStyle,
 	CLITemplate,
@@ -8,12 +7,8 @@ import {
 	type HomeSearchResponse,
 	type HomeSearchResult
 } from "@openfin/workspace";
-import { getCurrentSync } from "@openfin/workspace-platform";
-import { checkCondition } from "./conditions";
 import * as endpointProvider from "./endpoint";
-import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
-import { MANIFEST_TYPES } from "./manifest-types";
 import {
 	closedownModule,
 	closedownModules,
@@ -21,7 +16,6 @@ import {
 	initializeModules,
 	loadModules
 } from "./modules";
-import { launchPage, launchView } from "./platform/browser";
 import * as platformSplashProvider from "./platform/platform-splash";
 import type {
 	EndpointIntegrationsPreferencesGetRequest,
@@ -37,6 +31,7 @@ import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 import { isEmpty } from "./utils";
+import { getVersionInfo } from "./version";
 
 const logger = createLogger("Integrations");
 
@@ -72,27 +67,9 @@ export async function init(
 		integrationHelpers = {
 			...helpers,
 			templateHelpers,
-			launchView,
-			launchPage,
-			launchSnapshot: async (manifestUrl): Promise<OpenFin.Identity[]> => {
-				const identities = await launch({
-					manifestType: MANIFEST_TYPES.Snapshot.id,
-					manifest: manifestUrl,
-					appId: "",
-					title: "",
-					icons: [],
-					publisher: ""
-				});
-				return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
-			},
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
 			setSearchQuery,
-			condition: async (conditionId): Promise<boolean> => {
-				const platform = getCurrentSync();
-				return checkCondition(platform, conditionId);
-			},
-			share,
-			getPlatform: getCurrentSync
+			share
 		};
 
 		// Map the old moduleUrl properties to url
@@ -371,9 +348,21 @@ export async function getManagementResults(): Promise<HomeSearchResponse> {
  */
 async function setPreferences(integrationId: string, preferences: { autoStart: boolean }): Promise<void> {
 	if (endpointProvider.hasEndpoint(INTEGRATIONS_PREFERENCE_ENDPOINT_SET)) {
+		const versionInfo = await getVersionInfo();
+
 		const success = await endpointProvider.action<EndpointIntegrationsPreferencesSetRequest>(
 			INTEGRATIONS_PREFERENCE_ENDPOINT_SET,
-			{ id: integrationId, payload: preferences }
+			{
+				platform: fin.me.identity.uuid,
+				metaData: {
+					version: {
+						workspacePlatformClient: versionInfo.workspacePlatformClient,
+						platformClient: versionInfo.platformClient
+					}
+				},
+				id: integrationId,
+				payload: preferences
+			}
 		);
 		if (success) {
 			logger.info(`Saved integration: ${integrationId} preference. AutoStart: ${preferences.autoStart}`);
@@ -395,13 +384,16 @@ async function getPreferences(integrationId: string): Promise<{ autoStart: boole
 		const preferences = await endpointProvider.requestResponse<
 			EndpointIntegrationsPreferencesGetRequest,
 			EndpointIntegrationsPreferencesGetResponse
-		>(INTEGRATIONS_PREFERENCE_ENDPOINT_GET, { id: integrationId });
-		if (!isEmpty(preferences)) {
+		>(INTEGRATIONS_PREFERENCE_ENDPOINT_GET, {
+			platform: fin.me.identity.uuid,
+			id: integrationId
+		});
+		if (!isEmpty(preferences?.payload)) {
 			logger.info(`Retrieved preference for integration: ${integrationId}`);
 		} else {
 			logger.info(`Unable to get preference for integration: ${integrationId}`);
 		}
-		return preferences;
+		return preferences?.payload;
 	}
 }
 

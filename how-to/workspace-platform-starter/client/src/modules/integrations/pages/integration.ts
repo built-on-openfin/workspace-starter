@@ -8,15 +8,25 @@ import type {
 	HomeSearchResult
 } from "@openfin/workspace";
 import type { Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import {
+	FAVORITE_TYPE_NAME_PAGE,
+	type FavoriteClient,
+	type FavoriteEntry,
+	type FavoriteInfo,
+	type FavoriteTypeNames
+} from "workspace-platform-starter/shapes/favorite-shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
-import type { PageChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
+import type {
+	FavoriteChangedLifecyclePayload,
+	PageChangedLifecyclePayload
+} from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import type { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
+import { isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 import type { PagesSettings } from "./shapes";
 
 /**
@@ -92,6 +102,16 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	private _lastResults?: HomeSearchResult[];
 
 	/**
+	 * Subscription id for theme-changed lifecycle event.
+	 */
+	private _themeChangedSubscriptionId: string | undefined;
+
+	/**
+	 * Subscription id for favorite-changed lifecycle event.
+	 */
+	private _favChangedSubscriptionId: string | undefined;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -120,19 +140,72 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 							lastResult.title = payload.page.title;
 							lastResult.data.workspaceTitle = payload.page.title;
 							(lastResult.templateContent as CustomTemplate).data.title = payload.page.title;
+
 							this.resultAddUpdate([lastResult]);
+
+							const { favoriteClient } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
+							if (favoriteClient?.setSavedFavorite) {
+								const saved = await favoriteClient.getSavedFavorites(FAVORITE_TYPE_NAME_PAGE);
+								const favorite = await saved?.find((f) => f.typeId === payload.id);
+								if (favorite) {
+									favorite.label = payload.page.title;
+									await favoriteClient.setSavedFavorite(favorite);
+								}
+							}
 						}
 					} else if (payload?.action === "delete") {
 						this.resultRemove(payload.id);
+
+						const { favoriteClient } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
+						if (favoriteClient?.deleteSavedFavorite) {
+							const saved = await favoriteClient.getSavedFavorites(FAVORITE_TYPE_NAME_PAGE);
+							const favorite = await saved?.find((f) => f.typeId === payload.id);
+							if (favorite) {
+								await favoriteClient.deleteSavedFavorite(favorite.id);
+							}
+						}
 					}
 				}
 			);
-			this._integrationHelpers.subscribeLifecycleEvent("theme-changed", async () => {
-				if (this._integrationHelpers?.getPlatform) {
-					const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
-					await this.rebuildResults(platform);
+			this._themeChangedSubscriptionId = this._integrationHelpers.subscribeLifecycleEvent(
+				"theme-changed",
+				async () => {
+					if (this._integrationHelpers?.getPlatform) {
+						const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
+						await this.rebuildResults(platform);
+					}
 				}
-			});
+			);
+			this._favChangedSubscriptionId =
+				this._integrationHelpers.subscribeLifecycleEvent<FavoriteChangedLifecyclePayload>(
+					"favorite-changed",
+					async (_: unknown, payload?: FavoriteChangedLifecyclePayload) => {
+						if (!isEmpty(payload)) {
+							await this.updateAppFavoriteButtons(payload);
+						}
+					}
+				);
+		}
+	}
+
+	/**
+	 * Close down any resources being used by the module.
+	 * @returns Nothing.
+	 */
+	public async closedown(): Promise<void> {
+		if (this._integrationHelpers?.unsubscribeLifecycleEvent) {
+			if (isStringValue(this._themeChangedSubscriptionId)) {
+				this._integrationHelpers.unsubscribeLifecycleEvent(this._themeChangedSubscriptionId, "theme-changed");
+				this._themeChangedSubscriptionId = undefined;
+			}
+
+			if (isStringValue(this._favChangedSubscriptionId)) {
+				this._integrationHelpers.unsubscribeLifecycleEvent(
+					this._favChangedSubscriptionId,
+					"favorite-changed"
+				);
+				this._favChangedSubscriptionId = undefined;
+			}
 		}
 	}
 
@@ -169,15 +242,30 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 		if (this._integrationHelpers?.getPlatform) {
 			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
-			const pages: Page[] = await platform.Storage.getPages();
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
 			const queryLower = query.toLowerCase();
+
+			let pages: Page[] = await platform.Storage.getPages();
+			let matchQuery = queryLower;
 
 			this._lastResponse = lastResponse;
 			this._lastQuery = queryLower;
 			this._lastQueryMinLength = options.queryMinLength;
 
-			pageResults = await this.buildResults(pages, queryLower, options.queryMinLength, colorScheme);
+			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
+
+			if (
+				favoriteInfo?.isEnabled &&
+				isStringValue(favoriteInfo?.command) &&
+				queryLower === favoriteInfo.command &&
+				favoriteClient
+			) {
+				const favoriteApps = await favoriteClient.getSavedFavorites(FAVORITE_TYPE_NAME_PAGE);
+				const favIds = favoriteApps?.map((f) => f.typeId) ?? [];
+				pages = pages.filter((a) => favIds.includes(a.pageId));
+				matchQuery = "";
+			}
+
+			pageResults = await this.buildResults(pages, matchQuery, options.queryMinLength);
 
 			this._lastResults = pageResults;
 		}
@@ -199,33 +287,52 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	): Promise<boolean> {
 		let handled = false;
 		if (result.action.trigger === "user-action") {
-			const data: {
-				pageId?: string;
-			} = result.data;
+			if (result.action.name.endsWith("favorite") && result.data?.pageId) {
+				const { favoriteClient } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
+				if (favoriteClient) {
+					if (result.action.name.startsWith("un")) {
+						if (!isEmpty(result.data?.favoriteId) && favoriteClient.deleteSavedFavorite) {
+							await favoriteClient.deleteSavedFavorite(result.data.favoriteId);
+						}
+					} else if (favoriteClient.setSavedFavorite) {
+						await favoriteClient.setSavedFavorite({
+							id: randomUUID(),
+							type: FAVORITE_TYPE_NAME_PAGE,
+							typeId: result.key,
+							label: result.title,
+							icon: this._settings?.images.page
+						});
+					}
 
-			if (data?.pageId) {
-				handled = true;
+					handled = true;
+				}
+			} else {
+				const data: {
+					pageId?: string;
+				} = result.data;
 
-				if (result.action.name === PagesProvider._ACTION_LAUNCH_PAGE) {
-					if (this._integrationHelpers?.getPlatform && this._integrationHelpers?.launchPage) {
-						const platform = this._integrationHelpers.getPlatform();
-						const pageToLaunch = await platform.Storage.getPage(data.pageId);
-						await this._integrationHelpers.launchPage(pageToLaunch, undefined, this._logger);
+				if (data?.pageId) {
+					handled = true;
+
+					if (result.action.name === PagesProvider._ACTION_LAUNCH_PAGE) {
+						if (this._integrationHelpers?.getPlatform && this._integrationHelpers?.launchPage) {
+							await this._integrationHelpers.launchPage(data.pageId, undefined, this._logger);
+						}
+					} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
+						if (this._integrationHelpers?.getPlatform) {
+							const platform = this._integrationHelpers.getPlatform();
+							await platform.Storage.deletePage(data.pageId);
+							// Deleting the page will eventually trigger the "delete" lifecycle
+							// event which will remove it from the result list
+						}
+					} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
+						if (this._integrationHelpers?.share) {
+							await this._integrationHelpers.share({ type: "page", pageId: data.pageId });
+						}
+					} else {
+						handled = false;
+						this._logger?.warn(`Unrecognized action for page selection: ${data.pageId}`);
 					}
-				} else if (result.action.name === PagesProvider._ACTION_DELETE_PAGE) {
-					if (this._integrationHelpers?.getPlatform) {
-						const platform = this._integrationHelpers.getPlatform();
-						await platform.Storage.deletePage(data.pageId);
-						// Deleting the page will eventually trigger the "delete" lifecycle
-						// event which will remove it from the result list
-					}
-				} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
-					if (this._integrationHelpers?.share) {
-						await this._integrationHelpers.share({ type: "page", pageId: data.pageId });
-					}
-				} else {
-					handled = false;
-					this._logger?.warn(`Unrecognized action for page selection: ${data.pageId}`);
 				}
 			}
 		}
@@ -238,14 +345,16 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @param id The id of the item.
 	 * @param title The title of the page.
 	 * @param shareEnabled Is sharing enabled.
-	 * @param colorScheme The current color scheme.
+	 * @param favInfo The favorites info if it is enabled.
+	 * @param favoriteId The id of the favorite.
 	 * @returns The home result.
 	 */
 	private async getPageTemplate(
 		id: string,
 		title: string,
 		shareEnabled: boolean,
-		colorScheme: ColorSchemeMode
+		favInfo: FavoriteInfo | undefined,
+		favoriteId: string | undefined
 	): Promise<HomeSearchResult> {
 		if (this._integrationHelpers && this._settings) {
 			const actions = [
@@ -280,13 +389,29 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				});
 			}
 
-			const icon = this._settings.images.page.replace("{scheme}", colorScheme as string);
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			const icon = await themeClient.themeUrl(this._settings.images.page);
+
+			const headerButtons: { icon: string; action: string }[] = [];
+
+			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon) {
+				const favoriteIcon = await themeClient.themeUrl(
+					!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon
+				);
+				if (favoriteIcon) {
+					headerButtons.push({
+						icon: favoriteIcon,
+						action: !isEmpty(favoriteId) ? "unfavorite" : "favorite"
+					});
+				}
+			}
 
 			const layoutData = await this._integrationHelpers.templateHelpers.createLayout(
 				title,
 				icon,
 				[await this._integrationHelpers.templateHelpers.createText("instructions")],
-				actionButtons
+				actionButtons,
+				headerButtons
 			);
 
 			return {
@@ -300,7 +425,8 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 					providerId: this._definition?.id,
 					pageTitle: title,
 					pageId: id,
-					tags: ["page"]
+					tags: ["page"],
+					favoriteId
 				},
 				template: "Custom" as CLITemplate.Custom,
 				templateContent: {
@@ -334,11 +460,9 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @param platform The workspace platform.
 	 */
 	private async rebuildResults(platform: WorkspacePlatformModule): Promise<void> {
-		if (this._integrationHelpers && this._lastQuery && this._lastQueryMinLength) {
-			const colorScheme = await this._integrationHelpers.getCurrentColorSchemeMode();
-
+		if (this._integrationHelpers && !isEmpty(this._lastQuery) && !isEmpty(this._lastQueryMinLength)) {
 			const pages: Page[] = await platform.Storage.getPages();
-			const results = await this.buildResults(pages, this._lastQuery, this._lastQueryMinLength, colorScheme);
+			const results = await this.buildResults(pages, this._lastQuery, this._lastQueryMinLength);
 			this.resultAddUpdate(results);
 		}
 	}
@@ -348,21 +472,29 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 	 * @param pages The list of workspaces to build the results for.
 	 * @param query The query.
 	 * @param queryMinLength The min query length.
-	 * @param colorScheme The color scheme.
 	 * @returns The list of home search results.
 	 */
 	private async buildResults(
 		pages: Page[],
 		query: string,
-		queryMinLength: number,
-		colorScheme: ColorSchemeMode
+		queryMinLength: number
 	): Promise<HomeSearchResult[]> {
 		let results: HomeSearchResult[] = [];
 
 		if (this._integrationHelpers && Array.isArray(pages)) {
 			let shareEnabled: boolean = false;
-			if (this._integrationHelpers.condition) {
-				shareEnabled = await this._integrationHelpers.condition("sharing");
+			if (this._integrationHelpers?.getConditionsClient) {
+				const conditionsClient = await this._integrationHelpers.getConditionsClient();
+				if (conditionsClient) {
+					shareEnabled = await conditionsClient.check("sharing");
+				}
+			}
+
+			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
+			let savedFavorites: FavoriteEntry[] | undefined;
+
+			if (favoriteClient) {
+				savedFavorites = await favoriteClient.getSavedFavorites(FAVORITE_TYPE_NAME_PAGE);
 			}
 
 			const pgsProm = pages
@@ -371,7 +503,11 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 						query.length === 0 || (query.length >= queryMinLength && pg.title.toLowerCase().includes(query))
 				)
 				.sort((a, b) => a.title.localeCompare(b.title))
-				.map(async (pg: Page) => this.getPageTemplate(pg.pageId, pg.title, shareEnabled, colorScheme));
+				.map(async (pg: Page) => {
+					const favoriteId = savedFavorites?.find((f) => f.typeId === pg.pageId)?.id;
+
+					return this.getPageTemplate(pg.pageId, pg.title, shareEnabled, favoriteInfo, favoriteId);
+				});
 
 			results = await Promise.all(pgsProm);
 		}
@@ -413,5 +549,82 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		if (this._lastResponse) {
 			this._lastResponse.revoke(id);
 		}
+	}
+
+	/**
+	 * Update the app buttons if the favorites have changed.
+	 * @param payload The payload of the favorite change.
+	 */
+	private async updateAppFavoriteButtons(payload: FavoriteChangedLifecyclePayload): Promise<void> {
+		const favorite: FavoriteEntry = payload.favorite;
+
+		if (
+			!isEmpty(this._lastResponse) &&
+			(payload.action === "set" || payload.action === "delete") &&
+			!isEmpty(favorite) &&
+			favorite.type === FAVORITE_TYPE_NAME_PAGE &&
+			this._lastResults &&
+			this._integrationHelpers
+		) {
+			const { favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
+
+			if (this._lastQuery === favoriteInfo?.command && payload.action === "delete") {
+				this._lastResponse.revoke(favorite.typeId);
+			} else if (this._lastResults) {
+				const lastPage = this._lastResults.find((pg) => pg.key === favorite.typeId);
+
+				if (!isEmpty(lastPage)) {
+					let shareEnabled: boolean = false;
+					if (this._integrationHelpers?.getConditionsClient) {
+						const conditionsClient = await this._integrationHelpers.getConditionsClient();
+						if (conditionsClient) {
+							shareEnabled = await conditionsClient.check("sharing");
+						}
+					}
+
+					const rebuilt = await this.getPageTemplate(
+						lastPage.key,
+						lastPage.title,
+						shareEnabled,
+						favoriteInfo,
+						payload.action === "set" ? favorite.id : undefined
+					);
+
+					this._lastResponse.respond([rebuilt]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get the favorite info and client if they are enabled.
+	 * @param favoriteTypeNames The type of client to get.
+	 * @returns The favorite info and client.
+	 */
+	private async getFavInfo(
+		favoriteTypeNames: FavoriteTypeNames
+	): Promise<{ favoriteClient: FavoriteClient | undefined; favoriteInfo: FavoriteInfo | undefined }> {
+		let favoriteInfo: FavoriteInfo | undefined;
+		let favoriteClient: FavoriteClient | undefined;
+
+		if ((this._definition?.data?.favoritesEnabled ?? true) && this._integrationHelpers?.getFavoriteClient) {
+			favoriteClient = await this._integrationHelpers.getFavoriteClient();
+			if (favoriteClient) {
+				favoriteInfo = favoriteClient.getInfo();
+				if (favoriteInfo.isEnabled) {
+					const isSupported =
+						isEmpty(favoriteInfo.enabledTypes) || favoriteInfo.enabledTypes.includes(favoriteTypeNames);
+					if (!isSupported) {
+						favoriteInfo = undefined;
+						favoriteClient = undefined;
+					}
+				}
+			}
+		}
+
+		return {
+			favoriteClient,
+			favoriteInfo
+		};
 	}
 }

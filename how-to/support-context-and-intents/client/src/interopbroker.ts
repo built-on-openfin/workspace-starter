@@ -143,9 +143,9 @@ export function createInteropOverride(
 				customSettings?.platformProvider?.intentPicker?.url ??
 				"http://localhost:8080/common/windows/intents/picker.html";
 
-			const winOption = {
+			const winOption: OpenFin.WindowCreationOptions = {
 				name: "intent-picker",
-				includeInSnapshot: false,
+				includeInSnapshots: false,
 				fdc3InteropApi: "1.2",
 				defaultWidth: width,
 				defaultHeight: height,

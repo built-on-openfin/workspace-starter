@@ -149,7 +149,8 @@ export class AboutProvider implements IntegrationModule<AboutProviderSettings> {
 		}
 
 		if (this._integrationHelpers?.getVersionInfo) {
-			const palette = await this._integrationHelpers.getCurrentPalette();
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			const palette = await themeClient.getPalette();
 
 			const versionInfo = await this._integrationHelpers.getVersionInfo();
 

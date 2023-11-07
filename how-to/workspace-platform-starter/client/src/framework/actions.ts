@@ -4,6 +4,7 @@ import {
 	getCurrentSync,
 	type BrowserCreateWindowRequest,
 	type CustomActionPayload,
+	type CustomActionSpecifier,
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
 import { toggleNotificationCenter } from "@openfin/workspace/notifications";
@@ -13,10 +14,12 @@ import { updateToolbarButtons } from "./buttons";
 import * as favoriteProvider from "./favorite";
 import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
+import { showPopupMenu } from "./menu";
 import { closedownModules, initializeModules, loadModules } from "./modules";
 import { launchView } from "./platform/browser";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
 import type { FavoriteEntry } from "./shapes/favorite-shapes";
+import type { PopupMenuEntry, PopupMenuStyles } from "./shapes/menu-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { showShareOptions } from "./share";
 import { toggleScheme } from "./themes";
@@ -47,7 +50,8 @@ export const PLATFORM_ACTION_IDS = {
 	launchView: "launch-view",
 	toggleScheme: "toggle-scheme",
 	favoriteAdd: "favorite-add",
-	favoriteRemove: "favorite-remove"
+	favoriteRemove: "favorite-remove",
+	popupMenu: "popup-menu"
 };
 
 /**
@@ -217,15 +221,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (currentToolbarOptions) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
+				if (currentToolbarOptions) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 
@@ -233,15 +240,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
-			if (!isEmpty(currentToolbarOptions)) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: true });
+				if (!isEmpty(currentToolbarOptions)) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 	};
@@ -251,15 +261,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			const platform = getCurrentSync();
 			const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 			const options = await browserWindow.openfinWindow.getOptions();
-			const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions;
-			await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
-			if (!isEmpty(currentToolbarOptions)) {
-				const newButtons = await updateToolbarButtons(
-					currentToolbarOptions.buttons,
-					payload.customData.sourceId as string,
-					payload.customData.replacementId as string
-				);
-				await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+			const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+			if (createRequest.workspacePlatform.windowType !== "platform") {
+				const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+				await browserWindow.openfinWindow.updateOptions({ alwaysOnTop: false });
+				if (!isEmpty(currentToolbarOptions)) {
+					const newButtons = await updateToolbarButtons(
+						currentToolbarOptions.buttons,
+						payload.customData.sourceId as string,
+						payload.customData.replacementId as string
+					);
+					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				}
 			}
 		}
 	};
@@ -355,6 +368,34 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 				logger.error("Can only remove from favorites if favorite data is provided in customData");
 			} else {
 				await favoriteProvider.deleteSavedFavorite(favorite.id);
+			}
+		}
+	};
+
+	actionMap[PLATFORM_ACTION_IDS.popupMenu] = async (payload: CustomActionPayload): Promise<void> => {
+		if (payload.callerType === CustomActionCallerType.CustomButton) {
+			const menuOptions: {
+				source: "dock";
+				noEntryText: string;
+				menuEntries: PopupMenuEntry<CustomActionSpecifier>[];
+				options?: {
+					popupMenuStyle?: PopupMenuStyles;
+				};
+			} = payload.customData;
+
+			const res = await showPopupMenu(
+				menuOptions.source === "dock" ? { x: payload.x, y: 48 } : { x: payload.x, y: payload.y },
+				payload.windowIdentity,
+				menuOptions.noEntryText,
+				menuOptions.menuEntries,
+				menuOptions.options
+			);
+
+			if (!isEmpty(res)) {
+				await callAction(res.id, {
+					...payload,
+					customData: res.customData
+				});
 			}
 		}
 	};

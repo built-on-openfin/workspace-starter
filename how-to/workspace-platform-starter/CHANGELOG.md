@@ -1,5 +1,69 @@
 # Changelog
 
+## v15
+
+- BREAKING CHANGE: BrowserProvider windowOptions. A number of versions ago we indicated that you should use defaultWindowOptions in the BrowserProvider configuration instead of the old windowOptions setting. We have removed the type from the schema and type and we have updated the main manifest to use defaultWindowOptions(like we did in our other examples as seen in settings.json). Please update your manifest/settings (we will maintain support for window options for the browser configuration for this release but then that backwards compatibility will be removed).
+- BREAKING CHANGE: `ModuleHelpers launchPage` helper function now takes a pageId (and it has to be a valid pageId) instead of asking modules to get the platform, use the storage apis and then send a page. This reduces code and also ensures that only valid pages are launched.
+- BREAKING CHANGE: The theming methods in module helpers have been encapsulated inside a class returned by the `getThemeClient` method, the old methods `getCurrentThemeId`, `getCurrentIconFolder`, `getCurrentPalette`and `getCurrentColorSchemeMode` have been removed but equivalent functions are available by using `getThemeClient`.
+- BREAKING CHANGE: Change ModuleHelpers `condition` method has been encapsulated into a `conditionsClient` retrieved using `getConditionsClient`
+- BREAKING CHANGE: Integration preferences endpoint payloads now include the platform and metadata properties, the response should include the preference properties in the `payload` object
+- Added conditionsClient has `changed` method which can notify the platform a condition has changed, a lifecycle event `condition-changed` will be raised
+- Added [Notification Support](./docs/how-to-use-notifications.md) to the platform. You now have a helper getNotificationClient function that returns a notification client to modules and there are rules around whether a module can have this capability and if you wish to isolate notifications between modules.
+- Added an example lifecycle module ExampleNotificationService ([see README.md](./client/src/modules/lifecycle/example-notification-service/README.md)) to the modules folder and added it (enabled:false) to the lifecycleProvider section of the main manifest ([manifest.fin.json](./public/manifest.fin.json)).
+- Updated the way the [notification.ts](./client/src/framework/workspace/notifications.ts) registers against the workspace notification center (The notification center is no longer automatically started and that now happens upon registration which resulted removing the check to see if the notification center was running before registering).
+- Added fdc3 approach to fdc3.open to the interop broker.
+- Change: Default fdc3.open approach has moved from opinionated intent based approach to fdc3 standard based approach. platformProvider interop setting now has openOptions where you can specify openStrategy. Set it to 'intent' if you want the opinionated behavior back.
+- Added improvements to the Interop Broker to improve support for FDC3 2.0 conformance.
+- Window Positioning Strategy - Added additional defensive coding for instances where windows may be opened and closed quickly asynchronously (e.g. during automation testing). This additional defensiveness is for situations where a reference to a window may no longer exist if it was closed before the check for whether the window is showing or what it's current bounds are.
+- Window Positioning Strategy - Added the option to turn window positioning strategy completely off if it is not required e.g. automation testing via the disableWindowPositioningStrategy in the browserProvider settings.
+- Added favorites support for Workspaces
+- Added favorites support for Pages
+- Change Favorites icons are theme aware
+- Change Favorites menu has option `menuStyle` to switch between `native` and `custom`
+- Fixed Pages and Workspace not appearing in home results as soon as they are created
+- Fixed Apps template not updating text color on theme-changed
+- Added module helpers `launchWorkspace` method
+- Added Native popup menus now support separators, icons
+- Added Custom popup menus now support separators, disabled, submenu, checkbox, aria labelling and off-screen positioning
+- Added Dock re-ordering is now enabled by default (it can be disabled by setting `dockProvider.disableUserRearrangement` to true)
+- Added Dock provider entries now require an `id` field so that they can be identified when re-ordering is enabled
+- Added Dock supports endpoints for storage of their config `dock-get` and `dock-set`, if you provide your own endpoints you must handle the adding/removing/ordering of buttons based on the available buttons
+- Added ability to specify a preference for a custom view or window height and width for an app through a new setting called launchPreference that can be added to an app definition (this metadata could be used for other types of app in the future but right now only views and classic windows are supported).
+- Added ability to specify whether the launched view/window should be autoCentered when launched via the launchPreference setting that can be added to an app definition.
+- Added ability to specify a custom Platform API window should be used for a view/inline-view instead of the default browser window through the options setting of launchPreference which can be added to an app definition. The ability to support Platform API Windows and Browser windows was added to v15 of the @openfin/workspace-platform package.
+- Updated [how-to-define-apps.md](./docs/how-to-define-apps.md), [how-to-define-apps-fdc3-1-2.md](./docs/how-to-define-apps-fdc3-1-2.md) and [how-to-define-apps-fdc3-2-0.md](./docs/how-to-define-apps-fdc3-2-0.md) to reflect the new launchPreference option.
+- Change Platform override for `openGlobalContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.globalMenu` to `native` or `custom`
+- Change Platform override for `openViewTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.viewMenu` to `native` or `custom`
+- Change Platform override for `openPageTabContextMenu` can be configured to use the custom popup menus by setting `browserProvider.menuOptions.style.pageMenu` to `native` or `custom`
+- Updated launchPreferences to provide a wider range of host options for views. Updated example platform api page to read the title from workspace platform title.
+- New Feature - Updated the page composite module so that you can enable an [init options](./client/src/modules/composite/pages/init-options.ts) module that lets you launch a specific page using init params. Example fins link: fin://localhost:8080/manifest.fin.json?$$action=show-page&$$payload=eyAicGFnZUlkIjogImIwY2UxNTg3LTM2ZDAtNGRlZC05ZGU3LTlmNmQyYjc1OGYyNyIgfQ== the payload is a base64 encoded string of { "pageId": "the-id-of-the-page" }
+- New Feature - Added a new init module example: launch-workspace so that you can enable an [init options](./client/src/modules/init-options/launch-workspace/init-options.ts) module that lets you launch a specific workspace using init params. Example fins link: fin://localhost:8080/manifest.fin.json?$$action=launch-workspace&$$payload=eyAid29ya3NwYWNlSWQiOiAidGhlLWlkLW9mLXRoZS13b3Jrc3BhY2UiIH0= the payload is a base64 encoded string of { "workspaceId": "the-id-of-the-workspace" }
+- Added MenusProvider.popupMenuStyle which sets a global style for popup menus which can be inherited by other components, default to `platform`, but can also be `native` or `custom`
+- Added ModuleHelpers now contain MenuClient which can be use to show a popup menu or get the global setting for menu style
+- Added Workspaces menu in custom menu module, visibility is disabled by default on the dock
+- Added platform action `popup-menu` which can be passed menu options in the payload to display a context menu, it then call the platform action for the result.
+- Added ModuleHelpers now contain getEndpointClient. This will give module developers access to endpoints so that useful endpoints can be exposed to teams building modules. Whether the endpoint client is made available to a module and which endpoints are accessible is controlled by the platform owner. See [How to define endpoints](./docs/how-to-define-endpoints.md)
+- New Feature - The intent picker now tries to appear in the center of the monitor from where the intent was raised (rather than always showing up on the main monitor).
+- Fix - Fixed the basic intent picker that wasn't working correctly.
+- Added Tray menu can now use the custom popup menus, will use the global popupMenuStyle but can be overridden by the `trayProvider.popupMenuStyle`
+- Updated interopbroker to break out some logic into sub classes in a broker folder. Also removed functions that were not being overridden.
+- Removed interop related functions from [apps.ts](./client/src/framework/apps.ts) to [app-intent-helper.ts](./client/src/framework/platform/broker/app-intent-helper.ts) as part of the interopbroker tidy.
+- Added support for app providers or platform owners to specify their own endpoint to handle the fetching of manifests (when a url is specified as a source for an app's manifest e.g. view options, window options, snapshot etc instead of the inline equivalent). [launch.ts](./client/src/framework/launch.ts) will now check the following when passed a manifest url:
+  - Is there a app specific endpoint available? E.g. if a view app has an id of `my-view-app` then we check for `manifest-get-my-view-app`. If the endpoint exists then we will call the request/response function against that endpoint and pass { url: string; appId: string} as the request. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
+  - Is there a platform specific endpoint available - `manifest-get` is specified. This gives platform owners the option of providing a hook where they want to manage the fetching of manifests for their platform. If you are using a fetch endpoint type instead of a custom module and the url is not specified we use the passed manifest url.
+  - If none of the above endpoints exist we fall back to the default `await fetch(manifestUrl)` behavior.
+  - Added example of how to enable/disable console logging of built in interop broker messages to manifests.
+  - Added extra check of view/window title when building a list of intent handler instances.
+- Encourage the use of the initOptionsProvider for loading content into the platform.
+- Change `getPlatform` moved from IntegrationsHelpers to ModulesHelpers
+- Change `launchSnapshot` moved from IntegrationsHelpers to ModulesHelpers
+- Change `launchView` moved from IntegrationsHelpers to ModulesHelpers
+- Added platform override for `applyWorkspace` which triggers the `workspace-changed` lifecycle event
+- Added Dock monitors the `conditions-changed` and refreshes its contents if the condition was used
+- Added url property to splashScreenProvider so you can provide your own custom location for the html content
+- Change splash screen progress updates are sent using channels so they work cross domain
+- Update applyWorkspace logic so that you are not prompted on whether you wish to save changes if you have never loaded a workspace (you just started a session), and you have not got any windows open that would be included in a snapshot and would be lost.
+
 ## v14
 
 - Added customizable splash screen (splashScreenProvider in settings)

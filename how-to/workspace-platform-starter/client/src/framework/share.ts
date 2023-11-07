@@ -92,17 +92,19 @@ export async function showShareOptions(payload: {
 			}
 		}
 
-		const template: OpenFin.MenuItemTemplate[] = [
-			{
+		const template: OpenFin.MenuItemTemplate[] = [];
+
+		if (!isEmpty(pageId)) {
+			template.push({
 				label: "Share Page",
-				data: { identity: { windowIdentity, pageId }, type: "page" }
-			},
-			{ type: "separator", data: {} },
-			{
-				label: "Share Workspace",
-				data: { identity: {}, type: "workspace" }
-			}
-		];
+				data: { windowIdentity, pageId, type: "page" }
+			});
+			template.push({ type: "separator", data: {} });
+		}
+		template.push({
+			label: "Share Workspace",
+			data: { type: "workspace" }
+		});
 
 		const r = await currentWindow.openfinWindow.showPopupMenu({
 			template,
@@ -113,7 +115,7 @@ export async function showShareOptions(payload: {
 		if (r.result === "closed") {
 			logger.info("share menu dismissed.");
 		} else if (r.data.type === "page") {
-			await saveSharedPage(r.data.identity);
+			await saveSharedPage(r.data);
 		} else if (r.data.type === "workspace") {
 			await saveSharedWorkspace();
 		}
@@ -170,8 +172,7 @@ async function notifyOfSuccessfulLoad(): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon:
-			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon: settings.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.GREEN,
 			text: "Share Request Applied"
@@ -211,8 +212,7 @@ async function notifyOfSuccess(url: string, expiryInHours: number): Promise<void
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon:
-			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon: settings.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.BLUE,
 			text: "Share Request Raised"
@@ -251,8 +251,7 @@ async function notifyOfFailure(body: string): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon:
-			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon: settings.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.RED,
 			text: "Share Request Failed"
@@ -290,8 +289,7 @@ async function notifyOfExpiry(): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon:
-			settings.browserProvider?.defaultWindowOptions?.icon ?? settings.browserProvider?.windowOptions?.icon,
+		icon: settings.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.RED,
 			text: "Share Request Expired"

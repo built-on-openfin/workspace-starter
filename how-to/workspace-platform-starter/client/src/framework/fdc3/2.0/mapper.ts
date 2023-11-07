@@ -38,7 +38,8 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		icons: app.icons ?? [],
 		images: app.screenshots,
 		private: app?.hostManifests?.OpenFin?.config?.private,
-		autostart: app?.hostManifests?.OpenFin?.config?.autostart
+		autostart: app?.hostManifests?.OpenFin?.config?.autostart,
+		launchPreference: app?.hostManifests?.OpenFin?.config?.launchPreference
 	};
 	return platformApp;
 }
@@ -267,7 +268,8 @@ function getHostManifestsFromPlatformApp(app: PlatformApp): HostManifests {
 			config: {
 				autostart: app.autostart,
 				private: app.private,
-				instanceMode: app.instanceMode
+				instanceMode: app.instanceMode,
+				launchPreference: app.launchPreference
 			}
 		}
 	};

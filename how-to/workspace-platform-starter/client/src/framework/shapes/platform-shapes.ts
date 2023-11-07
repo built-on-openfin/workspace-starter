@@ -1,4 +1,6 @@
+import type { DockButton } from "@openfin/workspace";
 import type { Page, Workspace } from "@openfin/workspace-platform";
+import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 
 /**
@@ -233,4 +235,58 @@ export interface EndpointPageRemoveRequest {
 	 * The id of the page to remove.
 	 */
 	id: string;
+}
+
+/**
+ * A request type for the DockEndpoint that gets the config for an entry
+ */
+export interface EndpointDockGetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The id of the config to get.
+	 */
+	id: string;
+	/**
+	 * The buttons that are available based on current configuration.
+	 */
+	availableButtons: DockButton[];
+}
+
+/**
+ * A response type for the DockEndpoint that gets the config for an entry
+ */
+export interface EndpointDockGetResponse {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The config.
+	 */
+	config?: DockProviderConfigWithIdentity;
+}
+
+/**
+ * A request type for the DockEndpoint that sets the config for an entry
+ */
+export interface EndpointDockSetRequest {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+	/**
+	 * The config.
+	 */
+	config?: DockProviderConfigWithIdentity;
 }

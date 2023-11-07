@@ -4,23 +4,23 @@ import {
 	type CustomActionsMap,
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	FAVORITE_TYPE_NAME_PAGE,
-	FAVORITE_TYPE_NAME_QUERY,
 	FAVORITE_TYPE_NAME_WORKSPACE,
-	type FavoriteEntry,
-	type FavoriteTypeNames
-} from "workspace-platform-starter/shapes";
-import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
+	type FavoriteEntry
+} from "workspace-platform-starter/shapes/favorite-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { PopupMenuEntry } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
+import type { FavoritesMenuSettings } from "./shapes";
 
 /**
  * Implementation for the favorites menu actions provider.
  */
-export class FavoritesMenuProvider implements Actions {
+export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 	/**
 	 * The logger for displaying information from the module.
 	 * @internal
@@ -34,6 +34,12 @@ export class FavoritesMenuProvider implements Actions {
 	private _helpers: ModuleHelpers | undefined;
 
 	/**
+	 * The settings for the menu.
+	 * @internal
+	 */
+	private _settings: FavoritesMenuSettings | undefined;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -41,12 +47,13 @@ export class FavoritesMenuProvider implements Actions {
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition,
+		definition: ModuleDefinition<FavoritesMenuSettings>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._logger = loggerCreator("FavoritesMenuProvider");
 		this._helpers = helpers;
+		this._settings = definition.data;
 
 		this._logger.info("Initializing");
 	}
@@ -59,55 +66,76 @@ export class FavoritesMenuProvider implements Actions {
 	public async get(platform: WorkspacePlatformModule): Promise<CustomActionsMap> {
 		const actionMap: CustomActionsMap = {};
 
-		for (const type of [
-			FAVORITE_TYPE_NAME_APP,
-			FAVORITE_TYPE_NAME_WORKSPACE,
-			FAVORITE_TYPE_NAME_PAGE,
-			FAVORITE_TYPE_NAME_QUERY
-		]) {
-			actionMap[`favorites-menu-${type}`] = async (payload: CustomActionPayload): Promise<void> => {
-				if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers?.showPopupMenu) {
-					const getClient = this._helpers?.getFavoriteClient;
-					if (!isEmpty(getClient)) {
-						const client = await getClient();
-						if (!isEmpty(client)) {
-							const favorites = await client.getSavedFavorites(type as FavoriteTypeNames);
+		actionMap["favorites-menu"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers) {
+				const getClient = this._helpers?.getFavoriteClient;
+				if (!isEmpty(getClient)) {
+					const client = await getClient();
+					if (!isEmpty(client)) {
+						const favInfo = await client.getInfo();
+						const menuEntries: PopupMenuEntry<FavoriteEntry>[] = [];
 
-							const menuEntries =
-								favorites?.map((f) => ({
-									label: f.label ?? "",
-									icon: f.icon,
-									customData: f
-								})) ?? [];
-
-							const result = await this._helpers.showPopupMenu<FavoriteEntry>(
-								{ x: payload.x, y: 48 },
-								payload.windowIdentity,
-								`There are no favorite ${type}s`,
-								menuEntries,
-								{
-									mode: "native"
-								}
-							);
-
-							if (isEmpty(result)) {
-								this._logger?.info("Favorites Menu Dismissed");
-							} else {
-								this._logger?.info("Favorites Menu Item Selected", result);
-
-								if (result.type === FAVORITE_TYPE_NAME_APP) {
-									if (!isEmpty(this._helpers?.launchApp)) {
-										await this._helpers?.launchApp(result.typeId);
+						if (favInfo.enabledTypes) {
+							let hadEntries = false;
+							for (const type of favInfo.enabledTypes) {
+								const saved = await client.getSavedFavorites(type);
+								if (saved && saved.length > 0) {
+									if (hadEntries) {
+										menuEntries.push({ type: "separator" });
 									}
-								} else {
-									this._logger?.info(`Favorites Type ${result.type} no yet supported`, result);
+
+									for (const entry of saved.sort((f1, f2) =>
+										(f1.label ?? "").localeCompare(f2.label ?? "")
+									)) {
+										menuEntries.push({
+											label: entry.label ?? "",
+											icon: entry.icon,
+											data: entry
+										});
+									}
+									hadEntries = true;
 								}
+							}
+						}
+
+						const menuClient = await this._helpers.getMenuClient();
+						const popupMenuStyle = this._settings?.popupMenuStyle ?? menuClient.getPopupMenuStyle();
+
+						const result = await menuClient.showPopupMenu<FavoriteEntry>(
+							{ x: payload.x, y: 48 },
+							payload.windowIdentity,
+							"There are no favorites",
+							menuEntries,
+							{
+								popupMenuStyle
+							}
+						);
+
+						if (isEmpty(result)) {
+							this._logger?.info("Favorites Menu Dismissed");
+						} else {
+							this._logger?.info("Favorites Menu Item Selected", result);
+
+							if (result.type === FAVORITE_TYPE_NAME_APP) {
+								if (!isEmpty(this._helpers?.launchApp)) {
+									await this._helpers?.launchApp(result.typeId);
+								}
+							} else if (result.type === FAVORITE_TYPE_NAME_PAGE) {
+								if (!isEmpty(this._helpers?.launchPage)) {
+									await this._helpers?.launchPage(result.typeId, undefined, this._logger);
+								}
+							} else if (result.type === FAVORITE_TYPE_NAME_WORKSPACE) {
+								if (!isEmpty(this._helpers?.launchWorkspace)) {
+									await this._helpers?.launchWorkspace(result.typeId);
+								}
+							} else {
+								this._logger?.info(`Favorites Type ${result.type} no yet supported`, result);
 							}
 						}
 					}
 				}
-			};
-		}
+			}
+		};
 
 		return actionMap;
 	}

@@ -16,7 +16,8 @@ export type LifecycleEvents =
 	| "workspace-changed"
 	| "page-changed"
 	| "apps-changed"
-	| "favorite-changed";
+	| "favorite-changed"
+	| "condition-changed";
 /**
  * The type for a lifecycle event handler.
  */
@@ -107,7 +108,16 @@ export interface ThemeChangedLifecyclePayload {
 	 */
 	schemeType?: ColorSchemeMode;
 	/**
-	 * The payload.
+	 * The palette.
 	 */
-	payload?: CustomPaletteSet;
+	palette?: CustomPaletteSet;
+}
+/**
+ * Condition changed event payload.
+ */
+export interface ConditionChangedLifecyclePayload {
+	/**
+	 * The condition that changed, or empty to determine many might have changed.
+	 */
+	conditionId?: string;
 }

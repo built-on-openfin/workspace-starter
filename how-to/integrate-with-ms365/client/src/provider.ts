@@ -219,7 +219,9 @@ function createLogger(group: string): Logger {
 function createHelpers(): IntegrationHelpers {
 	return {
 		templateHelpers,
-		getCurrentPalette: templateHelpers.getCurrentPalette,
+		getThemeClient: async () => ({
+			getPalette: templateHelpers.getCurrentPalette
+		}),
 		launchView: async (viewOptions: OpenFin.PlatformViewCreationOptions): Promise<OpenFin.View> => {
 			const platform = getCurrentSync();
 			return platform.createView(viewOptions);

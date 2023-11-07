@@ -13,7 +13,7 @@ import { subscribeLifecycleEvent } from "./lifecycle";
 import { getSettings } from "./settings";
 import type { WorkspacePlatformToolbarButton } from "./shapes/browser-shapes";
 import type { ColorSchemeMode } from "./shapes/theme-shapes";
-import { getCurrentColorSchemeMode, getCurrentIconFolder } from "./themes";
+import { getCurrentColorSchemeMode, getCurrentIconFolder, themeUrl } from "./themes";
 import { isEmpty, objectClone } from "./utils";
 
 let configToolbarButtons: WorkspacePlatformToolbarButton[] | undefined;
@@ -107,33 +107,35 @@ export async function updateBrowserWindowButtonsColorScheme(
 ): Promise<void> {
 	if (configToolbarButtons) {
 		const options = await browserWindow.openfinWindow.getOptions();
-		const currentToolbarButtons = (options as BrowserCreateWindowRequest).workspacePlatform.toolbarOptions
-			?.buttons;
+		const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+		if (createRequest.workspacePlatform.windowType !== "platform") {
+			const currentToolbarButtons = createRequest.workspacePlatform.toolbarOptions?.buttons;
 
-		if (Array.isArray(currentToolbarButtons)) {
-			const updatedButtons = [];
-			const iconFolder = await getCurrentIconFolder();
-			const colorSchemeMode = await getCurrentColorSchemeMode();
+			if (Array.isArray(currentToolbarButtons)) {
+				const updatedButtons = [];
+				const iconFolder = await getCurrentIconFolder();
+				const colorSchemeMode = await getCurrentColorSchemeMode();
 
-			for (const button of currentToolbarButtons) {
-				if (button.type === BrowserButtonType.Custom) {
-					const buttonId = (button as CustomBrowserButtonConfig).action?.id;
-					if (buttonId) {
-						// Find the original button from config so that we can use the original
-						// iconUrl with any schema placeholders
-						const originalButton = configToolbarButtons.find(
-							(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
-						);
-						const btn = originalButton?.button as CustomButtonConfig;
-						if (btn?.iconUrl) {
-							button.iconUrl = themeUrl(btn.iconUrl, iconFolder, colorSchemeMode);
+				for (const button of currentToolbarButtons) {
+					if (button.type === BrowserButtonType.Custom) {
+						const buttonId = (button as CustomBrowserButtonConfig).action?.id;
+						if (buttonId) {
+							// Find the original button from config so that we can use the original
+							// iconUrl with any schema placeholders
+							const originalButton = configToolbarButtons.find(
+								(b) => (b.button as CustomBrowserButtonConfig).action?.id === buttonId
+							);
+							const btn = originalButton?.button as CustomButtonConfig;
+							if (btn?.iconUrl) {
+								button.iconUrl = themeUrl(btn.iconUrl, iconFolder, colorSchemeMode);
+							}
 						}
 					}
+					updatedButtons.push(button);
 				}
-				updatedButtons.push(button);
-			}
 
-			await browserWindow.replaceToolbarOptions({ buttons: updatedButtons });
+				await browserWindow.replaceToolbarOptions({ buttons: updatedButtons });
+			}
 		}
 	}
 }
@@ -182,19 +184,4 @@ function themeButton(
 	buttonCopy.iconUrl = themeUrl(buttonCopy.iconUrl, iconFolder, colorSchemeMode);
 
 	return buttonCopy;
-}
-
-/**
- * Apply a theme to a url.
- * @param url The url to apply the theme to.
- * @param iconFolder The folder where the icons are located.
- * @param colorSchemeMode The color scheme for the theme.
- * @returns The themed url.
- */
-function themeUrl(
-	url: string | undefined,
-	iconFolder: string,
-	colorSchemeMode: ColorSchemeMode
-): string | undefined {
-	return url ? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorSchemeMode) : undefined;
 }

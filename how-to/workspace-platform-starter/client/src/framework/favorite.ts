@@ -96,12 +96,16 @@ export async function getSavedFavorites(byType?: FavoriteTypeNames): Promise<Fav
 			platform: fin.me.identity.uuid
 		});
 		if (!isEmpty(favorites) && Array.isArray(favorites.entries)) {
+			let entries = favorites.entries.map((fav) => fav.payload);
+
 			if (!isEmpty(byType)) {
 				logger.info(`Returning saved favorites by type ${byType} from custom storage`);
+				entries = entries.filter((e) => e.type === byType);
 			} else {
 				logger.info("Returning saved favorites from custom storage");
 			}
-			return favorites.entries.map((fav) => fav.payload);
+
+			return entries;
 		}
 		logger.warn("No response getting saved favorites from custom storage");
 		return [];

@@ -118,6 +118,14 @@ export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionTy
 }
 
 /**
+ * Get the current native color scheme mode.
+ * @returns The native color scheme mode.
+ */
+export async function getNativeColorSchemeMode(): Promise<ColorSchemeMode> {
+	return getSystemPreferredColorScheme();
+}
+
+/**
  * Get the id of the current theme.
  * @returns The current theme id.
  */
@@ -153,10 +161,10 @@ export async function notifyColorScheme(): Promise<void> {
 	const schemeType = await getCurrentColorSchemeMode();
 	const palette = await getCurrentPalette();
 
-	await fireLifecycleEvent(platform, "theme-changed", {
+	await fireLifecycleEvent<ThemeChangedLifecyclePayload>(platform, "theme-changed", {
 		schemeType,
 		palette
-	} as ThemeChangedLifecyclePayload);
+	});
 
 	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
 
@@ -345,9 +353,24 @@ function hasScheme(theme: PlatformCustomTheme, scheme: string): boolean {
  * Get the system preferred color scheme.
  * @returns The system color scheme.
  */
-function getSystemPreferredColorScheme(): ColorSchemeMode {
+export function getSystemPreferredColorScheme(): ColorSchemeMode {
 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
 		return ColorSchemeMode.Dark;
 	}
 	return ColorSchemeMode.Light;
+}
+
+/**
+ * Apply theming to an icon url.
+ * @param url The url to theme.
+ * @param iconFolder The icon folder.
+ * @param colorScheme The color scheme.
+ * @returns The themed url.
+ */
+export function themeUrl(
+	url: string | undefined,
+	iconFolder: string,
+	colorScheme: ColorSchemeMode
+): string | undefined {
+	return url ? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorScheme as string) : undefined;
 }

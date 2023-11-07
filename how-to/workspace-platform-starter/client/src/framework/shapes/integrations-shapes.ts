@@ -1,4 +1,3 @@
-import type OpenFin from "@openfin/core";
 import type {
 	CLIFilter,
 	HomeDispatchedSearchResult,
@@ -6,8 +5,8 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { PlatformStorageMetadata } from "./platform-shapes";
 import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 
@@ -19,24 +18,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * Template helpers.
 	 */
 	templateHelpers: TemplateHelpers;
-
-	/**
-	 * Launch a view in the workspace.
-	 * @param view The view to launch.
-	 * @param targetIdentity The optional target identity of the launch with.
-	 * @returns The launched view.
-	 */
-	launchView?(
-		view: OpenFin.PlatformViewCreationOptions | string,
-		targetIdentity?: OpenFin.Identity
-	): Promise<OpenFin.View>;
-
-	/**
-	 * Launch a snapshot.
-	 * @param snapshotUrl The snapshot url.
-	 * @returns The identities that constitute the snapshot.
-	 */
-	launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
 
 	/**
 	 * Open a url with the browser.
@@ -53,24 +34,11 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	setSearchQuery?(query: string): Promise<void>;
 
 	/**
-	 * Get the value of a condition.
-	 * @param conditionId The id of the condition.
-	 * @returns True if the condition is set.
-	 */
-	condition?(conditionId: string): Promise<boolean>;
-
-	/**
 	 * Share data.
 	 * @param options The sharing options.
 	 * @returns Nothing.
 	 */
 	share?(options?: ShareCustomData): Promise<void>;
-
-	/**
-	 * Get the current platform.
-	 * @returns The current platform.
-	 */
-	getPlatform?(): WorkspacePlatformModule;
 }
 
 /**
@@ -178,6 +146,16 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
  */
 export interface EndpointIntegrationsPreferencesSetRequest {
 	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+
+	/**
 	 * The id of the integration.
 	 */
 	id: string;
@@ -198,6 +176,10 @@ export interface EndpointIntegrationsPreferencesSetRequest {
  */
 export interface EndpointIntegrationsPreferencesGetRequest {
 	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
 	 * The id of the integration.
 	 */
 	id: string;
@@ -208,7 +190,22 @@ export interface EndpointIntegrationsPreferencesGetRequest {
  */
 export interface EndpointIntegrationsPreferencesGetResponse {
 	/**
-	 * Should the integration auto start.
+	 * The id of the platform making the request
 	 */
-	autoStart: boolean;
+	platform: string;
+
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
+
+	/**
+	 * The preferences for the integration.
+	 */
+	payload: {
+		/**
+		 * Should the integration auto start.
+		 */
+		autoStart: boolean;
+	};
 }

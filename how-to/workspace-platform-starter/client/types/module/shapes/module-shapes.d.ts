@@ -1,10 +1,14 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserWindowModule, CustomPaletteSet, Page } from "@openfin/workspace-platform";
+import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import type { ConditionsClient } from "./conditions-shapes";
+import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
-import type { ColorSchemeMode } from "./theme-shapes";
+import type { MenuClient } from "./menu-shapes";
+import type { NotificationClient } from "./notification-shapes";
+import type { ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 /**
  * List of modules.
@@ -62,6 +66,11 @@ export interface ModuleHelpers {
 	 */
 	sessionId: string;
 	/**
+	 * Get the current platform.
+	 * @returns The current platform.
+	 */
+	getPlatform?(): WorkspacePlatformModule;
+	/**
 	 * Get the list of apps supported by this platform and/or user.
 	 * @returns The list of platform apps available from the module.
 	 */
@@ -72,26 +81,6 @@ export interface ModuleHelpers {
 	 * @returns The app id it exists.
 	 */
 	getApp?(id: string): Promise<PlatformApp | undefined>;
-	/**
-	 * Get the current theme id.
-	 * @returns The current theme id.
-	 */
-	getCurrentThemeId(): Promise<string>;
-	/**
-	 * Get the current icon folder.
-	 * @returns the platform icon folder.
-	 */
-	getCurrentIconFolder(): Promise<string>;
-	/**
-	 * Get the current palette.
-	 * @returns The current palette.
-	 */
-	getCurrentPalette(): Promise<CustomPaletteSet>;
-	/**
-	 * Get the current color scheme.
-	 * @returns The current color scheme.
-	 */
-	getCurrentColorSchemeMode(): Promise<ColorSchemeMode>;
 	/**
 	 * Get the version information related to the platform you are running in. If you request the version info on
 	 * initialization or you execute early you might not receive all of the version related information as you may be
@@ -110,12 +99,37 @@ export interface ModuleHelpers {
 	 */
 	getInteropClient?(): Promise<OpenFin.InteropClient | undefined>;
 	/**
+	 * If this platform has been configured to support theming it will provide it.
+	 * @returns the theme client.
+	 */
+	getThemeClient(): Promise<ThemeClient>;
+	/**
+	 * If this platform has been configured to support menus it will provide it.
+	 * @returns the menu client.
+	 */
+	getMenuClient(): Promise<MenuClient>;
+	/**
 	 * If this platform has been configured to support favorites and you are able to receive favorites
 	 * then you will receive a client that will provide you with a number of functions (if supported).
 	 * This can let a module add additional support for favorites if they support the supported favorite types.
 	 * @returns the favorite client.
 	 */
 	getFavoriteClient?(): Promise<FavoriteClient | undefined>;
+	/**
+	 * If this platform has been configured to support notification client then it will provide it.
+	 * @returns notification client.
+	 */
+	getNotificationClient?(): Promise<NotificationClient | undefined>;
+	/**
+	 * If this platform has been configured to support endpoint client then it will provide it.
+	 * @returns endpoint client.
+	 */
+	getEndpointClient?(): Promise<EndpointClient | undefined>;
+	/**
+	 * If this platform has been configured to support conditions then it will provide it.
+	 * @returns conditions client.
+	 */
+	getConditionsClient?(): Promise<ConditionsClient | undefined>;
 	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.
@@ -125,23 +139,46 @@ export interface ModuleHelpers {
 	launchApp?(appId: string): Promise<void>;
 	/**
 	 * Launch a page in the workspace.
-	 * @param page The page to launch.
+	 * @param pageId The page to launch.
 	 * @param options The options for the launch.
 	 * @param options.bounds The optional bounds for the page.
 	 * @param options.targetWindowIdentity The optional target window for the page.
 	 * @param options.createCopyIfExists Create a copy of the page if it exists.
 	 * @param logger Log output from the operation.
-	 * @returns The window created.
+	 * @returns The window created or undefined if the page did not exist.
 	 */
 	launchPage?(
-		page: Page,
+		pageId: string,
 		options?: {
 			bounds?: OpenFin.Bounds;
 			targetWindowIdentity?: OpenFin.Identity;
 			createCopyIfExists?: boolean;
 		},
 		logger?: Logger
-	): Promise<BrowserWindowModule>;
+	): Promise<BrowserWindowModule | undefined>;
+	/**
+	 * Launch a workspace.
+	 * @param workspaceId The id of the workspace to launch.
+	 * @param logger Log output from the operation.
+	 * @returns Was the workspace opened.
+	 */
+	launchWorkspace?(workspaceId: string, logger?: Logger): Promise<boolean>;
+	/**
+	 * Launch a view in the workspace.
+	 * @param view The view to launch.
+	 * @param targetIdentity The optional target identity of the launch with.
+	 * @returns The launched view.
+	 */
+	launchView?(
+		view: OpenFin.PlatformViewCreationOptions | string,
+		targetIdentity?: OpenFin.Identity
+	): Promise<OpenFin.View>;
+	/**
+	 * Launch a snapshot.
+	 * @param snapshotUrl The snapshot url.
+	 * @returns The identities that constitute the snapshot.
+	 */
+	launchSnapshot?(snapshotUrl: string): Promise<OpenFin.Identity[]>;
 	/**
 	 * Subscribe to lifecycle events.
 	 * @param lifecycleEvent The event to subscribe to.
@@ -158,34 +195,6 @@ export interface ModuleHelpers {
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
 	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
-	/**
-	 * Show a custom menu.
-	 * @param position The position to show the menu.
-	 * @param position.x The x position to show the menu.
-	 * @param position.y The y position to show the menu.
-	 * @param parentIdentity The identity of the parent window.
-	 * @param noEntryText The text to display if there are no entries.
-	 * @param menuEntries The menu entries to display.
-	 * @param options The options for displaying the menu.
-	 * @param options.mode Display as native menu or custom popup.
-	 * @returns The menu entry.
-	 */
-	showPopupMenu?<T = unknown>(
-		position: {
-			x: number;
-			y: number;
-		},
-		parentIdentity: OpenFin.Identity,
-		noEntryText: string,
-		menuEntries: {
-			label: string;
-			customData: T;
-			icon?: string;
-		}[],
-		options?: {
-			mode?: "native" | "custom";
-		}
-	): Promise<T | undefined>;
 }
 /**
  * The implementation of the module with generic options and helpers.

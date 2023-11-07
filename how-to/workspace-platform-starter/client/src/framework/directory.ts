@@ -1,8 +1,9 @@
-import { mapInteropFromFDC3, mapToPlatformApp as mapFDC3OnePointTwoToPlatformApp } from "./fdc3/1.2/mapper";
-import { mapIntentsFromFDC3, mapToPlatformApp as mapFDC3TwoPointZeroToPlatformApp } from "./fdc3/2.0/mapper";
+import { mapToPlatformApp as mapFDC3OnePointTwoToPlatformApp, mapInteropFromFDC3 } from "./fdc3/1.2/mapper";
+import { mapToPlatformApp as mapFDC3TwoPointZeroToPlatformApp, mapIntentsFromFDC3 } from "./fdc3/2.0/mapper";
 import { createLogger } from "./logger-provider";
-import type { EndpointProvider, PlatformApp } from "./shapes";
+import type { PlatformApp } from "./shapes/app-shapes";
 import type { DirectoryApps, DirectoryEndpoint } from "./shapes/directory-shapes";
+import type { EndpointProvider } from "./shapes/endpoint-shapes";
 import type { FDC3VOnePointTwoAppDirectoryResponse } from "./shapes/fdc3-1-2-shapes";
 import type { FDC3VTwoPointZeroAppDirectoryResponse } from "./shapes/fdc3-2-0-shapes";
 import { isEmpty } from "./utils";

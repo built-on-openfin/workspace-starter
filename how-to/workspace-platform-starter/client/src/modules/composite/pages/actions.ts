@@ -53,11 +53,9 @@ export class PageActions implements Actions {
 				const pageId: string = payload?.customData?.pageId;
 				const targetWindowIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
 				if (!isEmpty(pageId)) {
-					const page = await platform.Storage.getPage(pageId);
-
 					if (this._helpers?.launchPage) {
 						await this._helpers.launchPage(
-							page,
+							pageId,
 							{
 								targetWindowIdentity
 							},

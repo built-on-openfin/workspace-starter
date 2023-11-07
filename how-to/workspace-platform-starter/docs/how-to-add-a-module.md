@@ -9,6 +9,7 @@ Many of the features can be extended by adding custom modules containing code, w
 The following features are currently extendable using modules:
 
 - actions
+- analytics
 - auth
 - conditions
 - endpoint

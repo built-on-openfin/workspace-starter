@@ -53,16 +53,18 @@ export class OpacityActions implements Actions {
 				this._logger?.info("Change Opacity Triggered");
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
-				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
-					.toolbarOptions;
-				await browserWindow.openfinWindow.updateOptions({ opacity: 0.7 });
-				if (!isEmpty(currentToolbarOptions)) {
-					const newButtons = await this._helpers.updateToolbarButtons(
-						currentToolbarOptions.buttons,
-						payload.customData.sourceId as string,
-						payload.customData.replacementId as string
-					);
-					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+				const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+				if (createRequest.workspacePlatform.windowType !== "platform") {
+					const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+					await browserWindow.openfinWindow.updateOptions({ opacity: 0.7 });
+					if (!isEmpty(currentToolbarOptions)) {
+						const newButtons = await this._helpers.updateToolbarButtons(
+							currentToolbarOptions.buttons,
+							payload.customData.sourceId as string,
+							payload.customData.replacementId as string
+						);
+						await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+					}
 				}
 			}
 		};
@@ -72,17 +74,19 @@ export class OpacityActions implements Actions {
 				this._logger?.info("Restore Opacity Triggered");
 				const browserWindow = platform.Browser.wrapSync(payload.windowIdentity);
 				const options = await browserWindow.openfinWindow.getOptions();
-				const currentToolbarOptions = (options as BrowserCreateWindowRequest).workspacePlatform
-					.toolbarOptions;
-				await browserWindow.openfinWindow.updateOptions({ opacity: 1 });
+				const createRequest: BrowserCreateWindowRequest = options as BrowserCreateWindowRequest;
+				if (createRequest.workspacePlatform.windowType !== "platform") {
+					const currentToolbarOptions = createRequest.workspacePlatform.toolbarOptions;
+					await browserWindow.openfinWindow.updateOptions({ opacity: 1 });
 
-				if (!isEmpty(currentToolbarOptions)) {
-					const newButtons = await this._helpers.updateToolbarButtons(
-						currentToolbarOptions.buttons,
-						payload.customData.sourceId as string,
-						payload.customData.replacementId as string
-					);
-					await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+					if (!isEmpty(currentToolbarOptions)) {
+						const newButtons = await this._helpers.updateToolbarButtons(
+							currentToolbarOptions.buttons,
+							payload.customData.sourceId as string,
+							payload.customData.replacementId as string
+						);
+						await browserWindow.replaceToolbarOptions({ buttons: newButtons });
+					}
 				}
 			}
 		};

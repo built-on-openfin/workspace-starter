@@ -373,12 +373,13 @@ export class Microsoft365Integration {
 		}
 	): Promise<HomeSearchResponse> {
 		if (!this._ms365Connection && this._integrationHelpers) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
 			this._connectLastResponse = lastResponse;
 			const results = [];
 			if (this._connectionError) {
 				const connectResult = await this.createConnectResult(
 					this._integrationHelpers.templateHelpers,
-					await this._integrationHelpers.getCurrentPalette()
+					await themeClient.getPalette()
 				);
 				if (connectResult) {
 					results.push(connectResult);
@@ -403,7 +404,8 @@ export class Microsoft365Integration {
 
 		this._debounceTimerId = window.setTimeout(async () => {
 			if (this._ms365Connection && this._integrationHelpers) {
-				const palette = await this._integrationHelpers.getCurrentPalette();
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
 
 				try {
 					// If query starts with ms just do a passthrough to the graph API
@@ -636,7 +638,8 @@ export class Microsoft365Integration {
 	): Promise<boolean> {
 		if (result.action.trigger === "focus-change") {
 			if (result.data?.state === "loading" && this._ms365Connection && this._integrationHelpers) {
-				const palette = await this._integrationHelpers.getCurrentPalette();
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
 				const templateHelpers = this._integrationHelpers.templateHelpers;
 				const actionData = result.data as ActionLoadingData;
 				const objType = actionData.objType as Microsoft365ObjectTypes;
@@ -713,10 +716,11 @@ export class Microsoft365Integration {
 			this._connectionError = this.formatError(err);
 			this._logger?.error("Connecting to MS Graph API failed", err);
 			if (this._connectLastResponse && this._integrationHelpers) {
+				const themeClient = await this._integrationHelpers.getThemeClient();
 				this._connectLastResponse.respond([
 					await this.createConnectResult(
 						this._integrationHelpers.templateHelpers,
-						await this._integrationHelpers.getCurrentPalette()
+						await themeClient.getPalette()
 					)
 				]);
 			}
@@ -993,7 +997,8 @@ export class Microsoft365Integration {
 				);
 
 				if (batchResponses.data?.responses && Array.isArray(batchResponses.data.responses)) {
-					const palette = await this._integrationHelpers.getCurrentPalette();
+					const themeClient = await this._integrationHelpers.getThemeClient();
+					const palette = await themeClient.getPalette();
 					for (const batchResponse of batchResponses.data.responses) {
 						if (batchResponse.status === 200) {
 							this._logger?.info(`${batchResponse.id} Response`, batchResponse.body);

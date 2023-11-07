@@ -181,7 +181,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v14.0.0/interop/fdc3/intent/fdc3-intent-view.html",
+							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v15.0.0/interop/fdc3/intent/fdc3-intent-view.html",
 							fdc3InteropApi: "1.2",
 							interop: {
 								currentContextGroup: "green"
@@ -236,7 +236,9 @@ function createLogger(group: string): Logger {
 function createHelpers(): IntegrationHelpers {
 	return {
 		templateHelpers,
-		getCurrentPalette: templateHelpers.getCurrentPalette,
+		getThemeClient: async () => ({
+			getPalette: templateHelpers.getCurrentPalette
+		}),
 		launchView: async (viewOptions: OpenFin.PlatformViewCreationOptions): Promise<OpenFin.View> => {
 			const platform = getCurrentSync();
 			return platform.createView(viewOptions);

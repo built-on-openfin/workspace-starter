@@ -69,7 +69,7 @@ Your window can then use this information to build a list for your user to engag
 Your window needs to expose a function that can be called by the platform:
 
 ```javascript
-// this function is called by the interopbroker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
+// this function is called by the intent-resolver-helper.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
 window['getIntentSelection'] = async () => {
   return new Promise((resolve, reject) => {
     // resolveAppSelection and rejectAppSelection can be called anything. They just represent the function names

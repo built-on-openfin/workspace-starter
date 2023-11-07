@@ -7,19 +7,20 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes";
 import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	type FavoriteClient,
 	type FavoriteEntry,
-	type FavoriteInfo
+	type FavoriteInfo,
+	type FavoriteTypeNames
 } from "workspace-platform-starter/shapes/favorite-shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition
 } from "workspace-platform-starter/shapes/integrations-shapes";
+import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isObject, isStringValue, randomUUID } from "workspace-platform-starter/utils";
@@ -222,30 +223,24 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	): Promise<boolean> {
 		let handled = false;
 		if (result.action.trigger === "user-action") {
-			if (
-				(this._definition?.data?.favoritesEnabled ?? true) &&
-				result.action.name.endsWith("favorite") &&
-				result.data?.app
-			) {
-				if (this._integrationHelpers?.getFavoriteClient) {
-					const favClient = await this._integrationHelpers.getFavoriteClient();
-					if (favClient) {
-						if (result.action.name.startsWith("un")) {
-							if (!isEmpty(result.data?.favoriteId) && favClient.deleteSavedFavorite) {
-								await favClient.deleteSavedFavorite(result.data.favoriteId);
-							}
-						} else if (favClient.setSavedFavorite) {
-							await favClient.setSavedFavorite({
-								id: randomUUID(),
-								type: FAVORITE_TYPE_NAME_APP,
-								typeId: result.key,
-								label: result.title,
-								icon: result.icon
-							});
+			if (result.action.name.endsWith("favorite") && result.data?.app) {
+				const { favoriteClient } = await this.getFavInfo(FAVORITE_TYPE_NAME_APP);
+				if (favoriteClient) {
+					if (result.action.name.startsWith("un")) {
+						if (!isEmpty(result.data?.favoriteId) && favoriteClient.deleteSavedFavorite) {
+							await favoriteClient.deleteSavedFavorite(result.data.favoriteId);
 						}
-
-						handled = true;
+					} else if (favoriteClient.setSavedFavorite) {
+						await favoriteClient.setSavedFavorite({
+							id: randomUUID(),
+							type: FAVORITE_TYPE_NAME_APP,
+							typeId: result.key,
+							label: result.title,
+							icon: result.icon
+						});
 					}
+
+					handled = true;
 				}
 			} else if (this._integrationHelpers?.launchApp) {
 				const data: {
@@ -292,21 +287,18 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			let apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
 			let matchQuery = queryLower;
 
-			if ((this._definition?.data?.favoritesEnabled ?? true) && this._integrationHelpers.getFavoriteClient) {
-				const favClient = await this._integrationHelpers.getFavoriteClient();
-				if (favClient) {
-					const info = favClient.getInfo();
-					if (info.isEnabled && isStringValue(info.command)) {
-						const isSupported =
-							isEmpty(info.enabledTypes) || info.enabledTypes.includes(FAVORITE_TYPE_NAME_APP);
-						if (isSupported && queryLower === info.command) {
-							const favoriteApps = await favClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
-							const favIds = favoriteApps?.map((f) => f.typeId) ?? [];
-							apps = apps.filter((a) => favIds.includes(a.appId));
-							matchQuery = "";
-						}
-					}
-				}
+			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_APP);
+
+			if (
+				favoriteInfo?.isEnabled &&
+				isStringValue(favoriteInfo?.command) &&
+				queryLower === favoriteInfo.command &&
+				favoriteClient
+			) {
+				const favoriteApps = await favoriteClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
+				const favIds = favoriteApps?.map((f) => f.typeId) ?? [];
+				apps = apps.filter((a) => favIds.includes(a.appId));
+				matchQuery = "";
 			}
 
 			this._lastAppResults = apps;
@@ -460,26 +452,12 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 */
 	private async mapAppEntriesToSearchEntries(apps: PlatformApp[]): Promise<HomeSearchResult[]> {
 		const appResults: HomeSearchResult[] = [];
-		if (Array.isArray(apps)) {
-			let favInfo: FavoriteInfo | undefined;
-			let favClient: FavoriteClient | undefined;
+		if (Array.isArray(apps) && this._integrationHelpers) {
 			let savedFavorites: FavoriteEntry[] | undefined;
-			const colorScheme = (await this._integrationHelpers?.getCurrentColorSchemeMode()) ?? "dark";
+			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_APP);
 
-			if ((this._definition?.data?.favoritesEnabled ?? true) && this._integrationHelpers?.getFavoriteClient) {
-				favClient = await this._integrationHelpers.getFavoriteClient();
-				if (favClient) {
-					favInfo = favClient.getInfo();
-					if (favInfo.isEnabled) {
-						const isSupported =
-							isEmpty(favInfo.enabledTypes) || favInfo.enabledTypes.includes(FAVORITE_TYPE_NAME_APP);
-						if (isSupported) {
-							savedFavorites = await favClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
-						} else {
-							favInfo = undefined;
-						}
-					}
-				}
+			if (favoriteClient) {
+				savedFavorites = await favoriteClient.getSavedFavorites(FAVORITE_TYPE_NAME_APP);
 			}
 
 			for (const app of apps) {
@@ -487,9 +465,8 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				const res = await this.mapAppEntryToSearchEntry(
 					app,
 					this._settings?.manifestTypeMapping,
-					favInfo,
-					favoriteId,
-					colorScheme
+					favoriteInfo,
+					favoriteId
 				);
 				if (res) {
 					appResults.push(res);
@@ -505,15 +482,13 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 	 * @param typeMapping The type mappings to include.
 	 * @param favInfo The favorites info if it is enabled.
 	 * @param favoriteId The id of the favorite.
-	 * @param colorScheme The color scheme.
 	 * @returns The search result.
 	 */
 	private async mapAppEntryToSearchEntry(
 		app: PlatformApp,
 		typeMapping: AppManifestTypeMapping | undefined,
 		favInfo: FavoriteInfo | undefined,
-		favoriteId: string | undefined,
-		colorScheme: string
+		favoriteId: string | undefined
 	): Promise<HomeSearchResult | undefined> {
 		const manifestType = app.manifestType;
 		if (isStringValue(manifestType)) {
@@ -548,15 +523,18 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 
 			const headerButtons: { icon: string; action: string }[] = [];
 
-			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon) {
-				const icon = (!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon).replace(
-					"{scheme}",
-					colorScheme
+			if (favInfo?.favoriteIcon && favInfo.unfavoriteIcon && this._integrationHelpers) {
+				const themeClient = await this._integrationHelpers.getThemeClient();
+
+				const favoriteIcon = await themeClient.themeUrl(
+					!isEmpty(favoriteId) ? favInfo.favoriteIcon : favInfo.unfavoriteIcon
 				);
-				headerButtons.push({
-					icon,
-					action: !isEmpty(favoriteId) ? "unfavorite" : "favorite"
-				});
+				if (favoriteIcon) {
+					headerButtons.push({
+						icon: favoriteIcon,
+						action: !isEmpty(favoriteId) ? "unfavorite" : "favorite"
+					});
+				}
 			}
 
 			entry.template = "Custom" as CLITemplate.Custom;
@@ -589,11 +567,11 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		if (
 			!isEmpty(this._lastResponse) &&
 			Array.isArray(this._lastResultIds) &&
-			this._lastQuery &&
-			this._lastCLIFilters &&
-			this._lastQueryAgainst &&
-			this._lastQueryMinLength &&
-			this._lastResultIds
+			!isEmpty(this._lastQuery) &&
+			!isEmpty(this._lastCLIFilters) &&
+			!isEmpty(this._lastQueryAgainst) &&
+			!isEmpty(this._lastQueryMinLength) &&
+			!isEmpty(this._lastResultIds)
 		) {
 			this._logger?.info("Rebuilding results...");
 			const lastResultIds = this._lastResultIds.slice();
@@ -621,44 +599,69 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 
 		if (
 			!isEmpty(this._lastResponse) &&
-			this._integrationHelpers?.getFavoriteClient &&
 			(payload.action === "set" || payload.action === "delete") &&
 			!isEmpty(favorite) &&
 			favorite.type === FAVORITE_TYPE_NAME_APP &&
-			this._lastAppResults
+			this._lastAppResults &&
+			this._integrationHelpers
 		) {
-			const favClient = await this._integrationHelpers.getFavoriteClient();
-			if (favClient) {
-				const favInfo = favClient.getInfo();
-				if (favInfo) {
-					const colorScheme = (await this._integrationHelpers?.getCurrentColorSchemeMode()) ?? "dark";
+			const { favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_APP);
 
-					if (this._lastQuery === favInfo.command && payload.action === "delete") {
-						this._lastResponse.revoke(favorite.typeId);
-					} else if (this._lastAppResults) {
-						let lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
+			if (this._lastQuery === favoriteInfo?.command && payload.action === "delete") {
+				this._lastResponse.revoke(favorite.typeId);
+			} else if (this._lastAppResults) {
+				let lastApp = this._lastAppResults.find((a) => a.appId === favorite.typeId);
 
-						// If it wasn't in the last results add it, but only if we are in fav command
-						if (!lastApp && this._integrationHelpers.getApp && this._lastQuery === favInfo.command) {
-							lastApp = await this._integrationHelpers.getApp(favorite.typeId);
-						}
+				// If it wasn't in the last results add it, but only if we are in fav command
+				if (!lastApp && this._integrationHelpers?.getApp && this._lastQuery === favoriteInfo?.command) {
+					lastApp = await this._integrationHelpers.getApp(favorite.typeId);
+				}
 
-						if (!isEmpty(lastApp)) {
-							const rebuilt = await this.mapAppEntryToSearchEntry(
-								lastApp,
-								this._settings?.manifestTypeMapping,
-								favInfo,
-								payload.action === "set" ? favorite.id : undefined,
-								colorScheme
-							);
+				if (!isEmpty(lastApp)) {
+					const rebuilt = await this.mapAppEntryToSearchEntry(
+						lastApp,
+						this._settings?.manifestTypeMapping,
+						favoriteInfo,
+						payload.action === "set" ? favorite.id : undefined
+					);
 
-							if (rebuilt) {
-								this._lastResponse.respond([rebuilt]);
-							}
-						}
+					if (rebuilt) {
+						this._lastResponse.respond([rebuilt]);
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get the favorite info and client if they are enabled.
+	 * @param favoriteTypeNames The type of client to get.
+	 * @returns The favorite info and client.
+	 */
+	private async getFavInfo(
+		favoriteTypeNames: FavoriteTypeNames
+	): Promise<{ favoriteClient: FavoriteClient | undefined; favoriteInfo: FavoriteInfo | undefined }> {
+		let favoriteInfo: FavoriteInfo | undefined;
+		let favoriteClient: FavoriteClient | undefined;
+
+		if ((this._definition?.data?.favoritesEnabled ?? true) && this._integrationHelpers?.getFavoriteClient) {
+			favoriteClient = await this._integrationHelpers.getFavoriteClient();
+			if (favoriteClient) {
+				favoriteInfo = favoriteClient.getInfo();
+				if (favoriteInfo.isEnabled) {
+					const isSupported =
+						isEmpty(favoriteInfo.enabledTypes) || favoriteInfo.enabledTypes.includes(favoriteTypeNames);
+					if (!isSupported) {
+						favoriteInfo = undefined;
+						favoriteClient = undefined;
+					}
+				}
+			}
+		}
+
+		return {
+			favoriteClient,
+			favoriteInfo
+		};
 	}
 }

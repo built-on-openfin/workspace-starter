@@ -45,11 +45,11 @@ export type PlatformApp = App & {
 	 */
 	manifest:
 		| string
-		| OpenFin.ViewOptions
-		| OpenFin.WindowOptions
-		| OpenFin.Snapshot
-		| OpenFin.ExternalProcessRequestType
-		| OpenFin.AppAssetInfo;
+		| Partial<OpenFin.ViewOptions>
+		| Partial<OpenFin.WindowOptions>
+		| Partial<OpenFin.Snapshot>
+		| Partial<OpenFin.ExternalProcessRequestType>
+		| Partial<OpenFin.AppAssetInfo>;
 
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This
@@ -79,7 +79,108 @@ export type PlatformApp = App & {
 	 * is used as name. Internally we use appId
 	 */
 	name?: string;
+
+	/**
+	 * When launching this defined application are there additional preferences the platform
+	 * should consider?
+	 */
+	launchPreference?: LaunchPreference;
 };
+
+/**
+ * Are there any preferences you would like to apply when launching this application?
+ */
+export interface LaunchPreference {
+	/**
+	 * Do you wish to specify a custom height/width that should be used when this application is launched?
+	 */
+	bounds?: {
+		width: number;
+		height: number;
+	};
+
+	/**
+	 * Should the launched UI be positioned in the center of the screen?
+	 */
+	defaultCentered?: boolean;
+
+	/**
+	 * Are there any app type specific options you would like to apply?
+	 */
+	options?: ViewLaunchOptions;
+}
+
+/**
+ * The list of Launch Option Types
+ */
+export type LaunchOptionsType = "view";
+
+/**
+ * The base LaunchOption type.
+ */
+export interface LaunchOptions {
+	/**
+	 * The type the options are linked to.
+	 */
+	type: LaunchOptionsType;
+}
+
+/**
+ * Additional options that apply to a view
+ */
+export interface ViewLaunchOptions extends LaunchOptions {
+	/**
+	 * View options type
+	 */
+	type: "view";
+	/**
+	 * If specified it indicates wish to specify specific host settings for this content.
+	 */
+	host?: HostLaunchOptions;
+}
+
+/**
+ * Additional options that apply to the host of the content
+ */
+export interface HostLaunchOptions {
+	/**
+	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
+	 */
+	url?: string;
+
+	/**
+	 * If specified it indicates a preference to be used by this type of host.
+	 */
+	title?: string;
+
+	/** The Icon you would prefer the window shows. */
+	icon?: string;
+
+	/**
+	 * Should the header for the content be hidden
+	 */
+	hasHeaders?: boolean;
+
+	/**
+	 * Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.
+	 */
+	disableMultiplePages?: boolean;
+
+	/**
+	 * Should the toolbar options of a window be hidden if they are available?
+	 */
+	disableToolbarOptions?: boolean;
+
+	/**
+	 * If this host supports multiple layouts what should the layout (e.g page) title be?
+	 */
+	pageTitle?: string;
+
+	/**
+	 * If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?
+	 */
+	pageIcon?: string;
+}
 
 /**
  * We define the app interop app for the platform in case we want to extend its

@@ -13,11 +13,7 @@ import {
 	type BrowserWindowModule,
 	type Page
 } from "@openfin/workspace-platform";
-import {
-	addEventListener as addNotificationEventListener,
-	create as createNotification,
-	type NotificationActionEvent
-} from "@openfin/workspace/notifications";
+import * as Notifications from "@openfin/workspace/notifications";
 import { XMLParser } from "fast-xml-parser";
 import {
 	CHANNEL_ACTIONS,
@@ -29,7 +25,7 @@ import {
 	type RssFeed,
 	type RssFeedCache,
 	type RssFeedCacheEntry,
-	type RssSettings
+	type CustomSettings
 } from "./shapes";
 
 /**
@@ -52,7 +48,7 @@ export class RssIntegration {
 	 * The integration settings.
 	 * @internal
 	 */
-	private _settings: RssSettings | undefined;
+	private _settings: CustomSettings | undefined;
 
 	/**
 	 * The id of the timer used to poll the feeds.
@@ -92,28 +88,38 @@ export class RssIntegration {
 	 * @param settings The settings for the module.
 	 * @returns Nothing.
 	 */
-	public async initialize(settings: RssSettings): Promise<void> {
+	public async initialize(settings: CustomSettings): Promise<void> {
 		this._settings = settings;
 
-		if (!Array.isArray(this._settings?.feeds) || this._settings.feeds.length === 0) {
+		await Notifications.register({
+			notificationsPlatformOptions: {
+				id: `${fin.me.identity.uuid}-rss`,
+				title: settings?.notification?.title ?? "RSS Notification Center",
+				icon: settings?.notification?.icon ?? "https://developer.openfin.co/favicon.ico"
+			}
+		});
+		if (!Array.isArray(this._settings?.rss?.feeds) || this._settings?.rss?.feeds.length === 0) {
 			console.warn("The RSS Feed integration has no feeds");
 		} else {
 			await this.loadFeeds();
 			this._pollingTimerId = window.setInterval(
 				async () => this.updateFeeds(),
-				(this._settings?.pollingInterval ?? 60) * 1000
+				(this._settings?.rss?.pollingInterval ?? 60) * 1000
 			);
 			await this.updateFeeds();
 
-			addNotificationEventListener("notification-action", async (event: NotificationActionEvent) => {
-				if (event?.result.action === "view-entry") {
-					const payload: {
-						feed: Omit<RssFeedCache, "entries">;
-						entry: RssFeedCacheEntry;
-					} = event.result.payload;
-					await this.launchFeedOrEntry(payload.feed, payload.entry);
+			await Notifications.addEventListener(
+				"notification-action",
+				async (event: Notifications.NotificationActionEvent) => {
+					if (event?.result.action === "view-entry") {
+						const payload: {
+							feed: Omit<RssFeedCache, "entries">;
+							entry: RssFeedCacheEntry;
+						} = event.result.payload;
+						await this.launchFeedOrEntry(payload.feed, payload.entry);
+					}
 				}
-			});
+			);
 
 			this._channelProvider = await fin.InterApplicationBus.Channel.create(RSS_APP_CHANNEL_NAME);
 
@@ -248,14 +254,14 @@ export class RssIntegration {
 	 * Update all the RSS feeds.
 	 */
 	private async updateFeeds(): Promise<void> {
-		if (this._settings?.feeds) {
-			for (const feed of this._settings.feeds) {
+		if (this._settings?.rss?.feeds) {
+			for (const feed of this._settings.rss.feeds) {
 				try {
 					console.log(`Retrieving RSS feed '${feed.id}' from ${feed.url}`);
 
 					let feedResponse: Response;
-					if (this._settings?.proxyUrl) {
-						feedResponse = await fetch(this._settings?.proxyUrl, {
+					if (this._settings?.rss?.proxyUrl) {
+						feedResponse = await fetch(this._settings?.rss?.proxyUrl, {
 							method: "POST",
 							headers: {
 								"content-type": "application/json"
@@ -356,7 +362,7 @@ export class RssIntegration {
 		feed: RssFeedCache,
 		feedEntry: RssFeedCacheEntry
 	): Promise<void> {
-		await createNotification({
+		await Notifications.create({
 			title: feed.title,
 			body:
 				type === "update"
@@ -396,7 +402,7 @@ export class RssIntegration {
 			key: `rss-${feed.id}`,
 			title: feed.title,
 			label: "Feed",
-			icon: this._settings?.icons.rss,
+			icon: this._settings?.rss?.icons.rss,
 			actions: [
 				{
 					name: RssIntegration._RSS_PROVIDER_FEED_VIEW_ACTION,
@@ -433,7 +439,7 @@ export class RssIntegration {
 			key: `rss-${entry.id}`,
 			title: entry.title,
 			label: "Information",
-			icon: this._settings?.icons.rssEntry,
+			icon: this._settings?.rss?.icons.rssEntry,
 			actions: [
 				{
 					name: RssIntegration._RSS_PROVIDER_ENTRY_VIEW_ACTION,
@@ -513,7 +519,7 @@ export class RssIntegration {
 		entry?: RssFeedCacheEntry
 	): Promise<void> {
 		const platformId = fin.Platform.getCurrentSync().identity.uuid;
-		const viewUrl = entry?.url ?? `${this._settings?.feedView}?feedId=${feed.id}`;
+		const viewUrl = entry?.url ?? `${this._settings?.rss?.feedView}?feedId=${feed.id}`;
 		const viewTitle = entry ? undefined : feed.title;
 		const viewId = `rss-view-${entry?.id ?? feed.id}`;
 		const viewTargetIdentity: OpenFin.Identity | undefined = entry
@@ -533,7 +539,7 @@ export class RssIntegration {
 		const page: Page = {
 			title: feed.title,
 			pageId,
-			iconUrl: this._settings?.icons.rss,
+			iconUrl: this._settings?.rss?.icons.rss,
 			layout: {
 				content: [
 					{
@@ -560,9 +566,9 @@ export class RssIntegration {
 				{
 					name: RSS_WINDOW_NAME,
 					uuid: platformId,
-					icon: this._settings?.icons.rss,
+					icon: this._settings?.rss?.icons.rss,
 					workspacePlatform: {
-						favicon: this._settings?.icons.rss,
+						favicon: this._settings?.rss?.icons.rss,
 						title: "RSS Feeds",
 						pages: [page]
 					}

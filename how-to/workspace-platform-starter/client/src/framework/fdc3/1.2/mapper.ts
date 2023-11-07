@@ -1,5 +1,5 @@
 import type { Image } from "@openfin/workspace";
-import type { PlatformApp } from "../../shapes";
+import type { PlatformApp } from "../../shapes/app-shapes";
 import type {
 	AppDefinition,
 	AppIcon,
@@ -37,7 +37,8 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		private: mapPrivateFromFDC3(app),
 		autostart: mapAutostartFromFDC3(app),
 		instanceMode: app.customConfig?.instanceMode,
-		tooltip: app.tooltip
+		tooltip: app.tooltip,
+		launchPreference: app.customConfig?.launchPreference
 	};
 	return platformApp;
 }
@@ -168,7 +169,8 @@ function mapCustomConfigFromPlatformApp(app: PlatformApp): CustomConfig {
 	const config: CustomConfig = {
 		autostart: mapBooleanValue(app?.autostart, false).toString(),
 		instanceMode: app.instanceMode,
-		private: mapBooleanValue(app.private, false).toString()
+		private: mapBooleanValue(app.private, false).toString(),
+		launchPreference: app.launchPreference
 	};
 	return config;
 }
