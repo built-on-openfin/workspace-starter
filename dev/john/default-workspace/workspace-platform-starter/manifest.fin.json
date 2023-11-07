@@ -280,8 +280,40 @@
 					"id": "favorite-remove",
 					"type": "module",
 					"typeId": "favorite-local-storage"
+				},
+				{
+					"id": "get-default-workspace",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "default-workspace"
+					}
+				},
+				{
+					"id": "set-default-workspace",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "default-workspace"
+					}
 				}
-			]
+			],
+			"endpointClients": {
+				"clientOptions": [
+					{
+						"enabled": true,
+						"id": "apply-default-workspace",
+						"endpointIds": ["get-default-workspace"]
+					},
+					{
+						"enabled": true,
+						"id": "set-default-workspace",
+						"endpointIds": ["set-default-workspace"]
+					}
+				]
+			}
 		},
 		"browserProvider": {
 			"defaultWindowOptions": {
@@ -1504,6 +1536,30 @@
 							"themeChanged": true,
 							"favoriteChanged": true
 						}
+					}
+				},
+				{
+					"id": "apply-default-workspace",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/default-workspace/workspace-platform-starter/favicon.ico",
+					"title": "apply default workspace",
+					"description": "apply default workspace",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/default-workspace/workspace-platform-starter/js/modules/lifecycle/apply-default-workspace.bundle.js",
+					"data": {
+						"endpointId": "get-default-workspace",
+						"payloadId": "default-workspace"
+					}
+				},
+				{
+					"id": "set-default-workspace",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/default-workspace/workspace-platform-starter/favicon.ico",
+					"title": "set default workspace",
+					"description": "set default workspace",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/default-workspace/workspace-platform-starter/js/modules/lifecycle/set-default-workspace.bundle.js",
+					"data": {
+						"endpointId": "set-default-workspace",
+						"payloadId": "default-workspace"
 					}
 				}
 			]
