@@ -153,7 +153,8 @@
 								"width": 775
 							},
 							"options": {
-								"view": { "host": { "url": "http://localhost:8080/windows/platform/platform-window.html" } }
+								"type": "view",
+								"host": { "url": "http://localhost:8080/windows/platform/platform-window.html" }
 							}
 						}
 					}
