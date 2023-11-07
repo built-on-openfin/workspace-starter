@@ -74,9 +74,9 @@ async function initializeWorkspacePlatform(): Promise<void> {
 	});
 	await Notifications.register({
 		notificationsPlatformOptions: {
+			id: PLATFORM_ID,
 			icon: PLATFORM_ICON,
-			title: PLATFORM_TITLE,
-			id: PLATFORM_ID
+			title: PLATFORM_TITLE
 		}
 	});
 }

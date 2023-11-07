@@ -249,7 +249,6 @@ export interface EndpointDockGetRequest {
 	 * The id of the config to get.
 	 */
 	id: string;
-
 	/**
 	 * The buttons that are available based on current configuration.
 	 */
@@ -260,6 +259,14 @@ export interface EndpointDockGetRequest {
  * A response type for the DockEndpoint that gets the config for an entry
  */
 export interface EndpointDockGetResponse {
+	/**
+	 * The id of the platform making the request
+	 */
+	platform: string;
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
 	/**
 	 * The config.
 	 */
@@ -274,7 +281,10 @@ export interface EndpointDockSetRequest {
 	 * The id of the platform making the request
 	 */
 	platform: string;
-
+	/**
+	 * The platform versions it saving the preferences
+	 */
+	metaData: PlatformStorageMetadata;
 	/**
 	 * The config.
 	 */

@@ -90,10 +90,13 @@ export class RssIntegration {
 	 */
 	public async initialize(settings: CustomSettings): Promise<void> {
 		this._settings = settings;
+
 		await Notifications.register({
-			id: `${fin.me.identity.uuid}-rss`,
-			title: settings?.notification?.title ?? "RSS Notification Center",
-			icon: settings?.notification?.icon ?? "https://developer.openfin.co/favicon.ico"
+			notificationsPlatformOptions: {
+				id: `${fin.me.identity.uuid}-rss`,
+				title: settings?.notification?.title ?? "RSS Notification Center",
+				icon: settings?.notification?.icon ?? "https://developer.openfin.co/favicon.ico"
+			}
 		});
 		if (!Array.isArray(this._settings?.rss?.feeds) || this._settings?.rss?.feeds.length === 0) {
 			console.warn("The RSS Feed integration has no feeds");
