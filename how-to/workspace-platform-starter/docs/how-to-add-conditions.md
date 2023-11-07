@@ -58,6 +58,30 @@ At other points in the platform we can check conditions, for example deciding to
 const hasCondition = await checkConditions(['has-some-value']);
 ```
 
+## Changing Conditions
+
+If you want to notify the platform that a condition has changed you can get the `ConditionsClient` from the module helpers, and then call the changed method e.g.
+
+```ts
+const conditionClient = await helpers.getConditionsClient();
+await conditionClient.changed('my-condition');
+```
+
+Any other platform code can watch for conditions changing by listening to the lifecycle event, the payload contains the specific id of the condition that was changed, or undefined if multiple have changed.
+
+```ts
+await helpers.subscribeLifecycleEvent<ConditionChangedLifecyclePayload>(
+  'condition-changed',
+  async (_, payload) => {
+    if (payload.conditionId === undefined) {
+      console.log('Many conditions have changed');
+    } else {
+      console.log(`Condition ${payload.conditionId} has changed`);
+    }
+  }
+);
+```
+
 ## In-Built Conditions
 
 As part of the platform there are already some built-in conditions.
