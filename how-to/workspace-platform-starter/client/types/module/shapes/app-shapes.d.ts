@@ -42,11 +42,11 @@ export type PlatformApp = App & {
 	 */
 	manifest:
 		| string
-		| OpenFin.ViewOptions
-		| OpenFin.WindowOptions
-		| OpenFin.Snapshot
-		| OpenFin.ExternalProcessRequestType
-		| OpenFin.AppAssetInfo;
+		| Partial<OpenFin.ViewOptions>
+		| Partial<OpenFin.WindowOptions>
+		| Partial<OpenFin.Snapshot>
+		| Partial<OpenFin.ExternalProcessRequestType>
+		| Partial<OpenFin.AppAssetInfo>;
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This
 	 * metadata serves multiple purposes:
@@ -96,23 +96,38 @@ export interface LaunchPreference {
 	/**
 	 * Are there any app type specific options you would like to apply?
 	 */
-	options?: {
-		view?: ViewLaunchPreference;
-	};
+	options?: ViewLaunchOptions;
+}
+/**
+ * The list of Launch Option Types
+ */
+export type LaunchPreferenceOptionsType = "view";
+/**
+ * The base LaunchOption type.
+ */
+export interface LaunchOptions {
+	/**
+	 * The type the options are linked to.
+	 */
+	type: LaunchPreferenceOptionsType;
 }
 /**
  * Additional options that apply to a view
  */
-export interface ViewLaunchPreference {
+export interface ViewLaunchOptions extends LaunchOptions {
+	/**
+	 * View options type
+	 */
+	type: "view";
 	/**
 	 * If specified it indicates wish to specify specific host settings for this content.
 	 */
-	host?: HostLaunchPreference;
+	host?: HostLaunchOptions;
 }
 /**
  * Additional options that apply to the host of the content
  */
-export interface HostLaunchPreference {
+export interface HostLaunchOptions {
 	/**
 	 * If specified it indicates you do not want to use a browser window for this view but a platform window.
 	 */

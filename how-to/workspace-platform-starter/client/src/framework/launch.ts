@@ -450,7 +450,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 		try {
 			const platform = getCurrentSync();
 
-			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options?.view)) {
+			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options)) {
 				let workspacePlatform:
 					| Partial<BrowserWorkspacePlatformWindowOptions>
 					| { windowType: WindowType.Platform }
@@ -470,33 +470,33 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 						}
 					],
 					settings: {
-						hasHeaders: viewApp.launchPreference?.options?.view?.host?.hasHeaders
+						hasHeaders: viewApp.launchPreference?.options?.host?.hasHeaders
 					}
 				};
 
 				workspacePlatform = {
-					windowType: !isEmpty(viewApp.launchPreference?.options?.view?.host?.url)
+					windowType: !isEmpty(viewApp.launchPreference?.options?.host?.url)
 						? WindowType.Platform
 						: undefined,
-					disableMultiplePages: viewApp.launchPreference?.options?.view?.host?.disableMultiplePages,
-					title: viewApp.launchPreference?.options?.view?.host?.title,
-					favicon: viewApp.launchPreference?.options?.view?.host?.icon
+					disableMultiplePages: viewApp.launchPreference?.options?.host?.disableMultiplePages,
+					title: viewApp.launchPreference?.options?.host?.title,
+					favicon: viewApp.launchPreference?.options?.host?.icon
 				};
 				if (
-					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageTitle) ||
-					!isEmpty(viewApp.launchPreference?.options?.view?.host?.pageIcon)
+					!isEmpty(viewApp.launchPreference?.options?.host?.pageTitle) ||
+					!isEmpty(viewApp.launchPreference?.options?.host?.pageIcon)
 				) {
 					const page: Page = {
 						pageId: `page-${randomUUID()}`,
-						iconUrl: viewApp.launchPreference?.options?.view?.host?.pageIcon,
+						iconUrl: viewApp.launchPreference?.options?.host?.pageIcon,
 						title: await platform.Browser.getUniquePageTitle(
-							viewApp.launchPreference?.options?.view?.host?.pageTitle
+							viewApp.launchPreference?.options?.host?.pageTitle
 						),
 						layout
 					};
 					workspacePlatform.pages = [page];
 				}
-				if (viewApp.launchPreference?.options?.view?.host?.disableToolbarOptions === true) {
+				if (viewApp.launchPreference?.options?.host?.disableToolbarOptions === true) {
 					workspacePlatform.toolbarOptions = { buttons: [] };
 				}
 
@@ -506,7 +506,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 
 				const preferenceWindow = await platform.createWindow({
 					workspacePlatform,
-					url: viewApp.launchPreference?.options?.view?.host?.url,
+					url: viewApp.launchPreference?.options?.host?.url,
 					height: viewApp.launchPreference?.bounds?.height,
 					defaultHeight: viewApp.launchPreference?.bounds?.height,
 					defaultWidth: viewApp.launchPreference?.bounds?.width,
