@@ -304,13 +304,8 @@
 				"clientOptions": [
 					{
 						"enabled": true,
-						"id": "apply-default-workspace",
-						"endpointIds": ["get-default-workspace"]
-					},
-					{
-						"enabled": true,
-						"id": "set-default-workspace",
-						"endpointIds": ["set-default-workspace"]
+						"id": "default-workspace",
+						"endpointIds": ["get-default-workspace", "set-default-workspace"]
 					}
 				]
 			}
@@ -1291,6 +1286,14 @@
 					"description": "Include In Snapshot",
 					"enabled": false,
 					"url": "http://localhost:8080/js/modules/composite/include-in-snapshot.bundle.js"
+				},
+				{
+					"id": "default-workspace",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Default Workspace",
+					"description": "Allows the setting of a default workspace and whether or not it should be set when an active workspace is switched.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js"
 				}
 			]
 		},
@@ -1435,6 +1438,15 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js",
 					"data": {}
+				},
+				{
+					"id": "default-workspace",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "default workspace menu options",
+					"description": "set your default default workspace",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
 				}
 			]
 		},
@@ -1539,28 +1551,13 @@
 					}
 				},
 				{
-					"id": "apply-default-workspace",
+					"id": "default-workspace",
 					"icon": "http://localhost:8080/favicon.ico",
-					"title": "apply default workspace",
-					"description": "apply default workspace",
-					"enabled": false,
-					"url": "http://localhost:8080/js/modules/lifecycle/apply-default-workspace.bundle.js",
-					"data": {
-						"endpointId": "get-default-workspace",
-						"payloadId": "default-workspace"
-					}
-				},
-				{
-					"id": "set-default-workspace",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "set default workspace",
-					"description": "set default workspace",
-					"enabled": false,
-					"url": "http://localhost:8080/js/modules/lifecycle/set-default-workspace.bundle.js",
-					"data": {
-						"endpointId": "set-default-workspace",
-						"payloadId": "default-workspace"
-					}
+					"title": "default workspace management",
+					"description": "set and apply your default workspace.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
 				}
 			]
 		}

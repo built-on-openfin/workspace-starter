@@ -847,7 +847,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/lifecycle/apply-default-workspace/index.ts',
+		entry: './client/src/modules/composite/default-workspace/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -864,39 +864,11 @@ const configs = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'apply-default-workspace.bundle.js',
+			filename: 'default-workspace.bundle.js',
 			library: {
 				type: 'module'
 			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'lifecycle')
-		},
-		experiments: {
-			outputModule: true
-		}
-	},
-	{
-		entry: './client/src/modules/lifecycle/set-default-workspace/index.ts',
-		devtool: 'inline-source-map',
-		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js'],
-			alias
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'set-default-workspace.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'lifecycle')
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'composite')
 		},
 		experiments: {
 			outputModule: true
