@@ -11,7 +11,7 @@ import type {
 	MenuType
 } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 import { DefaultWorkspaceStorage } from "./default-workspace-storage";
 import type { DefaultWorkspaceProviderOptions } from "./shapes";
 
@@ -52,7 +52,8 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 		this._logger = loggerCreator("SetDefaultWorkspaceProvider");
 		this._settings = definition.data;
 		this._logger.info("Initializing");
-		this._defaultWorkspaceStorage = new DefaultWorkspaceStorage(definition?.data, helpers, this._logger);
+		this._defaultWorkspaceStorage = new DefaultWorkspaceStorage();
+		await this._defaultWorkspaceStorage.initialize(definition?.data, helpers, this._logger);
 	}
 
 	/**
@@ -105,8 +106,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 				label: this._settings?.reset?.menuLabel ?? "None",
 				icon: this._settings?.reset?.menuIcon,
 				visible: includeReset,
-				enabled:
-					useLastActiveWorkspaceSet || (!isEmpty(savedDefaultWorkspaceId) && savedDefaultWorkspaceId !== ""),
+				enabled: useLastActiveWorkspaceSet || isStringValue(savedDefaultWorkspaceId),
 				type: "normal",
 				data: {
 					type: "Custom" as GlobalContextMenuOptionType.Custom,

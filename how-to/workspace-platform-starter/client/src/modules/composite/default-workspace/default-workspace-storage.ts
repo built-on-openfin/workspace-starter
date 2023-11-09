@@ -19,19 +19,19 @@ export class DefaultWorkspaceStorage {
 	 * The logger for displaying information from the module.
 	 * @internal
 	 */
-	private readonly _logger?: Logger;
+	private _logger?: Logger;
 
 	/**
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private readonly _helpers: ModuleHelpers | undefined;
+	private _helpers: ModuleHelpers | undefined;
 
 	/**
 	 * The helper methods to use.
 	 * @internal
 	 */
-	private readonly _settings?: DefaultWorkspaceProviderOptions;
+	private _settings?: DefaultWorkspaceProviderOptions;
 
 	/**
 	 * An endpoint client if available.
@@ -51,20 +51,16 @@ export class DefaultWorkspaceStorage {
 	 * @param helpers helper functions to be used
 	 * @param logger a logger to use while performing actions
 	 */
-	constructor(
+	public async initialize(
 		settings: DefaultWorkspaceProviderOptions | undefined,
 		helpers: ModuleHelpers | undefined,
 		logger: Logger
-	) {
+	): Promise<void> {
 		this._logger = logger;
 		this._helpers = helpers;
 		this._settings = settings;
-		this.setupEndpointClient()
-			.then((result) => logger.info(`Endpoint client created: ${result}`))
-			.catch((err) => logger.error("There was an error creating the endpoint client.", err));
-		this.setVersionInfo()
-			.then((result) => logger.info(`Version Info retrieved: ${result}`))
-			.catch((err) => logger.error("There was an error fetching the version info.", err));
+		await this.setupEndpointClient();
+		await this.setVersionInfo();
 	}
 
 	/**
@@ -93,6 +89,9 @@ export class DefaultWorkspaceStorage {
 			});
 			return success;
 		}
+		this._logger?.warn(
+			"Unable to set the default workspace as the access to the endpoint client, version info or the endpoint is not available."
+		);
 		return false;
 	}
 
@@ -118,6 +117,9 @@ export class DefaultWorkspaceStorage {
 			});
 			return savedWorkspace?.payload ?? noSavedData;
 		}
+		this._logger?.warn(
+			"Unable to get the default workspace as the access to the endpoint client or the endpoint is not available."
+		);
 		return noSavedData;
 	}
 

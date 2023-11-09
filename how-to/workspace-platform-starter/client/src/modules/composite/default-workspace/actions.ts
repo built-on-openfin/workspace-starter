@@ -14,7 +14,7 @@ import type { DefaultWorkspacePayload, DefaultWorkspaceProviderOptions } from ".
 /**
  * Implement the actions.
  */
-export class DefaultWorkspaceActions implements Actions {
+export class DefaultWorkspaceActions implements Actions<DefaultWorkspaceProviderOptions> {
 	/**
 	 * The logger for displaying information from the module.
 	 * @internal
@@ -40,7 +40,8 @@ export class DefaultWorkspaceActions implements Actions {
 		helpers: ActionHelpers
 	): Promise<void> {
 		this._logger = loggerCreator("DefaultWorkspaceAction");
-		this._defaultWorkspaceStorage = new DefaultWorkspaceStorage(definition?.data, helpers, this._logger);
+		this._defaultWorkspaceStorage = new DefaultWorkspaceStorage();
+		await this._defaultWorkspaceStorage.initialize(definition?.data, helpers, this._logger);
 	}
 
 	/**

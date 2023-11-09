@@ -6,7 +6,7 @@ import type {
 } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 import { DefaultWorkspaceStorage } from "./default-workspace-storage";
 import type { DefaultWorkspaceProviderOptions } from "./shapes";
 
@@ -29,7 +29,7 @@ export class ApplyDefaultWorkspaceProvider implements Lifecycle<DefaultWorkspace
 	/**
 	 * The means to get and set default workspaces
 	 * @internal
-	 * */
+	 */
 	private _defaultWorkspaceStorage: DefaultWorkspaceStorage | undefined;
 
 	/**
@@ -46,7 +46,8 @@ export class ApplyDefaultWorkspaceProvider implements Lifecycle<DefaultWorkspace
 	): Promise<void> {
 		this._logger = loggerCreator("ApplyDefaultWorkspaceProvider");
 		this._helpers = helpers;
-		this._defaultWorkspaceStorage = new DefaultWorkspaceStorage(definition?.data, helpers, this._logger);
+		this._defaultWorkspaceStorage = new DefaultWorkspaceStorage();
+		await this._defaultWorkspaceStorage.initialize(definition?.data, helpers, this._logger);
 		this._logger.info("Initializing");
 	}
 
@@ -72,7 +73,7 @@ export class ApplyDefaultWorkspaceProvider implements Lifecycle<DefaultWorkspace
 			try {
 				const savedDefaultWorkspace = await this._defaultWorkspaceStorage?.getDefaultWorkspace();
 				const workspaceId = savedDefaultWorkspace?.workspaceId;
-				if (!isEmpty(workspaceId) && workspaceId !== "" && !isEmpty(this._helpers?.launchWorkspace)) {
+				if (isStringValue(workspaceId) && !isEmpty(this._helpers?.launchWorkspace)) {
 					this._logger?.info(
 						`Retrieved workspace id: ${savedDefaultWorkspace?.workspaceId} and we have the ability to launch a workspace. Applying the workspace.`
 					);
