@@ -280,8 +280,35 @@
 					"id": "favorite-remove",
 					"type": "module",
 					"typeId": "favorite-local-storage"
+				},
+				{
+					"id": "get-default-workspace",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "default-workspace"
+					}
+				},
+				{
+					"id": "set-default-workspace",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "default-workspace"
+					}
 				}
-			]
+			],
+			"endpointClients": {
+				"clientOptions": [
+					{
+						"enabled": true,
+						"id": "default-workspace",
+						"endpointIds": ["get-default-workspace", "set-default-workspace"]
+					}
+				]
+			}
 		},
 		"browserProvider": {
 			"defaultWindowOptions": {
@@ -1259,6 +1286,14 @@
 					"description": "Include In Snapshot",
 					"enabled": false,
 					"url": "http://localhost:8080/js/modules/composite/include-in-snapshot.bundle.js"
+				},
+				{
+					"id": "default-workspace",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Default Workspace",
+					"description": "Allows the setting of a default workspace and whether or not it should be set when an active workspace is switched.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js"
 				}
 			]
 		},
@@ -1402,6 +1437,15 @@
 					"description": "Provides additional menu options for windows.",
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "default-workspace",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "default workspace menu options",
+					"description": "set your default default workspace",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js",
 					"data": {}
 				}
 			]

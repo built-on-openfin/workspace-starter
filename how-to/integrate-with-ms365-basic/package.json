@@ -17,8 +17,8 @@
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.38.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "16.0.3",
-		"@openfin/workspace-platform": "16.0.3"
+		"@openfin/workspace": "16.0.4",
+		"@openfin/workspace-platform": "16.0.4"
 	},
 	"devDependencies": {
 		"@openfin/core": "33.77.11",

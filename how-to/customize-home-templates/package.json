@@ -18,8 +18,8 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "16.0.3",
-		"@openfin/workspace-platform": "16.0.3",
+		"@openfin/workspace": "16.0.4",
+		"@openfin/workspace-platform": "16.0.4",
 		"chart.js": "^4.4.0",
 		"csstype": "^3.1.2",
 		"luxon": "^3.4.3",
@@ -28,7 +28,7 @@
 	"devDependencies": {
 		"@openfin/core": "33.77.11",
 		"@openfin/node-adapter": "33.77.11",
-		"@types/luxon": "^3.3.3",
+		"@types/luxon": "^3.3.4",
 		"@types/node-emoji": "^1.8.2",
 		"ts-loader": "^9.5.0",
 		"typescript": "^5.2.2",

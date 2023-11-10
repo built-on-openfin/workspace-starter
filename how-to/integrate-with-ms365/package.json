@@ -18,8 +18,8 @@
 		"@finos/fdc3": "^2.0.3",
 		"@microsoft/microsoft-graph-types": "^2.38.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "16.0.3",
-		"@openfin/workspace-platform": "16.0.3",
+		"@openfin/workspace": "16.0.4",
+		"@openfin/workspace-platform": "16.0.4",
 		"csstype": "^3.1.2"
 	},
 	"devDependencies": {

@@ -92,21 +92,21 @@ export async function showShareOptions(payload: {
 			}
 		}
 
-		const template: OpenFin.MenuItemTemplate<SharePageData | ShareWorkspaceData>[] = [];
+		const template: OpenFin.MenuItemTemplate<SharePageData | ShareWorkspaceData | undefined>[] = [];
 
 		if (!isEmpty(pageId)) {
 			template.push({
 				label: "Share Page",
 				data: { windowIdentity, pageId, type: "page" }
 			});
-			template.push({ type: "separator", data: {} });
+			template.push({ type: "separator" });
 		}
 		template.push({
 			label: "Share Workspace",
 			data: { type: "workspace" }
 		});
 
-		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData>({
+		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData | undefined>({
 			template,
 			x: payload.x,
 			y: payload.y
@@ -114,9 +114,9 @@ export async function showShareOptions(payload: {
 
 		if (r.result === "closed") {
 			logger.info("share menu dismissed.");
-		} else if (r.data.type === "page") {
+		} else if (r.data?.type === "page") {
 			await saveSharedPage(r.data);
-		} else if (r.data.type === "workspace") {
+		} else if (r.data?.type === "workspace") {
 			await saveSharedWorkspace();
 		}
 	} else {
