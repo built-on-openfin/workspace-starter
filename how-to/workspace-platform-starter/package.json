@@ -45,8 +45,8 @@
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/openid-connect": "^1.0.0",
 		"@openfin/snap-sdk": "0.2.0",
-		"@openfin/workspace": "15.0.8",
-		"@openfin/workspace-platform": "15.0.8",
+		"@openfin/workspace": "15.0.11",
+		"@openfin/workspace-platform": "15.0.11",
 		"chart.js": "^4.4.0",
 		"csstype": "^3.1.2",
 		"node-emoji": "^1.11.0"
