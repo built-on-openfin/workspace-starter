@@ -147,6 +147,7 @@ export async function applyDecoratedSnapshot(snapshot: OpenFin.Snapshot): Promis
  * @param launchStrategy The launch strategy for the application.
  * @param appId The id to associated with the app.
  * @param instanceId The instance if for the app.
+ * @returns The id of the launched app.
  */
 export async function launchApp(
 	path: string,
