@@ -165,7 +165,10 @@
 			"properties": {
 				"behavior": {
 					"$ref": "#/definitions/T",
-					"description": "Behavior to use when opening matched content."
+					"description": "Behavior to use when opening matched content. The value could be 'view' | 'window' | 'browser' | 'block'."
+				},
+				"data": {
+					"description": "custom property"
 				},
 				"match": {
 					"description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
@@ -190,6 +193,9 @@
 			"type": "object"
 		},
 		"ContentNavigation": {
+			"$ref": "#/definitions/__type_13"
+		},
+		"ContentRedirect": {
 			"$ref": "#/definitions/__type_13"
 		},
 		"ContextGroupStates": {
@@ -271,46 +277,7 @@
 			},
 			"type": "object"
 		},
-		"HostLaunchPreference": {
-			"additionalProperties": false,
-			"description": "Additional options that apply to the host of the content",
-			"properties": {
-				"disableMultiplePages": {
-					"description": "Should the host support multi layouts (e.g. pages). Assumes the default for each host will be used.",
-					"type": "boolean"
-				},
-				"disableToolbarOptions": {
-					"description": "Should the toolbar options of a window be hidden if they are available?",
-					"type": "boolean"
-				},
-				"hasHeaders": {
-					"description": "Should the header for the content be hidden",
-					"type": "boolean"
-				},
-				"icon": {
-					"description": "The Icon you would prefer the window shows.",
-					"type": "string"
-				},
-				"pageIcon": {
-					"description": "If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?",
-					"type": "string"
-				},
-				"pageTitle": {
-					"description": "If this host supports multiple layouts what should the layout (e.g page) title be?",
-					"type": "string"
-				},
-				"title": {
-					"description": "If specified it indicates a preference to be used by this type of host.",
-					"type": "string"
-				},
-				"url": {
-					"description": "If specified it indicates you do not want to use a browser window for this view but a platform window.",
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"Identity": {
+		"Identity_5": {
 			"$ref": "#/definitions/__type_1"
 		},
 		"Image": {
@@ -552,6 +519,7 @@
 			"description": "Context menu item with an implementation provided by OpenFin.",
 			"enum": [
 				"copy",
+				"copyImage",
 				"cut",
 				"inspect",
 				"navigateBack",
@@ -651,6 +619,7 @@
 			"$ref": "#/definitions/__type_18"
 		},
 		"WebPermission": {
+			"description": "Defines the type of requested web APIs permission.",
 			"enum": [
 				"audio",
 				"clipboard-read",
@@ -667,7 +636,7 @@
 		},
 		"WindowCreationOptions": {
 			"additionalProperties": false,
-			"description": "Options required to create a new window with {@link Window.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
+			"description": "Options required to create a new window with {@link Window._WindowModule.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
 			"properties": {
 				"name": {
 					"type": "string"
@@ -717,7 +686,10 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contentRedirect": {
+					"$ref": "#/definitions/ContentRedirect"
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -730,7 +702,7 @@
 					"$ref": "#/definitions/ContextMenuSettings"
 				},
 				"customContext": {
-					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. For usage example, see {@link MutableWindowOptionscustomContext Example}."
 				},
 				"customData": {
 					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
@@ -776,7 +748,7 @@
 					"type": "string"
 				},
 				"hotkeys": {
-					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example, see {@link MutableWindowOptionshotkeys Example}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
 					"items": {
 						"additionalProperties": false,
 						"description": "A hotkey binding.",
@@ -843,7 +815,7 @@
 					"type": "string"
 				},
 				"target": {
-					"$ref": "#/definitions/Identity",
+					"$ref": "#/definitions/Identity_5",
 					"description": "The identity of the window this view should be attached to."
 				},
 				"url": {
@@ -857,13 +829,14 @@
 		},
 		"__type_1": {
 			"additionalProperties": false,
+			"description": "Unique identifier for a window, view or iframe.",
 			"properties": {
 				"name": {
-					"description": "The name of the component",
+					"description": "The name of the component.  Must be unique within the owning application.",
 					"type": "string"
 				},
 				"uuid": {
-					"description": "Universally unique identifier of the compenent",
+					"description": "Universally unique identifier of the application that owns the component.",
 					"type": "string"
 				}
 			},
@@ -923,9 +896,21 @@
 		},
 		"__type_13": {
 			"additionalProperties": false,
-			"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details.",
 			"properties": {
+				"allowlist": {
+					"description": "Allowed URLs for navigation.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
 				"blacklist": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"denylist": {
 					"description": "Forbidden URLs for navigation.",
 					"items": {
 						"type": "string"
@@ -933,7 +918,6 @@
 					"type": "array"
 				},
 				"whitelist": {
-					"description": "Allowed URLs for navigation.",
 					"items": {
 						"type": "string"
 					},
@@ -945,15 +929,27 @@
 		"__type_14": {
 			"additionalProperties": false,
 			"properties": {
+				"allowlist": {
+					"description": "Allowed URLs for navigation.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
 				"blacklist": {
-					"description": "Forbidden URLs for redirects.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"denylist": {
+					"description": "Forbidden URLs for navigation.",
 					"items": {
 						"type": "string"
 					},
 					"type": "array"
 				},
 				"whitelist": {
-					"description": "Allowed URLs for redirects.",
 					"items": {
 						"type": "string"
 					},
@@ -1246,6 +1242,7 @@
 					"type": "object"
 				},
 				"windows": {
+					"description": "The array of window options objects",
 					"items": {
 						"$ref": "#/definitions/WindowCreationOptions"
 					},
@@ -1520,7 +1517,7 @@
 				},
 				"alphaMask": {
 					"$ref": "#/definitions/RGB",
-					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
 				},
 				"alwaysOnTop": {
 					"type": "boolean"
@@ -1556,11 +1553,11 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, navigation to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
 				},
 				"contentRedirect": {
 					"$ref": "#/definitions/Partial_4",
-					"description": "Restrict redirects to URLs that match a whitelisted pattern.\nIn the lack of a whitelist, redirects to URLs that match a blacklisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -1577,7 +1574,7 @@
 					"description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
 				},
 				"customContext": {
-					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. [Example]{@tutorial customContext}"
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts."
 				},
 				"customData": {
 					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
@@ -1613,7 +1610,7 @@
 					"type": "array"
 				},
 				"defaultCentered": {
-					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value. **NOTE:** On macOS _defaultCenter_ is\nsomewhat above center vertically.",
+					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value.\n\n**NOTE:** On macOS _defaultCenter_ is somewhat above center vertically.",
 					"type": "boolean"
 				},
 				"defaultHeight": {
@@ -1642,7 +1639,7 @@
 					"type": "boolean"
 				},
 				"hotkeys": {
-					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window. For usage example see [example]{@tutorial hotkeys}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n[keyboard commands]{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
 					"items": {
 						"additionalProperties": false,
 						"description": "A hotkey binding.",
@@ -1661,7 +1658,7 @@
 					"type": "array"
 				},
 				"icon": {
-					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application._\n note: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
 				},
 				"ignoreSavedWindowState": {
@@ -1694,7 +1691,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity",
+					"$ref": "#/definitions/Identity_5",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -1946,6 +1943,7 @@
 		},
 		"__type_9": {
 			"additionalProperties": false,
+			"description": "Information relevant to the Interop Broker.",
 			"properties": {
 				"currentContextGroup": {
 					"description": "Context Group for the client. (green, yellow, red, etc.).",

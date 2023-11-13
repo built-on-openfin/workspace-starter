@@ -378,7 +378,7 @@ export interface ClientSnapshot {
 	/**
 	 * The identity of the application which provided the snapshot.
 	 */
-	identity: OpenFin.ApplicationIdentity;
+	identity: OpenFin.Identity;
 
 	/**
 	 * The application snapshot.

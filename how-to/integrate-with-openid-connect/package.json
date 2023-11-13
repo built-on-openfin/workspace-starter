@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-openid-connect",
-	"version": "15.0.0",
+	"version": "16.0.0",
 	"description": "OpenFin Workspace -- Integrate with OpenId Connect",
 	"main": "index.js",
 	"scripts": {
@@ -18,13 +18,13 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "15.0.11",
-		"@openfin/workspace-platform": "15.0.11",
-		"@openfin/openid-connect": "^1.0.0"
+		"@openfin/openid-connect": "^1.0.0",
+		"@openfin/workspace": "16.0.4",
+		"@openfin/workspace-platform": "16.0.4"
 	},
 	"devDependencies": {
-		"@openfin/core": "32.76.20",
-		"openfin-adapter": "32.76.10",
+		"@openfin/core": "33.77.11",
+		"@openfin/node-adapter": "33.77.11",
 		"ts-loader": "^9.5.0",
 		"typescript": "^5.2.2",
 		"webpack": "^5.89.0",

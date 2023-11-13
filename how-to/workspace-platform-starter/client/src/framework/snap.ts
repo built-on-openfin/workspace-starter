@@ -81,6 +81,7 @@ export function isEnabled(): boolean {
 export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
 	try {
 		if (server) {
+			// @ts-expect-error - TODO correct this when OpenFin.Core becomes a peerDependency in Snap SDK
 			snapshot = await server.decorateSnapshot(snapshot);
 		}
 	} catch (error) {
@@ -109,7 +110,7 @@ export async function prepareToApplyDecoratedSnapshot(): Promise<void> {
 export async function applyDecoratedSnapshot(snapshot: OpenFin.Snapshot): Promise<void> {
 	try {
 		if (server) {
-			await server.applySnapshot(snapshot);
+			await server.applySnapshot(snapshot as Snap.SnapSnapshot);
 		}
 	} catch (error) {
 		console.error("Failed to apply decorated snapshot.", formatError(error));

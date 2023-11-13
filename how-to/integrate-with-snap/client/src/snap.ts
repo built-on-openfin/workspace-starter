@@ -69,7 +69,8 @@ export async function launchApp(appId: string, instanceId: string): Promise<void
 export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
 	try {
 		if (server) {
-			snapshot = await server.decorateSnapshot(snapshot);
+			// TODO: the types in snap need to be peer dependencies so that they do not conflict with the core types used by a platform.
+			snapshot = await server.decorateSnapshot(snapshot as Snap.SnapSnapshot);
 		}
 	} catch (error) {
 		console.error("Failed to decorate snapshot.", formatError(error));
@@ -108,8 +109,8 @@ export async function applyDecoratedSnapshot(snapshot: OpenFin.Snapshot): Promis
 					}
 				}
 			}
-
-			await server.applySnapshot(snapshot);
+			// TODO: the types in snap need to be peer dependencies so that they do not conflict with the core types used by a platform.
+			await server.applySnapshot(snapshot as Snap.SnapSnapshot);
 		}
 	} catch (error) {
 		console.error("Failed to apply decorated snapshot.", formatError(error));

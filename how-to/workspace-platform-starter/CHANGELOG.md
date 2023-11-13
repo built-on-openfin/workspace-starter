@@ -1,5 +1,9 @@
 # Changelog
 
+## v16
+
+- Added support for Snap, enable by setting `customSettings.snapProvider.enabled` to true. Configure the `customSettings.snapProvider.serverAssetInfo` to point to the `SNAP_ASSET_URL`. Enable the Snap debugging window by setting `customSettings.snapProvider.showDebugWindow` to true.
+
 ## v15
 
 - BREAKING CHANGE: BrowserProvider windowOptions. A number of versions ago we indicated that you should use defaultWindowOptions in the BrowserProvider configuration instead of the old windowOptions setting. We have removed the type from the schema and type and we have updated the main manifest to use defaultWindowOptions(like we did in our other examples as seen in settings.json). Please update your manifest/settings (we will maintain support for window options for the browser configuration for this release but then that backwards compatibility will be removed).
@@ -63,7 +67,6 @@
 - Added url property to splashScreenProvider so you can provide your own custom location for the html content
 - Change splash screen progress updates are sent using channels so they work cross domain
 - Update applyWorkspace logic so that you are not prompted on whether you wish to save changes if you have never loaded a workspace (you just started a session), and you have not got any windows open that would be included in a snapshot and would be lost.
-- Added a new composite module: default-workspace. This composite module contains menu logic to show a configurable default workspace menu option in browser, an action to react to the menu selection and two lifecycle entries to support capturing the active workspace switch and applying a default workspace on load.
 
 ## v14
 
