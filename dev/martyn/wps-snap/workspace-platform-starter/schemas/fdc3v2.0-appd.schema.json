@@ -315,7 +315,7 @@
 			"required": ["$schema", "applications"],
 			"type": "object"
 		},
-		"HostLaunchPreference": {
+		"HostLaunchOptions": {
 			"additionalProperties": false,
 			"description": "Additional options that apply to the host of the content",
 			"properties": {
@@ -423,14 +423,8 @@
 					"type": "boolean"
 				},
 				"options": {
-					"additionalProperties": false,
-					"description": "Are there any app type specific options you would like to apply?",
-					"properties": {
-						"view": {
-							"$ref": "#/definitions/ViewLaunchPreference"
-						}
-					},
-					"type": "object"
+					"$ref": "#/definitions/ViewLaunchOptions",
+					"description": "Are there any app type specific options you would like to apply?"
 				}
 			},
 			"type": "object"
@@ -492,15 +486,21 @@
 			"required": ["src"],
 			"type": "object"
 		},
-		"ViewLaunchPreference": {
+		"ViewLaunchOptions": {
 			"additionalProperties": false,
 			"description": "Additional options that apply to a view",
 			"properties": {
 				"host": {
-					"$ref": "#/definitions/HostLaunchPreference",
+					"$ref": "#/definitions/HostLaunchOptions",
 					"description": "If specified it indicates wish to specify specific host settings for this content."
+				},
+				"type": {
+					"const": "view",
+					"description": "View options type",
+					"type": "string"
 				}
 			},
+			"required": ["type"],
 			"type": "object"
 		},
 		"WebAppDetails": {
