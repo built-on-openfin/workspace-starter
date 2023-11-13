@@ -27,8 +27,27 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 			return;
 		}
 
-		if (isEmpty(serverAssetInfo.src)) {
+		const src = serverAssetInfo.src;
+		if (isEmpty(src)) {
 			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.src");
+			return;
+		}
+
+		const alias = serverAssetInfo.alias;
+		if (isEmpty(alias)) {
+			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.alias");
+			return;
+		}
+
+		const target = serverAssetInfo.target;
+		if (isEmpty(target)) {
+			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.target");
+			return;
+		}
+
+		const version = serverAssetInfo.version;
+		if (isEmpty(version)) {
+			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.version");
 			return;
 		}
 
@@ -47,7 +66,11 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 				logger.info(`Downloaded ${downloadedPercent}% of Snap Server asset`);
 			});
 
-			const serverAssetExecutablePath = await getAppAssetExecutablePath(serverAssetInfo);
+			const serverAssetExecutablePath = await getAppAssetExecutablePath({
+				alias,
+				target,
+				version
+			});
 
 			server = new Snap.SnapServer(options.id);
 
@@ -118,11 +141,49 @@ export async function applyDecoratedSnapshot(snapshot: OpenFin.Snapshot): Promis
 }
 
 /**
+ * Launch an application.
+ * @param path The path to the application.
+ * @param args The args to launch the app with.
+ * @param launchStrategy The launch strategy for the application.
+ * @param appId The id to associated with the app.
+ * @param instanceId The instance if for the app.
+ */
+export async function launchApp(
+	path: string,
+	args: string | undefined,
+	launchStrategy: Snap.LaunchStrategy | undefined,
+	appId: string,
+	instanceId: string
+): Promise<string | undefined> {
+	try {
+		if (server) {
+			const clientId = `@app/${appId}/${instanceId}`;
+			await server.launch({
+				path,
+				clientId: `@app/${appId}/${instanceId}`,
+				args: (args ?? "").split(" "),
+				strategy: launchStrategy
+			});
+			return clientId;
+		}
+	} catch (error) {
+		console.error("Failed to launch app.", formatError(error));
+	}
+}
+
+/**
  * Get the executable path for an app asset.
  * @param appAssetInfo The app asset information.
+ * @param appAssetInfo.alias The app asset alias information.
+ * @param appAssetInfo.version The app asset version information.
+ * @param appAssetInfo.target The app asset target information.
  * @returns The native path for the asset.
  */
-async function getAppAssetExecutablePath(appAssetInfo: OpenFin.AppAssetInfo): Promise<string> {
+export async function getAppAssetExecutablePath(appAssetInfo: {
+	alias: string;
+	version: string;
+	target: string;
+}): Promise<string> {
 	const runtimeInfo = await fin.System.getRuntimeInfo();
 	// Use the local-startup-url to determine where app assets have been stored.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

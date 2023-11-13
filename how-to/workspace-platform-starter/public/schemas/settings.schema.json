@@ -1091,6 +1091,25 @@
         "DeepPartial": {
             "$ref": "#/definitions/__type_31"
         },
+        "DelayStrategy": {
+            "additionalProperties": false,
+            "description": "A window launch discovery strategy that waits for the given time period, checks if a process has\na window and if so, captures that window and registers it with the Snap Server",
+            "properties": {
+                "delayMs": {
+                    "description": "How to wait in milliseconds after process launch before looking for a window",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "delay",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "delayMs",
+                "type"
+            ],
+            "type": "object"
+        },
         "DipRect": {
             "additionalProperties": false,
             "properties": {
@@ -2000,11 +2019,31 @@
                     "type": "boolean"
                 },
                 "options": {
-                    "$ref": "#/definitions/ViewLaunchOptions",
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ViewLaunchOptions"
+                        },
+                        {
+                            "$ref": "#/definitions/NativeLaunchOptions"
+                        }
+                    ],
                     "description": "Are there any app type specific options you would like to apply?"
                 }
             },
             "type": "object"
+        },
+        "LaunchStrategy": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/DelayStrategy"
+                },
+                {
+                    "$ref": "#/definitions/WaitForWindowNameStrategy"
+                },
+                {
+                    "$ref": "#/definitions/WaitForWindowClassStrategy"
+                }
+            ]
         },
         "LayoutColumn": {
             "additionalProperties": false,
@@ -3019,6 +3058,25 @@
         "MonitorInfo": {
             "$ref": "#/definitions/__type_34"
         },
+        "NativeLaunchOptions": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to a native app",
+            "properties": {
+                "snap": {
+                    "$ref": "#/definitions/SnapLaunchOptions",
+                    "description": "If specified it indicates the native app should be included when snapping."
+                },
+                "type": {
+                    "const": "native",
+                    "description": "Native options type",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
         "NotificationClientDefaultOptions": {
             "additionalProperties": false,
             "description": "A set of default options that will apply against all notification clients unless they\nhave a setting of their own.",
@@ -3834,6 +3892,17 @@
                 },
                 "paintIntervalMs": {
                     "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "SnapLaunchOptions": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to the app when used in a snap context",
+            "properties": {
+                "strategy": {
+                    "$ref": "#/definitions/LaunchStrategy",
+                    "description": "The strategy for launching and locating the application."
                 }
             },
             "type": "object"
@@ -4698,6 +4767,54 @@
         },
         "ViewVisibilityOptions": {
             "$ref": "#/definitions/__type_23"
+        },
+        "WaitForWindowClassStrategy": {
+            "additionalProperties": false,
+            "description": "A window launch discovery strategy that looks for a window whose underlying OS class type matches the given regular expression.\nIt will timeout after the given time period if no window is found.",
+            "properties": {
+                "matchRegex": {
+                    "description": "A regular expression string to match the window class against",
+                    "type": "string"
+                },
+                "timeoutMs": {
+                    "description": "The timeout period milliseconds after which the window search will be abandoned",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "waitForWindowOfClass",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "matchRegex",
+                "timeoutMs",
+                "type"
+            ],
+            "type": "object"
+        },
+        "WaitForWindowNameStrategy": {
+            "additionalProperties": false,
+            "description": "A window launch discovery strategy that looks for a window whose caption matches the given regular expression.\nIt will timeout after the given time period if no window is found.",
+            "properties": {
+                "matchRegex": {
+                    "description": "A regular expression string to match the window caption against",
+                    "type": "string"
+                },
+                "timeoutMs": {
+                    "description": "The timeout period milliseconds after which the window search will be abandoned",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "waitForWindowOfName",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "matchRegex",
+                "timeoutMs",
+                "type"
+            ],
+            "type": "object"
         },
         "WebPermission": {
             "description": "Defines the type of requested web APIs permission.",
