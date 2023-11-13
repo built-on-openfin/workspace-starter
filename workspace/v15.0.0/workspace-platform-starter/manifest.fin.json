@@ -193,7 +193,8 @@
 				"inline-appasset",
 				"manifest",
 				"desktop-browser",
-				"connection"
+				"connection",
+				"endpoint"
 			]
 		},
 		"endpointProvider": {
