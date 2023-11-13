@@ -107,7 +107,8 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 				icon: this._settings?.reset?.menuIcon,
 				visible: includeReset,
 				enabled: useLastActiveWorkspaceSet || isStringValue(savedDefaultWorkspaceId),
-				type: "normal",
+				checked: !useLastActiveWorkspaceSet && !isStringValue(savedDefaultWorkspaceId),
+				type: "checkbox",
 				data: {
 					type: "Custom" as GlobalContextMenuOptionType.Custom,
 					action: {
@@ -126,6 +127,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 				icon: this._settings?.lastActive?.menuIcon,
 				visible: includeLastActive,
 				checked: useLastActiveWorkspaceSet,
+				enabled: !useLastActiveWorkspaceSet,
 				type: "checkbox",
 				data: {
 					type: "Custom" as GlobalContextMenuOptionType.Custom,
@@ -139,10 +141,15 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 				}
 			});
 			if (workspaces.length > 0) {
+				const lastActiveWorkspaceLabel =
+					this._settings?.lastActive?.lastActiveWorkspaceLabel ?? " [Active Workspace]";
 				for (const workspace of workspaces) {
 					defaultWorkspaceMenuEntry.submenu?.push({
-						label: workspace.title,
-						enabled: workspace.workspaceId !== savedDefaultWorkspaceId,
+						label:
+							useLastActiveWorkspaceSet && workspace.workspaceId === savedDefaultWorkspaceId
+								? `${workspace.title} ${lastActiveWorkspaceLabel}`
+								: workspace.title,
+						enabled: workspace.workspaceId !== savedDefaultWorkspaceId || useLastActiveWorkspaceSet,
 						checked: !useLastActiveWorkspaceSet && workspace.workspaceId === savedDefaultWorkspaceId,
 						type: "checkbox",
 						data: {

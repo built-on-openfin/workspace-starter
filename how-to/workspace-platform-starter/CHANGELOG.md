@@ -64,6 +64,8 @@
 - Change splash screen progress updates are sent using channels so they work cross domain
 - Update applyWorkspace logic so that you are not prompted on whether you wish to save changes if you have never loaded a workspace (you just started a session), and you have not got any windows open that would be included in a snapshot and would be lost.
 - Added a new composite module: default-workspace. This composite module contains menu logic to show a configurable default workspace menu option in browser, an action to react to the menu selection and two lifecycle entries to support capturing the active workspace switch and applying a default workspace on load.
+- Updated the composite module: default-workspace. Now the currently selected mode is always disabled in the menu (it was inconsistent before). When Last Active Workspace is selected the linked workspace is no longer disabled (as this would prevent you from setting it as the default workspace unless you reset via None and then selected it). When a workspace is linked to Last Active Workspace the workspace can still be selected (which will turn off Last Active Workspace) and is marked with "[Active Workspace]" (this can be changed via the lastActive.lastActiveWorkspaceLabel setting).
+- Enabled endpoints as a valid manifest type in the appProvider.
 
 ## v14
 
