@@ -91,7 +91,7 @@ export async function open(): Promise<void> {
 			});
 			channelProvider = await fin.InterApplicationBus.Channel.create(channelName);
 			channelProvider.onConnection((identity) => {
-				if (identity.name === winName) {
+				if (identity.uuid === fin.me.identity.uuid && identity.name === winName) {
 					channelClientIdentity = identity;
 					return true;
 				}
