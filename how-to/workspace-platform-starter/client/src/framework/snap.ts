@@ -274,7 +274,7 @@ export async function launchApp(
 				if (existingClientIndex >= 0) {
 					launch = false;
 
-					// If the window is minimized it set its state to normal
+					// If the window is minimized set its state to normal
 					// TODO Would also be nice to bring this to front, will need a snap
 					// enhancement for this
 					if (layout.clients[existingClientIndex].state === "minimized") {
