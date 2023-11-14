@@ -106,11 +106,13 @@ export async function showShareOptions(payload: {
 			data: { type: "workspace" }
 		});
 
-		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData | undefined>({
-			template,
-			x: payload.x,
-			y: payload.y
-		});
+		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData | undefined>(
+			{
+				template,
+				x: payload.x,
+				y: payload.y
+			}
+		);
 
 		if (r.result === "closed") {
 			logger.info("share menu dismissed.");

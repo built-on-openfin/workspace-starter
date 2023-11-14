@@ -1,8 +1,8 @@
 import type OpenFin from "@openfin/core";
 import {
+	WindowType,
 	getCurrentSync,
 	type BrowserSnapshot,
-	WindowType,
 	type BrowserWorkspacePlatformWindowOptions,
 	type Page
 } from "@openfin/workspace-platform";
@@ -17,8 +17,14 @@ import {
 	doesWindowExist,
 	findViewNames
 } from "./platform/browser";
-import type { PlatformApp, PlatformAppIdentifier } from "./shapes/app-shapes";
-import { isEmpty, objectClone, randomUUID } from "./utils";
+import type {
+	NativeLaunchOptions,
+	PlatformApp,
+	PlatformAppIdentifier,
+	ViewLaunchOptions
+} from "./shapes/app-shapes";
+import * as snapProvider from "./snap";
+import { isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
@@ -450,7 +456,11 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 		try {
 			const platform = getCurrentSync();
 
-			if (!isEmpty(viewApp.launchPreference?.bounds) || !isEmpty(viewApp?.launchPreference?.options)) {
+			const bounds = viewApp.launchPreference?.bounds;
+			const launchOptions = viewApp?.launchPreference?.options;
+			if (!isEmpty(bounds) || (!isEmpty(launchOptions) && launchOptions.type === "view")) {
+				const viewOptions = viewApp?.launchPreference?.options as ViewLaunchOptions;
+
 				let workspacePlatform:
 					| Partial<BrowserWorkspacePlatformWindowOptions>
 					| { windowType: WindowType.Platform }
@@ -470,33 +480,26 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 						}
 					],
 					settings: {
-						hasHeaders: viewApp.launchPreference?.options?.host?.hasHeaders
+						hasHeaders: viewOptions?.host?.hasHeaders
 					}
 				};
 
 				workspacePlatform = {
-					windowType: !isEmpty(viewApp.launchPreference?.options?.host?.url)
-						? WindowType.Platform
-						: undefined,
-					disableMultiplePages: viewApp.launchPreference?.options?.host?.disableMultiplePages,
-					title: viewApp.launchPreference?.options?.host?.title,
-					favicon: viewApp.launchPreference?.options?.host?.icon
+					windowType: !isEmpty(viewOptions?.host?.url) ? WindowType.Platform : undefined,
+					disableMultiplePages: viewOptions?.host?.disableMultiplePages,
+					title: viewOptions?.host?.title,
+					favicon: viewOptions?.host?.icon
 				};
-				if (
-					!isEmpty(viewApp.launchPreference?.options?.host?.pageTitle) ||
-					!isEmpty(viewApp.launchPreference?.options?.host?.pageIcon)
-				) {
+				if (!isEmpty(viewOptions?.host?.pageTitle) || !isEmpty(viewOptions?.host?.pageIcon)) {
 					const page: Page = {
 						pageId: `page-${randomUUID()}`,
-						iconUrl: viewApp.launchPreference?.options?.host?.pageIcon,
-						title: await platform.Browser.getUniquePageTitle(
-							viewApp.launchPreference?.options?.host?.pageTitle
-						),
+						iconUrl: viewOptions?.host?.pageIcon,
+						title: await platform.Browser.getUniquePageTitle(viewOptions?.host?.pageTitle),
 						layout
 					};
 					workspacePlatform.pages = [page];
 				}
-				if (viewApp.launchPreference?.options?.host?.disableToolbarOptions === true) {
+				if (viewOptions?.host?.disableToolbarOptions === true) {
 					workspacePlatform.toolbarOptions = { buttons: [] };
 				}
 
@@ -506,11 +509,11 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 
 				const preferenceWindow = await platform.createWindow({
 					workspacePlatform,
-					url: viewApp.launchPreference?.options?.host?.url,
-					height: viewApp.launchPreference?.bounds?.height,
-					defaultHeight: viewApp.launchPreference?.bounds?.height,
-					defaultWidth: viewApp.launchPreference?.bounds?.width,
-					width: viewApp.launchPreference?.bounds?.width,
+					url: viewOptions?.host?.url,
+					height: bounds?.height,
+					defaultHeight: bounds?.height,
+					defaultWidth: bounds?.width,
+					width: bounds?.width,
 					defaultCentered: viewApp.launchPreference?.defaultCentered,
 					layout
 				});
@@ -648,9 +651,13 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 /**
  * Launch an app asset for the platform app.
  * @param appAssetApp The app to launch app asset view for.
+ * @param instanceId Provide an instance id for the app being launched.
  * @returns The identities of the snapshot parts launched.
  */
-async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
+export async function launchAppAsset(
+	appAssetApp: PlatformApp,
+	instanceId?: string
+): Promise<PlatformAppIdentifier | undefined> {
 	const options: OpenFin.ExternalProcessRequestType = {};
 	logger.info(`Request to launch app asset app of type ${appAssetApp.manifestType}`);
 	if (appAssetApp.manifestType === MANIFEST_TYPES.Appasset.id) {
@@ -678,11 +685,14 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
 		options.uuid = appAssetApp.appId;
 	}
-	logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
 	try {
-		const identity = await fin.System.launchExternalProcess(options);
-		logger.info(`App asset with appId: ${appAssetApp.appId} launched with the following identity`, identity);
-		return { ...identity, appId: appAssetApp.appId };
+		logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
+		const identity = await launchExternalProcess(appAssetApp, options, instanceId);
+		logger.info(
+			`External app with appId: ${appAssetApp.appId} launched with the following identity`,
+			identity
+		);
+		return identity;
 	} catch (error) {
 		logger.error(`Error trying to launch app asset with appId: ${appAssetApp.appId}}`, error);
 	}
@@ -691,9 +701,13 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 /**
  * Launch an external for the platform app.
  * @param externalApp The app to launch external view for.
- * @returns The identities of the snapshot parts launched.
+ * @param instanceId Provide an instance id for the app being launched.
+ * @returns The identities of the app parts launched.
  */
-async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
+export async function launchExternal(
+	externalApp: PlatformApp,
+	instanceId?: string
+): Promise<PlatformAppIdentifier | undefined> {
 	let options: OpenFin.ExternalProcessRequestType = {};
 	logger.info(`Request to external app of type ${externalApp.manifestType}`);
 	if (externalApp.manifestType === MANIFEST_TYPES.External.id) {
@@ -708,10 +722,94 @@ async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIden
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
 		options.uuid = externalApp.appId;
 	}
+
 	try {
-		const identity = await fin.System.launchExternalProcess(options);
-		return { ...identity, appId: externalApp.appId };
+		logger.info(
+			`Launching external app asset with appId: ${externalApp.appId} with the following options:`,
+			options
+		);
+		const identity = await launchExternalProcess(externalApp, options, instanceId);
+		logger.info(
+			`External app with appId: ${externalApp.appId} launched with the following identity`,
+			identity
+		);
+		return identity;
 	} catch (err) {
 		logger.error(`Error trying to launch external with appId: ${externalApp.appId}`, err);
 	}
+}
+
+/**
+ * Launch an external process either in regular or snap mode.
+ * @param app The app being launched.
+ * @param options The launch options.
+ * @param instanceId Provide an instance id for the app being launched.
+ * @returns The identity of the process.
+ */
+async function launchExternalProcess(
+	app: PlatformApp,
+	options: OpenFin.ExternalProcessRequestType,
+	instanceId?: string
+): Promise<PlatformAppIdentifier> {
+	const nativeOptions = app.launchPreference?.options as NativeLaunchOptions;
+
+	const hasPath = isStringValue(options.path);
+
+	let identity: PlatformAppIdentifier | undefined;
+	if (
+		snapProvider.isEnabled() &&
+		nativeOptions?.type === "native" &&
+		!isEmpty(nativeOptions?.snap?.strategy)
+	) {
+		let path = options.path;
+		if (!hasPath && isStringValue(options.alias)) {
+			const appAsset = await fin.System.getAppAssetInfo({
+				alias: options.alias
+			});
+
+			path = await snapProvider.getAppAssetExecutablePath({
+				alias: appAsset.alias,
+				version: appAsset.version,
+				target: appAsset.target ?? ""
+			});
+		}
+
+		if (isStringValue(path)) {
+			if (!isStringValue(instanceId)) {
+				instanceId = app.instanceMode === "single" ? app.appId : randomUUID();
+			}
+
+			let args = nativeOptions.snap?.args;
+			if (!isStringValue(args) && isStringValue(options.arguments)) {
+				args = [options.arguments];
+			}
+
+			const launchIdentity = await snapProvider.launchApp(
+				path,
+				args,
+				nativeOptions.snap?.strategy,
+				app.appId,
+				instanceId
+			);
+
+			if (launchIdentity) {
+				identity = { uuid: fin.me.identity.uuid, name: launchIdentity, appId: app.appId };
+			} else {
+				logger.warn(
+					`The app with id ${app.appId} could not be launched with snap support, falling back to launch without snap`
+				);
+			}
+		} else {
+			logger.warn(
+				`The app with id ${app.appId} specifies a snap launch strategy, but it has neither a path property or app asset alias/version/target combination, falling back to launch without snap`
+			);
+		}
+	}
+
+	if (isEmpty(identity)) {
+		const launchIdentity = await fin.System.launchExternalProcess(options);
+		identity = { ...launchIdentity, appId: app.appId };
+	}
+
+	return identity;
 }

@@ -276,6 +276,22 @@
 			"required": ["alias"],
 			"type": "object"
 		},
+		"DelayStrategy": {
+			"additionalProperties": false,
+			"description": "A window launch discovery strategy that waits for the given time period, checks if a process has\na window and if so, captures that window and registers it with the Snap Server",
+			"properties": {
+				"delayMs": {
+					"description": "How to wait in milliseconds after process launch before looking for a window",
+					"type": "number"
+				},
+				"type": {
+					"const": "delay",
+					"type": "string"
+				}
+			},
+			"required": ["delayMs", "type"],
+			"type": "object"
+		},
 		"FDC3VTwoPointZeroAppDirectoryResponse": {
 			"additionalProperties": false,
 			"description": "The successful response expected from a FDC3 2.0 request when all applications are requested.",
@@ -423,11 +439,31 @@
 					"type": "boolean"
 				},
 				"options": {
-					"$ref": "#/definitions/ViewLaunchOptions",
+					"anyOf": [
+						{
+							"$ref": "#/definitions/ViewLaunchOptions"
+						},
+						{
+							"$ref": "#/definitions/NativeLaunchOptions"
+						}
+					],
 					"description": "Are there any app type specific options you would like to apply?"
 				}
 			},
 			"type": "object"
+		},
+		"LaunchStrategy": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/DelayStrategy"
+				},
+				{
+					"$ref": "#/definitions/WaitForWindowNameStrategy"
+				},
+				{
+					"$ref": "#/definitions/WaitForWindowClassStrategy"
+				}
+			]
 		},
 		"NativeAppDetails": {
 			"additionalProperties": false,
@@ -443,6 +479,23 @@
 				}
 			},
 			"required": ["path"],
+			"type": "object"
+		},
+		"NativeLaunchOptions": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to a native app",
+			"properties": {
+				"snap": {
+					"$ref": "#/definitions/SnapLaunchOptions",
+					"description": "If specified it indicates the native app should be included when snapping."
+				},
+				"type": {
+					"const": "native",
+					"description": "Native options type",
+					"type": "string"
+				}
+			},
+			"required": ["type"],
 			"type": "object"
 		},
 		"OnlineNativeAppDetails": {
@@ -486,6 +539,24 @@
 			"required": ["src"],
 			"type": "object"
 		},
+		"SnapLaunchOptions": {
+			"additionalProperties": false,
+			"description": "Additional options that apply to the app when used in a snap context",
+			"properties": {
+				"args": {
+					"description": "Snap requires args as a string array, not a single string like in app assets.\nSo we provide the ability to include them here.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"strategy": {
+					"$ref": "#/definitions/LaunchStrategy",
+					"description": "The strategy for launching and locating the application."
+				}
+			},
+			"type": "object"
+		},
 		"ViewLaunchOptions": {
 			"additionalProperties": false,
 			"description": "Additional options that apply to a view",
@@ -501,6 +572,46 @@
 				}
 			},
 			"required": ["type"],
+			"type": "object"
+		},
+		"WaitForWindowClassStrategy": {
+			"additionalProperties": false,
+			"description": "A window launch discovery strategy that looks for a window whose underlying OS class type matches the given regular expression.\nIt will timeout after the given time period if no window is found.",
+			"properties": {
+				"matchRegex": {
+					"description": "A regular expression string to match the window class against",
+					"type": "string"
+				},
+				"timeoutMs": {
+					"description": "The timeout period milliseconds after which the window search will be abandoned",
+					"type": "number"
+				},
+				"type": {
+					"const": "waitForWindowOfClass",
+					"type": "string"
+				}
+			},
+			"required": ["matchRegex", "timeoutMs", "type"],
+			"type": "object"
+		},
+		"WaitForWindowNameStrategy": {
+			"additionalProperties": false,
+			"description": "A window launch discovery strategy that looks for a window whose caption matches the given regular expression.\nIt will timeout after the given time period if no window is found.",
+			"properties": {
+				"matchRegex": {
+					"description": "A regular expression string to match the window caption against",
+					"type": "string"
+				},
+				"timeoutMs": {
+					"description": "The timeout period milliseconds after which the window search will be abandoned",
+					"type": "number"
+				},
+				"type": {
+					"const": "waitForWindowOfName",
+					"type": "string"
+				}
+			},
+			"required": ["matchRegex", "timeoutMs", "type"],
 			"type": "object"
 		},
 		"WebAppDetails": {

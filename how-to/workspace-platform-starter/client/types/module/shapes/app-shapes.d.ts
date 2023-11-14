@@ -1,5 +1,6 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import type { LaunchStrategy } from "@openfin/snap-sdk";
 import type { App } from "@openfin/workspace";
 import type { AppInterop } from "./fdc3-2-0-shapes";
 /**
@@ -96,12 +97,12 @@ export interface LaunchPreference {
 	/**
 	 * Are there any app type specific options you would like to apply?
 	 */
-	options?: ViewLaunchOptions;
+	options?: ViewLaunchOptions | NativeLaunchOptions;
 }
 /**
  * The list of Launch Option Types
  */
-export type LaunchOptionsType = "view";
+export type LaunchOptionsType = "view" | "native";
 /**
  * The base LaunchOption type.
  */
@@ -123,6 +124,19 @@ export interface ViewLaunchOptions extends LaunchOptions {
 	 * If specified it indicates wish to specify specific host settings for this content.
 	 */
 	host?: HostLaunchOptions;
+}
+/**
+ * Additional options that apply to a native app
+ */
+export interface NativeLaunchOptions extends LaunchOptions {
+	/**
+	 * Native options type
+	 */
+	type: "native";
+	/**
+	 * If specified it indicates the native app should be included when snapping.
+	 */
+	snap?: SnapLaunchOptions;
 }
 /**
  * Additional options that apply to the host of the content
@@ -158,6 +172,20 @@ export interface HostLaunchOptions {
 	 * If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?
 	 */
 	pageIcon?: string;
+}
+/**
+ * Additional options that apply to the app when used in a snap context
+ */
+export interface SnapLaunchOptions {
+	/**
+	 * Snap requires args as a string array, not a single string like in app assets.
+	 * So we provide the ability to include them here.
+	 */
+	args?: string[];
+	/**
+	 * The strategy for launching and locating the application.
+	 */
+	strategy?: LaunchStrategy;
 }
 /**
  * We define the app interop app for the platform in case we want to extend its
