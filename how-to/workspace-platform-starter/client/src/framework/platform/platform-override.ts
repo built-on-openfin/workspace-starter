@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import type { LayoutClient } from "@openfin/snap-sdk";
 import {
 	getCurrentSync,
 	type AnalyticsEvent,
@@ -144,7 +145,7 @@ export function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
-			let existingApps: string[] | undefined;
+			let existingApps: LayoutClient[] | undefined;
 			if (snapProvider.isEnabled()) {
 				existingApps = await snapProvider.prepareToApplyDecoratedSnapshot();
 			}

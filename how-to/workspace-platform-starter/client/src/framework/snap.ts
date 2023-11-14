@@ -9,7 +9,7 @@ import type { SnapProviderOptions } from "./shapes";
 import { formatError, isEmpty } from "./utils";
 
 const logger = createLogger("Snap");
-const NATIVE_APP_PREFIX = "@app";
+const NATIVE_APP_PREFIX = "app:";
 
 let server: Snap.SnapServer | undefined;
 let isSnapEnabled: boolean = false;
@@ -122,7 +122,7 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
  * Prepare to apply a decorated snapshot.
  * @returns List of existing app ids with their windows.
  */
-export async function prepareToApplyDecoratedSnapshot(): Promise<string[]> {
+export async function prepareToApplyDecoratedSnapshot(): Promise<Snap.LayoutClient[]> {
 	try {
 		if (server) {
 			// Don't call prepareToApplySnapshot as this will unregister all the existing clients
@@ -138,7 +138,7 @@ export async function prepareToApplyDecoratedSnapshot(): Promise<string[]> {
 			};
 			await server.setLayout(appOnlyLayout);
 
-			return appOnlyLayout.clients.map((c) => c.id);
+			return appOnlyLayout.clients;
 		}
 	} catch (error) {
 		console.error("Failed to prepare decorated snapshot.", formatError(error));
@@ -149,94 +149,91 @@ export async function prepareToApplyDecoratedSnapshot(): Promise<string[]> {
 /**
  * Apply a decorated snapshot.
  * @param snapshot The snapshot to apply.
- * @param existingAppIds A list of the existing app ids.
+ * @param existingApps A list of the existing apps registered with snap.
  */
 export async function applyDecoratedSnapshot(
 	snapshot: OpenFin.Snapshot,
-	existingAppIds: string[]
+	existingApps: Snap.LayoutClient[]
 ): Promise<void> {
 	try {
-		if (server) {
-			const snapSnapshot = snapshot as Snap.SnapSnapshot;
+		const snapSnapshot = snapshot as Snap.SnapSnapshot;
 
-			const clients = snapSnapshot.snap?.clients;
-			const connections = snapSnapshot.snap?.connections;
-			if (Array.isArray(clients)) {
-				const remainingClients: Snap.LayoutClient[] = [];
-				const launchClients: Snap.LayoutClient[] = [];
+		if (server && !isEmpty(snapSnapshot.snap)) {
+			const remainingClients: Snap.LayoutClient[] = [];
+			const launchClients: Snap.LayoutClient[] = [];
 
-				// First pass use existing apps that match the appId and instanceId
-				for (const client of clients) {
-					if (client.id.startsWith(NATIVE_APP_PREFIX)) {
-						const existingAppIndex = existingAppIds.indexOf(client.id);
-						if (existingAppIndex >= 0) {
-							// The app is already launched so no need to launch it again
-							// remove it from the list
-							existingAppIds.splice(existingAppIndex, 1);
-						} else {
-							remainingClients.push(client);
-						}
-					}
-				}
-
-				// All we have remaining are apps that don't match exactly
-				// see if there are any that match just the app id
-				for (const client of remainingClients) {
-					const parts = client.id.split("/");
-					const appId = parts[1];
-
-					const existingAppIndex = existingAppIds.findIndex((e) => e.includes(`/${appId}/`));
+			// First pass use existing apps that match the appId and instanceId
+			for (const client of snapSnapshot.snap.clients) {
+				if (client.id.startsWith(NATIVE_APP_PREFIX)) {
+					const existingAppIndex = existingApps.findIndex((c) => c.id === client.id);
 					if (existingAppIndex >= 0) {
-						// We found a matching app, so substitute the instance id into the snapshot data
-						// updating both the connection and the client id
-						if (Array.isArray(connections)) {
-							for (const connection of connections) {
-								// TODO - Remove these any casts when the TS defs are corrected in snap sdk
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any
-								if ((connection as any).attachedClientId === client.id) {
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any
-									(connection as any).attachedClientId = existingAppIds[existingAppIndex];
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any
-								} else if ((connection as any).targetClientId === client.id) {
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any
-									(connection as any).targetClientId = existingAppIds[existingAppIndex];
-								}
-							}
-						}
-						client.id = existingAppIds[existingAppIndex];
-
-						existingAppIds.splice(existingAppIndex, 1);
+						// The app is already launched so no need to launch it again
+						// remove it from the list
+						existingApps.splice(existingAppIndex, 1);
 					} else {
-						// No existing matching appIds we can use, so the app will need launching
-						launchClients.push(client);
+						remainingClients.push(client);
 					}
 				}
+			}
 
-				// TODO - The existingAppIds might have remaining entries, maybe we should close them down ?
-				// This will need a snap extension to achieve this.
+			// All we have remaining are apps that don't match exactly
+			// see if there are any that match just the app id
+			for (const client of remainingClients) {
+				const parts = client.id.split("/");
+				const appId = parts[1];
 
-				// Now launch the remaining apps
-				for (const launchClient of launchClients) {
-					const parts = launchClient.id.split("/");
-					const appId = parts[1];
-					const instanceId = parts[2];
-
-					const app = await getApp(appId);
-					if (app) {
-						if (
-							app.manifestType === MANIFEST_TYPES.External.id ||
-							app.manifestType === MANIFEST_TYPES.InlineExternal.id
-						) {
-							await launchExternal(app, instanceId);
-						} else if (
-							app.manifestType === MANIFEST_TYPES.Appasset.id ||
-							app.manifestType === MANIFEST_TYPES.InlineAppAsset.id
-						) {
-							await launchAppAsset(app, instanceId);
+				const existingAppIndex = existingApps.findIndex((e) => e.id.includes(`/${appId}/`));
+				if (existingAppIndex >= 0) {
+					// We found a matching app, so substitute the instance id into the snapshot data
+					// updating both the connection and the client id
+					for (const connection of snapSnapshot.snap.connections) {
+						// TODO - Remove these any casts when the TS defs are corrected in snap sdk
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						if ((connection as any).attachedClientId === client.id) {
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							(connection as any).attachedClientId = existingApps[existingAppIndex];
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						} else if ((connection as any).targetClientId === client.id) {
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							(connection as any).targetClientId = existingApps[existingAppIndex];
 						}
-					} else {
-						logger.error(`Unable to find app with id ${appId} to relaunch it`);
 					}
+					client.id = existingApps[existingAppIndex].id;
+
+					existingApps.splice(existingAppIndex, 1);
+				} else {
+					// No existing matching appIds we can use, so the app will need launching
+					launchClients.push(client);
+				}
+			}
+
+			// For all remaining apps that we haven't used add them in to the layout minimized
+			for (const existingApp of existingApps) {
+				existingApp.state = "minimized";
+				snapSnapshot.snap.clients.push(existingApp);
+			}
+
+			// Now launch the remaining apps
+			for (const launchClient of launchClients) {
+				const parts = launchClient.id.split("/");
+				const appId = parts[1];
+				const instanceId = parts[2];
+
+				const app = await getApp(appId);
+				if (app) {
+					if (
+						app.manifestType === MANIFEST_TYPES.External.id ||
+						app.manifestType === MANIFEST_TYPES.InlineExternal.id
+					) {
+						await launchExternal(app, instanceId);
+					} else if (
+						app.manifestType === MANIFEST_TYPES.Appasset.id ||
+						app.manifestType === MANIFEST_TYPES.InlineAppAsset.id
+					) {
+						await launchAppAsset(app, instanceId);
+					}
+				} else {
+					logger.error(`Unable to find app with id ${appId} to relaunch it`);
 				}
 			}
 

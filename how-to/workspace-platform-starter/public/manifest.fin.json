@@ -1553,7 +1553,7 @@
 			]
 		},
 		"snapProvider": {
-			"enabled": true,
+			"enabled": false,
 			"id": "workspace-platform-starter",
 			"serverAssetInfo": {
 				"src": "SNAP_ASSET_URL",
