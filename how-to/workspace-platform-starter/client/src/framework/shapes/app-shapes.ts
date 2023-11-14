@@ -202,6 +202,12 @@ export interface HostLaunchOptions {
  */
 export interface SnapLaunchOptions {
 	/**
+	 * Snap requires args as a string array, not a single string like in app assets.
+	 * So we provide the ability to include them here.
+	 */
+	args?: string[];
+
+	/**
 	 * The strategy for launching and locating the application.
 	 */
 	strategy?: LaunchStrategy;

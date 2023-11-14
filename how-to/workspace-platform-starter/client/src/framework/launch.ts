@@ -651,9 +651,13 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 /**
  * Launch an app asset for the platform app.
  * @param appAssetApp The app to launch app asset view for.
+ * @param instanceId Provide an instance id for the app being launched.
  * @returns The identities of the snapshot parts launched.
  */
-async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
+export async function launchAppAsset(
+	appAssetApp: PlatformApp,
+	instanceId?: string
+): Promise<PlatformAppIdentifier | undefined> {
 	const options: OpenFin.ExternalProcessRequestType = {};
 	logger.info(`Request to launch app asset app of type ${appAssetApp.manifestType}`);
 	if (appAssetApp.manifestType === MANIFEST_TYPES.Appasset.id) {
@@ -683,7 +687,7 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 	}
 	try {
 		logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
-		const identity = await launchExternalProcess(appAssetApp, options);
+		const identity = await launchExternalProcess(appAssetApp, options, instanceId);
 		logger.info(
 			`External app with appId: ${appAssetApp.appId} launched with the following identity`,
 			identity
@@ -697,9 +701,13 @@ async function launchAppAsset(appAssetApp: PlatformApp): Promise<PlatformAppIden
 /**
  * Launch an external for the platform app.
  * @param externalApp The app to launch external view for.
+ * @param instanceId Provide an instance id for the app being launched.
  * @returns The identities of the app parts launched.
  */
-async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
+export async function launchExternal(
+	externalApp: PlatformApp,
+	instanceId?: string
+): Promise<PlatformAppIdentifier | undefined> {
 	let options: OpenFin.ExternalProcessRequestType = {};
 	logger.info(`Request to external app of type ${externalApp.manifestType}`);
 	if (externalApp.manifestType === MANIFEST_TYPES.External.id) {
@@ -720,7 +728,7 @@ async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIden
 			`Launching external app asset with appId: ${externalApp.appId} with the following options:`,
 			options
 		);
-		const identity = await launchExternalProcess(externalApp, options);
+		const identity = await launchExternalProcess(externalApp, options, instanceId);
 		logger.info(
 			`External app with appId: ${externalApp.appId} launched with the following identity`,
 			identity
@@ -735,12 +743,14 @@ async function launchExternal(externalApp: PlatformApp): Promise<PlatformAppIden
  * Launch an external process either in regular or snap mode.
  * @param app The app being launched.
  * @param options The launch options.
+ * @param instanceId Provide an instance id for the app being launched.
  * @returns The identity of the process.
  */
 async function launchExternalProcess(
 	app: PlatformApp,
-	options: OpenFin.ExternalProcessRequestType
-): Promise<PlatformAppIdentifier | undefined> {
+	options: OpenFin.ExternalProcessRequestType,
+	instanceId?: string
+): Promise<PlatformAppIdentifier> {
 	const nativeOptions = app.launchPreference?.options as NativeLaunchOptions;
 
 	const hasPath = isStringValue(options.path);
@@ -765,17 +775,34 @@ async function launchExternalProcess(
 		}
 
 		if (isStringValue(path)) {
+			if (!isStringValue(instanceId)) {
+				instanceId = app.instanceMode === "single" ? app.appId : randomUUID();
+			}
+
+			let args = nativeOptions.snap?.args;
+			if (!isStringValue(args) && isStringValue(options.arguments)) {
+				args = [options.arguments];
+			}
+
 			const launchIdentity = await snapProvider.launchApp(
 				path,
-				options.arguments,
+				args,
 				nativeOptions.snap?.strategy,
 				app.appId,
-				app.instanceMode === "single" ? app.appId : randomUUID()
+				instanceId
 			);
 
 			if (launchIdentity) {
 				identity = { uuid: fin.me.identity.uuid, name: launchIdentity, appId: app.appId };
+			} else {
+				logger.warn(
+					`The app with id ${app.appId} could not be launched with snap support, falling back to launch without snap`
+				);
 			}
+		} else {
+			logger.warn(
+				`The app with id ${app.appId} specifies a snap launch strategy, but it has neither a path property or app asset alias/version/target combination, falling back to launch without snap`
+			);
 		}
 	}
 

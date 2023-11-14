@@ -1,8 +1,8 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import type { LaunchStrategy } from "@openfin/snap-sdk";
 import type { App } from "@openfin/workspace";
 import type { AppInterop } from "./fdc3-2-0-shapes";
-import * as Snap from "@openfin/snap-sdk";
 /**
  * Definition for application with extended properties.
  */
@@ -178,9 +178,14 @@ export interface HostLaunchOptions {
  */
 export interface SnapLaunchOptions {
 	/**
+	 * Snap requires args as a string array, not a single string like in app assets.
+	 * So we provide the ability to include them here.
+	 */
+	args?: string[];
+	/**
 	 * The strategy for launching and locating the application.
 	 */
-	strategy?: Snap.LaunchStrategy;
+	strategy?: LaunchStrategy;
 }
 /**
  * We define the app interop app for the platform in case we want to extend its

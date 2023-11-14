@@ -144,14 +144,15 @@ export function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
+			let existingApps: string[] | undefined;
 			if (snapProvider.isEnabled()) {
-				await snapProvider.prepareToApplyDecoratedSnapshot();
+				existingApps = await snapProvider.prepareToApplyDecoratedSnapshot();
 			}
 
 			await super.applySnapshot(payload, identity);
 
 			if (snapProvider.isEnabled()) {
-				await snapProvider.applyDecoratedSnapshot(payload.snapshot);
+				await snapProvider.applyDecoratedSnapshot(payload.snapshot, existingApps ?? []);
 			}
 
 			// Use the decorated snapshot to open any connected clients
