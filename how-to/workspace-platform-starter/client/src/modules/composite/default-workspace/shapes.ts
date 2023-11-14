@@ -11,6 +11,7 @@ export interface DefaultWorkspaceProviderOptions {
 		include?: boolean;
 		menuLabel?: string;
 		menuIcon?: string;
+		lastActiveWorkspaceLabel?: string;
 	};
 
 	/**

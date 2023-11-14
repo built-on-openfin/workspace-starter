@@ -87,6 +87,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 			const savedDefaultWorkspaceId: string = currentDefaultWorkspace.workspaceId;
 
 			const workspaces: Workspace[] = await platform.Storage.getWorkspaces();
+			const currentWorkspace: Workspace = await platform.getCurrentWorkspace();
 			workspaces.sort((a, b) => a.title.localeCompare(b.title));
 			const defaultWorkspaceMenuEntry: MenuEntry = {
 				include: true,
@@ -107,7 +108,8 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 				icon: this._settings?.reset?.menuIcon,
 				visible: includeReset,
 				enabled: useLastActiveWorkspaceSet || isStringValue(savedDefaultWorkspaceId),
-				type: "normal",
+				checked: !useLastActiveWorkspaceSet && !isStringValue(savedDefaultWorkspaceId),
+				type: "checkbox",
 				data: {
 					type: "Custom" as GlobalContextMenuOptionType.Custom,
 					action: {
@@ -126,23 +128,29 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 				icon: this._settings?.lastActive?.menuIcon,
 				visible: includeLastActive,
 				checked: useLastActiveWorkspaceSet,
+				enabled: !useLastActiveWorkspaceSet,
 				type: "checkbox",
 				data: {
 					type: "Custom" as GlobalContextMenuOptionType.Custom,
 					action: {
 						id: "set-default-workspace",
 						customData: {
-							workspaceId: "",
+							workspaceId: currentWorkspace?.workspaceId ?? "",
 							useLastActiveWorkspace: true
 						}
 					}
 				}
 			});
 			if (workspaces.length > 0) {
+				const lastActiveWorkspaceLabel =
+					this._settings?.lastActive?.lastActiveWorkspaceLabel ?? " [Active Workspace]";
 				for (const workspace of workspaces) {
 					defaultWorkspaceMenuEntry.submenu?.push({
-						label: workspace.title,
-						enabled: workspace.workspaceId !== savedDefaultWorkspaceId,
+						label:
+							useLastActiveWorkspaceSet && workspace.workspaceId === savedDefaultWorkspaceId
+								? `${workspace.title} ${lastActiveWorkspaceLabel}`
+								: workspace.title,
+						enabled: workspace.workspaceId !== savedDefaultWorkspaceId || useLastActiveWorkspaceSet,
 						checked: !useLastActiveWorkspaceSet && workspace.workspaceId === savedDefaultWorkspaceId,
 						type: "checkbox",
 						data: {
