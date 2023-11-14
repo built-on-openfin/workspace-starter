@@ -87,6 +87,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 			const savedDefaultWorkspaceId: string = currentDefaultWorkspace.workspaceId;
 
 			const workspaces: Workspace[] = await platform.Storage.getWorkspaces();
+			const currentWorkspace: Workspace = await platform.getCurrentWorkspace();
 			workspaces.sort((a, b) => a.title.localeCompare(b.title));
 			const defaultWorkspaceMenuEntry: MenuEntry = {
 				include: true,
@@ -134,7 +135,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 					action: {
 						id: "set-default-workspace",
 						customData: {
-							workspaceId: "",
+							workspaceId: currentWorkspace?.workspaceId ?? "",
 							useLastActiveWorkspace: true
 						}
 					}
