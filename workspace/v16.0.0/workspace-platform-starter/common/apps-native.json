@@ -25,7 +25,19 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/images/previews/native/openfin-winform-interop.png"
 			}
 		],
-		"tags": ["native", "appasset", "dock", "developer"]
+		"tags": ["native", "appasset", "dock", "developer"],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "waitForWindowOfName",
+						"timeoutMs": 2000,
+						"matchRegex": "^Interop Example Tool"
+					}
+				}
+			}
+		}
 	},
 	{
 		"appId": "Notepad",
