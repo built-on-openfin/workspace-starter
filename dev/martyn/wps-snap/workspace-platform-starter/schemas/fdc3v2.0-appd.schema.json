@@ -543,6 +543,13 @@
 			"additionalProperties": false,
 			"description": "Additional options that apply to the app when used in a snap context",
 			"properties": {
+				"args": {
+					"description": "Snap requires args as a string array, not a single string like in app assets.\nSo we provide the ability to include them here.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
 				"strategy": {
 					"$ref": "#/definitions/LaunchStrategy",
 					"description": "The strategy for launching and locating the application."
