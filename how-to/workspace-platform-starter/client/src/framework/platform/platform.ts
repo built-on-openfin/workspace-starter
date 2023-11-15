@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
 	init as workspacePlatformInit,
@@ -10,6 +11,7 @@ import * as auth from "../auth";
 import * as authFlow from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
+import * as contentCreationProvider from "../content-creation";
 import * as endpointProvider from "../endpoint";
 import * as favoriteProvider from "../favorite";
 import * as initOptionsProvider from "../init-options";
@@ -165,6 +167,16 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	await snapProvider.init(customSettings?.snapProvider);
 	conditionsProvider.registerCondition("snap", async () => snapProvider.isEnabled(), false);
+
+	await contentCreationProvider.init(customSettings.contentCreationProvider, helpers);
+
+	if (contentCreationProvider.isEnabled()) {
+		browser.defaultViewOptions = browser.defaultViewOptions ?? ({} as OpenFin.ViewOptions);
+		await contentCreationProvider.populateRules(browser.defaultViewOptions);
+
+		browser.defaultWindowOptions = browser.defaultWindowOptions ?? {};
+		await contentCreationProvider.populateRules(browser.defaultWindowOptions);
+	}
 
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => {

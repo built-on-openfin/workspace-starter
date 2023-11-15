@@ -1563,6 +1563,33 @@
 				"target": "OpenFinSnap.exe"
 			},
 			"showDebugWindow": false
+		},
+		"contentCreationProvider": {
+			"modules": [
+				{
+					"id": "example-content-creation",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Example Content Creation",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/content-creation/example.bundle.js",
+					"data": {
+						"rules": [
+							{
+								"behavior": "window",
+								"match": ["https://www.newscientist.com/*"],
+								"options": {
+									"defaultWidth": 800,
+									"defaultHeight": 600
+								}
+							},
+							{
+								"behavior": "view",
+								"match": ["https://www.scientificamerican.com/*"]
+							}
+						]
+					}
+				}
+			]
 		}
 	}
 }

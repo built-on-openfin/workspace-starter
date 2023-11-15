@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/brace-style */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	NotificationActionEvent,
@@ -276,30 +274,30 @@ export class ExampleNotificationServiceProvider
 	/**
 	 * Setup listeners using the notification client fetched via a helper.
 	 */
-	private async setupNotificationEventListeners() {
+	private async setupNotificationEventListeners(): Promise<void> {
 		if (!isEmpty(this._notificationClient) && !isEmpty(this._notificationSubscriptions)) {
-			const actionEventHandler = (event: NotificationActionEvent) => {
+			const actionEventHandler = (event: NotificationActionEvent): void => {
 				this._logger?.info("Event for notification action received.", event);
 			};
 
 			await this._notificationClient.addEventListener("notification-action", actionEventHandler);
 			this._notificationSubscriptions["notification-action"] = actionEventHandler;
 
-			const closedEventHandler = (event: NotificationClosedEvent) => {
+			const closedEventHandler = (event: NotificationClosedEvent): void => {
 				this._logger?.info("Event for notification closed received.", event);
 			};
 
 			await this._notificationClient.addEventListener("notification-closed", closedEventHandler);
 			this._notificationSubscriptions["notification-closed"] = closedEventHandler;
 
-			const createdEventHandler = (event: NotificationCreatedEvent) => {
+			const createdEventHandler = (event: NotificationCreatedEvent): void => {
 				this._logger?.info("Event for notification created received.", event);
 			};
 
 			await this._notificationClient.addEventListener("notification-created", createdEventHandler);
 			this._notificationSubscriptions["notification-created"] = createdEventHandler;
 
-			const formSubmittedEventHandler = (event: NotificationFormSubmittedEvent) => {
+			const formSubmittedEventHandler = (event: NotificationFormSubmittedEvent): void => {
 				this._logger?.info("Event for notification form submitted received.", event);
 			};
 
@@ -309,7 +307,7 @@ export class ExampleNotificationServiceProvider
 			);
 			this._notificationSubscriptions["notification-form-submitted"] = formSubmittedEventHandler;
 
-			const reminderCreatedEventHandler = (event: NotificationReminderCreatedEvent) => {
+			const reminderCreatedEventHandler = (event: NotificationReminderCreatedEvent): void => {
 				this._logger?.info("Event for notification reminder created received.", event);
 			};
 
@@ -319,7 +317,7 @@ export class ExampleNotificationServiceProvider
 			);
 			this._notificationSubscriptions["notification-reminder-created"] = reminderCreatedEventHandler;
 
-			const reminderRemovedEventHandler = (event: NotificationReminderRemovedEvent) => {
+			const reminderRemovedEventHandler = (event: NotificationReminderRemovedEvent): void => {
 				this._logger?.info("Event for notification reminder removed received.", event);
 			};
 
@@ -329,7 +327,7 @@ export class ExampleNotificationServiceProvider
 			);
 			this._notificationSubscriptions["notification-reminder-removed"] = reminderRemovedEventHandler;
 
-			const toastDismissedEventHandler = (event: NotificationToastDismissedEvent) => {
+			const toastDismissedEventHandler = (event: NotificationToastDismissedEvent): void => {
 				this._logger?.info("Event for notification toast dismissed received.", event);
 			};
 
@@ -339,7 +337,7 @@ export class ExampleNotificationServiceProvider
 			);
 			this._notificationSubscriptions["notification-toast-dismissed"] = toastDismissedEventHandler;
 
-			const notificationsCountChangedEventHandler = (event: NotificationsCountChanged) => {
+			const notificationsCountChangedEventHandler = (event: NotificationsCountChanged): void => {
 				this._logger?.info("Event for notification count changed received.", event);
 			};
 
@@ -354,7 +352,7 @@ export class ExampleNotificationServiceProvider
 	/**
 	 * Clean up notification subscriptions.
 	 */
-	private async removeNotificationEventListeners() {
+	private async removeNotificationEventListeners(): Promise<void> {
 		if (!isEmpty(this._notificationClient) && !isEmpty(this._notificationSubscriptions)) {
 			for (const [key, value] of Object.entries(this._notificationSubscriptions)) {
 				await this._notificationClient.removeEventListener(

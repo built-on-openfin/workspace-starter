@@ -524,7 +524,7 @@ module.exports = {
 				'@typescript-eslint/ban-ts-comment': ['error'],
 				'@typescript-eslint/ban-tslint-comment': ['off'],
 				'@typescript-eslint/ban-types': ['error'],
-				'@typescript-eslint/brace-style': ['error'],
+				'@typescript-eslint/brace-style': ['off'],
 				'@typescript-eslint/class-literal-property-style': ['error'],
 				'@typescript-eslint/comma-spacing': ['error'],
 				'@typescript-eslint/no-confusing-void-expression': ['off'],
