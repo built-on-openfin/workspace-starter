@@ -73,8 +73,8 @@ const s = window.fin,
 			return i
 				? this.selectedText.replace('{0}', s)
 				: t === this.contextGroupId
-				? this.leaveText.replace('{0}', s)
-				: this.joinText.replace('{0}', s);
+				  ? this.leaveText.replace('{0}', s)
+				  : this.joinText.replace('{0}', s);
 		}
 		async setupContextPicker() {
 			if (void 0 !== s) {
@@ -148,50 +148,50 @@ const s = window.fin,
 						)
 				  )
 				: void 0 === this.contextGroupId
-				? i(
-						'div',
-						null,
-						i(
-							'span',
-							this.showListOnClick
-								? {
-										onClick: this.showContextList.bind(this),
-										title: this.unselectedText,
-										style: {
-											padding: '0px 5px',
-											color: `${this.unselectedColor}`
-										}
-								  }
-								: {
-										onMouseEnter: this.showContextList.bind(this),
-										title: this.unselectedText,
-										style: {
-											padding: '0px 5px',
-											color: `${this.unselectedColor}`
-										}
-								  },
-							'⬤'
-						)
-				  )
-				: i(
-						'div',
-						{ id: 'selected-context' },
-						i(
-							'span',
-							this.showListOnClick
-								? {
-										onClick: this.showContextList.bind(this),
-										title: this.getContextGroupTooltip(this.contextGroupId, !0),
-										style: { padding: '0px 5px', color: `${this.iconColor}` }
-								  }
-								: {
-										onMouseEnter: this.showContextList.bind(this),
-										title: this.getContextGroupTooltip(this.contextGroupId, !0),
-										style: { padding: '0px 5px', color: `${this.iconColor}` }
-								  },
-							'⬤'
-						)
-				  );
+				  ? i(
+							'div',
+							null,
+							i(
+								'span',
+								this.showListOnClick
+									? {
+											onClick: this.showContextList.bind(this),
+											title: this.unselectedText,
+											style: {
+												padding: '0px 5px',
+												color: `${this.unselectedColor}`
+											}
+									  }
+									: {
+											onMouseEnter: this.showContextList.bind(this),
+											title: this.unselectedText,
+											style: {
+												padding: '0px 5px',
+												color: `${this.unselectedColor}`
+											}
+									  },
+								'⬤'
+							)
+				    )
+				  : i(
+							'div',
+							{ id: 'selected-context' },
+							i(
+								'span',
+								this.showListOnClick
+									? {
+											onClick: this.showContextList.bind(this),
+											title: this.getContextGroupTooltip(this.contextGroupId, !0),
+											style: { padding: '0px 5px', color: `${this.iconColor}` }
+									  }
+									: {
+											onMouseEnter: this.showContextList.bind(this),
+											title: this.getContextGroupTooltip(this.contextGroupId, !0),
+											style: { padding: '0px 5px', color: `${this.iconColor}` }
+									  },
+								'⬤'
+							)
+				    );
 		}
 	};
 e.style =
