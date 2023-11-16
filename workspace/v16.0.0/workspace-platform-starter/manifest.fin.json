@@ -1563,6 +1563,33 @@
 				"target": "OpenFinSnap.exe"
 			},
 			"showDebugWindow": false
+		},
+		"contentCreationProvider": {
+			"modules": [
+				{
+					"id": "view-position-content-creation",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/favicon.ico",
+					"title": "View Position Content Creation",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/js/modules/content-creation/view-position.bundle.js",
+					"data": {
+						"rules": [
+							{
+								"behavior": "window",
+								"match": ["https://www.newscientist.com/*"],
+								"options": {
+									"defaultWidth": 800,
+									"defaultHeight": 600
+								}
+							},
+							{
+								"behavior": "view",
+								"match": ["https://www.scientificamerican.com/*"]
+							}
+						]
+					}
+				}
+			]
 		}
 	}
 }

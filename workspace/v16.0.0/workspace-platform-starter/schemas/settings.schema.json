@@ -727,6 +727,10 @@
         "ContentCreationOptions": {
             "$ref": "#/definitions/__type_4"
         },
+        "ContentCreationProviderOptions": {
+            "$ref": "#/definitions/ModuleList_5",
+            "description": "List of modules."
+        },
         "ContentCreationRule<ContentCreationBehaviorNames>": {
             "additionalProperties": false,
             "description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled.",
@@ -1011,6 +1015,10 @@
                 "connectionProvider": {
                     "$ref": "#/definitions/ConnectionProviderOptions",
                     "description": "The connection provider options."
+                },
+                "contentCreationProvider": {
+                    "$ref": "#/definitions/ContentCreationProviderOptions",
+                    "description": "The settings required to enable the content creation features."
                 },
                 "dockProvider": {
                     "$ref": "#/definitions/DockProviderOptions",
@@ -3041,6 +3049,20 @@
         "ModuleList_4": {
             "additionalProperties": false,
             "description": "This is a list of modules that allow you to hook into the lifecycle events exposed by the platform. A good example\nmight be you wish to register a module that is called when an authenticated session is expired",
+            "properties": {
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ModuleList_5": {
+            "additionalProperties": false,
+            "description": "A list of modules that provide content creation rules.",
             "properties": {
                 "modules": {
                     "description": "The list of modules.",
