@@ -227,7 +227,8 @@ export type ModuleTypes =
 	| "conditions"
 	| "lifecycle"
 	| "analytics"
-	| "menus";
+	| "menus"
+	| "contentCreation";
 /**
  * The definition of a module with typed entry points.
  */

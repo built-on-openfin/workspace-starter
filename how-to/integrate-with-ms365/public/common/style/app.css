@@ -251,6 +251,7 @@ button.plain:not(:disabled):not(:read-only):hover {
 }
 
 button.small,
+a.button.small,
 ::-webkit-file-upload-button,
 td button {
 	padding: 5px 10px;

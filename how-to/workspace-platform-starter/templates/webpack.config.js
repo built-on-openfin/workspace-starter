@@ -284,6 +284,34 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './templates/src/content-creation/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'content-creation.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 
