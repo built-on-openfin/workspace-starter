@@ -1567,11 +1567,11 @@
 		"contentCreationProvider": {
 			"modules": [
 				{
-					"id": "example-content-creation",
+					"id": "view-position-content-creation",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/content-creation-rules/workspace-platform-starter/favicon.ico",
-					"title": "Example Content Creation",
+					"title": "View Position Content Creation",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/content-creation-rules/workspace-platform-starter/js/modules/content-creation/example.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/content-creation-rules/workspace-platform-starter/js/modules/content-creation/view-position.bundle.js",
 					"data": {
 						"rules": [
 							{

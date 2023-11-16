@@ -303,7 +303,7 @@
 		"title": "Content Creation Examples",
 		"description": "An example of using content creation rules to launch views/windows.",
 		"manifest": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/content-creation-rules/workspace-platform-starter/common/views/content-creation/example.html"
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/content-creation-rules/workspace-platform-starter/common/views/content-creation/view-position.html"
 		},
 		"manifestType": "inline-view",
 		"icons": [
