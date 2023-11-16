@@ -7,12 +7,14 @@ import type {
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
-import type { ExampleContentCreationSettings } from "./shapes";
+import type { ViewPositionContentCreationSettings } from "./shapes";
 
 /**
- * Implementation for the example content creation provider.
+ * Implementation for the view position content creation provider.
  */
-export class ExampleContentCreationProvider implements ContentCreationRules<ExampleContentCreationSettings> {
+export class ViewPositionContentCreationProvider
+	implements ContentCreationRules<ViewPositionContentCreationSettings>
+{
 	/**
 	 * The logger for displaying information from the module.
 	 * @internal
@@ -29,7 +31,7 @@ export class ExampleContentCreationProvider implements ContentCreationRules<Exam
 	 * The settings for the menu.
 	 * @internal
 	 */
-	private _settings: ExampleContentCreationSettings | undefined;
+	private _settings: ViewPositionContentCreationSettings | undefined;
 
 	/**
 	 * Initialize the module.
@@ -39,11 +41,11 @@ export class ExampleContentCreationProvider implements ContentCreationRules<Exam
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<ExampleContentCreationSettings>,
+		definition: ModuleDefinition<ViewPositionContentCreationSettings>,
 		loggerCreator: LoggerCreator,
 		helpers: ModuleHelpers
 	): Promise<void> {
-		this._logger = loggerCreator("ExampleContentCreationProvider");
+		this._logger = loggerCreator("ViewPositionContentCreationProvider");
 		this._settings = definition.data;
 		this._helpers = helpers;
 	}

@@ -110,12 +110,12 @@ await parentTabStack.addView(event.childOptions, {
 });
 ```
 
-There is an example module linked in the Source Reference which demonstrates this type of handling.
+There is an module linked in the Source Reference which demonstrates this type of handling.
 
 ## Source Reference
 
 - [content-creation.ts](../client/src/framework/content-creation.ts)
-- [example module](../client/src/modules/content-creation/example/content-creation.ts)
-- [example html](../public/common/views/content-creation/example.html)
+- [view position example module](../client/src/modules/content-creation/view-position/content-creation.ts)
+- [view position html](../public/common/views/content-creation/view-position.html)
 
 [<- Back to Table Of Contents](../README.md)

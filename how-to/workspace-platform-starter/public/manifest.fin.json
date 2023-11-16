@@ -1567,11 +1567,11 @@
 		"contentCreationProvider": {
 			"modules": [
 				{
-					"id": "example-content-creation",
+					"id": "view-position-content-creation",
 					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Example Content Creation",
+					"title": "View Position Content Creation",
 					"enabled": false,
-					"url": "http://localhost:8080/js/modules/content-creation/example.bundle.js",
+					"url": "http://localhost:8080/js/modules/content-creation/view-position.bundle.js",
 					"data": {
 						"rules": [
 							{

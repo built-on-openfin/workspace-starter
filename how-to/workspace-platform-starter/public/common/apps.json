@@ -303,7 +303,7 @@
 		"title": "Content Creation Examples",
 		"description": "An example of using content creation rules to launch views/windows.",
 		"manifest": {
-			"url": "http://localhost:8080/common/views/content-creation/example.html"
+			"url": "http://localhost:8080/common/views/content-creation/view-position.html"
 		},
 		"manifestType": "inline-view",
 		"icons": [

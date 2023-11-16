@@ -847,7 +847,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/content-creation/example/index.ts',
+		entry: './client/src/modules/content-creation/view-position/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -864,7 +864,7 @@ const configs = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'example.bundle.js',
+			filename: 'view-position.bundle.js',
 			library: {
 				type: 'module'
 			},
