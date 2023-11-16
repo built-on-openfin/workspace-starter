@@ -324,7 +324,7 @@ export class ServiceNowIntegration {
 								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Case}?${this.buildSearchQuery(
 									query,
 									["number", "case", "short_description"],
-									["sys_id", "number"],
+									["sys_id", "number", "short_description"],
 									10
 								)}`
 							});
@@ -337,7 +337,7 @@ export class ServiceNowIntegration {
 								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Task}?${this.buildSearchQuery(
 									query,
 									["number", "short_description"],
-									["sys_id", "number"],
+									["sys_id", "number", "short_description"],
 									10
 								)}`
 							});
@@ -349,7 +349,12 @@ export class ServiceNowIntegration {
 								method: "GET",
 								url: `/api/now/v2/table/${
 									ServiceNowIntegration._TABLE_NAMES.Incident
-								}?${this.buildSearchQuery(query, ["number", "short_description"], ["sys_id", "number"], 10)}`
+								}?${this.buildSearchQuery(
+									query,
+									["number", "short_description"],
+									["sys_id", "number", "short_description"],
+									10
+								)}`
 							});
 						}
 
@@ -373,27 +378,29 @@ export class ServiceNowIntegration {
 
 						if (results.Contact) {
 							for (const contact of results.Contact as ServiceNowEntities.Core.Contact[]) {
-								homeResults.push(await this.createLoadingResult(contact, "name", "Contact"));
+								homeResults.push(await this.createLoadingResult(contact, "name", undefined, "Contact"));
 							}
 						}
 						if (results.Account) {
 							for (const account of results.Account as ServiceNowEntities.CSM.Account[]) {
-								homeResults.push(await this.createLoadingResult(account, "name", "Account"));
+								homeResults.push(await this.createLoadingResult(account, "name", undefined, "Account"));
 							}
 						}
 						if (results.Case) {
 							for (const cs of results.Case as ServiceNowEntities.CSM.Case[]) {
-								homeResults.push(await this.createLoadingResult(cs, "number", "Case"));
+								homeResults.push(await this.createLoadingResult(cs, "short_description", "number", "Case"));
 							}
 						}
 						if (results.Task) {
 							for (const task of results.Task as ServiceNowEntities.CSM.Task[]) {
-								homeResults.push(await this.createLoadingResult(task, "number", "Task"));
+								homeResults.push(await this.createLoadingResult(task, "short_description", "number", "Task"));
 							}
 						}
 						if (results.Incident) {
 							for (const incident of results.Incident as ServiceNowEntities.Core.Incident[]) {
-								homeResults.push(await this.createLoadingResult(incident, "number", "Incident"));
+								homeResults.push(
+									await this.createLoadingResult(incident, "short_description", "number", "Incident")
+								);
 							}
 						}
 
@@ -726,20 +733,37 @@ export class ServiceNowIntegration {
 	/**
 	 * Create a result which show a loading template.
 	 * @param obj The object to display loading for.
-	 * @param title The title of the item.
+	 * @param titleField The title of the item.
+	 * @param labelField The label of the item.
 	 * @param objType The type of the item.
 	 * @returns The home search result.
 	 */
 	private async createLoadingResult<T extends ServiceNowEntities.Core.BaseEntity>(
 		obj: T,
-		title: keyof T,
+		titleField: keyof T,
+		labelField: keyof T | undefined,
 		objType: ServiceNowObjectTypes
 	): Promise<CLISearchResultLoading<HomeAction>> {
+		let title: string = "";
+		let label: string = objType;
+
+		if (obj[titleField]) {
+			title = obj[titleField] as string;
+		}
+
+		if (labelField && obj[labelField]) {
+			label += ` ${obj[labelField] as string}`;
+		}
+
+		if (title.length === 0) {
+			title = `Untitled ${objType}`;
+		}
+
 		return {
 			key: `${this._definition?.id}-${obj.sys_id}`,
 			score: this.objectTypeToOrder(objType),
-			title: (obj[title] as unknown as string) ?? `Untitled ${objType}`,
-			label: objType,
+			title,
+			label,
 			icon: this._settings?.images[objType.toLowerCase() as IMAGES],
 			actions: [],
 			data: {
@@ -1027,6 +1051,9 @@ export class ServiceNowIntegration {
 			wide?: boolean;
 		}[] = [];
 
+		let shortDescription: string | undefined;
+		const taskNumber = cs.number as string;
+
 		if (
 			cs.assigned_to &&
 			typeof cs.assigned_to === "object" &&
@@ -1046,6 +1073,7 @@ export class ServiceNowIntegration {
 		}
 
 		if ((cs.short_description as string)?.length) {
+			shortDescription = cs.short_description as string;
 			pairs.push({ label: "Description", value: cs.short_description as string });
 		}
 
@@ -1091,8 +1119,8 @@ export class ServiceNowIntegration {
 		return {
 			key: `${this._definition?.id}-${cs.sys_id}`,
 			score: this.objectTypeToOrder("Case"),
-			title: cs.number as string,
-			label: "Case",
+			title: shortDescription ?? taskNumber,
+			label: `Case ${taskNumber}`,
 			icon: this._settings?.images.case,
 			actions: [
 				{
@@ -1139,6 +1167,9 @@ export class ServiceNowIntegration {
 			wide?: boolean;
 		}[] = [];
 
+		let shortDescription: string | undefined;
+		const taskNumber = task.number as string;
+
 		if (
 			task.assigned_to &&
 			typeof task.assigned_to === "object" &&
@@ -1158,6 +1189,7 @@ export class ServiceNowIntegration {
 		}
 
 		if ((task.short_description as string)?.length) {
+			shortDescription = task.short_description as string;
 			pairs.push({ label: "Description", value: task.short_description as string });
 		}
 
@@ -1203,8 +1235,8 @@ export class ServiceNowIntegration {
 		return {
 			key: `${this._definition?.id}-${task.sys_id}`,
 			score: this.objectTypeToOrder("Task"),
-			title: task.number as string,
-			label: "Task",
+			title: shortDescription ?? taskNumber,
+			label: `Task ${taskNumber}`,
 			icon: this._settings?.images.task,
 			actions: [
 				{
@@ -1251,6 +1283,9 @@ export class ServiceNowIntegration {
 			wide?: boolean;
 		}[] = [];
 
+		let shortDescription: string | undefined;
+		const taskNumber = incident.number as string;
+
 		if (
 			incident.assigned_to &&
 			typeof incident.assigned_to === "object" &&
@@ -1261,6 +1296,7 @@ export class ServiceNowIntegration {
 		}
 
 		if ((incident.short_description as string)?.length) {
+			shortDescription = incident.short_description as string;
 			pairs.push({ label: "Description", value: incident.short_description as string });
 		}
 
@@ -1306,8 +1342,8 @@ export class ServiceNowIntegration {
 		return {
 			key: `${this._definition?.id}-${incident.sys_id}`,
 			score: this.objectTypeToOrder("Incident"),
-			title: incident.number as string,
-			label: "Incident",
+			title: shortDescription ?? taskNumber,
+			label: `Incident ${taskNumber}`,
 			icon: this._settings?.images.incident,
 			actions: [
 				{
