@@ -16,13 +16,13 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/salesforce": "2.2.0",
-		"@openfin/workspace": "16.0.4",
-		"@openfin/workspace-platform": "16.0.4"
+		"@openfin/workspace": "16.0.6",
+		"@openfin/workspace-platform": "16.0.6"
 	},
 	"devDependencies": {
 		"@openfin/core": "33.77.11",
 		"@openfin/node-adapter": "33.77.11",
-		"ts-loader": "^9.5.0",
+		"ts-loader": "^9.5.1",
 		"typescript": "^5.2.2",
 		"webpack": "^5.89.0",
 		"webpack-cli": "^5.1.4"
