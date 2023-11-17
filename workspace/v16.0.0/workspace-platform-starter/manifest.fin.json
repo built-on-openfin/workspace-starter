@@ -1585,6 +1585,14 @@
 							{
 								"behavior": "view",
 								"match": ["https://www.scientificamerican.com/*"]
+							},
+							{
+								"behavior": "browser",
+								"match": ["https://www.livescience.com/*"]
+							},
+							{
+								"behavior": "block",
+								"match": ["https://www.sciencenews.org/*"]
 							}
 						]
 					}
