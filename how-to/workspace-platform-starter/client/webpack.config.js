@@ -873,6 +873,34 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/actions/window-actions/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'window-actions.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'actions')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

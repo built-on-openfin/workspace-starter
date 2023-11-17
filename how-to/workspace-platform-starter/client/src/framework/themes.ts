@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
-import type { CustomPaletteSet } from "@openfin/workspace-platform";
-import { ColorSchemeOptionType, getCurrentSync } from "@openfin/workspace-platform";
+import type { CustomActionPayload, CustomActionsMap, CustomPaletteSet } from "@openfin/workspace-platform";
+import { ColorSchemeOptionType, CustomActionCallerType, getCurrentSync } from "@openfin/workspace-platform";
 import { DEFAULT_PALETTES } from "./default-palettes";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
@@ -373,4 +373,23 @@ export function themeUrl(
 	colorScheme: ColorSchemeMode
 ): string | undefined {
 	return url ? url.replace(/{theme}/g, iconFolder).replace(/{scheme}/g, colorScheme as string) : undefined;
+}
+
+/**
+ * Get the inbuilt actions for the platform.
+ * @returns The map of platform actions.
+ */
+export async function getPlatformActions(): Promise<CustomActionsMap> {
+	const actionMap: CustomActionsMap = {};
+
+	actionMap["toggle-scheme"] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.CustomDropdownItem
+		) {
+			await toggleScheme();
+		}
+	};
+
+	return actionMap;
 }

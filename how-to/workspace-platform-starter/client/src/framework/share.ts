@@ -1,12 +1,20 @@
 import type OpenFin from "@openfin/core";
-import { getCurrentSync, type Page } from "@openfin/workspace-platform";
-import { create, IndicatorColor, type NotificationOptions } from "@openfin/workspace/notifications";
+import {
+	CustomActionCallerType,
+	getCurrentSync,
+	type CustomActionPayload,
+	type CustomActionsMap,
+	type CustomButtonActionPayload,
+	type Page
+} from "@openfin/workspace-platform";
+import { IndicatorColor, create, type NotificationOptions } from "@openfin/workspace/notifications";
 import { requestResponse } from "./endpoint";
 import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
+import { showPopupMenu } from "./menu";
 import { getPageBounds, launchPage } from "./platform/browser";
 import { getSettings } from "./settings";
-import type { ShareStoreEntry, SharePageData, ShareWorkspaceData } from "./shapes/share-shapes";
+import type { SharePageData, ShareStoreEntry, ShareWorkspaceData } from "./shapes/share-shapes";
 import { isEmpty } from "./utils";
 
 const logger = createLogger("Share");
@@ -71,11 +79,7 @@ export function isShareEnabled(): boolean {
  * @param payload.x The x position of the mouse click.
  * @param payload.y The y position of the mouse click.
  */
-export async function showShareOptions(payload: {
-	windowIdentity: OpenFin.Identity;
-	x: number;
-	y: number;
-}): Promise<void> {
+export async function showShareOptions(payload: CustomButtonActionPayload): Promise<void> {
 	if (shareRegistered) {
 		logger.info("Share called with payload:", payload);
 
@@ -106,19 +110,18 @@ export async function showShareOptions(payload: {
 			data: { type: "workspace" }
 		});
 
-		const r = await currentWindow.openfinWindow.showPopupMenu<SharePageData | ShareWorkspaceData | undefined>(
-			{
-				template,
-				x: payload.x,
-				y: payload.y
-			}
+		const result = await showPopupMenu<SharePageData | ShareWorkspaceData | undefined>(
+			{ x: payload.x, y: payload.y },
+			payload.windowIdentity,
+			"",
+			template
 		);
 
-		if (r.result === "closed") {
+		if (isEmpty(result)) {
 			logger.info("share menu dismissed.");
-		} else if (r.data?.type === "page") {
-			await saveSharedPage(r.data);
-		} else if (r.data?.type === "workspace") {
+		} else if (result.type === "page") {
+			await saveSharedPage(result);
+		} else if (result.type === "workspace") {
 			await saveSharedWorkspace();
 		}
 	} else {
@@ -463,4 +466,20 @@ async function loadSharedEntry(id: string): Promise<void> {
 		logger.error("There has been an error trying to load and apply the share link.", error);
 		await notifyOfFailure("The specified share link cannot be loaded.");
 	}
+}
+
+/**
+ * Get the inbuilt actions for the platform.
+ * @returns The map of platform actions.
+ */
+export async function getPlatformActions(): Promise<CustomActionsMap> {
+	const actionMap: CustomActionsMap = {};
+
+	actionMap.share = async (payload: CustomActionPayload): Promise<void> => {
+		if (payload.callerType === CustomActionCallerType.CustomButton) {
+			await showShareOptions(payload);
+		}
+	};
+
+	return actionMap;
 }

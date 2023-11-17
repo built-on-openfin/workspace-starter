@@ -663,7 +663,7 @@ async function addDropdownOrMenu(
 		tooltip,
 		iconUrl,
 		action: {
-			id: PLATFORM_ACTION_IDS.popupMenu,
+			id: "popup-menu",
 			customData: {
 				source: "dock",
 				noEntryText: "No Entries",

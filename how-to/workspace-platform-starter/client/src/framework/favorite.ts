@@ -1,4 +1,9 @@
-import { getCurrentSync } from "@openfin/workspace-platform";
+import {
+	CustomActionCallerType,
+	getCurrentSync,
+	type CustomActionPayload,
+	type CustomActionsMap
+} from "@openfin/workspace-platform";
 import * as conditionsProvider from "./conditions";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
@@ -243,4 +248,42 @@ export function getInfo(): FavoriteInfo {
 		command: favoriteOptions.favoriteCommand,
 		enabledTypes: favoriteOptions.supportedFavoriteTypes
 	};
+}
+
+/**
+ * Get the inbuilt actions for the platform.
+ * @returns The map of platform actions.
+ */
+export async function getPlatformActions(): Promise<CustomActionsMap> {
+	const actionMap: CustomActionsMap = {};
+
+	actionMap["favorite-add"] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
+		) {
+			const favorite: FavoriteEntry = payload.customData;
+			if (isEmpty(favorite)) {
+				logger.error("Can only add to favorites if favorite data is provided in customData");
+			} else {
+				await setSavedFavorite(favorite);
+			}
+		}
+	};
+
+	actionMap["favorite-remove"] = async (payload: CustomActionPayload): Promise<void> => {
+		if (
+			payload.callerType === CustomActionCallerType.CustomButton ||
+			payload.callerType === CustomActionCallerType.StoreCustomButton
+		) {
+			const favorite: FavoriteEntry = payload.customData;
+			if (isEmpty(favorite)) {
+				logger.error("Can only remove from favorites if favorite data is provided in customData");
+			} else {
+				await deleteSavedFavorite(favorite.id);
+			}
+		}
+	};
+
+	return actionMap;
 }

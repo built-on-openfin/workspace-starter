@@ -4,7 +4,7 @@ import * as analyticsProvider from "./analytics";
 import { getApps } from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
-import { registerAction } from "./connections";
+import * as connectionProvider from "./connections";
 import { init as registerInitOptionsListener } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launch } from "./launch";
@@ -77,7 +77,7 @@ export async function init(): Promise<boolean> {
 				clientAPIVersion: homeRegistration.clientAPIVersion
 			};
 			registeredComponents.push("home");
-			registerHomeSupportedActions();
+			registerHomeConnectionActions();
 		}
 	}
 
@@ -90,7 +90,7 @@ export async function init(): Promise<boolean> {
 				workspaceMetaInfo = storeRegistration;
 			}
 			registeredComponents.push("store");
-			registerStoreSupportedActions();
+			registerStoreConnectionActions();
 		}
 	}
 
@@ -103,7 +103,7 @@ export async function init(): Promise<boolean> {
 				workspaceMetaInfo = dockRegistration;
 			}
 			registeredComponents.push("dock");
-			registerDockSupportedActions();
+			registerDockConnectionActions();
 		}
 	}
 
@@ -118,7 +118,7 @@ export async function init(): Promise<boolean> {
 		await platformSplashProvider.updateProgress("Notifications");
 
 		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
-		registerNotificationSupportedActions();
+		registerNotificationConnectionActions();
 	}
 
 	if (!isEmpty(notificationMetaInfo)) {
@@ -160,7 +160,7 @@ export async function init(): Promise<boolean> {
 	await lowCodeIntegrationProvider.initializeWorkflows();
 	if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
 		registeredComponents.push("home");
-		registerHomeSupportedActions();
+		registerHomeConnectionActions();
 	}
 
 	logger.info("Validating auto show list:", bootstrapOptions.autoShow);
@@ -295,11 +295,11 @@ async function deregister(): Promise<void> {
 /**
  * Used to register home related actions.
  */
-function registerHomeSupportedActions(): void {
-	registerAction("show-home", async () => {
+function registerHomeConnectionActions(): void {
+	connectionProvider.registerAction("show-home", async () => {
 		await homeComponent.show();
 	});
-	registerAction("hide-home", async () => {
+	connectionProvider.registerAction("hide-home", async () => {
 		await homeComponent.hide();
 	});
 }
@@ -307,11 +307,11 @@ function registerHomeSupportedActions(): void {
 /**
  * Used to register store related actions.
  */
-function registerStoreSupportedActions(): void {
-	registerAction("show-store", async () => {
+function registerStoreConnectionActions(): void {
+	connectionProvider.registerAction("show-store", async () => {
 		await storeComponent.show();
 	});
-	registerAction("hide-store", async () => {
+	connectionProvider.registerAction("hide-store", async () => {
 		await storeComponent.hide();
 	});
 }
@@ -319,11 +319,11 @@ function registerStoreSupportedActions(): void {
 /**
  * Used to register dock related actions.
  */
-function registerDockSupportedActions(): void {
-	registerAction("show-dock", async () => {
+function registerDockConnectionActions(): void {
+	connectionProvider.registerAction("show-dock", async () => {
 		await dockComponent.show();
 	});
-	registerAction("minimize-dock", async () => {
+	connectionProvider.registerAction("minimize-dock", async () => {
 		await dockComponent.minimize();
 	});
 }
@@ -331,11 +331,11 @@ function registerDockSupportedActions(): void {
 /**
  * Used to register notification related actions.
  */
-function registerNotificationSupportedActions(): void {
-	registerAction("show-notifications", async () => {
+function registerNotificationConnectionActions(): void {
+	connectionProvider.registerAction("show-notifications", async () => {
 		await notificationsComponent.show();
 	});
-	registerAction("hide-notifications", async () => {
+	connectionProvider.registerAction("hide-notifications", async () => {
 		await notificationsComponent.hide();
 	});
 }
