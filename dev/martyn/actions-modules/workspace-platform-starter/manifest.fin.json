@@ -1297,12 +1297,12 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/actions-modules/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js"
 				},
 				{
-					"id": "window-actions",
+					"id": "window-platform",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/actions-modules/workspace-platform-starter/favicon.ico",
-					"title": "Window Actions",
-					"description": "Window Actions",
+					"title": "Window Platform Actions",
+					"description": "Window Platform Actions",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/actions-modules/workspace-platform-starter/js/modules/actions/window-actions.bundle.js"
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/actions-modules/workspace-platform-starter/js/modules/actions/window-platform.bundle.js"
 				}
 			]
 		},
