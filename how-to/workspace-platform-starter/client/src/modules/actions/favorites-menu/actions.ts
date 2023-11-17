@@ -1,10 +1,9 @@
-import {
-	CustomActionCallerType,
-	type CustomActionPayload,
-	type CustomActionsMap,
-	type WorkspacePlatformModule
+import type {
+	CustomActionPayload,
+	CustomActionsMap,
+	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
+import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	FAVORITE_TYPE_NAME_PAGE,
@@ -72,7 +71,7 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 				if (!isEmpty(getClient)) {
 					const client = await getClient();
 					if (!isEmpty(client)) {
-						const favInfo = await client.getInfo();
+						const favInfo = client.getInfo();
 						const menuEntries: PopupMenuEntry<FavoriteEntry>[] = [];
 
 						if (favInfo.enabledTypes) {
@@ -84,9 +83,9 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 										menuEntries.push({ type: "separator" });
 									}
 
-									for (const entry of saved.sort((f1, f2) =>
-										(f1.label ?? "").localeCompare(f2.label ?? "")
-									)) {
+									saved.sort((f1, f2) => (f1.label ?? "").localeCompare(f2.label ?? ""));
+
+									for (const entry of saved) {
 										menuEntries.push({
 											label: entry.label ?? "",
 											icon: entry.icon,

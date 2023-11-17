@@ -581,7 +581,7 @@ function calculateButtons(
 		appSecondaryButtons.push({
 			title: favoriteEntry ? "Remove Favorite" : "Add Favorite",
 			action: {
-				id: favoriteEntry ? PLATFORM_ACTION_IDS.favoriteRemove : PLATFORM_ACTION_IDS.favoriteAdd,
+				id: favoriteEntry ? "favorite-remove" : "favorite-add",
 				customData: favoriteEntry ?? {
 					id: randomUUID(),
 					type: FAVORITE_TYPE_NAME_APP,

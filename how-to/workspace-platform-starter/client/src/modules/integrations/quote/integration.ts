@@ -20,7 +20,6 @@ import {
 	TimeScale
 } from "chart.js";
 import { DateTime } from "luxon";
-import type { TemplateHelpers } from "workspace-platform-starter/shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
@@ -28,6 +27,7 @@ import type {
 } from "workspace-platform-starter/shapes/integrations-shapes";
 import type { LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import type { TemplateHelpers } from "workspace-platform-starter/shapes/template-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 import type { QuoteResult, QuoteSettings } from "./shapes";
 

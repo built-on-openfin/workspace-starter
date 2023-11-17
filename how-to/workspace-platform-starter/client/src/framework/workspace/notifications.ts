@@ -123,6 +123,15 @@ export async function hide(): Promise<void> {
 }
 
 /**
+ * Toggle the notification center.
+ * @returns Nothing.
+ */
+export async function toggle(): Promise<void> {
+	logger.info("Toggle Notifications called.");
+	return Notifications.toggleNotificationCenter();
+}
+
+/**
  * Returns a restricted notification client that helps isolate the notifications that
  * can be read, updated and cleared by a client inside of a platform.
  * @param options The options to help with the client restriction.

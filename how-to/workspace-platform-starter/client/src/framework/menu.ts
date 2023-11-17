@@ -1,6 +1,10 @@
 import type OpenFin from "@openfin/core";
+import type { CustomActionSpecifier } from "@openfin/workspace";
 import {
+	CustomActionCallerType,
 	getCurrentSync,
+	type CustomActionPayload,
+	type CustomActionsMap,
 	type GlobalContextMenuItemTemplate,
 	type GlobalContextMenuOptionType,
 	type PageTabContextMenuItemTemplate,
@@ -8,6 +12,7 @@ import {
 	type ViewTabContextMenuTemplate,
 	type ViewTabMenuOptionType
 } from "@openfin/workspace-platform";
+import { callAction } from "./actions";
 import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
@@ -16,10 +21,10 @@ import type {
 	MenuEntry,
 	MenuOptionType,
 	MenuPositionOperation,
-	Menus,
-	MenusProviderOptions,
 	MenuTemplateType,
 	MenuType,
+	Menus,
+	MenusProviderOptions,
 	PopupMenuEntry,
 	PopupMenuStyles,
 	RelatedMenuId
@@ -628,4 +633,42 @@ function calculateMenuInfo<T>(
 		width,
 		height
 	};
+}
+
+/**
+ * Get the inbuilt actions for the platform.
+ * @returns The map of platform actions.
+ */
+export async function getPlatformActions(): Promise<CustomActionsMap> {
+	const actionMap: CustomActionsMap = {};
+
+	actionMap["popup-menu"] = async (payload: CustomActionPayload): Promise<void> => {
+		if (payload.callerType === CustomActionCallerType.CustomButton) {
+			const menuOptions: {
+				source: "dock";
+				noEntryText: string;
+				menuEntries: PopupMenuEntry<CustomActionSpecifier>[];
+				options?: {
+					popupMenuStyle?: PopupMenuStyles;
+				};
+			} = payload.customData;
+
+			const res = await showPopupMenu(
+				menuOptions.source === "dock" ? { x: payload.x, y: 48 } : { x: payload.x, y: payload.y },
+				payload.windowIdentity,
+				menuOptions.noEntryText,
+				menuOptions.menuEntries,
+				menuOptions.options
+			);
+
+			if (!isEmpty(res)) {
+				await callAction(res.id, {
+					...payload,
+					customData: res.customData
+				});
+			}
+		}
+	};
+
+	return actionMap;
 }

@@ -35,3 +35,17 @@ export interface ActionHelpers extends ModuleHelpers {
 		replacementButtonId: string
 	) => Promise<ToolbarButton[]>;
 }
+
+/**
+ * Use this in preference to CustomActionCallerType from workspace-platform to avoid the import of the whole of workspace package in modules.
+ */
+export enum CustomActionCallerType {
+	CustomButton = "CustomButton",
+	StoreCustomButton = "StoreCustomButton",
+	CustomDropdownItem = "CustomDropdownItem",
+	GlobalContextMenu = "GlobalContextMenu",
+	ViewTabContextMenu = "ViewTabContextMenu",
+	PageTabContextMenu = "PageTabContextMenu",
+	SaveButtonContextMenu = "SaveButtonContextMenu",
+	API = "API"
+}

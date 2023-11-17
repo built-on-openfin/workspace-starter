@@ -1295,6 +1295,14 @@
 					"description": "Allows the setting of a default workspace and whether or not it should be set when an active workspace is switched.",
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js"
+				},
+				{
+					"id": "window-platform",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Window Platform Actions",
+					"description": "Window Platform Actions",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/actions/window-platform.bundle.js"
 				}
 			]
 		},
