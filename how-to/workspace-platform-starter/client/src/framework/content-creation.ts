@@ -3,8 +3,8 @@ import { getCurrentSync } from "@openfin/workspace-platform";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import * as platformSplashProvider from "./platform/platform-splash";
-import type { ModuleEntry, ModuleHelpers } from "./shapes";
 import type { ContentCreationProviderOptions, ContentCreationRules } from "./shapes/content-creation-shapes";
+import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty } from "./utils";
 
 const logger = createLogger("ContentCreation");
@@ -34,17 +34,34 @@ export async function init(
 			const platform = getCurrentSync();
 
 			await platform.addListener("view-child-view-created", async (e) => {
+				let attached = false;
 				for (const module of modules) {
 					if (module.implementation.handleViewCreated) {
-						await module.implementation.handleViewCreated(platform, e);
+						const matchingRuleIndex = await findMatchingRule(module, e);
+						const viewAttached = await module.implementation.handleViewCreated(
+							platform,
+							e,
+							matchingRuleIndex,
+							attached
+						);
+						if (viewAttached) {
+							attached = true;
+						}
 					}
+				}
+				if (!attached) {
+					// The view has not been attached by any of the modules
+					// so do a default behavior of attaching it to the original
+					// target window
+					await platform.createView(e.childOptions, e.target);
 				}
 			});
 
 			await platform.addListener("view-child-window-created", async (e) => {
 				for (const module of modules) {
 					if (module.implementation.handleWindowCreated) {
-						await module.implementation.handleWindowCreated(platform, e);
+						const matchingRuleIndex = await findMatchingRule(module, e);
+						await module.implementation.handleWindowCreated(platform, e, matchingRuleIndex);
 					}
 				}
 			});
@@ -52,7 +69,8 @@ export async function init(
 			await platform.addListener("view-child-content-opened-in-browser", async (e) => {
 				for (const module of modules) {
 					if (module.implementation.handleBrowserCreated) {
-						await module.implementation.handleBrowserCreated(platform, e);
+						const matchingRuleIndex = await findMatchingRule(module, e);
+						await module.implementation.handleBrowserCreated(platform, e, matchingRuleIndex);
 					}
 				}
 			});
@@ -60,7 +78,8 @@ export async function init(
 			await platform.addListener("view-child-content-blocked", async (e) => {
 				for (const module of modules) {
 					if (module.implementation.handleBlocked) {
-						await module.implementation.handleBlocked(platform, e);
+						const matchingRuleIndex = await findMatchingRule(module, e);
+						await module.implementation.handleBlocked(platform, e, matchingRuleIndex);
 					}
 				}
 			});
@@ -94,4 +113,25 @@ export async function populateRules(ruleContainer: {
 			ruleContainer.contentCreation.rules.push(...moduleRules);
 		}
 	}
+}
+
+/**
+ * See if the module has a rule which matches the one from the event.
+ * @param module The module to match the rules for.
+ * @param event The event to find the matching rule.
+ * @returns The index of the matching rule, or -1 if it does not exist.
+ */
+async function findMatchingRule(
+	module: ModuleEntry<ContentCreationRules>,
+	event: OpenFin.WebContentsEvents.ContentCreationRulesEvent
+): Promise<number> {
+	let index = -1;
+	if (module.implementation?.getRules) {
+		const rules = await module.implementation.getRules();
+		index = rules.findIndex(
+			(r) =>
+				r.behavior === event.rule.behavior && JSON.stringify(r.match) === JSON.stringify(event.rule.match)
+		);
+	}
+	return index;
 }

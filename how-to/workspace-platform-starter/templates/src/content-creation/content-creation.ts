@@ -76,31 +76,43 @@ export class ExampleContentCreationProvider
 	 * Hand the content created event for a view to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the created view.
-	 * @returns Nothing.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
+	 * @param attached Will be set if a previous handler has already attached the view.
+	 * @returns True if the view has been attached.
 	 */
 	public async handleViewCreated(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildViewCreatedEvent>
-	): Promise<void> {
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildViewCreatedEvent>,
+		matchingRuleIndex: number,
+		attached: boolean
+	): Promise<boolean> {
 		this._logger?.info("View Created", event);
 
-		// When we receive a view created event it is up to us to decide where
-		// to add the view. Calling platform.createView does not re-create the view
-		// if it already exists, but specifying a target means it will be added to that window
+		// If the view has not already been attached we could attach it somewhere
+		// or we could just modify the view
+		if (!attached) {
+			// When we receive a view created event it is up to us to decide where
+			// to add the view. Calling platform.createView does not re-create the view
+			// if it already exists, but specifying a target means it will be added to that window
+			// by returning false the default logic will attach the view to the current target
+			// returning true means we have attached the view somewhere
+			// TODO: Add logic to position the view
+		}
 
-		// TODO: Add logic to position the view
-		await platform.createView(event.childOptions, event.target);
+		return false;
 	}
 
 	/**
 	 * Hand the content created event for a window to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the created window.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
 	 * @returns Nothing.
 	 */
 	public async handleWindowCreated(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildWindowCreatedEvent>
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildWindowCreatedEvent>,
+		matchingRuleIndex: number
 	): Promise<void> {
 		// TODO: There is rarely a need to add anything in this method, but it can be used
 		// to manipulate window creations after the fact
@@ -110,11 +122,13 @@ export class ExampleContentCreationProvider
 	 * Hand the content created event for a browser to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the created browser.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
 	 * @returns Nothing.
 	 */
 	public async handleBrowserCreated(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentOpenedInBrowserEvent>
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentOpenedInBrowserEvent>,
+		matchingRuleIndex: number
 	): Promise<void> {
 		// TODO: There is rarely a need to add anything in this method, but can be used
 		// to track when content was opened in the browser
@@ -124,11 +138,13 @@ export class ExampleContentCreationProvider
 	 * Hand the content blocked event to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the blocked content.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
 	 * @returns Nothing.
 	 */
 	public async handleBlocked(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentBlockedEvent>
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentBlockedEvent>,
+		matchingRuleIndex: number
 	): Promise<void> {
 		// TODO: There is rarely a need to add anything in this method, but can be used
 		// to track when content was blocked

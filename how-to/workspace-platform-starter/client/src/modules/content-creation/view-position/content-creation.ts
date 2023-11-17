@@ -62,93 +62,101 @@ export class ViewPositionContentCreationProvider
 	 * Hand the content created event for a view to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the created view.
-	 * @returns Nothing.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
+	 * @param attached Will be set if a previous handler has already attached the view.
+	 * @returns True if the view has been attached.
 	 */
 	public async handleViewCreated(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildViewCreatedEvent>
-	): Promise<void> {
-		this._logger?.info("View Created", event);
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildViewCreatedEvent>,
+		matchingRuleIndex: number,
+		attached: boolean
+	): Promise<boolean> {
+		this._logger?.info("View Created", event, matchingRuleIndex, attached);
 
-		// When we receive a view created event it is up to us to decide where
-		// to add the view. Calling platform.createView does not re-create the view
-		// if it already exists, but specifying a target means it will be added to that window
-		// You can of course locate the view elsewhere as shown using the view-position
-		// feature flag which could be passed to the window.open call
-		let viewPosition = "";
-		if (isStringValue(event.features)) {
-			const pairs = event.features.split(",");
-			for (const pair of pairs) {
-				if (pair.startsWith("view-position=")) {
-					viewPosition = pair.slice(14);
+		// Only perform the positioning if it matches one of our rules
+		// and its not already attached
+		if (matchingRuleIndex >= 0 && !attached) {
+			// When we receive a view created event it is up to us to decide where
+			// to add the view. Calling platform.createView does not re-create the view
+			// if it already exists, but specifying a target means it will be added to that window
+			// By returning false for the attached flag the default handling will just attach
+			// to the specified target
+
+			// You can of course locate the view elsewhere as shown using the view-position
+			// feature flag which could be passed to the window.open call
+			const viewPosition = event.parsedFeatures["view-position"];
+			if (isStringValue(viewPosition) && !isEmpty(event.viewIdentity)) {
+				if (
+					viewPosition === "right" ||
+					viewPosition === "left" ||
+					viewPosition === "top" ||
+					viewPosition === "bottom"
+				) {
+					const view: OpenFin.View = fin.View.wrapSync(event.viewIdentity);
+					const parentTabStack: OpenFin.TabStack = await view.getCurrentStack();
+					await parentTabStack.createAdjacentStack([event.childOptions], {
+						position: viewPosition
+					});
+					return true;
+				} else if (viewPosition === "stack-left" || viewPosition === "stack-right") {
+					const view: OpenFin.View = fin.View.wrapSync(event.viewIdentity);
+					const parentTabStack: OpenFin.TabStack = await view.getCurrentStack();
+					const siblingViewIds: OpenFin.Identity[] = await parentTabStack.getViews();
+					const currentViewIndex = siblingViewIds.findIndex((id) => id.name === event.viewIdentity?.name);
+					await parentTabStack.addView(event.childOptions, {
+						index: viewPosition === "stack-left" ? currentViewIndex : currentViewIndex + 1
+					});
+					return true;
 				}
 			}
 		}
 
-		if (
-			!isEmpty(event.viewIdentity) &&
-			(viewPosition === "right" ||
-				viewPosition === "left" ||
-				viewPosition === "top" ||
-				viewPosition === "bottom")
-		) {
-			const view: OpenFin.View = fin.View.wrapSync(event.viewIdentity);
-			const parentTabStack: OpenFin.TabStack = await view.getCurrentStack();
-			await parentTabStack.createAdjacentStack([event.childOptions], {
-				position: viewPosition
-			});
-		} else if (
-			!isEmpty(event.viewIdentity) &&
-			(viewPosition === "stack-left" || viewPosition === "stack-right")
-		) {
-			const view: OpenFin.View = fin.View.wrapSync(event.viewIdentity);
-			const parentTabStack: OpenFin.TabStack = await view.getCurrentStack();
-			const siblingViewIds: OpenFin.Identity[] = await parentTabStack.getViews();
-			const currentViewIndex = siblingViewIds.findIndex((id) => id.name === event.viewIdentity?.name);
-			await parentTabStack.addView(event.childOptions, {
-				index: viewPosition === "stack-left" ? currentViewIndex : currentViewIndex + 1
-			});
-		} else {
-			await platform.createView(event.childOptions, event.target);
-		}
+		return false;
 	}
 
 	/**
 	 * Hand the content created event for a window to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the created window.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
 	 * @returns Nothing.
 	 */
 	public async handleWindowCreated(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildWindowCreatedEvent>
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildWindowCreatedEvent>,
+		matchingRuleIndex: number
 	): Promise<void> {
-		this._logger?.info("Window Created", event);
+		this._logger?.info("Window Created", event, matchingRuleIndex);
 	}
 
 	/**
 	 * Hand the content created event for a browser to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the created browser.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
 	 * @returns Nothing.
 	 */
 	public async handleBrowserCreated(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentOpenedInBrowserEvent>
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentOpenedInBrowserEvent>,
+		matchingRuleIndex: number
 	): Promise<void> {
-		this._logger?.info("Browser Created", event);
+		this._logger?.info("Browser Created", event, matchingRuleIndex);
 	}
 
 	/**
 	 * Hand the content blocked event to the module to process it.
 	 * @param platform The current platform.
 	 * @param event The event details for the blocked content.
+	 * @param matchingRuleIndex Which of the modules rules does the event match, -1 if it does not match.
 	 * @returns Nothing.
 	 */
 	public async handleBlocked(
 		platform: WorkspacePlatformModule,
-		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentBlockedEvent>
+		event: ContentCreationEvent<OpenFin.Events.WebContentsEvents.ChildContentBlockedEvent>,
+		matchingRuleIndex: number
 	): Promise<void> {
-		this._logger?.info("Content Blocked", event);
+		this._logger?.info("Content Blocked", event, matchingRuleIndex);
 	}
 }
