@@ -1,12 +1,11 @@
-import {
-	CustomActionCallerType,
-	type CustomActionPayload,
-	type CustomActionsMap,
-	type Page,
-	type Workspace,
-	type WorkspacePlatformModule
+import type {
+	CustomActionPayload,
+	CustomActionsMap,
+	Page,
+	Workspace,
+	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { Actions } from "workspace-platform-starter/shapes/actions-shapes";
+import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";

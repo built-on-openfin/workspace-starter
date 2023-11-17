@@ -5,7 +5,28 @@
 - Added support for Snap, enable by setting `customSettings.snapProvider.enabled` to true. Configure the `customSettings.snapProvider.serverAssetInfo` to point to the `SNAP_ASSET_URL`. Enable the Snap debugging window by setting `customSettings.snapProvider.showDebugWindow` to true.
 - Added new module type `content-creation`, these modules can be used to define content creation rules and handle the associated events. Modules are added in `customSettings.contentCreationProvider` section in manifest.
 - Added example content creation module which interrogates the `features` property from `window.open` to determine where to place a view in relation to where it was launched from. An example app `Content Creation Example` demonstrates this in use.
-- Change moved pin/unpin/move-view/move-window actions in to module
+- Added CustomActionCallerType enum to actions-shapes, use these in preference to the workspace-platform CustomActionCallerType type to avoid importing the whole npm package into your modules.
+- Change moved pin/unpin/move-view/move-window actions in to module, make sure the following config is in your manifest so this functionality is still available
+
+```json
+{
+   "customSettings": {
+      "actionsProvider": {
+         "modules": [
+            ...
+            {
+               "id": "window-platform",
+               "icon": "http://localhost:8080/favicon.ico",
+               "title": "Window Platform Actions",
+               "description": "Window Platform Actions",
+               "enabled": true,
+               "url": "http://localhost:8080/js/modules/actions/window-platform.bundle.js"
+            }
+         ]
+      }
+   }
+}
+```
 
 ## v15
 

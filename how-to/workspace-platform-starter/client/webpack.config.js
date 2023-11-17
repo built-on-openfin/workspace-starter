@@ -847,6 +847,34 @@ const configs = [
 		}
 	},
 	{
+		entry: './client/src/modules/composite/default-workspace/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'default-workspace.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'composite')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
 		entry: './client/src/modules/content-creation/view-position/index.ts',
 		devtool: 'inline-source-map',
 		module: {
@@ -875,7 +903,7 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/actions/window-actions/index.ts',
+		entry: './client/src/modules/actions/window-platform/index.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -892,7 +920,7 @@ const configs = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'window-actions.bundle.js',
+			filename: 'window-platform.bundle.js',
 			library: {
 				type: 'module'
 			},

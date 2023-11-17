@@ -1,20 +1,23 @@
 import type OpenFin from "@openfin/core";
+import type {
+	BrowserCreateWindowRequest,
+	CustomActionPayload,
+	CustomActionsMap,
+	WorkspacePlatformModule
+} from "@openfin/workspace-platform";
 import {
 	CustomActionCallerType,
-	type BrowserCreateWindowRequest,
-	type CustomActionPayload,
-	type CustomActionsMap,
-	type WorkspacePlatformModule
-} from "@openfin/workspace-platform";
-import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
+	type ActionHelpers,
+	type Actions
+} from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 
 /**
- * Implementation for the window actions provider.
+ * Implementation for the window platform actions provider.
  */
-export class WindowActionsProvider implements Actions {
+export class WindowPlatformActionsProvider implements Actions {
 	/**
 	 * The logger for displaying information from the module.
 	 * @internal
@@ -39,7 +42,7 @@ export class WindowActionsProvider implements Actions {
 		loggerCreator: LoggerCreator,
 		helpers: ActionHelpers
 	): Promise<void> {
-		this._logger = loggerCreator("WindowActionsProvider");
+		this._logger = loggerCreator("WindowPlatformActionsProvider");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
