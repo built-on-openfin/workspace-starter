@@ -1,14 +1,13 @@
 import {
+	CLITemplate,
 	Home,
-	type HomeProvider,
 	type CLIFilter,
 	type HomeDispatchedSearchResult,
+	type HomeProvider,
 	type HomeRegistration,
 	type HomeSearchListenerRequest,
 	type HomeSearchListenerResponse,
-	type HomeSearchResponse,
-	CLITemplate,
-	CLIFilterOptionType
+	type HomeSearchResponse
 } from "@openfin/workspace";
 import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
 import { createLogger } from "../logger-provider";
@@ -206,7 +205,7 @@ async function onUserInput(
 				}
 			}
 			searchResults.context ??= {};
-			searchResults.context.filters = finalFilters.length > 0 ? finalFilters : [createDummyFilter()];
+			searchResults.context.filters = finalFilters.length > 0 ? finalFilters : [createEmptySourceFilter()];
 			if (!Array.isArray(searchResults?.results)) {
 				logger.info("No results array returned.");
 			} else {
@@ -237,7 +236,7 @@ async function onUserInput(
 			}
 		],
 		context: {
-			filters: [createDummyFilter()]
+			filters: [createEmptySourceFilter()]
 		}
 	};
 }
@@ -275,11 +274,10 @@ async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
  * bouncing as it adds and removes.
  * @returns A dummy filter.
  */
-function createDummyFilter(): CLIFilter {
+function createEmptySourceFilter(): CLIFilter {
 	return {
-		id: "app-searching",
-		title: "Tags",
-		type: CLIFilterOptionType.MultiSelect,
+		id: HOME_SOURCE_FILTERS,
+		title: homeProviderOptions?.sourceFilter?.label ?? HOME_SOURCE_DEFAULT_FILTER_LABEL,
 		options: [
 			{
 				value: "All",
