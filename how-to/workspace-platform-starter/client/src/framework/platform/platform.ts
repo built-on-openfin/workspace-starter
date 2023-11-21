@@ -46,7 +46,7 @@ export async function init(): Promise<boolean> {
 	const customSettings = await getManifestCustomSettings();
 
 	const isValid = await authFlow.init(
-		customSettings.authProvider,
+		customSettings?.authProvider,
 		async () => setupPlatform(customSettings),
 		logger,
 		true
@@ -66,7 +66,7 @@ export async function init(): Promise<boolean> {
  * @param manifestSettings The custom setting to use for setting up the platform.
  * @returns True if the platform setup was successful.
  */
-async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean> {
+async function setupPlatform(manifestSettings: CustomSettings | undefined): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	await modules.init(randomUUID());
@@ -78,7 +78,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await initOptionsProvider.init(manifestSettings?.initOptionsProvider, helpers, "after-auth");
 
 	// We reload the settings now that endpoints have been configured.
-	const customSettings: CustomSettings = await getSettings();
+	const customSettings: CustomSettings | undefined = await getSettings();
 
 	await platformSplashProvider.updateProgress("Logger");
 
@@ -129,7 +129,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	const sharingEnabled = customSettings.platformProvider?.sharing ?? true;
+	const sharingEnabled = customSettings?.platformProvider?.sharing ?? true;
 	if (sharingEnabled) {
 		await platformSplashProvider.updateProgress("Sharing");
 		await shareProvider.init({ enabled: sharingEnabled });
@@ -148,13 +148,13 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	const browser: BrowserInitConfig = {};
 
 	if (!isEmpty(customSettings?.browserProvider)) {
-		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings.browserProvider);
+		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings?.browserProvider);
 	}
 	if (!isEmpty(customSettings?.browserProvider?.defaultPageOptions)) {
-		browser.defaultPageOptions = customSettings.browserProvider?.defaultPageOptions;
+		browser.defaultPageOptions = customSettings?.browserProvider?.defaultPageOptions;
 	}
 	if (!isEmpty(customSettings?.browserProvider?.defaultViewOptions)) {
-		browser.defaultViewOptions = customSettings.browserProvider?.defaultViewOptions;
+		browser.defaultViewOptions = customSettings?.browserProvider?.defaultViewOptions;
 	}
 
 	logger.info("Specifying following browser options", browser);
@@ -168,7 +168,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await snapProvider.init(customSettings?.snapProvider);
 	conditionsProvider.registerCondition("snap", async () => snapProvider.isEnabled(), false);
 
-	await contentCreationProvider.init(customSettings.contentCreationProvider, helpers);
+	await contentCreationProvider.init(customSettings?.contentCreationProvider, helpers);
 
 	if (contentCreationProvider.isEnabled()) {
 		browser.defaultViewOptions = browser.defaultViewOptions ?? ({} as OpenFin.ViewOptions);

@@ -177,7 +177,7 @@ async function notifyOfSuccessfulLoad(): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon,
+		icon: settings?.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.GREEN,
 			text: "Share Request Applied"
@@ -217,7 +217,7 @@ async function notifyOfSuccess(url: string, expiryInHours: number): Promise<void
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon,
+		icon: settings?.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.BLUE,
 			text: "Share Request Raised"
@@ -256,7 +256,7 @@ async function notifyOfFailure(body: string): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon,
+		icon: settings?.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.RED,
 			text: "Share Request Failed"
@@ -294,7 +294,7 @@ async function notifyOfExpiry(): Promise<void> {
 			appId: fin.me.identity.uuid
 		},
 		priority: 1,
-		icon: settings.browserProvider?.defaultWindowOptions?.icon,
+		icon: settings?.browserProvider?.defaultWindowOptions?.icon,
 		indicator: {
 			color: IndicatorColor.RED,
 			text: "Share Request Expired"

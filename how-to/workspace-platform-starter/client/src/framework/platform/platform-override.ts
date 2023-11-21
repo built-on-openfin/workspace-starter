@@ -739,15 +739,15 @@ export function overrideCallback(
 						const platformManifest: OpenFin.Manifest = await app.getManifest();
 						logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
 						windowDefaultLeft =
-							settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
+							settings?.browserProvider?.defaultWindowOptions?.defaultLeft ??
 							platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
 							0;
 						windowDefaultTop =
-							settings.browserProvider?.defaultWindowOptions?.defaultTop ??
+							settings?.browserProvider?.defaultWindowOptions?.defaultTop ??
 							platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
 							0;
 
-						windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
+						windowPositioningStrategy = settings?.browserProvider?.windowPositioningStrategy;
 					}
 				}
 

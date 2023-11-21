@@ -37,12 +37,7 @@ export class PlatformLocalStorage<T = unknown> implements PlatformStorage<T> {
 			return;
 		}
 		const store = this.getCompleteStore();
-		const savedEntry = store[id];
-		if (isEmpty(savedEntry)) {
-			this._logger?.warn(`No ${this._storageTypeName} entry was found for id ${id}`);
-			return;
-		}
-		return savedEntry;
+		return store[id];
 	}
 
 	/**

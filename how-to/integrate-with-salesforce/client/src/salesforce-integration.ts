@@ -852,8 +852,8 @@ export class SalesforceIntegration {
 				if (fieldValue !== null && fieldValue !== undefined && fieldValue.length > 0) {
 					if (fieldMapping.displayMode === "icon") {
 						headerParts.image = await templateHelpers.createImage("image", "Profile", {
-							width: "44px",
-							height: "44px",
+							width: "38px",
+							height: "38px",
 							objectFit: "cover",
 							borderRadius: "50%"
 						});
@@ -868,9 +868,9 @@ export class SalesforceIntegration {
 							initials += values[values.length - 1][0];
 						}
 
-						headerParts.image = await templateHelpers.createText("initials", 18, {
-							width: "44px",
-							height: "44px",
+						headerParts.image = await templateHelpers.createText("initials", 16, {
+							width: "38px",
+							height: "38px",
 							objectFit: "cover",
 							borderRadius: "50%",
 							backgroundColor: palette.background2,
@@ -881,10 +881,10 @@ export class SalesforceIntegration {
 						});
 						data.initials = initials.toUpperCase();
 					} else if (fieldMapping.displayMode === "header") {
-						headerParts.header = await templateHelpers.createTitle("header", 14);
+						headerParts.header = await templateHelpers.createTitle("header");
 						data.header = fieldValue;
 					} else if (fieldMapping.displayMode === "sub-header") {
-						headerParts.subHeader = await templateHelpers.createText("subHeader", 12);
+						headerParts.subHeader = await templateHelpers.createText("subHeader", 10);
 						data.subHeader = fieldValue;
 					} else if (fieldMapping.displayMode === "field") {
 						if (fieldMapping.fieldContent === "link") {
@@ -924,12 +924,16 @@ export class SalesforceIntegration {
 			if (headerParts.subHeader) {
 				headerTitleParts.push(headerParts.subHeader);
 			}
-			headerChildren.push(await templateHelpers.createContainer("column", headerTitleParts));
+			headerChildren.push(
+				await templateHelpers.createContainer("column", headerTitleParts, {
+					overflow: "hidden"
+				})
+			);
 		}
 
 		const headerRow = await templateHelpers.createContainer("row", headerChildren, {
-			paddingBottom: "10px",
-			borderBottom: `1px solid ${palette.textDefault}`,
+			borderBottom: `1px solid ${palette.background6}`,
+			paddingBottom: "5px",
 			gap: "10px"
 		});
 

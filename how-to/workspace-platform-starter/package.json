@@ -19,6 +19,7 @@
 		"secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
 		"thirdclient": "node ./scripts/launch.mjs http://localhost:8080/third.manifest.fin.json",
 		"fourthclient": "node ./scripts/launch.mjs http://localhost:8080/fourth.manifest.fin.json",
+		"emptyclient": "node ./scripts/launch.mjs http://localhost:8080/empty.manifest.fin.json",
 		"server": "node ./server/build/index.js",
 		"setup": "npm install && npm run build",
 		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",

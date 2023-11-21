@@ -370,6 +370,21 @@ export interface TemplateHelpers {
 		fontSize?: number,
 		style?: CSS.Properties
 	): Promise<TemplateFragment>;
+
+	/**
+	 * Create a title element.
+	 * @param dataKey The data key for the title text.
+	 * @param fontSize The font size.
+	 * @param fontWeight The font weight.
+	 * @param style Additional CSS properties to use.
+	 * @returns The title element.
+	 */
+	createTitle(
+		dataKey: string,
+		fontSize?: number,
+		fontWeight?: string,
+		style?: CSS.Properties
+	): Promise<TextTemplateFragment>;
 }
 
 /**

@@ -236,7 +236,6 @@ export async function deleteSavedFavorite(id: string): Promise<boolean> {
  */
 export function getInfo(): FavoriteInfo {
 	if (isEmpty(favoriteOptions)) {
-		logger.warn("The options for favorites has not been set yet.");
 		return {
 			isEnabled: false
 		};
