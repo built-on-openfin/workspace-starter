@@ -26,7 +26,7 @@
 		"@openfin/core": "33.77.11",
 		"@openfin/node-adapter": "33.77.11",
 		"ts-loader": "^9.5.1",
-		"typescript": "^5.2.2",
+		"typescript": "^5.3.2",
 		"webpack": "^5.89.0",
 		"webpack-cli": "^5.1.4"
 	}
