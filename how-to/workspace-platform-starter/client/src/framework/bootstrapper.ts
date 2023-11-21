@@ -15,6 +15,7 @@ import * as platformSplashProvider from "./platform/platform-splash";
 import { getSettings } from "./settings";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import type { HomeProviderOptions } from "./shapes/home-shapes";
 import type { LoggedInLifecyclePayload } from "./shapes/lifecycle-shapes";
 import type { ModuleHelpers } from "./shapes/module-shapes";
 import * as trayProvider from "./tray";
@@ -41,7 +42,7 @@ export async function init(): Promise<boolean> {
 	logger.info("Initializing the bootstrapper");
 	const customSettings = await getSettings();
 
-	bootstrapOptions = { ...customSettings.bootstrap };
+	bootstrapOptions = { ...customSettings?.bootstrap };
 	bootstrapOptions.home = bootstrapOptions.home ?? true;
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
@@ -58,7 +59,7 @@ export async function init(): Promise<boolean> {
 
 	await platformSplashProvider.updateProgress("Integrations");
 	logger.info("Registering integrations");
-	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
+	await registerIntegration(customSettings?.integrationProvider, moduleHelpers, async (query) => {
 		if (homeRegistration?.setSearchQuery) {
 			await homeRegistration?.setSearchQuery(query);
 		} else {
@@ -69,8 +70,22 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.home) {
 		await platformSplashProvider.updateProgress("Home");
 
+		let homeProvider: HomeProviderOptions | undefined = customSettings?.homeProvider;
+
+		// If there were no custom settings home provider
+		// default to values from the manifest
+		if (isEmpty(homeProvider)) {
+			const app = await fin.Application.getCurrent();
+			const manifest = await app.getManifest();
+			homeProvider = {
+				id: fin.me.identity.uuid,
+				title: "Home",
+				icon: manifest.platform?.icon ?? ""
+			};
+		}
+
 		// only register search logic once workspace is running
-		homeRegistration = await homeComponent.register(customSettings.homeProvider);
+		homeRegistration = await homeComponent.register(homeProvider);
 		if (homeRegistration) {
 			workspaceMetaInfo = {
 				workspaceVersion: homeRegistration.workspaceVersion,
@@ -84,7 +99,7 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.store) {
 		await platformSplashProvider.updateProgress("Store");
 
-		const storeRegistration = await storeComponent.register(customSettings.storefrontProvider);
+		const storeRegistration = await storeComponent.register(customSettings?.storefrontProvider);
 		if (storeRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = storeRegistration;
@@ -97,7 +112,7 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.dock) {
 		await platformSplashProvider.updateProgress("Dock");
 
-		const dockRegistration = await dockComponent.register(customSettings.dockProvider, bootstrapOptions);
+		const dockRegistration = await dockComponent.register(customSettings?.dockProvider, bootstrapOptions);
 		if (dockRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = dockRegistration;
@@ -117,7 +132,7 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.notifications) {
 		await platformSplashProvider.updateProgress("Notifications");
 
-		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
+		notificationMetaInfo = await notificationsComponent.register(customSettings?.notificationProvider);
 		registerNotificationConnectionActions();
 	}
 
@@ -154,13 +169,15 @@ export async function init(): Promise<boolean> {
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
 
-	await platformSplashProvider.updateProgress("Low Code Integrations");
+	if (lowCodeIntegrationProvider.isEnabled()) {
+		await platformSplashProvider.updateProgress("Low Code Integrations");
 
-	// register any instantiated low code integrations that require registering
-	await lowCodeIntegrationProvider.initializeWorkflows();
-	if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
-		registeredComponents.push("home");
-		registerHomeConnectionActions();
+		// register any instantiated low code integrations that require registering
+		await lowCodeIntegrationProvider.initializeWorkflows();
+		if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
+			registeredComponents.push("home");
+			registerHomeConnectionActions();
+		}
 	}
 
 	logger.info("Validating auto show list:", bootstrapOptions.autoShow);
@@ -188,7 +205,7 @@ export async function init(): Promise<boolean> {
 		}
 	}
 
-	if (!isEmpty(customSettings?.trayProvider) && customSettings.trayProvider.enabled) {
+	if (!isEmpty(customSettings?.trayProvider) && customSettings?.trayProvider.enabled) {
 		await platformSplashProvider.updateProgress("Tray");
 		await trayProvider.init(customSettings?.trayProvider);
 	}

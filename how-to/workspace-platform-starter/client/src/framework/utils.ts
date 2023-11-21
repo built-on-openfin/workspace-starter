@@ -125,7 +125,13 @@ export function formatError(err: unknown): string {
  */
 export function sanitizeString(content: string): string {
 	if (isString(content)) {
-		return content.replace(/<[^>]*>?/gm, "");
+		return content
+			.replace(/<[^>]*>?/gm, "")
+			.replace(/&gt;/g, ">")
+			.replace(/&lt;/g, "<")
+			.replace(/&amp;/g, "&")
+			.replace(/&nbsp;/g, " ")
+			.replace(/\n\s*\n/g, "\n");
 	}
 	return content;
 }

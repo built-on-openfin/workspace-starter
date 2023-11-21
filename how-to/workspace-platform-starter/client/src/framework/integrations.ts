@@ -35,7 +35,7 @@ import { getVersionInfo } from "./version";
 
 const logger = createLogger("Integrations");
 
-let integrationProviderOptions: IntegrationProviderOptions;
+let integrationProviderOptions: IntegrationProviderOptions | undefined;
 let integrationModules: ModuleEntry<
 	IntegrationModule,
 	IntegrationHelpers,
@@ -144,42 +144,46 @@ export async function getSearchResults(
 		},
 		sourceFilters: []
 	};
-
-	if (
-		integrationProviderOptions.isManagementEnabled &&
-		query.startsWith(`/${integrationProviderOptions.command ?? "integrations"}`)
-	) {
-		return getManagementResults();
-	}
-
-	const promises: Promise<HomeSearchResponse>[] = [];
 	const sourceFilters: string[] = [];
-	for (const integrationModule of integrationModules) {
-		if (
-			integrationModule.isInitialized &&
-			integrationModule.implementation.getSearchResults &&
-			((integrationModule.definition.excludeFromSourceFilter ?? selectedSources.length === 0) ||
-				selectedSources.includes(integrationModule.definition.title))
-		) {
-			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse, options));
-		}
-		if (!integrationModule.definition.excludeFromSourceFilter) {
-			sourceFilters.push(integrationModule.definition.title);
-		}
-	}
 
-	const promiseResults = await Promise.allSettled(promises);
-	for (const promiseResult of promiseResults) {
-		if (promiseResult.status === "fulfilled") {
-			if (Array.isArray(promiseResult.value.results)) {
-				homeResponse.results = homeResponse.results.concat(promiseResult.value.results);
+	if (!isEmpty(integrationProviderOptions)) {
+		if (
+			integrationProviderOptions.isManagementEnabled &&
+			query.startsWith(`/${integrationProviderOptions.command ?? "integrations"}`)
+		) {
+			return getManagementResults();
+		}
+
+		const promises: Promise<HomeSearchResponse>[] = [];
+		for (const integrationModule of integrationModules) {
+			if (
+				integrationModule.isInitialized &&
+				integrationModule.implementation.getSearchResults &&
+				((integrationModule.definition.excludeFromSourceFilter ?? selectedSources.length === 0) ||
+					selectedSources.includes(integrationModule.definition.title))
+			) {
+				promises.push(
+					integrationModule.implementation.getSearchResults(query, filters, lastResponse, options)
+				);
 			}
-			const newFilters = promiseResult.value.context?.filters;
-			if (Array.isArray(newFilters) && homeResponse.context?.filters) {
-				homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
+			if (!integrationModule.definition.excludeFromSourceFilter) {
+				sourceFilters.push(integrationModule.definition.title);
 			}
-		} else {
-			logger.error(promiseResult.reason);
+		}
+
+		const promiseResults = await Promise.allSettled(promises);
+		for (const promiseResult of promiseResults) {
+			if (promiseResult.status === "fulfilled") {
+				if (Array.isArray(promiseResult.value.results)) {
+					homeResponse.results = homeResponse.results.concat(promiseResult.value.results);
+				}
+				const newFilters = promiseResult.value.context?.filters;
+				if (Array.isArray(newFilters) && homeResponse.context?.filters) {
+					homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
+				}
+			} else {
+				logger.error(promiseResult.reason);
+			}
 		}
 	}
 
@@ -196,6 +200,7 @@ export async function getSearchResults(
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	if (!integrationProviderOptions) {
 		logger.error("IntegrationProvider is not available, make sure your have called init");
+		return [];
 	}
 
 	let results: HomeSearchResult[] = [];
@@ -295,16 +300,17 @@ export async function itemSelection(
  * @returns The home results.
  */
 export async function getManagementResults(): Promise<HomeSearchResponse> {
-	if (!integrationProviderOptions) {
-		logger.error("IntegrationProvider is not available, make sure your have called init");
-	}
-
 	const homeResponse: HomeSearchResponse = {
 		results: [],
 		context: {
 			filters: []
 		}
 	};
+
+	if (!integrationProviderOptions) {
+		logger.error("IntegrationProvider is not available, make sure your have called init");
+		return homeResponse;
+	}
 
 	for (const integrationModule of integrationModules) {
 		const result = await createResult(

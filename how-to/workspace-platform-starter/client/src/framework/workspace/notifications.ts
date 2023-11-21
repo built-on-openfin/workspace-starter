@@ -35,7 +35,7 @@ export async function register(
 
 		logger.info("Registering platform with Notification Center.");
 		const settings = await getSettings();
-		if (!isEmpty(settings?.notificationProvider)) {
+		if (!isEmpty(settings) && !isEmpty(settings?.notificationProvider)) {
 			const { notificationClients, ...notificationsPlatformOptions } = settings.notificationProvider;
 			notificationPlatformId = notificationsPlatformOptions?.id ?? fin.me.identity.uuid;
 			notificationsPlatformOptions.id = notificationPlatformId;
