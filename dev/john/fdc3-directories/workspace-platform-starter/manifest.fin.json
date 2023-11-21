@@ -1560,6 +1560,15 @@
 							"favoriteChanged": true
 						}
 					}
+				},
+				{
+					"id": "default-workspace",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/favicon.ico",
+					"title": "default workspace management",
+					"description": "set and apply your default workspace.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
 				}
 			]
 		},
