@@ -165,6 +165,9 @@
 		},
 		"appProvider": {
 			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/apps-fdc3-2-0.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-contact.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-expero.json",
@@ -174,9 +177,8 @@
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-dev-extensions.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-preload.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-tools.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/apps.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/apps-fdc3-1-2.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/apps-fdc3-2-0.json"
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-directories/workspace-platform-starter/common/apps-fdc3-2-0.json"
 			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
