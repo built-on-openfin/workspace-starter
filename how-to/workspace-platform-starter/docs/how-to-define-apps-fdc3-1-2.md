@@ -8,7 +8,7 @@
 
 We support this format although you will lose out on the ability to specify tags (which is used for store, and dock app assignment and used to filter apps in home) unless you specify tags as a string array property of the app (which is not part of the spec but we map that to our tag setting). We generally recommend our platform app format or FDC3 2.0.
 
-We map this format to our internal Platform App format. We include an example of this in the public folder of workspace-platform-starter [apps-fdc3-1-2.json](../public/apps-fdc3-1-2.json).
+We map this format to our internal Platform App format. We include an example of this in the public folder of workspace-platform-starter [public/common/apps-fdc3-1-2.json](../public/common/apps-fdc3-1-2.json). We also give you an empty applications array for you to fill in for your own apps: [public/apps-fdc3-1-2.json](../public/apps-fdc3-1-2.json).
 
 ### What Does An FDC3 1.2 App Definition Look Like?
 

@@ -100,6 +100,9 @@
 	},
 	"appProvider": {
 		"endpointIds": [
+			"http://localhost:8080/apps.json",
+			"http://localhost:8080/apps-fdc3-1-2.json",
+			"http://localhost:8080/apps-fdc3-2-0.json",
 			"http://localhost:8080/common/apps-contact.json",
 			"http://localhost:8080/common/apps.json",
 			"http://localhost:8080/common/apps-expero.json",
@@ -109,9 +112,8 @@
 			"http://localhost:8080/common/apps-dev-extensions.json",
 			"http://localhost:8080/common/apps-preload.json",
 			"http://localhost:8080/common/apps-tools.json",
-			"http://localhost:8080/apps.json",
-			"http://localhost:8080/apps-fdc3-1-2.json",
-			"http://localhost:8080/apps-fdc3-2-0.json"
+			"http://localhost:8080/common/apps-fdc3-1-2.json",
+			"http://localhost:8080/common/apps-fdc3-2-0.json"
 		],
 		"cacheDurationInSeconds": 10,
 		"cacheDurationInMinutes": 0,
