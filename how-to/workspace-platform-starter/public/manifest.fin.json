@@ -1560,6 +1560,15 @@
 							"favoriteChanged": true
 						}
 					}
+				},
+				{
+					"id": "default-workspace",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "default workspace management",
+					"description": "set and apply your default workspace.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
 				}
 			]
 		},
