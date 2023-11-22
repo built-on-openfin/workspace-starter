@@ -17,6 +17,8 @@ let lastCacheUpdate: number = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
 let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
+let canLaunchExternalProcess: boolean | undefined;
+let canDownloadAppAssets: boolean | undefined;
 
 /**
  * Initialize the application provider.
@@ -350,7 +352,9 @@ export async function getApp(appId: string): Promise<PlatformApp | undefined> {
  * @returns True if we have permission.
  */
 async function getCanLaunchExternalProcess(): Promise<boolean> {
-	let canLaunchExternalProcess = false;
+	if (!isEmpty(canLaunchExternalProcess)) {
+		return canLaunchExternalProcess;
+	}
 
 	try {
 		const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
@@ -360,6 +364,7 @@ async function getCanLaunchExternalProcess(): Promise<boolean> {
 		canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
 	} catch (error) {
 		logger.error("Error while querying for System.launchExternalProcess permission", error);
+		canLaunchExternalProcess = false;
 	}
 
 	return canLaunchExternalProcess;
@@ -370,7 +375,9 @@ async function getCanLaunchExternalProcess(): Promise<boolean> {
  * @returns True if we have permission.
  */
 async function getCanDownloadAppAssets(): Promise<boolean> {
-	let canDownloadAppAssets = false;
+	if (!isEmpty(canDownloadAppAssets)) {
+		return canDownloadAppAssets;
+	}
 
 	try {
 		const canDownloadAppAssetsResponse =
@@ -378,6 +385,7 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 	} catch (error) {
 		logger.error("Error while querying for System.downloadAsset permission", error);
+		canDownloadAppAssets = false;
 	}
 
 	return canDownloadAppAssets;

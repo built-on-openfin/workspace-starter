@@ -8,7 +8,7 @@
 
 We support this format out of the box (we map it to our own internal format). We generally recommend our platform app format or FDC3 2.0.
 
-We include an example of this in the public folder of workspace-platform-starter [apps-fdc3-2-0.json](../public/apps-fdc3-2-0.json).
+We include an example of this in the public folder of workspace-platform-starter [public/common/apps-fdc3-2-0.json](../public/common/apps-fdc3-2-0.json). We also give you an empty applications array for you to fill in for your own apps: [public/apps-fdc3-2-0.json](../public/apps-fdc3-2-0.json).
 
 ### What Does An FDC3 2.0 App Definition Look Like?
 

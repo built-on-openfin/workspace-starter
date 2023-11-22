@@ -14,7 +14,7 @@ You have a number of choices when choosing how you define your apps.
 
 The Platform App definition for a workspace platform is based on the FDC3 1.2 App definition with some additional extensions (such as tags, private, autostart, and instanceMode). It is the structure used internally.
 
-Using workspace platform starter an app definition can easily be added to an [apps.json](../public/apps.json) file and it will be automatically picked up alongside a collection of [common apps](../public/common/apps.json).
+Workspace platform starter includes a number of example app.json files in the public/common folder e.g. [common apps](../public/common/apps.json). We also give you an empty applications array for you to add your own apps: [public/apps.json](../public/apps.json). The workspace starter platform will pull in all listed directories and merge them together.
 
 ### What Does An App Definition Look Like?
 
