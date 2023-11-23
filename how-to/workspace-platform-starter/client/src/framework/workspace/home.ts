@@ -167,13 +167,19 @@ async function onUserInput(
 						// obliterate any that already exist
 						const asyncFilters = context?.filters;
 						if (!isEmpty(asyncFilters)) {
-							// Replace any filters we already have and add any left to the end
+							// Replace any filters we already have and add any remaining
 							for (const asyncFilter of asyncFilters) {
-								const filterIndex = finalFilters.findIndex((f) => f.id === asyncFilter.id);
-								if (filterIndex >= 0) {
-									finalFilters.splice(filterIndex, 1, asyncFilter);
-								} else {
-									finalFilters.unshift(asyncFilter);
+								// Only add the filter if it has any options
+								if (Array.isArray(asyncFilter.options) && asyncFilter.options.length > 0) {
+									const filterIndex = finalFilters.findIndex((f) => f.id === asyncFilter.id);
+
+									if (filterIndex >= 0) {
+										// Already in the list so replace it
+										finalFilters.splice(filterIndex, 1, asyncFilter);
+									} else {
+										// Not in list so add
+										finalFilters.unshift(asyncFilter);
+									}
 								}
 							}
 
