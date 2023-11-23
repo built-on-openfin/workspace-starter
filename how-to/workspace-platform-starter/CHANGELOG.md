@@ -29,7 +29,7 @@
 ```
 
 - Fixed async filters so they don't replace the current filters
-- Added a home searching panel whey querying, and debounced requests
+- Added a home searching panel when querying, and debounced requests
 - Improved the Home UI experience so that it does not appear to bounce when typing search requests
 - Improved platform now starts correctly when no customSettings are provided in manifest
 - Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
