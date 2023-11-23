@@ -116,11 +116,13 @@ async function onUserInput(
 	lastResponse = response;
 	lastResponse.open();
 
+	const enableSourceFilter = !(homeProviderOptions?.sourceFilter?.disabled ?? false);
+
 	// Debounce the keyboard input, this also means that the method returns
 	// immediately with a dummy filter, so the UI does not "bounce"
 	debounceTimerId = window.setTimeout(async () => {
 		try {
-			const filters: CLIFilter[] = request?.context?.selectedFilters ?? [];
+			const selectedFilters: CLIFilter[] = request?.context?.selectedFilters ?? [];
 			const queryLower = request.query.toLowerCase();
 
 			if (queryLower === "?") {
@@ -135,11 +137,9 @@ async function onUserInput(
 				return searchResults;
 			}
 
-			const enableSourceFilter = !(homeProviderOptions?.sourceFilter?.disabled ?? false);
-
 			let selectedSourceFilterOptions: string[] = [];
-			if (enableSourceFilter && filters) {
-				const sourceFilter = filters.find((f) => f.id === HOME_SOURCE_FILTERS);
+			if (enableSourceFilter && selectedFilters) {
+				const sourceFilter = selectedFilters.find((f) => f.id === HOME_SOURCE_FILTERS);
 				if (sourceFilter) {
 					if (Array.isArray(sourceFilter.options)) {
 						selectedSourceFilterOptions = sourceFilter.options
@@ -151,27 +151,41 @@ async function onUserInput(
 				}
 			}
 
-			let sourceFilterOptions: string[] = [];
-
 			logger.info("Search results requested.");
 			const finalFilters: CLIFilter[] = [];
+			let sourceFilter: CLIFilter | undefined;
+
 			const searchResults = await getSearchResults(
 				request.query,
-				filters,
+				selectedFilters,
 				{
 					...lastResponse,
 					updateContext: (context: HomeSearchResponse["context"]) => {
 						// We must provide an overloaded updateContext to the
-						// integrations so that we can intercept it, this was
+						// integrations so that we can intercept it, this way
 						// if they replace filters async it doesn't completely
 						// obliterate any that already exist
-						const finalContext = {
-							filters: finalFilters
-						};
-						if (context?.filters) {
-							finalContext.filters.push(...context.filters);
+						const asyncFilters = context?.filters;
+						if (!isEmpty(asyncFilters)) {
+							// Replace any filters we already have and add any left to the end
+							for (const asyncFilter of asyncFilters) {
+								const filterIndex = finalFilters.findIndex((f) => f.id === asyncFilter.id);
+								if (filterIndex >= 0) {
+									finalFilters.splice(filterIndex, 1, asyncFilter);
+								} else {
+									finalFilters.unshift(asyncFilter);
+								}
+							}
+
+							// We copy and reverse the filters as they are laid out right to left
+							// and we want to stop them from moving position once they are displayed
+							const filters = (sourceFilter ? [...finalFilters, sourceFilter] : finalFilters)
+								.slice()
+								.reverse();
+							lastResponse.updateContext({
+								filters
+							});
 						}
-						lastResponse.updateContext(finalContext);
 					}
 				},
 				selectedSourceFilterOptions,
@@ -182,30 +196,6 @@ async function onUserInput(
 				}
 			);
 
-			if (Array.isArray(searchResults.sourceFilters) && searchResults.sourceFilters.length > 0) {
-				sourceFilterOptions = sourceFilterOptions.concat(searchResults.sourceFilters);
-			}
-
-			if (enableSourceFilter && sourceFilterOptions.length > 0) {
-				searchResults.context = searchResults.context ?? {};
-				searchResults.context.filters = searchResults.context.filters ?? [];
-				searchResults.context.filters.push({
-					id: HOME_SOURCE_FILTERS,
-					title: homeProviderOptions?.sourceFilter?.label ?? HOME_SOURCE_DEFAULT_FILTER_LABEL,
-					options: sourceFilterOptions.map((c) => ({ value: c, isSelected: true }))
-				});
-			}
-
-			const contextFilters = searchResults.context?.filters;
-			if (Array.isArray(contextFilters)) {
-				for (const filter of contextFilters) {
-					if (Array.isArray(filter.options) && filter.options.length > 0) {
-						finalFilters.push(filter);
-					}
-				}
-			}
-			searchResults.context ??= {};
-			searchResults.context.filters = finalFilters.length > 0 ? finalFilters : [createEmptySourceFilter()];
 			if (!Array.isArray(searchResults?.results)) {
 				logger.info("No results array returned.");
 			} else {
@@ -216,8 +206,35 @@ async function onUserInput(
 			// returns quickly without the UI bouncing
 			lastResponse.revoke("home-searching");
 			lastResponse.respond(searchResults.results);
+
+			// Remove any filters with no options
+			const contextFilters = searchResults.context?.filters;
+			if (Array.isArray(contextFilters)) {
+				for (const filter of contextFilters) {
+					if (Array.isArray(filter.options) && filter.options.length > 0) {
+						finalFilters.push(filter);
+					}
+				}
+			}
+
+			// The integrations returned us some source filters so add them to the list of source filter options
+			if (enableSourceFilter) {
+				if (Array.isArray(searchResults.sourceFilters) && searchResults.sourceFilters.length > 0) {
+					sourceFilter = {
+						id: HOME_SOURCE_FILTERS,
+						title: homeProviderOptions?.sourceFilter?.label ?? HOME_SOURCE_DEFAULT_FILTER_LABEL,
+						options: searchResults.sourceFilters.map((c) => ({ value: c, isSelected: true }))
+					};
+				} else {
+					sourceFilter = createEmptySourceFilter();
+				}
+			}
+
+			// We copy and reverse the filters as they are laid out right to left
+			// and we want to stop them from moving position once they are displayed
+			const filters = (sourceFilter ? [...finalFilters, sourceFilter] : finalFilters).slice().reverse();
 			lastResponse.updateContext({
-				filters: searchResults.context?.filters
+				filters
 			});
 		} catch (err) {
 			logger.error("Exception while getting search list results", err);
@@ -236,7 +253,7 @@ async function onUserInput(
 			}
 		],
 		context: {
-			filters: [createEmptySourceFilter()]
+			filters: enableSourceFilter ? [createEmptySourceFilter()] : []
 		}
 	};
 }
