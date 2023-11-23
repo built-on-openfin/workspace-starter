@@ -231,11 +231,12 @@ export class ServiceNowIntegration {
 			queryAgainst?: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const palette = await this.getCurrentPalette();
 		if (!this._serviceNowConnection && this._integrationHelpers) {
 			this._connectLastResponse = lastResponse;
 			const results = [];
-			if (this._connectionError && palette) {
+			if (this._connectionError) {
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
 				const connectResult = await this.createConnectResult(
 					this._integrationHelpers.templateHelpers,
 					palette
@@ -260,11 +261,9 @@ export class ServiceNowIntegration {
 
 		const apps: HomeSearchResult[] = [];
 
-		if (
-			(query.length === 0 || "servicenow".startsWith(query.toLowerCase())) &&
-			this._integrationHelpers &&
-			palette
-		) {
+		if ((query.length === 0 || "servicenow".startsWith(query.toLowerCase())) && this._integrationHelpers) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			const palette = await themeClient.getPalette();
 			apps.push(await this.createAppResult(this._integrationHelpers?.templateHelpers, palette));
 		}
 
@@ -405,6 +404,27 @@ export class ServiceNowIntegration {
 						}
 
 						lastResponse.respond(homeResults);
+
+						const resultTypes: Set<string> = new Set<string>();
+						for (const searchResult of homeResults) {
+							if (searchResult.data?.objType) {
+								resultTypes.add(searchResult.data?.objType);
+							}
+						}
+
+						const newFilters = resultTypes.entries();
+						lastResponse.updateContext({
+							filters: [
+								{
+									id: ServiceNowIntegration._FILTERS as string,
+									title: "Service Now",
+									options: [...newFilters].map((f) => ({
+										value: f[0],
+										isSelected: true
+									}))
+								}
+							]
+						});
 					}
 				} catch (err) {
 					if (err instanceof AuthTokenExpiredError) {
@@ -420,19 +440,7 @@ export class ServiceNowIntegration {
 		}, 500);
 
 		return {
-			results: apps.concat(query.length >= minLength ? [this.createSearchingResult()] : []),
-			context: {
-				filters: [
-					{
-						id: ServiceNowIntegration._FILTERS as string,
-						title: "Service Now",
-						options: defaultFilters.map((o) => ({
-							value: o,
-							isSelected: true
-						}))
-					}
-				]
-			}
+			results: apps.concat(query.length >= minLength ? [this.createSearchingResult()] : [])
 		};
 	}
 
@@ -448,67 +456,58 @@ export class ServiceNowIntegration {
 	): Promise<boolean> {
 		if (result.action.trigger === "focus-change") {
 			if (result.data?.state === "loading" && this._serviceNowConnection && this._integrationHelpers) {
-				const currentPalette = await this.getCurrentPalette();
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
 				const templateHelpers = this._integrationHelpers.templateHelpers;
 				const actionData = result.data as ActionLoadingData;
 				const objType = actionData.objType;
 
-				if (currentPalette) {
-					try {
-						// Load the full expanded version of the object with display values
-						const response = await this._serviceNowConnection.executeApiRequest(
-							`/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES[objType]}/${actionData.obj.sys_id}?sysparm_display_value=true`,
-							"GET"
-						);
+				try {
+					// Load the full expanded version of the object with display values
+					const response = await this._serviceNowConnection.executeApiRequest(
+						`/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES[objType]}/${actionData.obj.sys_id}?sysparm_display_value=true`,
+						"GET"
+					);
 
-						if (response.data) {
-							actionData.obj = response.data;
-						}
-					} catch (err) {
-						this._logger?.error(this.formatError(err));
+					if (response.data) {
+						actionData.obj = response.data;
 					}
+				} catch (err) {
+					this._logger?.error(this.formatError(err));
+				}
 
-					const resultHandlers: {
-						[key in ServiceNowObjectTypes]?: () => Promise<HomeSearchResult>;
-					} = {
-						Contact: async () =>
-							this.createContactResult(
-								templateHelpers,
-								currentPalette,
-								actionData.obj as ServiceNowEntities.Core.Contact
-							),
-						Account: async () =>
-							this.createAccountResult(
-								templateHelpers,
-								currentPalette,
-								actionData.obj as ServiceNowEntities.CSM.Account
-							),
-						Case: async () =>
-							this.createCaseResult(
-								templateHelpers,
-								currentPalette,
-								actionData.obj as ServiceNowEntities.CSM.Case
-							),
-						Task: async () =>
-							this.createTaskResult(
-								templateHelpers,
-								currentPalette,
-								actionData.obj as ServiceNowEntities.CSM.Task
-							),
-						Incident: async () =>
-							this.createIncidentResult(
-								templateHelpers,
-								currentPalette,
-								actionData.obj as ServiceNowEntities.Core.Incident
-							)
-					};
+				const resultHandlers: {
+					[key in ServiceNowObjectTypes]?: () => Promise<HomeSearchResult>;
+				} = {
+					Contact: async () =>
+						this.createContactResult(
+							templateHelpers,
+							palette,
+							actionData.obj as ServiceNowEntities.Core.Contact
+						),
+					Account: async () =>
+						this.createAccountResult(
+							templateHelpers,
+							palette,
+							actionData.obj as ServiceNowEntities.CSM.Account
+						),
+					Case: async () =>
+						this.createCaseResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Case),
+					Task: async () =>
+						this.createTaskResult(templateHelpers, palette, actionData.obj as ServiceNowEntities.CSM.Task),
+					Incident: async () =>
+						this.createIncidentResult(
+							templateHelpers,
+							palette,
+							actionData.obj as ServiceNowEntities.Core.Incident
+						)
+				};
 
-					const typeHandler = resultHandlers[objType];
-					if (typeHandler) {
-						const res = await typeHandler();
-						if (res) {
-							lastResponse.respond([res]);
-						}
+				const typeHandler = resultHandlers[objType];
+				if (typeHandler) {
+					const res = await typeHandler();
+					if (res) {
+						lastResponse.respond([res]);
 					}
 				}
 			}
@@ -585,11 +584,10 @@ export class ServiceNowIntegration {
 			this._connectionError = this.formatError(err);
 			this._logger?.error("Connecting to ServiceNow failed", err);
 			if (this._connectLastResponse && this._integrationHelpers) {
-				const palette = await this.getCurrentPalette();
-				if (palette) {
-					const res = await this.createConnectResult(this._integrationHelpers.templateHelpers, palette);
-					this._connectLastResponse.respond([res]);
-				}
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
+				const res = await this.createConnectResult(this._integrationHelpers.templateHelpers, palette);
+				this._connectLastResponse.respond([res]);
 			}
 		}
 	}
@@ -1676,21 +1674,5 @@ export class ServiceNowIntegration {
 			return new Date(date).toLocaleString();
 		}
 		return "";
-	}
-
-	/**
-	 * Get the current palette from either of the integration helper methods.
-	 * This is to retain compatibility with old helper structure.
-	 * @returns The pallete if one of the methods is available.
-	 */
-	private async getCurrentPalette(): Promise<CustomPaletteSet | undefined> {
-		if (this._integrationHelpers?.getCurrentPalette) {
-			return this._integrationHelpers.getCurrentPalette();
-		} else if (this._integrationHelpers?.getThemeClient) {
-			const themeClient = await this._integrationHelpers.getThemeClient();
-			if (themeClient.getPalette) {
-				return themeClient.getPalette();
-			}
-		}
 	}
 }

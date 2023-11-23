@@ -256,21 +256,15 @@ export interface IntegrationHelpers {
 	templateHelpers: TemplateHelpers;
 
 	/**
-	 * Get the current palette.
-	 * @returns The current palette.
-	 */
-	getCurrentPalette?(): Promise<CustomPaletteSet>;
-
-	/**
 	 * If this platform has been configured to support theming it will provide it.
 	 * @returns the theme client.
 	 */
-	getThemeClient?(): Promise<{
+	getThemeClient(): Promise<{
 		/**
 		 * Get the current palette.
 		 * @returns The current palette.
 		 */
-		getPalette?(): Promise<CustomPaletteSet>;
+		getPalette(): Promise<CustomPaletteSet>;
 	}>;
 
 	/**
