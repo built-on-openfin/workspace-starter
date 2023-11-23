@@ -12,6 +12,7 @@
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
 		"setup": "npm install && npm run build",
 		"prettier": "prettier --config .prettierrc --write .",
+		"prettier-check": "prettier --config .prettierrc --check .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
 		"markdownlint": "markdownlint **/*.md",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint"

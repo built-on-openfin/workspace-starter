@@ -35,6 +35,7 @@
 		"prepare-package": "npm run package-content --manifest=../scripts/pack.json --env=dist --host=http://localhost && cd packaged && npm pkg set name=$NAME",
 		"generate-module": "node ./templates/scripts/generate-module.mjs",
 		"prettier": "prettier --config .prettierrc --write .",
+		"prettier-check": "prettier --config .prettierrc --check .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
 		"markdownlint": "markdownlint **/*.md",
 		"validate": "npm run prettier & npm run eslint & npm run markdownlint"

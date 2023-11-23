@@ -10,6 +10,7 @@
 		"package-for-aws": "node ./scripts/package.js --location aws",
 		"start": "echo You must be in a folder for a specific how-to to use npm run start e.g. ./how-to/register-with-home",
 		"prettier": "node ./scripts/workspaces.mjs prettier",
+		"prettier-check": "node ./scripts/workspaces.mjs prettier-check",
 		"eslint": "node ./scripts/workspaces.mjs eslint",
 		"markdownlint": "node ./scripts/workspaces.mjs markdownlint",
 		"validate": "node ./scripts/workspaces.mjs validate",
