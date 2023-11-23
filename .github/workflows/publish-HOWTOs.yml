@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Build packages
-        run: npm run build-client --workspaces
+        run: npm run build
 
       - name: Package for publishing (GitHub Pages)
         run: npm run package

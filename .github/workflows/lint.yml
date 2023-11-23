@@ -21,7 +21,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
       - name: Run prettier
-        run: npx prettier --config .prettierrc --check .
+        run: npm run prettier-check
       - name: Run eslint
         run: npm run eslint
       - name: Run markdownlint
