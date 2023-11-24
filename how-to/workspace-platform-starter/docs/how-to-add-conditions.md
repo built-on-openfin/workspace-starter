@@ -90,6 +90,16 @@ As part of the platform there are already some built-in conditions.
 - `sharing` - Is the sharing flag in the platform enabled.
 - `themed` - Is the platform configured with a light and dark theme.
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Conditions" is the name you want to give your module:
+
+```shell
+npm run generate-module conditions "My Conditions"
+```
+
+This will generate the code in the modules/conditions folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [conditions.ts](../client/src/framework/conditions.ts)

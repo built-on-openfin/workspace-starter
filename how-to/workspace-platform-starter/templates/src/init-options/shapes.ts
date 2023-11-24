@@ -9,3 +9,13 @@ export interface ExampleInitOptionsProviderOptions extends InitOptionsHandlerOpt
 	 */
 	exampleProp?: string;
 }
+
+/**
+ * Options for the example init options payload.
+ */
+export interface ExampleInitOptionsPayload {
+	/**
+	 * Example property passed in the payload.
+	 */
+	exampleProp?: string;
+}

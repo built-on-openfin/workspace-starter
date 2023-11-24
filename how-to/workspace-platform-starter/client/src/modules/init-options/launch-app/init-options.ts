@@ -1,4 +1,7 @@
-import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
+import type {
+	ActionHandlerContext,
+	InitOptionsHandler
+} from "workspace-platform-starter/shapes/init-options-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
@@ -7,7 +10,7 @@ import type { LaunchAppOptions, LaunchAppPayload } from "./shapes";
 /**
  * Init options launch handler.
  */
-export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchAppOptions> {
+export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchAppOptions, LaunchAppPayload> {
 	private _logger?: Logger;
 
 	private _helpers?: ModuleHelpers;
@@ -36,8 +39,13 @@ export class InitOptionsLaunchAppHandler implements InitOptionsHandler<LaunchApp
 	 * Handle the init options action.
 	 * @param requestedAction The requested action.
 	 * @param payload The payload for the action.
+	 * @param context The context calling the action.
 	 */
-	public async action(requestedAction: string, payload?: LaunchAppPayload): Promise<void> {
+	public async action(
+		requestedAction: string,
+		payload: LaunchAppPayload | undefined,
+		context: ActionHandlerContext
+	): Promise<void> {
 		if (isEmpty(payload)) {
 			this._logger?.warn(
 				`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`

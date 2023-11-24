@@ -112,6 +112,16 @@ await parentTabStack.addView(event.childOptions, {
 
 There is an module linked in the Source Reference which demonstrates this type of handling.
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Content Creation" is the name you want to give your module:
+
+```shell
+npm run generate-module contentCreation "My Content Creation"
+```
+
+This will generate the code in the modules/content-creation folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [content-creation.ts](../client/src/framework/content-creation.ts)

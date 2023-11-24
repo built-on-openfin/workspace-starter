@@ -35,6 +35,16 @@ public async handleAnalytics(events: AnalyticsEvent[]) {
 }
 ```
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Analytics" is the name you want to give your module:
+
+```shell
+npm run generate-module analytics "My Analytics"
+```
+
+This will generate the code in the modules/analytics folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [Analytics](../client/src/framework/analytics.ts)

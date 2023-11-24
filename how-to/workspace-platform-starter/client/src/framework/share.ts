@@ -34,7 +34,7 @@ export async function init(options: { enabled: boolean } | undefined): Promise<v
 		if (shareEnabled) {
 			if (!shareRegistered) {
 				shareRegistered = true;
-				initOptionsListenerId = registerListener("shareId", async (initOptions) => {
+				initOptionsListenerId = registerListener("shareId", async (initOptions, context) => {
 					logger.info("Received share request.");
 					if (typeof initOptions.shareId === "string") {
 						await loadSharedEntry(initOptions.shareId);

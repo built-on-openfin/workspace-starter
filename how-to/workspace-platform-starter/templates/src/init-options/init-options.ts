@@ -1,12 +1,17 @@
-import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
+import type {
+	ActionHandlerContext,
+	InitOptionsHandler
+} from "workspace-platform-starter/shapes/init-options-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { ExampleInitOptionsProviderOptions } from "./shapes";
+import type { ExampleInitOptionsPayload, ExampleInitOptionsProviderOptions } from "./shapes";
 
 /**
  * Implementation for the example init options provider.
  */
-export class ExampleInitOptionsProvider implements InitOptionsHandler<ExampleInitOptionsProviderOptions> {
+export class ExampleInitOptionsProvider
+	implements InitOptionsHandler<ExampleInitOptionsProviderOptions, ExampleInitOptionsPayload>
+{
 	/**
 	 * The module definition including settings.
 	 * @internal
@@ -61,9 +66,14 @@ export class ExampleInitOptionsProvider implements InitOptionsHandler<ExampleIni
 	 * Handle the init options action.
 	 * @param requestedAction The requested action.
 	 * @param payload The payload for the action.
+	 * @param context The context calling the action.
 	 * @returns Nothing.
 	 */
-	public async action(requestedAction: string, payload?: unknown): Promise<void> {
+	public async action(
+		requestedAction: string,
+		payload: ExampleInitOptionsPayload | undefined,
+		context: ActionHandlerContext
+	): Promise<void> {
 		// TODO: Handle the init options
 	}
 }
