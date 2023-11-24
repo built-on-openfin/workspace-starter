@@ -95,7 +95,7 @@ As part of the platform there are already some built-in conditions.
 You can generate the scaffold for a new module by using the following command line, where "My Conditions" is the name you want to give your module:
 
 ```shell
-npm run generate-module initOptions "My Conditions"
+npm run generate-module conditions "My Conditions"
 ```
 
 This will generate the code in the modules/conditions folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
