@@ -284,6 +284,16 @@ For every search result you return from an integration you should use either the
 }
 ```
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Integration" is the name you want to give your module:
+
+```shell
+npm run generate-module integrations "My Integration"
+```
+
+This will generate the code in the modules/integrations folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [home.ts](../client/src/framework/workspace/home.ts)

@@ -72,6 +72,16 @@ public async action(requestedAction: string, payload: MyPayload | undefined, con
 
 You are free to perform whatever task you want within the action method, and can behave differently if the app was launched with the payload, or already running.
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Init Options" is the name you want to give your module:
+
+```shell
+npm run generate-module initOptions "My Init Options"
+```
+
+This will generate the code in the modules/init-options folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [init-options.ts](../client/src/framework/init-options.ts)

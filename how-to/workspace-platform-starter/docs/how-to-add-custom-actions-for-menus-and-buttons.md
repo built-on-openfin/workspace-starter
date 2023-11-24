@@ -61,6 +61,16 @@ We can trigger actions from other parts of the platform by configuring the inter
 - View Menu see [manifest.fin.json](../public/manifest.fin.json#249)
 - Buttons see [manifest.fin.json](../public/manifest.fin.json#281)
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Actions" is the name you want to give your module:
+
+```shell
+npm run generate-module actions "My Actions"
+```
+
+This will generate the code in the modules/actions folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [actions.ts](../client/src/framework/actions.ts)
