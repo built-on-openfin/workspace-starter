@@ -33,6 +33,7 @@
 - Improved the Home UI experience so that it does not appear to bounce when typing search requests
 - Improved platform now starts correctly when no customSettings are provided in manifest
 - Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
+- InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`
 
 ## v15
 
