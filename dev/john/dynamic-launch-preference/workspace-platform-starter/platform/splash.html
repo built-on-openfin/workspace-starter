@@ -45,5 +45,70 @@
 				</svg>
 			</div>
 		</main>
+		<script>
+			if (window.fin) {
+				function setupStyle(style) {
+					document.title = style.title;
+
+					const iconElem = document.querySelector('#icon');
+					if (iconElem) {
+						iconElem.src = style.icon;
+					}
+
+					const headingElem = document.querySelector('#heading');
+					if (headingElem) {
+						headingElem.textContent = style.title;
+					}
+
+					if (style.backgroundColor) {
+						document.body.style.backgroundColor = style.backgroundColor;
+					}
+
+					if (style.textColor) {
+						if (headingElem) {
+							headingElem.style.color = style.textColor;
+						}
+						const progressElem = document.querySelector('#progress');
+						if (progressElem) {
+							progressElem.style.color = style.textColor;
+						}
+						const loaderElem = document.querySelector('#loader');
+						if (loaderElem) {
+							loaderElem.style.color = style.textColor;
+						}
+					}
+
+					if (style.borderColor) {
+						const headerElem = document.querySelector('header');
+						if (headerElem) {
+							headerElem.style.borderBottomColor = style.borderColor;
+						}
+					}
+				}
+
+				async function setupChannel(channelName) {
+					if (channelName) {
+						const channel = await fin.InterApplicationBus.Channel.connect(channelName);
+						await channel.register('progress', (payload) => {
+							const progress = document.querySelector('#progress');
+							if (progress) {
+								progress.textContent = `Initializing ${payload.progress}...`;
+							}
+						});
+					}
+				}
+
+				(async () => {
+					try {
+						const options = await fin.me.getOptions();
+
+						setupStyle(options.customData.style);
+						await setupChannel(options.customData.channelName);
+					} catch (err) {
+						console.error(err);
+					}
+				})();
+			}
+		</script>
 	</body>
 </html>

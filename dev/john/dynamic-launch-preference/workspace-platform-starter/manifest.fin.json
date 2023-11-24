@@ -4,7 +4,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "32.114.76.14"
+		"version": "33.116.77.11"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-workspace-platform-starter"
@@ -73,7 +73,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - v15.0.0",
+		"name": "Workspace Platform Starter - v16.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -165,6 +165,9 @@
 		},
 		"appProvider": {
 			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/apps.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/apps-fdc3-2-0.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-contact.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-expero.json",
@@ -174,9 +177,8 @@
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-dev-extensions.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-preload.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-tools.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/apps.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/apps-fdc3-1-2.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/apps-fdc3-2-0.json"
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/apps-fdc3-2-0.json"
 			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
@@ -193,7 +195,8 @@
 				"inline-appasset",
 				"manifest",
 				"desktop-browser",
-				"connection"
+				"connection",
+				"endpoint"
 			]
 		},
 		"endpointProvider": {
@@ -280,8 +283,35 @@
 					"id": "favorite-remove",
 					"type": "module",
 					"typeId": "favorite-local-storage"
+				},
+				{
+					"id": "get-default-workspace",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "GET",
+						"dataType": "default-workspace"
+					}
+				},
+				{
+					"id": "set-default-workspace",
+					"type": "module",
+					"typeId": "local-storage",
+					"options": {
+						"method": "SET",
+						"dataType": "default-workspace"
+					}
 				}
-			]
+			],
+			"endpointClients": {
+				"clientOptions": [
+					{
+						"enabled": true,
+						"id": "default-workspace",
+						"endpointIds": ["get-default-workspace", "set-default-workspace"]
+					}
+				]
+			}
 		},
 		"browserProvider": {
 			"defaultWindowOptions": {
@@ -1073,26 +1103,26 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/js/preload.js",
 						"enableLibLogging": true,
 						"iconMap": {
-							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/salesforce.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/task.svg",
-							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/dashboard.svg",
-							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/phone.svg",
-							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/chat.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/integrate-with-salesforce/images/email.svg"
+							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/salesforce.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				},
@@ -1259,6 +1289,22 @@
 					"description": "Include In Snapshot",
 					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/composite/include-in-snapshot.bundle.js"
+				},
+				{
+					"id": "default-workspace",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/favicon.ico",
+					"title": "Default Workspace",
+					"description": "Allows the setting of a default workspace and whether or not it should be set when an active workspace is switched.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js"
+				},
+				{
+					"id": "window-platform",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/favicon.ico",
+					"title": "Window Platform Actions",
+					"description": "Window Platform Actions",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/actions/window-platform.bundle.js"
 				}
 			]
 		},
@@ -1349,7 +1395,7 @@
 		"versionProvider": {
 			"appVersion": "1.0.0",
 			"minVersion": {
-				"workspace": "15.0.5"
+				"workspace": "16.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -1402,6 +1448,15 @@
 					"description": "Provides additional menu options for windows.",
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/composite/windows.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "default-workspace",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/favicon.ico",
+					"title": "default workspace menu options",
+					"description": "set your default default workspace",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js",
 					"data": {}
 				}
 			]
@@ -1504,6 +1559,61 @@
 							"themeChanged": true,
 							"favoriteChanged": true
 						}
+					}
+				},
+				{
+					"id": "default-workspace",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/favicon.ico",
+					"title": "default workspace management",
+					"description": "set and apply your default workspace.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
+				}
+			]
+		},
+		"snapProvider": {
+			"enabled": false,
+			"id": "workspace-platform-starter",
+			"serverAssetInfo": {
+				"src": "SNAP_ASSET_URL",
+				"alias": "openfin-snap",
+				"version": "0.2.0",
+				"target": "OpenFinSnap.exe"
+			},
+			"showDebugWindow": false
+		},
+		"contentCreationProvider": {
+			"modules": [
+				{
+					"id": "view-position-content-creation",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/favicon.ico",
+					"title": "View Position Content Creation",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/content-creation/view-position.bundle.js",
+					"data": {
+						"rules": [
+							{
+								"behavior": "window",
+								"match": ["https://www.newscientist.com/*"],
+								"options": {
+									"defaultWidth": 800,
+									"defaultHeight": 600
+								}
+							},
+							{
+								"behavior": "view",
+								"match": ["https://www.scientificamerican.com/*"]
+							},
+							{
+								"behavior": "browser",
+								"match": ["https://www.livescience.com/*"]
+							},
+							{
+								"behavior": "block",
+								"match": ["https://www.sciencenews.org/*"]
+							}
+						]
 					}
 				}
 			]
