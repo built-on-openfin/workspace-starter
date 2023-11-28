@@ -154,15 +154,15 @@ export interface UpdatableViewLaunchPreference {
 /**
  * A list of web related settings that can be updated.
  */
-export type UpdatableWebLaunchPreferenceName = "URL" | "CUSTOM_DATA" | "INTEROP" | "BOUNDS" | "CENTERED";
+export type UpdatableWebLaunchPreferenceName = "url" | "custom-data" | "interop" | "bounds" | "centered";
 /**
  * A list of Web related constraints
  */
-export type UpdatableWebLaunchPreferenceConstraint = "URL_DOMAIN" | "URL_PAGE" | "URL_ANY" | "URL_NONE";
+export type UpdatableWebLaunchPreferenceConstraint = "url-domain" | "url-page" | "url-any" | "url-none";
 /**
  * The different type of settings that might apply to a view
  */
-export type UpdatableViewLaunchPreferenceName = UpdatableWebLaunchPreferenceName | "HOST_OPTIONS";
+export type UpdatableViewLaunchPreferenceName = UpdatableWebLaunchPreferenceName | "host-options";
 /**
  * A list of constrain rules that might apply to a view
  */

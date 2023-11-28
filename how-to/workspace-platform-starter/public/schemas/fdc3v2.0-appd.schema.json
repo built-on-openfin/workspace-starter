@@ -589,17 +589,17 @@
 		},
 		"UpdatableViewLaunchPreferenceName": {
 			"description": "The different type of settings that might apply to a view",
-			"enum": ["BOUNDS", "CENTERED", "CUSTOM_DATA", "HOST_OPTIONS", "INTEROP", "URL"],
+			"enum": ["bounds", "centered", "custom-data", "host-options", "interop", "url"],
 			"type": "string"
 		},
 		"UpdatableWebLaunchPreferenceConstraint": {
 			"description": "A list of Web related constraints",
-			"enum": ["URL_ANY", "URL_DOMAIN", "URL_NONE", "URL_PAGE"],
+			"enum": ["url-any", "url-domain", "url-none", "url-page"],
 			"type": "string"
 		},
 		"UpdatableWebLaunchPreferenceName": {
 			"description": "A list of web related settings that can be updated.",
-			"enum": ["BOUNDS", "CENTERED", "CUSTOM_DATA", "INTEROP", "URL"],
+			"enum": ["bounds", "centered", "custom-data", "interop", "url"],
 			"type": "string"
 		},
 		"UpdatableWindowLaunchPreference": {

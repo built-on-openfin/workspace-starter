@@ -2,6 +2,7 @@
 
 ## v16
 
+- Improved launchPreference so additional options such as url, interop, customData can be specified. Modules can now pass a launchPreference when launching an app by appId. They can see if the app supports being updated by getting the app by id and checking for the updatable setting under launchPreference.options. Only inline-view/view and inline-window/window support updatable launch preferences. Please see [how to define app launch preference](./docs/how-to-define-app-launch-preference.md).
 - Added support for Snap, enable by setting `customSettings.snapProvider.enabled` to true. Configure the `customSettings.snapProvider.serverAssetInfo` to point to the `SNAP_ASSET_URL`. Enable the Snap debugging window by setting `customSettings.snapProvider.showDebugWindow` to true.
 - Added new module type `content-creation`, these modules can be used to define content creation rules and handle the associated events. Modules are added in `customSettings.contentCreationProvider` section in manifest.
 - Added example content creation module which interrogates the `features` property from `window.open` to determine where to place a view in relation to where it was launched from. An example app `Content Creation Example` demonstrates this in use.

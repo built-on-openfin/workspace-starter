@@ -68,20 +68,7 @@ The following field is custom to this platform and is optional:
 - private - default value is false. Should this app entry be available for api usage (e.g. intents) but not be visible in e.g. Home, Store, Dock? Similar to how a private npm package can be used by some people but not everyone.
 - autostart - default value is false. Should this app be launched after bootstrapping.
 - instanceMode - default mode is multi. Value can be "single"|"multi"|"new" (new means a new instance will be created if an intent is raised and the app specified but no instance id even if there are existing instances. The intent picker will also not show instances as the app provider has indicated they want to just launch a new instance).
-- launchPreference - This is an optional and new setting added to v15 of workspace-platform-starter. This lets the directory owner or the app owner specify a preference that should apply to the application when launching.
-  - bounds - Bounds can optionally be specified. A view is something that exists in a platform/browser window so this allows a preference for height/width to be specified. A classic window can already specify a height and width in it's manifest but you may want a custom height/width for this app entry (especially if the window is defined as an external manifest as opposed to an inline one).
-  - defaultCentered - a particular view/classic window might need to be centered on launch. This allows the app/directory owner to specify that preference.
-- options - Optional options that are specific to the app/manifest type. Only view/inline-view has supported settings at this time.
-  - view you specify host specific settings.
-    - host - host settings to be used by the page hosting the view
-      - url - lets you specify that this view should be loaded into a specific Platform API window instead of the default browser window. The ability to have Platform API and Browser windows together in the same platform was added in v15 of @openfin/workspace-platform.
-      - title - the title to set on the window and this title is shown if pages are disabled on a browser window
-      - icon - used to replace the menu icon on a browser window (can be used by a platform window if you use the setting)
-      - hasHeaders - specify if you wish to have the view tab in a browser or platform api window
-      - disableMultiplePages - Disable multiple pages in a browser window.
-      - disableToolbarOptions - Remove toolbar buttons from browser window.
-      - pageTitle - provide a custom title (instead of undefined) to the launched page hosting the view if you haven't turned off pages.
-      - pageIcon - an icon to display alongside the page title is the page has no unsaved changes.
+- launchPreference - Please see [how to define app launch preference](./how-to-define-app-launch-preference.md)
 
 These settings are expressed by setting the customConfig of an app definition:
 
