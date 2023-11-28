@@ -877,7 +877,7 @@ export class ServiceNowIntegration {
 				providerId: this._definition?.id,
 				objType: "Contact",
 				obj: contact,
-				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Contact}.do?sys_id=${contact.sys_id}`,
+				url: `${this._settings?.instanceUrl}${ServiceNowIntegration._TABLE_NAMES.Contact}.do?sys_id=${contact.sys_id}`,
 				phone,
 				email
 			} as ActionData,
@@ -1008,7 +1008,7 @@ export class ServiceNowIntegration {
 				providerId: this._definition?.id,
 				objType: "Account",
 				obj: account,
-				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Account}.do?sys_id=${account.sys_id}`,
+				url: `${this._settings?.instanceUrl}${ServiceNowIntegration._TABLE_NAMES.Account}.do?sys_id=${account.sys_id}`,
 				phone,
 				email
 			} as ActionData,
@@ -1130,7 +1130,7 @@ export class ServiceNowIntegration {
 				providerId: this._definition?.id,
 				objType: "Case",
 				obj: cs,
-				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Case}.do?sys_id=${cs.sys_id}`
+				url: `${this._settings?.instanceUrl}${ServiceNowIntegration._TABLE_NAMES.Case}.do?sys_id=${cs.sys_id}`
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
@@ -1246,7 +1246,7 @@ export class ServiceNowIntegration {
 				providerId: this._definition?.id,
 				objType: "Task",
 				obj: task,
-				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Task}.do?sys_id=${task.sys_id}`
+				url: `${this._settings?.instanceUrl}${ServiceNowIntegration._TABLE_NAMES.Task}.do?sys_id=${task.sys_id}`
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {
@@ -1353,7 +1353,7 @@ export class ServiceNowIntegration {
 				providerId: this._definition?.id,
 				objType: "Incident",
 				obj: incident,
-				url: `${this._settings?.instanceUrl}nav_to.do?uri=${ServiceNowIntegration._TABLE_NAMES.Incident}.do?sys_id=${incident.sys_id}`
+				url: `${this._settings?.instanceUrl}${ServiceNowIntegration._TABLE_NAMES.Incident}.do?sys_id=${incident.sys_id}`
 			} as ActionData,
 			template: CLITemplate.Custom,
 			templateContent: {

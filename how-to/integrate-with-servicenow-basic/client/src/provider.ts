@@ -256,7 +256,7 @@ function updateContactsTable(): void {
  */
 async function openContact(contact: ServiceNowEntities.Core.Contact): Promise<void> {
 	const viewOptions = {
-		url: `${INSTANCE_URL}nav_to.do?uri=customer_contact.do?sys_id=${contact.sys_id}`,
+		url: `${INSTANCE_URL}customer_contact.do?sys_id=${contact.sys_id}`,
 		fdc3InteropApi: "2.0",
 		interop: {
 			currentContextGroup: "green"

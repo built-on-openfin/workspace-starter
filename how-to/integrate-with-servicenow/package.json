@@ -15,7 +15,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/servicenow": "^1.0.0-beta.6",
+		"@openfin/servicenow": "^1.0.0",
 		"@openfin/workspace": "15.0.12",
 		"@openfin/workspace-platform": "15.0.12",
 		"csstype": "^3.1.2"
