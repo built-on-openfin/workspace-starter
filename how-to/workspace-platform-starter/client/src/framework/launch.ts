@@ -394,14 +394,12 @@ async function launchWindow(
 				appLaunchPreferenceOptions.updatable.length > 0
 			) {
 				for (const option of appLaunchPreferenceOptions.updatable) {
-					if (option.name === "BOUNDS") {
+					if (option.name === "bounds") {
 						appLaunchPreference.bounds = launchPreference?.bounds;
-					}
-					if (option.name === "CENTERED") {
+					} else if (option.name === "centered") {
 						appLaunchPreference.defaultCentered = launchPreference?.defaultCentered;
-					}
-					if (
-						option.name === "CUSTOM_DATA" &&
+					} else if (
+						option.name === "custom-data" &&
 						launchPreference?.options?.type === "window" &&
 						!isEmpty(launchPreference.options?.window?.customData)
 					) {
@@ -412,9 +410,8 @@ async function launchWindow(
 							...appLaunchPreferenceOptions.window?.customData,
 							...launchPreference.options?.window?.customData
 						};
-					}
-					if (
-						option.name === "INTEROP" &&
+					} else if (
+						option.name === "interop" &&
 						launchPreference?.options?.type === "window" &&
 						!isEmpty(launchPreference.options?.window?.interop)
 					) {
@@ -422,9 +419,8 @@ async function launchWindow(
 							appLaunchPreferenceOptions.window = {};
 						}
 						appLaunchPreferenceOptions.window.interop = launchPreference?.options.window?.interop;
-					}
-					if (
-						option.name === "URL" &&
+					} else if (
+						option.name === "url" &&
 						launchPreference?.options?.type === "window" &&
 						!isEmpty(launchPreference.options?.window) &&
 						isStringValue(launchPreference.options?.window?.url)
@@ -563,14 +559,12 @@ async function launchView(
 				appLaunchPreferenceOptions.updatable.length > 0
 			) {
 				for (const option of appLaunchPreferenceOptions.updatable) {
-					if (option.name === "BOUNDS") {
+					if (option.name === "bounds") {
 						appLaunchPreference.bounds = launchPreference?.bounds;
-					}
-					if (option.name === "CENTERED") {
+					} else if (option.name === "centered") {
 						appLaunchPreference.defaultCentered = launchPreference?.defaultCentered;
-					}
-					if (
-						option.name === "HOST_OPTIONS" &&
+					} else if (
+						option.name === "host-options" &&
 						launchPreference?.options?.type === "view" &&
 						!isEmpty(launchPreference.options.host)
 					) {
@@ -593,9 +587,8 @@ async function launchView(
 							...appLaunchPreferenceOptions.host,
 							...launchPreference.options?.host
 						};
-					}
-					if (
-						option.name === "CUSTOM_DATA" &&
+					} else if (
+						option.name === "custom-data" &&
 						launchPreference?.options?.type === "view" &&
 						!isEmpty(launchPreference.options?.view?.customData)
 					) {
@@ -606,9 +599,8 @@ async function launchView(
 							...appLaunchPreferenceOptions.view?.customData,
 							...launchPreference.options?.view?.customData
 						};
-					}
-					if (
-						option.name === "INTEROP" &&
+					} else if (
+						option.name === "interop" &&
 						launchPreference?.options?.type === "view" &&
 						!isEmpty(launchPreference.options?.view?.interop)
 					) {
@@ -616,9 +608,8 @@ async function launchView(
 							appLaunchPreferenceOptions.view = {};
 						}
 						appLaunchPreferenceOptions.view.interop = launchPreference?.options.view?.interop;
-					}
-					if (
-						option.name === "URL" &&
+					} else if (
+						option.name === "url" &&
 						launchPreference?.options?.type === "view" &&
 						!isEmpty(launchPreference.options.view) &&
 						isStringValue(launchPreference.options?.view?.url)

@@ -143,7 +143,7 @@ export function sanitizeString(content: string): string {
  * ANY means you are allowed to replace one url with another without constrain.
  * NONE means you want to ensure that the url is not changed.
  */
-export type ValidURLConstraint = "URL_DOMAIN" | "URL_PAGE" | "URL_ANY" | "URL_NONE";
+export type ValidURLConstraint = "url-domain" | "url-page" | "url-any" | "url-none";
 
 /**
  * Validates the suggested url to see if it can replace the source url.
@@ -163,10 +163,10 @@ export function isValidUrl(
 	if (!Array.isArray(constraint) || constraint.length === 0) {
 		return true;
 	}
-	if (constraint.includes("URL_NONE")) {
+	if (constraint.includes("url-none")) {
 		return false;
 	}
-	if (constraint.includes("URL_ANY")) {
+	if (constraint.includes("url-any")) {
 		return true;
 	}
 	if (isEmpty(sourceUrl)) {
@@ -176,14 +176,14 @@ export function isValidUrl(
 	const validatedSourceUrl = new URL(sourceUrl);
 	const validatedSuggestedUrl = new URL(suggestedUrl);
 
-	if (constraint.includes("URL_PAGE")) {
+	if (constraint.includes("url-page")) {
 		return (
 			(validatedSourceUrl.origin + validatedSourceUrl.pathname).toLowerCase() ===
 			(validatedSuggestedUrl.origin + validatedSuggestedUrl.pathname).toLowerCase()
 		);
 	}
 
-	if (constraint.includes("URL_DOMAIN")) {
+	if (constraint.includes("url-domain")) {
 		return validatedSourceUrl.origin === validatedSuggestedUrl.origin;
 	}
 	return true;
