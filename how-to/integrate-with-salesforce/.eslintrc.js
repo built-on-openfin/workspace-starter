@@ -26,7 +26,7 @@ module.exports = {
 		'**/*.d.ts',
 		'**/settings.schema.json',
 		'**/reports/*',
-		'**/js/preload.js'
+		'**/public/js/preload.js'
 	],
 	parserOptions: {
 		ecmaVersion: 2020,
