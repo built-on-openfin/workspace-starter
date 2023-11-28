@@ -21,19 +21,22 @@ import type {
 	NativeLaunchOptions,
 	PlatformApp,
 	PlatformAppIdentifier,
+	UpdatableLaunchPreference,
 	ViewLaunchOptions
 } from "./shapes/app-shapes";
 import * as snapProvider from "./snap";
-import { isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
+import { isEmpty, isStringValue, isValidUrl, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
 /**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch.
+ * @param launchPreference launchPreferences if updatable for your the application.
  * @returns Identifiers specific to the type of application launched.
  */
-export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdentifier[] | undefined> {
+export async function launch(platformApp: PlatformApp,
+	launchPreference?: UpdatableLaunchPreference): Promise<PlatformAppIdentifier[] | undefined> {
 	try {
 		logger.info("Application launch requested", platformApp);
 
@@ -63,7 +66,7 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 			}
 			case MANIFEST_TYPES.InlineView.id:
 			case MANIFEST_TYPES.View.id: {
-				const platformIdentity = await launchView(app);
+				const platformIdentity = await launchView(app, launchPreference);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -393,9 +396,11 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 /**
  * Launch a view for the platform app.
  * @param viewApp The app to launch the view for.
+ * @param launchPreference The preferences (if supported) that you would like to apply
  * @returns The identity of the view launched.
  */
-async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
+async function launchView(viewApp: PlatformApp,
+	launchPreference: UpdatableLaunchPreference | undefined): Promise<PlatformAppIdentifier | undefined> {
 	if (isEmpty(viewApp)) {
 		logger.warn("No app was passed to launchView");
 		return;
@@ -455,11 +460,76 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 	if (!viewExists) {
 		try {
 			const platform = getCurrentSync();
+			const appLaunchPreference = objectClone(viewApp.launchPreference);
+			const appLaunchPreferenceOptions = objectClone(viewApp.launchPreference?.options) as ViewLaunchOptions;
+			if(appLaunchPreference?.options?.type === "view" &&
+				isEmpty(appLaunchPreference?.options?.updatable) &&
+			   Array.isArray(appLaunchPreferenceOptions?.updatable) &&
+			   appLaunchPreferenceOptions.updatable.length > 0) {
+				console.log(appLaunchPreference.options.updatable);
+				for(const option of appLaunchPreferenceOptions.updatable) {
+					if(option.name === "BOUNDS") {
+						appLaunchPreference.bounds = launchPreference?.bounds;
+					}
+					if(option.name === "CENTERED") {
+						appLaunchPreference.defaultCentered = launchPreference?.defaultCentered;
+					}
+					if(option.name === "HOST_OPTIONS" && launchPreference?.options?.type === "view" && !isEmpty(launchPreference.options.host)) {
+						if(isStringValue(appLaunchPreferenceOptions.host?.url) &&
+						 isStringValue(launchPreference.options.host?.url)) {
+							const sourceUrl: string = appLaunchPreferenceOptions.host?.url as string;
+							if(!isValidUrl(sourceUrl, launchPreference.options.host.url, option.constraint)) {
+								// a url already exists and the suggested one does not match so reset it
+								launchPreference.options.host.url = undefined;
+							}
+						}
+						appLaunchPreferenceOptions.host =
+						{ ...launchPreference.options?.host, ...appLaunchPreferenceOptions.host };
+					}
+					if(option.name === "CUSTOM_DATA" && launchPreference?.options?.type === "view" && !isEmpty(launchPreference.options?.view?.customData)) {
+						if(isEmpty(appLaunchPreferenceOptions.view)) {
+							appLaunchPreferenceOptions.view = {};
+						}
+						appLaunchPreferenceOptions.view.customData =
+						{ ...appLaunchPreferenceOptions.view?.customData,
+							...launchPreference.options?.view?.customData };
+					}
+					if(option.name === "INTEROP" && launchPreference?.options?.type === "view" && !isEmpty(launchPreference.options?.view?.interop)) {
+						if(isEmpty(appLaunchPreferenceOptions.view)) {
+							appLaunchPreferenceOptions.view = {};
+						}
+						appLaunchPreferenceOptions.view.interop = launchPreference?.options.view?.interop;
+					}
+					if(option.name === "URL" && launchPreference?.options?.type === "view" && isStringValue(launchPreference.options?.view?.url)) {
+						const suggestedUrl: string = launchPreference.options?.view?.url as string;
+						if(isEmpty(appLaunchPreferenceOptions.view)) {
+							appLaunchPreferenceOptions.view = {};
+						}
+						if(isValidUrl(manifest.url, suggestedUrl, option.constraint)) {
+							appLaunchPreferenceOptions.view.url = suggestedUrl;
+						}
+					}
+				}
+			}
 
-			const bounds = viewApp.launchPreference?.bounds;
-			const launchOptions = viewApp?.launchPreference?.options;
+			if(appLaunchPreference?.options?.type === "view" && !isEmpty(appLaunchPreference.options.view)) {
+				if(isStringValue(appLaunchPreference.options.view.url)) {
+					logger.info(`Updating view url with launch preferences: ${manifest.url} with ${appLaunchPreference.options.view.url}`);
+					manifest.url = appLaunchPreference.options.view.url;
+				}
+				if(!isEmpty(appLaunchPreference?.options?.view?.customData)) {
+					logger.info("Updating view customData with merged launch preferences.", appLaunchPreference.options.view.customData);
+					manifest.customData = appLaunchPreference.options.view.customData;
+				}
+				if(!isEmpty(appLaunchPreference?.options?.view?.interop)) {
+					logger.info("Updating view interop config with launch preferences.", appLaunchPreference.options.view.interop);
+					manifest.interop = appLaunchPreference.options.view.interop;
+				}
+			}
+			const bounds = appLaunchPreference?.bounds;
+			const launchOptions = appLaunchPreference?.options;
 			if (!isEmpty(bounds) || (!isEmpty(launchOptions) && launchOptions.type === "view")) {
-				const viewOptions = viewApp?.launchPreference?.options as ViewLaunchOptions;
+				const viewOptions = appLaunchPreference?.options as ViewLaunchOptions;
 
 				let workspacePlatform:
 					| Partial<BrowserWorkspacePlatformWindowOptions>
@@ -514,7 +584,7 @@ async function launchView(viewApp: PlatformApp): Promise<PlatformAppIdentifier |
 					defaultHeight: bounds?.height,
 					defaultWidth: bounds?.width,
 					width: bounds?.width,
-					defaultCentered: viewApp.launchPreference?.defaultCentered,
+					defaultCentered: appLaunchPreference?.defaultCentered,
 					layout
 				});
 

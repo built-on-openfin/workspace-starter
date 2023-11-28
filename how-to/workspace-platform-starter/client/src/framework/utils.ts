@@ -135,3 +135,52 @@ export function sanitizeString(content: string): string {
 	}
 	return content;
 }
+
+/**
+ * A way of specify the rules around the validation.
+ * DOMAIN means that the url must come from the same origin.
+ * PAGE means that the urls must match the same origin and path.
+ * ANY means you are allowed to replace one url with another without constrain.
+ * NONE means you want to ensure that the url is not changed.
+ */
+export type ValidURLConstraint = "URL_DOMAIN"|"URL_PAGE"|"URL_ANY"|"URL_NONE";
+
+/**
+ * Validates the suggested url to see if it can replace the source url.
+ * @param sourceUrl the original url to compare against.
+ * @param suggestedUrl the suggested url to replace it with.
+ * @param constraint the rules to apply against it.
+ * @returns whether it is ok to replace the sourceUrl with the suggestedUrl
+ */
+export function isValidUrl(sourceUrl: string | undefined,
+	suggestedUrl: string,
+	constraint: ValidURLConstraint[] | undefined): boolean {
+	if(isEmpty(suggestedUrl)) {
+		return false;
+	}
+	if(!Array.isArray(constraint) || constraint.length === 0) {
+		return true;
+	}
+	if(constraint.includes("URL_NONE")) {
+		return false;
+	}
+	if(constraint.includes("URL_ANY")) {
+		return true;
+	}
+	if(isEmpty(sourceUrl)) {
+		// if we are about to do a domain related check then we need a source url
+		return false;
+	}
+	const validatedSourceUrl = new URL(sourceUrl);
+	const validatedSuggestedUrl = new URL(suggestedUrl);
+
+	if(constraint.includes("URL_PAGE")) {
+		return (validatedSourceUrl.origin + validatedSourceUrl.pathname).toLowerCase() ===
+		(validatedSuggestedUrl.origin + validatedSuggestedUrl.pathname).toLowerCase();
+	}
+
+	if(constraint.includes("URL_DOMAIN")) {
+		return validatedSourceUrl.origin === validatedSuggestedUrl.origin;
+	}
+	return true;
+}
