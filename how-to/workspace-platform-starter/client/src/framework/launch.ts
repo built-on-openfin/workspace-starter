@@ -393,7 +393,6 @@ async function launchWindow(
 				Array.isArray(appLaunchPreferenceOptions?.updatable) &&
 				appLaunchPreferenceOptions.updatable.length > 0
 			) {
-				console.log(appLaunchPreference.options.updatable);
 				for (const option of appLaunchPreferenceOptions.updatable) {
 					if (option.name === "BOUNDS") {
 						appLaunchPreference.bounds = launchPreference?.bounds;
@@ -563,7 +562,6 @@ async function launchView(
 				Array.isArray(appLaunchPreferenceOptions?.updatable) &&
 				appLaunchPreferenceOptions.updatable.length > 0
 			) {
-				console.log(appLaunchPreference.options.updatable);
 				for (const option of appLaunchPreferenceOptions.updatable) {
 					if (option.name === "BOUNDS") {
 						appLaunchPreference.bounds = launchPreference?.bounds;
@@ -635,33 +633,33 @@ async function launchView(
 				}
 			}
 
-			if (appLaunchPreference?.options?.type === "view" && !isEmpty(appLaunchPreference.options.view)) {
-				if (isStringValue(appLaunchPreference.options.view.url)) {
+			if (appLaunchPreferenceOptions.type === "view" && !isEmpty(appLaunchPreferenceOptions.view)) {
+				if (isStringValue(appLaunchPreferenceOptions.view.url)) {
 					logger.debug(
-						`Updating app with id: ${viewApp.appId} url with launch preferences: ${manifest.url} with ${appLaunchPreference.options.view.url}`
+						`Updating app with id: ${viewApp.appId} url with launch preferences: ${manifest.url} with ${appLaunchPreferenceOptions.view.url}`
 					);
-					manifest.url = appLaunchPreference.options.view.url;
+					manifest.url = appLaunchPreferenceOptions.view.url;
 				}
-				if (!isEmpty(appLaunchPreference?.options?.view?.customData)) {
+				if (!isEmpty(appLaunchPreferenceOptions.view?.customData)) {
 					logger.debug(
 						`Updating app with id: ${viewApp.appId} customData with merged launch preferences.`,
-						appLaunchPreference.options.view.customData
+						appLaunchPreferenceOptions.view.customData
 					);
-					manifest.customData = appLaunchPreference.options.view.customData;
+					manifest.customData = appLaunchPreferenceOptions.view.customData;
 				}
-				if (!isEmpty(appLaunchPreference?.options?.view?.interop)) {
+				if (!isEmpty(appLaunchPreferenceOptions?.view?.interop)) {
 					logger.debug(
 						`Updating app with id: ${viewApp.appId} interop config with launch preferences.`,
-						appLaunchPreference.options.view.interop
+						appLaunchPreferenceOptions.view.interop
 					);
-					manifest.interop = appLaunchPreference.options.view.interop;
+					manifest.interop = appLaunchPreferenceOptions.view.interop;
 				}
 			}
 			const bounds = appLaunchPreference?.bounds;
-			const launchOptions = appLaunchPreference?.options;
-			if (!isEmpty(bounds) || (!isEmpty(launchOptions) && launchOptions.type === "view")) {
-				const viewOptions = appLaunchPreference?.options as ViewLaunchOptions;
-
+			if (
+				!isEmpty(bounds) ||
+				(!isEmpty(appLaunchPreferenceOptions) && appLaunchPreferenceOptions.type === "view")
+			) {
 				let workspacePlatform:
 					| Partial<BrowserWorkspacePlatformWindowOptions>
 					| { windowType: WindowType.Platform }
@@ -681,26 +679,29 @@ async function launchView(
 						}
 					],
 					settings: {
-						hasHeaders: viewOptions?.host?.hasHeaders
+						hasHeaders: appLaunchPreferenceOptions?.host?.hasHeaders
 					}
 				};
 
 				workspacePlatform = {
-					windowType: !isEmpty(viewOptions?.host?.url) ? WindowType.Platform : undefined,
-					disableMultiplePages: viewOptions?.host?.disableMultiplePages,
-					title: viewOptions?.host?.title,
-					favicon: viewOptions?.host?.icon
+					windowType: !isEmpty(appLaunchPreferenceOptions?.host?.url) ? WindowType.Platform : undefined,
+					disableMultiplePages: appLaunchPreferenceOptions?.host?.disableMultiplePages,
+					title: appLaunchPreferenceOptions?.host?.title,
+					favicon: appLaunchPreferenceOptions?.host?.icon
 				};
-				if (!isEmpty(viewOptions?.host?.pageTitle) || !isEmpty(viewOptions?.host?.pageIcon)) {
+				if (
+					!isEmpty(appLaunchPreferenceOptions?.host?.pageTitle) ||
+					!isEmpty(appLaunchPreferenceOptions?.host?.pageIcon)
+				) {
 					const page: Page = {
 						pageId: `page-${randomUUID()}`,
-						iconUrl: viewOptions?.host?.pageIcon,
-						title: await platform.Browser.getUniquePageTitle(viewOptions?.host?.pageTitle),
+						iconUrl: appLaunchPreferenceOptions?.host?.pageIcon,
+						title: await platform.Browser.getUniquePageTitle(appLaunchPreferenceOptions?.host?.pageTitle),
 						layout
 					};
 					workspacePlatform.pages = [page];
 				}
-				if (viewOptions?.host?.disableToolbarOptions === true) {
+				if (appLaunchPreferenceOptions?.host?.disableToolbarOptions === true) {
 					workspacePlatform.toolbarOptions = { buttons: [] };
 				}
 
@@ -710,7 +711,7 @@ async function launchView(
 
 				const preferenceWindow = await platform.createWindow({
 					workspacePlatform,
-					url: viewOptions?.host?.url,
+					url: appLaunchPreferenceOptions?.host?.url,
 					height: bounds?.height,
 					defaultHeight: bounds?.height,
 					defaultWidth: bounds?.width,
