@@ -22,7 +22,8 @@ import type {
 	PlatformApp,
 	PlatformAppIdentifier,
 	UpdatableLaunchPreference,
-	ViewLaunchOptions
+	ViewLaunchOptions,
+	WindowLaunchOptions
 } from "./shapes/app-shapes";
 import * as snapProvider from "./snap";
 import { isEmpty, isStringValue, isValidUrl, objectClone, randomUUID } from "./utils";
@@ -35,8 +36,10 @@ const logger = createLogger("Launch");
  * @param launchPreference launchPreferences if updatable for your the application.
  * @returns Identifiers specific to the type of application launched.
  */
-export async function launch(platformApp: PlatformApp,
-	launchPreference?: UpdatableLaunchPreference): Promise<PlatformAppIdentifier[] | undefined> {
+export async function launch(
+	platformApp: PlatformApp,
+	launchPreference?: UpdatableLaunchPreference
+): Promise<PlatformAppIdentifier[] | undefined> {
 	try {
 		logger.info("Application launch requested", platformApp);
 
@@ -315,9 +318,13 @@ function getManifestEndpointId(appId?: string): string {
 /**
  * Launch a window for the platform app.
  * @param windowApp The app to launch the window for.
+ * @param launchPreference Optional custom launch preferences
  * @returns The identity of the window launched.
  */
-async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifier | undefined> {
+async function launchWindow(
+	windowApp: PlatformApp,
+	launchPreference?: UpdatableLaunchPreference
+): Promise<PlatformAppIdentifier | undefined> {
 	if (isEmpty(windowApp)) {
 		logger.warn("No app was passed to launchWindow");
 		return;
@@ -375,12 +382,99 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
 
 	if (!windowExists) {
 		try {
+			const appLaunchPreference = objectClone(windowApp.launchPreference);
+			const appLaunchPreferenceOptions = objectClone(
+				windowApp.launchPreference?.options
+			) as WindowLaunchOptions;
+
+			// validate passed launch preferences
+			if (
+				appLaunchPreference?.options?.type === "window" &&
+				Array.isArray(appLaunchPreferenceOptions?.updatable) &&
+				appLaunchPreferenceOptions.updatable.length > 0
+			) {
+				console.log(appLaunchPreference.options.updatable);
+				for (const option of appLaunchPreferenceOptions.updatable) {
+					if (option.name === "BOUNDS") {
+						appLaunchPreference.bounds = launchPreference?.bounds;
+					}
+					if (option.name === "CENTERED") {
+						appLaunchPreference.defaultCentered = launchPreference?.defaultCentered;
+					}
+					if (
+						option.name === "CUSTOM_DATA" &&
+						launchPreference?.options?.type === "window" &&
+						!isEmpty(launchPreference.options?.window?.customData)
+					) {
+						if (isEmpty(appLaunchPreferenceOptions.window)) {
+							appLaunchPreferenceOptions.window = {};
+						}
+						appLaunchPreferenceOptions.window.customData = {
+							...appLaunchPreferenceOptions.window?.customData,
+							...launchPreference.options?.window?.customData
+						};
+					}
+					if (
+						option.name === "INTEROP" &&
+						launchPreference?.options?.type === "window" &&
+						!isEmpty(launchPreference.options?.window?.interop)
+					) {
+						if (isEmpty(appLaunchPreferenceOptions.window)) {
+							appLaunchPreferenceOptions.window = {};
+						}
+						appLaunchPreferenceOptions.window.interop = launchPreference?.options.window?.interop;
+					}
+					if (
+						option.name === "URL" &&
+						launchPreference?.options?.type === "window" &&
+						isStringValue(launchPreference.options?.window?.url)
+					) {
+						const suggestedUrl: string = launchPreference.options?.window?.url as string;
+						if (isEmpty(appLaunchPreferenceOptions.window)) {
+							appLaunchPreferenceOptions.window = {};
+						}
+						if (isValidUrl(manifest.url, suggestedUrl, option.constraint)) {
+							appLaunchPreferenceOptions.window.url = suggestedUrl;
+						}
+					}
+				}
+			}
+
 			const platform = getCurrentSync();
-			manifest.defaultHeight = windowApp?.launchPreference?.bounds?.height ?? manifest.defaultHeight;
-			manifest.height = windowApp?.launchPreference?.bounds?.height ?? manifest.height;
-			manifest.defaultWidth = windowApp?.launchPreference?.bounds?.width ?? manifest.defaultWidth;
-			manifest.width = windowApp?.launchPreference?.bounds?.width ?? manifest.width;
-			manifest.defaultCentered = windowApp.launchPreference?.defaultCentered ?? manifest.defaultCentered;
+			manifest.defaultHeight = appLaunchPreference?.bounds?.height ?? manifest.defaultHeight;
+			manifest.height = appLaunchPreference?.bounds?.height ?? manifest.height;
+			manifest.defaultWidth = appLaunchPreference?.bounds?.width ?? manifest.defaultWidth;
+			manifest.width = appLaunchPreference?.bounds?.width ?? manifest.width;
+			manifest.defaultCentered = appLaunchPreference?.defaultCentered ?? manifest.defaultCentered;
+
+			if (
+				!isEmpty(appLaunchPreferenceOptions.window) &&
+				isStringValue(appLaunchPreferenceOptions.window.url)
+			) {
+				logger.debug(
+					`Updating app with id: ${windowApp.appId}. The url of the window app is defined via launch preferences: ${manifest.url} is being replaced with ${appLaunchPreferenceOptions.window?.url}`
+				);
+				manifest.url = appLaunchPreferenceOptions.window?.url;
+			}
+
+			if (!isEmpty(appLaunchPreferenceOptions.window?.customData)) {
+				logger.debug(
+					`Updating app with id: ${windowApp.appId}. The custom data is being updated with launch preferences:`,
+					appLaunchPreferenceOptions.window?.customData
+				);
+				manifest.customData = appLaunchPreferenceOptions.window?.customData;
+			}
+
+			if (
+				!isEmpty(appLaunchPreferenceOptions.window) &&
+				!isEmpty(appLaunchPreferenceOptions.window?.interop)
+			) {
+				logger.debug(
+					`Updating app with id: ${windowApp.appId}. The interop definition is being updated with launch preferences:`,
+					appLaunchPreferenceOptions.window?.interop
+				);
+				manifest.interop = appLaunchPreferenceOptions.window.interop;
+			}
 
 			const createdWindow = await platform.createWindow(manifest);
 			identity = createdWindow.identity;
@@ -399,8 +493,10 @@ async function launchWindow(windowApp: PlatformApp): Promise<PlatformAppIdentifi
  * @param launchPreference The preferences (if supported) that you would like to apply
  * @returns The identity of the view launched.
  */
-async function launchView(viewApp: PlatformApp,
-	launchPreference: UpdatableLaunchPreference | undefined): Promise<PlatformAppIdentifier | undefined> {
+async function launchView(
+	viewApp: PlatformApp,
+	launchPreference?: UpdatableLaunchPreference
+): Promise<PlatformAppIdentifier | undefined> {
 	if (isEmpty(viewApp)) {
 		logger.warn("No app was passed to launchView");
 		return;
@@ -462,67 +558,98 @@ async function launchView(viewApp: PlatformApp,
 			const platform = getCurrentSync();
 			const appLaunchPreference = objectClone(viewApp.launchPreference);
 			const appLaunchPreferenceOptions = objectClone(viewApp.launchPreference?.options) as ViewLaunchOptions;
-			if(appLaunchPreference?.options?.type === "view" &&
+			if (
+				appLaunchPreference?.options?.type === "view" &&
 				isEmpty(appLaunchPreference?.options?.updatable) &&
-			   Array.isArray(appLaunchPreferenceOptions?.updatable) &&
-			   appLaunchPreferenceOptions.updatable.length > 0) {
+				Array.isArray(appLaunchPreferenceOptions?.updatable) &&
+				appLaunchPreferenceOptions.updatable.length > 0
+			) {
 				console.log(appLaunchPreference.options.updatable);
-				for(const option of appLaunchPreferenceOptions.updatable) {
-					if(option.name === "BOUNDS") {
+				for (const option of appLaunchPreferenceOptions.updatable) {
+					if (option.name === "BOUNDS") {
 						appLaunchPreference.bounds = launchPreference?.bounds;
 					}
-					if(option.name === "CENTERED") {
+					if (option.name === "CENTERED") {
 						appLaunchPreference.defaultCentered = launchPreference?.defaultCentered;
 					}
-					if(option.name === "HOST_OPTIONS" && launchPreference?.options?.type === "view" && !isEmpty(launchPreference.options.host)) {
-						if(isStringValue(appLaunchPreferenceOptions.host?.url) &&
-						 isStringValue(launchPreference.options.host?.url)) {
+					if (
+						option.name === "HOST_OPTIONS" &&
+						launchPreference?.options?.type === "view" &&
+						!isEmpty(launchPreference.options.host)
+					) {
+						if (
+							isStringValue(appLaunchPreferenceOptions.host?.url) &&
+							isStringValue(launchPreference.options.host?.url)
+						) {
 							const sourceUrl: string = appLaunchPreferenceOptions.host?.url as string;
-							if(!isValidUrl(sourceUrl, launchPreference.options.host.url, option.constraint)) {
+							if (!isValidUrl(sourceUrl, launchPreference.options.host.url, option.constraint)) {
 								// a url already exists and the suggested one does not match so reset it
 								launchPreference.options.host.url = undefined;
 							}
 						}
-						appLaunchPreferenceOptions.host =
-						{ ...launchPreference.options?.host, ...appLaunchPreferenceOptions.host };
+						appLaunchPreferenceOptions.host = {
+							...launchPreference.options?.host,
+							...appLaunchPreferenceOptions.host
+						};
 					}
-					if(option.name === "CUSTOM_DATA" && launchPreference?.options?.type === "view" && !isEmpty(launchPreference.options?.view?.customData)) {
-						if(isEmpty(appLaunchPreferenceOptions.view)) {
+					if (
+						option.name === "CUSTOM_DATA" &&
+						launchPreference?.options?.type === "view" &&
+						!isEmpty(launchPreference.options?.view?.customData)
+					) {
+						if (isEmpty(appLaunchPreferenceOptions.view)) {
 							appLaunchPreferenceOptions.view = {};
 						}
-						appLaunchPreferenceOptions.view.customData =
-						{ ...appLaunchPreferenceOptions.view?.customData,
-							...launchPreference.options?.view?.customData };
+						appLaunchPreferenceOptions.view.customData = {
+							...appLaunchPreferenceOptions.view?.customData,
+							...launchPreference.options?.view?.customData
+						};
 					}
-					if(option.name === "INTEROP" && launchPreference?.options?.type === "view" && !isEmpty(launchPreference.options?.view?.interop)) {
-						if(isEmpty(appLaunchPreferenceOptions.view)) {
+					if (
+						option.name === "INTEROP" &&
+						launchPreference?.options?.type === "view" &&
+						!isEmpty(launchPreference.options?.view?.interop)
+					) {
+						if (isEmpty(appLaunchPreferenceOptions.view)) {
 							appLaunchPreferenceOptions.view = {};
 						}
 						appLaunchPreferenceOptions.view.interop = launchPreference?.options.view?.interop;
 					}
-					if(option.name === "URL" && launchPreference?.options?.type === "view" && isStringValue(launchPreference.options?.view?.url)) {
+					if (
+						option.name === "URL" &&
+						launchPreference?.options?.type === "view" &&
+						isStringValue(launchPreference.options?.view?.url)
+					) {
 						const suggestedUrl: string = launchPreference.options?.view?.url as string;
-						if(isEmpty(appLaunchPreferenceOptions.view)) {
+						if (isEmpty(appLaunchPreferenceOptions.view)) {
 							appLaunchPreferenceOptions.view = {};
 						}
-						if(isValidUrl(manifest.url, suggestedUrl, option.constraint)) {
+						if (isValidUrl(manifest.url, suggestedUrl, option.constraint)) {
 							appLaunchPreferenceOptions.view.url = suggestedUrl;
 						}
 					}
 				}
 			}
 
-			if(appLaunchPreference?.options?.type === "view" && !isEmpty(appLaunchPreference.options.view)) {
-				if(isStringValue(appLaunchPreference.options.view.url)) {
-					logger.info(`Updating view url with launch preferences: ${manifest.url} with ${appLaunchPreference.options.view.url}`);
+			if (appLaunchPreference?.options?.type === "view" && !isEmpty(appLaunchPreference.options.view)) {
+				if (isStringValue(appLaunchPreference.options.view.url)) {
+					logger.debug(
+						`Updating app with id: ${viewApp.appId} url with launch preferences: ${manifest.url} with ${appLaunchPreference.options.view.url}`
+					);
 					manifest.url = appLaunchPreference.options.view.url;
 				}
-				if(!isEmpty(appLaunchPreference?.options?.view?.customData)) {
-					logger.info("Updating view customData with merged launch preferences.", appLaunchPreference.options.view.customData);
+				if (!isEmpty(appLaunchPreference?.options?.view?.customData)) {
+					logger.debug(
+						`Updating app with id: ${viewApp.appId} customData with merged launch preferences.`,
+						appLaunchPreference.options.view.customData
+					);
 					manifest.customData = appLaunchPreference.options.view.customData;
 				}
-				if(!isEmpty(appLaunchPreference?.options?.view?.interop)) {
-					logger.info("Updating view interop config with launch preferences.", appLaunchPreference.options.view.interop);
+				if (!isEmpty(appLaunchPreference?.options?.view?.interop)) {
+					logger.debug(
+						`Updating app with id: ${viewApp.appId} interop config with launch preferences.`,
+						appLaunchPreference.options.view.interop
+					);
 					manifest.interop = appLaunchPreference.options.view.interop;
 				}
 			}

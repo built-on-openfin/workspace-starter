@@ -108,7 +108,7 @@ export interface LaunchPreference {
 	/**
 	 * Are there any app type specific options you would like to apply?
 	 */
-	options?: ViewLaunchOptions | NativeLaunchOptions;
+	options?: ViewLaunchOptions | WindowLaunchOptions | NativeLaunchOptions;
 }
 
 /**
@@ -119,7 +119,7 @@ export type UpdatableLaunchPreference = LaunchPreference;
 /**
  * The list of Launch Option Types
  */
-export type LaunchOptionsType = "view" | "native";
+export type LaunchOptionsType = "view" | "window" | "native";
 
 /**
  * The base LaunchOption type.
@@ -147,13 +147,13 @@ export interface ViewLaunchOptions extends LaunchOptions {
 	/**
 	 * The option to override a few settings that are specific to views.
 	 */
-	view?: Partial<Pick<OpenFin.ViewOptions, "url"|"interop"|"customData" >>;
+	view?: Partial<Pick<OpenFin.ViewOptions, "url" | "interop" | "customData">>;
 
 	/**
 	 * What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.
 	 * By default nothing can be set outside of the app definition when launching the app.
 	 */
-	updatable?: UpdatableViewLaunchPreference [];
+	updatable?: UpdatableViewLaunchPreference[];
 }
 
 /**
@@ -174,12 +174,12 @@ export interface UpdatableViewLaunchPreference {
 /**
  * A list of web related settings that can be updated.
  */
-export type UpdatableWebLaunchPreferenceName = "URL"|"CUSTOM_DATA"|"INTEROP"|"BOUNDS"|"CENTERED";
+export type UpdatableWebLaunchPreferenceName = "URL" | "CUSTOM_DATA" | "INTEROP" | "BOUNDS" | "CENTERED";
 
 /**
  * A list of Web related constraints
  */
-export type UpdatableWebLaunchPreferenceConstraint = "URL_DOMAIN"|"URL_PAGE"|"URL_ANY"|"URL_NONE";
+export type UpdatableWebLaunchPreferenceConstraint = "URL_DOMAIN" | "URL_PAGE" | "URL_ANY" | "URL_NONE";
 
 /**
  * The different type of settings that might apply to a view
@@ -262,6 +262,42 @@ export interface SnapLaunchOptions {
 	 * The strategy for launching and locating the application.
 	 */
 	strategy?: LaunchStrategy;
+}
+
+/**
+ * Additional options that apply to a window
+ */
+export interface WindowLaunchOptions extends LaunchOptions {
+	/**
+	 * Window options type
+	 */
+	type: "window";
+
+	/**
+	 * The option to override a few settings that are specific to windows.
+	 */
+	window?: Partial<Pick<OpenFin.WindowOptions, "url" | "interop" | "customData">>;
+
+	/**
+	 * What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: UpdatableWindowLaunchPreference[];
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface UpdatableWindowLaunchPreference {
+	/**
+	 * What setting is updatable?
+	 */
+	name?: UpdatableWebLaunchPreferenceName;
+
+	/**
+	 * Is there a constraint that the platform can apply?
+	 */
+	constraint?: UpdatableWebLaunchPreferenceConstraint[];
 }
 
 /**
