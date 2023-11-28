@@ -77,7 +77,7 @@ export async function launch(
 			}
 			case MANIFEST_TYPES.Window.id:
 			case MANIFEST_TYPES.InlineWindow.id: {
-				const platformIdentity = await launchWindow(app);
+				const platformIdentity = await launchWindow(app, launchPreference);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -427,14 +427,14 @@ async function launchWindow(
 					if (
 						option.name === "URL" &&
 						launchPreference?.options?.type === "window" &&
+						!isEmpty(launchPreference.options?.window) &&
 						isStringValue(launchPreference.options?.window?.url)
 					) {
-						const suggestedUrl: string = launchPreference.options?.window?.url as string;
 						if (isEmpty(appLaunchPreferenceOptions.window)) {
 							appLaunchPreferenceOptions.window = {};
 						}
-						if (isValidUrl(manifest.url, suggestedUrl, option.constraint)) {
-							appLaunchPreferenceOptions.window.url = suggestedUrl;
+						if (isValidUrl(manifest.url, launchPreference.options.window.url, option.constraint)) {
+							appLaunchPreferenceOptions.window.url = launchPreference.options.window.url;
 						}
 					}
 				}
@@ -560,7 +560,6 @@ async function launchView(
 			const appLaunchPreferenceOptions = objectClone(viewApp.launchPreference?.options) as ViewLaunchOptions;
 			if (
 				appLaunchPreference?.options?.type === "view" &&
-				isEmpty(appLaunchPreference?.options?.updatable) &&
 				Array.isArray(appLaunchPreferenceOptions?.updatable) &&
 				appLaunchPreferenceOptions.updatable.length > 0
 			) {
@@ -577,19 +576,24 @@ async function launchView(
 						launchPreference?.options?.type === "view" &&
 						!isEmpty(launchPreference.options.host)
 					) {
+						if (isEmpty(appLaunchPreferenceOptions.host)) {
+							appLaunchPreferenceOptions.host = {};
+						}
 						if (
 							isStringValue(appLaunchPreferenceOptions.host?.url) &&
-							isStringValue(launchPreference.options.host?.url)
+							isStringValue(launchPreference.options.host?.url) &&
+							!isValidUrl(
+								appLaunchPreferenceOptions.host.url,
+								launchPreference.options.host.url,
+								option.constraint
+							)
 						) {
-							const sourceUrl: string = appLaunchPreferenceOptions.host?.url as string;
-							if (!isValidUrl(sourceUrl, launchPreference.options.host.url, option.constraint)) {
-								// a url already exists and the suggested one does not match so reset it
-								launchPreference.options.host.url = undefined;
-							}
+							// a url already exists and the suggested one does not match so reset it
+							launchPreference.options.host.url = undefined;
 						}
 						appLaunchPreferenceOptions.host = {
-							...launchPreference.options?.host,
-							...appLaunchPreferenceOptions.host
+							...appLaunchPreferenceOptions.host,
+							...launchPreference.options?.host
 						};
 					}
 					if (
@@ -618,14 +622,14 @@ async function launchView(
 					if (
 						option.name === "URL" &&
 						launchPreference?.options?.type === "view" &&
+						!isEmpty(launchPreference.options.view) &&
 						isStringValue(launchPreference.options?.view?.url)
 					) {
-						const suggestedUrl: string = launchPreference.options?.view?.url as string;
 						if (isEmpty(appLaunchPreferenceOptions.view)) {
 							appLaunchPreferenceOptions.view = {};
 						}
-						if (isValidUrl(manifest.url, suggestedUrl, option.constraint)) {
-							appLaunchPreferenceOptions.view.url = suggestedUrl;
+						if (isValidUrl(manifest.url, launchPreference.options.view.url, option.constraint)) {
+							appLaunchPreferenceOptions.view.url = launchPreference.options.view.url;
 						}
 					}
 				}
