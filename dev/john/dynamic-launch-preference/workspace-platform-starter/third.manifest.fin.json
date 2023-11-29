@@ -376,7 +376,7 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/integrations/workspaces.bundle.js",
 					"data": {
 						"images": {
-							"workspace": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/icons/{scheme}/workspace.svg"
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg"
 						}
 					}
 				},
@@ -389,7 +389,7 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/js/modules/integrations/pages.bundle.js",
 					"data": {
 						"images": {
-							"page": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/icons/{scheme}/page.svg"
+							"page": "https://built-on-openfin.github.io/workspace-starter/dev/john/dynamic-launch-preference/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg"
 						}
 					}
 				}
