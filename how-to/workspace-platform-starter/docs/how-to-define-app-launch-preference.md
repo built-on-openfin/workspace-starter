@@ -159,7 +159,7 @@ export interface UpdatableViewLaunchPreference {
  /**
   * Is there a constraint that the platform can apply?
   */
- constraint?: "url-domain" | "url-page" | "url-any" | "url-none"[];
+ constraint?: ("url-domain" | "url-page" | "url-any" | "url-none")[];
 }
 ```
 
@@ -226,7 +226,7 @@ export interface UpdatableWindowLaunchPreference {
  /**
   * Is there a constraint that the platform can apply?
   */
- constraint?: "url-domain" | "url-page" | "url-any" | "url-none"[];
+ constraint?: ("url-domain" | "url-page" | "url-any" | "url-none")[];
 }
 ```
 

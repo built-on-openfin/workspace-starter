@@ -163,7 +163,7 @@ export interface UpdatableViewLaunchPreference {
 	/**
 	 * What setting is updatable?
 	 */
-	name?: UpdatableViewLaunchPreferenceName;
+	name: UpdatableViewLaunchPreferenceName;
 
 	/**
 	 * Is there a constraint that the platform can apply?
@@ -292,7 +292,7 @@ export interface UpdatableWindowLaunchPreference {
 	/**
 	 * What setting is updatable?
 	 */
-	name?: UpdatableWebLaunchPreferenceName;
+	name: UpdatableWebLaunchPreferenceName;
 
 	/**
 	 * Is there a constraint that the platform can apply?
