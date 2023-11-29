@@ -79,7 +79,7 @@ export interface ViewLaunchOptions extends LaunchOptions {
   * What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.
   * By default nothing can be set outside of the app definition when launching the app.
   */
- updatable?: UpdatableViewLaunchPreference[];
+ updatable?: (ViewPreference | ViewPreferenceUrl)[];
 }
 ```
 
@@ -144,22 +144,42 @@ We let you specify the following view specific settings:
 
 #### Updatable View Options
 
-An app directory is the golden source for the description of an app. A platform can launch application in many ways but it may want to restrict what can be dynamically changed when launching an app and this is where the updatable setting comes in. This is an array of options that contain the name of the setting that can be configured and an optional array of constraints that should be checked before trying to apply the update. We have inlined some of the options below to make it easier to read.
+An app directory is the golden source for the description of an app. A platform can launch application in many ways but it may want to restrict what can be dynamically changed when launching an app and this is where the updatable setting comes in. This is an array of options that contain the name of the setting that can be configured and an optional array of constraints that should be checked before trying to apply the update.
 
 ```javascript
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface UpdatableViewLaunchPreference {
+export interface Preference<T = unknown> {
  /**
   * What setting is updatable?
   */
- name?: "url" | "custom-data" | "interop" | "bounds" | "centered" | "host-options";
+ name: ViewPreferenceName | WebPreferenceName;
 
  /**
   * Is there a constraint that the platform can apply?
   */
- constraint?: ("url-domain" | "url-page" | "url-any" | "url-none")[];
+ constraint?: T;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreference<T = never> extends Preference<T> {
+ /**
+  * What setting is updatable?
+  */
+ name: ViewPreferenceName;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUrl> {
+ /**
+  * Is the url updatable?
+  */
+ name: "url" | "host-options";
 }
 ```
 
@@ -195,8 +215,9 @@ export interface WindowLaunchOptions extends LaunchOptions {
   * What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.
   * By default nothing can be set outside of the app definition when launching the app.
   */
- updatable?: UpdatableWindowLaunchPreference[];
+ updatable?: (WindowPreference | WindowPreferenceUrl)[];
 }
+
 ```
 
 Every launch preference option has to specify a type so that we can correctly type the settings you have specified.
@@ -211,22 +232,27 @@ We let you specify the following window specific settings:
 
 #### Updatable Window Options
 
-An app directory is the golden source for the description of an app. A platform can launch application in many ways but it may want to restrict what can be dynamically changed when launching an app and this is where the updatable setting comes in. This is an array of options that contain the name of the setting that can be configured and an optional array of constraints that should be checked before trying to apply the update. We have inlined some of the options below to make it easier to read. This is similar to the view updatable setting.
+An app directory is the golden source for the description of an app. A platform can launch application in many ways but it may want to restrict what can be dynamically changed when launching an app and this is where the updatable setting comes in. This is an array of options that contain the name of the setting that can be configured and an optional array of constraints that should be checked before trying to apply the update.
 
 ```javascript
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface UpdatableWindowLaunchPreference {
+export interface WindowPreference<T = never> extends Preference<T> {
  /**
   * What setting is updatable?
   */
- name?: "url" | "custom-data" | "interop" | "bounds" | "centered";
+ name: WebPreferenceName;
+}
 
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface WindowPreferenceUrl extends Preference<PreferenceConstraintUrl> {
  /**
-  * Is there a constraint that the platform can apply?
+  * Is the url updatable?
   */
- constraint?: ("url-domain" | "url-page" | "url-any" | "url-none")[];
+ name: "url";
 }
 ```
 
