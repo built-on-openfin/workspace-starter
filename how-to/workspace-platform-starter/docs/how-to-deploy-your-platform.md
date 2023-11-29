@@ -50,7 +50,7 @@ As each file is processed the development host references will be replaced with 
 
 After the manifest file is processed the `contentPacks` from `./scripts/package-config.json` are processed in the same way. This can be useful if there are assets that are not directly referenced in the other files, but are still required at runtime.
 
-At a bare minimum the `public` and `common` sections are required, as they are used to locate other assets. Any pack can include a `dependsOn` field, specifying this means that it will only include the packs content if the file specified by the property has been included earlier in the processing.
+All of the content packs are included, unless they have `autoInclude` set to false. To include these packages you can use the `--packages` option on the command line e.g. `--packages=shell,package,of-info`
 
 ### Environment Substitutions
 
@@ -122,10 +122,10 @@ This will use `second-manifest.fin.json` as the starting point for the content, 
 
 You can test a local build with the following commands (assuming defaults):
 
-Serve the content:
+Serve the content, the `-c-` option disables caching making it easier to test:
 
 ```shell
-npx http-server packaged\local -p 8181
+npx http-server packaged\local -p 8181 -c-1
 ```
 
 Start the OpenFin app:
