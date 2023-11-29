@@ -527,7 +527,7 @@
 						"type": "Custom",
 						"tooltip": "Include in Snapshot",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/snapshot-removed.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/snapshot-removed.svg",
 						"action": {
 							"id": "include-in-snapshot",
 							"customData": {
@@ -545,7 +545,7 @@
 						"type": "Custom",
 						"tooltip": "Remove from snapshot",
 						"disabled": false,
-						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/snapshot-included.svg",
+						"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/snapshot-included.svg",
 						"action": {
 							"id": "remove-from-snapshot",
 							"customData": {
@@ -878,7 +878,7 @@
 				{
 					"id": "workspaces",
 					"tooltip": "Workspaces",
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/workspace.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg",
 					"action": {
 						"id": "workspaces-menu"
 					},
@@ -905,7 +905,7 @@
 				{
 					"id": "favorites",
 					"tooltip": "Favorites",
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/favorite.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/favorite.svg",
 					"action": {
 						"id": "favorites-menu"
 					},
@@ -914,7 +914,7 @@
 				{
 					"id": "pages",
 					"tooltip": "Pages",
-					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/page.svg",
+					"iconUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg",
 					"action": {
 						"id": "pages-menu"
 					}
@@ -1083,7 +1083,7 @@
 					"data": {
 						"favoritesEnabled": false,
 						"images": {
-							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/workspace.svg"
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg"
 						}
 					}
 				},
@@ -1097,7 +1097,7 @@
 					"data": {
 						"favoritesEnabled": false,
 						"images": {
-							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/page.svg"
+							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg"
 						}
 					}
 				},
@@ -1269,8 +1269,8 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/js/modules/actions/custom-menu.bundle.js",
 					"data": {
 						"images": {
-							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/page.svg",
-							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/workspace.svg"
+							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg",
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg"
 						}
 					}
 				},
@@ -1536,8 +1536,8 @@
 		},
 		"favoriteProvider": {
 			"enabled": false,
-			"favoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/favorite.svg",
-			"unfavoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/icons/{scheme}/unfavorite.svg",
+			"favoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/favorite.svg",
+			"unfavoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/workspace-platform-starter/common/icons/{theme}/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
 			"supportedFavoriteTypes": ["workspace", "page", "app"]
 		},
