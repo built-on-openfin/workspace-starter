@@ -5,11 +5,16 @@ import path from 'path';
 // example commands
 // npm run package-content
 // npm run package-content --manifest=manifest.fin.json --env=uat --host=https://openfin.mydomain.com
+// For packages that are marked as include=false in package-config.json you can include them using
+// the comma separated command line option --packages=project,shell
+// To generate a package.json use --project=name
 
 (async () => {
 	const manifest = process.env.npm_config_manifest ?? 'manifest.fin.json';
 	const env = process.env.npm_config_env ?? 'local';
 	const host = process.env.npm_config_host ?? 'http://localhost:8181';
+	const packages = process.env.npm_config_packages ?? '';
+	const project = process.env.npm_config_project ?? '';
 
 	console.log('Package');
 	console.log('=======');
@@ -17,22 +22,54 @@ import path from 'path';
 	console.log('Manifest:', manifest);
 	console.log('Env:', env);
 	console.log('Host:', host);
+	if (packages) {
+		console.log('Packages:', packages);
+	}
+	if (project) {
+		console.log('Project:', project);
+	}
 	console.log();
 
 	try {
-		const packagedDir = await packageContent(manifest, env, host);
+		const packagedDir = await packageContent(manifest, env, host, packages);
+
+		if (project) {
+			const projectJsonFile = path.join(packagedDir, '..', 'package.json');
+
+			console.log('Generating project file', projectJsonFile);
+
+			const currentPackageContent = await fs.readFile('./package.json', 'utf8');
+			const currentPackage = JSON.parse(currentPackageContent);
+
+			const projectJson = {
+				name: project,
+				version: currentPackage.version,
+				description: currentPackage.description,
+				author: currentPackage.author,
+				contributors: currentPackage.contributors,
+				license: currentPackage.license,
+				main: 'dist/js/provider.bundle.js',
+				types: 'client/types/provider.d.ts',
+				dependencies: pickKeys(currentPackage.dependencies, ['@openfin', '@finos']),
+				devDependencies: pickKeys(currentPackage.devDependencies, ['@openfin'])
+			};
+			await fs.writeFile(projectJsonFile, JSON.stringify(projectJson, undefined, '\t'));
+		}
 
 		if (host.includes('localhost')) {
 			console.log();
 			console.log('-------------------------------------------------');
 			console.log();
-			console.log('Execute the following command to serve locally');
+			console.log('Execute the following command to serve locally, note http caching is disabled');
 			const url = new URL(host);
 			console.log(
-				`   npx http-server ${path.relative('.', packagedDir)} -p ${url.port.length === 0 ? '80' : url.port}`
+				`   npx http-server ${path.relative('.', packagedDir)} -p ${
+					url.port.length === 0 ? '80' : url.port
+				} -c-1`
 			);
 			console.log(`and start the app with`);
 			console.log(`   start fin://${url.host}/${manifest}`);
+			console.log();
 		}
 	} catch (err) {
 		console.error(err);
@@ -44,9 +81,10 @@ import path from 'path';
  * @param manifest The manifest file to start.
  * @param env The environment we are packaging for.
  * @param host The host to point to in the files.
+ * @param packages List of packages to always include.
  * @returns The final packaged directory.
  */
-async function packageContent(manifest, env, host) {
+async function packageContent(manifest, env, host, packages) {
 	const packageConfig = await readJsonFile('./scripts/package-config.json');
 
 	const packagedDirectory = path.join(
@@ -67,6 +105,7 @@ async function packageContent(manifest, env, host) {
 	await fs.mkdir(packagedDirectory, { recursive: true });
 
 	const cache = [];
+	const alwaysInclude = packages.split(',');
 
 	packageConfig.contentPacks.unshift({
 		id: 'manifest',
@@ -79,12 +118,7 @@ async function packageContent(manifest, env, host) {
 	for (const contentPack of packageConfig.contentPacks) {
 		console.log('Processing content pack', contentPack.id);
 
-		let includePack = true;
-		if (contentPack.dependsOn) {
-			console.log('   Depends On', contentPack.dependsOn);
-			includePack = cache.some((c) => c.endsWith(contentPack.dependsOn));
-			console.log('   Dependency Found', includePack);
-		}
+		const includePack = alwaysInclude.includes(contentPack.id) ? true : contentPack?.autoInclude ?? true;
 
 		if (includePack) {
 			console.log();
@@ -350,4 +384,16 @@ async function readJsonFile(filename) {
 	} catch (err) {
 		console.error(`Error reading ${filename}`, err);
 	}
+}
+
+/**
+ * Pick the keys from the object.
+ * @param obj The object to pick from.
+ * @param keys The keys to pick.
+ * @returns The object with only specific keys.
+ */
+function pickKeys(obj, keys) {
+	const filteredKeys = Object.keys(obj).filter((origKey) => keys.some((k) => origKey.startsWith(k)));
+
+	return Object.fromEntries(filteredKeys.filter((key) => key in obj).map((key) => [key, obj[key]]));
 }

@@ -230,7 +230,7 @@ We have a number of integrations we have built to allow you to configure workspa
   "url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
   "data": {
     "images": {
-      "workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
+      "workspace": "http://localhost:8080/common/icons/{theme}/{scheme}/workspace.svg"
     }
   }
 }
@@ -248,7 +248,7 @@ We have a number of integrations we have built to allow you to configure workspa
   "url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
   "data": {
     "images": {
-      "page": "http://localhost:8080/icons/{scheme}/page.svg"
+      "page": "http://localhost:8080/common/icons/{theme}/{scheme}/page.svg"
     }
   }
 }
