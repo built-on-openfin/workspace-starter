@@ -159,7 +159,7 @@ export interface ViewLaunchOptions extends LaunchOptions {
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface Preference {
+export interface Preference<T = unknown> {
 	/**
 	 * What setting is updatable?
 	 */
@@ -168,37 +168,27 @@ export interface Preference {
 	/**
 	 * Is there a constraint that the platform can apply?
 	 */
-	constraint?: unknown;
+	constraint?: T;
 }
 
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface ViewPreference extends Preference {
+export interface ViewPreference<T = never> extends Preference<T> {
 	/**
 	 * What setting is updatable?
 	 */
 	name: ViewPreferenceName;
-
-	/**
-	 * Is there a constraint that the platform can apply?
-	 */
-	constraint?: unknown;
 }
 
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface ViewPreferenceUrl extends ViewPreference {
+export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUrl> {
 	/**
 	 * Is the url updatable?
 	 */
 	name: "url" | "host-options";
-
-	/**
-	 * Is there a constraint that the platform can apply?
-	 */
-	constraint?: PreferenceConstraintUrl;
 }
 
 /**
@@ -313,31 +303,21 @@ export interface WindowLaunchOptions extends LaunchOptions {
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface WindowPreference extends Preference {
+export interface WindowPreference<T = never> extends Preference<T> {
 	/**
 	 * What setting is updatable?
 	 */
 	name: WebPreferenceName;
-
-	/**
-	 * Is there a constraint that the platform can apply?
-	 */
-	constraint?: unknown;
 }
 
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface WindowPreferenceUrl extends Preference {
+export interface WindowPreferenceUrl extends Preference<PreferenceConstraintUrl> {
 	/**
 	 * Is the url updatable?
 	 */
 	name: "url";
-
-	/**
-	 * Is there a constraint that the platform can apply?
-	 */
-	constraint?: PreferenceConstraintUrl;
 }
 
 /**
