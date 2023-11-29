@@ -23,10 +23,11 @@ import type {
 	PlatformAppIdentifier,
 	UpdatableLaunchPreference,
 	ViewLaunchOptions,
-	WindowLaunchOptions
+	WindowLaunchOptions,
+	PreferenceConstraintUrl
 } from "./shapes/app-shapes";
 import * as snapProvider from "./snap";
-import { isEmpty, isStringValue, isValidUrl, objectClone, randomUUID } from "./utils";
+import { isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
@@ -1005,4 +1006,48 @@ async function launchExternalProcess(
 	}
 
 	return identity;
+}
+
+/**
+ * Validates the suggested url to see if it can replace the source url.
+ * @param sourceUrl the original url to compare against.
+ * @param suggestedUrl the suggested url to replace it with.
+ * @param constraint the rules to apply against it.
+ * @returns whether it is ok to replace the sourceUrl with the suggestedUrl
+ */
+export function isValidUrl(
+	sourceUrl: string | undefined,
+	suggestedUrl: string,
+	constraint: PreferenceConstraintUrl | undefined
+): boolean {
+	if (isEmpty(suggestedUrl)) {
+		return false;
+	}
+	if (!isStringValue(constraint)) {
+		return true;
+	}
+	if (constraint === "url-none") {
+		return false;
+	}
+	if (constraint === "url-any") {
+		return true;
+	}
+	if (isEmpty(sourceUrl)) {
+		// if we are about to do a domain related check then we need a source url
+		return false;
+	}
+	const validatedSourceUrl = new URL(sourceUrl);
+	const validatedSuggestedUrl = new URL(suggestedUrl);
+
+	if (constraint === "url-page") {
+		return (
+			(validatedSourceUrl.origin + validatedSourceUrl.pathname).toLowerCase() ===
+			(validatedSuggestedUrl.origin + validatedSuggestedUrl.pathname).toLowerCase()
+		);
+	}
+
+	if (constraint === "url-domain") {
+		return validatedSourceUrl.origin === validatedSuggestedUrl.origin;
+	}
+	return true;
 }

@@ -153,43 +153,68 @@ export interface ViewLaunchOptions extends LaunchOptions {
 	 * What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.
 	 * By default nothing can be set outside of the app definition when launching the app.
 	 */
-	updatable?: UpdatableViewLaunchPreference[];
+	updatable?: (ViewPreference | ViewPreferenceUrl)[];
 }
 
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface UpdatableViewLaunchPreference {
+export interface Preference {
 	/**
 	 * What setting is updatable?
 	 */
-	name: UpdatableViewLaunchPreferenceName;
+	name: ViewPreferenceName | WebPreferenceName;
 
 	/**
 	 * Is there a constraint that the platform can apply?
 	 */
-	constraint?: UpdatableViewLaunchPreferenceConstraint[];
+	constraint?: unknown;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreference extends Preference {
+	/**
+	 * What setting is updatable?
+	 */
+	name: ViewPreferenceName;
+
+	/**
+	 * Is there a constraint that the platform can apply?
+	 */
+	constraint?: unknown;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreferenceUrl extends ViewPreference {
+	/**
+	 * Is the url updatable?
+	 */
+	name: "url" | "host-options";
+
+	/**
+	 * Is there a constraint that the platform can apply?
+	 */
+	constraint?: PreferenceConstraintUrl;
 }
 
 /**
  * A list of web related settings that can be updated.
  */
-export type UpdatableWebLaunchPreferenceName = "url" | "custom-data" | "interop" | "bounds" | "centered";
+export type WebPreferenceName = "url" | "custom-data" | "interop" | "bounds" | "centered";
 
 /**
  * A list of Web related constraints
  */
-export type UpdatableWebLaunchPreferenceConstraint = "url-domain" | "url-page" | "url-any" | "url-none";
+export type PreferenceConstraintUrl = "url-domain" | "url-page" | "url-any" | "url-none";
 
 /**
  * The different type of settings that might apply to a view
  */
-export type UpdatableViewLaunchPreferenceName = UpdatableWebLaunchPreferenceName | "host-options";
-
-/**
- * A list of constrain rules that might apply to a view
- */
-export type UpdatableViewLaunchPreferenceConstraint = UpdatableWebLaunchPreferenceConstraint;
+export type ViewPreferenceName = WebPreferenceName | "host-options";
 
 /**
  * Additional options that apply to a native app
@@ -282,22 +307,37 @@ export interface WindowLaunchOptions extends LaunchOptions {
 	 * What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.
 	 * By default nothing can be set outside of the app definition when launching the app.
 	 */
-	updatable?: UpdatableWindowLaunchPreference[];
+	updatable?: (WindowPreference | WindowPreferenceUrl)[];
 }
 
 /**
  * Which Launch Options are updatable and are there any constraints
  */
-export interface UpdatableWindowLaunchPreference {
+export interface WindowPreference extends Preference {
 	/**
 	 * What setting is updatable?
 	 */
-	name: UpdatableWebLaunchPreferenceName;
+	name: WebPreferenceName;
 
 	/**
 	 * Is there a constraint that the platform can apply?
 	 */
-	constraint?: UpdatableWebLaunchPreferenceConstraint[];
+	constraint?: unknown;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface WindowPreferenceUrl extends Preference {
+	/**
+	 * Is the url updatable?
+	 */
+	name: "url";
+
+	/**
+	 * Is there a constraint that the platform can apply?
+	 */
+	constraint?: PreferenceConstraintUrl;
 }
 
 /**
