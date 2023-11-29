@@ -3886,6 +3886,16 @@
             ],
             "type": "string"
         },
+        "Preference.T": {
+            "description": "A list of Web related constraints",
+            "enum": [
+                "url-any",
+                "url-domain",
+                "url-none",
+                "url-page"
+            ],
+            "type": "string"
+        },
         "RGB": {
             "$ref": "#/definitions/__type_18"
         },
@@ -4473,75 +4483,6 @@
             },
             "type": "object"
         },
-        "UpdatableViewLaunchPreference": {
-            "additionalProperties": false,
-            "description": "Which Launch Options are updatable and are there any constraints",
-            "properties": {
-                "constraint": {
-                    "description": "Is there a constraint that the platform can apply?",
-                    "items": {
-                        "$ref": "#/definitions/UpdatableWebLaunchPreferenceConstraint"
-                    },
-                    "type": "array"
-                },
-                "name": {
-                    "$ref": "#/definitions/UpdatableViewLaunchPreferenceName",
-                    "description": "What setting is updatable?"
-                }
-            },
-            "type": "object"
-        },
-        "UpdatableViewLaunchPreferenceName": {
-            "description": "The different type of settings that might apply to a view",
-            "enum": [
-                "bounds",
-                "centered",
-                "custom-data",
-                "host-options",
-                "interop",
-                "url"
-            ],
-            "type": "string"
-        },
-        "UpdatableWebLaunchPreferenceConstraint": {
-            "description": "A list of Web related constraints",
-            "enum": [
-                "url-any",
-                "url-domain",
-                "url-none",
-                "url-page"
-            ],
-            "type": "string"
-        },
-        "UpdatableWebLaunchPreferenceName": {
-            "description": "A list of web related settings that can be updated.",
-            "enum": [
-                "bounds",
-                "centered",
-                "custom-data",
-                "interop",
-                "url"
-            ],
-            "type": "string"
-        },
-        "UpdatableWindowLaunchPreference": {
-            "additionalProperties": false,
-            "description": "Which Launch Options are updatable and are there any constraints",
-            "properties": {
-                "constraint": {
-                    "description": "Is there a constraint that the platform can apply?",
-                    "items": {
-                        "$ref": "#/definitions/UpdatableWebLaunchPreferenceConstraint"
-                    },
-                    "type": "array"
-                },
-                "name": {
-                    "$ref": "#/definitions/UpdatableWebLaunchPreferenceName",
-                    "description": "What setting is updatable?"
-                }
-            },
-            "type": "object"
-        },
         "VersionInfo": {
             "additionalProperties": false,
             "description": "Information about the version of the platform and it's dependencies",
@@ -4628,7 +4569,14 @@
                 "updatable": {
                     "description": "What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
                     "items": {
-                        "$ref": "#/definitions/UpdatableViewLaunchPreference"
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/ViewPreference<never>"
+                            },
+                            {
+                                "$ref": "#/definitions/ViewPreferenceUrl"
+                            }
+                        ]
                     },
                     "type": "array"
                 },
@@ -4861,6 +4809,54 @@
             ],
             "type": "object"
         },
+        "ViewPreference<never>": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/ViewPreferenceName",
+                    "description": "What setting is updatable?"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "ViewPreferenceName": {
+            "description": "The different type of settings that might apply to a view",
+            "enum": [
+                "bounds",
+                "centered",
+                "custom-data",
+                "host-options",
+                "interop",
+                "url"
+            ],
+            "type": "string"
+        },
+        "ViewPreferenceUrl": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "constraint": {
+                    "$ref": "#/definitions/Preference.T",
+                    "description": "Is there a constraint that the platform can apply?"
+                },
+                "name": {
+                    "description": "Is the url updatable?",
+                    "enum": [
+                        "host-options",
+                        "url"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
         "ViewTabMenuOptionType": {
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override.",
             "enum": [
@@ -4950,6 +4946,17 @@
             ],
             "type": "string"
         },
+        "WebPreferenceName": {
+            "description": "A list of web related settings that can be updated.",
+            "enum": [
+                "bounds",
+                "centered",
+                "custom-data",
+                "interop",
+                "url"
+            ],
+            "type": "string"
+        },
         "WindowCreationOptions": {
             "additionalProperties": false,
             "description": "Options required to create a new window with {@link Window._WindowModule.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
@@ -4986,7 +4993,14 @@
                 "updatable": {
                     "description": "What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
                     "items": {
-                        "$ref": "#/definitions/UpdatableWindowLaunchPreference"
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WindowPreference<never>"
+                            },
+                            {
+                                "$ref": "#/definitions/WindowPreferenceUrl"
+                            }
+                        ]
                     },
                     "type": "array"
                 },
@@ -4997,6 +5011,39 @@
             },
             "required": [
                 "type"
+            ],
+            "type": "object"
+        },
+        "WindowPreference<never>": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/WebPreferenceName",
+                    "description": "What setting is updatable?"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "WindowPreferenceUrl": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "constraint": {
+                    "$ref": "#/definitions/Preference.T",
+                    "description": "Is there a constraint that the platform can apply?"
+                },
+                "name": {
+                    "const": "url",
+                    "description": "Is the url updatable?",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
             ],
             "type": "object"
         },
