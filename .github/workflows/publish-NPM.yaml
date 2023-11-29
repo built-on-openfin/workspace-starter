@@ -12,7 +12,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm run setup
         working-directory: ./how-to/workspace-platform-starter
-      - run: npm run prepare-npm
+      - run: NAME=@openfin/default-workspace-platform npm run prepare-package
         working-directory: ./how-to/workspace-platform-starter
       - run: npm publish --access restricted
         working-directory: ./how-to/workspace-platform-starter/packaged

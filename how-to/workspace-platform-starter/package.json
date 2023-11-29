@@ -31,7 +31,6 @@
 		"generate-snapshot-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
 		"prepare-package": "cross-env-shell npm run package-content --manifest=manifest-pack.fin.json --env=dist --host=http://localhost --packages=shell,package,of-info --project=$NAME",
-		"prepare-npm": "cross-env NAME=@openfin/default-workspace-platform npm run prepare-package",
 		"generate-module": "node ./templates/scripts/generate-module.mjs",
 		"prettier": "prettier --config .prettierrc --write .",
 		"prettier-check": "prettier --config .prettierrc --check .",
