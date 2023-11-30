@@ -50,7 +50,7 @@
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_44"
+            "$ref": "#/definitions/__type_46"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -2032,6 +2032,9 @@
                             "$ref": "#/definitions/ViewLaunchOptions"
                         },
                         {
+                            "$ref": "#/definitions/WindowLaunchOptions"
+                        },
+                        {
                             "$ref": "#/definitions/NativeLaunchOptions"
                         }
                     ],
@@ -3480,6 +3483,12 @@
         "Partial_12": {
             "$ref": "#/definitions/__type_43"
         },
+        "Partial_13": {
+            "$ref": "#/definitions/__type_44"
+        },
+        "Partial_14": {
+            "$ref": "#/definitions/__type_45"
+        },
         "Partial_2": {
             "$ref": "#/definitions/__type_5"
         },
@@ -3874,6 +3883,16 @@
                 "separator",
                 "spellCheck",
                 "undo"
+            ],
+            "type": "string"
+        },
+        "Preference.T": {
+            "description": "A list of Web related constraints",
+            "enum": [
+                "url-any",
+                "url-domain",
+                "url-none",
+                "url-page"
             ],
             "type": "string"
         },
@@ -4546,6 +4565,24 @@
                     "const": "view",
                     "description": "View options type",
                     "type": "string"
+                },
+                "updatable": {
+                    "description": "What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/ViewPreference<never>"
+                            },
+                            {
+                                "$ref": "#/definitions/ViewPreferenceUrl"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "view": {
+                    "$ref": "#/definitions/Partial_13",
+                    "description": "The option to override a few settings that are specific to views."
                 }
             },
             "required": [
@@ -4772,6 +4809,54 @@
             ],
             "type": "object"
         },
+        "ViewPreference<never>": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/ViewPreferenceName",
+                    "description": "What setting is updatable?"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "ViewPreferenceName": {
+            "description": "The different type of settings that might apply to a view",
+            "enum": [
+                "bounds",
+                "centered",
+                "custom-data",
+                "host-options",
+                "interop",
+                "url"
+            ],
+            "type": "string"
+        },
+        "ViewPreferenceUrl": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "constraint": {
+                    "$ref": "#/definitions/Preference.T",
+                    "description": "Is there a constraint that the platform can apply?"
+                },
+                "name": {
+                    "description": "Is the url updatable?",
+                    "enum": [
+                        "host-options",
+                        "url"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
         "ViewTabMenuOptionType": {
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override.",
             "enum": [
@@ -4861,6 +4946,17 @@
             ],
             "type": "string"
         },
+        "WebPreferenceName": {
+            "description": "A list of web related settings that can be updated.",
+            "enum": [
+                "bounds",
+                "centered",
+                "custom-data",
+                "interop",
+                "url"
+            ],
+            "type": "string"
+        },
         "WindowCreationOptions": {
             "additionalProperties": false,
             "description": "Options required to create a new window with {@link Window._WindowModule.create Window.create}.\n\nNote that `name` is the only required property — albeit the `url` property is usually provided as well\n(defaults to `\"about:blank\"` when omitted).",
@@ -4884,6 +4980,72 @@
                 "tearout"
             ],
             "type": "string"
+        },
+        "WindowLaunchOptions": {
+            "additionalProperties": false,
+            "description": "Additional options that apply to a window",
+            "properties": {
+                "type": {
+                    "const": "window",
+                    "description": "Window options type",
+                    "type": "string"
+                },
+                "updatable": {
+                    "description": "What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/WindowPreference<never>"
+                            },
+                            {
+                                "$ref": "#/definitions/WindowPreferenceUrl"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "window": {
+                    "$ref": "#/definitions/Partial_14",
+                    "description": "The option to override a few settings that are specific to windows."
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "WindowPreference<never>": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/WebPreferenceName",
+                    "description": "What setting is updatable?"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
+        },
+        "WindowPreferenceUrl": {
+            "additionalProperties": false,
+            "description": "Which Launch Options are updatable and are there any constraints",
+            "properties": {
+                "constraint": {
+                    "$ref": "#/definitions/Preference.T",
+                    "description": "Is there a constraint that the platform can apply?"
+                },
+                "name": {
+                    "const": "url",
+                    "description": "Is the url updatable?",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "type": "object"
         },
         "WindowState": {
             "description": "Visibility state of a window.",
@@ -6909,6 +7071,36 @@
             "type": "object"
         },
         "__type_44": {
+            "additionalProperties": false,
+            "properties": {
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_45": {
+            "additionalProperties": false,
+            "properties": {
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_46": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
