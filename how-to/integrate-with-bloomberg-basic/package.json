@@ -14,8 +14,8 @@
 		"prettier": "prettier --config .prettierrc --write .",
 		"prettier-check": "prettier --config .prettierrc --check .",
 		"eslint": "eslint . --ext .js,.mjs,.ts",
-		"markdownlint": "markdownlint **/*.md",
-		"validate": "npm run prettier & npm run eslint & npm run markdownlint"
+		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
+		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
 	},
 	"keywords": [
 		"bloomberg",

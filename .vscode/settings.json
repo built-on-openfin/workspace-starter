@@ -38,5 +38,6 @@
 			"url": "./how-to/workspace-platform-starter/public/schemas/snapshot.schema.json"
 		}
 	],
-	"eslint.execArgv": ["--max-old-space-size=5120"]
+	"jest.rootPath": "./src",
+	"jest.autoRun": "off"
 }
