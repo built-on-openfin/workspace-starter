@@ -214,9 +214,10 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 			title: command,
 			label: "Help",
 			icon: integrationProviderOptions.icon,
-			actions: [],
+			actions: [{ name: POPULATE_QUERY, hotkey: "enter" }],
 			data: {
-				providerId: "integration-provider"
+				providerId: "integration-provider",
+				populateQuery: `/${integrationProviderOptions.command ?? "integrations"}`
 			},
 			template: CLITemplate.Custom,
 			templateContent: await createHelp(

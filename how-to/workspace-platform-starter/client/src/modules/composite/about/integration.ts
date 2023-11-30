@@ -164,12 +164,11 @@ export class AboutProvider implements IntegrationModule<AboutProviderSettings> {
 			if (versionInfo && this._versionTypeMap && this._excludeVersionType) {
 				const keys = Object.keys(versionInfo);
 
-				for (let i = 0; i < keys.length; i++) {
-					const key = keys[i];
+				for (const key of keys) {
 					const versionForKey = versionInfo[key as keyof VersionInfo];
 					if (!this._excludeVersionType.includes(key) && versionForKey) {
 						const label = this._versionTypeMap[key] ?? key;
-						tableData.push([label, (versionForKey ?? "unknown") as string]);
+						tableData.push([label, versionForKey ?? "unknown"]);
 					}
 				}
 			}
@@ -202,12 +201,12 @@ export class AboutProvider implements IntegrationModule<AboutProviderSettings> {
 				children.push(descriptionFragment);
 			}
 
-			const tableFragment = (await this._integrationHelpers.templateHelpers.createTable(
+			const tableFragment = await this._integrationHelpers.templateHelpers.createTable(
 				tableData,
 				[],
 				0,
 				data
-			)) as TemplateFragment;
+			);
 
 			children.push(tableFragment);
 

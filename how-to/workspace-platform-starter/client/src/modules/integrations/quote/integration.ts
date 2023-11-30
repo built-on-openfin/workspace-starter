@@ -96,6 +96,7 @@ export class QuoteIntegrationProvider implements IntegrationModule<QuoteSettings
 					score: this._definition?.baseScore ?? QuoteIntegrationProvider._DEFAULT_BASE_SCORE,
 					title: "/quote",
 					label: "Help",
+					icon: this._definition?.icon,
 					actions: [],
 					data: {
 						providerId: this._definition?.id,
