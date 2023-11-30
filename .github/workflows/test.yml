@@ -1,4 +1,4 @@
-name: Check Linting has been applied
+name: Check Tests run
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
   push:
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -21,10 +21,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
-      - name: Run prettier
-        run: npm run prettier-check
-      - name: Run eslint
-        run: npm run eslint
-      - name: Run markdownlint
-        run: npm run markdownlint
-
+      - name: Run Workspace Platform Starter Unit Tests
+        working-directory: ./how-to/workspace-platform-starter
+        run: npm run test
