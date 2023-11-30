@@ -444,16 +444,16 @@ async function launchWindow(
 			manifest.defaultCentered = appLaunchPreference?.defaultCentered ?? manifest.defaultCentered;
 
 			if (
-				!isEmpty(appLaunchPreferenceOptions.window) &&
-				isStringValue(appLaunchPreferenceOptions.window.url)
+				!isEmpty(appLaunchPreferenceOptions?.window) &&
+				isStringValue(appLaunchPreferenceOptions?.window?.url)
 			) {
 				logger.debug(
 					`Updating app with id: ${windowApp.appId}. The url of the window app is defined via launch preferences: ${manifest.url} is being replaced with ${appLaunchPreferenceOptions.window?.url}`
 				);
-				manifest.url = appLaunchPreferenceOptions.window?.url;
+				manifest.url = appLaunchPreferenceOptions.window.url;
 			}
 
-			if (!isEmpty(appLaunchPreferenceOptions.window?.customData)) {
+			if (!isEmpty(appLaunchPreferenceOptions?.window?.customData)) {
 				logger.debug(
 					`Updating app with id: ${windowApp.appId}. The custom data is being updated with launch preferences:`,
 					appLaunchPreferenceOptions.window?.customData
@@ -462,8 +462,8 @@ async function launchWindow(
 			}
 
 			if (
-				!isEmpty(appLaunchPreferenceOptions.window) &&
-				!isEmpty(appLaunchPreferenceOptions.window?.interop)
+				!isEmpty(appLaunchPreferenceOptions?.window) &&
+				!isEmpty(appLaunchPreferenceOptions?.window?.interop)
 			) {
 				logger.debug(
 					`Updating app with id: ${windowApp.appId}. The interop definition is being updated with launch preferences:`,
@@ -625,7 +625,7 @@ async function launchView(
 				}
 			}
 
-			if (appLaunchPreferenceOptions.type === "view" && !isEmpty(appLaunchPreferenceOptions.view)) {
+			if (appLaunchPreferenceOptions?.type === "view" && !isEmpty(appLaunchPreferenceOptions?.view)) {
 				if (isStringValue(appLaunchPreferenceOptions.view.url)) {
 					logger.debug(
 						`Updating app with id: ${viewApp.appId} url with launch preferences: ${manifest.url} with ${appLaunchPreferenceOptions.view.url}`
