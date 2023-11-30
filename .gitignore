@@ -1,6 +1,7 @@
 node_modules
 build
 out
+.idea
 .DS_STORE
 how-to/*/package-lock.json
 how-to/workspace-platform-starter/packaged

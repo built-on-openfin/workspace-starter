@@ -2,6 +2,97 @@
 	"$schema": "./schemas/fdc3v2.0-appd.schema.json",
 	"applications": [
 		{
+			"appId": "adaptable-fdc3-demo",
+			"name": "adaptable-fdc3-demo",
+			"title": "Adaptable FDC3 Demo",
+			"description": "AdapTable is a powerful, low-code extension to AG Grid that allows financial services users to manage, visualise and transform their data. AdapTable includes advanced FDC3 capabilities.",
+			"icons": [
+				{
+					"src": "https://fdc3-demo.adaptabletools.com/adaptable_icon.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://fdc3-demo.adaptabletools.com/adaptable_fdc3.png",
+					"label": "AdapTable FDC3 Demo"
+				}
+			],
+			"categories": [
+				"data",
+				"grid",
+				"blotter",
+				"trading",
+				"low-code",
+				"no-code"
+			],
+			"version": "16.0.0",
+			"tooltip": "AdapTable Tools FDC3 Demo",
+			"lang": "en-US",
+			"publisher": "AdapTable Tools",
+			"contactEmail": "sales@adaptabletools.com",
+			"supportEmail": "support@adaptabletools.com",
+			"moreInfo": "https://www.adaptabletools.com/",
+			"type": "other",
+			"details": {},
+			"hostManifests": {
+				"OpenFin": {
+					"type": "view",
+					"details": "http://localhost:8080/adaptable-fdc3-demo.view.fin.json"
+				}
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewInstrument": {
+							"displayName": "View Instrument",
+							"contexts": [
+								"fdc3.instrument"
+							]
+						}
+					},
+					"raises": {
+						"ViewInstrument": [
+							"fdc3.instrument"
+						],
+						"ViewChart": [
+							"fdc3.instrument"
+						],
+						"ViewNews": [
+							"fdc3.instrument"
+						],
+						"ViewAnalysis": [
+							"fdc3.instrument"
+						],
+						"ViewHoldings": [
+							"fdc3.instrument"
+						],
+						"ViewOrders": [
+							"fdc3.instrument"
+						],
+						"ViewInteractions": [
+							"fdc3.instrument"
+						],
+						"ViewOrders": [
+							"fdc3.instrument"
+						],
+						"ViewQuote": [
+							"fdc3.instrument"
+						],
+						"ViewResearch": [
+							"fdc3.instrument"
+						]
+					}
+				},
+				"userChannels": {
+					"broadcasts": ["fdc3.instrument"],
+					"listensFor": [
+						"fdc3.instrument"
+					]
+				},
+				"appChannels": []
+			}
+		},
+		{
 			"appId": "fdc3-intent-view-2-0",
 			"name": "fdc3-intent-view-2-0",
 			"title": "Intents using FDC3 (2.0)",
