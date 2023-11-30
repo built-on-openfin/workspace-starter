@@ -15,7 +15,7 @@ import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import * as Menu from "./menu";
 import { launchPage, launchView } from "./platform/browser";
-import type { PlatformApp } from "./shapes/app-shapes";
+import type { PlatformApp, UpdatableLaunchPreference } from "./shapes/app-shapes";
 import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
@@ -287,14 +287,14 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getThemeClient,
 		getMenuClient,
 		getConditionsClient,
-		launchApp: async (appId: string): Promise<void> => {
+		launchApp: async (appId: string, launchPreference?: UpdatableLaunchPreference): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
 			if (isEmpty(app)) {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);
-				await launch(app);
+				await launch(app, launchPreference);
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
 		},

@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { PlatformApp } from "./app-shapes";
+import type { PlatformApp, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
@@ -156,9 +156,10 @@ export interface ModuleHelpers {
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
+	 * @param launchPreference If the app supports launch preferences then these can be passed.
 	 * @returns Nothing.
 	 */
-	launchApp?(appId: string): Promise<void>;
+	launchApp?(appId: string, launchPreference?: UpdatableLaunchPreference): Promise<void>;
 
 	/**
 	 * Launch a page in the workspace.

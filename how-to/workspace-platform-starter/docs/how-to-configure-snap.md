@@ -52,6 +52,8 @@ To enable Snap for native apps you must provide additional information in the ap
    }
 ```
 
+To find out more about launchPreference please see [how to define app launch preference](./how-to-define-app-launch-preference.md)
+
 ## Source Reference
 
 - [snap.ts](../client/src/framework/snap.ts)

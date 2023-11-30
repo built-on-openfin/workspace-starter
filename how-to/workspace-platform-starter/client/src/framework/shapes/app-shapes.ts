@@ -108,13 +108,18 @@ export interface LaunchPreference {
 	/**
 	 * Are there any app type specific options you would like to apply?
 	 */
-	options?: ViewLaunchOptions | NativeLaunchOptions;
+	options?: ViewLaunchOptions | WindowLaunchOptions | NativeLaunchOptions;
 }
+
+/**
+ *
+ */
+export type UpdatableLaunchPreference = LaunchPreference;
 
 /**
  * The list of Launch Option Types
  */
-export type LaunchOptionsType = "view" | "native";
+export type LaunchOptionsType = "view" | "window" | "native";
 
 /**
  * The base LaunchOption type.
@@ -138,7 +143,68 @@ export interface ViewLaunchOptions extends LaunchOptions {
 	 * If specified it indicates wish to specify specific host settings for this content.
 	 */
 	host?: HostLaunchOptions;
+
+	/**
+	 * The option to override a few settings that are specific to views.
+	 */
+	view?: Partial<Pick<OpenFin.ViewOptions, "url" | "interop" | "customData">>;
+
+	/**
+	 * What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: (ViewPreference | ViewPreferenceUrl)[];
 }
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface Preference<T = unknown> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: ViewPreferenceName | WebPreferenceName;
+
+	/**
+	 * Is there a constraint that the platform can apply?
+	 */
+	constraint?: T;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreference<T = never> extends Preference<T> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: ViewPreferenceName;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUrl> {
+	/**
+	 * Is the url updatable?
+	 */
+	name: "url" | "host-options";
+}
+
+/**
+ * A list of web related settings that can be updated.
+ */
+export type WebPreferenceName = "url" | "custom-data" | "interop" | "bounds" | "centered";
+
+/**
+ * A list of Web related constraints
+ */
+export type PreferenceConstraintUrl = "url-domain" | "url-page" | "url-any" | "url-none";
+
+/**
+ * The different type of settings that might apply to a view
+ */
+export type ViewPreferenceName = WebPreferenceName | "host-options";
 
 /**
  * Additional options that apply to a native app
@@ -211,6 +277,47 @@ export interface SnapLaunchOptions {
 	 * The strategy for launching and locating the application.
 	 */
 	strategy?: LaunchStrategy;
+}
+
+/**
+ * Additional options that apply to a window
+ */
+export interface WindowLaunchOptions extends LaunchOptions {
+	/**
+	 * Window options type
+	 */
+	type: "window";
+
+	/**
+	 * The option to override a few settings that are specific to windows.
+	 */
+	window?: Partial<Pick<OpenFin.WindowOptions, "url" | "interop" | "customData">>;
+
+	/**
+	 * What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: (WindowPreference | WindowPreferenceUrl)[];
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface WindowPreference<T = never> extends Preference<T> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: WebPreferenceName;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface WindowPreferenceUrl extends Preference<PreferenceConstraintUrl> {
+	/**
+	 * Is the url updatable?
+	 */
+	name: "url";
 }
 
 /**
