@@ -105,6 +105,20 @@ async function onUserInput(
 	request: HomeSearchListenerRequest,
 	response: HomeSearchListenerResponse
 ): Promise<HomeSearchResponse> {
+	const enableSourceFilter = !(homeProviderOptions?.sourceFilter?.disabled ?? false);
+
+	if (request.query === "?") {
+		logger.info("Integration Help requested.");
+		const integrationHelpSearchEntries = await getHelpSearchEntries();
+		const searchResults = {
+			results: integrationHelpSearchEntries,
+			context: {
+				filters: enableSourceFilter ? [createEmptySourceFilter()] : []
+			}
+		};
+		return searchResults;
+	}
+
 	if (debounceTimerId) {
 		window.clearTimeout(debounceTimerId);
 		debounceTimerId = undefined;
@@ -116,26 +130,11 @@ async function onUserInput(
 	lastResponse = response;
 	lastResponse.open();
 
-	const enableSourceFilter = !(homeProviderOptions?.sourceFilter?.disabled ?? false);
-
 	// Debounce the keyboard input, this also means that the method returns
 	// immediately with a dummy filter, so the UI does not "bounce"
 	debounceTimerId = window.setTimeout(async () => {
 		try {
 			const selectedFilters: CLIFilter[] = request?.context?.selectedFilters ?? [];
-			const queryLower = request.query.toLowerCase();
-
-			if (queryLower === "?") {
-				logger.info("Integration Help requested.");
-				const integrationHelpSearchEntries = await getHelpSearchEntries();
-				const searchResults = {
-					results: integrationHelpSearchEntries,
-					context: {
-						filters: []
-					}
-				};
-				return searchResults;
-			}
 
 			let selectedSourceFilterOptions: string[] = [];
 			if (enableSourceFilter && selectedFilters) {
