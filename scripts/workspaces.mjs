@@ -73,8 +73,8 @@ async function runShellCmd(app, args, cwd) {
 			}
 		);
 
-		sp.on('exit', (exitCode) => {
-			if (Number.parseInt(exitCode, 10) !== 0) {
+		sp.on('exit', (exitCode, signals) => {
+			if (Number.parseInt(exitCode, 10) !== 0 || signals?.length) {
 				reject(new Error('Run failed'));
 			} else {
 				resolve();

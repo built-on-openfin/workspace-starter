@@ -1,3 +1,11 @@
+let additionalOverrides = [];
+try {
+	const { overrides } = require('./.eslintrc.extended.js');
+	if (Array.isArray(overrides)) {
+		additionalOverrides = overrides;
+	}
+} catch {}
+
 module.exports = {
 	env: {
 		browser: true,
@@ -661,7 +669,7 @@ module.exports = {
 				'@typescript-eslint/prefer-string-starts-ends-with': ['error'],
 				'@typescript-eslint/prefer-ts-expect-error': ['error'],
 				'@typescript-eslint/promise-function-async': ['error'],
-				'@typescript-eslint/quotes': ['error', 'double'],
+				'@typescript-eslint/quotes': ['error', 'double', { avoidEscape: true }],
 				'@typescript-eslint/require-array-sort-compare': ['off'],
 				'@typescript-eslint/require-await': ['off'],
 				'@typescript-eslint/restrict-plus-operands': ['error'],
@@ -691,29 +699,6 @@ module.exports = {
 				'@typescript-eslint/unified-signatures': ['error']
 			}
 		},
-		{
-			files: ['how-to/workspace-platform-starter/client/**/*.ts'],
-			rules: {
-				'no-restricted-syntax': [
-					'error',
-					{
-						selector: "BinaryExpression[operator='==='][right.type='Identifier'][right.name='undefined']",
-						message: 'Instead of using "=== undefined", please use the utils method isEmpty'
-					},
-					{
-						selector: "BinaryExpression[operator='!=='][right.type='Identifier'][right.name='undefined']",
-						message: 'Instead of using "!== undefined", please use the utils method !isEmpty'
-					},
-					{
-						selector: "BinaryExpression[operator='==='][right.type='Identifier'][right.name='null']",
-						message: 'Instead of using "=== null", please use the utils method isEmpty'
-					},
-					{
-						selector: "BinaryExpression[operator='!=='][right.type='Identifier'][right.name='null']",
-						message: 'Instead of using "!== null", please use the utils method !isEmpty'
-					}
-				]
-			}
-		}
+		...additionalOverrides
 	]
 };
