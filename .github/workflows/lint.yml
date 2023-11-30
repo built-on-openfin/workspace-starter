@@ -3,6 +3,7 @@ name: Check Linting has been applied
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
+  push:
 
 jobs:
   lint:
@@ -26,3 +27,6 @@ jobs:
         run: npm run eslint
       - name: Run markdownlint
         run: npm run markdownlint
+      - name: Run Workspace Platform Starter Unit Tests
+        working-directory: ./how-to/workspace-platform-starter
+        run: npm run test
