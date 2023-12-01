@@ -6,7 +6,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  e2e:
     runs-on: windows-latest
 
     steps:
