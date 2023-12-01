@@ -54,7 +54,7 @@ export async function launch(
 		switch (app.manifestType) {
 			case MANIFEST_TYPES.External.id:
 			case MANIFEST_TYPES.InlineExternal.id: {
-				const platformIdentity = await launchExternal(app);
+				const platformIdentity = await launchExternal(app, launchPreference);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -896,11 +896,13 @@ export async function launchAppAsset(
  * Launch an external for the platform app.
  * @param externalApp The app to launch external view for.
  * @param instanceId Provide an instance id for the app being launched.
+ * @param launchPreference Optional custom launch preferences
  * @returns The identities of the app parts launched.
  */
 export async function launchExternal(
 	externalApp: PlatformApp,
-	instanceId?: string
+	instanceId?: string,
+	launchPreference?: UpdatableLaunchPreference
 ): Promise<PlatformAppIdentifier | undefined> {
 	let options: OpenFin.ExternalProcessRequestType = {};
 	logger.info(`Request to external app of type ${externalApp.manifestType}`);
@@ -915,6 +917,20 @@ export async function launchExternal(
 	if (externalApp.instanceMode === "single") {
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
 		options.uuid = externalApp.appId;
+	}
+
+	if(externalApp.launchPreference?.options?.type === "native") {
+		if(launchPreference?.options?.type === "native" &&
+		Array.isArray(launchPreference.options.updatable) &&
+		launchPreference.options.updatable.length > 0) {
+			for (const option of launchPreference.options.updatable) {
+				if (option.name === "arguments" && isStringValue(launchPreference.options.native?.arguments)) {
+					options.arguments = launchPreference.options.native?.arguments;
+				}
+			}
+		} else if(isStringValue(externalApp.launchPreference?.options?.native?.arguments)) {
+			options.arguments = externalApp.launchPreference?.options?.native?.arguments;
+		}
 	}
 
 	try {
