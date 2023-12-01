@@ -1,6 +1,8 @@
 name: Workspace Platform Starter - E2E Tests
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  push:
 
 jobs:
   build:
