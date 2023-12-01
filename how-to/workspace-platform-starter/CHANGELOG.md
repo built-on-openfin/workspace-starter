@@ -35,7 +35,8 @@
 - Improved platform now starts correctly when no customSettings are provided in manifest
 - Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
 - InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`
-- Added unit testing script `npm run unit-test` tests can be found in ./test folder, for more information see [How to Test Your Platform](./docs/how-to-test-your-platform-code.md)
+- Added unit testing script `npm run test` tests can be found in ./test folder, for more information see [How to Test Your Platform Code](./docs/how-to-test-your-platform-code.md)
+- Added e2e testing script `npm run e2e` tests can be found in ./e2e folder, for more information see [How to Test Your Platform UI](./docs/how-to-test-your-platform-ui.md)
 
 ## v15
 
