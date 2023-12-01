@@ -308,7 +308,7 @@ export class SalesforceIntegration {
 					const action = data.mapping?.actions?.[actionIdx];
 
 					if (!action?.url && !action?.intent && !action?.view) {
-						await this.openSalesforceView(data);
+						await this.openSalesforceContent(data);
 					} else if (action.url) {
 						await fin.System.openUrlWithBrowser(
 							this.substituteProperties(data.mapping, data.obj, action.url, true)
@@ -355,7 +355,7 @@ export class SalesforceIntegration {
 							await fin.System.openUrlWithBrowser(u);
 						}
 					} else {
-						await this.openSalesforceView(data);
+						await this.openSalesforceContent(data);
 					}
 					return true;
 				}
@@ -750,21 +750,38 @@ export class SalesforceIntegration {
 	}
 
 	/**
-	 * Open a Salesforce view.
+	 * Open salesforce content in a view or as an app.
 	 * @param data The data to use for opening.
 	 */
-	private async openSalesforceView(data: SalesforceResultData): Promise<void> {
-		const preload = this._settings?.preload;
-		const viewOptions: OpenFin.PlatformViewCreationOptions = {
-			url: data.url,
-			fdc3InteropApi: "1.2",
-			interop: {
-				currentContextGroup: "green"
-			},
-			customData: { buttonLabel: "Process Participant" },
-			preloadScripts: [{ url: preload ?? "" }]
+	private async openSalesforceContent(data: SalesforceResultData): Promise<void> {
+		const interop: OpenFin.InteropConfig = {
+			currentContextGroup: "green"
 		};
-		await this._integrationHelpers?.launchView(viewOptions);
+		const customData = { buttonLabel: "Process Participant" };
+		const url = data.url;
+
+		if (this._settings?.appId && this._integrationHelpers?.launchApp) {
+			await this._integrationHelpers?.launchApp(this._settings.appId, {
+				options: {
+					type: "view",
+					view: {
+						url,
+						interop,
+						customData
+					}
+				}
+			});
+		} else {
+			const preload = this._settings?.preload;
+			const viewOptions: OpenFin.PlatformViewCreationOptions = {
+				url,
+				fdc3InteropApi: "1.2",
+				interop,
+				customData,
+				preloadScripts: [{ url: preload ?? "" }]
+			};
+			await this._integrationHelpers?.launchView(viewOptions);
+		}
 	}
 
 	/**
