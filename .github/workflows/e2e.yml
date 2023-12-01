@@ -1,15 +1,15 @@
-name: Workspace Platform Starter - Unit Tests
+name: Workspace Platform Starter - E2E Tests
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, edited]
+on: 
+  workflow_dispatch:
   push:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  e2e:
+    runs-on: windows-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Repo
         uses: actions/checkout@v3
 
       - name: Setup Node 18
@@ -31,6 +31,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
 
-      - name: Run Workspace Platform Starter Unit Tests
+      - name: Run Workspace Platform Starter E2E Tests
         working-directory: ./how-to/workspace-platform-starter
-        run: npm run test
+        run: |
+          npm run build
+          npm run start & npm run e2e

@@ -9,5 +9,6 @@ module.exports = {
 	verbose: true,
 	collectCoverage: true,
 	coverageReporters: ['text-summary'],
-	setupFilesAfterEnv: ['<rootDir>/test/setup.ts']
+	setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+	roots: ['<rootDir>/test']
 };
