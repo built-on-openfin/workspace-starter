@@ -35,4 +35,5 @@ jobs:
         working-directory: ./how-to/workspace-platform-starter
         run: |
           npm run build
-          npm run start & npm run e2e
+          npm run start & npx --yes wait-on tcp:8080
+          npm run e2e
