@@ -11,8 +11,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-helpers": "^1.1.11",
-		"@openfin/automation-native": "^1.1.11",
+		"@openfin/automation-helpers": "^1.2.0",
+		"@openfin/automation-native": "^1.2.0",
 		"chai": "4.3.10",
 		"chromedriver": "116.0.0",
 		"fkill": "7.2.1",
