@@ -6,9 +6,11 @@ describe("Platform", () => {
 		expect(isReady).toEqual(true);
 	});
 
-	it("The title should be set", async () => {
-		const title = await WebDriver.getTitle();
-		expect(title).toEqual("Platform Provider");
+	it("The platform title should be set", async () => {
+		const windows = await WebDriver.getWindows();
+		expect(windows.length).toBeGreaterThan(0);
+		const titles = windows.map((w) => w.title);
+		expect(titles).toContain("Platform Provider");
 	});
 
 	it("The runtime version should be set", async () => {

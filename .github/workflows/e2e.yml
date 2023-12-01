@@ -1,9 +1,6 @@
-name: Automation Test Headless
-on: workflow_dispatch
+name: Workspace Platform Starter - E2E Tests
 
-concurrency:
-  group: automation-single-${{ github.ref }}
-  cancel-in-progress: true
+on: workflow_dispatch
 
 jobs:
   build:
@@ -32,7 +29,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
 
-      - name: Run JavaScript Tests with Mocha
-        run: |
-          npx fkill-cli OpenFin OpenFinRVM --force --silent
-          npm run test-remote-mocha --prefix how-to/automation-testing/register-with-home-js
+      - name: Run Workspace Platform Starter E2E Tests
+        working-directory: ./how-to/workspace-platform-starter
+        run: npm run e2e

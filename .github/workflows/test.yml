@@ -1,4 +1,4 @@
-name: Check Tests run
+name: Workspace Platform Starter - Unit Tests
 
 on:
   pull_request:
