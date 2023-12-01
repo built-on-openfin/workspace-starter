@@ -54,7 +54,7 @@ export async function launch(
 		switch (app.manifestType) {
 			case MANIFEST_TYPES.External.id:
 			case MANIFEST_TYPES.InlineExternal.id: {
-				const platformIdentity = await launchExternal(app, launchPreference);
+				const platformIdentity = await launchExternal(app, undefined, launchPreference);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -62,7 +62,7 @@ export async function launch(
 			}
 			case MANIFEST_TYPES.Appasset.id:
 			case MANIFEST_TYPES.InlineAppAsset.id: {
-				const platformIdentity = await launchAppAsset(app);
+				const platformIdentity = await launchAppAsset(app, undefined, launchPreference);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -846,11 +846,13 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
  * Launch an app asset for the platform app.
  * @param appAssetApp The app to launch app asset view for.
  * @param instanceId Provide an instance id for the app being launched.
+ * @param launchPreference Optional custom launch preferences
  * @returns The identities of the snapshot parts launched.
  */
 export async function launchAppAsset(
 	appAssetApp: PlatformApp,
-	instanceId?: string
+	instanceId?: string,
+	launchPreference?: UpdatableLaunchPreference
 ): Promise<PlatformAppIdentifier | undefined> {
 	const options: OpenFin.ExternalProcessRequestType = {};
 	logger.info(`Request to launch app asset app of type ${appAssetApp.manifestType}`);
@@ -881,7 +883,7 @@ export async function launchAppAsset(
 	}
 	try {
 		logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
-		const identity = await launchExternalProcess(appAssetApp, options, instanceId);
+		const identity = await launchExternalProcess(appAssetApp, options, instanceId, launchPreference);
 		logger.info(
 			`External app with appId: ${appAssetApp.appId} launched with the following identity`,
 			identity
@@ -919,26 +921,12 @@ export async function launchExternal(
 		options.uuid = externalApp.appId;
 	}
 
-	if(externalApp.launchPreference?.options?.type === "native") {
-		if(launchPreference?.options?.type === "native" &&
-		Array.isArray(launchPreference.options.updatable) &&
-		launchPreference.options.updatable.length > 0) {
-			for (const option of launchPreference.options.updatable) {
-				if (option.name === "arguments" && isStringValue(launchPreference.options.native?.arguments)) {
-					options.arguments = launchPreference.options.native?.arguments;
-				}
-			}
-		} else if(isStringValue(externalApp.launchPreference?.options?.native?.arguments)) {
-			options.arguments = externalApp.launchPreference?.options?.native?.arguments;
-		}
-	}
-
 	try {
 		logger.info(
 			`Launching external app asset with appId: ${externalApp.appId} with the following options:`,
 			options
 		);
-		const identity = await launchExternalProcess(externalApp, options, instanceId);
+		const identity = await launchExternalProcess(externalApp, options, instanceId, launchPreference);
 		logger.info(
 			`External app with appId: ${externalApp.appId} launched with the following identity`,
 			identity
@@ -954,18 +942,47 @@ export async function launchExternal(
  * @param app The app being launched.
  * @param options The launch options.
  * @param instanceId Provide an instance id for the app being launched.
+ * @param launchPreference Optional custom launch preferences
  * @returns The identity of the process.
  */
 async function launchExternalProcess(
 	app: PlatformApp,
 	options: OpenFin.ExternalProcessRequestType,
-	instanceId?: string
+	instanceId?: string,
+	launchPreference?: UpdatableLaunchPreference
 ): Promise<PlatformAppIdentifier> {
 	const nativeOptions = app.launchPreference?.options as NativeLaunchOptions;
 
 	const hasPath = isStringValue(options.path);
 
 	let identity: PlatformAppIdentifier | undefined;
+
+	let args: string[] | undefined;
+
+	if (app.launchPreference?.options?.type === "native") {
+		if (
+			launchPreference?.options?.type === "native" &&
+			Array.isArray(launchPreference.options.updatable) &&
+			launchPreference.options.updatable.length > 0
+		) {
+			for (const option of launchPreference.options.updatable) {
+				if (option.name === "args" && Array.isArray(launchPreference.options.native?.args)) {
+					args = launchPreference.options.native?.args;
+					logger.debug(`Using passed launch preference for the args for app ${app.appId}`, args);
+				}
+			}
+		}
+		if (isEmpty(args) && Array.isArray(app.launchPreference?.options?.native?.args)) {
+			args = app.launchPreference?.options?.native?.args;
+			logger.debug(`Using app definition based args for app ${app.appId}`, args);
+		}
+	}
+	if (isEmpty(args) && isStringValue(options.arguments)) {
+		args = [options.arguments];
+	} else {
+		args = [];
+	}
+
 	if (
 		snapProvider.isEnabled() &&
 		nativeOptions?.type === "native" &&
@@ -987,11 +1004,6 @@ async function launchExternalProcess(
 		if (isStringValue(path)) {
 			if (!isStringValue(instanceId)) {
 				instanceId = app.instanceMode === "single" ? app.appId : randomUUID();
-			}
-
-			let args = nativeOptions.snap?.args;
-			if (!isStringValue(args) && isStringValue(options.arguments)) {
-				args = [options.arguments];
 			}
 
 			const launchIdentity = await snapProvider.launchApp(
@@ -1017,7 +1029,9 @@ async function launchExternalProcess(
 	}
 
 	if (isEmpty(identity)) {
-		const launchIdentity = await fin.System.launchExternalProcess(options);
+		const clonedOptions = objectClone(options);
+		clonedOptions.arguments = args.join(" ");
+		const launchIdentity = await fin.System.launchExternalProcess(clonedOptions);
 		identity = { ...launchIdentity, appId: app.appId };
 	}
 

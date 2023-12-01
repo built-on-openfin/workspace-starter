@@ -204,7 +204,7 @@ export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUr
 /**
  * A list of native related settings that can be updated.
  */
-export type NativePreferenceName = "arguments";
+export type NativePreferenceName = "args";
 
 /**
  * A list of web related settings that can be updated.
@@ -237,7 +237,12 @@ export interface NativeLaunchOptions extends LaunchOptions {
 	/**
 	 * Launch Preferences related to native apps
 	 */
-	native?: Partial<Pick<OpenFin.ExternalProcessRequestType, "arguments">>;
+	native?: {
+		/**
+		 * Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.
+		 */
+		args?: string[];
+	};
 
 	/**
 	 * What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.
@@ -293,12 +298,6 @@ export interface HostLaunchOptions {
  * Additional options that apply to the app when used in a snap context
  */
 export interface SnapLaunchOptions {
-	/**
-	 * Snap requires args as a string array, not a single string like in app assets.
-	 * So we provide the ability to include them here.
-	 */
-	args?: string[];
-
 	/**
 	 * The strategy for launching and locating the application.
 	 */
