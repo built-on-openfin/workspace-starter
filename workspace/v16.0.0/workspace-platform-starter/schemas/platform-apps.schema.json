@@ -384,6 +384,20 @@
 			"additionalProperties": false,
 			"description": "Additional options that apply to a native app",
 			"properties": {
+				"native": {
+					"additionalProperties": false,
+					"description": "Launch Preferences related to native apps",
+					"properties": {
+						"arguments": {
+							"description": "Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.",
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					"type": "object"
+				},
 				"snap": {
 					"$ref": "#/definitions/SnapLaunchOptions",
 					"description": "If specified it indicates the native app should be included when snapping."
@@ -392,10 +406,34 @@
 					"const": "native",
 					"description": "Native options type",
 					"type": "string"
+				},
+				"updatable": {
+					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
+					"items": {
+						"$ref": "#/definitions/NativePreference<never>"
+					},
+					"type": "array"
 				}
 			},
 			"required": ["type"],
 			"type": "object"
+		},
+		"NativePreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/NativePreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"NativePreferenceName": {
+			"const": "arguments",
+			"description": "A list of native related settings that can be updated.",
+			"type": "string"
 		},
 		"Partial": {
 			"$ref": "#/definitions/__type"
@@ -628,13 +666,6 @@
 			"additionalProperties": false,
 			"description": "Additional options that apply to the app when used in a snap context",
 			"properties": {
-				"args": {
-					"description": "Snap requires args as a string array, not a single string like in app assets.\nSo we provide the ability to include them here.",
-					"items": {
-						"type": "string"
-					},
-					"type": "array"
-				},
 				"strategy": {
 					"$ref": "#/definitions/LaunchStrategy",
 					"description": "The strategy for launching and locating the application."
