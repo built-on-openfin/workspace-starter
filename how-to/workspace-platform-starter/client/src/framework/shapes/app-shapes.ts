@@ -163,12 +163,22 @@ export interface Preference<T = unknown> {
 	/**
 	 * What setting is updatable?
 	 */
-	name: ViewPreferenceName | WebPreferenceName;
+	name: ViewPreferenceName | WebPreferenceName | NativePreferenceName;
 
 	/**
 	 * Is there a constraint that the platform can apply?
 	 */
 	constraint?: T;
+}
+
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface NativePreference<T = never> extends Preference<T> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: NativePreferenceName;
 }
 
 /**
@@ -190,6 +200,11 @@ export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUr
 	 */
 	name: "url" | "host-options";
 }
+
+/**
+ * A list of native related settings that can be updated.
+ */
+export type NativePreferenceName = "arguments";
 
 /**
  * A list of web related settings that can be updated.
@@ -218,6 +233,22 @@ export interface NativeLaunchOptions extends LaunchOptions {
 	 * If specified it indicates the native app should be included when snapping.
 	 */
 	snap?: SnapLaunchOptions;
+
+	/**
+	 * Launch Preferences related to native apps
+	 */
+	native?: {
+		/**
+		 * Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.
+		 */
+		arguments?: string[];
+	};
+
+	/**
+	 * What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: NativePreference[];
 }
 
 /**
@@ -267,12 +298,6 @@ export interface HostLaunchOptions {
  * Additional options that apply to the app when used in a snap context
  */
 export interface SnapLaunchOptions {
-	/**
-	 * Snap requires args as a string array, not a single string like in app assets.
-	 * So we provide the ability to include them here.
-	 */
-	args?: string[];
-
 	/**
 	 * The strategy for launching and locating the application.
 	 */

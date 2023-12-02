@@ -280,6 +280,22 @@ export interface NativeLaunchOptions extends LaunchOptions {
   * If specified it indicates the native app should be included when snapping.
   */
  snap?: SnapLaunchOptions;
+
+ /**
+  * Launch Preferences related to native apps
+  */
+ native?: {
+  /**
+   * Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.
+   */
+  arguments?: string[];
+ };
+
+ /**
+  * What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.
+  * By default nothing can be set outside of the app definition when launching the app.
+  */
+ updatable?: NativePreference[];
 }
 ```
 
@@ -290,6 +306,33 @@ Every launch preference option has to specify a type so that we can correctly ty
 These settings are used to specify snap specific settings which are used by the platform to help launch and snap applications with Browser and Platform Windows.
 
 To find out more about these settings please visit the [how to configure snap](./how-to-configure-snap.md).
+
+#### Native settings
+
+Native settings let you specify an array of arguments that will be put together and passed to the native application that is being launched. It will override the default arguments that may have been specified.
+
+#### Updatable Native Options
+
+An app directory is the golden source for the description of an app. A platform can launch application in many ways but it may want to restrict what can be dynamically changed when launching an app and this is where the updatable setting comes in. This is an array of options that contain the name of the setting that can be configured and an optional array of constraints that should be checked before trying to apply the update (if applicable).
+
+```javascript
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface NativePreference<T = never> extends Preference<T> {
+ /**
+  * What setting is updatable?
+  */
+ name: NativePreferenceName;
+}
+
+/**
+ * A list of native related settings that can be updated.
+ */
+export type NativePreferenceName = "arguments";
+```
+
+You can see that you can have an updatable array with an object that specify that you want arguments to be dynamically updatable. Without that setting you can still override the arguments but only through the launchPreference within the app definition.
 
 ## Using Launch Preferences from a module
 
