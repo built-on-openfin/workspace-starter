@@ -3091,7 +3091,7 @@
                     "additionalProperties": false,
                     "description": "Launch Preferences related to native apps",
                     "properties": {
-                        "args": {
+                        "arguments": {
                             "description": "Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.",
                             "items": {
                                 "type": "string"
@@ -3138,7 +3138,7 @@
             "type": "object"
         },
         "NativePreferenceName": {
-            "const": "args",
+            "const": "arguments",
             "description": "A list of native related settings that can be updated.",
             "type": "string"
         },

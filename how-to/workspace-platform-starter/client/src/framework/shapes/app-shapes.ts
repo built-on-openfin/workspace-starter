@@ -204,7 +204,7 @@ export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUr
 /**
  * A list of native related settings that can be updated.
  */
-export type NativePreferenceName = "args";
+export type NativePreferenceName = "arguments";
 
 /**
  * A list of web related settings that can be updated.
@@ -241,7 +241,7 @@ export interface NativeLaunchOptions extends LaunchOptions {
 		/**
 		 * Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.
 		 */
-		args?: string[];
+		arguments?: string[];
 	};
 
 	/**

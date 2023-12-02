@@ -959,27 +959,27 @@ async function launchExternalProcess(
 
 	let args: string[] | undefined;
 
-	if (app.launchPreference?.options?.type === "native") {
+	if (nativeOptions?.type === "native") {
 		if (
 			launchPreference?.options?.type === "native" &&
-			Array.isArray(launchPreference.options.updatable) &&
-			launchPreference.options.updatable.length > 0
+			Array.isArray(nativeOptions?.updatable) &&
+			nativeOptions.updatable.length > 0
 		) {
-			for (const option of launchPreference.options.updatable) {
-				if (option.name === "args" && Array.isArray(launchPreference.options.native?.args)) {
-					args = launchPreference.options.native?.args;
+			for (const option of nativeOptions.updatable) {
+				if (option.name === "arguments" && Array.isArray(launchPreference.options.native?.arguments)) {
+					args = launchPreference.options.native?.arguments;
 					logger.debug(`Using passed launch preference for the args for app ${app.appId}`, args);
 				}
 			}
 		}
-		if (isEmpty(args) && Array.isArray(app.launchPreference?.options?.native?.args)) {
-			args = app.launchPreference?.options?.native?.args;
+		if (isEmpty(args) && Array.isArray(nativeOptions?.native?.arguments)) {
+			args = nativeOptions.native?.arguments;
 			logger.debug(`Using app definition based args for app ${app.appId}`, args);
 		}
 	}
 	if (isEmpty(args) && isStringValue(options.arguments)) {
 		args = [options.arguments];
-	} else {
+	} else if (isEmpty(args)) {
 		args = [];
 	}
 
