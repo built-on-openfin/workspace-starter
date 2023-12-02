@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
   push:
+    paths:
+      - 'how-to/workspace-platform-starter/**'
 
 jobs:
   test:
