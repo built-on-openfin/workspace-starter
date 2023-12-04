@@ -11,13 +11,13 @@ First a definition of what we mean by service:
 There are two approaches to achieving the following:
 
 - Create a lifecycle module (see [how to use lifecycle events](./how-to-use-lifecycle-events.md))
-- Create a headless app and add it to your app directory configured to autostart
+- Create a headless app and add it to your app directory configured to autostart (see [how to add an app](./how-to-define-apps.md))
 
 This document will describe the two options in more detail and the reasons why you might pick one over the other.
 
 ## Lifecycle Module
 
-A lifecycle module is a JavaScript module that is built ((see [how to use lifecycle events](./how-to-use-lifecycle-events.md))) by a platform developer or a content developer. A platform owner can then register the module through configuration so that it loads up and executed at the specified lifecycle event (e.g. after bootstrapping).
+A lifecycle module is a JavaScript module that is built (see [how to use lifecycle events](./how-to-use-lifecycle-events.md)) by a platform developer or a content developer. A platform owner can then register the module through configuration so that it loads up and executed at the specified lifecycle event (e.g. after bootstrapping).
 
 ### Benefits of a lifecycle module
 
@@ -27,7 +27,7 @@ A lifecycle module is a JavaScript module that is built ((see [how to use lifecy
 
 ## Headless Application
 
-You can register an application in the app directory (See [how to add an app](./how-to-define-apps.md)) and you can specify the following:
+You can register an application in the app directory (see [how to add an app](./how-to-define-apps.md)) and you can specify the following:
 
 - It is of type: window (manifestType: window or inline-window)
 - It is a singleton so only a single instance is fired up (instanceMode: single)
