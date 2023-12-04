@@ -17,7 +17,7 @@ This document will describe the two options in more detail and the reasons why y
 
 ## Lifecycle Module
 
-A lifecycle module is a JavaScript module that is built (see [how to use lifecycle events](./how-to-use-lifecycle-events.md)) by a platform developer or a content developer. A platform owner can then register the module through configuration so that it loads up and executed at the specified lifecycle event (e.g. after bootstrapping).
+A lifecycle module is a JavaScript module that is built (see [how to use lifecycle events](./how-to-use-lifecycle-events.md)) by a platform developer or a content developer. A platform owner can then register the module through configuration so that it loads up and is executed at the specified lifecycle event (e.g. after bootstrapping).
 
 ### Benefits of a lifecycle module
 
