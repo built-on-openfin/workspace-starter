@@ -1,5 +1,4 @@
 {
-	"$schema": "./schemas/manifest.schema.json",
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
@@ -270,22 +269,26 @@
 				{
 					"id": "favorite-list",
 					"type": "module",
-					"typeId": "favorite-local-storage"
+					"typeId": "favorite-local-storage",
+					"options": {}
 				},
 				{
 					"id": "favorite-get",
 					"type": "module",
-					"typeId": "favorite-local-storage"
+					"typeId": "favorite-local-storage",
+					"options": {}
 				},
 				{
 					"id": "favorite-set",
 					"type": "module",
-					"typeId": "favorite-local-storage"
+					"typeId": "favorite-local-storage",
+					"options": {}
 				},
 				{
 					"id": "favorite-remove",
 					"type": "module",
-					"typeId": "favorite-local-storage"
+					"typeId": "favorite-local-storage",
+					"options": {}
 				},
 				{
 					"id": "get-default-workspace",
