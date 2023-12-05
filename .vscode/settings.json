@@ -36,6 +36,14 @@
 		{
 			"fileMatch": ["/*.snapshot.fin.json"],
 			"url": "./how-to/workspace-platform-starter/public/schemas/snapshot.schema.json"
+		},
+		{
+			"fileMatch": ["/workspace-platform-starter/*/*.manifest.fin.json", "/workspace-platform-starter/*/manifest.fin.json"],
+			"url": "./how-to/workspace-platform-starter/public/schemas/wps.manifest.schema.json"
+		},
+		{
+			"fileMatch": ["manifest.fin.json", "*.manifest.fin.json", "!**/workspace-platform-starter/*/*manifest.fin.json"],
+			"url": "./how-to/workspace-platform-starter/public/schemas/openfin.manifest.schema.json"
 		}
 	],
 	"jest.rootPath": "./src",

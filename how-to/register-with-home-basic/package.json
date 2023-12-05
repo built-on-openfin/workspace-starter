@@ -20,8 +20,8 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "16.0.6",
-		"@openfin/workspace-platform": "16.0.6"
+		"@openfin/workspace": "16.0.9",
+		"@openfin/workspace-platform": "16.0.9"
 	},
 	"devDependencies": {
 		"@openfin/core": "33.77.11",

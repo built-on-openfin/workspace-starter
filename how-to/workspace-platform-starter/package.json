@@ -21,7 +21,7 @@
 		"server": "node ./server/build/index.js",
 		"setup": "npm install && npm run build",
 		"generate-types": "tsc --project ./client/tsconfig.types.json && tsc --project ./client/tsconfig.types-module.json && npx rimraf ./client/types/framework",
-		"generate-schema": "npm run generate-settings-schema && npm run generate-fdc3v2-schema && npm run generate-fdc3v1-schema && npm run generate-platform-apps-schema && npm run generate-view-options-schema && npm run generate-window-options-schema && npm run generate-snapshot-options-schema",
+		"generate-schema": "npm run generate-settings-schema && npm run generate-fdc3v2-schema && npm run generate-fdc3v1-schema && npm run generate-platform-apps-schema && npm run generate-view-options-schema && npm run generate-window-options-schema && npm run generate-snapshot-options-schema && npm run generate-wps-manifest-schema && npm run generate-openfin-manifest-schema",
 		"generate-settings-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json CustomSettings --topRef --required --noExtraProps --aliasRefs --out public/schemas/settings.schema.json",
 		"generate-fdc3v2-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json FDC3VTwoPointZeroAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v2.0-appd.schema.json",
 		"generate-fdc3v1-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json FDC3VOnePointTwoAppDirectoryResponse --topRef --required --noExtraProps --aliasRefs --out public/schemas/fdc3v1.2-appd.schema.json",
@@ -29,6 +29,8 @@
 		"generate-view-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformViewOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/view.schema.json",
 		"generate-window-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformWindowOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/window.schema.json",
 		"generate-snapshot-options-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json PlatformSnapshotOptions --topRef --required --noExtraProps --aliasRefs --out public/schemas/snapshot.schema.json",
+		"generate-wps-manifest-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json WPSManifest --topRef --required --noExtraProps --aliasRefs --out public/schemas/wps.manifest.schema.json",
+		"generate-openfin-manifest-schema": "npx --yes typescript-json-schema client/tsconfig.schema.json OpenFinManifest --topRef --required --noExtraProps --aliasRefs --out public/schemas/openfin.manifest.schema.json",
 		"package-content": "node ./scripts/package-content.mjs",
 		"prepare-package": "cross-env-shell npm run package-content --manifest=manifest-pack.fin.json --env=dist --host=http://localhost --packages=shell,package,of-info --project=$NAME",
 		"generate-module": "node ./templates/scripts/generate-module.mjs",
@@ -38,7 +40,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint",
 		"test": "jest --config ./jest.config.js",
-		"e2e": "of-automation http://localhost:8080/manifest.fin.json ./e2e/**/*.spec.ts --workspace 16.0.6 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
+		"e2e": "of-automation http://localhost:8080/manifest.fin.json ./e2e/**/*.spec.ts --workspace 16.0.9 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [
@@ -50,8 +52,8 @@
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/openid-connect": "^1.0.0",
-		"@openfin/workspace": "16.0.6",
-		"@openfin/workspace-platform": "16.0.6",
+		"@openfin/workspace": "16.0.9",
+		"@openfin/workspace-platform": "16.0.9",
 		"chart.js": "^4.4.0",
 		"csstype": "^3.1.2",
 		"node-emoji": "^1.11.0"
