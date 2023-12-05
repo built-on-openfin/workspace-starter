@@ -112,8 +112,8 @@ export function overrideCallback(
 		 * @returns nothing.
 		 */
 		public async launchIntoPlatform(payload: OpenFin.LaunchIntoPlatformPayload): Promise<void> {
-			logger.warn(
-				"launchIntoPlatform called. Please use the initOptionsProvider for loading content into the platform.",
+			logger.debug(
+				"launchIntoPlatform called. Please use the initOptionsProvider for loading content into the platform. If triggered by clicking on the application icon then autoShow options from the bootstrapper are applied.",
 				payload
 			);
 		}

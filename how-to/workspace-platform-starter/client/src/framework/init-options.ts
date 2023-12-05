@@ -14,10 +14,11 @@ import type {
 	InitOptionsListener
 } from "./shapes/init-options-shapes";
 import type { ModuleHelpers } from "./shapes/module-shapes";
-import { isEmpty, randomUUID } from "./utils";
+import { isEmpty, isStringValue, randomUUID } from "./utils";
 
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";
+const NO_PARAM_NAME = "-----default-if-no-param-----";
 
 const logger = createLogger("InitOptions");
 
@@ -138,14 +139,17 @@ export function registerActionListener(
 
 /**
  * Manually register a listener.
- * @param paramName The param name to look for in the init option.
  * @param handler The handler to call when a match on the param name occurs.
+ * @param paramName The param name to look for in the init option. If not specified then it is a function to be called if no params are passed.
  * @returns The subscription id that can be used to remove the listener.
  */
-export function registerListener(paramName: string, handler: InitOptionsListener): string | undefined {
+export function registerListener(handler: InitOptionsListener, paramName?: string): string | undefined {
 	if (paramName === ACTION_PARAM_NAME) {
 		logger.warn("Please use registerActionListener if you wish to listen for an action");
 		return;
+	}
+	if (!isStringValue(paramName)) {
+		paramName = NO_PARAM_NAME;
 	}
 	const subscriptionId = randomUUID();
 	if (!listeners[paramName]) {
@@ -268,6 +272,11 @@ async function notifyListeners(initOptions: UserAppConfigArgs, context: ActionHa
 		}
 	}
 
+	if (isEmpty(listenerId) && (isEmpty(initOptions) || Object.keys(initOptions).length === 0)) {
+		logger.info("No init options passed, calling default listeners");
+		listenerId = NO_PARAM_NAME;
+	}
+
 	if (!isEmpty(listenerId)) {
 		logger.info(
 			`Init param has been passed and it has a matching listener (${listenerId}). Passing on init options to listeners`
@@ -308,5 +317,7 @@ async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs 
 		} else {
 			await notifyListeners(event.userAppConfigArgs, "running");
 		}
+	} else {
+		logger.info("Received while platform is running but no init options were passed");
 	}
 }

@@ -34,14 +34,14 @@ export async function init(options: { enabled: boolean } | undefined): Promise<v
 		if (shareEnabled) {
 			if (!shareRegistered) {
 				shareRegistered = true;
-				initOptionsListenerId = registerListener("shareId", async (initOptions, context) => {
+				initOptionsListenerId = registerListener(async (initOptions, context) => {
 					logger.info("Received share request.");
 					if (typeof initOptions.shareId === "string") {
 						await loadSharedEntry(initOptions.shareId);
 					} else {
 						logger.warn("shareId passed but it wasn't a string");
 					}
-				});
+				}, "shareId");
 			} else {
 				logger.warn("Share cannot be registered more than once.");
 			}
