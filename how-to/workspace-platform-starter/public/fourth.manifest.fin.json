@@ -67,6 +67,9 @@
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
+	"snapshot": {
+		"windows": []
+	},
 	"customSettings": {
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",

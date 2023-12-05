@@ -5,7 +5,10 @@ import { getApps } from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
 import * as connectionProvider from "./connections";
-import { init as registerInitOptionsListener } from "./init-options";
+import {
+	init as registerInitOptionsListener,
+	registerListener as registerInitListener
+} from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launch } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
@@ -195,15 +198,13 @@ export async function init(): Promise<boolean> {
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
-	for (const autoShow of bootstrapOptions.autoShow) {
-		if (autoShow === "home") {
-			await homeComponent.show();
-		} else if (autoShow === "store") {
-			await storeComponent.show();
-		} else if (autoShow === "dock") {
-			await dockComponent.show();
+	await autoShow(bootstrapOptions.autoShow);
+	let autoShowOnShortcut = true;
+	registerInitListener(async (_) => {
+		if (autoShowOnShortcut && bootstrapOptions?.autoShow) {
+			await autoShow(bootstrapOptions.autoShow);
 		}
-	}
+	});
 
 	if (!isEmpty(customSettings?.trayProvider) && customSettings?.trayProvider.enabled) {
 		await platformSplashProvider.updateProgress("Tray");
@@ -222,11 +223,15 @@ export async function init(): Promise<boolean> {
 			await fireLifecycleEvent(platform, "auth-logged-in", {
 				user
 			} as LoggedInLifecyclePayload);
+			// if the user has logged in and ensure the autoShow is not disabled
+			autoShowOnShortcut = true;
 		});
 
 		authProvider.subscribe("session-expired", async () => {
 			// session expired. What do you want to do with the platform when the user needs to log back in.
 			await fireLifecycleEvent(platform, "auth-session-expired");
+			// if the user has logged out ensure the autoShow is disabled
+			autoShowOnShortcut = false;
 		});
 
 		authProvider.subscribe("before-logged-out", async () => {
@@ -281,6 +286,24 @@ async function autoStartApps(): Promise<void> {
 					logger.error(`Error launching app: ${app.appId}.`, error);
 				}
 			}, 1000);
+		}
+	}
+}
+
+/**
+ * This function autoShows any components that are listed in the auto show options for the bootstrap process.
+ * @param autoShowComponents The list of components to auto show.
+ */
+async function autoShow(autoShowComponents?: BootstrapComponents[]): Promise<void> {
+	if (Array.isArray(autoShowComponents)) {
+		for (const autoShowComponent of autoShowComponents) {
+			if (autoShowComponent === "home") {
+				await homeComponent.show();
+			} else if (autoShowComponent === "store") {
+				await storeComponent.show();
+			} else if (autoShowComponent === "dock") {
+				await dockComponent.show();
+			}
 		}
 	}
 }

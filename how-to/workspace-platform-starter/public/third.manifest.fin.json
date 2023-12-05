@@ -72,6 +72,9 @@
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
+	"snapshot": {
+		"windows": []
+	},
 	"customSettings": {
 		"bootstrap": {
 			"home": true,
