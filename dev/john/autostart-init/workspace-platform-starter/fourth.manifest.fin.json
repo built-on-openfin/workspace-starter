@@ -67,6 +67,9 @@
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
+	"snapshot": {
+		"windows": []
+	},
 	"customSettings": {
 		"platformProvider": {
 			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/autostart-init/workspace-platform-starter",

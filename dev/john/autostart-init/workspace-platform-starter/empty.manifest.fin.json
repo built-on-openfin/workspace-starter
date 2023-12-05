@@ -29,5 +29,8 @@
 		"product": "Workspace Starter - Workspace Platform Starter - Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
+	},
+	"snapshot": {
+		"windows": []
 	}
 }
