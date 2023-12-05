@@ -198,11 +198,11 @@ export async function init(): Promise<boolean> {
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
-	await autoShow(bootstrapOptions.autoShow);
+	await autoShow();
 	let autoShowOnShortcut = true;
 	registerInitListener(async (_) => {
 		if (autoShowOnShortcut && bootstrapOptions?.autoShow) {
-			await autoShow(bootstrapOptions.autoShow);
+			await autoShow();
 		}
 	});
 
@@ -292,9 +292,9 @@ async function autoStartApps(): Promise<void> {
 
 /**
  * This function autoShows any components that are listed in the auto show options for the bootstrap process.
- * @param autoShowComponents The list of components to auto show.
  */
-async function autoShow(autoShowComponents?: BootstrapComponents[]): Promise<void> {
+async function autoShow(): Promise<void> {
+	const autoShowComponents = bootstrapOptions?.autoShow;
 	if (Array.isArray(autoShowComponents)) {
 		for (const autoShowComponent of autoShowComponents) {
 			if (autoShowComponent === "home") {

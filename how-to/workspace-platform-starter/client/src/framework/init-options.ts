@@ -14,7 +14,7 @@ import type {
 	InitOptionsListener
 } from "./shapes/init-options-shapes";
 import type { ModuleHelpers } from "./shapes/module-shapes";
-import { isEmpty, randomUUID } from "./utils";
+import { isEmpty, isStringValue, randomUUID } from "./utils";
 
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";
@@ -148,7 +148,7 @@ export function registerListener(handler: InitOptionsListener, paramName?: strin
 		logger.warn("Please use registerActionListener if you wish to listen for an action");
 		return;
 	}
-	if (isEmpty(paramName)) {
+	if (!isStringValue(paramName)) {
 		paramName = NO_PARAM_NAME;
 	}
 	const subscriptionId = randomUUID();
