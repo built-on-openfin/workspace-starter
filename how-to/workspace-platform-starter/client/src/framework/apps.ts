@@ -7,6 +7,7 @@ import { MANIFEST_TYPES } from "./manifest-types";
 import type { AppFilterOptions, AppProviderOptions, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
 import { isEmpty, isNumber, randomUUID } from "./utils";
+import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
 
 const logger = createLogger("Apps");
 
@@ -17,9 +18,6 @@ let lastCacheUpdate: number = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
 let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
-let canLaunchExternalProcess: boolean | undefined;
-let canDownloadAppAssets: boolean | undefined;
-let canRVMLaunchAndDownload: boolean | undefined;
 
 /**
  * Initialize the application provider.
@@ -237,9 +235,8 @@ async function getEntries(): Promise<PlatformApp[]> {
  * @returns The list of validated apps.
  */
 async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
-	const hasLaunchExternalProcess = await getCanLaunchExternalProcess();
-	const hasDownloadAppAssets = await getCanDownloadAppAssets();
-	const canUseRVMForNative = await isNativeSupportedByRVM();
+	const hasLaunchExternalProcess = await getCanLaunchExternalProcess(logger);
+	const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
 
 	const validatedApps: PlatformApp[] = [];
 	const rejectedAppIds = [];
@@ -261,7 +258,7 @@ async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
 					manifestType !== MANIFEST_TYPES.InlineAppAsset.id
 				) {
 					validatedApps.push(app);
-				} else if (!hasLaunchExternalProcess || !canUseRVMForNative) {
+				} else if (!hasLaunchExternalProcess) {
 					rejectedAppIds.push(app.appId);
 				} else if (
 					(manifestType === MANIFEST_TYPES.Appasset.id ||
@@ -347,63 +344,4 @@ export async function getApp(appId: string): Promise<PlatformApp | undefined> {
 	}
 
 	return app;
-}
-
-/**
- * Do we have the permissions to launch external processes.
- * @returns True if we have permission.
- */
-async function getCanLaunchExternalProcess(): Promise<boolean> {
-	if (!isEmpty(canLaunchExternalProcess)) {
-		return canLaunchExternalProcess;
-	}
-
-	try {
-		const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.launchExternalProcess"
-		);
-
-		canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
-	} catch (error) {
-		logger.error("Error while querying for System.launchExternalProcess permission", error);
-		canLaunchExternalProcess = false;
-	}
-
-	return canLaunchExternalProcess;
-}
-
-/**
- * Do we have the permissions to download app assets.
- * @returns True if we have permission.
- */
-async function getCanDownloadAppAssets(): Promise<boolean> {
-	if (!isEmpty(canDownloadAppAssets)) {
-		return canDownloadAppAssets;
-	}
-
-	try {
-		const canDownloadAppAssetsResponse =
-			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
-	} catch (error) {
-		logger.error("Error while querying for System.downloadAsset permission", error);
-		canDownloadAppAssets = false;
-	}
-
-	return canDownloadAppAssets;
-}
-
-/**
- * The mac rvm as of version 11 does not support download app asset
- * or launch external process. Once there is support then we will
- * update logic to support a minimum rvm version on mac.
- * @returns True if the downloading and/or launching native apps is supported by the RVM.
- */
-async function isNativeSupportedByRVM(): Promise<boolean> {
-	if (!isEmpty(canRVMLaunchAndDownload)) {
-		return canRVMLaunchAndDownload;
-	}
-	const hostSpecs = await fin.System.getHostSpecs();
-	canRVMLaunchAndDownload = !hostSpecs.name.toLowerCase().startsWith("mac");
-	return canRVMLaunchAndDownload;
 }
