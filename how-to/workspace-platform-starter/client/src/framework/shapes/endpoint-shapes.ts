@@ -118,7 +118,7 @@ export type ModuleEndpointDefinition<O> = BaseEndpointDefinition & {
 /**
  * Specific endpoint type for fetching.
  */
-export type FetchEndpointDefinition<O> = BaseEndpointDefinition & {
+export type FetchEndpointDefinition = BaseEndpointDefinition & {
 	/**
 	 * This uses the built in support for fetch and the options will be the fetch options
 	 */
@@ -126,15 +126,13 @@ export type FetchEndpointDefinition<O> = BaseEndpointDefinition & {
 	/**
 	 * The data to be passed to this endpoint when it is called so that it knows how to act
 	 */
-	options: O;
+	options: FetchOptions;
 };
 
 /**
  * All the types for endpoints.
  */
-export type EndpointDefinition<O = unknown> =
-	| FetchEndpointDefinition<FetchOptions>
-	| ModuleEndpointDefinition<O>;
+export type EndpointDefinition<O = unknown> = FetchEndpointDefinition | ModuleEndpointDefinition<O>;
 
 /**
  * Options for fetching
