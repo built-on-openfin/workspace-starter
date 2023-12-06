@@ -65,6 +65,10 @@ describe("utils", () => {
 			expect(isObject(true)).toEqual(false);
 		});
 
+		it("should return false for array", () => {
+			expect(isObject([])).toEqual(false);
+		});
+
 		it("should return true for object", () => {
 			expect(isObject({})).toEqual(true);
 		});

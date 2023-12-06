@@ -15,7 +15,7 @@ export function isEmpty(value: unknown): value is null | undefined {
  */
 export function isObject(value: unknown): value is object {
 	// eslint-disable-next-line no-restricted-syntax
-	return value !== undefined && value !== null && typeof value === "object";
+	return value !== undefined && value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 /**
