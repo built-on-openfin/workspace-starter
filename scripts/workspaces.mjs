@@ -3,9 +3,9 @@
  * It is much like using the --workspaces option for npm commands,
  * but it fails fast when there is an error.
  */
+import { spawn } from "child_process";
 import FastGlob from 'fast-glob';
 import fs from 'fs/promises';
-import { spawn } from "child_process";
 import path from 'path';
 
 /**
@@ -26,7 +26,7 @@ async function run() {
 
 	const packageJson = await loadJson("package.json");
 
-	let workspaces = await FastGlob(packageJson.workspaces, { onlyDirectories: true });
+	const workspaces = await FastGlob(packageJson.workspaces, { onlyDirectories: true });
 
 	for (const workspace of workspaces) {
 		const workspacePackageJsonFilename = path.join(workspace, "package.json");
@@ -45,7 +45,7 @@ async function run() {
  * @returns The loaded JSON.
  */
 async function loadJson(filePath) {
-	const content = await fs.readFile(filePath, "utf-8");
+	const content = await fs.readFile(filePath, "utf8");
 
 	return JSON.parse(content);
 }
@@ -61,7 +61,7 @@ async function runShellCmd(app, args, cwd) {
 	return new Promise((resolve, reject) => {
 		console.log(`${app} ${args.join(" ")}`);
 
-		const osCommand = /^win/.test(process.platform) ? `${app}.cmd` : app;
+		const osCommand = process.platform.startsWith('win') ? `${app}.cmd` : app;
 
 		const sp = spawn(
 			osCommand,
