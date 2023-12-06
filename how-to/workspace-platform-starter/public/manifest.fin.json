@@ -269,26 +269,22 @@
 				{
 					"id": "favorite-list",
 					"type": "module",
-					"typeId": "favorite-local-storage",
-					"options": {}
+					"typeId": "favorite-local-storage"
 				},
 				{
 					"id": "favorite-get",
 					"type": "module",
-					"typeId": "favorite-local-storage",
-					"options": {}
+					"typeId": "favorite-local-storage"
 				},
 				{
 					"id": "favorite-set",
 					"type": "module",
-					"typeId": "favorite-local-storage",
-					"options": {}
+					"typeId": "favorite-local-storage"
 				},
 				{
 					"id": "favorite-remove",
 					"type": "module",
-					"typeId": "favorite-local-storage",
-					"options": {}
+					"typeId": "favorite-local-storage"
 				},
 				{
 					"id": "get-default-workspace",

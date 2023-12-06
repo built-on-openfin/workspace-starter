@@ -335,11 +335,6 @@
 			"enum": ["document-user-activation-required", "no-user-gesture-required", "user-gesture-required"],
 			"type": "string"
 		},
-		"BaseEndpointDefinition.O": {
-			"$ref": "#/definitions/FetchOptions",
-			"description": "Options for fetching"
-		},
-		"BaseEndpointDefinition.O_1": {},
 		"BootstrapComponents": {
 			"description": "The components that can be bootstrapped.",
 			"enum": ["dock", "home", "none", "store"],
@@ -1498,7 +1493,7 @@
 					"type": "string"
 				},
 				"options": {
-					"$ref": "#/definitions/BaseEndpointDefinition.O",
+					"$ref": "#/definitions/O",
 					"description": "The data to be passed to this endpoint when it is called so that it knows how to act"
 				},
 				"type": {
@@ -2778,7 +2773,7 @@
 					"type": "string"
 				},
 				"options": {
-					"$ref": "#/definitions/BaseEndpointDefinition.O_1",
+					"$ref": "#/definitions/O_1",
 					"description": "The data to be passed to this endpoint when it is called so that it knows how to act"
 				},
 				"type": {
@@ -2791,7 +2786,7 @@
 					"type": "string"
 				}
 			},
-			"required": ["id", "options", "type", "typeId"],
+			"required": ["id", "type", "typeId"],
 			"type": "object"
 		},
 		"ModuleList": {
@@ -3032,6 +3027,11 @@
 			"required": ["icon", "id", "title"],
 			"type": "object"
 		},
+		"O": {
+			"$ref": "#/definitions/FetchOptions",
+			"description": "Options for fetching"
+		},
+		"O_1": {},
 		"Omit": {
 			"$ref": "#/definitions/__type_25"
 		},
