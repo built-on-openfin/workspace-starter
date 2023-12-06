@@ -79,6 +79,13 @@ export class LocalStorageEndpoint implements Endpoint {
 			return false;
 		}
 
+		if (isEmpty(endpointDefinition.options)) {
+			this._logger?.warn(
+				`The endpoint definition options are required for this action: ${endpointDefinition.id}`
+			);
+			return false;
+		}
+
 		const { dataType, method } = endpointDefinition.options;
 		const localStorage = this.getStorage<{ metaData: PlatformStorageMetadata; payload: unknown }>(dataType);
 
@@ -124,6 +131,13 @@ export class LocalStorageEndpoint implements Endpoint {
 				`We only expect endpoints of type module. Unable to action request/response for: ${endpointDefinition.id}`
 			);
 			return;
+		}
+
+		if (isEmpty(endpointDefinition.options)) {
+			this._logger?.warn(
+				`The endpoint definition options are required for this action: ${endpointDefinition.id}`
+			);
+			return false;
 		}
 
 		const { dataType, method } = endpointDefinition.options;

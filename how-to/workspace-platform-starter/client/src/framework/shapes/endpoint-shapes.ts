@@ -80,7 +80,7 @@ export type EndpointClient = Omit<EndpointProvider, "init">;
 /**
  * Shared properties for endpoints.
  */
-interface BaseEndpointDefinition<O> {
+interface BaseEndpointDefinition {
 	/**
 	 * A unique id for this endpoint. This ID will be called by the platform. In the future you may change what the
 	 * implementation for this endpoint is but you can keep the same endpoint id and request/response objects in order
@@ -93,17 +93,12 @@ interface BaseEndpointDefinition<O> {
 	 * supported by the platform
 	 */
 	type: "module" | "fetch";
-
-	/**
-	 * The data to be passed to this endpoint when it is called so that it knows how to act
-	 */
-	options: O;
 }
 
 /**
  * Specific endpoint type for modules.
  */
-export type ModuleEndpointDefinition<O> = BaseEndpointDefinition<O> & {
+export type ModuleEndpointDefinition<O> = BaseEndpointDefinition & {
 	/**
 	 * This indicates that this endpoint depends on a module that needs to be loaded in order for it to work
 	 */
@@ -113,24 +108,31 @@ export type ModuleEndpointDefinition<O> = BaseEndpointDefinition<O> & {
 	 * The id of the module that should be loaded.
 	 */
 	typeId: string;
+
+	/**
+	 * The data to be passed to this endpoint when it is called so that it knows how to act
+	 */
+	options?: O;
 };
 
 /**
  * Specific endpoint type for fetching.
  */
-export type FetchEndpointDefinition<O> = BaseEndpointDefinition<O> & {
+export type FetchEndpointDefinition = BaseEndpointDefinition & {
 	/**
 	 * This uses the built in support for fetch and the options will be the fetch options
 	 */
 	type: "fetch";
+	/**
+	 * The data to be passed to this endpoint when it is called so that it knows how to act
+	 */
+	options: FetchOptions;
 };
 
 /**
  * All the types for endpoints.
  */
-export type EndpointDefinition<O = unknown> =
-	| FetchEndpointDefinition<FetchOptions>
-	| ModuleEndpointDefinition<O>;
+export type EndpointDefinition<O = unknown> = FetchEndpointDefinition | ModuleEndpointDefinition<O>;
 
 /**
  * Options for fetching
