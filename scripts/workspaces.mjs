@@ -3,7 +3,7 @@
  * It is much like using the --workspaces option for npm commands,
  * but it fails fast when there is an error.
  */
-import { spawn } from "child_process";
+import { spawn } from 'child_process';
 import FastGlob from 'fast-glob';
 import fs from 'fs/promises';
 import path from 'path';
@@ -18,22 +18,22 @@ async function run() {
 	console.log(`Platform: ${process.platform}`);
 
 	if (process.argv.length <= 2) {
-		throw new Error("No command specified");
+		throw new Error('No command specified');
 	}
 
 	const command = process.argv[2];
 	console.log(`Command: ${command}`);
 
-	const packageJson = await loadJson("package.json");
+	const packageJson = await loadJson('package.json');
 
 	const workspaces = await FastGlob(packageJson.workspaces, { onlyDirectories: true });
 
 	for (const workspace of workspaces) {
-		const workspacePackageJsonFilename = path.join(workspace, "package.json");
+		const workspacePackageJsonFilename = path.join(workspace, 'package.json');
 		if (await fileExists(workspacePackageJsonFilename)) {
-			const workspacePackageJson  = await loadJson(workspacePackageJsonFilename);
+			const workspacePackageJson = await loadJson(workspacePackageJsonFilename);
 			if (workspacePackageJson?.scripts?.[command]) {
-				await runShellCmd("npm", ["run", command], workspace);
+				await runShellCmd('npm', ['run', command], workspace);
 			}
 		}
 	}
@@ -45,7 +45,7 @@ async function run() {
  * @returns The loaded JSON.
  */
 async function loadJson(filePath) {
-	const content = await fs.readFile(filePath, "utf8");
+	const content = await fs.readFile(filePath, 'utf8');
 
 	return JSON.parse(content);
 }
@@ -59,19 +59,15 @@ async function loadJson(filePath) {
  */
 async function runShellCmd(app, args, cwd) {
 	return new Promise((resolve, reject) => {
-		console.log(`${app} ${args.join(" ")}`);
+		console.log(`${app} ${args.join(' ')}`);
 
 		const osCommand = process.platform.startsWith('win') ? `${app}.cmd` : app;
 
-		const sp = spawn(
-			osCommand,
-			args,
-			{
-				stdio: "inherit",
-				shell: true,
-				cwd
-			}
-		);
+		const sp = spawn(osCommand, args, {
+			stdio: 'inherit',
+			shell: true,
+			cwd
+		});
 
 		sp.on('exit', (exitCode, signals) => {
 			if (Number.parseInt(exitCode, 10) !== 0 || signals?.length) {
