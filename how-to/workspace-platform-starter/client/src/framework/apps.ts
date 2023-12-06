@@ -19,6 +19,7 @@ let supportedManifestTypes: string[];
 let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
 let canLaunchExternalProcess: boolean | undefined;
 let canDownloadAppAssets: boolean | undefined;
+let canRVMLaunchAndDownload: boolean | undefined;
 
 /**
  * Initialize the application provider.
@@ -238,6 +239,7 @@ async function getEntries(): Promise<PlatformApp[]> {
 async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
 	const hasLaunchExternalProcess = await getCanLaunchExternalProcess();
 	const hasDownloadAppAssets = await getCanDownloadAppAssets();
+	const canUseRVMForNative = await isNativeSupportedByRVM();
 
 	const validatedApps: PlatformApp[] = [];
 	const rejectedAppIds = [];
@@ -259,7 +261,7 @@ async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
 					manifestType !== MANIFEST_TYPES.InlineAppAsset.id
 				) {
 					validatedApps.push(app);
-				} else if (!hasLaunchExternalProcess) {
+				} else if (!hasLaunchExternalProcess || !canUseRVMForNative) {
 					rejectedAppIds.push(app.appId);
 				} else if (
 					(manifestType === MANIFEST_TYPES.Appasset.id ||
@@ -389,4 +391,19 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 	}
 
 	return canDownloadAppAssets;
+}
+
+/**
+ * The mac rvm as of version 11 does not support download app asset
+ * or launch external process. Once there is support then we will
+ * update logic to support a minimum rvm version on mac.
+ * @returns True if the downloading and/or launching native apps is supported by the RVM.
+ */
+async function isNativeSupportedByRVM(): Promise<boolean> {
+	if (!isEmpty(canRVMLaunchAndDownload)) {
+		return canRVMLaunchAndDownload;
+	}
+	const hostSpecs = await fin.System.getHostSpecs();
+	canRVMLaunchAndDownload = !hostSpecs.name.toLowerCase().startsWith("mac");
+	return canRVMLaunchAndDownload;
 }
