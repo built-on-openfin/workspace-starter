@@ -62,6 +62,12 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 			);
 		}
 
+		if (isEmpty(endpointDefinition.options) || isEmpty(endpointDefinition.options.url)) {
+			this._logger?.warn(
+				`The endpoint definition for ${endpointDefinition.id} does not have a url defined. Unable to action request/response.`
+			);
+			return null;
+		}
 		const { url, ...options }: FetchOptions = endpointDefinition.options;
 
 		const req = this.getRequestOptions(url as string, options, request as { [id: string]: string });
