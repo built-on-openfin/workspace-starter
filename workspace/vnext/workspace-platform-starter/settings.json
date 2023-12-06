@@ -100,6 +100,9 @@
 	},
 	"appProvider": {
 		"endpointIds": [
+			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps.json",
+			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-1-2.json",
+			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-2-0.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-contact.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-expero.json",
@@ -109,9 +112,8 @@
 			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-dev-extensions.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-preload.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-tools.json",
-			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps.json",
-			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-1-2.json",
-			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-2-0.json"
+			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-fdc3-1-2.json",
+			"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-fdc3-2-0.json"
 		],
 		"cacheDurationInSeconds": 10,
 		"cacheDurationInMinutes": 0,
@@ -904,7 +906,7 @@
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/integrations/workspaces.bundle.js",
 				"data": {
 					"images": {
-						"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/icons/{scheme}/workspace.svg"
+						"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg"
 					}
 				}
 			},
@@ -917,7 +919,7 @@
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/integrations/pages.bundle.js",
 				"data": {
 					"images": {
-						"page": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/icons/{scheme}/page.svg"
+						"page": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg"
 					}
 				}
 			},
@@ -1131,7 +1133,7 @@
 	"versionProvider": {
 		"appVersion": "1.0.0",
 		"minVersion": {
-			"workspace": "16.0.0"
+			"workspace": "15.0.0"
 		},
 		"versionWindow": {
 			"name": "versioning",

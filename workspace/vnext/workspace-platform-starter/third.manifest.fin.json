@@ -72,6 +72,9 @@
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
+	"snapshot": {
+		"windows": []
+	},
 	"customSettings": {
 		"bootstrap": {
 			"home": true,
@@ -154,7 +157,12 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-1-2.json", "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-2-0.json"],
+			"endpointIds": [
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/apps-fdc3-2-0.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-fdc3-1-2.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/apps-fdc3-2-0.json"
+			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
@@ -316,7 +324,7 @@
 		},
 		"versionProvider": {
 			"minVersion": {
-				"workspace": "16.0.0"
+				"workspace": "17.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
@@ -371,7 +379,7 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/integrations/workspaces.bundle.js",
 					"data": {
 						"images": {
-							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/icons/{scheme}/workspace.svg"
+							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg"
 						}
 					}
 				},
@@ -384,7 +392,7 @@
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/integrations/pages.bundle.js",
 					"data": {
 						"images": {
-							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/icons/{scheme}/page.svg"
+							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg"
 						}
 					}
 				}
