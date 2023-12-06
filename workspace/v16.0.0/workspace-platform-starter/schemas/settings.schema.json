@@ -360,11 +360,6 @@
             ],
             "type": "string"
         },
-        "BaseEndpointDefinition.O": {
-            "$ref": "#/definitions/FetchOptions",
-            "description": "Options for fetching"
-        },
-        "BaseEndpointDefinition.O_1": {},
         "BootstrapComponents": {
             "description": "The components that can be bootstrapped.",
             "enum": [
@@ -1582,7 +1577,7 @@
                     "type": "string"
                 },
                 "options": {
-                    "$ref": "#/definitions/BaseEndpointDefinition.O",
+                    "$ref": "#/definitions/FetchOptions",
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
@@ -2972,7 +2967,7 @@
                     "type": "string"
                 },
                 "options": {
-                    "$ref": "#/definitions/BaseEndpointDefinition.O_1",
+                    "$ref": "#/definitions/O",
                     "description": "The data to be passed to this endpoint when it is called so that it knows how to act"
                 },
                 "type": {
@@ -2987,7 +2982,6 @@
             },
             "required": [
                 "id",
-                "options",
                 "type",
                 "typeId"
             ],
@@ -3241,6 +3235,7 @@
             ],
             "type": "object"
         },
+        "O": {},
         "Omit": {
             "$ref": "#/definitions/__type_25"
         },
