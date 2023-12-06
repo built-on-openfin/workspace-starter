@@ -73,7 +73,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Default Workspace Platform - v16.0.0",
+		"name": "Default Workspace Platform - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

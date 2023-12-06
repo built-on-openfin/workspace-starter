@@ -67,10 +67,7 @@ export async function updateToolbarButtons(
 	replacementButtonId: string
 ): Promise<ToolbarButton[]> {
 	const index = buttons.findIndex((entry) => {
-		if (
-			entry.type === BrowserButtonType.Custom &&
-			(entry as CustomBrowserButtonConfig).action.customData.sourceId === buttonId
-		) {
+		if (entry.type === BrowserButtonType.Custom && entry.action.customData.sourceId === buttonId) {
 			return true;
 		}
 		return false;
@@ -81,7 +78,7 @@ export async function updateToolbarButtons(
 		if (!isEmpty(availableToolbarButtons)) {
 			const replacement = availableToolbarButtons.find((entry) => {
 				if (entry.button.type === BrowserButtonType.Custom) {
-					const customButton = entry.button as CustomBrowserButtonConfig;
+					const customButton = entry.button;
 					return customButton?.action?.customData?.sourceId === replacementButtonId;
 				}
 				return false;
@@ -118,7 +115,7 @@ export async function updateBrowserWindowButtonsColorScheme(
 
 				for (const button of currentToolbarButtons) {
 					if (button.type === BrowserButtonType.Custom) {
-						const buttonId = (button as CustomBrowserButtonConfig).action?.id;
+						const buttonId = button.action?.id;
 						if (buttonId) {
 							// Find the original button from config so that we can use the original
 							// iconUrl with any schema placeholders

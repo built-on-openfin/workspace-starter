@@ -187,7 +187,7 @@ export class NotificationClient implements NotificationClientInterface {
 				wrappedListener: (event: NotificationsEventMap[keyof NotificationsEventMap]) => void;
 			}
 		);
-		await notificationAddEventListener(eventType as never, mappedListener.wrappedListener as never);
+		notificationAddEventListener(eventType as never, mappedListener.wrappedListener as never);
 	}
 
 	/**

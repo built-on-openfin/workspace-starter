@@ -63,7 +63,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
-		"name": "Workspace Platform Starter - v16.0.0 - FDC3 Workspace",
+		"name": "Workspace Platform Starter - vnext - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -324,7 +324,7 @@
 		},
 		"versionProvider": {
 			"minVersion": {
-				"workspace": "16.0.0"
+				"workspace": "17.0.0"
 			},
 			"versionWindow": {
 				"name": "versioning",
