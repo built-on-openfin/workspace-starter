@@ -7,6 +7,7 @@ import type { BrowserProviderOptions } from "./browser-shapes";
 import type { ConditionsProviderOptions } from "./conditions-shapes";
 import type { ConnectionProviderOptions } from "./connection-shapes";
 import type { ContentCreationProviderOptions } from "./content-creation-shapes";
+import type { DialogProviderOptions } from "./dialog-shapes";
 import type { DockProviderOptions } from "./dock-shapes";
 import type { EndpointProviderOptions } from "./endpoint-shapes";
 import type { FavoriteProviderOptions } from "./favorite-shapes";
@@ -146,4 +147,8 @@ export interface CustomSettings {
 	 * The settings required to enable the share features.
 	 */
 	shareProvider?: ShareProviderOptions;
+	/**
+	 * The settings required to configure the dialog features.
+	 */
+	dialogProvider?: DialogProviderOptions;
 }

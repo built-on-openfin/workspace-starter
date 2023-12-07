@@ -1,11 +1,10 @@
 import type OpenFin from "@openfin/core";
-import type { Page } from "@openfin/workspace-platform";
 import type { ShareConfirmationType } from "workspace-platform-starter/shapes/share-shapes";
 
 /**
- * Options for the pages share provider.
+ * Options for the workspaces share provider.
  */
-export interface PagesShareProviderOptions {
+export interface WorkspacesShareProviderOptions {
 	/**
 	 * The display mode to use when displaying a confirmation.
 	 */
@@ -40,19 +39,14 @@ export interface PagesShareProviderOptions {
 /**
  * The payload for a page share entry.
  */
-export interface PageShareEntryPayload {
+export interface WorkspacesShareEntryPayload {
 	/**
 	 * Identity of the window performing the share.
 	 */
 	windowIdentity?: OpenFin.Identity;
 
 	/**
-	 * The page id being shared.
+	 * The workspace id being shared.
 	 */
-	pageId?: string;
-
-	/**
-	 * The page being shared.
-	 */
-	page?: Page;
+	workspaceId?: string;
 }

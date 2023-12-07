@@ -451,7 +451,8 @@ async function getConditionsClient(): Promise<ConditionsClient> {
 async function getShareClient(): Promise<ShareClient | undefined> {
 	if (Share.isShareEnabled()) {
 		return {
-			share: Share.share
+			share: Share.share,
+			confirmation: Share.confirmation
 		};
 	}
 }

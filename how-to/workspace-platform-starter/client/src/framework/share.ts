@@ -5,12 +5,21 @@ import {
 	type CustomActionsMap,
 	type CustomButtonActionPayload
 } from "@openfin/workspace-platform";
+import { IndicatorColor, create, type NotificationOptions } from "@openfin/workspace/notifications";
+import { showConfirmation } from "./dialog";
 import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
 import { showPopupMenu } from "./menu";
 import { initializeModules, loadModules } from "./modules";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
-import type { Share, ShareEntry, ShareProviderOptions } from "./shapes/share-shapes";
+import type {
+	Share,
+	ShareConfirmationOptions,
+	ShareConfirmationStatus,
+	ShareConfirmationType,
+	ShareEntry,
+	ShareProviderOptions
+} from "./shapes/share-shapes";
 import { isEmpty, isStringValue } from "./utils";
 
 const logger = createLogger("Share");
@@ -19,15 +28,22 @@ let shareOptions: ShareProviderOptions | undefined;
 let modules: ModuleEntry<Share>[] = [];
 let shareInitialized = false;
 let initOptionsListenerId: string | undefined;
+let defaultIconUrl: string | undefined;
 
 /**
  * Initialize the sharing.
  * @param options The options for sharing.
  * @param helpers The module helpers.
+ * @param iconUrl The default icon url to use for notifications or modals.
  */
-export async function init(options: ShareProviderOptions | undefined, helpers: ModuleHelpers): Promise<void> {
+export async function init(
+	options: ShareProviderOptions | undefined,
+	helpers: ModuleHelpers,
+	iconUrl: string | undefined
+): Promise<void> {
 	if (!isEmpty(options)) {
 		shareOptions = options;
+		defaultIconUrl = iconUrl;
 
 		if (shareOptions.enabled) {
 			if (!shareInitialized) {
@@ -38,7 +54,11 @@ export async function init(options: ShareProviderOptions | undefined, helpers: M
 				initOptionsListenerId = registerListener(async (initOptions) => {
 					logger.info("Received share request.");
 					if (isStringValue(initOptions.shareType)) {
-						await share(initOptions.shareType, initOptions.payload);
+						let payloadJson;
+						if (isStringValue(initOptions.payload)) {
+							payloadJson = JSON.parse(atob(initOptions.payload));
+						}
+						await handle(initOptions.shareType, payloadJson);
 					} else {
 						logger.warn("shareType passed but it wasn't a string");
 					}
@@ -70,34 +90,35 @@ export function isShareEnabled(): boolean {
 
 /**
  * Show the share options menu.
- * @param payload The payload containing information to use for positioning.
- * @param payload.windowIdentity The window that initiated the menu request.
- * @param payload.x The x position of the mouse click.
- * @param payload.y The y position of the mouse click.
+ * @param actionPayload The payload containing information to use for positioning.
  */
-export async function showShareOptions(payload: CustomButtonActionPayload): Promise<void> {
+export async function showShareOptions(actionPayload: CustomButtonActionPayload): Promise<void> {
 	if (shareInitialized) {
-		logger.info("Share called with payload:", payload);
+		logger.info("Share called with payload:", actionPayload);
 
-		const windowIdentity = payload.windowIdentity;
+		const windowIdentity = actionPayload.windowIdentity;
 
-		const template: OpenFin.MenuItemTemplate<ShareEntry>[] = [];
+		const template: OpenFin.MenuItemTemplate<Omit<ShareEntry, "label">>[] = [];
 
 		for (const module of modules) {
 			const shareEntries = await module.implementation.getEntries(windowIdentity);
 			if (Array.isArray(shareEntries)) {
 				for (const shareEntry of shareEntries) {
+					const { label, type, payload } = shareEntry;
 					template.push({
-						label: shareEntry.label,
-						data: shareEntry
+						label,
+						data: {
+							type,
+							payload
+						}
 					});
 				}
 			}
 		}
 
-		const result = await showPopupMenu<ShareEntry>(
-			{ x: payload.x, y: payload.y },
-			payload.windowIdentity,
+		const result = await showPopupMenu<Omit<ShareEntry, "label">>(
+			{ x: actionPayload.x, y: actionPayload.y },
+			actionPayload.windowIdentity,
 			"",
 			template
 		);
@@ -144,5 +165,93 @@ export async function share(type: string, payload?: unknown): Promise<void> {
 	}
 	if (!handled) {
 		logger.warn(`Received shareType ${type} but no module was found to handle it.`);
+	}
+}
+
+/**
+ * Perform the handle operation.
+ * @param type The type of share handling to perform.
+ * @param payload The data to associate with the share handling.
+ */
+export async function handle(type: string, payload?: unknown): Promise<void> {
+	let handled = false;
+	for (const module of modules) {
+		const shareTypes = await module.implementation.getShareTypes();
+		if (shareTypes.includes(type)) {
+			await module.implementation.handle(type, payload);
+			handled = true;
+		}
+	}
+	if (!handled) {
+		logger.warn(`Received shareType ${type} but no module was found to handle it.`);
+	}
+}
+
+/**
+ * Display a confirmation for the share.
+ * @param confirmationOptions The confirmation options.
+ * @param confirmationType The type of confirmation to show.
+ * @param parentIdentity The identity of the parent window.
+ * @returns Nothing.
+ */
+export async function confirmation(
+	confirmationOptions: ShareConfirmationOptions,
+	confirmationType: ShareConfirmationType | undefined,
+	parentIdentity?: OpenFin.Identity
+): Promise<void> {
+	const finalType = confirmationType ?? shareOptions?.confirmationMode ?? "notification";
+
+	if (finalType === "modal") {
+		await showConfirmation(
+			{
+				title: confirmationOptions.title,
+				message: confirmationOptions.message,
+				iconUrl: confirmationOptions.iconUrl ?? defaultIconUrl,
+				buttons: [
+					{
+						label: "Dismiss",
+						id: "dismiss"
+					}
+				]
+			},
+			parentIdentity
+		);
+	} else if (finalType === "notification") {
+		const statusColors: { [key in ShareConfirmationStatus]: IndicatorColor } = {
+			shared: IndicatorColor.GREEN,
+			loaded: IndicatorColor.BLUE,
+			error: IndicatorColor.RED
+		};
+
+		const notification: NotificationOptions = {
+			expires: new Date(Date.now() + 30000),
+			body: confirmationOptions.message,
+			buttons: [
+				{
+					submit: false,
+					onClick: null,
+					index: 3,
+					iconUrl: "",
+					cta: false,
+					title: "Dismiss",
+					type: "button"
+				}
+			],
+			stream: {
+				id: "share-requests",
+				displayName: "Share Request",
+				appId: fin.me.identity.uuid
+			},
+			priority: 1,
+			icon: confirmationOptions.iconUrl ?? defaultIconUrl,
+			indicator: {
+				color: statusColors[confirmationOptions.status],
+				text: confirmationOptions.title
+			},
+			category: "share",
+			title: confirmationOptions.title,
+			template: "markdown"
+		};
+		await create(notification);
 	}
 }

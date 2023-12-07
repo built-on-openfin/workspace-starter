@@ -9,6 +9,11 @@ export interface ShareProviderOptions extends ModuleList {
 	 * Is sharing enabled, defaults to true.
 	 */
 	enabled?: boolean;
+
+	/**
+	 * The display mode to use when displaying a confirmation.
+	 */
+	confirmationMode?: ShareConfirmationType;
 }
 
 /**
@@ -66,6 +71,41 @@ export interface ShareEntry {
 }
 
 /**
+ * Type of share confirmation.
+ */
+export type ShareConfirmationType = "notification" | "modal" | "none";
+
+/**
+ * Type of share status.
+ */
+export type ShareConfirmationStatus = "shared" | "loaded" | "error";
+
+/**
+ * Share confirmation options.
+ */
+export interface ShareConfirmationOptions {
+	/**
+	 * The title for the confirmation.
+	 */
+	title: string;
+
+	/**
+	 * The icon for the confirmation.
+	 */
+	iconUrl?: string;
+
+	/**
+	 * The message for the confirmation.
+	 */
+	message: string;
+
+	/**
+	 * The status of the notification.
+	 */
+	status: ShareConfirmationStatus;
+}
+
+/**
  * The client providing share methods
  */
 export interface ShareClient {
@@ -76,4 +116,17 @@ export interface ShareClient {
 	 * @returns Nothing.
 	 */
 	share(type: string, payload?: unknown): Promise<void>;
+
+	/**
+	 * Display a confirmation for the share.
+	 * @param confirmationOptions The confirmation options.
+	 * @param confirmationType The type of confirmation to show.
+	 * @param parentIdentity The identity of the parent window.
+	 * @returns Nothing.
+	 */
+	confirmation(
+		confirmationOptions: ShareConfirmationOptions,
+		confirmationType: ShareConfirmationType | undefined,
+		parentIdentity?: OpenFin.Identity
+	): Promise<void>;
 }

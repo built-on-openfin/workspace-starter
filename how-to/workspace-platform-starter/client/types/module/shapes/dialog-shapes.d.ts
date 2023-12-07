@@ -1,3 +1,22 @@
+import type OpenFin from "@openfin/core";
+/**
+ * The options for the dialog provider.
+ */
+export interface DialogProviderOptions {
+	/**
+	 * The location of the HTML to use for dialog page.
+	 * defaults to http://localhost:8080/common/popups/dialog/index.html
+	 */
+	dialogHtml?: string;
+	/**
+	 * Default width for the dialogs, defaults to 500.
+	 */
+	defaultWidth?: number;
+	/**
+	 * Default height for the dialogs, defaults to 250.
+	 */
+	defaultHeight?: number;
+}
 /**
  * The client providing dialog methods
  */
@@ -5,10 +24,12 @@ export interface DialogClient {
 	/**
 	 * Display a confirmation dialog.
 	 * @param options The options for the dialog.
+	 * @param parentWindow The parent window to display the dialog over.
 	 * @returns The result of the dialog.
 	 */
 	showConfirmation<T = unknown>(
-		options: ConfirmationDialogOptions<T>
+		options: ConfirmationDialogOptions<T>,
+		parentWindow?: OpenFin.Identity
 	): Promise<
 		| {
 				id: string;
@@ -28,7 +49,11 @@ export interface ConfirmationDialogOptions<T = unknown> {
 	/**
 	 * The icon to display in the dialog.
 	 */
-	icon: string;
+	iconUrl?: string;
+	/**
+	 * The message to display in the dialog.
+	 */
+	message: string;
 	/**
 	 * The confirmation buttons to display, if undefined a default OK button will be displayed.
 	 */

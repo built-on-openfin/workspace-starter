@@ -86,7 +86,7 @@ The service is configured via endpoints (see [How To Define Endpoints](./how-to-
     }
    },
    {
-    "id": "share-save",
+    "id": "share-set",
     "type": "fetch",
     "options": {
      "method": "POST",
@@ -103,13 +103,13 @@ The service is configured via endpoints (see [How To Define Endpoints](./how-to-
 Endpoints support an action and request/response function (see [How To Define Endpoints](./how-to-define-endpoints.md)). Workspace platform starter checks to see if you have specified the following endpoints when implementing sharing:
 
 - share-get
-- share-save
+- share-set
 
 You can see we are using the default built in fetch support and passing fetch options via config.
 
 Endpoints have a default **fetch** implementation where you can just point to rest endpoints but you could also have a custom module (see [how to add a module](./how-to-add-a-module.md) that implements your own logic.
 
-## What Would The Share-Save Endpoint Need To Support?
+## What Would The Share-Set Endpoint Need To Support?
 
 ### Request To Your Endpoint For Sharing A Page
 
