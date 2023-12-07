@@ -1,12 +1,12 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getConnectedApps } from "./connections";
-import { addDirectoryEndpoint, getPlatformApps, init as directoryInit } from "./directory";
+import { addDirectoryEndpoint, init as directoryInit, getPlatformApps } from "./directory";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import type { AppFilterOptions, AppProviderOptions, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import { isEmpty, isNumber, randomUUID } from "./utils";
+import { isEmpty, isNumber, isString, randomUUID } from "./utils";
 import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
 
 const logger = createLogger("Apps");
@@ -62,7 +62,7 @@ export async function init(
 		} else if (Array.isArray(options?.endpointIds)) {
 			logger.info("Using the following passed endpoints", options.endpointIds);
 			for (const endpointId of options.endpointIds) {
-				if (typeof endpointId === "string") {
+				if (isString(endpointId)) {
 					if (endpointId.startsWith("http")) {
 						addDirectoryEndpoint({
 							id: randomUUID(),

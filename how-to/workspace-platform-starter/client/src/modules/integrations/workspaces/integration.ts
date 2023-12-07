@@ -462,9 +462,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						// event which will remove it from the result list
 					} else if (
 						result.action.name === WorkspacesProvider._ACTION_SHARE_WORKSPACE &&
-						this._integrationHelpers.share
+						this._integrationHelpers.getShareClient
 					) {
-						await this._integrationHelpers.share({ type: "workspace", workspaceId: data.workspaceId });
+						const shareClient = await this._integrationHelpers.getShareClient();
+						if (shareClient) {
+							await shareClient.share("workspace", { workspaceId: data.workspaceId });
+						}
 					} else {
 						handled = false;
 						this._logger?.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);

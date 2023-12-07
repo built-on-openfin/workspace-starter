@@ -205,8 +205,9 @@ export function removeActionListener(id: string): boolean {
  */
 function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undefined {
 	try {
-		if (typeof initOptions?.payload === "string") {
-			const plainJson = atob(initOptions?.payload);
+		const base64Payload = initOptions?.payload;
+		if (isStringValue(base64Payload)) {
+			const plainJson = atob(base64Payload);
 			const payload = JSON.parse(plainJson) as T;
 			logger.info("Extracted payload", payload);
 			return payload;

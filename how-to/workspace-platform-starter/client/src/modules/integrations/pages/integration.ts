@@ -325,9 +325,13 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 							// Deleting the page will eventually trigger the "delete" lifecycle
 							// event which will remove it from the result list
 						}
-					} else if (result.action.name === PagesProvider._ACTION_SHARE_PAGE) {
-						if (this._integrationHelpers?.share) {
-							await this._integrationHelpers.share({ type: "page", pageId: data.pageId });
+					} else if (
+						result.action.name === PagesProvider._ACTION_SHARE_PAGE &&
+						this._integrationHelpers?.getShareClient
+					) {
+						const shareClient = await this._integrationHelpers.getShareClient();
+						if (shareClient) {
+							await shareClient.share("page", { pageId: data.pageId });
 						}
 					} else {
 						handled = false;

@@ -7,7 +7,6 @@ import type {
 } from "@openfin/workspace";
 import type { ModuleDefinition, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { PlatformStorageMetadata } from "./platform-shapes";
-import type { ShareCustomData } from "./share-shapes";
 import type { TemplateHelpers } from "./template-shapes";
 
 /**
@@ -32,13 +31,6 @@ export interface IntegrationHelpers extends ModuleHelpers {
 	 * @returns Nothing.
 	 */
 	setSearchQuery?(query: string): Promise<void>;
-
-	/**
-	 * Share data.
-	 * @param options The sharing options.
-	 * @returns Nothing.
-	 */
-	share?(options?: ShareCustomData): Promise<void>;
 }
 
 /**

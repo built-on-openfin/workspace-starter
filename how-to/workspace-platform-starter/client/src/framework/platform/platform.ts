@@ -129,10 +129,11 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	const sharingEnabled = customSettings?.platformProvider?.sharing ?? true;
-	if (sharingEnabled) {
+	const shareOptions = customSettings?.shareProvider ?? {};
+	shareOptions.enabled ??= true;
+	if (shareOptions.enabled) {
 		await platformSplashProvider.updateProgress("Sharing");
-		await shareProvider.init({ enabled: sharingEnabled });
+		await shareProvider.init(shareOptions, helpers);
 	}
 
 	if (!isEmpty(customSettings?.favoriteProvider) && (customSettings?.favoriteProvider.enabled ?? true)) {

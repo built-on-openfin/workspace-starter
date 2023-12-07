@@ -123,7 +123,7 @@ export function formatError(err: unknown): string {
 		return "";
 	} else if (err instanceof Error) {
 		return err.message;
-	} else if (typeof err === "string") {
+	} else if (isStringValue(err)) {
 		return err;
 	} else if (isObject(err) && "message" in err && isString(err.message)) {
 		return err.message;

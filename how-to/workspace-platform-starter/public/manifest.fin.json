@@ -1619,6 +1619,21 @@
 					}
 				}
 			]
+		},
+		"shareProvider": {
+			"modules": [
+				{
+					"id": "pages",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Pages",
+					"description": "Pages",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/share/pages.bundle.js",
+					"data": {
+						"exampleProp": "value"
+					}
+				}
+			]
 		}
 	}
 }

@@ -1,84 +1,70 @@
 import type OpenFin from "@openfin/core";
-import type { Page } from "@openfin/workspace-platform";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 /**
- * All of the share custom data types.
+ * A list of modules that provide sharing.
  */
-export type ShareCustomData = SharePageData | ShareWorkspaceData;
-/**
- * The payload for sharing page data.
- */
-export interface SharePageData {
+export interface ShareProviderOptions extends ModuleList {
 	/**
-	 * The type of the data.
+	 * Is sharing enabled, defaults to true.
 	 */
-	type: "page";
-	/**
-	 * The window identity of the sharing page.
-	 */
-	windowIdentity?: OpenFin.Identity;
-	/**
-	 * The page id of the shared page.
-	 */
-	pageId: string;
-	/**
-	 * The page data.
-	 */
-	page?: Page;
+	enabled?: boolean;
 }
 /**
- * The payload for sharing workspace data.
+ * The module definition for shares.
  */
-export interface ShareWorkspaceData {
+export interface Share<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
-	 * The type of the data.
+	 * Get the list of share types supported by the module.
+	 * @returns Nothing.
 	 */
-	type: "workspace";
+	getShareTypes(): Promise<string[]>;
 	/**
-	 * The id of the shared workspace.
+	 * Get the shares from the module.
+	 * @param windowIdentity The window identity to get the shares for.
+	 * @returns Nothing.
 	 */
-	workspaceId?: string;
+	getEntries(windowIdentity: OpenFin.Identity): Promise<ShareEntry[] | undefined>;
+	/**
+	 * Perform the share for the given entry.
+	 * @param type The type of share to perform.
+	 * @param payload The data to associate with the share.
+	 * @returns Nothing.
+	 */
+	share(type: string, payload?: unknown): Promise<void>;
+	/**
+	 * Handle a share activation.
+	 * @param type The type of the share.
+	 * @param payload The payload for the share.
+	 * @returns Nothing.
+	 */
+	handle(type: string, payload?: unknown): Promise<void>;
 }
 /**
- * The combined shared store types.
+ * An entry for sharing.
  */
-export type ShareStoreEntry = ShareEntryStorePage | ShareEntryStoreWorkspace | ShareEntryStoreUnknown;
-/**
- * Share stored entry for page.
- */
-interface ShareEntryStorePage {
+export interface ShareEntry {
 	/**
-	 * The type of the data.
+	 * The type of the share entry.
 	 */
-	type: "page";
+	type: string;
 	/**
-	 * The data to store.
+	 * The label of the share entry.
 	 */
-	data: {
-		page: Page;
-	};
+	label: string;
+	/**
+	 * Custom data for the share entry.
+	 */
+	payload?: unknown;
 }
 /**
- * Share stored entry for workspace.
+ * The client providing share methods
  */
-interface ShareEntryStoreWorkspace {
+export interface ShareClient {
 	/**
-	 * The type of the data.
+	 * Perform a share of the specified type.
+	 * @param type The type of share to perform.
+	 * @param payload The data to associate with the share.
+	 * @returns Nothing.
 	 */
-	type: "workspace";
-	/**
-	 * The data to store.
-	 */
-	data: {
-		snapshot: string;
-	};
+	share(type: string, payload?: unknown): Promise<void>;
 }
-/**
- * Share stored entry for unknown.
- */
-interface ShareEntryStoreUnknown {
-	/**
-	 * The type of the data.
-	 */
-	type: "other";
-}
-export {};
