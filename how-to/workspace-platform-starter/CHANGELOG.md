@@ -49,6 +49,8 @@
 - Added Share provider which allows modules to plugin their own share options.
 - Added Share client to module helpers for performing share operations.
 - Added Dialog client to module helpers to provide a simple way to show confirmation dialogs.
+- Added sharing for pages moved into module
+- Added sharing for workspaces moved into module
 
 ## v15
 
