@@ -27,7 +27,6 @@
 	},
 	"platformProvider": {
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter",
-		"sharing": true,
 		"interop": {
 			"intentResolver": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/common/windows/intents/instance-picker.html",
@@ -164,7 +163,7 @@
 				}
 			},
 			{
-				"id": "share-save",
+				"id": "share-set",
 				"type": "fetch",
 				"options": {
 					"method": "POST",
@@ -1188,5 +1187,45 @@
 				"data": {}
 			}
 		]
+	},
+	"shareProvider": {
+		"confirmationMode": "modal",
+		"modules": [
+			{
+				"id": "pages-share",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/favicon.ico",
+				"title": "Pages Share",
+				"description": "Pages Share",
+				"enabled": true,
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/js/modules/share/pages.bundle.js",
+				"data": {
+					"getEndpointId": "share-get",
+					"setEndpointId": "share-set",
+					"images": {
+						"error": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/common/icons/{theme}/{scheme}/error.svg",
+						"success": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/common/icons/{theme}/{scheme}/success.svg"
+					}
+				}
+			},
+			{
+				"id": "workspaces-share",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/favicon.ico",
+				"title": "Workspaces Share",
+				"description": "Workspaces Share",
+				"enabled": true,
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/js/modules/share/workspaces.bundle.js",
+				"data": {
+					"getEndpointId": "share-get",
+					"setEndpointId": "share-set",
+					"images": {
+						"error": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/common/icons/{theme}/{scheme}/error.svg",
+						"success": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/common/icons/{theme}/{scheme}/success.svg"
+					}
+				}
+			}
+		]
+	},
+	"dialogProvider": {
+		"dialogHtml": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/share-refactor/workspace-platform-starter/common/popups/dialog/index.html"
 	}
 }
