@@ -51,11 +51,23 @@ The dock component has some built in buttons for `Home`, `Workspaces`, `Notifica
 }
 ```
 
-The rest of the elements shown on the dock are configured in one of two sections, `apps` or `buttons`.
+By default the items on the dock can be rearranged, to disable this options use the following configuration:
 
-## App Entries
+```json
+"dockProvider": {
+    "disableUserRearrangement": true
+}
+```
 
-The `apps` can be used to show dock entries based on `apps` configured from your app provider (see [How To Define Apps](./how-to-define-apps.md)). This provides a convenient shortcut with minimum configuration to launch apps that you have already provided from your app source.
+The elements shown on the dock are configured in the `entries` property.
+
+## Entries
+
+The entries property for items on the dock can be a combination of apps and buttons.
+
+### Entries for apps
+
+The app entires can be used to show dock entries based on apps configured from your app provider (see [How To Define Apps](./how-to-define-apps.md)). This provides a convenient shortcut with minimum configuration to launch apps that you have already provided from your app source.
 
 The dock can display either single buttons, or a drop down menu. You can override the icon and tooltip for the buttons, but by default they will use the metadata from the app definition. Each entry can pull apps from multiple tagged items.
 
@@ -63,7 +75,7 @@ To add single buttons for all apps tagged with `dock` you would add the followin
 
 ```json
 "dockProvider": {
-    "apps": [
+    "entries": [
         {
             "display": "individual",
             "tags": ["dock"]
@@ -76,7 +88,7 @@ To add a drop down containing all the apps tagged with `fdc3` you would add the 
 
 ```json
 "dockProvider": {
-    "apps": [
+    "entries": [
         {
             "display": "group",
             "tooltip": "FDC3",
@@ -90,7 +102,7 @@ In this second group example we override both the `tooltip` and `iconUrl` and it
 
 ```json
 "dockProvider": {
-    "apps": [
+    "entries": [
         {
             "display": "group",
             "tooltip": "Manager",
@@ -101,15 +113,15 @@ In this second group example we override both the `tooltip` and `iconUrl` and it
 }
 ```
 
-## Button Entries
+### Entries for buttons
 
-The `buttons` provide more flexibility than the `apps` and can be used to show dock entries which can launch apps or custom actions.
+The buttons provide more flexibility than the apps and can be used to show dock entries which can launch apps or custom actions.
 
 If you specify an `appId` it is looked up from your apps provider and is launched on the button click.
 
 ```json
 "dockProvider": {
-    "buttons": [
+    "entries": [
         {
             "tooltip": "My App",
             "iconUrl": "http://localhost:8080/favicon.ico",
@@ -123,7 +135,7 @@ To launch a custom action you instead specify its `id`, and the `customData` spe
 
 ```json
 "dockProvider": {
-    "buttons": [
+    "entries": [
         {
             "tooltip": "Google",
             "iconUrl": "https://www.google.com/favicon.ico",
@@ -142,7 +154,7 @@ If you want to configure a drop down menu instead of a single button you can use
 
 ```json
 "dockProvider": {
-    "buttons": [
+    "entries": [
         {
             "tooltip": "Social",
             "iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg",
