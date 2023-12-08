@@ -449,20 +449,11 @@ export function overrideCallback(
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
 			const platform = getCurrentSync();
 
-			if (isEmpty(req.page.customData)) {
-				req.page.customData = {};
-			}
-
-			let windowBounds = await getPageBounds(req.page.pageId);
-
-			if (isEmpty(windowBounds)) {
-				// likely this is a new save page as implementation as we were unable to find this page id in the available pages
-				const parentIdentity = await platform.Browser.getLastFocusedWindow();
-				const parentWindow = fin.Window.wrapSync(parentIdentity);
-				windowBounds = await parentWindow.getBounds();
-			}
-
+			const windowBounds = await getPageBounds(req.page.pageId);
 			if (!isEmpty(windowBounds)) {
+				if (isEmpty(req.page.customData)) {
+					req.page.customData = {};
+				}
 				req.page.customData.windowBounds = windowBounds;
 			}
 

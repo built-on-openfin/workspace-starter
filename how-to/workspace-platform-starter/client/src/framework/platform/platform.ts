@@ -12,6 +12,7 @@ import * as authFlow from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as contentCreationProvider from "../content-creation";
+import * as dialogProvider from "../dialog";
 import * as endpointProvider from "../endpoint";
 import * as favoriteProvider from "../favorite";
 import * as initOptionsProvider from "../init-options";
@@ -110,6 +111,9 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	await platformSplashProvider.updateProgress("Menus");
 	await menusProvider.init(customSettings?.menusProvider, helpers, customSettings?.platformProvider?.rootUrl);
 
+	await platformSplashProvider.updateProgress("Dialogs");
+	await dialogProvider.init(customSettings?.dialogProvider);
+
 	await platformSplashProvider.updateProgress("Analytics");
 	await analyticsProvider.init(customSettings?.analyticsProvider, helpers);
 
@@ -129,10 +133,11 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	const sharingEnabled = customSettings?.platformProvider?.sharing ?? true;
-	if (sharingEnabled) {
+	const shareOptions = customSettings?.shareProvider ?? {};
+	shareOptions.enabled ??= true;
+	if (shareOptions.enabled) {
 		await platformSplashProvider.updateProgress("Sharing");
-		await shareProvider.init({ enabled: sharingEnabled });
+		await shareProvider.init(shareOptions, helpers, customSettings?.homeProvider?.icon);
 	}
 
 	if (!isEmpty(customSettings?.favoriteProvider) && (customSettings?.favoriteProvider.enabled ?? true)) {

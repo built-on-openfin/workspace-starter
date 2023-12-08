@@ -1,12 +1,13 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getConnectedApps } from "./connections";
-import { addDirectoryEndpoint, getPlatformApps, init as directoryInit } from "./directory";
+import { addDirectoryEndpoint, init as directoryInit, getPlatformApps } from "./directory";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import type { AppFilterOptions, AppProviderOptions, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import { isEmpty, isNumber, randomUUID } from "./utils";
+import { isEmpty, isNumber, isString, randomUUID } from "./utils";
+import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
 
 const logger = createLogger("Apps");
 
@@ -17,8 +18,6 @@ let lastCacheUpdate: number = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
 let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
-let canLaunchExternalProcess: boolean | undefined;
-let canDownloadAppAssets: boolean | undefined;
 
 /**
  * Initialize the application provider.
@@ -63,7 +62,7 @@ export async function init(
 		} else if (Array.isArray(options?.endpointIds)) {
 			logger.info("Using the following passed endpoints", options.endpointIds);
 			for (const endpointId of options.endpointIds) {
-				if (typeof endpointId === "string") {
+				if (isString(endpointId)) {
 					if (endpointId.startsWith("http")) {
 						addDirectoryEndpoint({
 							id: randomUUID(),
@@ -236,8 +235,8 @@ async function getEntries(): Promise<PlatformApp[]> {
  * @returns The list of validated apps.
  */
 async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
-	const hasLaunchExternalProcess = await getCanLaunchExternalProcess();
-	const hasDownloadAppAssets = await getCanDownloadAppAssets();
+	const hasLaunchExternalProcess = await getCanLaunchExternalProcess(logger);
+	const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
 
 	const validatedApps: PlatformApp[] = [];
 	const rejectedAppIds = [];
@@ -345,48 +344,4 @@ export async function getApp(appId: string): Promise<PlatformApp | undefined> {
 	}
 
 	return app;
-}
-
-/**
- * Do we have the permissions to launch external processes.
- * @returns True if we have permission.
- */
-async function getCanLaunchExternalProcess(): Promise<boolean> {
-	if (!isEmpty(canLaunchExternalProcess)) {
-		return canLaunchExternalProcess;
-	}
-
-	try {
-		const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.launchExternalProcess"
-		);
-
-		canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
-	} catch (error) {
-		logger.error("Error while querying for System.launchExternalProcess permission", error);
-		canLaunchExternalProcess = false;
-	}
-
-	return canLaunchExternalProcess;
-}
-
-/**
- * Do we have the permissions to download app assets.
- * @returns True if we have permission.
- */
-async function getCanDownloadAppAssets(): Promise<boolean> {
-	if (!isEmpty(canDownloadAppAssets)) {
-		return canDownloadAppAssets;
-	}
-
-	try {
-		const canDownloadAppAssetsResponse =
-			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
-	} catch (error) {
-		logger.error("Error while querying for System.downloadAsset permission", error);
-		canDownloadAppAssets = false;
-	}
-
-	return canDownloadAppAssets;
 }

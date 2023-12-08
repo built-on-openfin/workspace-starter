@@ -962,6 +962,10 @@
 					"$ref": "#/definitions/ContentCreationProviderOptions",
 					"description": "The settings required to enable the content creation features."
 				},
+				"dialogProvider": {
+					"$ref": "#/definitions/DialogProviderOptions",
+					"description": "The settings required to configure the dialog features."
+				},
 				"dockProvider": {
 					"$ref": "#/definitions/DockProviderOptions",
 					"description": "The dock provider options."
@@ -1009,6 +1013,10 @@
 				"platformProvider": {
 					"$ref": "#/definitions/PlatformProviderOptions",
 					"description": "The platform provider options."
+				},
+				"shareProvider": {
+					"$ref": "#/definitions/ShareProviderOptions",
+					"description": "The settings required to enable the share features."
 				},
 				"snapProvider": {
 					"$ref": "#/definitions/SnapProviderOptions",
@@ -1058,6 +1066,25 @@
 				}
 			},
 			"required": ["delayMs", "type"],
+			"type": "object"
+		},
+		"DialogProviderOptions": {
+			"additionalProperties": false,
+			"description": "The options for the dialog provider.",
+			"properties": {
+				"defaultHeight": {
+					"description": "Default height for the dialogs, defaults to 250.",
+					"type": "number"
+				},
+				"defaultWidth": {
+					"description": "Default width for the dialogs, defaults to 500.",
+					"type": "number"
+				},
+				"dialogHtml": {
+					"description": "The location of the HTML to use for dialog page.\ndefaults to http://localhost:8080/common/popups/dialog/index.html",
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"DipRect": {
@@ -3861,13 +3888,9 @@
 				"rootUrl": {
 					"description": "What is the root url of you platform e.g. https://mydomain.com",
 					"type": "string"
-				},
-				"sharing": {
-					"description": "Do you want to enable this platforms sharing capability (you will still need to have 2 endpoints called\nshare-save and share-get for the storing and retrieval of the share target)",
-					"type": "boolean"
 				}
 			},
-			"required": ["rootUrl", "sharing"],
+			"required": ["rootUrl"],
 			"type": "object"
 		},
 		"Point": {
@@ -3952,6 +3975,33 @@
 			"description": "The order to sort scored search results in.",
 			"enum": ["ascending", "descending"],
 			"type": "string"
+		},
+		"ShareConfirmationType": {
+			"description": "Type of share confirmation.",
+			"enum": ["modal", "none", "notification"],
+			"type": "string"
+		},
+		"ShareProviderOptions": {
+			"additionalProperties": false,
+			"description": "A list of modules that provide sharing.",
+			"properties": {
+				"confirmationMode": {
+					"$ref": "#/definitions/ShareConfirmationType",
+					"description": "The display mode to use when displaying a confirmation."
+				},
+				"enabled": {
+					"description": "Is sharing enabled, defaults to true.",
+					"type": "boolean"
+				},
+				"modules": {
+					"description": "The list of modules.",
+					"items": {
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
+					},
+					"type": "array"
+				}
+			},
+			"type": "object"
 		},
 		"ShortcutOverride": {
 			"additionalProperties": false,

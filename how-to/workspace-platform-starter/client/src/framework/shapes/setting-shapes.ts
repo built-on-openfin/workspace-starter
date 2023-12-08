@@ -7,6 +7,7 @@ import type { BrowserProviderOptions } from "./browser-shapes";
 import type { ConditionsProviderOptions } from "./conditions-shapes";
 import type { ConnectionProviderOptions } from "./connection-shapes";
 import type { ContentCreationProviderOptions } from "./content-creation-shapes";
+import type { DialogProviderOptions } from "./dialog-shapes";
 import type { DockProviderOptions } from "./dock-shapes";
 import type { EndpointProviderOptions } from "./endpoint-shapes";
 import type { FavoriteProviderOptions } from "./favorite-shapes";
@@ -19,6 +20,7 @@ import type { LowCodeIntegrationProviderOptions } from "./low-code-integration-s
 import type { MenusProviderOptions } from "./menu-shapes";
 import type { NotificationProviderOptions } from "./notification-shapes";
 import type { PlatformProviderOptions } from "./platform-shapes";
+import type { ShareProviderOptions } from "./share-shapes";
 import type { SnapProviderOptions } from "./snap-shapes";
 import type { SplashScreenProviderOptions } from "./splash-shapes";
 import type { StorefrontProviderOptions } from "./store-shapes";
@@ -169,4 +171,14 @@ export interface CustomSettings {
 	 * The settings required to enable the content creation features.
 	 */
 	contentCreationProvider?: ContentCreationProviderOptions;
+
+	/**
+	 * The settings required to enable the share features.
+	 */
+	shareProvider?: ShareProviderOptions;
+
+	/**
+	 * The settings required to configure the dialog features.
+	 */
+	dialogProvider?: DialogProviderOptions;
 }

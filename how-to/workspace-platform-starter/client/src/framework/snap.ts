@@ -7,6 +7,7 @@ import { MANIFEST_TYPES } from "./manifest-types";
 import * as platformSplashProvider from "./platform/platform-splash";
 import type { SnapProviderOptions } from "./shapes";
 import { formatError, isEmpty } from "./utils";
+import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
 
 const logger = createLogger("Snap");
 const NATIVE_APP_PREFIX = "app:";
@@ -59,6 +60,16 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 		if (serverAssetInfo.src === "SNAP_ASSET_URL") {
 			logger.error(
 				"Please request the SNAP_ASSET_URL from OpenFin and update SnapProvider.serverAssetInfo.src before running the platform"
+			);
+			return;
+		}
+
+		const hasLaunchExternalProcess = await getCanLaunchExternalProcess(logger);
+		const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
+
+		if (!hasLaunchExternalProcess || !hasDownloadAppAssets) {
+			logger.warn(
+				"Snap is enabled but the platform does not have the capability or permission to download app assets or launch external processes."
 			);
 			return;
 		}

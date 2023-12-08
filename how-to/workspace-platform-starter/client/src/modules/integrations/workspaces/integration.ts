@@ -426,10 +426,10 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						await platform.Storage.saveWorkspace(workspace);
 
 						let shareEnabled: boolean = false;
-						if (this._integrationHelpers?.getConditionsClient) {
-							const conditionsClient = await this._integrationHelpers.getConditionsClient();
-							if (conditionsClient) {
-								shareEnabled = await conditionsClient.check("sharing");
+						if (this._integrationHelpers?.getShareClient) {
+							const shareClient = await this._integrationHelpers.getShareClient();
+							if (shareClient) {
+								shareEnabled = await shareClient.typeEnabled("workspace");
 							}
 						}
 
@@ -462,9 +462,12 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 						// event which will remove it from the result list
 					} else if (
 						result.action.name === WorkspacesProvider._ACTION_SHARE_WORKSPACE &&
-						this._integrationHelpers.share
+						this._integrationHelpers.getShareClient
 					) {
-						await this._integrationHelpers.share({ type: "workspace", workspaceId: data.workspaceId });
+						const shareClient = await this._integrationHelpers.getShareClient();
+						if (shareClient) {
+							await shareClient.share("workspace", { workspaceId: data.workspaceId });
+						}
 					} else {
 						handled = false;
 						this._logger?.warn(`Unrecognized action for workspace selection: ${data.workspaceId}`);
@@ -639,10 +642,10 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			const currentWorkspace = await platform.getCurrentWorkspace();
 			const currentWorkspaceId = currentWorkspace?.workspaceId;
 			let shareEnabled: boolean = false;
-			if (this._integrationHelpers?.getConditionsClient) {
-				const conditionsClient = await this._integrationHelpers.getConditionsClient();
-				if (conditionsClient) {
-					shareEnabled = await conditionsClient.check("sharing");
+			if (this._integrationHelpers?.getShareClient) {
+				const shareClient = await this._integrationHelpers.getShareClient();
+				if (shareClient) {
+					shareEnabled = await shareClient.typeEnabled("workspace");
 				}
 			}
 

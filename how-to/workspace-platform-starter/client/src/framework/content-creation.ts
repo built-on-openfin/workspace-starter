@@ -126,7 +126,7 @@ async function findMatchingRule(
 	event: OpenFin.WebContentsEvents.ContentCreationRulesEvent
 ): Promise<number> {
 	let index = -1;
-	if (module.implementation?.getRules) {
+	if (module.implementation?.getRules && !isEmpty(event.rule)) {
 		const rules = await module.implementation.getRules();
 		index = rules.findIndex(
 			(r) =>

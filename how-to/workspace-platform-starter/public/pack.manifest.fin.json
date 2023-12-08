@@ -91,7 +91,6 @@
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
-			"sharing": false,
 			"interop": {
 				"intentResolver": {
 					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
@@ -260,6 +259,22 @@
 						"method": "SET",
 						"dataType": "default-workspace"
 					}
+				},
+				{
+					"id": "share-get",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://example.com/api/share/[id]"
+					}
+				},
+				{
+					"id": "share-set",
+					"type": "fetch",
+					"options": {
+						"method": "POST",
+						"url": "https://example.com/api/share"
+					}
 				}
 			],
 			"endpointClients": {
@@ -268,6 +283,16 @@
 						"enabled": true,
 						"id": "default-workspace",
 						"endpointIds": ["get-default-workspace", "set-default-workspace"]
+					},
+					{
+						"enabled": true,
+						"id": "pages-share",
+						"endpointIds": ["share-get", "share-set"]
+					},
+					{
+						"enabled": true,
+						"id": "workspaces-share",
+						"endpointIds": ["share-get", "share-set"]
 					}
 				]
 			}
@@ -854,6 +879,46 @@
 					}
 				}
 			]
+		},
+		"shareProvider": {
+			"enabled": false,
+			"modules": [
+				{
+					"id": "pages-share",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Pages Share",
+					"description": "Pages Share",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/share/pages.bundle.js",
+					"data": {
+						"getEndpointId": "share-get",
+						"setEndpointId": "share-set",
+						"images": {
+							"error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+							"success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
+						}
+					}
+				},
+				{
+					"id": "workspaces-share",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Workspaces Share",
+					"description": "Workspaces Share",
+					"enabled": false,
+					"url": "http://localhost:8080/js/modules/share/workspaces.bundle.js",
+					"data": {
+						"getEndpointId": "share-get",
+						"setEndpointId": "share-set",
+						"images": {
+							"error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+							"success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
+						}
+					}
+				}
+			]
+		},
+		"dialogProvider": {
+			"dialogHtml": "http://localhost:8080/common/popups/dialog/index.html"
 		}
 	}
 }

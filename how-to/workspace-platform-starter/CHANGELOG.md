@@ -2,6 +2,7 @@
 
 ## v16
 
+- Updated logic to handle current launchExternalProcess and downloadAppAsset support in the Mac RVM. In apps.ts we filter out native or app asset applications and if Snap is enabled then we log a warning and do not try to enable the Snap SDK.
 - Updated endpoint types so that fetch endpoints keep mandatory options (it can't work without them) but module endpoints now have options marked as optional (as not all custom modules would need to pass settings). This ties in with the schema improvements below.
 - Added support for supporting intellisense for any manifest file called \*.manifest.fin.json or manifest.fin.json. The rules are any manifest in how-to/workspace-platform-starter will include the OpenFin manifest options as well as Workspace Platform Starter custom settings. Any manifest file in the other how-to examples will include the OpenFin manifest settings but not the custom settings that are specific to Workspace Platform Starter. The schema reference in the manifest has been dropped and schema settings are now picked up in the .vscode/settings.json file. Please open this repo at the root in VSCode so that you have access to all the how-tos and you have access to the settings for this repo.
 - Added support for reshow. If you click on the application icon/shortcut it will show you the components that have been configured to autoShow (see [how to customize the bootstrapping process](./docs/how-to-customize-the-bootstrapping-process.md)) if the application is already running.
@@ -42,6 +43,15 @@
 - InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`
 - Added unit testing script `npm run test` tests can be found in ./test folder, for more information see [How to Test Your Platform Code](./docs/how-to-test-your-platform-code.md)
 - Added e2e testing script `npm run e2e` tests can be found in ./e2e folder, for more information see [How to Test Your Platform UI](./docs/how-to-test-your-platform-ui.md)
+- BREAKING CHANGE: sharing has been moved to it's own provider, the `sharing` flag has been removed from `platformProvider` and `enabled` can be set in `shareProvider`
+- BREAKING CHANGE: share links are now of the form `shareType=<type>&payload=` instead of `shareId=<id>`
+- BREAKING CHANGE: share method has been removed from integration helpers, use shareClient in module helpers
+- Added Share provider which allows modules to plugin their own share options.
+- Added Share client to module helpers for performing share operations.
+- Added Dialog client to module helpers to provide a simple way to show confirmation dialogs.
+- Added sharing for pages moved into module
+- Added sharing for workspaces moved into module
+- Added example dummy share server for testing locally (stores in memory), to use update manifest.fin.json `https://workspace.openfin.co` references to `http://localhost:8080`
 
 ## v15
 

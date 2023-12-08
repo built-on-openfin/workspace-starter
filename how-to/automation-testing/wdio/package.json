@@ -10,7 +10,7 @@
 	"devDependencies": {
 		"@openfin/automation-helpers": "^1.2.0",
 		"@openfin/automation-native": "^1.2.0",
-		"@wdio/cli": "8.24.13",
+		"@wdio/cli": "8.24.16",
 		"@wdio/local-runner": "8.24.12",
 		"@wdio/mocha-framework": "8.24.12",
 		"@wdio/shared-store-service": "8.24.12",

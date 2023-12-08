@@ -27,7 +27,6 @@
 	},
 	"platformProvider": {
 		"rootUrl": "http://localhost:8080",
-		"sharing": true,
 		"interop": {
 			"intentResolver": {
 				"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
@@ -164,7 +163,7 @@
 				}
 			},
 			{
-				"id": "share-save",
+				"id": "share-set",
 				"type": "fetch",
 				"options": {
 					"method": "POST",
@@ -1188,5 +1187,45 @@
 				"data": {}
 			}
 		]
+	},
+	"shareProvider": {
+		"confirmationMode": "modal",
+		"modules": [
+			{
+				"id": "pages-share",
+				"icon": "http://localhost:8080/favicon.ico",
+				"title": "Pages Share",
+				"description": "Pages Share",
+				"enabled": true,
+				"url": "http://localhost:8080/js/modules/share/pages.bundle.js",
+				"data": {
+					"getEndpointId": "share-get",
+					"setEndpointId": "share-set",
+					"images": {
+						"error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+						"success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
+					}
+				}
+			},
+			{
+				"id": "workspaces-share",
+				"icon": "http://localhost:8080/favicon.ico",
+				"title": "Workspaces Share",
+				"description": "Workspaces Share",
+				"enabled": true,
+				"url": "http://localhost:8080/js/modules/share/workspaces.bundle.js",
+				"data": {
+					"getEndpointId": "share-get",
+					"setEndpointId": "share-set",
+					"images": {
+						"error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+						"success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
+					}
+				}
+			}
+		]
+	},
+	"dialogProvider": {
+		"dialogHtml": "http://localhost:8080/common/popups/dialog/index.html"
 	}
 }

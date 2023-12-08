@@ -261,7 +261,7 @@ async function getViewIdentities(
  * @returns The manifest object.
  */
 function getInlineManifest<T>(platformApp: PlatformApp): T {
-	if (typeof platformApp.manifest === "string" && platformApp.manifest.startsWith("{")) {
+	if (isStringValue(platformApp.manifest) && platformApp.manifest.startsWith("{")) {
 		return JSON.parse(platformApp.manifest) as T;
 	}
 
