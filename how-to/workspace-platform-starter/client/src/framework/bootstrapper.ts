@@ -4,10 +4,11 @@ import * as analyticsProvider from "./analytics";
 import { getApps } from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
+import * as conditionsProvider from "./conditions";
 import * as connectionProvider from "./connections";
 import {
-	init as registerInitOptionsListener,
-	registerListener as registerInitListener
+	registerListener as registerInitListener,
+	init as registerInitOptionsListener
 } from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launch } from "./launch";
@@ -138,6 +139,11 @@ export async function init(): Promise<boolean> {
 		notificationMetaInfo = await notificationsComponent.register(customSettings?.notificationProvider);
 		registerNotificationConnectionActions();
 	}
+	conditionsProvider.registerCondition(
+		"notifications",
+		async () => bootstrapOptions?.notifications ?? false,
+		false
+	);
 
 	if (!isEmpty(notificationMetaInfo)) {
 		versionProvider.setVersion("notificationCenter", notificationMetaInfo.workspaceVersion);

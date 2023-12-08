@@ -43,6 +43,14 @@
 - InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`
 - Added unit testing script `npm run test` tests can be found in ./test folder, for more information see [How to Test Your Platform Code](./docs/how-to-test-your-platform-code.md)
 - Added e2e testing script `npm run e2e` tests can be found in ./e2e folder, for more information see [How to Test Your Platform UI](./docs/how-to-test-your-platform-ui.md)
+- BREAKING CHANGE: sharing has been moved to it's own provider, the `sharing` flag has been removed from `platformProvider` and `enabled` can be set in `shareProvider`
+- BREAKING CHANGE: share links are now of the form `shareType=<type>&payload=` instead of `shareId=<id>`
+- BREAKING CHANGE: share method has been removed from integration helpers, use shareClient in module helpers
+- Added Share provider which allows modules to plugin their own share options.
+- Added Share client to module helpers for performing share operations.
+- Added Dialog client to module helpers to provide a simple way to show confirmation dialogs.
+- Added sharing for pages moved into module
+- Added sharing for workspaces moved into module
 
 ## v15
 

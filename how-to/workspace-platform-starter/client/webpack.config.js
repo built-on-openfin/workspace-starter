@@ -929,6 +929,62 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/share/pages/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'pages.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'share')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './client/src/modules/share/workspaces/index.ts',
+		devtool: 'inline-source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'workspaces.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'share')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

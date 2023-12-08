@@ -245,7 +245,7 @@ function mapImagesFromPlatformApp(app: PlatformApp): AppImage[] {
  * @returns The manifest.
  */
 function getManifestFromFDC3(app: AppDefinition): unknown {
-	if (typeof app.manifest === "string" && app.manifest.startsWith("{")) {
+	if (isStringValue(app.manifest) && app.manifest.startsWith("{")) {
 		return JSON.parse(app.manifest);
 	}
 

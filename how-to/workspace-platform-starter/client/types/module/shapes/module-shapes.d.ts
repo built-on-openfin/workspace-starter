@@ -2,12 +2,14 @@ import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { PlatformApp, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
+import type { DialogClient } from "./dialog-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
 import type { LifecycleEvents, LifecycleHandler } from "./lifecycle-shapes";
 import type { Logger, LoggerCreator } from "./logger-shapes";
 import type { MenuClient } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
+import type { ShareClient } from "./share-shapes";
 import type { ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
 /**
@@ -131,6 +133,16 @@ export interface ModuleHelpers {
 	 */
 	getConditionsClient?(): Promise<ConditionsClient | undefined>;
 	/**
+	 * If this platform has been configured to support sharing then it will provide it.
+	 * @returns share client.
+	 */
+	getShareClient?(): Promise<ShareClient | undefined>;
+	/**
+	 * If this platform has been configured to support dialogs then it will provide it.
+	 * @returns dialog client.
+	 */
+	getDialogClient?(): Promise<DialogClient | undefined>;
+	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
@@ -229,7 +241,8 @@ export type ModuleTypes =
 	| "lifecycle"
 	| "analytics"
 	| "menus"
-	| "contentCreation";
+	| "contentCreation"
+	| "share";
 /**
  * The definition of a module with typed entry points.
  */

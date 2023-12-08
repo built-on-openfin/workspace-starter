@@ -21,7 +21,8 @@ const MODULE_TYPES = [
 	'integrations',
 	'lifecycle',
 	'log',
-	'menus'
+	'menus',
+	'share'
 ];
 const MANIFEST_TYPE_MAPPING = {
 	analytics: 'analyticsProvider',
@@ -34,7 +35,8 @@ const MANIFEST_TYPE_MAPPING = {
 	integrations: 'integrationProvider',
 	lifecycle: 'lifecycleProvider',
 	log: 'loggerProvider',
-	menus: 'menusProvider'
+	menus: 'menusProvider',
+	share: 'shareProvider'
 };
 
 const launchArgs = process.argv.slice(2);

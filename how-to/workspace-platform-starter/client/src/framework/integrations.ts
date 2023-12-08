@@ -27,10 +27,9 @@ import type {
 	IntegrationProviderOptions
 } from "./shapes/integrations-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
-import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
-import { isEmpty } from "./utils";
+import { isEmpty, isStringValue } from "./utils";
 import { getVersionInfo } from "./version";
 
 const logger = createLogger("Integrations");
@@ -68,8 +67,7 @@ export async function init(
 			...helpers,
 			templateHelpers,
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			setSearchQuery,
-			share
+			setSearchQuery
 		};
 
 		// Map the old moduleUrl properties to url
@@ -272,7 +270,7 @@ export async function itemSelection(
 			integrationHelpers?.setSearchQuery &&
 			result.action.trigger === "user-action" &&
 			result.action.name === POPULATE_QUERY &&
-			typeof result.data?.populateQuery === "string"
+			isStringValue(result.data?.populateQuery)
 		) {
 			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);
 			return true;

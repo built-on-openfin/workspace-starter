@@ -7,6 +7,7 @@ export * from "./browser-shapes";
 export * from "./conditions-shapes";
 export * from "./content-creation-shapes";
 export * from "./connection-shapes";
+export * from "./dialog-shapes";
 export * from "./directory-shapes";
 export * from "./dock-shapes";
 export * from "./endpoint-shapes";
