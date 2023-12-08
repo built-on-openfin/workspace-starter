@@ -4,23 +4,85 @@
 
 # What Is Sharing?
 
-Sharing is the ability for one user to generate a link that they can share with another user. On launching of the link then the workspace or page that was shared would be applied to the second user's desktop.
+Providing the ability to share data between one platform and another can be customized with sharing. Sharing could be achieved by generating a link for some content that can shared with another user, on launching the link on a second platform the data will also be available there.
 
-# How Can You Enable/Disable Sharing?
+## Sharing can be customized through the `shareProvider` ?
 
-Sharing can be enabled/disabled through the platform provider configuration:
+By default sharing is enabled, but can be disabled using the following configuration:
 
 ```json
-"platformProvider": {
+"shareProvider": {
   ...
-  "sharing": true,
+  "enabled": false,
   ...
 },
 ```
 
-# Where Is This Setting Used?
+If you want to know if sharing is enabled you can use the global condition `sharing` in other areas of your platform.
 
-## As A Condition For A Sharing Button
+## Extended Sharing With Modules
+
+You can extend sharing by following the module pattern, see [How To Add A Module](./how-to-add-a-module.md) and adding them to the `shareProvider.modules` section.
+
+A module for sharing pages could be added to the manifest as follows:
+
+```json
+"shareProvider": {
+    "modules": [
+        {
+           "id": "pages-share",
+            "icon": "http://localhost:8080/favicon.ico",
+            "title": "Pages Share",
+            "description": "Pages Share",
+            "enabled": true,
+            "url": "http://localhost:8080/js/modules/share/pages.bundle.js",
+            "data": {
+                "getEndpointId": "share-get",
+                "setEndpointId": "share-set",
+                "images": {
+                    "error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+                    "success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
+                }
+            }
+        }
+    ]
+}
+```
+
+## Implementation A Share Module
+
+To implement a share module you should implement the `Share` interface.
+
+```ts
+export class MyShare implements Share {
+  // Returns a list of types that the share module supports
+  // e.g. "page"
+  getShareTypes(): Promise<string[]>;
+
+  // Returns a list of entries that appear when the share context menu is displayed
+  // The windowIdentity is the entity which triggered the share request
+  getEntries(windowIdentity: OpenFin.Identity): Promise<ShareEntry[] | undefined>;
+
+  // Triggers the operation to perform the share, the type and payload
+  // are the properties from the ShareEntry result from getEntries
+  // This could generate a fins link or perform some other operation to
+  // share the data with another platform
+  share(type: string, payload?: unknown): Promise<void>;
+
+  // When a platform receives the incoming data for a share
+  // it should perform the necessary operations with it
+  // for example a fins link which launches the platform
+  // with a payload
+  handle(type: string, payload?: unknown): Promise<void>;
+}
+```
+
+There are example implementations for sharing a page and workspace in the following modules:
+
+- [Workspace Share Module](../client/src/modules/share/workspaces/share.ts)
+- [Page Share Module](../client/src/modules/share/pages/share.ts)
+
+## Using The `sharing` Condition For A Toolbar Button
 
 It is used when you define a browser button (see [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md)) to allow your users to share and use conditions:
 
@@ -32,9 +94,6 @@ It is used when you define a browser button (see [How To Customize Browser Butto
    {
     "include": true,
     "id": "share",
-    "themes": {
-     "light": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg"
-    },
     "button": {
      "type": "Custom",
      "tooltip": "Share",
@@ -55,7 +114,7 @@ It is used when you define a browser button (see [How To Customize Browser Butto
 
 Here you can see that you can change the icon and tooltip for the share button. You should however keep the action and the condition the same unless you want to replace it with your own implementation.
 
-This would give you the following icon and menu in the browser:
+This would give you the following icon and menu in the browser, the entries are sources from the `getEntries` method in the modules:
 
 ![Sharing Button and Menu](./assets/browser-share-menu.png)
 
@@ -185,7 +244,17 @@ or
 
 ### What Would The User See After Raising A Share Request?
 
-When a share is successful or fails we use notifications to let the user know.
+The confirmation displayed to a user for a successful share, or an error is under the control of the module. The `shareProvider` settings provide a default for the display mode, but this can be overridden by an individual model should it want to, it can be configured as follows.
+
+```json
+"shareProvider": {
+  ...
+  "confirmationMode": "notification",
+  ...
+},
+```
+
+When a share is successful or fails we use the confirmation to let the user know.
 
 ![Successful Share](./assets/share-request-raised.png)
 
@@ -194,6 +263,10 @@ The url copied to the clipboard would be the url for your platform (it is localh
 If a share is unsuccessful the user will see a notification:
 
 ![Failed Share](./assets/share-request-failed.png)
+
+If you changed the `confirmationMode` to `modal` you would see something more like the following:
+
+![Successful Share Modal](./assets/share-request-raised-modal.png)
 
 ## What Would The Share-Get Endpoint Need To Support?
 
@@ -280,8 +353,18 @@ If there is a problem fetching or applying the share then the user will be notif
 
 ![Share Apply Failure](./assets/share-applied-failed.png)
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Share" is the name you want to give your module:
+
+```shell
+npm run generate-module share "My Share"
+```
+
 ## Source Reference
 
 - [share.ts](../client/src/framework/share.ts)
+- [Workspace Share Module](../client/src/modules/share/workspaces/share.ts)
+- [Page Share Module](../client/src/modules/share/pages/share.ts)
 
 [<- Back to Table Of Contents](../README.md)

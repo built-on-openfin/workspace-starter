@@ -487,10 +487,10 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 		if (this._integrationHelpers && Array.isArray(pages)) {
 			let shareEnabled: boolean = false;
-			if (this._integrationHelpers?.getConditionsClient) {
-				const conditionsClient = await this._integrationHelpers.getConditionsClient();
-				if (conditionsClient) {
-					shareEnabled = await conditionsClient.check("sharing");
+			if (this._integrationHelpers?.getShareClient) {
+				const shareClient = await this._integrationHelpers.getShareClient();
+				if (shareClient) {
+					shareEnabled = await shareClient.typeEnabled("page");
 				}
 			}
 
@@ -579,10 +579,10 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 
 				if (!isEmpty(lastPage)) {
 					let shareEnabled: boolean = false;
-					if (this._integrationHelpers?.getConditionsClient) {
-						const conditionsClient = await this._integrationHelpers.getConditionsClient();
-						if (conditionsClient) {
-							shareEnabled = await conditionsClient.check("sharing");
+					if (this._integrationHelpers?.getShareClient) {
+						const shareClient = await this._integrationHelpers.getShareClient();
+						if (shareClient) {
+							shareEnabled = await shareClient.typeEnabled("page");
 						}
 					}
 

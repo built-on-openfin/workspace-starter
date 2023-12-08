@@ -110,6 +110,13 @@ export interface ShareConfirmationOptions {
  */
 export interface ShareClient {
 	/**
+	 * Check if the share type is enabled.
+	 * @param type The type of share to check.
+	 * @returns True if the share type is enabled.
+	 */
+	typeEnabled(type: string): Promise<boolean>;
+
+	/**
 	 * Perform a share of the specified type.
 	 * @param type The type of share to perform.
 	 * @param payload The data to associate with the share.

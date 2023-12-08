@@ -85,7 +85,25 @@ export async function closedown(): Promise<void> {
  * @returns True if sharing is enabled.
  */
 export function isShareEnabled(): boolean {
-	return shareInitialized;
+	return shareInitialized && Array.isArray(modules) && modules.length > 0;
+}
+
+/**
+ * Check if the share type is enabled.
+ * @param type The type of share to check.
+ * @returns True if the share type is enabled.
+ */
+export async function typeEnabled(type: string): Promise<boolean> {
+	if (Array.isArray(modules)) {
+		for (const module of modules) {
+			const shareTypes = await module.implementation.getShareTypes();
+			if (shareTypes.includes(type)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 /**
