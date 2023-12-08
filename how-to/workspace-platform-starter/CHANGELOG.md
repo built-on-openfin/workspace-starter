@@ -51,6 +51,7 @@
 - Added Dialog client to module helpers to provide a simple way to show confirmation dialogs.
 - Added sharing for pages moved into module
 - Added sharing for workspaces moved into module
+- Added example dummy share server for testing locally (stores in memory), to use update manifest.fin.json `https://workspace.openfin.co` references to `http://localhost:8080`
 
 ## v15
 
