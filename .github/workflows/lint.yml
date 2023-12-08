@@ -3,6 +3,7 @@ name: Check Linting has been applied
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
+  push:
 
 jobs:
   lint:
@@ -10,19 +11,31 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Node 16
+
+      - name: Setup Node 18
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://registry.npmjs.org
           scope: '@openfin'
+
+      - name: Restore root node_modules from cache
+        id: node-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
       - name: Install dependencies
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
+
       - name: Run prettier
-        run: npx prettier --config .prettierrc --check .
+        run: npm run prettier-check
+
       - name: Run eslint
         run: npm run eslint
+
       - name: Run markdownlint
         run: npm run markdownlint

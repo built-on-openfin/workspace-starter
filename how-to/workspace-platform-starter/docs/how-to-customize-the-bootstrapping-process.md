@@ -34,6 +34,8 @@ A provider can be initialized without being displayed, so to automatically show 
 
 If you do not provide and `autoShow` property the first registered component in the order listed above will be used.
 
+If the platform is already running and the user double clicks the desktop shortcut or shortcut in program files (or clicks on the platform icon in the dock if on a mac) then the components configured in "autoShow" will be shown.
+
 ## Lifecycle
 
 [Lifecycle events](./how-to-use-lifecycle-events.md) are raised during the bootstrapping process.

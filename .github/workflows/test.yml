@@ -1,0 +1,38 @@
+name: Workspace Platform Starter - Unit Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    paths:
+      - 'how-to/workspace-platform-starter/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org
+          scope: '@openfin'
+
+      - name: Restore root node_modules from cache
+        id: node-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
+
+      - name: Run Workspace Platform Starter Unit Tests
+        working-directory: ./how-to/workspace-platform-starter
+        run: npm run test

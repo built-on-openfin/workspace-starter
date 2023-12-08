@@ -17,12 +17,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node 18
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://registry.npmjs.org
           scope: '@openfin'
+
+      - name: Restore root node_modules from cache
+        id: node-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Install dependencies
         env:
@@ -30,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Build packages
-        run: npm run build-client --workspaces
+        run: npm run build
 
       - name: Package for publishing (GitHub Pages)
         run: npm run package

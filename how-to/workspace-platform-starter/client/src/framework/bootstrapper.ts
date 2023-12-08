@@ -4,8 +4,12 @@ import * as analyticsProvider from "./analytics";
 import { getApps } from "./apps";
 import * as authProvider from "./auth";
 import { isAuthenticationEnabled } from "./auth";
-import { registerAction } from "./connections";
-import { init as registerInitOptionsListener } from "./init-options";
+import * as conditionsProvider from "./conditions";
+import * as connectionProvider from "./connections";
+import {
+	registerListener as registerInitListener,
+	init as registerInitOptionsListener
+} from "./init-options";
 import { closedown as deregisterIntegration, init as registerIntegration } from "./integrations";
 import { launch } from "./launch";
 import { fireLifecycleEvent } from "./lifecycle";
@@ -15,6 +19,7 @@ import * as platformSplashProvider from "./platform/platform-splash";
 import { getSettings } from "./settings";
 import type { PlatformAnalyticsEvent } from "./shapes/analytics-shapes";
 import type { BootstrapComponents, BootstrapOptions } from "./shapes/bootstrap-shapes";
+import type { HomeProviderOptions } from "./shapes/home-shapes";
 import type { LoggedInLifecyclePayload } from "./shapes/lifecycle-shapes";
 import type { ModuleHelpers } from "./shapes/module-shapes";
 import * as trayProvider from "./tray";
@@ -41,7 +46,7 @@ export async function init(): Promise<boolean> {
 	logger.info("Initializing the bootstrapper");
 	const customSettings = await getSettings();
 
-	bootstrapOptions = { ...customSettings.bootstrap };
+	bootstrapOptions = { ...customSettings?.bootstrap };
 	bootstrapOptions.home = bootstrapOptions.home ?? true;
 	bootstrapOptions.store = bootstrapOptions.store ?? false;
 	bootstrapOptions.dock = bootstrapOptions.dock ?? false;
@@ -58,7 +63,7 @@ export async function init(): Promise<boolean> {
 
 	await platformSplashProvider.updateProgress("Integrations");
 	logger.info("Registering integrations");
-	await registerIntegration(customSettings.integrationProvider, moduleHelpers, async (query) => {
+	await registerIntegration(customSettings?.integrationProvider, moduleHelpers, async (query) => {
 		if (homeRegistration?.setSearchQuery) {
 			await homeRegistration?.setSearchQuery(query);
 		} else {
@@ -69,41 +74,55 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.home) {
 		await platformSplashProvider.updateProgress("Home");
 
+		let homeProvider: HomeProviderOptions | undefined = customSettings?.homeProvider;
+
+		// If there were no custom settings home provider
+		// default to values from the manifest
+		if (isEmpty(homeProvider)) {
+			const app = await fin.Application.getCurrent();
+			const manifest = await app.getManifest();
+			homeProvider = {
+				id: fin.me.identity.uuid,
+				title: "Home",
+				icon: manifest.platform?.icon ?? ""
+			};
+		}
+
 		// only register search logic once workspace is running
-		homeRegistration = await homeComponent.register(customSettings.homeProvider);
+		homeRegistration = await homeComponent.register(homeProvider);
 		if (homeRegistration) {
 			workspaceMetaInfo = {
 				workspaceVersion: homeRegistration.workspaceVersion,
 				clientAPIVersion: homeRegistration.clientAPIVersion
 			};
 			registeredComponents.push("home");
-			registerHomeSupportedActions();
+			registerHomeConnectionActions();
 		}
 	}
 
 	if (bootstrapOptions.store) {
 		await platformSplashProvider.updateProgress("Store");
 
-		const storeRegistration = await storeComponent.register(customSettings.storefrontProvider);
+		const storeRegistration = await storeComponent.register(customSettings?.storefrontProvider);
 		if (storeRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = storeRegistration;
 			}
 			registeredComponents.push("store");
-			registerStoreSupportedActions();
+			registerStoreConnectionActions();
 		}
 	}
 
 	if (bootstrapOptions.dock) {
 		await platformSplashProvider.updateProgress("Dock");
 
-		const dockRegistration = await dockComponent.register(customSettings.dockProvider, bootstrapOptions);
+		const dockRegistration = await dockComponent.register(customSettings?.dockProvider, bootstrapOptions);
 		if (dockRegistration) {
 			if (!workspaceMetaInfo) {
 				workspaceMetaInfo = dockRegistration;
 			}
 			registeredComponents.push("dock");
-			registerDockSupportedActions();
+			registerDockConnectionActions();
 		}
 	}
 
@@ -117,9 +136,14 @@ export async function init(): Promise<boolean> {
 	if (bootstrapOptions.notifications) {
 		await platformSplashProvider.updateProgress("Notifications");
 
-		notificationMetaInfo = await notificationsComponent.register(customSettings.notificationProvider);
-		registerNotificationSupportedActions();
+		notificationMetaInfo = await notificationsComponent.register(customSettings?.notificationProvider);
+		registerNotificationConnectionActions();
 	}
+	conditionsProvider.registerCondition(
+		"notifications",
+		async () => bootstrapOptions?.notifications ?? false,
+		false
+	);
 
 	if (!isEmpty(notificationMetaInfo)) {
 		versionProvider.setVersion("notificationCenter", notificationMetaInfo.workspaceVersion);
@@ -154,13 +178,15 @@ export async function init(): Promise<boolean> {
 	logger.info("Checking to see if version monitoring is required.");
 	await versionProvider.MonitorVersionStatus();
 
-	await platformSplashProvider.updateProgress("Low Code Integrations");
+	if (lowCodeIntegrationProvider.isEnabled()) {
+		await platformSplashProvider.updateProgress("Low Code Integrations");
 
-	// register any instantiated low code integrations that require registering
-	await lowCodeIntegrationProvider.initializeWorkflows();
-	if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
-		registeredComponents.push("home");
-		registerHomeSupportedActions();
+		// register any instantiated low code integrations that require registering
+		await lowCodeIntegrationProvider.initializeWorkflows();
+		if (lowCodeIntegrationProvider.hasRegisteredIntegrations() && !registeredComponents.includes("home")) {
+			registeredComponents.push("home");
+			registerHomeConnectionActions();
+		}
 	}
 
 	logger.info("Validating auto show list:", bootstrapOptions.autoShow);
@@ -178,17 +204,15 @@ export async function init(): Promise<boolean> {
 		bootstrapOptions.autoShow = [registeredComponents[0]];
 	}
 
-	for (const autoShow of bootstrapOptions.autoShow) {
-		if (autoShow === "home") {
-			await homeComponent.show();
-		} else if (autoShow === "store") {
-			await storeComponent.show();
-		} else if (autoShow === "dock") {
-			await dockComponent.show();
+	await autoShow();
+	let autoShowOnShortcut = true;
+	registerInitListener(async (_) => {
+		if (autoShowOnShortcut && bootstrapOptions?.autoShow) {
+			await autoShow();
 		}
-	}
+	});
 
-	if (!isEmpty(customSettings?.trayProvider) && customSettings.trayProvider.enabled) {
+	if (!isEmpty(customSettings?.trayProvider) && customSettings?.trayProvider.enabled) {
 		await platformSplashProvider.updateProgress("Tray");
 		await trayProvider.init(customSettings?.trayProvider);
 	}
@@ -205,11 +229,15 @@ export async function init(): Promise<boolean> {
 			await fireLifecycleEvent(platform, "auth-logged-in", {
 				user
 			} as LoggedInLifecyclePayload);
+			// if the user has logged in and ensure the autoShow is not disabled
+			autoShowOnShortcut = true;
 		});
 
 		authProvider.subscribe("session-expired", async () => {
 			// session expired. What do you want to do with the platform when the user needs to log back in.
 			await fireLifecycleEvent(platform, "auth-session-expired");
+			// if the user has logged out ensure the autoShow is disabled
+			autoShowOnShortcut = false;
 		});
 
 		authProvider.subscribe("before-logged-out", async () => {
@@ -269,6 +297,24 @@ async function autoStartApps(): Promise<void> {
 }
 
 /**
+ * This function autoShows any components that are listed in the auto show options for the bootstrap process.
+ */
+async function autoShow(): Promise<void> {
+	const autoShowComponents = bootstrapOptions?.autoShow;
+	if (Array.isArray(autoShowComponents)) {
+		for (const autoShowComponent of autoShowComponents) {
+			if (autoShowComponent === "home") {
+				await homeComponent.show();
+			} else if (autoShowComponent === "store") {
+				await storeComponent.show();
+			} else if (autoShowComponent === "dock") {
+				await dockComponent.show();
+			}
+		}
+	}
+}
+
+/**
  * Deregister any of the components registered on startup.
  */
 async function deregister(): Promise<void> {
@@ -295,11 +341,11 @@ async function deregister(): Promise<void> {
 /**
  * Used to register home related actions.
  */
-function registerHomeSupportedActions(): void {
-	registerAction("show-home", async () => {
+function registerHomeConnectionActions(): void {
+	connectionProvider.registerAction("show-home", async () => {
 		await homeComponent.show();
 	});
-	registerAction("hide-home", async () => {
+	connectionProvider.registerAction("hide-home", async () => {
 		await homeComponent.hide();
 	});
 }
@@ -307,11 +353,11 @@ function registerHomeSupportedActions(): void {
 /**
  * Used to register store related actions.
  */
-function registerStoreSupportedActions(): void {
-	registerAction("show-store", async () => {
+function registerStoreConnectionActions(): void {
+	connectionProvider.registerAction("show-store", async () => {
 		await storeComponent.show();
 	});
-	registerAction("hide-store", async () => {
+	connectionProvider.registerAction("hide-store", async () => {
 		await storeComponent.hide();
 	});
 }
@@ -319,11 +365,11 @@ function registerStoreSupportedActions(): void {
 /**
  * Used to register dock related actions.
  */
-function registerDockSupportedActions(): void {
-	registerAction("show-dock", async () => {
+function registerDockConnectionActions(): void {
+	connectionProvider.registerAction("show-dock", async () => {
 		await dockComponent.show();
 	});
-	registerAction("minimize-dock", async () => {
+	connectionProvider.registerAction("minimize-dock", async () => {
 		await dockComponent.minimize();
 	});
 }
@@ -331,11 +377,11 @@ function registerDockSupportedActions(): void {
 /**
  * Used to register notification related actions.
  */
-function registerNotificationSupportedActions(): void {
-	registerAction("show-notifications", async () => {
+function registerNotificationConnectionActions(): void {
+	connectionProvider.registerAction("show-notifications", async () => {
 		await notificationsComponent.show();
 	});
-	registerAction("hide-notifications", async () => {
+	connectionProvider.registerAction("hide-notifications", async () => {
 		await notificationsComponent.hide();
 	});
 }

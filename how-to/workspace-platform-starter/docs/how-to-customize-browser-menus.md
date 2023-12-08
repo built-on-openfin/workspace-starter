@@ -170,6 +170,16 @@ The `popupMenuStyle` property can be one of the following options.
 }
 ```
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Menus" is the name you want to give your module:
+
+```shell
+npm run generate-module menus "My Menus"
+```
+
+This will generate the code in the modules/menus folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [menu.ts](../client/src/framework/menu.ts)

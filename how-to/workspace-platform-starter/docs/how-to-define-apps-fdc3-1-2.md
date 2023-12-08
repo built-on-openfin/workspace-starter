@@ -8,7 +8,7 @@
 
 We support this format although you will lose out on the ability to specify tags (which is used for store, and dock app assignment and used to filter apps in home) unless you specify tags as a string array property of the app (which is not part of the spec but we map that to our tag setting). We generally recommend our platform app format or FDC3 2.0.
 
-We map this format to our internal Platform App format. We include an example of this in the public folder of workspace-platform-starter [apps-fdc3-1-2.json](../public/apps-fdc3-1-2.json).
+We map this format to our internal Platform App format. We include an example of this in the public folder of workspace-platform-starter [public/common/apps-fdc3-1-2.json](../public/common/apps-fdc3-1-2.json). We also give you an empty applications array for you to fill in for your own apps: [public/apps-fdc3-1-2.json](../public/apps-fdc3-1-2.json).
 
 ### What Does An FDC3 1.2 App Definition Look Like?
 
@@ -21,7 +21,7 @@ We map this format to our internal Platform App format. We include an example of
       "name": "fdc3-workbench",
       "title": "FDC3 Workbench (1.2)",
       "description": "Launch the official FDC3 Workbench with FDC3 1.2 enabled.",
-      "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
+      "manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/common/views/fdc3/workbench/fdc3-workbench.view.fin.json",
       "manifestType": "view",
       "icons": [
         {
@@ -47,7 +47,7 @@ We map this format to our internal Platform App format. We include an example of
       ],
       "images": [
         {
-          "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v15.0.0/common/images/previews/fdc3-workbench.png"
+          "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/common/images/previews/fdc3-workbench.png"
         }
       ]
     }
@@ -68,20 +68,7 @@ The following field is custom to this platform and is optional:
 - private - default value is false. Should this app entry be available for api usage (e.g. intents) but not be visible in e.g. Home, Store, Dock? Similar to how a private npm package can be used by some people but not everyone.
 - autostart - default value is false. Should this app be launched after bootstrapping.
 - instanceMode - default mode is multi. Value can be "single"|"multi"|"new" (new means a new instance will be created if an intent is raised and the app specified but no instance id even if there are existing instances. The intent picker will also not show instances as the app provider has indicated they want to just launch a new instance).
-- launchPreference - This is an optional and new setting added to v15 of workspace-platform-starter. This lets the directory owner or the app owner specify a preference that should apply to the application when launching.
-  - bounds - Bounds can optionally be specified. A view is something that exists in a platform/browser window so this allows a preference for height/width to be specified. A classic window can already specify a height and width in it's manifest but you may want a custom height/width for this app entry (especially if the window is defined as an external manifest as opposed to an inline one).
-  - defaultCentered - a particular view/classic window might need to be centered on launch. This allows the app/directory owner to specify that preference.
-- options - Optional options that are specific to the app/manifest type. Only view/inline-view has supported settings at this time.
-  - view you specify host specific settings.
-    - host - host settings to be used by the page hosting the view
-      - url - lets you specify that this view should be loaded into a specific Platform API window instead of the default browser window. The ability to have Platform API and Browser windows together in the same platform was added in v15 of @openfin/workspace-platform.
-      - title - the title to set on the window and this title is shown if pages are disabled on a browser window
-      - icon - used to replace the menu icon on a browser window (can be used by a platform window if you use the setting)
-      - hasHeaders - specify if you wish to have the view tab in a browser or platform api window
-      - disableMultiplePages - Disable multiple pages in a browser window.
-      - disableToolbarOptions - Remove toolbar buttons from browser window.
-      - pageTitle - provide a custom title (instead of undefined) to the launched page hosting the view if you haven't turned off pages.
-      - pageIcon - an icon to display alongside the page title is the page has no unsaved changes.
+- launchPreference - Please see [how to define app launch preference](./how-to-define-app-launch-preference.md)
 
 These settings are expressed by setting the customConfig of an app definition:
 

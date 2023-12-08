@@ -97,6 +97,16 @@ Also since the logging level is driven from the manifest settings you could make
 
 We don't want to include the logging code directly in external modules as it bloats their size, instead when the a module has it's `initialize` method called it is passed the `createLogger` method, so it can use this create a logger and perform logging from within the module.
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Logger" is the name you want to give your module:
+
+```shell
+npm run generate-module log "My Logger"
+```
+
+This will generate the code in the modules/log folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [logger-provider.ts](../client/src/framework/logger-provider.ts)

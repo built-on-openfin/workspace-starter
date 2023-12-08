@@ -74,7 +74,7 @@ export function interopOverride(
 			);
 			getSettings()
 				.then((customSettings) => {
-					if (!isEmpty(customSettings?.platformProvider)) {
+					if (!isEmpty(customSettings) && !isEmpty(customSettings?.platformProvider)) {
 						if (
 							isEmpty(customSettings?.platformProvider?.interop?.intentResolver) &&
 							!isEmpty(customSettings?.platformProvider?.intentPicker)

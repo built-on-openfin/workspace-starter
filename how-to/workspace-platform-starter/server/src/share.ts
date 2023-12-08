@@ -1,34 +1,38 @@
-
+import { randomUUID } from "crypto";
 import express from "express";
-import { randomUUID } from "crypto"
-export function init(app: express.Application): void {
-const baseUrl = "http://localhost:8080";
 
-// Create a map to store workspace objects
-const workspaceStore: Map<string, unknown> = new Map();
+// Create a map to store json objects
+const jsonStore: Map<string, unknown> = new Map<string, unknown>();
 
-// POST endpoint to store workspace object.
-app.post('/api/share', express.json(), (request, response) => {
-  const id = randomUUID();
-  const data = request.body;
-  workspaceStore.set(id, data);
+/**
+ * Initialize the share service.
+ * @param app The express app to extend.
+ * @param baseUrl The base url of the server.
+ */
+export function init(app: express.Application, baseUrl: string): void {
+	// POST endpoint to store json object.
+	app.post("/api/share", express.json(), (request, response) => {
+		const id = randomUUID();
+		const data = request.body;
+		jsonStore.set(id, data);
 
-  const responseObject = {
-    id,
-    url: `$${baseUrl}/api/share/${id}`
-  };
+		const responseObject = {
+			id,
+			url: `${baseUrl}/api/share/${id}`
+		};
 
-  response.json(responseObject);
-});
+		response.json(responseObject);
+	});
 
-// GET endpoint to retrieve workspace object
-app.get('/api/share/:id', express.json(), (request, response) => {
-  const id = request.params.id;
-  const data = workspaceStore.get(id);
+	// GET endpoint to retrieve json object
+	app.get("/api/share/:id", express.json(), (request, response) => {
+		const id = request.params.id;
+		const data = jsonStore.get(id);
 
-  if (!data) {
-    return response.status(404).json({ error: 'Workspace not found' });
-  }
+		if (!data) {
+			return response.status(404).json({ error: "Data not found" });
+		}
 
-  response.json(data);
-});}
+		response.json(data);
+	});
+}

@@ -6,6 +6,7 @@ import {
 } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import { checkCondition, conditionChanged } from "./conditions";
+import * as Dialog from "./dialog";
 import { getEndpointClient } from "./endpoint";
 import type { EndpointClient } from "./endpoint-client";
 import * as favoriteProvider from "./favorite";
@@ -15,8 +16,9 @@ import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import * as Menu from "./menu";
 import { launchPage, launchView } from "./platform/browser";
-import type { PlatformApp } from "./shapes/app-shapes";
+import type { PlatformApp, UpdatableLaunchPreference } from "./shapes/app-shapes";
 import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
+import type { DialogClient } from "./shapes/dialog-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
 import type { MenuClient } from "./shapes/menu-shapes";
@@ -31,7 +33,9 @@ import type {
 	ModuleTypes
 } from "./shapes/module-shapes";
 import type { NotificationClient } from "./shapes/notification-shapes";
+import type { ShareClient } from "./shapes/share-shapes";
 import type { ThemeClient } from "./shapes/theme-shapes";
+import * as Share from "./share";
 import {
 	getCurrentColorSchemeMode,
 	getCurrentIconFolder,
@@ -287,14 +291,16 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getThemeClient,
 		getMenuClient,
 		getConditionsClient,
-		launchApp: async (appId: string): Promise<void> => {
+		getShareClient,
+		getDialogClient,
+		launchApp: async (appId: string, launchPreference?: UpdatableLaunchPreference): Promise<void> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
 			if (isEmpty(app)) {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);
-				await launch(app);
+				await launch(app, launchPreference);
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
 		},
@@ -435,5 +441,29 @@ async function getConditionsClient(): Promise<ConditionsClient> {
 			return checkCondition(platform, conditionId, contextType);
 		},
 		changed: conditionChanged
+	};
+}
+
+/**
+ * Get the share client to use with the modules.
+ * @returns The share client.
+ */
+async function getShareClient(): Promise<ShareClient | undefined> {
+	if (Share.isShareEnabled()) {
+		return {
+			typeEnabled: Share.typeEnabled,
+			share: Share.share,
+			confirmation: Share.confirmation
+		};
+	}
+}
+
+/**
+ * Get the dialog client to use with the modules.
+ * @returns The dialog client.
+ */
+async function getDialogClient(): Promise<DialogClient> {
+	return {
+		showConfirmation: Dialog.showConfirmation
 	};
 }

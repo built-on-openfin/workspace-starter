@@ -1,5 +1,6 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import type { LaunchStrategy } from "@openfin/snap-sdk";
 import type { App } from "@openfin/workspace";
 import type { AppInterop } from "./fdc3-2-0-shapes";
 /**
@@ -96,12 +97,16 @@ export interface LaunchPreference {
 	/**
 	 * Are there any app type specific options you would like to apply?
 	 */
-	options?: ViewLaunchOptions;
+	options?: ViewLaunchOptions | WindowLaunchOptions | NativeLaunchOptions;
 }
+/**
+ *
+ */
+export type UpdatableLaunchPreference = LaunchPreference;
 /**
  * The list of Launch Option Types
  */
-export type LaunchOptionsType = "view";
+export type LaunchOptionsType = "view" | "window" | "native";
 /**
  * The base LaunchOption type.
  */
@@ -123,6 +128,98 @@ export interface ViewLaunchOptions extends LaunchOptions {
 	 * If specified it indicates wish to specify specific host settings for this content.
 	 */
 	host?: HostLaunchOptions;
+	/**
+	 * The option to override a few settings that are specific to views.
+	 */
+	view?: Partial<Pick<OpenFin.ViewOptions, "url" | "interop" | "customData">>;
+	/**
+	 * What can be specified when launching a view. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: (ViewPreference | ViewPreferenceUrl)[];
+}
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface Preference<T = unknown> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: ViewPreferenceName | WebPreferenceName | NativePreferenceName;
+	/**
+	 * Is there a constraint that the platform can apply?
+	 */
+	constraint?: T;
+}
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface NativePreference<T = never> extends Preference<T> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: NativePreferenceName;
+}
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreference<T = never> extends Preference<T> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: ViewPreferenceName;
+}
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface ViewPreferenceUrl extends ViewPreference<PreferenceConstraintUrl> {
+	/**
+	 * Is the url updatable?
+	 */
+	name: "url" | "host-options";
+}
+/**
+ * A list of native related settings that can be updated.
+ */
+export type NativePreferenceName = "arguments";
+/**
+ * A list of web related settings that can be updated.
+ */
+export type WebPreferenceName = "url" | "custom-data" | "interop" | "bounds" | "centered";
+/**
+ * A list of Web related constraints
+ */
+export type PreferenceConstraintUrl = "url-domain" | "url-page" | "url-any" | "url-none";
+/**
+ * The different type of settings that might apply to a view
+ */
+export type ViewPreferenceName = WebPreferenceName | "host-options";
+/**
+ * Additional options that apply to a native app
+ */
+export interface NativeLaunchOptions extends LaunchOptions {
+	/**
+	 * Native options type
+	 */
+	type: "native";
+	/**
+	 * If specified it indicates the native app should be included when snapping.
+	 */
+	snap?: SnapLaunchOptions;
+	/**
+	 * Launch Preferences related to native apps
+	 */
+	native?: {
+		/**
+		 * Arguments are set as an array for compatibility with appAssets, launchExternalProcess and Snap.
+		 */
+		arguments?: string[];
+	};
+	/**
+	 * What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: NativePreference[];
 }
 /**
  * Additional options that apply to the host of the content
@@ -158,6 +255,51 @@ export interface HostLaunchOptions {
 	 * If this host supports multiple layouts what should the icon be for the layout (e.g. page) be?
 	 */
 	pageIcon?: string;
+}
+/**
+ * Additional options that apply to the app when used in a snap context
+ */
+export interface SnapLaunchOptions {
+	/**
+	 * The strategy for launching and locating the application.
+	 */
+	strategy?: LaunchStrategy;
+}
+/**
+ * Additional options that apply to a window
+ */
+export interface WindowLaunchOptions extends LaunchOptions {
+	/**
+	 * Window options type
+	 */
+	type: "window";
+	/**
+	 * The option to override a few settings that are specific to windows.
+	 */
+	window?: Partial<Pick<OpenFin.WindowOptions, "url" | "interop" | "customData">>;
+	/**
+	 * What can be specified when launching a window. This is an array of named types to reflect the properties you are happy to be specified.
+	 * By default nothing can be set outside of the app definition when launching the app.
+	 */
+	updatable?: (WindowPreference | WindowPreferenceUrl)[];
+}
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface WindowPreference<T = never> extends Preference<T> {
+	/**
+	 * What setting is updatable?
+	 */
+	name: WebPreferenceName;
+}
+/**
+ * Which Launch Options are updatable and are there any constraints
+ */
+export interface WindowPreferenceUrl extends Preference<PreferenceConstraintUrl> {
+	/**
+	 * Is the url updatable?
+	 */
+	name: "url";
 }
 /**
  * We define the app interop app for the platform in case we want to extend its
@@ -334,7 +476,7 @@ export interface ClientSnapshot {
 	/**
 	 * The identity of the application which provided the snapshot.
 	 */
-	identity: OpenFin.ApplicationIdentity;
+	identity: OpenFin.Identity;
 	/**
 	 * The application snapshot.
 	 */

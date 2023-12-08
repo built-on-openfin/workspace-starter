@@ -4,16 +4,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
         with:
-          node-version: '19'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm run setup
+          node-version: 18
+          registry-url: https://registry.npmjs.org
+          scope: '@openfin'
+
+      - name: Restore root node_modules from cache
+        id: node-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
+
+      - run: npm run build
         working-directory: ./how-to/workspace-platform-starter
+
       - run: NAME=@openfin/default-workspace-platform npm run prepare-package
         working-directory: ./how-to/workspace-platform-starter
+
       - run: npm publish --access restricted
         working-directory: ./how-to/workspace-platform-starter/packaged
         env:

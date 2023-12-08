@@ -1,5 +1,9 @@
 import type OpenFin from "@openfin/core";
-import type { CustomActionPayload, WorkspacePlatformProvider } from "@openfin/workspace-platform";
+import type {
+	CustomActionPayload,
+	GlobalContextMenuItemData,
+	WorkspacePlatformProvider
+} from "@openfin/workspace-platform";
 import {
 	CustomActionCallerType,
 	GlobalContextMenuOptionType,
@@ -374,7 +378,7 @@ function overrideCallback(
 			const template = req.template;
 			const platform = getCurrentSync();
 			const pages: Page[] = await platform.Storage.getPages();
-			const pagesMenu: OpenFin.MenuItemTemplate[] = [];
+			const pagesMenu: OpenFin.MenuItemTemplate<GlobalContextMenuItemData>[] = [];
 			const menuEntry: GlobalContextMenuItemTemplate = {
 				label: "Open Page",
 				submenu: []
@@ -473,7 +477,7 @@ async function showPrintMenu(position: { x: number; y: number }): Promise<void> 
 	const { uuid, name } = await platform.Browser.getLastFocusedWindow();
 	const browserWindow = platform.Browser.wrapSync({ uuid, name });
 
-	const template: OpenFin.MenuItemTemplate[] = [
+	const template: OpenFin.MenuItemTemplate<{ type: string }>[] = [
 		{
 			label: "Print All",
 			data: { type: "views" }

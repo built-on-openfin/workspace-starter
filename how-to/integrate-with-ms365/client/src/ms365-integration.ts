@@ -1144,11 +1144,11 @@ export class Microsoft365Integration {
 			[
 				await templateHelpers.createContainer(
 					"row",
-					[await templateHelpers.createText("title", 14, { fontWeight: "bold" })],
+					[await templateHelpers.createText("title", 12, { fontWeight: "bold" })],
 					{
-						paddingBottom: "10px",
 						borderBottom: `1px solid ${palette.background6}`,
-						gap: "10px"
+						paddingBottom: "5px",
+						gap: "5px"
 					}
 				),
 				await templateHelpers.createText("description", 12),
@@ -1535,19 +1535,24 @@ export class Microsoft365Integration {
 									border: "2px solid white",
 									padding: "2px",
 									position: "relative",
-									left: "-12px",
-									top: "32px"
+									left: "-14px",
+									top: "28px"
 								}),
-								await templateHelpers.createContainer("column", [
-									await templateHelpers.createText("displayName", 14, {
-										fontWeight: "bold"
-									}),
-									await templateHelpers.createText("availability", 12, {})
-								])
+								await templateHelpers.createContainer(
+									"column",
+									[
+										await templateHelpers.createTitle("displayName"),
+										await templateHelpers.createText("availability", 10, {})
+									],
+									{
+										overflow: "hidden"
+									}
+								)
 							],
 							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`
+								borderBottom: `1px solid ${palette.background6}`,
+								paddingBottom: "5px",
+								gap: "5px"
 							}
 						),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
@@ -1738,17 +1743,21 @@ export class Microsoft365Integration {
 									objectFit: "cover",
 									borderRadius: "50%"
 								}),
-								await templateHelpers.createContainer("column", [
-									await templateHelpers.createText("displayName", 14, {
-										fontWeight: "bold"
-									}),
-									await templateHelpers.createText("company", 12, {})
-								])
+								await templateHelpers.createContainer(
+									"column",
+									[
+										await templateHelpers.createTitle("displayName"),
+										await templateHelpers.createText("company", 10, {})
+									],
+									{
+										overflow: "hidden"
+									}
+								)
 							],
 							{
-								paddingBottom: "10px",
 								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
+								paddingBottom: "5px",
+								gap: "5px"
 							}
 						),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
@@ -1806,7 +1815,7 @@ export class Microsoft365Integration {
 		if (message.bodyPreview) {
 			pairs.push({
 				label: "Preview",
-				value: message.bodyPreview,
+				value: this.sanitizeString(message.bodyPreview),
 				wide: true
 			});
 		}
@@ -1848,19 +1857,12 @@ export class Microsoft365Integration {
 				layout: await templateHelpers.createContainer(
 					"column",
 					[
-						await templateHelpers.createContainer(
-							"row",
-							[
-								await templateHelpers.createText("subject", 14, {
-									fontWeight: "bold"
-								})
-							],
-							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
-							}
-						),
+						await templateHelpers.createContainer("row", [await templateHelpers.createTitle("subject")], {
+							borderBottom: `1px solid ${palette.background6}`,
+							paddingBottom: "5px",
+							gap: "5px",
+							overflow: "hidden"
+						}),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
 						await this.createButtonsLayout(templateHelpers, palette, buttons)
 					],
@@ -1945,7 +1947,7 @@ export class Microsoft365Integration {
 		if (event.bodyPreview) {
 			pairs.push({
 				label: "Preview",
-				value: event.bodyPreview,
+				value: this.sanitizeString(event.bodyPreview),
 				wide: true
 			});
 		}
@@ -1987,19 +1989,12 @@ export class Microsoft365Integration {
 				layout: await templateHelpers.createContainer(
 					"column",
 					[
-						await templateHelpers.createContainer(
-							"row",
-							[
-								await templateHelpers.createText("subject", 14, {
-									fontWeight: "bold"
-								})
-							],
-							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
-							}
-						),
+						await templateHelpers.createContainer("row", [await templateHelpers.createTitle("subject")], {
+							borderBottom: `1px solid ${palette.background6}`,
+							paddingBottom: "5px",
+							gap: "5px",
+							overflow: "hidden"
+						}),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
 						await this.createButtonsLayout(templateHelpers, palette, buttons)
 					],
@@ -2086,12 +2081,10 @@ export class Microsoft365Integration {
 			});
 		}
 
-		// Strip any HTML tags
-		const body = chatMessage.body?.content?.replace(/<[^>]*>/g, "");
-		if (body) {
+		if (chatMessage.body?.content) {
 			pairs.push({
 				label: "Preview",
-				value: body,
+				value: this.sanitizeString(chatMessage.body?.content),
 				wide: true
 			});
 		}
@@ -2135,19 +2128,12 @@ export class Microsoft365Integration {
 				layout: await templateHelpers.createContainer(
 					"column",
 					[
-						await templateHelpers.createContainer(
-							"row",
-							[
-								await templateHelpers.createText("summary", 14, {
-									fontWeight: "bold"
-								})
-							],
-							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
-							}
-						),
+						await templateHelpers.createContainer("row", [await templateHelpers.createTitle("summary")], {
+							borderBottom: `1px solid ${palette.background6}`,
+							paddingBottom: "5px",
+							gap: "5px",
+							overflow: "hidden"
+						}),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
 						await this.createButtonsLayout(templateHelpers, palette, buttons)
 					],
@@ -2269,19 +2255,12 @@ export class Microsoft365Integration {
 				layout: await templateHelpers.createContainer(
 					"column",
 					[
-						await templateHelpers.createContainer(
-							"row",
-							[
-								await templateHelpers.createText("displayName", 14, {
-									fontWeight: "bold"
-								})
-							],
-							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
-							}
-						),
+						await templateHelpers.createContainer("row", [await templateHelpers.createTitle("displayName")], {
+							borderBottom: `1px solid ${palette.background6}`,
+							paddingBottom: "5px",
+							gap: "5px",
+							overflow: "hidden"
+						}),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
 						await this.createButtonsLayout(templateHelpers, palette, buttons)
 					],
@@ -2405,19 +2384,12 @@ export class Microsoft365Integration {
 				layout: await templateHelpers.createContainer(
 					"column",
 					[
-						await templateHelpers.createContainer(
-							"row",
-							[
-								await templateHelpers.createText("displayName", 14, {
-									fontWeight: "bold"
-								})
-							],
-							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
-							}
-						),
+						await templateHelpers.createContainer("row", [await templateHelpers.createTitle("displayName")], {
+							borderBottom: `1px solid ${palette.background6}`,
+							paddingBottom: "5px",
+							gap: "5px",
+							overflow: "hidden"
+						}),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
 						await this.createButtonsLayout(templateHelpers, palette, buttons)
 					],
@@ -2529,19 +2501,12 @@ export class Microsoft365Integration {
 				layout: await templateHelpers.createContainer(
 					"column",
 					[
-						await templateHelpers.createContainer(
-							"row",
-							[
-								await templateHelpers.createText("displayName", 14, {
-									fontWeight: "bold"
-								})
-							],
-							{
-								paddingBottom: "10px",
-								borderBottom: `1px solid ${palette.background6}`,
-								gap: "10px"
-							}
-						),
+						await templateHelpers.createContainer("row", [await templateHelpers.createTitle("displayName")], {
+							borderBottom: `1px solid ${palette.background6}`,
+							paddingBottom: "5px",
+							gap: "5px",
+							overflow: "hidden"
+						}),
 						await this.createPairsLayout(templateHelpers, palette, pairs),
 						await this.createButtonsLayout(templateHelpers, palette, buttons)
 					],
@@ -2690,7 +2655,7 @@ export class Microsoft365Integration {
 		for (const pair of pairs) {
 			pairData[`${pair.label}Title`] = pair.label;
 			if (pair.value) {
-				pairData[pair.label] = this.stripHtml(pair.value);
+				pairData[pair.label] = this.sanitizeString(pair.value);
 			}
 			if (pair.links) {
 				for (let i = 0; i < pair.links.length; i++) {
@@ -2887,12 +2852,21 @@ export class Microsoft365Integration {
 	}
 
 	/**
-	 * Strip any HTML content from a string.
-	 * @param input The string to strip the HTML from.
-	 * @returns The string with HTML removed.
+	 * A basic string sanitize function that removes angle brackets <> from a string.
+	 * @param content the content to sanitize
+	 * @returns a string without angle brackets <>
 	 */
-	private stripHtml(input: string): string {
-		return input.replace(/<[^>]+>/g, "");
+	private sanitizeString(content: string): string {
+		if (content !== undefined && content !== null && typeof content === "string") {
+			return content
+				.replace(/<[^>]*>?/gm, "")
+				.replace(/&gt;/g, ">")
+				.replace(/&lt;/g, "<")
+				.replace(/&amp;/g, "&")
+				.replace(/&nbsp;/g, " ")
+				.replace(/\n\s*\n/g, "\n");
+		}
+		return content;
 	}
 
 	/**

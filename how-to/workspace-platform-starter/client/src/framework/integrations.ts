@@ -27,15 +27,14 @@ import type {
 	IntegrationProviderOptions
 } from "./shapes/integrations-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
-import { share } from "./share";
 import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
-import { isEmpty } from "./utils";
+import { isEmpty, isStringValue } from "./utils";
 import { getVersionInfo } from "./version";
 
 const logger = createLogger("Integrations");
 
-let integrationProviderOptions: IntegrationProviderOptions;
+let integrationProviderOptions: IntegrationProviderOptions | undefined;
 let integrationModules: ModuleEntry<
 	IntegrationModule,
 	IntegrationHelpers,
@@ -68,8 +67,7 @@ export async function init(
 			...helpers,
 			templateHelpers,
 			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
-			setSearchQuery,
-			share
+			setSearchQuery
 		};
 
 		// Map the old moduleUrl properties to url
@@ -144,42 +142,46 @@ export async function getSearchResults(
 		},
 		sourceFilters: []
 	};
-
-	if (
-		integrationProviderOptions.isManagementEnabled &&
-		query.startsWith(`/${integrationProviderOptions.command ?? "integrations"}`)
-	) {
-		return getManagementResults();
-	}
-
-	const promises: Promise<HomeSearchResponse>[] = [];
 	const sourceFilters: string[] = [];
-	for (const integrationModule of integrationModules) {
-		if (
-			integrationModule.isInitialized &&
-			integrationModule.implementation.getSearchResults &&
-			((integrationModule.definition.excludeFromSourceFilter ?? selectedSources.length === 0) ||
-				selectedSources.includes(integrationModule.definition.title))
-		) {
-			promises.push(integrationModule.implementation.getSearchResults(query, filters, lastResponse, options));
-		}
-		if (!integrationModule.definition.excludeFromSourceFilter) {
-			sourceFilters.push(integrationModule.definition.title);
-		}
-	}
 
-	const promiseResults = await Promise.allSettled(promises);
-	for (const promiseResult of promiseResults) {
-		if (promiseResult.status === "fulfilled") {
-			if (Array.isArray(promiseResult.value.results)) {
-				homeResponse.results = homeResponse.results.concat(promiseResult.value.results);
+	if (!isEmpty(integrationProviderOptions)) {
+		if (
+			integrationProviderOptions.isManagementEnabled &&
+			query.startsWith(`/${integrationProviderOptions.command ?? "integrations"}`)
+		) {
+			return getManagementResults();
+		}
+
+		const promises: Promise<HomeSearchResponse>[] = [];
+		for (const integrationModule of integrationModules) {
+			if (
+				integrationModule.isInitialized &&
+				integrationModule.implementation.getSearchResults &&
+				((integrationModule.definition.excludeFromSourceFilter ?? selectedSources.length === 0) ||
+					selectedSources.includes(integrationModule.definition.title))
+			) {
+				promises.push(
+					integrationModule.implementation.getSearchResults(query, filters, lastResponse, options)
+				);
 			}
-			const newFilters = promiseResult.value.context?.filters;
-			if (Array.isArray(newFilters) && homeResponse.context?.filters) {
-				homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
+			if (!integrationModule.definition.excludeFromSourceFilter) {
+				sourceFilters.push(integrationModule.definition.title);
 			}
-		} else {
-			logger.error(promiseResult.reason);
+		}
+
+		const promiseResults = await Promise.allSettled(promises);
+		for (const promiseResult of promiseResults) {
+			if (promiseResult.status === "fulfilled") {
+				if (Array.isArray(promiseResult.value.results)) {
+					homeResponse.results = homeResponse.results.concat(promiseResult.value.results);
+				}
+				const newFilters = promiseResult.value.context?.filters;
+				if (Array.isArray(newFilters) && homeResponse.context?.filters) {
+					homeResponse.context.filters = homeResponse.context.filters.concat(newFilters);
+				}
+			} else {
+				logger.error(promiseResult.reason);
+			}
 		}
 	}
 
@@ -196,6 +198,7 @@ export async function getSearchResults(
 export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 	if (!integrationProviderOptions) {
 		logger.error("IntegrationProvider is not available, make sure your have called init");
+		return [];
 	}
 
 	let results: HomeSearchResult[] = [];
@@ -209,9 +212,10 @@ export async function getHelpSearchEntries(): Promise<HomeSearchResult[]> {
 			title: command,
 			label: "Help",
 			icon: integrationProviderOptions.icon,
-			actions: [],
+			actions: [{ name: POPULATE_QUERY, hotkey: "enter" }],
 			data: {
-				providerId: "integration-provider"
+				providerId: "integration-provider",
+				populateQuery: `/${integrationProviderOptions.command ?? "integrations"}`
 			},
 			template: CLITemplate.Custom,
 			templateContent: await createHelp(
@@ -266,7 +270,7 @@ export async function itemSelection(
 			integrationHelpers?.setSearchQuery &&
 			result.action.trigger === "user-action" &&
 			result.action.name === POPULATE_QUERY &&
-			typeof result.data?.populateQuery === "string"
+			isStringValue(result.data?.populateQuery)
 		) {
 			await integrationHelpers.setSearchQuery(result.data.populateQuery as string);
 			return true;
@@ -295,16 +299,17 @@ export async function itemSelection(
  * @returns The home results.
  */
 export async function getManagementResults(): Promise<HomeSearchResponse> {
-	if (!integrationProviderOptions) {
-		logger.error("IntegrationProvider is not available, make sure your have called init");
-	}
-
 	const homeResponse: HomeSearchResponse = {
 		results: [],
 		context: {
 			filters: []
 		}
 	};
+
+	if (!integrationProviderOptions) {
+		logger.error("IntegrationProvider is not available, make sure your have called init");
+		return homeResponse;
+	}
 
 	for (const integrationModule of integrationModules) {
 		const result = await createResult(

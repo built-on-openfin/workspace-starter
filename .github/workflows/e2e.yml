@@ -1,0 +1,38 @@
+name: Workspace Platform Starter - E2E Tests
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org
+          scope: '@openfin'
+
+      - name: Restore root node_modules from cache
+        id: node-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
+
+      - name: Run Workspace Platform Starter E2E Tests
+        working-directory: ./how-to/workspace-platform-starter
+        run: |
+          npm run build
+          npm run start & npx --yes wait-on tcp:8080
+          npm run e2e

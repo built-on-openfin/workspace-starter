@@ -230,7 +230,7 @@ We have a number of integrations we have built to allow you to configure workspa
   "url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
   "data": {
     "images": {
-      "workspace": "http://localhost:8080/icons/{scheme}/workspace.svg"
+      "workspace": "http://localhost:8080/common/icons/{theme}/{scheme}/workspace.svg"
     }
   }
 }
@@ -248,7 +248,7 @@ We have a number of integrations we have built to allow you to configure workspa
   "url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
   "data": {
     "images": {
-      "page": "http://localhost:8080/icons/{scheme}/page.svg"
+      "page": "http://localhost:8080/common/icons/{theme}/{scheme}/page.svg"
     }
   }
 }
@@ -283,6 +283,16 @@ For every search result you return from an integration you should use either the
    ...
 }
 ```
+
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Integration" is the name you want to give your module:
+
+```shell
+npm run generate-module integrations "My Integration"
+```
+
+This will generate the code in the modules/integrations folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
 
 ## Source Reference
 

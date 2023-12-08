@@ -11,6 +11,41 @@ let lowCodeIntegrations: { [key: string]: WorkflowIntegration };
 const requiresSearchInitialization: string[] = [];
 
 /**
+ * Initialize the Low Code Integration provider.
+ * @param options Options for the Low Code Integration Provider.
+ * @returns Nothing.
+ */
+export async function init(options: LowCodeIntegrationProviderOptions | undefined): Promise<void> {
+	if (!isEmpty(options)) {
+		logger.info("LowCodeIntegrationProvider initialized with options.");
+		lowCodeIntegrationProviderOptions = options;
+	}
+}
+
+/**
+ * This function initializes the low code integration instances if not already initialized and
+ * returns them as an array of instances.
+ * @returns An array of WorkflowIntegrations.
+ */
+export async function register(): Promise<WorkflowIntegration[]> {
+	if (isEmpty(lowCodeIntegrations)) {
+		await initializeLowCodeIntegrations();
+	}
+	if (isEmpty(lowCodeIntegrations)) {
+		return [];
+	}
+	return Object.values(lowCodeIntegrations);
+}
+
+/**
+ * Are there any low code integrations enabled.
+ * @returns True if there are enabled low code integrations.
+ */
+export function isEnabled(): boolean {
+	return !isEmpty(lowCodeIntegrations) && Object.keys(lowCodeIntegrations).length > 0;
+}
+
+/**
  * This function uses the passed configuration to create an instance of each required low code integration and
  * creates a list of low code integrations that still need their search integration initialized.
  */
@@ -60,33 +95,6 @@ async function initializeLowCodeIntegrations(): Promise<void> {
 			}
 		}
 	}
-}
-
-/**
- * Initialize the Low Code Integration provider.
- * @param options Options for the Low Code Integration Provider.
- * @returns Nothing.
- */
-export async function init(options: LowCodeIntegrationProviderOptions | undefined): Promise<void> {
-	if (!isEmpty(options)) {
-		logger.info("LowCodeIntegrationProvider initialized with options.");
-		lowCodeIntegrationProviderOptions = options;
-	}
-}
-
-/**
- * This function initializes the low code integration instances if not already initialized and
- * returns them as an array of instances.
- * @returns An array of WorkflowIntegrations.
- */
-export async function register(): Promise<WorkflowIntegration[]> {
-	if (isEmpty(lowCodeIntegrations)) {
-		await initializeLowCodeIntegrations();
-	}
-	if (isEmpty(lowCodeIntegrations)) {
-		return [];
-	}
-	return Object.values(lowCodeIntegrations);
 }
 
 /**

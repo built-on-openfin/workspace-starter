@@ -10,7 +10,7 @@ import {
 import { getToolbarButtons } from "../buttons";
 import type { BrowserProviderOptions } from "../shapes/browser-shapes";
 import type { Logger } from "../shapes/logger-shapes";
-import { isEmpty, isStringValue } from "../utils";
+import { isEmpty, isString, isStringValue } from "../utils";
 
 /**
  * Get the default window options for the browser.
@@ -490,7 +490,7 @@ export async function launchView(
 ): Promise<OpenFin.View> {
 	const platform = getCurrentSync();
 	let viewOptions: OpenFin.PlatformViewCreationOptions;
-	if (typeof view === "string") {
+	if (isString(view)) {
 		viewOptions = { url: view, target: undefined };
 	} else {
 		viewOptions = view;

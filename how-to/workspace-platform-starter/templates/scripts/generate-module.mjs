@@ -15,24 +15,28 @@ const MODULE_TYPES = [
 	'actions',
 	'auth',
 	'conditions',
+	'contentCreation',
 	'endpoint',
 	'initOptions',
 	'integrations',
 	'lifecycle',
 	'log',
-	'menus'
+	'menus',
+	'share'
 ];
 const MANIFEST_TYPE_MAPPING = {
 	analytics: 'analyticsProvider',
 	actions: 'actionsProvider',
 	auth: 'authProvider',
 	conditions: 'conditionsProvider',
+	contentCreation: 'contentCreationProvider',
 	endpoint: 'endpointProvider',
 	initOptions: 'initOptionsProvider',
 	integrations: 'integrationProvider',
 	lifecycle: 'lifecycleProvider',
 	log: 'loggerProvider',
-	menus: 'menusProvider'
+	menus: 'menusProvider',
+	share: 'shareProvider'
 };
 
 const launchArgs = process.argv.slice(2);

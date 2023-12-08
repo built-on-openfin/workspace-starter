@@ -1,4 +1,7 @@
-import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
+import type {
+	ActionHandlerContext,
+	InitOptionsHandler
+} from "workspace-platform-starter/shapes/init-options-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
@@ -7,7 +10,7 @@ import type { ShowPageOptions, ShowPagePayload } from "./shapes";
 /**
  * Init options show page handler.
  */
-export class InitOptionsShowPageHandler implements InitOptionsHandler<ShowPageOptions> {
+export class InitOptionsShowPageHandler implements InitOptionsHandler<ShowPageOptions, ShowPagePayload> {
 	private _logger?: Logger;
 
 	private _helpers?: ModuleHelpers;
@@ -36,8 +39,13 @@ export class InitOptionsShowPageHandler implements InitOptionsHandler<ShowPageOp
 	 * Handle the init options action.
 	 * @param requestedAction The requested action.
 	 * @param payload The payload for the action.
+	 * @param context The context calling the action.
 	 */
-	public async action(requestedAction: string, payload?: ShowPagePayload): Promise<void> {
+	public async action(
+		requestedAction: string,
+		payload: ShowPagePayload | undefined,
+		context: ActionHandlerContext
+	): Promise<void> {
 		if (isEmpty(payload)) {
 			this._logger?.warn(
 				`Actions passed to the module require a payload to be passed. Requested action: ${requestedAction} can not be fulfilled.`
@@ -56,7 +64,7 @@ export class InitOptionsShowPageHandler implements InitOptionsHandler<ShowPageOp
 					return;
 				}
 
-				if (isEmpty(this._helpers?.launchPage) || isEmpty(this._helpers?.launchPage)) {
+				if (isEmpty(this._helpers?.launchPage)) {
 					this._logger?.warn(
 						`Unable to show page with pageId: ${pageId} as a launchPage function was not passed to this module via the module helpers.`
 					);

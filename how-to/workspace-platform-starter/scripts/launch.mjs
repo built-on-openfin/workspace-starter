@@ -4,8 +4,8 @@
  * It uses the OpenFin NodeJS adapter to launch the url specified on the command line.
  * Pressing Ctrl+C/Command+C will terminate the application.
  */
+import { connect, launch } from '@openfin/node-adapter';
 import { setDefaultResultOrder } from 'dns';
-import { connect, launch } from 'openfin-adapter';
 
 /**
  * Run the process.

@@ -306,6 +306,11 @@ export interface SalesforceSettings {
 	preload: string;
 
 	/**
+	 * App Id. Should this integration launch an app instead of a view.
+	 */
+	appId?: string;
+
+	/**
 	 * Map the data from SF to templates, if you just include the type field the default display will be used.
 	 */
 	mappings?: SalesforceMapping[];
@@ -378,6 +383,15 @@ export interface IntegrationHelpers {
 	 * @returns The interop client.
 	 */
 	getInteropClient(): Promise<OpenFin.InteropClient | undefined>;
+
+	/**
+	 * If available, this function lets you request the launch of an application that is available to this platform and
+	 * the current user.
+	 * @param appId The id of the application that is registered against the currently running platform
+	 * @param launchPreference If the app supports launch preferences then these can be passed.
+	 * @returns Nothing.
+	 */
+	launchApp?(appId: string, launchPreference?: UpdatableLaunchPreference): Promise<void>;
 }
 
 /**
@@ -490,4 +504,28 @@ export interface ThemeClient {
 	 * @returns The current palette.
 	 */
 	getPalette(): Promise<CustomPaletteSet>;
+}
+
+/**
+ * Are there any preferences you would like to apply when launching this application?
+ */
+export interface UpdatableLaunchPreference {
+	/**
+	 * Are there any app type specific options you would like to apply?
+	 */
+	options?: ViewLaunchOptions;
+}
+
+/**
+ * Additional options that apply to a view
+ */
+export interface ViewLaunchOptions {
+	/**
+	 * View options type
+	 */
+	type: "view";
+	/**
+	 * The option to override a few settings that are specific to views.
+	 */
+	view?: Partial<Pick<OpenFin.ViewOptions, "url" | "interop" | "customData">>;
 }
