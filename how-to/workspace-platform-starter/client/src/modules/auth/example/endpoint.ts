@@ -6,7 +6,7 @@ import type {
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type { CustomSettings } from "workspace-platform-starter/shapes/setting-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 import type { AppWithTagsOrCategories, ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 
@@ -62,9 +62,15 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 			);
 		}
 
+		if (isEmpty(endpointDefinition.options) || isEmpty(endpointDefinition.options.url)) {
+			this._logger?.warn(
+				`The endpoint definition for ${endpointDefinition.id} does not have a url defined. Unable to action request/response.`
+			);
+			return null;
+		}
 		const { url, ...options }: FetchOptions = endpointDefinition.options;
 
-		const req = this.getRequestOptions(url as string, options, request as { [id: string]: string });
+		const req = this.getRequestOptions(url, options, request as { [id: string]: string });
 		if (req.options.method !== "GET" && req.options.method !== "POST") {
 			this._logger?.warn(
 				`${endpointDefinition.id} specifies a type: ${endpointDefinition.type} with a method ${req.options.method} that is not supported.`
@@ -208,7 +214,7 @@ export class ExampleAuthEndpoint implements Endpoint<ExampleEndpointOptions> {
 				let count = 0;
 				const updateEndpoints = [];
 				for (const endpoint of appEndpointIds) {
-					if (typeof endpoint === "string") {
+					if (isStringValue(endpoint)) {
 						if (endpoint.startsWith("http")) {
 							updateEndpoints.push({ position: count, url: endpoint });
 						} else {

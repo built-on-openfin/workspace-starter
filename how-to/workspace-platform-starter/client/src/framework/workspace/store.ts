@@ -156,12 +156,12 @@ function isStorefrontConfigurationValid(): boolean {
 		isEmpty(storeProviderOptions) ||
 		isEmpty(storeProviderOptions.id) ||
 		isEmpty(storeProviderOptions.title) ||
-		(isEmpty(storeProviderOptions.footer) &&
-			!isEmpty(storeProviderOptions.landingPage) &&
-			!isEmpty(storeProviderOptions.landingPage.topRow) &&
-			!isEmpty(storeProviderOptions.landingPage.middleRow) &&
-			!isEmpty(storeProviderOptions.landingPage.bottomRow) &&
-			!isEmpty(storeProviderOptions.navigation))
+		isEmpty(storeProviderOptions.footer) ||
+		isEmpty(storeProviderOptions.landingPage) ||
+		isEmpty(storeProviderOptions.landingPage?.topRow) ||
+		isEmpty(storeProviderOptions.landingPage?.middleRow) ||
+		isEmpty(storeProviderOptions.landingPage?.bottomRow) ||
+		isEmpty(storeProviderOptions.navigation)
 	) {
 		logger.error(
 			"StorefrontProvider is not correctly configured in the customSettings of this manifest. You must ensure that storefrontProvider is defined, that it has an id and title and that the footer, landingPage (top row, middle row and bottom row) and navigation sections have been defined"
@@ -581,7 +581,7 @@ function calculateButtons(
 		appSecondaryButtons.push({
 			title: favoriteEntry ? "Remove Favorite" : "Add Favorite",
 			action: {
-				id: favoriteEntry ? PLATFORM_ACTION_IDS.favoriteRemove : PLATFORM_ACTION_IDS.favoriteAdd,
+				id: favoriteEntry ? "favorite-remove" : "favorite-add",
 				customData: favoriteEntry ?? {
 					id: randomUUID(),
 					type: FAVORITE_TYPE_NAME_APP,

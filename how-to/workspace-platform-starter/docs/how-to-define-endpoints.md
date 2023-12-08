@@ -208,6 +208,16 @@ Client options have an enabled flag (enabled by default) so you can turn off spe
  }
 ```
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Endpoint" is the name you want to give your module:
+
+```shell
+npm run generate-module endpoint "My Endpoint"
+```
+
+This will generate the code in the modules/endpoint folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [endpoint.ts](../client/src/framework/endpoint.ts)

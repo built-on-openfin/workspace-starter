@@ -14,7 +14,7 @@ You have a number of choices when choosing how you define your apps.
 
 The Platform App definition for a workspace platform is based on the FDC3 1.2 App definition with some additional extensions (such as tags, private, autostart, and instanceMode). It is the structure used internally.
 
-Using workspace platform starter an app definition can easily be added to an [apps.json](../public/apps.json) file and it will be automatically picked up alongside a collection of [common apps](../public/common/apps.json).
+Workspace platform starter includes a number of example app.json files in the public/common folder e.g. [common apps](../public/common/apps.json). We also give you an empty applications array for you to add your own apps: [public/apps.json](../public/apps.json). The workspace starter platform will pull in all listed directories and merge them together.
 
 ### What Does An App Definition Look Like?
 
@@ -89,20 +89,7 @@ The following field is custom to this platform and is optional:
 - tooltip - to match fdc3 1.2 and 2.0 definitions
 - moreInfo - to match additional information provided by fdc3 2.0 apps
 - name - not actively used (more as a fallback) but supported for fdc3 1.2 or 2.0 mappings.
-- launchPreference - This is an optional and new setting added to v15 of workspace-platform-starter. This lets the directory owner or the app owner specify a preference that should apply to the application when launching.
-  - bounds - Bounds can optionally be specified. A view is something that exists in a platform/browser window so this allows a preference for height/width to be specified. A classic window can already specify a height and width in it's manifest but you may want a custom height/width for this app entry (especially if the window is defined as an external manifest as opposed to an inline one).
-  - defaultCentered - a particular view/classic window might need to be centered on launch. This allows the app/directory owner to specify that preference.
-  - options - Optional options that are specific to the app/manifest type. Only view/inline-view has supported settings at this time.
-    - view you specify host specific settings.
-      - host - host settings to be used by the page hosting the view
-        - url - lets you specify that this view should be loaded into a specific Platform API window instead of the default browser window. The ability to have Platform API and Browser windows together in the same platform was added in v15 of @openfin/workspace-platform.
-        - title - the title to set on the window and this title is shown if pages are disabled on a browser window
-        - icon - used to replace the menu icon on a browser window (can be used by a platform window if you use the setting)
-        - hasHeaders - specify if you wish to have the view tab in a browser or platform api window
-        - disableMultiplePages - Disable multiple pages in a browser window.
-        - disableToolbarOptions - Remove toolbar buttons from browser window.
-        - pageTitle - provide a custom title (instead of undefined) to the launched page hosting the view if you haven't turned off pages.
-        - pageIcon - an icon to display alongside the page title is the page has no unsaved changes.
+- launchPreference - Please see [how to define app launch preference](./how-to-define-app-launch-preference.md)
 
 The rest of the fields are self explanatory but the intents array deserves more detail.
 

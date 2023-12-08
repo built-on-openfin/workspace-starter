@@ -308,7 +308,7 @@ export class SalesforceIntegration {
 					const action = data.mapping?.actions?.[actionIdx];
 
 					if (!action?.url && !action?.intent && !action?.view) {
-						await this.openSalesforceView(data);
+						await this.openSalesforceContent(data);
 					} else if (action.url) {
 						await fin.System.openUrlWithBrowser(
 							this.substituteProperties(data.mapping, data.obj, action.url, true)
@@ -355,7 +355,7 @@ export class SalesforceIntegration {
 							await fin.System.openUrlWithBrowser(u);
 						}
 					} else {
-						await this.openSalesforceView(data);
+						await this.openSalesforceContent(data);
 					}
 					return true;
 				}
@@ -750,21 +750,38 @@ export class SalesforceIntegration {
 	}
 
 	/**
-	 * Open a Salesforce view.
+	 * Open salesforce content in a view or as an app.
 	 * @param data The data to use for opening.
 	 */
-	private async openSalesforceView(data: SalesforceResultData): Promise<void> {
-		const preload = this._settings?.preload;
-		const viewOptions: OpenFin.PlatformViewCreationOptions = {
-			url: data.url,
-			fdc3InteropApi: "1.2",
-			interop: {
-				currentContextGroup: "green"
-			},
-			customData: { buttonLabel: "Process Participant" },
-			preloadScripts: [{ url: preload ?? "" }]
+	private async openSalesforceContent(data: SalesforceResultData): Promise<void> {
+		const interop: OpenFin.InteropConfig = {
+			currentContextGroup: "green"
 		};
-		await this._integrationHelpers?.launchView(viewOptions);
+		const customData = { buttonLabel: "Process Participant" };
+		const url = data.url;
+
+		if (this._settings?.appId && this._integrationHelpers?.launchApp) {
+			await this._integrationHelpers?.launchApp(this._settings.appId, {
+				options: {
+					type: "view",
+					view: {
+						url,
+						interop,
+						customData
+					}
+				}
+			});
+		} else {
+			const preload = this._settings?.preload;
+			const viewOptions: OpenFin.PlatformViewCreationOptions = {
+				url,
+				fdc3InteropApi: "1.2",
+				interop,
+				customData,
+				preloadScripts: [{ url: preload ?? "" }]
+			};
+			await this._integrationHelpers?.launchView(viewOptions);
+		}
 	}
 
 	/**
@@ -852,8 +869,8 @@ export class SalesforceIntegration {
 				if (fieldValue !== null && fieldValue !== undefined && fieldValue.length > 0) {
 					if (fieldMapping.displayMode === "icon") {
 						headerParts.image = await templateHelpers.createImage("image", "Profile", {
-							width: "44px",
-							height: "44px",
+							width: "38px",
+							height: "38px",
 							objectFit: "cover",
 							borderRadius: "50%"
 						});
@@ -868,9 +885,9 @@ export class SalesforceIntegration {
 							initials += values[values.length - 1][0];
 						}
 
-						headerParts.image = await templateHelpers.createText("initials", 18, {
-							width: "44px",
-							height: "44px",
+						headerParts.image = await templateHelpers.createText("initials", 16, {
+							width: "38px",
+							height: "38px",
 							objectFit: "cover",
 							borderRadius: "50%",
 							backgroundColor: palette.background2,
@@ -881,10 +898,10 @@ export class SalesforceIntegration {
 						});
 						data.initials = initials.toUpperCase();
 					} else if (fieldMapping.displayMode === "header") {
-						headerParts.header = await templateHelpers.createTitle("header", 14);
+						headerParts.header = await templateHelpers.createTitle("header");
 						data.header = fieldValue;
 					} else if (fieldMapping.displayMode === "sub-header") {
-						headerParts.subHeader = await templateHelpers.createText("subHeader", 12);
+						headerParts.subHeader = await templateHelpers.createText("subHeader", 10);
 						data.subHeader = fieldValue;
 					} else if (fieldMapping.displayMode === "field") {
 						if (fieldMapping.fieldContent === "link") {
@@ -924,12 +941,16 @@ export class SalesforceIntegration {
 			if (headerParts.subHeader) {
 				headerTitleParts.push(headerParts.subHeader);
 			}
-			headerChildren.push(await templateHelpers.createContainer("column", headerTitleParts));
+			headerChildren.push(
+				await templateHelpers.createContainer("column", headerTitleParts, {
+					overflow: "hidden"
+				})
+			);
 		}
 
 		const headerRow = await templateHelpers.createContainer("row", headerChildren, {
-			paddingBottom: "10px",
-			borderBottom: `1px solid ${palette.textDefault}`,
+			borderBottom: `1px solid ${palette.background6}`,
+			paddingBottom: "5px",
 			gap: "10px"
 		});
 

@@ -22,12 +22,31 @@ async function run(packageDir, configFile) {
 	const numChunks = Math.ceil(configModule.default.length / chunkSize);
 
 	for (let chunk = 0; chunk < numChunks; chunk++) {
+		let promises = [];
 		for (let i = chunk * chunkSize; i < Math.min(configModule.default.length, (chunk + 1) * chunkSize); i++) {
-			spawn('npm', ['run', 'build-client-serial'], {
-				stdio: 'inherit',
-				env: { ...process.env, WEBPACK_CONFIG_INDEX: i },
-				shell: true
-			});
+			promises.push(
+				new Promise((resolve, reject) => {
+					const sp = spawn('npm', ['run', 'build-client-serial'], {
+						stdio: 'inherit',
+						env: { ...process.env, WEBPACK_CONFIG_INDEX: i },
+						shell: true
+					});
+					sp.on('exit', (exitCode) => {
+						if (Number.parseInt(exitCode, 10) !== 0) {
+							reject(new Error('run failed'));
+						} else {
+							resolve();
+						}
+					});
+				})
+			);
+		}
+		try {
+			await Promise.all(promises);
+			promises = [];
+		} catch {
+			// eslint-disable-next-line unicorn/no-process-exit
+			process.exit(1);
 		}
 	}
 }

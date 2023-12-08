@@ -6,6 +6,5 @@
 			"$ref": "./settings.schema.json#/definitions/CustomSettings"
 		}
 	},
-	"required": ["customSettings"],
 	"additionalProperties": true
 }

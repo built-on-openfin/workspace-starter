@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 import { ColorSchemeOptionType, getCurrentSync, init } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 

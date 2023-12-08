@@ -4,17 +4,21 @@ import { checkConditions } from "./conditions";
 import { createLogger } from "./logger-provider";
 import { initializeModules, loadModules } from "./modules";
 import type {
+	InitOptionsActionHandler,
+	ActionHandlerContext,
 	InitOptionsHandler,
 	InitOptionsHandlerOptions,
 	InitOptionsLifecycle,
 	InitOptionsProviderOptions,
-	UserAppConfigArgs
+	UserAppConfigArgs,
+	InitOptionsListener
 } from "./shapes/init-options-shapes";
 import type { ModuleHelpers } from "./shapes/module-shapes";
-import { isEmpty, randomUUID } from "./utils";
+import { isEmpty, isStringValue, randomUUID } from "./utils";
 
 const ACTION_PARAM_NAME = "action";
 const ACTION_PAYLOAD_PARAM_NAME = "payload";
+const NO_PARAM_NAME = "-----default-if-no-param-----";
 
 const logger = createLogger("InitOptions");
 
@@ -22,14 +26,14 @@ let actionListeners: {
 	[action: string]: {
 		[subscriptionId: string]: {
 			lifecycle: InitOptionsLifecycle;
-			actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>;
+			actionHandler: InitOptionsActionHandler;
 		};
 	};
 } = {};
 let actionListenerMap: { [key: string]: string } = {};
 const listeners: {
 	[paramName: string]: {
-		[subscriptionId: string]: (initOptions: UserAppConfigArgs) => Promise<void>;
+		[subscriptionId: string]: InitOptionsListener;
 	};
 } = {};
 const listenerMap: { [key: string]: string } = {};
@@ -68,7 +72,7 @@ export async function init(
 			registerActionListener(
 				supportedAction,
 				initOptionsModule.definition.data?.lifecycle ?? "after-bootstrap",
-				async (requestedAction: string, payload?: unknown) => {
+				async (requestedAction: string, payload: unknown, context: ActionHandlerContext) => {
 					if (
 						await checkConditions(platform, initOptionsModule.definition.data?.conditions, {
 							callerType: "init-options",
@@ -81,7 +85,7 @@ export async function init(
 						logger.info(
 							`Action: ${requestedAction} being handled by module ${initOptionsModule.definition.id}`
 						);
-						await initOptionsModule.implementation.action(requestedAction, payload);
+						await initOptionsModule.implementation.action(requestedAction, payload, context);
 					}
 				}
 			);
@@ -97,9 +101,9 @@ export async function init(
 	if (!isEmpty(customInitOptions?.userAppConfigArgs)) {
 		logger.info("Received during startup", customInitOptions?.userAppConfigArgs);
 		if (!isEmpty(customInitOptions?.userAppConfigArgs[ACTION_PARAM_NAME])) {
-			await notifyActionListeners(customInitOptions?.userAppConfigArgs, lifecycle);
+			await notifyActionListeners(customInitOptions?.userAppConfigArgs, lifecycle, "launch");
 		} else {
-			await notifyListeners(customInitOptions?.userAppConfigArgs);
+			await notifyListeners(customInitOptions?.userAppConfigArgs, "launch");
 		}
 	}
 
@@ -119,7 +123,7 @@ export async function init(
 export function registerActionListener(
 	action: string,
 	lifecycle: InitOptionsLifecycle,
-	actionHandler: <T>(requestedAction: string, payload?: T) => Promise<void>
+	actionHandler: InitOptionsActionHandler
 ): string {
 	const subscriptionId = randomUUID();
 	if (!actionListeners[action]) {
@@ -135,17 +139,17 @@ export function registerActionListener(
 
 /**
  * Manually register a listener.
- * @param paramName The param name to look for in the init option.
  * @param handler The handler to call when a match on the param name occurs.
+ * @param paramName The param name to look for in the init option. If not specified then it is a function to be called if no params are passed.
  * @returns The subscription id that can be used to remove the listener.
  */
-export function registerListener(
-	paramName: string,
-	handler: (initOptions: UserAppConfigArgs) => Promise<void>
-): string | undefined {
+export function registerListener(handler: InitOptionsListener, paramName?: string): string | undefined {
 	if (paramName === ACTION_PARAM_NAME) {
 		logger.warn("Please use registerActionListener if you wish to listen for an action");
 		return;
+	}
+	if (!isStringValue(paramName)) {
+		paramName = NO_PARAM_NAME;
 	}
 	const subscriptionId = randomUUID();
 	if (!listeners[paramName]) {
@@ -201,8 +205,9 @@ export function removeActionListener(id: string): boolean {
  */
 function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undefined {
 	try {
-		if (typeof initOptions?.payload === "string") {
-			const plainJson = atob(initOptions?.payload);
+		const base64Payload = initOptions?.payload;
+		if (isStringValue(base64Payload)) {
+			const plainJson = atob(base64Payload);
 			const payload = JSON.parse(plainJson) as T;
 			logger.info("Extracted payload", payload);
 			return payload;
@@ -216,10 +221,12 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
  * Notify anybody subscribed to the action listeners.
  * @param initOptions The init options to extract from.
  * @param lifecycle The lifecycle event to use.
+ * @param context The context calling the action handler.
  */
 async function notifyActionListeners(
 	initOptions: UserAppConfigArgs,
-	lifecycle: InitOptionsLifecycle
+	lifecycle: InitOptionsLifecycle,
+	context: ActionHandlerContext
 ): Promise<void> {
 	const action = initOptions[ACTION_PARAM_NAME];
 	const payload = !isEmpty(initOptions[ACTION_PAYLOAD_PARAM_NAME])
@@ -237,7 +244,7 @@ async function notifyActionListeners(
 				try {
 					const listen = availableListeners[subscriberId];
 					if (listen) {
-						await listen.actionHandler(action, payload);
+						await listen.actionHandler(action, payload, context);
 					}
 				} catch (error) {
 					logger.error(
@@ -253,8 +260,9 @@ async function notifyActionListeners(
 /**
  * Notify anybody subscribed to the listeners.
  * @param initOptions The init options to extract from.
+ * @param context The context calling the action handler.
  */
-async function notifyListeners(initOptions: UserAppConfigArgs): Promise<void> {
+async function notifyListeners(initOptions: UserAppConfigArgs, context: ActionHandlerContext): Promise<void> {
 	const customParamIds = Object.keys(listeners);
 	let listenerId: string | undefined;
 
@@ -263,6 +271,11 @@ async function notifyListeners(initOptions: UserAppConfigArgs): Promise<void> {
 			listenerId = id;
 			break;
 		}
+	}
+
+	if (isEmpty(listenerId) && (isEmpty(initOptions) || Object.keys(initOptions).length === 0)) {
+		logger.info("No init options passed, calling default listeners");
+		listenerId = NO_PARAM_NAME;
 	}
 
 	if (!isEmpty(listenerId)) {
@@ -279,7 +292,7 @@ async function notifyListeners(initOptions: UserAppConfigArgs): Promise<void> {
 				try {
 					const listen = availableListeners[subscriberId];
 					if (listen) {
-						await listen(initOptions);
+						await listen(initOptions, context);
 					}
 				} catch (error) {
 					logger.error(
@@ -301,9 +314,11 @@ async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs 
 	if (!isEmpty(event?.userAppConfigArgs)) {
 		logger.info("Received while platform is running", event.userAppConfigArgs);
 		if (!isEmpty(event.userAppConfigArgs[ACTION_PARAM_NAME])) {
-			await notifyActionListeners(event.userAppConfigArgs, "after-bootstrap");
+			await notifyActionListeners(event.userAppConfigArgs, "after-bootstrap", "running");
 		} else {
-			await notifyListeners(event.userAppConfigArgs);
+			await notifyListeners(event.userAppConfigArgs, "running");
 		}
+	} else {
+		logger.info("Received while platform is running but no init options were passed");
 	}
 }

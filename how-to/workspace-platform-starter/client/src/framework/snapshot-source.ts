@@ -24,7 +24,7 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 			const snapShotSource = await fin.SnapshotSource.wrap({ uuid: entry.identity.uuid });
 			try {
 				logger.info(`Snapshot source: ${entry.identity.uuid}. Requesting a snapshot.`);
-				const sourceSnapshot = await snapShotSource.getSnapshot();
+				const sourceSnapshot = (await snapShotSource.getSnapshot()) as Extract<"snapshot", ClientSnapshot>;
 				return { identity: entry.identity, snapshot: sourceSnapshot };
 			} catch {
 				logger.info(`Snapshot source: ${entry.identity.uuid} was not available.`);

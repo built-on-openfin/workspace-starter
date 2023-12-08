@@ -1,4 +1,8 @@
-import type { InitOptionsHandler } from "workspace-platform-starter/shapes/init-options-shapes";
+import type {
+	ActionHandlerContext,
+	InitOptionsHandler,
+	InitOptionsHandlerOptions
+} from "workspace-platform-starter/shapes/init-options-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
@@ -7,7 +11,9 @@ import type { RaiseIntentPayload, ShareContextPayload } from "./shapes";
 /**
  * Init options interop handler.
  */
-export class InitOptionsInteropHandler implements InitOptionsHandler {
+export class InitOptionsInteropHandler
+	implements InitOptionsHandler<InitOptionsHandlerOptions, RaiseIntentPayload | ShareContextPayload>
+{
 	private _logger?: Logger;
 
 	/**
@@ -31,10 +37,12 @@ export class InitOptionsInteropHandler implements InitOptionsHandler {
 	 * Handle the init options action.
 	 * @param requestedAction The requested action.
 	 * @param payload The payload for the action.
+	 * @param context The context calling the action.
 	 */
 	public async action(
 		requestedAction: string,
-		payload?: RaiseIntentPayload | ShareContextPayload
+		payload: RaiseIntentPayload | ShareContextPayload | undefined,
+		context: ActionHandlerContext
 	): Promise<void> {
 		if (isEmpty(payload)) {
 			this._logger?.warn(

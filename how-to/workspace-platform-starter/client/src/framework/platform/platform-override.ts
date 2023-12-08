@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import type { LayoutClient } from "@openfin/snap-sdk";
 import {
 	getCurrentSync,
 	type AnalyticsEvent,
@@ -50,6 +51,7 @@ import type {
 	PlatformProviderOptions
 } from "../shapes/platform-shapes";
 import type { VersionInfo } from "../shapes/version-shapes";
+import * as snapProvider from "../snap";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { isEmpty } from "../utils";
@@ -110,8 +112,8 @@ export function overrideCallback(
 		 * @returns nothing.
 		 */
 		public async launchIntoPlatform(payload: OpenFin.LaunchIntoPlatformPayload): Promise<void> {
-			logger.warn(
-				"launchIntoPlatform called. Please use the initOptionsProvider for loading content into the platform.",
+			logger.debug(
+				"launchIntoPlatform called. Please use the initOptionsProvider for loading content into the platform. If triggered by clicking on the application icon then autoShow options from the bootstrapper are applied.",
 				payload
 			);
 		}
@@ -123,7 +125,11 @@ export function overrideCallback(
 		 * @returns Snapshot of current platform state.
 		 */
 		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
-			const snapshot = await super.getSnapshot(payload, identity);
+			let snapshot = await super.getSnapshot(payload, identity);
+
+			if (snapProvider.isEnabled()) {
+				snapshot = await snapProvider.decorateSnapshot(snapshot);
+			}
 
 			// Decorate the default snapshot with additional information for connection clients.
 			return decorateSnapshot(snapshot);
@@ -139,8 +145,19 @@ export function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
+			let existingApps: LayoutClient[] | undefined;
+			if (snapProvider.isEnabled()) {
+				existingApps = await snapProvider.prepareToApplyDecoratedSnapshot();
+			}
+
+			await super.applySnapshot(payload, identity);
+
+			if (snapProvider.isEnabled()) {
+				await snapProvider.applyDecoratedSnapshot(payload.snapshot, existingApps ?? []);
+			}
+
 			// Use the decorated snapshot to open any connected clients
-			await Promise.all([super.applySnapshot(payload, identity), applyClientSnapshot(payload.snapshot)]);
+			await applyClientSnapshot(payload.snapshot);
 		}
 
 		/**
@@ -432,20 +449,11 @@ export function overrideCallback(
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
 			const platform = getCurrentSync();
 
-			if (isEmpty(req.page.customData)) {
-				req.page.customData = {};
-			}
-
-			let windowBounds = await getPageBounds(req.page.pageId);
-
-			if (isEmpty(windowBounds)) {
-				// likely this is a new save page as implementation as we were unable to find this page id in the available pages
-				const parentIdentity = await platform.Browser.getLastFocusedWindow();
-				const parentWindow = fin.Window.wrapSync(parentIdentity);
-				windowBounds = await parentWindow.getBounds();
-			}
-
+			const windowBounds = await getPageBounds(req.page.pageId);
 			if (!isEmpty(windowBounds)) {
+				if (isEmpty(req.page.customData)) {
+					req.page.customData = {};
+				}
 				req.page.customData.windowBounds = windowBounds;
 			}
 
@@ -722,15 +730,15 @@ export function overrideCallback(
 						const platformManifest: OpenFin.Manifest = await app.getManifest();
 						logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
 						windowDefaultLeft =
-							settings.browserProvider?.defaultWindowOptions?.defaultLeft ??
+							settings?.browserProvider?.defaultWindowOptions?.defaultLeft ??
 							platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
 							0;
 						windowDefaultTop =
-							settings.browserProvider?.defaultWindowOptions?.defaultTop ??
+							settings?.browserProvider?.defaultWindowOptions?.defaultTop ??
 							platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
 							0;
 
-						windowPositioningStrategy = settings.browserProvider?.windowPositioningStrategy;
+						windowPositioningStrategy = settings?.browserProvider?.windowPositioningStrategy;
 					}
 				}
 

@@ -12,15 +12,18 @@ export type InitOptionsProviderOptions = ModuleList;
 /**
  * Module definition for init options handler.
  */
-export interface InitOptionsHandler<O extends InitOptionsHandlerOptions = InitOptionsHandlerOptions>
-	extends ModuleImplementation<O> {
+export interface InitOptionsHandler<
+	O extends InitOptionsHandlerOptions = InitOptionsHandlerOptions,
+	AT = unknown
+> extends ModuleImplementation<O> {
 	/**
 	 * Handle the init options action.
 	 * @param requestedAction The requested action.
 	 * @param payload The payload for the action.
+	 * @param context The context calling the action.
 	 * @returns Nothing.
 	 */
-	action(requestedAction: string, payload?: unknown): Promise<void>;
+	action: InitOptionsActionHandler<AT>;
 }
 
 /**
@@ -54,3 +57,25 @@ export interface InitOptionsHandlerOptions {
 export interface UserAppConfigArgs {
 	[key: string]: string;
 }
+
+/**
+ * The context that called the action handler.
+ */
+export type ActionHandlerContext = "launch" | "running";
+
+/**
+ * The handler for an init options action.
+ */
+export type InitOptionsActionHandler<T = unknown> = (
+	action: string,
+	payload: T | undefined,
+	context: ActionHandlerContext
+) => Promise<void>;
+
+/**
+ * The handler for an init options listener.
+ */
+export type InitOptionsListener = (
+	initOptions: UserAppConfigArgs,
+	context: ActionHandlerContext
+) => Promise<void>;

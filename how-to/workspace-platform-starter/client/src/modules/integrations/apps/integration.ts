@@ -434,7 +434,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 				if (Array.isArray(tagFilter.options)) {
 					tagFilter.options.push({
 						value: tag,
-						isSelected: false
+						isSelected: true
 					});
 				}
 			}

@@ -17,7 +17,7 @@ export async function init(): Promise<boolean> {
 	const customSettings = await getManifestCustomSettings();
 	const isValid = await initAuthFlow(
 		customSettings?.authProvider,
-		async () => initProvider(customSettings.platformProvider),
+		async () => initProvider(customSettings?.platformProvider),
 		logger
 	);
 	if (!isValid) {

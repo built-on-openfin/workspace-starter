@@ -1,94 +1,139 @@
 import type OpenFin from "@openfin/core";
-import type { Page } from "@openfin/workspace-platform";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
- * All of the share custom data types.
+ * A list of modules that provide sharing.
  */
-export type ShareCustomData = SharePageData | ShareWorkspaceData;
-
-/**
- * The payload for sharing page data.
- */
-export interface SharePageData {
+export interface ShareProviderOptions extends ModuleList {
 	/**
-	 * The type of the data.
+	 * Is sharing enabled, defaults to true.
 	 */
-	type: "page";
+	enabled?: boolean;
 
 	/**
-	 * The window identity of the sharing page.
+	 * The display mode to use when displaying a confirmation.
 	 */
-	windowIdentity?: OpenFin.Identity;
-
-	/**
-	 * The page id of the shared page.
-	 */
-	pageId: string;
-
-	/**
-	 * The page data.
-	 */
-	page?: Page;
+	confirmationMode?: ShareConfirmationType;
 }
 
 /**
- * The payload for sharing workspace data.
+ * The module definition for shares.
  */
-export interface ShareWorkspaceData {
+export interface Share<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
-	 * The type of the data.
+	 * Get the list of share types supported by the module.
+	 * @returns Nothing.
 	 */
-	type: "workspace";
+	getShareTypes(): Promise<string[]>;
 
 	/**
-	 * The id of the shared workspace.
+	 * Get the shares from the module.
+	 * @param windowIdentity The window identity to get the shares for.
+	 * @returns Nothing.
 	 */
-	workspaceId?: string;
+	getEntries(windowIdentity: OpenFin.Identity): Promise<ShareEntry[] | undefined>;
+
+	/**
+	 * Perform the share for the given entry.
+	 * @param type The type of share to perform.
+	 * @param payload The data to associate with the share.
+	 * @returns Nothing.
+	 */
+	share(type: string, payload?: unknown): Promise<void>;
+
+	/**
+	 * Handle a share activation.
+	 * @param type The type of the share.
+	 * @param payload The payload for the share.
+	 * @returns Nothing.
+	 */
+	handle(type: string, payload?: unknown): Promise<void>;
 }
 
 /**
- * The combined shared store types.
+ * An entry for sharing.
  */
-export type ShareStoreEntry = ShareEntryStorePage | ShareEntryStoreWorkspace | ShareEntryStoreUnknown;
+export interface ShareEntry {
+	/**
+	 * The type of the share entry.
+	 */
+	type: string;
 
-/**
- * Share stored entry for page.
- */
-interface ShareEntryStorePage {
 	/**
-	 * The type of the data.
+	 * The label of the share entry.
 	 */
-	type: "page";
+	label: string;
+
 	/**
-	 * The data to store.
+	 * Custom data for the share entry.
 	 */
-	data: {
-		page: Page;
-	};
+	payload?: unknown;
 }
 
 /**
- * Share stored entry for workspace.
+ * Type of share confirmation.
  */
-interface ShareEntryStoreWorkspace {
+export type ShareConfirmationType = "notification" | "modal" | "none";
+
+/**
+ * Type of share status.
+ */
+export type ShareConfirmationStatus = "shared" | "loaded" | "error";
+
+/**
+ * Share confirmation options.
+ */
+export interface ShareConfirmationOptions {
 	/**
-	 * The type of the data.
+	 * The title for the confirmation.
 	 */
-	type: "workspace";
+	title: string;
+
 	/**
-	 * The data to store.
+	 * The icon for the confirmation.
 	 */
-	data: {
-		snapshot: string;
-	};
+	iconUrl?: string;
+
+	/**
+	 * The message for the confirmation.
+	 */
+	message: string;
+
+	/**
+	 * The status of the notification.
+	 */
+	status: ShareConfirmationStatus;
 }
 
 /**
- * Share stored entry for unknown.
+ * The client providing share methods
  */
-interface ShareEntryStoreUnknown {
+export interface ShareClient {
 	/**
-	 * The type of the data.
+	 * Check if the share type is enabled.
+	 * @param type The type of share to check.
+	 * @returns True if the share type is enabled.
 	 */
-	type: "other";
+	typeEnabled(type: string): Promise<boolean>;
+
+	/**
+	 * Perform a share of the specified type.
+	 * @param type The type of share to perform.
+	 * @param payload The data to associate with the share.
+	 * @returns Nothing.
+	 */
+	share(type: string, payload?: unknown): Promise<void>;
+
+	/**
+	 * Display a confirmation for the share.
+	 * @param confirmationOptions The confirmation options.
+	 * @param confirmationType The type of confirmation to show.
+	 * @param parentIdentity The identity of the parent window.
+	 * @returns Nothing.
+	 */
+	confirmation(
+		confirmationOptions: ShareConfirmationOptions,
+		confirmationType: ShareConfirmationType | undefined,
+		parentIdentity?: OpenFin.Identity
+	): Promise<void>;
 }

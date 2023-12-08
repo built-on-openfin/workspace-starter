@@ -1,5 +1,58 @@
 # Changelog
 
+## v16
+
+- Updated logic to handle current launchExternalProcess and downloadAppAsset support in the Mac RVM. In apps.ts we filter out native or app asset applications and if Snap is enabled then we log a warning and do not try to enable the Snap SDK.
+- Updated endpoint types so that fetch endpoints keep mandatory options (it can't work without them) but module endpoints now have options marked as optional (as not all custom modules would need to pass settings). This ties in with the schema improvements below.
+- Added support for supporting intellisense for any manifest file called \*.manifest.fin.json or manifest.fin.json. The rules are any manifest in how-to/workspace-platform-starter will include the OpenFin manifest options as well as Workspace Platform Starter custom settings. Any manifest file in the other how-to examples will include the OpenFin manifest settings but not the custom settings that are specific to Workspace Platform Starter. The schema reference in the manifest has been dropped and schema settings are now picked up in the .vscode/settings.json file. Please open this repo at the root in VSCode so that you have access to all the how-tos and you have access to the settings for this repo.
+- Added support for reshow. If you click on the application icon/shortcut it will show you the components that have been configured to autoShow (see [how to customize the bootstrapping process](./docs/how-to-customize-the-bootstrapping-process.md)) if the application is already running.
+- Docs - Added a document showing [How To Add A Service](./docs/how-to-add-a-service.md)
+- Improved launchPreference so that now args for a native app (app asset or external) can be specified via launchPreference. Launch preference can also be configured to allow args to be specified dynamically when the launch request is made. Please see [how to define app launch preference](./docs/how-to-define-app-launch-preference.md).
+- Improved launchPreference so additional options such as url, interop, customData can be specified. Modules can now pass a launchPreference when launching an app by appId. They can see if the app supports being updated by getting the app by id and checking for the updatable setting under launchPreference.options. Only inline-view/view and inline-window/window support updatable launch preferences. Please see [how to define app launch preference](./docs/how-to-define-app-launch-preference.md).
+- Added support for Snap, enable by setting `customSettings.snapProvider.enabled` to true. Configure the `customSettings.snapProvider.serverAssetInfo` to point to the `SNAP_ASSET_URL`. Enable the Snap debugging window by setting `customSettings.snapProvider.showDebugWindow` to true.
+- Added new module type `content-creation`, these modules can be used to define content creation rules and handle the associated events. Modules are added in `customSettings.contentCreationProvider` section in manifest.
+- Added example content creation module which interrogates the `features` property from `window.open` to determine where to place a view in relation to where it was launched from. An example app `Content Creation Example` demonstrates this in use.
+- Added CustomActionCallerType enum to actions-shapes, use these in preference to the workspace-platform CustomActionCallerType type to avoid importing the whole npm package into your modules.
+- Change moved pin/unpin/move-view/move-window actions in to module, make sure the following config is in your manifest so this functionality is still available
+
+```json
+{
+   "customSettings": {
+      "actionsProvider": {
+         "modules": [
+            ...
+            {
+               "id": "window-platform",
+               "icon": "http://localhost:8080/favicon.ico",
+               "title": "Window Platform Actions",
+               "description": "Window Platform Actions",
+               "enabled": true,
+               "url": "http://localhost:8080/js/modules/actions/window-platform.bundle.js"
+            }
+         ]
+      }
+   }
+}
+```
+
+- Fixed async filters so they don't replace the current filters
+- Added a home searching panel when querying, and debounced requests
+- Improved the Home UI experience so that it does not appear to bounce when typing search requests
+- Improved platform now starts correctly when no customSettings are provided in manifest
+- Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
+- InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`
+- Added unit testing script `npm run test` tests can be found in ./test folder, for more information see [How to Test Your Platform Code](./docs/how-to-test-your-platform-code.md)
+- Added e2e testing script `npm run e2e` tests can be found in ./e2e folder, for more information see [How to Test Your Platform UI](./docs/how-to-test-your-platform-ui.md)
+- BREAKING CHANGE: sharing has been moved to it's own provider, the `sharing` flag has been removed from `platformProvider` and `enabled` can be set in `shareProvider`
+- BREAKING CHANGE: share links are now of the form `shareType=<type>&payload=` instead of `shareId=<id>`
+- BREAKING CHANGE: share method has been removed from integration helpers, use shareClient in module helpers
+- Added Share provider which allows modules to plugin their own share options.
+- Added Share client to module helpers for performing share operations.
+- Added Dialog client to module helpers to provide a simple way to show confirmation dialogs.
+- Added sharing for pages moved into module
+- Added sharing for workspaces moved into module
+- Added example dummy share server for testing locally (stores in memory), to use update manifest.fin.json `https://workspace.openfin.co` references to `http://localhost:8080`
+
 ## v15
 
 - BREAKING CHANGE: BrowserProvider windowOptions. A number of versions ago we indicated that you should use defaultWindowOptions in the BrowserProvider configuration instead of the old windowOptions setting. We have removed the type from the schema and type and we have updated the main manifest to use defaultWindowOptions(like we did in our other examples as seen in settings.json). Please update your manifest/settings (we will maintain support for window options for the browser configuration for this release but then that backwards compatibility will be removed).
@@ -63,9 +116,6 @@
 - Added url property to splashScreenProvider so you can provide your own custom location for the html content
 - Change splash screen progress updates are sent using channels so they work cross domain
 - Update applyWorkspace logic so that you are not prompted on whether you wish to save changes if you have never loaded a workspace (you just started a session), and you have not got any windows open that would be included in a snapshot and would be lost.
-- Added a new composite module: default-workspace. This composite module contains menu logic to show a configurable default workspace menu option in browser, an action to react to the menu selection and two lifecycle entries to support capturing the active workspace switch and applying a default workspace on load.
-- Updated the composite module: default-workspace. Now the currently selected mode is always disabled in the menu (it was inconsistent before). When Last Active Workspace is selected the linked workspace is no longer disabled (as this would prevent you from setting it as the default workspace unless you reset via None and then selected it). When a workspace is linked to Last Active Workspace the workspace can still be selected (which will turn off Last Active Workspace) and is marked with "[Active Workspace]" (this can be changed via the lastActive.lastActiveWorkspaceLabel setting).
-- Enabled endpoints as a valid manifest type in the appProvider.
 
 ## v14
 

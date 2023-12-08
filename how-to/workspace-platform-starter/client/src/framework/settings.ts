@@ -15,7 +15,7 @@ const PLATFORM_SETTINGS_ENDPOINT_GET = "platform-settings";
  * Load the customSettings section from the application manifest.
  * @returns The custom settings from the manifest.
  */
-export async function getManifestCustomSettings(): Promise<CustomSettings> {
+export async function getManifestCustomSettings(): Promise<CustomSettings | undefined> {
 	const app = await fin.Application.getCurrent();
 	const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
 	return manifest.customSettings ?? {};
@@ -25,16 +25,17 @@ export async function getManifestCustomSettings(): Promise<CustomSettings> {
  * Get the settings for the application, either from manifest or settings endpoint.
  * @returns The custom settings for the application.
  */
-export async function getSettings(): Promise<CustomSettings> {
+export async function getSettings(): Promise<CustomSettings | undefined> {
 	if (isEmpty(customSettings)) {
 		// Get the settings from the manifest
 		customSettings = await getManifestCustomSettings();
 
 		// If the manifest has endpoint support then see if there is a settings endpoint
 		// that we can load additional settings from
-		if (customSettings.endpointProvider) {
+		const endpointProviderOptions = customSettings?.endpointProvider;
+		if (!isEmpty(endpointProviderOptions)) {
 			const moduleHelpers: ModuleHelpers = getDefaultHelpers();
-			await endpointProvider.init(customSettings.endpointProvider, moduleHelpers);
+			await endpointProvider.init(endpointProviderOptions, moduleHelpers);
 
 			if (endpointProvider.hasEndpoint(PLATFORM_SETTINGS_ENDPOINT_GET)) {
 				logger.info(`${PLATFORM_SETTINGS_ENDPOINT_GET} endpoint specified. Fetching platform settings.`);

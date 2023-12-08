@@ -21,6 +21,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/customize-home-templates/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/customize-home-templates",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -46,6 +51,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-server-authentication/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-server-authentication",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -71,6 +81,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-bloomberg-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-bloomberg-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -103,6 +118,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-excel/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-excel",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -128,6 +148,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-ms365/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-ms365",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -153,6 +178,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-ms365-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-ms365-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -178,6 +208,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-ms365-low-code/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-ms365-low-code",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -203,6 +238,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-ms365-low-code-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-ms365-low-code-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -228,6 +268,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-rss/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-rss",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -248,6 +293,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-salesforce/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-salesforce",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -273,6 +323,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-salesforce-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-salesforce-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -293,6 +348,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-servicenow/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-servicenow",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -318,6 +378,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-servicenow-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-servicenow-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -343,6 +408,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-snap-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-snap-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -368,6 +438,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-snap/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-snap",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -393,6 +468,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/integrate-with-openid-connect/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/integrate-with-openid-connect",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -418,6 +498,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-browser/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-browser",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -443,6 +528,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-dock/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-dock",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -468,6 +558,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-dock-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-dock-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -512,6 +607,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-home/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-home",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -545,6 +645,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-home-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-home-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -578,6 +683,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-platform-windows/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-platform-windows",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -629,6 +739,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-store/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-store",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -672,6 +787,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/register-with-store-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/register-with-store-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -713,6 +833,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/support-context-and-intents/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/support-context-and-intents",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -738,6 +863,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/use-notifications/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/use-notifications",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -775,6 +905,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/use-theming/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/use-theming",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -810,6 +945,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/use-theming-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/use-theming-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -844,6 +984,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/workspace-native-window-integration/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/workspace-native-window-integration",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	},
@@ -882,6 +1027,11 @@
 				"srcFolder": "how-to/workspace-platform-starter/client/types",
 				"destFolder": "how-to/workspace-platform-starter-basic/client/types",
 				"files": ["fin.d.ts"]
+			},
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/workspace-platform-starter-basic",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
 	}

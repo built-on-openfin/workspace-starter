@@ -4,7 +4,7 @@
 		{
 			"id": "platform",
 			"sourceRoot": "./public",
-			"sources": ["./platform/provider.html", "./js/provider.bundle.js"],
+			"sources": ["./platform/provider.html", "./js/provider.bundle.js", "./platform/splash.html"],
 			"dest": "./"
 		},
 		{
@@ -26,16 +26,16 @@
 			"dest": "./schemas"
 		},
 		{
-			"id": "schemas",
-			"sourceRoot": "./public/schemas",
-			"sources": ["**"],
-			"dest": "./schemas"
+			"id": "shell",
+			"sourceRoot": "./public",
+			"sources": ["./shell/shell.html", "./js/shell.bundle.js"],
+			"dest": "./",
+			"autoInclude": false
 		},
 		{
 			"id": "package",
 			"sourceRoot": "./",
 			"sources": [
-				"package.json",
 				"docs/**/*",
 				"README.md",
 				"LICENSE.md",
@@ -44,7 +44,13 @@
 				"client/types/module/**"
 			],
 			"dest": "../",
-			"dependsOn": "schemas"
+			"autoInclude": false
+		},
+		{
+			"id": "of-info",
+			"sourceRoot": "./public/common",
+			"sources": ["views/platform/of-info.view.fin.json", "views/platform/of-info/**/*"],
+			"dest": "./common"
 		}
 	],
 	"replaceTypes": [".json", ".html", ".js"],

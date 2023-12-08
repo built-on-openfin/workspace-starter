@@ -15,7 +15,7 @@ export function isEmpty(value: unknown): value is null | undefined {
  */
 export function isObject(value: unknown): value is object {
 	// eslint-disable-next-line no-restricted-syntax
-	return value !== undefined && value !== null && typeof value === "object";
+	return value !== undefined && value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 /**
@@ -45,6 +45,15 @@ export function isStringValue(value: unknown): value is string {
 export function isNumber(value: unknown): value is number {
 	// eslint-disable-next-line no-restricted-syntax
 	return value !== undefined && value !== null && typeof value === "number";
+}
+
+/**
+ * Test if a value is a number with a real value i.e. not NaN or Infinite.
+ * @param value The value to test.
+ * @returns True if the value is a number.
+ */
+export function isNumberValue(value: unknown): value is number {
+	return isNumber(value) && !Number.isNaN(value) && Number.isFinite(value);
 }
 
 /**
@@ -81,9 +90,9 @@ export function objectClone<T>(obj: T): T {
  * @returns The random UUID.
  */
 export function randomUUID(): string {
-	if ("randomUUID" in window.crypto) {
+	if ("randomUUID" in globalThis.crypto) {
 		// eslint-disable-next-line no-restricted-syntax
-		return window.crypto.randomUUID();
+		return globalThis.crypto.randomUUID();
 	}
 	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
 	// we are still using window.crypto.getRandomValues which is always available
@@ -95,7 +104,7 @@ export function randomUUID(): string {
 	 */
 	function getRandomHex(c: string): string {
 		// eslint-disable-next-line no-bitwise
-		const rnd = window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+		const rnd = globalThis.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
 		return (
 			// eslint-disable-next-line no-bitwise
 			(Number(c) ^ rnd).toString(16)
@@ -110,10 +119,14 @@ export function randomUUID(): string {
  * @returns The formatted error.
  */
 export function formatError(err: unknown): string {
-	if (err instanceof Error) {
+	if (isEmpty(err)) {
+		return "";
+	} else if (err instanceof Error) {
 		return err.message;
-	} else if (typeof err === "string") {
+	} else if (isStringValue(err)) {
 		return err;
+	} else if (isObject(err) && "message" in err && isString(err.message)) {
+		return err.message;
 	}
 	return JSON.stringify(err);
 }
@@ -123,9 +136,15 @@ export function formatError(err: unknown): string {
  * @param content the content to sanitize
  * @returns a string without angle brackets <>
  */
-export function sanitizeString(content: string): string {
-	if (isString(content)) {
-		return content.replace(/<[^>]*>?/gm, "");
+export function sanitizeString(content: unknown): string {
+	if (isStringValue(content)) {
+		return content
+			.replace(/<[^>]*>?/gm, "")
+			.replace(/&gt;/g, ">")
+			.replace(/&lt;/g, "<")
+			.replace(/&amp;/g, "&")
+			.replace(/&nbsp;/g, " ")
+			.replace(/\n\s*\n/g, "\n");
 	}
-	return content;
+	return "";
 }

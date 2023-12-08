@@ -75,7 +75,7 @@ export async function getEndpointClient(options: EndpointClientOptions): Promise
 
 	if (!allowEndpointClientCreation) {
 		logger.warn(
-			"Endpoint client creation is disabled. If this is not expected please check you Endpoint Provider -> Endpoint Clients settings."
+			"Endpoint client creation is disabled. If you this is not expected please check you Endpoint Provider -> Endpoint Clients settings."
 		);
 		return undefined;
 	}

@@ -251,6 +251,7 @@ button.plain:not(:disabled):not(:read-only):hover {
 }
 
 button.small,
+a.button.small,
 ::-webkit-file-upload-button,
 td button {
 	padding: 5px 10px;
@@ -412,8 +413,13 @@ input[type='week'] {
 	min-width: auto;
 }
 
+::-webkit-calendar-picker-indicator,
 .theme-dark ::-webkit-calendar-picker-indicator {
 	filter: invert(1);
+}
+
+.theme-light ::-webkit-calendar-picker-indicator {
+	filter: invert(0);
 }
 
 ::-webkit-datetime-edit-day-field:focus,
@@ -442,15 +448,25 @@ select {
 
 select:not([multiple]):not(:disabled) {
 	appearance: none;
-	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='WindowText'><polygon points='0,0 100,0 50,50'/></svg>");
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23ffffff'><polygon points='0,0 100,0 50,50'/></svg>");
 	background-repeat: no-repeat;
 	background-size: 12px;
 	background-position: calc(100% - 12px) 12px;
 	background-color: var(--brand-input-background);
 }
 
-.theme-dark select:not([multiple]):not(:disabled) {
-	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23ffffff'><polygon points='0,0 100,0 50,50'/></svg>");
+.theme-light select:not([multiple]):not(:disabled) {
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23000000'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
+select.small {
+	padding: 4px 8px;
+	font-size: 10px;
+}
+
+select.small:not([multiple]):not(:disabled) {
+	background-size: 8px;
+	background-position: calc(100% - 8px) 8px;
 }
 
 option {

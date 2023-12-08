@@ -75,6 +75,16 @@ The lifecycle events that are available to connect to are:
 - `favorite-changed` - The event is called when a favorite is set/delete, it is passed the `FavoriteChangedLifecyclePayload` payload which contains the `action` and information about the favorite.
 - `condition-changed` - The event is called when a condition is changed, it is passed the `ConditionChangedLifecyclePayload` payload which contains `conditionId` of the condition that changed, if `conditionId` us undefined, a number of conditions might have changed.
 
+## Generate From Template
+
+You can generate the scaffold for a new module by using the following command line, where "My Lifecycle" is the name you want to give your module:
+
+```shell
+npm run generate-module lifecycle "My Lifecycle"
+```
+
+This will generate the code in the modules/lifecycle folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
 ## Source Reference
 
 - [lifecycle.ts](../client/src/framework/lifecycle.ts)

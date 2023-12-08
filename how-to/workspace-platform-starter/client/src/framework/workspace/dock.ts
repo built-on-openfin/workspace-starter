@@ -5,7 +5,8 @@ import {
 	type CustomButtonConfig,
 	type DockButton,
 	type DockProvider,
-	type DockProviderRegistration
+	type DockProviderRegistration,
+	type WorkspaceButton
 } from "@openfin/workspace";
 import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
@@ -139,20 +140,43 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 			id: dockProviderOptions.id,
 			title: dockProviderOptions.title,
 			icon: dockProviderOptions.icon,
-			workspaceComponents: {
-				hideWorkspacesButton: dockProviderOptions.workspaceComponents?.hideWorkspacesButton,
-				hideHomeButton:
-					!registeredBootstrapOptions?.home || dockProviderOptions.workspaceComponents?.hideHomeButton,
-				hideStorefrontButton:
-					!registeredBootstrapOptions?.store || dockProviderOptions.workspaceComponents?.hideStorefrontButton,
-				hideNotificationsButton:
-					!registeredBootstrapOptions?.notifications ||
-					dockProviderOptions.workspaceComponents?.hideNotificationsButton
-			},
+			workspaceComponents: buildWorkspaceButtons(),
 			disableUserRearrangement: dockProviderOptions?.disableUserRearrangement ?? false,
 			buttons: objectClone(registeredButtons)
 		};
 	}
+}
+
+/**
+ * Build the workspace buttons based on config.
+ * @returns The list of workspace buttons.
+ */
+function buildWorkspaceButtons(): WorkspaceButton[] {
+	const workspaceButtons: WorkspaceButton[] = [];
+
+	if (!(dockProviderOptions?.workspaceComponents?.hideWorkspacesButton ?? false)) {
+		workspaceButtons.push("switchWorkspace");
+	}
+	if (
+		!(dockProviderOptions?.workspaceComponents?.hideHomeButton ?? false) &&
+		(registeredBootstrapOptions?.home ?? false)
+	) {
+		workspaceButtons.push("home");
+	}
+	if (
+		!(dockProviderOptions?.workspaceComponents?.hideNotificationsButton ?? false) &&
+		(registeredBootstrapOptions?.notifications ?? false)
+	) {
+		workspaceButtons.push("notifications");
+	}
+	if (
+		!(dockProviderOptions?.workspaceComponents?.hideStorefrontButton ?? false) &&
+		(registeredBootstrapOptions?.store ?? false)
+	) {
+		workspaceButtons.push("store");
+	}
+
+	return workspaceButtons;
 }
 
 /**
@@ -554,6 +578,13 @@ export async function loadConfig(
 		}
 	}
 
+	if (!isEmpty(config)) {
+		// Always build the workspace buttons based on the config,
+		// otherwise loaded config can show buttons that it is
+		// not supposed to
+		config.workspaceComponents = buildWorkspaceButtons();
+	}
+
 	return config;
 }
 
@@ -602,16 +633,7 @@ async function refreshDock(): Promise<void> {
 		if (JSON.stringify(newButtons) !== JSON.stringify(registeredButtons)) {
 			const dockProvider = await buildDockProvider(newButtons);
 			if (dockProvider) {
-				// updateDockProviderConfig was added in v13, fallback if it doesn't exist
-				if (registrationInfo?.updateDockProviderConfig) {
-					await registrationInfo.updateDockProviderConfig(dockProvider);
-				} else {
-					await deregister();
-					await Dock.register(dockProvider);
-					if (registeredBootstrapOptions?.autoShow?.includes("dock")) {
-						await show();
-					}
-				}
+				await registrationInfo.updateDockProviderConfig(dockProvider);
 			}
 		}
 	}
@@ -663,7 +685,7 @@ async function addDropdownOrMenu(
 		tooltip,
 		iconUrl,
 		action: {
-			id: PLATFORM_ACTION_IDS.popupMenu,
+			id: "popup-menu",
 			customData: {
 				source: "dock",
 				noEntryText: "No Entries",

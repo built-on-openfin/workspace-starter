@@ -1,12 +1,13 @@
 import { getCurrentSync } from "@openfin/workspace-platform";
 import { getConnectedApps } from "./connections";
-import { addDirectoryEndpoint, getPlatformApps, init as directoryInit } from "./directory";
+import { addDirectoryEndpoint, init as directoryInit, getPlatformApps } from "./directory";
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import type { AppFilterOptions, AppProviderOptions, PlatformApp } from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
-import { isEmpty, isNumber, randomUUID } from "./utils";
+import { isEmpty, isNumber, isString, randomUUID } from "./utils";
+import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
 
 const logger = createLogger("Apps");
 
@@ -61,7 +62,7 @@ export async function init(
 		} else if (Array.isArray(options?.endpointIds)) {
 			logger.info("Using the following passed endpoints", options.endpointIds);
 			for (const endpointId of options.endpointIds) {
-				if (typeof endpointId === "string") {
+				if (isString(endpointId)) {
 					if (endpointId.startsWith("http")) {
 						addDirectoryEndpoint({
 							id: randomUUID(),
@@ -234,8 +235,8 @@ async function getEntries(): Promise<PlatformApp[]> {
  * @returns The list of validated apps.
  */
 async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
-	const hasLaunchExternalProcess = await getCanLaunchExternalProcess();
-	const hasDownloadAppAssets = await getCanDownloadAppAssets();
+	const hasLaunchExternalProcess = await getCanLaunchExternalProcess(logger);
+	const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
 
 	const validatedApps: PlatformApp[] = [];
 	const rejectedAppIds = [];
@@ -343,42 +344,4 @@ export async function getApp(appId: string): Promise<PlatformApp | undefined> {
 	}
 
 	return app;
-}
-
-/**
- * Do we have the permissions to launch external processes.
- * @returns True if we have permission.
- */
-async function getCanLaunchExternalProcess(): Promise<boolean> {
-	let canLaunchExternalProcess = false;
-
-	try {
-		const canLaunchExternalProcessResponse = await fin.System.queryPermissionForCurrentContext(
-			"System.launchExternalProcess"
-		);
-
-		canLaunchExternalProcess = canLaunchExternalProcessResponse?.granted;
-	} catch (error) {
-		logger.error("Error while querying for System.launchExternalProcess permission", error);
-	}
-
-	return canLaunchExternalProcess;
-}
-
-/**
- * Do we have the permissions to download app assets.
- * @returns True if we have permission.
- */
-async function getCanDownloadAppAssets(): Promise<boolean> {
-	let canDownloadAppAssets = false;
-
-	try {
-		const canDownloadAppAssetsResponse =
-			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
-		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
-	} catch (error) {
-		logger.error("Error while querying for System.downloadAsset permission", error);
-	}
-
-	return canDownloadAppAssets;
 }

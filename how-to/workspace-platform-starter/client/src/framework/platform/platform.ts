@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	getCurrentSync,
 	init as workspacePlatformInit,
@@ -10,6 +11,8 @@ import * as auth from "../auth";
 import * as authFlow from "../auth-flow";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
+import * as contentCreationProvider from "../content-creation";
+import * as dialogProvider from "../dialog";
 import * as endpointProvider from "../endpoint";
 import * as favoriteProvider from "../favorite";
 import * as initOptionsProvider from "../init-options";
@@ -21,6 +24,7 @@ import { getManifestCustomSettings, getSettings } from "../settings";
 import type { ModuleHelpers } from "../shapes/module-shapes";
 import type { CustomSettings } from "../shapes/setting-shapes";
 import * as shareProvider from "../share";
+import * as snapProvider from "../snap";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { isEmpty, randomUUID } from "../utils";
 import * as versionProvider from "../version";
@@ -43,7 +47,7 @@ export async function init(): Promise<boolean> {
 	const customSettings = await getManifestCustomSettings();
 
 	const isValid = await authFlow.init(
-		customSettings.authProvider,
+		customSettings?.authProvider,
 		async () => setupPlatform(customSettings),
 		logger,
 		true
@@ -63,7 +67,7 @@ export async function init(): Promise<boolean> {
  * @param manifestSettings The custom setting to use for setting up the platform.
  * @returns True if the platform setup was successful.
  */
-async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean> {
+async function setupPlatform(manifestSettings: CustomSettings | undefined): Promise<boolean> {
 	// Load the init options from the initial manifest
 	// and notify any actions with the after auth lifecycle
 	await modules.init(randomUUID());
@@ -75,7 +79,7 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await initOptionsProvider.init(manifestSettings?.initOptionsProvider, helpers, "after-auth");
 
 	// We reload the settings now that endpoints have been configured.
-	const customSettings: CustomSettings = await getSettings();
+	const customSettings: CustomSettings | undefined = await getSettings();
 
 	await platformSplashProvider.updateProgress("Logger");
 
@@ -107,6 +111,9 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await platformSplashProvider.updateProgress("Menus");
 	await menusProvider.init(customSettings?.menusProvider, helpers, customSettings?.platformProvider?.rootUrl);
 
+	await platformSplashProvider.updateProgress("Dialogs");
+	await dialogProvider.init(customSettings?.dialogProvider);
+
 	await platformSplashProvider.updateProgress("Analytics");
 	await analyticsProvider.init(customSettings?.analyticsProvider, helpers);
 
@@ -126,10 +133,11 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
 
-	const sharingEnabled = customSettings.platformProvider?.sharing ?? true;
-	if (sharingEnabled) {
+	const shareOptions = customSettings?.shareProvider ?? {};
+	shareOptions.enabled ??= true;
+	if (shareOptions.enabled) {
 		await platformSplashProvider.updateProgress("Sharing");
-		await shareProvider.init({ enabled: sharingEnabled });
+		await shareProvider.init(shareOptions, helpers, customSettings?.homeProvider?.icon);
 	}
 
 	if (!isEmpty(customSettings?.favoriteProvider) && (customSettings?.favoriteProvider.enabled ?? true)) {
@@ -145,13 +153,13 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 	const browser: BrowserInitConfig = {};
 
 	if (!isEmpty(customSettings?.browserProvider)) {
-		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings.browserProvider);
+		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings?.browserProvider);
 	}
 	if (!isEmpty(customSettings?.browserProvider?.defaultPageOptions)) {
-		browser.defaultPageOptions = customSettings.browserProvider?.defaultPageOptions;
+		browser.defaultPageOptions = customSettings?.browserProvider?.defaultPageOptions;
 	}
 	if (!isEmpty(customSettings?.browserProvider?.defaultViewOptions)) {
-		browser.defaultViewOptions = customSettings.browserProvider?.defaultViewOptions;
+		browser.defaultViewOptions = customSettings?.browserProvider?.defaultViewOptions;
 	}
 
 	logger.info("Specifying following browser options", browser);
@@ -161,6 +169,19 @@ async function setupPlatform(manifestSettings: CustomSettings): Promise<boolean>
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);
 	const integrations = await lowCodeIntegrationProvider.register();
+
+	await snapProvider.init(customSettings?.snapProvider);
+	conditionsProvider.registerCondition("snap", async () => snapProvider.isEnabled(), false);
+
+	await contentCreationProvider.init(customSettings?.contentCreationProvider, helpers);
+
+	if (contentCreationProvider.isEnabled()) {
+		browser.defaultViewOptions = browser.defaultViewOptions ?? ({} as OpenFin.ViewOptions);
+		await contentCreationProvider.populateRules(browser.defaultViewOptions);
+
+		browser.defaultWindowOptions = browser.defaultWindowOptions ?? {};
+		await contentCreationProvider.populateRules(browser.defaultWindowOptions);
+	}
 
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => {
