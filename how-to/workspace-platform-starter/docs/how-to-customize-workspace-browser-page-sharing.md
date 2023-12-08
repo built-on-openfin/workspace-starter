@@ -65,11 +65,13 @@ If you have enabled workspace management (see [How To Workspace Platform Starter
 
 # Where Are Shared Workspaces/Pages Saved?
 
-By default in our two examples we save the json data to an OpenFin cloud service. This is because you need a server in order to be able to demonstrate this capability.
+By default in our two examples we save the json data to an OpenFin cloud service. Additionally, strictly for development purposes, we provide a local server endpoint that can be used to test local payloads sent from the platform provider.
 
 This service is not for production use and all saves are cleared after 24 hours. Please contact OpenFin if you would like to talk about this service.
 
 The service is configured via endpoints (see [How To Define Endpoints](./how-to-define-endpoints.md)). The examples have the following defined:
+
+Default configuration for use with the workspace platform provider using a remotely hosted demo endpoint:
 
 ```json
  "endpointProvider": {
@@ -91,6 +93,35 @@ The service is configured via endpoints (see [How To Define Endpoints](./how-to-
     "options": {
      "method": "POST",
      "url": "https://workspace.openfin.co/api/share"
+    }
+   }
+  ]
+ },
+
+```
+
+Alternate configuration containing the **local development server endpoint**:
+
+```json
+ "endpointProvider": {
+  "modules": [
+
+  ],
+  "endpoints": [
+   {
+    "id": "share-get",
+    "type": "fetch",
+    "options": {
+     "method": "GET",
+     "url": "https://localhost:8080/api/share/[id]"
+    }
+   },
+   {
+    "id": "share-save",
+    "type": "fetch",
+    "options": {
+     "method": "POST",
+     "url": "http://loclahost:8080/api/share"
     }
    }
   ]
