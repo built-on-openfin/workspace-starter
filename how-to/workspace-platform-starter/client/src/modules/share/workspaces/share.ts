@@ -143,15 +143,7 @@ export class WorkspacesShareProvider implements Share<WorkspacesShareProviderOpt
 			if (platform) {
 				const responsePayload = response?.payload;
 				if (!isEmpty(responsePayload) && this._helpers?.launchWorkspace) {
-					const workspace = await platform.Storage.getWorkspace(responsePayload.workspaceId);
-					if (workspace) {
-						await platform.Storage.updateWorkspace({
-							workspaceId: responsePayload.workspaceId,
-							workspace: responsePayload
-						});
-					} else {
-						await platform.Storage.saveWorkspace(responsePayload);
-					}
+					await platform.Storage.saveWorkspace(responsePayload);
 					await this._helpers.launchWorkspace(responsePayload.workspaceId, this._logger);
 				}
 			}
