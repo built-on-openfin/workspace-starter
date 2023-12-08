@@ -296,5 +296,26 @@
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
+	},
+	{
+		"appId": "openfin-content-creation",
+		"name": "openfin-content-creation",
+		"title": "Content Creation Examples",
+		"description": "An example of using content creation rules to launch views/windows.",
+		"manifest": {
+			"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/content-creation/view-position.html"
+		},
+		"manifestType": "inline-view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["developer", "view"]
 	}
 ]

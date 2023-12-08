@@ -1,10 +1,9 @@
 {
-	"$schema": "./schemas/manifest.schema.json",
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect --enable-mesh --security-realm=fourth-workspace-starter-how-to-workspace-platform-starter",
-		"version": "32.114.76.20"
+		"version": "33.116.77.11"
 	},
 	"startup_app": {
 		"name": "fourth-workspace-starter-how-to-workspace-platform-starter"
@@ -66,6 +65,9 @@
 		"product": "Workspace Starter - Workspace Platform Starter - Fourth Client",
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
+	},
+	"snapshot": {
+		"windows": []
 	},
 	"customSettings": {
 		"platformProvider": {
