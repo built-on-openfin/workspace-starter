@@ -2,7 +2,7 @@ name: Workspace Platform Starter - Unit Tests
 
 on:
   pull_request:
-  push:
+    types: [opened, synchronize, reopened, edited]
     paths:
       - 'how-to/workspace-platform-starter/**'
 
