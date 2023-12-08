@@ -1,11 +1,13 @@
 import type OpenFin from "@openfin/core";
 import {
 	CustomActionCallerType,
+	getCurrentSync,
 	type CustomActionPayload,
 	type CustomActionsMap,
 	type CustomButtonActionPayload
 } from "@openfin/workspace-platform";
 import { IndicatorColor, create, type NotificationOptions } from "@openfin/workspace/notifications";
+import { checkCondition } from "./conditions";
 import { showConfirmation } from "./dialog";
 import { registerListener, removeListener } from "./init-options";
 import { createLogger } from "./logger-provider";
@@ -217,9 +219,18 @@ export async function confirmation(
 	confirmationType: ShareConfirmationType | undefined,
 	parentIdentity?: OpenFin.Identity
 ): Promise<void> {
-	const finalType = confirmationType ?? shareOptions?.confirmationMode ?? "notification";
+	let displayType = confirmationType ?? shareOptions?.confirmationMode ?? "notification";
 
-	if (finalType === "modal") {
+	// If display type is notification, but it is not enabled, then use modal instead.
+	if (displayType === "notification") {
+		const platform = getCurrentSync();
+		const enabled = await checkCondition(platform, "notifications");
+		if (!enabled) {
+			displayType = "modal";
+		}
+	}
+
+	if (displayType === "modal") {
 		await showConfirmation(
 			{
 				title: confirmationOptions.title,
@@ -234,7 +245,7 @@ export async function confirmation(
 			},
 			parentIdentity
 		);
-	} else if (finalType === "notification") {
+	} else if (displayType === "notification") {
 		const statusColors: { [key in ShareConfirmationStatus]: IndicatorColor } = {
 			shared: IndicatorColor.GREEN,
 			loaded: IndicatorColor.BLUE,
