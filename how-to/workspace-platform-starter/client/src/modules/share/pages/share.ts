@@ -195,12 +195,7 @@ export class PagesShareProvider implements Share<PagesShareProviderOptions> {
 			if (platform) {
 				const responsePayload = response?.payload;
 				if (!isEmpty(responsePayload) && this._helpers?.launchPage) {
-					const page = await platform.Storage.getPage(responsePayload.pageId);
-					if (page) {
-						await platform.Storage.updatePage({ pageId: responsePayload.pageId, page: responsePayload });
-					} else {
-						await platform.Storage.savePage(responsePayload);
-					}
+					await platform.Storage.savePage(responsePayload);
 					await this._helpers.launchPage(responsePayload.pageId, undefined, this._logger);
 				}
 			}

@@ -14,6 +14,9 @@ export function init(app: express.Application, baseUrl: string): void {
 	app.post("/api/share", express.json(), (request, response) => {
 		const id = randomUUID();
 		const data = request.body;
+
+		console.log("Share::Storing data with id:", id);
+
 		jsonStore.set(id, data);
 
 		const responseObject = {
@@ -28,6 +31,8 @@ export function init(app: express.Application, baseUrl: string): void {
 	app.get("/api/share/:id", express.json(), (request, response) => {
 		const id = request.params.id;
 		const data = jsonStore.get(id);
+
+		console.log("Share::Retrieving data with id:", id);
 
 		if (!data) {
 			return response.status(404).json({ error: "Data not found" });
