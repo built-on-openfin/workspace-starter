@@ -364,7 +364,17 @@ export function overrideCallback(
 					}
 				}
 			}
-			const applied = await super.applyWorkspace(payload);
+			const applied = await super.applyWorkspace({
+				...payload,
+				options: {
+					...payload.options,
+					applySnapshotOptions: {
+						...payload.options?.applySnapshotOptions,
+						closeExistingWindows: false,
+						closeSnapshotWindows: true
+					}
+				}
+			});
 
 			if (applied && !workspaceApplied) {
 				workspaceApplied = true;
