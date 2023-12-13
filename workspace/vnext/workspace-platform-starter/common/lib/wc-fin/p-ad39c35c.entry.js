@@ -49,13 +49,13 @@ const s = window.fin,
 			null != e &&
 				(this.contextGroupId === t && s
 					? ((this.contextGroupId = void 0),
-					  (this.iconColor = this.unselectedColor),
-					  (this.iconId = void 0),
-					  await this.leaveContextGroup(i))
+						(this.iconColor = this.unselectedColor),
+						(this.iconId = void 0),
+						await this.leaveContextGroup(i))
 					: ((this.iconColor = e.color),
-					  (this.iconId = e.id),
-					  (this.contextGroupId = t),
-					  await this.joinContextGroup(t, i)),
+						(this.iconId = e.id),
+						(this.contextGroupId = t),
+						await this.joinContextGroup(t, i)),
 				await this.saveSelectedContextGroup(this.contextGroupId),
 				(this.showContextGroupList = !1));
 		}
@@ -73,8 +73,8 @@ const s = window.fin,
 			return i
 				? this.selectedText.replace('{0}', s)
 				: t === this.contextGroupId
-				  ? this.leaveText.replace('{0}', s)
-				  : this.joinText.replace('{0}', s);
+					? this.leaveText.replace('{0}', s)
+					: this.joinText.replace('{0}', s);
 		}
 		async setupContextPicker() {
 			if (void 0 !== s) {
@@ -111,9 +111,9 @@ const s = window.fin,
 					void 0 !== i.interop && void 0 !== i.interop.currentContextGroup
 						? (t = i.interop.currentContextGroup)
 						: !1 === this.bindSelf &&
-						  void 0 !== i.customData &&
-						  void 0 !== i.customData.selectedContextGroup &&
-						  (t = i.customData.selectedContextGroup),
+							void 0 !== i.customData &&
+							void 0 !== i.customData.selectedContextGroup &&
+							(t = i.customData.selectedContextGroup),
 						await this.updateContextGroup(t);
 				}
 			}
@@ -146,9 +146,9 @@ const s = window.fin,
 								'⬤'
 							)
 						)
-				  )
+					)
 				: void 0 === this.contextGroupId
-				  ? i(
+					? i(
 							'div',
 							null,
 							i(
@@ -161,7 +161,7 @@ const s = window.fin,
 												padding: '0px 5px',
 												color: `${this.unselectedColor}`
 											}
-									  }
+										}
 									: {
 											onMouseEnter: this.showContextList.bind(this),
 											title: this.unselectedText,
@@ -169,11 +169,11 @@ const s = window.fin,
 												padding: '0px 5px',
 												color: `${this.unselectedColor}`
 											}
-									  },
+										},
 								'⬤'
 							)
-				    )
-				  : i(
+						)
+					: i(
 							'div',
 							{ id: 'selected-context' },
 							i(
@@ -183,15 +183,15 @@ const s = window.fin,
 											onClick: this.showContextList.bind(this),
 											title: this.getContextGroupTooltip(this.contextGroupId, !0),
 											style: { padding: '0px 5px', color: `${this.iconColor}` }
-									  }
+										}
 									: {
 											onMouseEnter: this.showContextList.bind(this),
 											title: this.getContextGroupTooltip(this.contextGroupId, !0),
 											style: { padding: '0px 5px', color: `${this.iconColor}` }
-									  },
+										},
 								'⬤'
 							)
-				    );
+						);
 		}
 	};
 e.style =

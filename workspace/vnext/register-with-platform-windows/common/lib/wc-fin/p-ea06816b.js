@@ -34,10 +34,10 @@ const l = 'undefined' != typeof window ? window : {},
 					Array.isArray(l)
 						? c(l)
 						: null != l &&
-						  'boolean' != typeof l &&
-						  ((s = 'function' != typeof e && !f(l)) && (l += ''),
-						  s && o ? (r[r.length - 1].i += l) : r.push(s ? y(null, l) : l),
-						  (o = s));
+							'boolean' != typeof l &&
+							((s = 'function' != typeof e && !f(l)) && (l += ''),
+							s && o ? (r[r.length - 1].i += l) : r.push(s ? y(null, l) : l),
+							(o = s));
 		};
 		if ((c(n), t)) {
 			const e = t.className || t.class;
@@ -128,7 +128,7 @@ const l = 'undefined' != typeof window ? window : {},
 			o = t.i;
 		null === o
 			? (w(e, t, !1),
-			  null !== l && null !== s
+				null !== l && null !== s
 					? ((e, t, n, l) => {
 							let s,
 								o = 0,
@@ -143,27 +143,27 @@ const l = 'undefined' != typeof window ? window : {},
 								null == i
 									? (i = t[++o])
 									: null == u
-									  ? (u = t[--c])
-									  : null == f
-									    ? (f = l[++r])
-									    : null == $
-									      ? ($ = l[--a])
-									      : j(i, f)
-									        ? (M(i, f), (i = t[++o]), (f = l[++r]))
-									        : j(u, $)
-									          ? (M(u, $), (u = t[--c]), ($ = l[--a]))
-									          : j(i, $)
-									            ? (M(i, $), e.insertBefore(i.p, u.p.nextSibling), (i = t[++o]), ($ = l[--a]))
-									            : j(u, f)
-									              ? (M(u, f), e.insertBefore(u.p, i.p), (u = t[--c]), (f = l[++r]))
-									              : ((s = b(t && t[r], n, r)),
-									                (f = l[++r]),
-									                s && i.p.parentNode.insertBefore(s, i.p));
+										? (u = t[--c])
+										: null == f
+											? (f = l[++r])
+											: null == $
+												? ($ = l[--a])
+												: j(i, f)
+													? (M(i, f), (i = t[++o]), (f = l[++r]))
+													: j(u, $)
+														? (M(u, $), (u = t[--c]), ($ = l[--a]))
+														: j(i, $)
+															? (M(i, $), e.insertBefore(i.p, u.p.nextSibling), (i = t[++o]), ($ = l[--a]))
+															: j(u, f)
+																? (M(u, f), e.insertBefore(u.p, i.p), (u = t[--c]), (f = l[++r]))
+																: ((s = b(t && t[r], n, r)),
+																	(f = l[++r]),
+																	s && i.p.parentNode.insertBefore(s, i.p));
 							o > c ? S(e, null == l[a + 1] ? null : l[a + 1].p, n, l, r, a) : r > a && g(t, o, c);
-					  })(n, l, t, s)
+						})(n, l, t, s)
 					: null !== s
-					  ? (null !== e.i && (n.textContent = ''), S(n, null, t, s, 0, s.length - 1))
-					  : null !== l && g(l, 0, l.length - 1))
+						? (null !== e.i && (n.textContent = ''), S(n, null, t, s, 0, s.length - 1))
+						: null !== l && g(l, 0, l.length - 1))
 			: e.i !== o && (n.data = o);
 	},
 	v = (e, t) => {
@@ -282,12 +282,12 @@ const l = 'undefined' != typeof window ? window : {},
 										null == e || f(e)
 											? e
 											: 4 & t
-											  ? 'false' !== e && ('' === e || !!e)
-											  : 2 & t
-											    ? parseFloat(e)
-											    : 1 & t
-											      ? e + ''
-											      : e)(n, l.C[t][0])),
+												? 'false' !== e && ('' === e || !!e)
+												: 2 & t
+													? parseFloat(e)
+													: 1 & t
+														? e + ''
+														: e)(n, l.C[t][0])),
 										(8 & r && void 0 !== o) || n === o || (s.O.set(t, n), c && 2 == (18 & r) && k(s, !1));
 								})(this, e, n, t);
 							},
@@ -402,7 +402,7 @@ const l = 'undefined' != typeof window ? window : {},
 														l();
 													}
 												})(this)
-										  );
+											);
 							}
 							disconnectedCallback() {
 								o.jmp(() => {});

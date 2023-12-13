@@ -233,7 +233,7 @@ function createTitle(rfqData) {
 	return rfqData.notional !== undefined
 		? `IRS: ${rfqData.swapType.toUpperCase()} ${rfqData.currency}@${rfqData.libor.toFixed(3)}% vs ${
 				rfqData.notionalUnits
-		  } LIBOR ${rfqData.tenor}`
+			} LIBOR ${rfqData.tenor}`
 		: `IRS: ${rfqData.swapType.toUpperCase()} ${rfqData.currency}`;
 }
 
