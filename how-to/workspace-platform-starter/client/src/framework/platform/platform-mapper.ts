@@ -1,6 +1,12 @@
 import type OpenFin from "@openfin/core";
-import type { BrowserSnapshotWindow, Page, PageLayout, Workspace } from "@openfin/workspace-platform";
-import { isEmpty, objectClone } from "workspace-platform-starter/utils";
+import type {
+	BrowserCreateWindowRequest,
+	BrowserSnapshotWindow,
+	Page,
+	PageLayout,
+	Workspace
+} from "@openfin/workspace-platform";
+import { deepEqual, deepMerge, isEmpty, objectClone } from "workspace-platform-starter/utils";
 
 /**
  * All the workspace keys.
@@ -44,7 +50,8 @@ type WorkspacePlatformKeys =
 	| "preventPageDragOut"
 	| "preventPageDrag"
 	| "preventPageClose"
-	| "_internalDeferShowOptions";
+	| "_internalDeferShowOptions"
+	| "windowType";
 
 /**
  * All the keys for page.
@@ -132,9 +139,20 @@ type ComponentStateKeys =
 /**
  * Map the platform workspace data to storage version.
  * @param workspace The workspace to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
  * @returns The storage workspace.
  */
-export function mapPlatformWorkspaceToStorage(workspace: Workspace | undefined): Workspace {
+export function mapPlatformWorkspaceToStorage(
+	workspace: Workspace | undefined,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): Workspace {
 	if (isEmpty(workspace)) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return undefined as any as Workspace;
@@ -143,7 +161,7 @@ export function mapPlatformWorkspaceToStorage(workspace: Workspace | undefined):
 	const clone: Workspace = objectClone(workspace);
 
 	for (const win of clone.snapshot.windows) {
-		platformWorkspaceWindowToStorage(win);
+		platformWorkspaceWindowToStorage(win, defaultOptions);
 	}
 
 	// Remove platform dependent information
@@ -187,24 +205,46 @@ export function mapPlatformWorkspaceToStorage(workspace: Workspace | undefined):
 /**
  * Map the platform page data to storage version.
  * @param page The page to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
  * @returns The mapped page.
  */
-export function mapPlatformPageToStorage(page: Page | undefined): Page {
+export function mapPlatformPageToStorage(
+	page: Page | undefined,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): Page {
 	if (isEmpty(page)) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return undefined as any as Page;
 	}
 
 	const clone = objectClone(page);
-	platformPageToStorage(clone);
+	platformPageToStorage(clone, defaultOptions);
 	return clone;
 }
 
 /**
  * Map the platform window data to storage.
  * @param window The window to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
  */
-function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
+function platformWorkspaceWindowToStorage(
+	window: BrowserSnapshotWindow,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): void {
 	const windowDefaults: {
 		propName: BrowserWindowKeys;
 		defaultValue: unknown;
@@ -281,6 +321,8 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 		{
 			propName: "contentNavigation",
 			defaultValue: {
+				allowlist: ["<all_urls>"],
+				denylist: [],
 				whitelist: ["<all_urls>"],
 				blacklist: []
 			}
@@ -288,6 +330,8 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 		{
 			propName: "contentRedirect",
 			defaultValue: {
+				allowlist: ["<all_urls>"],
+				denylist: [],
 				whitelist: ["<all_urls>"],
 				blacklist: []
 			}
@@ -329,7 +373,6 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 		{ propName: "backgroundColor", defaultValue: "" },
 		{ propName: "fdc3InteropApi", defaultValue: "" },
 		{ propName: "enableBeforeUnload", defaultValue: false },
-		// Skip to make platform dependent and remove below
 		// { propName: "hotkeys", defaultValue: [] },
 		// { propName: "taskbarIconGroup", defaultValue: "" },
 		{
@@ -347,7 +390,10 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 			}
 		},
 		{ propName: "autoplayPolicy", defaultValue: "no-user-gesture-required" },
-		{ propName: "permissions", defaultValue: {} },
+		{
+			propName: "permissions",
+			defaultValue: {}
+		},
 		{ propName: "contextMenu", defaultValue: true },
 		{
 			propName: "contextMenuOptions",
@@ -364,7 +410,8 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 		removePropIfNonDefault<BrowserSnapshotWindow, BrowserWindowKeys>(
 			window,
 			windowDefault.propName,
-			windowDefault.defaultValue
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(defaultOptions?.window as any)?.[windowDefault.propName] ?? windowDefault.defaultValue
 		);
 	}
 
@@ -394,14 +441,17 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 			{ propName: "preventPageDragIn", defaultValue: false },
 			{ propName: "preventPageDragOut", defaultValue: false },
 			{ propName: "preventPageDrag", defaultValue: false },
-			{ propName: "preventPageClose", defaultValue: false }
+			{ propName: "preventPageClose", defaultValue: false },
+			{ propName: "windowType", defaultValue: "browser" }
 		];
 
 		for (const workspacePlatformDefault of workspacePlatformDefaults) {
 			removePropIfNonDefault<unknown, WorkspacePlatformKeys>(
 				window.workspacePlatform,
 				workspacePlatformDefault.propName,
-				workspacePlatformDefault.defaultValue
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(defaultOptions?.window?.workspacePlatform as any)?.[workspacePlatformDefault.propName] ??
+					workspacePlatformDefault.defaultValue
 			);
 		}
 
@@ -412,7 +462,7 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 		removeProp<unknown, WorkspacePlatformKeys>(window.workspacePlatform, "_internalDeferShowOptions");
 
 		for (const page of window.workspacePlatform.pages) {
-			platformPageToStorage(page);
+			platformPageToStorage(page, defaultOptions);
 		}
 	}
 }
@@ -420,30 +470,61 @@ function platformWorkspaceWindowToStorage(window: BrowserSnapshotWindow): void {
 /**
  * Map the platform page data to storage.
  * @param page The page to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
  */
-export function platformPageToStorage(page: Page): void {
+export function platformPageToStorage(
+	page: Page,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): void {
 	const pageDefaults: {
 		propName: PageKeys;
 		defaultValue: unknown;
 	}[] = [
 		{ propName: "isActive", defaultValue: false },
 		{ propName: "isReadOnly", defaultValue: false },
-		{ propName: "hasUnsavedChanges", defaultValue: false },
+		// Always store with no unsaved changes
+		// { propName: "hasUnsavedChanges", defaultValue: false },
 		{ propName: "panels", defaultValue: [] }
 	];
 
 	for (const pageDefault of pageDefaults) {
-		removePropIfNonDefault<unknown, PageKeys>(page, pageDefault.propName, pageDefault.defaultValue);
+		removePropIfNonDefault<unknown, PageKeys>(
+			page,
+			pageDefault.propName,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(defaultOptions?.page as any)?.[pageDefault.propName] ?? pageDefault.defaultValue
+		);
 	}
 
-	platformPageLayoutToStorage(page.layout);
+	// Always remove this key, if we are saving we don't want it to reload saying something is unsaved
+	removeProp<unknown, PageKeys>(page, "hasUnsavedChanges");
+
+	platformPageLayoutToStorage(page.layout, defaultOptions);
 }
 
 /**
  * Map the page layout to storage.
  * @param pageLayout The page layout to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
  */
-export function platformPageLayoutToStorage(pageLayout: PageLayout): void {
+export function platformPageLayoutToStorage(
+	pageLayout: PageLayout,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): void {
 	const pageLayoutDefaults: {
 		propName: PageLayoutKeys;
 		defaultValue: unknown;
@@ -535,7 +616,7 @@ export function platformPageLayoutToStorage(pageLayout: PageLayout): void {
 
 	if (pageLayout.content) {
 		for (const component of pageLayout.content) {
-			platformLayoutComponentToStorage(component);
+			platformLayoutComponentToStorage(component, defaultOptions);
 		}
 	}
 }
@@ -543,8 +624,19 @@ export function platformPageLayoutToStorage(pageLayout: PageLayout): void {
 /**
  * Map the platform layout content data to storage.
  * @param component The layout content to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
  */
-function platformLayoutComponentToStorage(component: ComponentType): void {
+function platformLayoutComponentToStorage(
+	component: ComponentType,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): void {
 	const componentDefaults: {
 		propName: ComponentKey;
 		defaultValue: unknown;
@@ -576,7 +668,7 @@ function platformLayoutComponentToStorage(component: ComponentType): void {
 				{ propName: "uuid", defaultValue: "" },
 				{ propName: "componentName", defaultValue: "view" },
 				{ propName: "initialUrl", defaultValue: "" },
-				{ propName: "processAffinity", defaultValue: "" },
+				{ propName: "processAffinity", defaultValue: fin.me.identity.uuid },
 				{ propName: "isClosable", defaultValue: true },
 				{ propName: "bounds", defaultValue: { x: 1, y: 1, width: 0, height: 0 } },
 				{ propName: "detachOnClose", defaultValue: true },
@@ -629,7 +721,9 @@ function platformLayoutComponentToStorage(component: ComponentType): void {
 				removePropIfNonDefault<OpenFin.ViewCreationOptions, ComponentStateKeys>(
 					componentState,
 					componentStateDefault.propName,
-					componentStateDefault.defaultValue
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					(defaultOptions?.view as any)?.[componentStateDefault.propName] ??
+						componentStateDefault.defaultValue
 				);
 			}
 
@@ -640,9 +734,118 @@ function platformLayoutComponentToStorage(component: ComponentType): void {
 
 	if (component.content) {
 		for (const comp of component.content) {
-			platformLayoutComponentToStorage(comp);
+			platformLayoutComponentToStorage(comp, defaultOptions);
 		}
 	}
+}
+
+/**
+ * Map the platform workspace data to storage version.
+ * @param workspace The workspace to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
+ * @returns The storage workspace.
+ */
+export function mapStorageToPlatformWorkspace(
+	workspace: Workspace | undefined,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): Workspace {
+	if (isEmpty(workspace)) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return undefined as any as Workspace;
+	}
+
+	const clone: Workspace = objectClone(workspace);
+
+	if (Array.isArray(clone.snapshot.windows)) {
+		const newWins = [];
+		for (const win of clone.snapshot.windows) {
+			newWins.push(platformWorkspaceWindowFromStorage(win, defaultOptions));
+		}
+		clone.snapshot.windows = newWins;
+	}
+
+	return clone;
+}
+
+/**
+ * Map the window storage to platform.
+ * @param window The window to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
+ * @returns The window merged with default options.
+ */
+function platformWorkspaceWindowFromStorage(
+	window: BrowserSnapshotWindow,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): BrowserSnapshotWindow {
+	const merged = deepMerge<BrowserSnapshotWindow>(window, defaultOptions?.window as BrowserSnapshotWindow);
+
+	if (!isEmpty(window?.workspacePlatform?.pages)) {
+		for (const page of window.workspacePlatform.pages) {
+			platformPageFromStorage(page, defaultOptions);
+		}
+	}
+
+	return merged;
+}
+
+/**
+ * Map the platform page data to storage version.
+ * @param page The page to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
+ * @returns The mapped page.
+ */
+export function mapPlatformPageFromStorage(
+	page: Page | undefined,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): Page {
+	if (isEmpty(page)) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return undefined as any as Page;
+	}
+
+	const clone = objectClone(page);
+	platformPageFromStorage(clone, defaultOptions);
+	return clone;
+}
+
+/**
+ * Map the platform page data to storage.
+ * @param page The page to map.
+ * @param defaultOptions The default options.
+ * @param defaultOptions.window The default window options.
+ * @param defaultOptions.page The default page options.
+ * @param defaultOptions.view The default view options.
+ */
+export function platformPageFromStorage(
+	page: Page,
+	defaultOptions?: {
+		window: Partial<BrowserCreateWindowRequest> | undefined;
+		page: Partial<Page> | undefined;
+		view: Partial<OpenFin.ViewOptions> | undefined;
+	}
+): void {
+	platformPageLayoutToStorage(page.layout, defaultOptions);
 }
 
 /**
@@ -657,7 +860,7 @@ function removePropIfNonDefault<T, K extends keyof T | string>(
 	defaultValue: unknown
 ): void {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	if (propName in obj && JSON.stringify((obj as any)[propName]) === JSON.stringify(defaultValue)) {
+	if (propName in obj && deepEqual((obj as any)[propName], defaultValue, false)) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		delete (obj as any)[propName];
 	}

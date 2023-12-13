@@ -1,15 +1,17 @@
 import {
+	deepEqual,
+	deepMerge,
+	formatError,
 	isBoolean,
 	isEmpty,
-	isObject,
 	isInteger,
 	isNumber,
 	isNumberValue,
+	isObject,
 	isString,
 	isStringValue,
 	objectClone,
 	randomUUID,
-	formatError,
 	sanitizeString
 } from "../../client/src/framework/utils";
 
@@ -352,6 +354,168 @@ describe("utils", () => {
 				a: true,
 				b: "foo",
 				c: { d: 1, e: null }
+			});
+		});
+	});
+
+	describe("deepEqual", () => {
+		it("should return true for two undefined values", () => {
+			expect(deepEqual(undefined, undefined)).toEqual(true);
+		});
+
+		it("should return false for one undefined and one null value", () => {
+			expect(deepEqual(undefined, null)).toEqual(false);
+		});
+
+		it("should return true for two null values", () => {
+			expect(deepEqual(null, null)).toEqual(true);
+		});
+
+		it("should return false for an undefined and object", () => {
+			expect(deepEqual(undefined, {})).toEqual(false);
+		});
+
+		it("should return true for two plain objects", () => {
+			expect(deepEqual({}, {})).toEqual(true);
+		});
+
+		it("should return true for two objects with single matching props", () => {
+			expect(deepEqual({ a: "foo" }, { a: "foo" })).toEqual(true);
+		});
+
+		it("should return false for two objects with single unmatched props", () => {
+			expect(deepEqual({ a: "foo" }, { a: "goo" })).toEqual(false);
+		});
+
+		it("should return false for two objects with single unmatched props", () => {
+			expect(deepEqual({ a: "foo" }, { b: "foo" })).toEqual(false);
+		});
+
+		it("should return false for two objects with different number of props in first object", () => {
+			expect(deepEqual({ a: "foo", c: "aaa" }, { b: "foo" })).toEqual(false);
+		});
+
+		it("should return false for two objects with different number of props in second object", () => {
+			expect(deepEqual({ a: "foo" }, { b: "foo", c: "aaa" })).toEqual(false);
+		});
+
+		it("should return false for two objects with two props in different order with match order flag", () => {
+			expect(deepEqual({ a: "foo", b: "goo" }, { b: "goo", ab: "foo" }, true)).toEqual(false);
+		});
+
+		it("should return true for two objects with two props in different order with no match order flag", () => {
+			expect(deepEqual({ a: "foo", b: "goo" }, { b: "goo", a: "foo" }, false)).toEqual(true);
+		});
+
+		it("should return true for two empty arrays", () => {
+			expect(deepEqual([], [])).toEqual(true);
+		});
+
+		it("should return true for arrays with the same values", () => {
+			expect(deepEqual([1], [1])).toEqual(true);
+		});
+
+		it("should return false for arrays with the different lengths", () => {
+			expect(deepEqual([1], [1, 2])).toEqual(false);
+		});
+
+		it("should return false for arrays with the same values in different order", () => {
+			expect(deepEqual([1, 2], [2, 1])).toEqual(false);
+		});
+
+		it("should return false for arrays with the same values in different order with match order flag", () => {
+			expect(deepEqual([1, 2], [2, 1], true)).toEqual(false);
+		});
+
+		it("should return false for arrays containing unmatched objects", () => {
+			expect(deepEqual([{ a: "foo" }], [{ a: "goo" }])).toEqual(false);
+		});
+
+		it("should return true for arrays containing matched objects", () => {
+			expect(deepEqual([{ a: "foo" }], [{ a: "foo" }])).toEqual(true);
+		});
+
+		it("should return true for 2 numbers", () => {
+			expect(deepEqual(1, 1)).toEqual(true);
+		});
+
+		it("should return false for 2 different numbers", () => {
+			expect(deepEqual(1, 2)).toEqual(false);
+		});
+
+		it("should return true for 2 booleans", () => {
+			expect(deepEqual(true, true)).toEqual(true);
+		});
+
+		it("should return false for 2 different booleans", () => {
+			expect(deepEqual(true, false)).toEqual(false);
+		});
+
+		it("should return true for 2 strings", () => {
+			expect(deepEqual("aaa", "aaa")).toEqual(true);
+		});
+
+		it("should return false for 2 different strings", () => {
+			expect(deepEqual("aaa", "aa")).toEqual(false);
+		});
+
+		it("should return false for different recursive objects", () => {
+			expect(deepEqual({ a: { b: true } }, { a: { b: false } })).toEqual(false);
+		});
+
+		it("should return true for matching recursive objects", () => {
+			expect(deepEqual({ a: { b: true } }, { a: { b: true } })).toEqual(true);
+		});
+	});
+
+	describe("deepMerge", () => {
+		it("should return undefined when merging 2 undefined objects", () => {
+			expect(deepMerge(undefined, undefined)).toEqual(undefined);
+		});
+
+		it("should return null when merging 2 null objects", () => {
+			expect(deepMerge(null, null)).toEqual(null);
+		});
+
+		it("should return an empty object when merging undefined", () => {
+			expect(deepMerge({}, undefined)).toEqual({});
+		});
+
+		it("should return an empty object when merging null", () => {
+			expect(deepMerge({}, null)).toEqual({});
+		});
+
+		it("should return undefined when merging object to undefined", () => {
+			expect(deepMerge(undefined, {})).toEqual(undefined);
+		});
+
+		it("should return null when merging object to null", () => {
+			expect(deepMerge(null, {})).toEqual(null);
+		});
+
+		it("should return object with replaced properties", () => {
+			expect(deepMerge({ a: "foo" }, { a: "bar" })).toEqual({ a: "bar" });
+		});
+
+		it("should return object with combined properties", () => {
+			expect(deepMerge({ a: "foo" }, { b: "bar" })).toEqual({ a: "foo", b: "bar" });
+		});
+
+		it("should return array replaced with new value", () => {
+			expect(deepMerge([1, 2, 3], [4, 5, 6])).toEqual([4, 5, 6]);
+		});
+
+		it("should return object containing array replaced with new value", () => {
+			expect(deepMerge({ a: [1, 2, 3] }, { a: [4, 5, 6] })).toEqual({ a: [4, 5, 6] });
+		});
+
+		it("should return merge objects in an array", () => {
+			expect(deepMerge([{ a: "foo" }], [{ b: "bar" }])).toEqual([{ a: "foo", b: "bar" }]);
+		});
+
+		it("should return object containing array replaced with new sub values", () => {
+			expect(deepMerge({ a: [{ b: "foo" }] }, { a: [{ c: "bar" }] })).toEqual({
+				a: [{ b: "foo", c: "bar" }]
 			});
 		});
 	});
