@@ -86,6 +86,98 @@ export function objectClone<T>(obj: T): T {
 }
 
 /**
+ * Do a deep comparison of the objects.
+ * @param obj1 The first object to compare.
+ * @param obj2 The second object to compare.
+ * @param matchPropertyOrder If true the properties must be in the same order.
+ * @returns True if the objects are the same.
+ */
+export function deepEqual(obj1: unknown, obj2: unknown, matchPropertyOrder: boolean = true): boolean {
+	if (isObject(obj1) && isObject(obj2)) {
+		const objKeys1 = Object.keys(obj1);
+		const objKeys2 = Object.keys(obj2);
+
+		if (objKeys1.length !== objKeys2.length) {
+			return false;
+		}
+
+		if (matchPropertyOrder && JSON.stringify(objKeys1) !== JSON.stringify(objKeys2)) {
+			return false;
+		}
+
+		for (const key of objKeys1) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const value1 = (obj1 as any)[key];
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const value2 = (obj2 as any)[key];
+
+			if (!deepEqual(value1, value2, matchPropertyOrder)) {
+				return false;
+			}
+		}
+		return true;
+	} else if (Array.isArray(obj1) && Array.isArray(obj2)) {
+		if (obj1.length !== obj2.length) {
+			return false;
+		}
+		for (let i = 0; i < obj1.length; i++) {
+			if (!deepEqual(obj1[i], obj2[i], matchPropertyOrder)) {
+				return false;
+			}
+		}
+	}
+
+	return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+/**
+ * Deep merge two objects.
+ * @param target The object to be merged into.
+ * @param sources The objects to merge into the target.
+ * @returns The merged object.
+ */
+export function deepMerge<T = unknown>(target: T, ...sources: T[]): T {
+	if (!Array.isArray(sources) || sources.length === 0) {
+		return target;
+	}
+
+	const targetAsMap = target as { [id: string]: unknown };
+	const source = sources.shift();
+
+	let keys;
+	if (isObject(targetAsMap) && isObject(source)) {
+		keys = Object.keys(source);
+	} else if (Array.isArray(source)) {
+		if (!Array.isArray(target)) {
+			return source;
+		}
+		keys = Object.keys(source).map((k) => Number.parseInt(k, 10));
+	}
+
+	if (keys) {
+		const sourceAsMap = source as { [id: string]: unknown };
+		for (const key of keys) {
+			const value = sourceAsMap[key];
+			if (isObject(value)) {
+				if (isEmpty(targetAsMap[key])) {
+					targetAsMap[key] = {};
+				}
+				deepMerge(targetAsMap[key], value);
+			} else if (Array.isArray(value)) {
+				if (isEmpty(targetAsMap[key])) {
+					targetAsMap[key] = [];
+				}
+				deepMerge(targetAsMap[key], value);
+			} else {
+				targetAsMap[key] = value;
+			}
+		}
+	}
+
+	return deepMerge(target, ...sources);
+}
+
+/**
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
  */

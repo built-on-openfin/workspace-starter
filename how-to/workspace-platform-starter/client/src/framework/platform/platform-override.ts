@@ -4,6 +4,7 @@ import {
 	getCurrentSync,
 	type AnalyticsEvent,
 	type ApplyWorkspacePayload,
+	type BrowserCreateWindowRequest,
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
@@ -54,11 +55,16 @@ import type { VersionInfo } from "../shapes/version-shapes";
 import * as snapProvider from "../snap";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
-import { isEmpty } from "../utils";
+import { deepMerge, isEmpty } from "../utils";
 import { loadConfig, saveConfig } from "../workspace/dock";
 import { getAllVisibleWindows, getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
-import { mapPlatformPageToStorage, mapPlatformWorkspaceToStorage } from "./platform-mapper";
+import {
+	mapPlatformPageFromStorage,
+	mapPlatformPageToStorage,
+	mapPlatformWorkspaceToStorage,
+	mapStorageToPlatformWorkspace
+} from "./platform-mapper";
 
 const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
@@ -81,6 +87,13 @@ let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
 let viewMenuStyle: PopupMenuStyles | undefined;
 let workspaceApplied: boolean;
+let defaultOptions:
+	| {
+			window: Partial<BrowserCreateWindowRequest> | undefined;
+			page: Partial<Page> | undefined;
+			view: Partial<OpenFin.ViewOptions> | undefined;
+	  }
+	| undefined;
 
 /**
  * Override methods in the platform.
@@ -209,7 +222,8 @@ export function overrideCallback(
 				>(WORKSPACE_ENDPOINT_ID_GET, { platform: fin.me.identity.uuid, id });
 				if (workspaceResponse) {
 					logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
-					return workspaceResponse.payload;
+					const defaultOpts = await buildDefaultOptions();
+					return mapStorageToPlatformWorkspace(workspaceResponse.payload, defaultOpts);
 				}
 				logger.warn(`No response getting saved workspace from custom storage for workspace id: ${id}`);
 				return {} as Workspace;
@@ -240,7 +254,9 @@ export function overrideCallback(
 								platformClient: versionInfo.platformClient
 							}
 						},
-						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+						payload: disableStorageMapping
+							? req.workspace
+							: mapPlatformWorkspaceToStorage(req.workspace, await buildDefaultOptions())
 					}
 				);
 				if (success) {
@@ -283,7 +299,9 @@ export function overrideCallback(
 								platformClient: versionInfo.platformClient
 							}
 						},
-						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+						payload: disableStorageMapping
+							? req.workspace
+							: mapPlatformWorkspaceToStorage(req.workspace, await buildDefaultOptions())
 					}
 				);
 				if (success) {
@@ -440,7 +458,8 @@ export function overrideCallback(
 				});
 				if (pageResponse) {
 					logger.info(`Returning saved page from custom storage for page id: ${id}`);
-					return pageResponse.payload;
+					const defaultOpts = await buildDefaultOptions();
+					return mapPlatformPageFromStorage(pageResponse.payload, defaultOpts);
 				}
 
 				logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
@@ -481,7 +500,9 @@ export function overrideCallback(
 							platformClient: versionInfo.platformClient
 						}
 					},
-					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
+					payload: disableStorageMapping
+						? req.page
+						: mapPlatformPageToStorage(req.page, await buildDefaultOptions())
 				});
 				if (success) {
 					logger.info(`Saved page with id: ${req.page.pageId} to custom storage`);
@@ -527,7 +548,9 @@ export function overrideCallback(
 							platformClient: versionInfo.platformClient
 						}
 					},
-					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
+					payload: disableStorageMapping
+						? req.page
+						: mapPlatformPageToStorage(req.page, await buildDefaultOptions())
 				});
 				if (success) {
 					logger.info(`Updated page with id: ${req.page.pageId} against custom storage`);
@@ -915,4 +938,31 @@ export function overrideCallback(
 		}
 	}
 	return new Override();
+}
+
+/**
+ * Build the default options for the window, page and view.
+ * @param browserProvider The browser provider options.
+ * @returns The default options.
+ */
+async function buildDefaultOptions(browserProvider?: BrowserProviderOptions): Promise<{
+	window: Partial<BrowserCreateWindowRequest> | undefined;
+	page: Partial<Page> | undefined;
+	view: Partial<OpenFin.ViewOptions> | undefined;
+}> {
+	if (defaultOptions) {
+		return defaultOptions;
+	}
+	const app = await fin.Application.getCurrent();
+	const manifest = await app.getManifest();
+
+	return {
+		window: deepMerge(
+			{},
+			manifest.platform?.defaultWindowOptions as Partial<BrowserCreateWindowRequest>,
+			browserProvider?.defaultWindowOptions
+		),
+		page: deepMerge({}, browserProvider?.defaultPageOptions),
+		view: deepMerge({}, manifest.platform?.defaultViewOptions, browserProvider?.defaultViewOptions)
+	};
 }

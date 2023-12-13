@@ -35,6 +35,47 @@ This frees you up to fetch and save your pages from/to anywhere in any way that 
 
 Endpoints have a default **fetch** implementation where you can just point to rest endpoints but you could also have a custom module (see [How To Add A Module](./how-to-add-a-module.md) that implements your own logic.
 
+You can enable a development endpoint on the local server to emulate these endpoints by adding the following endpoint entries, this code should not be used in production. The server stores everything in memory, so it will be wiped if you restart it.
+
+```json
+"endpointProvider": {
+    "endpoints": [
+        {
+            "id": "page-list",
+            "type": "fetch",
+            "options": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/storage/page"
+            }
+        },
+        {
+            "id": "page-get",
+            "type": "fetch",
+            "options": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/storage/page/[id]"
+            }
+        },
+        {
+            "id": "page-set",
+            "type": "fetch",
+            "options": {
+                "method": "POST",
+                "url": "http://localhost:8080/api/storage/page"
+            }
+        },
+        {
+            "id": "page-remove",
+            "type": "fetch",
+            "options": {
+                "method": "DELETE",
+                "url": "http://localhost:8080/api/storage/page/[id]"
+            }
+        }
+    ]
+}
+```
+
 ## Do You Have An Example Of A Custom Implementation?
 
 Our default example manifest ([manifest.fin.json](../public/manifest.fin.json)) doesn't override the default behavior. Our second manifest ([second.manifest.fin.json](../public/second.manifest.fin.json)) loads configuration through a rest endpoint (see [settings.json](../public/settings.json)) and that defines the endpoints listed above in the **endpointProvider** definition.

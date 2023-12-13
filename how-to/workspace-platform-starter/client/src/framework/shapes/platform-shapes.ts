@@ -50,42 +50,15 @@ export interface PlatformStorageMetadata {
 }
 
 /**
- * A request type for the WorkspaceEndpoint that gets all saved workspace entries
+ * A request type for the Storage Endpoint that gets a specific entry
  */
-export interface EndpointWorkspaceListRequest {
+export interface EndpointGetRequest {
 	/**
 	 * The id of the platform making the request
 	 */
 	platform: string;
 	/**
-	 * Optional query that limits the workspaces.
-	 */
-	query?: string;
-}
-
-/**
- * The response after the request for workspaces was fulfilled
- */
-export interface EndpointWorkspaceListResponse {
-	/**
-	 * The list of workspace entries with information of what platform versions they were originally saved against
-	 */
-	[key: string]: {
-		metaData: PlatformStorageMetadata;
-		payload: Workspace;
-	};
-}
-
-/**
- * A request type for the WorkspaceEndpoint that gets a specific workspace entry
- */
-export interface EndpointWorkspaceGetRequest {
-	/**
-	 * The id of the platform making the request
-	 */
-	platform: string;
-	/**
-	 * The id of the workspace to get.
+	 * The id of the entry to get.
 	 */
 	id: string;
 }
@@ -93,112 +66,48 @@ export interface EndpointWorkspaceGetRequest {
 /**
  * The response after the request for workspace was fulfilled
  */
-export interface EndpointWorkspaceGetResponse {
+export interface EndpointGetResponse<T = unknown> {
 	/**
 	 * The platform versions it was originally saved against
 	 */
 	metaData: PlatformStorageMetadata;
 	/**
-	 * The workspace entry
+	 * The storage entry
 	 */
-	payload: Workspace;
+	payload: T;
 }
 
 /**
- * A request type for the WorkspaceEndpoint that sets a specific workspace entry
+ * The response after the request for object was fulfilled
  */
-export interface EndpointWorkspaceSetRequest {
-	/**
-	 * The id of the platform making the request
-	 */
-	platform: string;
-	/**
-	 * The id of the workspace to set.
-	 */
-	id: string;
-	/**
-	 * The platform versions it saving the workspace
-	 */
-	metaData: PlatformStorageMetadata;
-	/**
-	 * The workspace entry
-	 */
-	payload: Workspace;
-}
-
-/**
- * A request type for the WorkspaceEndpoint that removes a specific workspace entry
- */
-export interface EndpointWorkspaceRemoveRequest {
-	/**
-	 * The id of the platform making the request
-	 */
-	platform: string;
-	/**
-	 * The id of the workspace to remove.
-	 */
-	id: string;
-}
-
-/**
- * A request type for the PageEndpoint that gets all saved pages entries
- */
-export interface EndpointPageListRequest {
-	/**
-	 * The id of the platform making the request
-	 */
-	platform: string;
-	/**
-	 * Optional query that limits the pages.
-	 */
-	query?: string;
-}
-
-/**
- * The response after the request for pages was fulfilled
- */
-export interface EndpointPageListResponse {
+export interface EndpointListResponse<T = unknown> {
 	/**
 	 * The list of page entries with information of what platform versions they were originally saved against
 	 */
 	[key: string]: {
 		metaData: PlatformStorageMetadata;
-		payload: Page;
+		payload: T;
 	};
 }
 
 /**
- * A request type for the PageEndpoint that gets a specific page entry
+ * A request type for the Storage Endpoint that gets all saved entries
  */
-export interface EndpointPageGetRequest {
+export interface EndpointListRequest {
 	/**
 	 * The id of the platform making the request
 	 */
 	platform: string;
 	/**
-	 * The id of the page to get.
+	 * Optional query that limits the entries.
 	 */
-	id: string;
+	query?: string;
 }
 
 /**
- * The response after the request for page was fulfilled
+ * A request type for the Storage Endpoint that sets a specific entry
  */
-export interface EndpointPageGetResponse {
-	/**
-	 * The platform versions it was originally saved against
-	 */
-	metaData: PlatformStorageMetadata;
-	/**
-	 * The page entry
-	 */
-	payload: Page;
-}
-
-/**
- * A request type for the PageEndpoint that sets a specific page entry
- */
-export interface EndpointPageSetRequest {
+export interface EndpointSetRequest<T = unknown> {
 	/**
 	 * The id of the platform making the request
 	 */
@@ -212,15 +121,15 @@ export interface EndpointPageSetRequest {
 	 */
 	metaData: PlatformStorageMetadata;
 	/**
-	 * The page entry
+	 * The entry
 	 */
-	payload: Page;
+	payload: T;
 }
 
 /**
- * A request type for the PageEndpoint that removes a specific page entry
+ * A request type for the Storage Endpoint that removes a specific entry
  */
-export interface EndpointPageRemoveRequest {
+export interface EndpointRemoveRequest {
 	/**
 	 * The id of the platform making the request
 	 */
@@ -230,6 +139,66 @@ export interface EndpointPageRemoveRequest {
 	 */
 	id: string;
 }
+
+/**
+ * The response after the request for workspaces was fulfilled
+ */
+export type EndpointWorkspaceListResponse = EndpointListResponse<Workspace>;
+
+/**
+ * A request type for the WorkspaceEndpoint that gets a specific workspace entry
+ */
+export type EndpointWorkspaceGetRequest = EndpointGetRequest;
+
+/**
+ * A request type for the WorkspaceEndpoint that gets all saved workspace entries
+ */
+export type EndpointWorkspaceListRequest = EndpointListRequest;
+
+/**
+ * The response after the request for workspace was fulfilled
+ */
+export type EndpointWorkspaceGetResponse = EndpointGetResponse<Workspace>;
+
+/**
+ * A request type for the WorkspaceEndpoint that sets a specific workspace entry
+ */
+export type EndpointWorkspaceSetRequest = EndpointSetRequest<Workspace>;
+
+/**
+ * A request type for the WorkspaceEndpoint that removes a specific workspace entry
+ */
+export type EndpointWorkspaceRemoveRequest = EndpointRemoveRequest;
+
+/**
+ * A request type for the PageEndpoint that gets all saved pages entries
+ */
+export type EndpointPageListRequest = EndpointListRequest;
+
+/**
+ * The response after the request for pages was fulfilled
+ */
+export type EndpointPageListResponse = EndpointListResponse<Page>;
+
+/**
+ * A request type for the PageEndpoint that gets a specific page entry
+ */
+export type EndpointPageGetRequest = EndpointGetRequest;
+
+/**
+ * The response after the request for page was fulfilled
+ */
+export type EndpointPageGetResponse = EndpointGetResponse<Page>;
+
+/**
+ * A request type for the PageEndpoint that sets a specific page entry
+ */
+export type EndpointPageSetRequest = EndpointSetRequest<Page>;
+
+/**
+ * A request type for the PageEndpoint that removes a specific page entry
+ */
+export type EndpointPageRemoveRequest = EndpointRemoveRequest;
 
 /**
  * A request type for the DockEndpoint that gets the config for an entry

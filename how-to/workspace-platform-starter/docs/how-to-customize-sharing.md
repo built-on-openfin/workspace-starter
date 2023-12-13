@@ -172,7 +172,7 @@ Alternate configuration containing the **local development server endpoint**:
     "type": "fetch",
     "options": {
      "method": "GET",
-     "url": "https://localhost:8080/api/share/[id]"
+     "url": "http://localhost:8080/api/share/[id]"
     }
    },
    {
