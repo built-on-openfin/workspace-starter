@@ -12,6 +12,23 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 This branch covers version **v16.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=16.0.9)
 
+## Before you get started
+
+Read more about our [recommended development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment).
+
+OpenFin Workspace is currently **only supported on Windows** but this repo can be run on windows or a mac.
+
+We recommend:
+
+- Using [Node.Js 18+](https://nodejs.org/en/about/previous-releases)
+- Using [RVM 7+](https://developer.openfin.co/versions/#/?product=RVM) on Windows (RVM on the Mac will be version 12+) - The RVM should auto update so this applies to environments where a specific RVM version is used.
+- Running [OpenFin Health Check](https://cdn.openfin.co/health/deployment/index.html) - Load this page to see if you will be able to install/run OpenFin without issue.
+- Installing [OpenFin Process Manager](https://start.openfin.co/pm) - Install the OpenFin process manager application (this will let you debug any issues you might have with running this repo or your changes)
+- Cloning this repo using: **git clone https://github.com/built-on-openfin/workspace-starter.git --depth=1** - We have a lot of history and versioned branches but you only need the main branch to get started (it will always reflect the latest stable release).
+- Opening the root workspace-starter folder in Visual Studio Code (instead of opening a how-to subfolder directly in Visual Studio Code) - this will give you access to all the samples and intellisense on JSON files when working on manifests or app directories.
+- Running **npm install** from the root folder
+- Running **npm run build** from the root folder - this will ensure every sample has all of it's dependencies and builds correctly (you can then open a terminal window or two at e.g. how-to/workspace-platform-starter to build that specific sample or run sample specific commands)
+
 ## What you can do with this repository
 
 This repository contains examples showing how to configure core workspace functionality for your application using our workspace API.
@@ -100,59 +117,5 @@ OpenFin is a very easy platform to integrate with. If you need to integrate with
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | [How To Migrate From A Previous Version](./how-to/migrate-from-a-previous-version) | This is more a guide than an example. The guide covers what is the difference between version 1-4 and version 5-6 and points to examples on how to manage those differences.   |             |
 | [Hints And Tips](./how-to/hints-and-tips)                                          | This is more a collection of hints and tips than an example. We will be building up this section over time as we come across points of interest while working on our examples. |             |
-
-## Before you get started
-
-Read more about our [recommended development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment).
-
-OpenFin Workspace is currently **only supported on Windows**.
-
-## Minimum RVM Version
-
-A desktop owner settings file is no longer required to configure OpenFin Workspace. However, there may be settings that a Desktop Owner may wish to configure (such as version) and this requires a minimum version of the OpenFin RVM. To find the version you currently have do the following:
-
-- Go to `%localappdata%/OpenFin` in windows explorer
-- Right-click on OpenFinRVM and select _Properties_
-- Click on the _Details_ tab and see your version number
-
-Depending on your version the following rules will apply:
-
-| RVM Version         | Supports Custom Workspace Settings | Setting Required          |
-| ------------------- | ---------------------------------- | ------------------------- |
-| v6.0.0.3 & below    | No                                 | N/A                       |
-| v6.1.0.1 - v6.3.1.3 | Yes                                | openfinSystemApplications |
-| v6.4.1.1 & above    | Yes                                | systemApps                |
-
-### Example Desktop Owner Setting for OpenFinRVM v6.1.0.1 - v6.3.1.3
-
-```json
-{
-  "desktopSettings": {
-    "openfinSystemApplications": {
-      "workspace": {
-        "version": "16.0.0",
-        "customConfig": {}
-      }
-    }
-  }
-}
-```
-
-### Example Desktop Owner Setting for OpenFinRVM v6.4.1.1 & Above
-
-```json
-{
-  "desktopSettings": {
-    "systemApps": {
-      "workspace": {
-        "version": "16.0.0",
-        "customConfig": {}
-      }
-    }
-  }
-}
-```
-
----
 
 ### Read more about these settings in [Workspace documentation](https://developers.openfin.co/of-docs/docs/workspace-override-options)
