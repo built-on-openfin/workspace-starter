@@ -50,7 +50,7 @@
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_46"
+            "$ref": "#/definitions/__type_48"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -7226,6 +7226,14 @@
             "type": "object"
         },
         "__type_46": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_47": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_48": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
