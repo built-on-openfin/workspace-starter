@@ -1,5 +1,11 @@
 # Changelog
 
+## vnext
+
+- Change storage mapper now removes additional defaults based on default window/page/view settings
+- Change storage mapper applies default settings when hydrating from storage
+- Added Example endpoint for page/workspace storage
+
 ## v16
 
 - Update the applyWorkspace override so that the following applySnapshot options are applied: closeExistingWindows: false, closeSnapshotWindows: true

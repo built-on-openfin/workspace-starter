@@ -130,7 +130,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "openfinSystemApplications": {
       "workspace": {
-        "version": "17.0.0",
+        "version": "16.1.0",
         "customConfig": {}
       }
     }
@@ -145,7 +145,7 @@ Depending on your version the following rules will apply:
   "desktopSettings": {
     "systemApps": {
       "workspace": {
-        "version": "17.0.0",
+        "version": "16.1.0",
         "customConfig": {}
       }
     }

@@ -531,7 +531,7 @@ export class Microsoft365Integration {
 									? "/me/drive/recent"
 									: `/me/drive/root/search(q=${encodeURIComponent(
 											fileSearchQuery
-									  )})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
+										)})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
 								method: "GET"
 							});
 						}

@@ -190,7 +190,7 @@ export async function createButton(
 		buttonStyle === ButtonStyle.Secondary
 			? {
 					border: `1px solid ${palette.inputColor}`
-			  }
+				}
 			: {};
 	return {
 		type: TemplateFragmentTypes.Button,

@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-register-with-store-js",
-	"version": "17.0.0",
+	"version": "16.1.0",
 	"description": "OpenFin Workspace Starter Automation Tests",
 	"scripts": {
 		"build": "echo Nothing to build",

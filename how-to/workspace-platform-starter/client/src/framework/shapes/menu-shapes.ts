@@ -209,10 +209,10 @@ export type MenuTemplateType =
 export type MenuOptionType<T> = T extends GlobalContextMenuItemTemplate
 	? GlobalContextMenuOptionType
 	: T extends PageTabContextMenuItemTemplate
-	  ? PageTabContextMenuOptionType
-	  : T extends ViewTabContextMenuTemplate
-	    ? ViewTabMenuOptionType
-	    : TrayMenuOptionType;
+		? PageTabContextMenuOptionType
+		: T extends ViewTabContextMenuTemplate
+			? ViewTabMenuOptionType
+			: TrayMenuOptionType;
 
 /**
  * The styles that can be used to display the popup menus.
