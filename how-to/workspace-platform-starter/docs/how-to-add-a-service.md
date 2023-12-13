@@ -63,4 +63,9 @@ If you are looking at building something that will handle intents -> Use a headl
 
 If you are looking at listening to notifications from a backend and push out notifications -> Use a lifecycle module that is fired after the bootstrap process and use the getNotificationClient helper method.
 
+## Source Reference
+
+- [Example hidden window definition: hidden.window.fin.json](../public/common/windows/hidden-window/hidden.window.fin.json)
+- [Example notification service using a lifecycle module: lifecycle.ts](../client/src/modules/lifecycle/example-notification-service/lifecycle.ts)
+
 [<- Back to Table Of Contents](../README.md)
