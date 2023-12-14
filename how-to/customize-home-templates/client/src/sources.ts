@@ -11,6 +11,7 @@ import { AsyncContactsSource } from "./sources/async-contacts/async-contacts-sou
 import { EmojiSource } from "./sources/emoji/emoji-source";
 import { QuoteSource } from "./sources/quote/quote-source";
 import { SuggestionSource } from "./sources/suggestions/suggestion-source";
+import { TemplateTypesSource } from "./sources/template-types/template-types-source";
 import { TreeInlineSource } from "./sources/tree-inline/tree-inline-source";
 import { TreeQuerySource } from "./sources/tree-query/tree-query-source";
 
@@ -69,6 +70,12 @@ const SOURCES: {
 			id: "suggestions"
 		},
 		instance: new SuggestionSource()
+	},
+	{
+		definition: {
+			id: "template-types"
+		},
+		instance: new TemplateTypesSource()
 	}
 ];
 
