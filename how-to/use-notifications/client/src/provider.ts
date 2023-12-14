@@ -28,11 +28,12 @@ let lastConnectionStatus: boolean | undefined;
  */
 window.addEventListener("DOMContentLoaded", async () => {
 	await initializeDom();
-	await initializeListeners();
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
+
+	await initializeNotifications();
 });
 
 /**
@@ -72,6 +73,12 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			}
 		]
 	});
+}
+
+/**
+ * Initialize the notifications.
+ */
+async function initializeNotifications(): Promise<void> {
 	await Notifications.register({
 		notificationsPlatformOptions: {
 			id: PLATFORM_ID,
@@ -79,6 +86,10 @@ async function initializeWorkspacePlatform(): Promise<void> {
 			title: PLATFORM_TITLE
 		}
 	});
+
+	showNotificationCount(await Notifications.getNotificationsCount());
+
+	await initializeListeners();
 }
 
 /**
@@ -260,8 +271,6 @@ async function initializeDom(): Promise<void> {
 			}
 		});
 	}
-
-	showNotificationCount(await Notifications.getNotificationsCount());
 }
 
 /**
