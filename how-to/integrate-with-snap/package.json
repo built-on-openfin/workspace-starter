@@ -21,8 +21,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/snap-sdk": "0.2.0",
-		"@openfin/workspace": "17.0.3",
-		"@openfin/workspace-platform": "17.0.3"
+		"@openfin/workspace": "16.1.2",
+		"@openfin/workspace-platform": "16.1.2"
 	},
 	"devDependencies": {
 		"@openfin/core": "33.77.11",
@@ -32,7 +32,7 @@
 		"eslint-config-airbnb-typescript": "17.1.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-import": "2.26.0",
-		"eslint-plugin-jsdoc": "46.9.0",
+		"eslint-plugin-jsdoc": "46.9.1",
 		"eslint-plugin-prettier": "5.0.1",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",
