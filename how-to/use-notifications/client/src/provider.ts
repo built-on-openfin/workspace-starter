@@ -210,6 +210,11 @@ async function initializeDom(): Promise<void> {
 		btnNotificationForm.addEventListener("click", async () => showFormNotification());
 	}
 
+	const btnNotificationFormAdvanced = document.querySelector("#btnNotificationFormAdvanced");
+	if (btnNotificationFormAdvanced) {
+		btnNotificationFormAdvanced.addEventListener("click", async () => showFormAdvancedNotification());
+	}
+
 	const btnNotificationUpdatable = document.querySelector("#btnNotificationUpdatable");
 	if (btnNotificationUpdatable) {
 		btnNotificationUpdatable.addEventListener("click", async () => showUpdatableNotification());
@@ -517,6 +522,215 @@ async function showFormNotification(): Promise<void> {
 					max: {
 						arg: 100,
 						invalidMessage: "Cannot be more than 100"
+					},
+					required: {
+						arg: true
+					}
+				}
+			}
+		],
+		buttons: [
+			{
+				title: "Save",
+				type: "button",
+				cta: true,
+				submit: true
+			},
+			{
+				title: "Cancel",
+				type: "button"
+			}
+		]
+	};
+
+	codeShowExample(notification);
+	await Notifications.create(notification);
+}
+
+/**
+ * Show a notification which has form fields, the data from the form will
+ * be returned to the notification-form-submitted listener.
+ */
+async function showFormAdvancedNotification(): Promise<void> {
+	const notification: Notifications.NotificationOptions = {
+		title: "Form Advanced Notification",
+		body: "This is a notification that has form data",
+		toast: "transient",
+		category: "default",
+		template: "markdown",
+		id: randomUUID(),
+		platform: activePlatform,
+		form: [
+			{
+				type: "string",
+				key: "book",
+				label: "Book",
+				helperText: "This is used to look up for book",
+				widget: {
+					type: "Text",
+					placeholder: "Book name"
+				},
+				validation: {
+					min: {
+						arg: 7,
+						invalidMessage: "Must be at least 7 chars long"
+					},
+					max: {
+						arg: 9,
+						invalidMessage: "Must be at most 9 chars long"
+					},
+					required: {
+						arg: true
+					}
+				},
+				value: "1234554"
+			},
+			{
+				type: "time",
+				key: "what_time",
+				label: "Chose time?",
+				helperText: "Some time choosing helper text",
+				value: {
+					hour: 12
+				},
+				validation: {
+					required: {
+						arg: true
+					}
+				},
+				widget: {
+					type: "Time"
+				}
+			},
+			{
+				type: "date",
+				key: "date_pickup",
+				label: "When to pick up?",
+				helperText: "Some date choosing helper text",
+				validation: {
+					required: {
+						arg: true
+					}
+				},
+				value: new Date(),
+				widget: {
+					type: "Date"
+				}
+			},
+			{
+				type: "string",
+				key: "book2",
+				label: "Book Type",
+				helperText: "This is used to look up for book",
+				validation: {
+					required: {
+						arg: true
+					}
+				},
+				widget: {
+					type: "Dropdown",
+					options: [
+						{
+							value: "book1",
+							label: "Book 1"
+						},
+						{
+							value: "book2",
+							label: "Book 2"
+						},
+						{
+							value: "book3",
+							label: "Book 3"
+						}
+					]
+				}
+			},
+			{
+				type: "radioGroup",
+				key: "radioGroupDemo",
+				label: "Chose one",
+				helperText: "Some radio choosing helper text",
+				validation: {
+					required: {
+						arg: true
+					}
+				},
+				widget: {
+					type: "RadioGroup",
+					group: [
+						{
+							label: "Option 1",
+							value: "option_1"
+						},
+						{
+							label: "Option 2",
+							value: "option_2"
+						},
+						{
+							label: "Option 3",
+							value: "option_3"
+						}
+					]
+				}
+			},
+			{
+				type: "checkboxGroup",
+				key: "checkboxGroupDemo",
+				label: "Chose Multiple",
+				helperText: "Some checkbox choosing helper text",
+				validation: {
+					required: {
+						arg: true
+					}
+				},
+				widget: {
+					type: "CheckboxGroup",
+					group: [
+						{
+							label: "Option 1",
+							value: "option_1"
+						},
+						{
+							label: "Option 2",
+							value: "option_2"
+						},
+						{
+							label: "Option 3",
+							value: "option_3"
+						}
+					]
+				}
+			},
+			{
+				type: "string",
+				key: "description",
+				label: "Description",
+				value: "very long text....",
+				helperText: "This is used to look up for book",
+				widget: {
+					type: "Text",
+					multiline: true,
+					placeholder: "Write description",
+					rows: 5
+				}
+			},
+			{
+				type: "number",
+				key: "age",
+				label: "Age",
+				helperText: "This is used to look up for book",
+				widget: {
+					type: "Number",
+					placeholder: "Enter age",
+					min: 1,
+					max: 8
+				},
+				validation: {
+					min: {
+						arg: 0
+					},
+					max: {
+						arg: 9
 					},
 					required: {
 						arg: true
