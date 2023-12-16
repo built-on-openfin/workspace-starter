@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/integrate-with-snap/favicon.ico",
-		"name": "Integrate With Snap - vnext",
+		"name": "Integrate With Snap - v16.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

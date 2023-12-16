@@ -20,7 +20,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - vnext",
+		"name": "Workspace Platform Starter - v16.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
