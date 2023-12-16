@@ -1,6 +1,6 @@
 # Changelog
 
-## vnext
+## v16.1.0
 
 - Change storage mapper now removes additional defaults based on default window/page/view settings
 - Change storage mapper applies default settings when hydrating from storage

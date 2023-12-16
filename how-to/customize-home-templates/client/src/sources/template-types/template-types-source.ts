@@ -205,7 +205,7 @@ export class TemplateTypesSource {
 							},
 							{
 								type: "SplitButton",
-								buttonType: "primary",
+								buttonStyle: ButtonStyle.Primary,
 								dataKey: "buttonSplit1Content"
 							}
 						]
