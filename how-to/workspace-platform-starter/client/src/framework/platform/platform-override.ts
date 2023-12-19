@@ -767,11 +767,11 @@ export function overrideCallback(
 					if (!hasLeft || !hasTop) {
 						const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
 
-						if (!hasLeft && !isEmpty(position?.x)) {
-							options.defaultLeft = position.x;
+						if (!hasLeft && !isEmpty(position?.left)) {
+							options.defaultLeft = position.left;
 						}
-						if (!hasTop && !isEmpty(position?.y)) {
-							options.defaultTop = position.y;
+						if (!hasTop && !isEmpty(position?.top)) {
+							options.defaultTop = position.top;
 						}
 					}
 				}

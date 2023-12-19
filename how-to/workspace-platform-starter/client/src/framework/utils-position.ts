@@ -202,9 +202,9 @@ export async function getWindowPositionOptions(
  * @returns The x and y coordinates of the window position.
  */
 export async function getWindowPositionUsingStrategy(
-	windowPositioningOptions: WindowPositioningOptions,
+	windowPositioningOptions?: WindowPositioningOptions,
 	relatedTo?: OpenFin.MonitorDetails | OpenFin.Identity | { x: number; y: number }
-): Promise<{ x: number; y: number } | undefined> {
+): Promise<{ left: number; top: number } | undefined> {
 	if (windowPositioningOptions?.disableWindowPositioningStrategy === true) {
 		return;
 	}
@@ -233,8 +233,8 @@ export async function getWindowPositionUsingStrategy(
 	// OS menus, task bar etc
 	const availableLeft = targetMonitor.availableRect.left;
 	const availableTop = targetMonitor.availableRect.top;
-	const windowOffsetsX: number = windowPositioningOptions.windowPositioningStrategy?.x ?? 30;
-	const windowOffsetsY: number = windowPositioningOptions.windowPositioningStrategy?.y ?? 30;
+	const windowOffsetsX: number = windowPositioningOptions?.windowPositioningStrategy?.x ?? 30;
+	const windowOffsetsY: number = windowPositioningOptions?.windowPositioningStrategy?.y ?? 30;
 	const windowOffsetsMaxIncrements: number =
 		windowPositioningOptions?.windowPositioningStrategy?.maxIncrements ?? 8;
 	const visibleWindows = await getAllVisibleWindows();
@@ -289,7 +289,7 @@ export async function getWindowPositionUsingStrategy(
 	const yOffset = minCountIndex * windowOffsetsY;
 	const y = windowDefaultTop + yOffset + availableTop;
 
-	return { x, y };
+	return { left: x, top: y };
 }
 
 /**
