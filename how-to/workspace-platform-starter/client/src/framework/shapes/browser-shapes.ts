@@ -93,6 +93,32 @@ export type BrowserProviderOptions = Pick<
 };
 
 /**
+ * Options for window positioning.
+ */
+export interface WindowPositioningOptions {
+	/**
+	 * The strategy for window positioning.
+	 */
+	windowPositioningStrategy?: CascadingWindowOffsetStrategy;
+
+	/**
+	 * By default we implement a Window Positioning Strategy that will try and position launched windows with an
+	 * offset. The way the windows are offset can be configured by specifying windowPositioningStrategy.
+	 * If you want to turn this off (e.g. automation tests that do not care about the layout of windows) then you
+	 * can set this value to true.
+	 */
+	disableWindowPositioningStrategy?: boolean;
+
+	/**
+	 * The default position for new windows.
+	 */
+	defaults?: {
+		top?: number;
+		left?: number;
+	};
+}
+
+/**
  * The cascading window strategy for positioning new windows.
  */
 export interface CascadingWindowOffsetStrategy {

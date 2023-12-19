@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import type { BrowserProviderOptions, WindowPositioningOptions } from "./shapes/browser-shapes";
 import { isEmpty } from "./utils";
 
 /**
@@ -155,4 +156,160 @@ export function getBoundsCenter(bounds?: OpenFin.Bounds): { x?: number; y?: numb
 		return { x: Math.round(boundsCenterX), y: Math.round(boundsCenterY) };
 	}
 	return {};
+}
+
+/**
+ * Given browser settings what window positioning options should be used?
+ * @param settings The browser settings that have been provided.
+ * @returns a set of window positioning options.
+ */
+export async function getWindowPositionOptions(
+	settings?: BrowserProviderOptions
+): Promise<WindowPositioningOptions> {
+	const windowPositioningOptions: WindowPositioningOptions = {};
+	windowPositioningOptions.defaults = {};
+	if (!isEmpty(settings)) {
+		windowPositioningOptions.windowPositioningStrategy = settings.windowPositioningStrategy;
+		windowPositioningOptions.disableWindowPositioningStrategy = settings.disableWindowPositioningStrategy;
+		if (!isEmpty(settings?.defaultWindowOptions?.defaultLeft)) {
+			windowPositioningOptions.defaults.left = settings.defaultWindowOptions.defaultLeft;
+		}
+		if (!isEmpty(settings?.defaultWindowOptions?.defaultTop)) {
+			windowPositioningOptions.defaults.top = settings.defaultWindowOptions.defaultTop;
+		}
+	}
+	if (isEmpty(windowPositioningOptions.defaults.left) || isEmpty(windowPositioningOptions.defaults.top)) {
+		const app = await fin.Application.getCurrent();
+		const platformManifest: OpenFin.Manifest = await app.getManifest();
+		if (!isEmpty(platformManifest?.platform?.defaultWindowOptions?.defaultLeft)) {
+			windowPositioningOptions.defaults.left = platformManifest.platform.defaultWindowOptions.defaultLeft;
+		}
+		if (!isEmpty(platformManifest?.platform?.defaultWindowOptions?.defaultTop)) {
+			windowPositioningOptions.defaults.top = platformManifest.platform.defaultWindowOptions.defaultTop;
+		}
+	}
+	return windowPositioningOptions;
+}
+
+/**
+ * Get the window position using a strategy.
+ * @param windowPositioningOptions The options for window positioning.
+ * @param windowPositioningOptions.windowPositioningStrategy The strategy for window positioning.
+ * @param windowPositioningOptions.windowPositioningStrategy.x The x coordinate.
+ * @param windowPositioningOptions.windowPositioningStrategy.y The y coordinate.
+ * @param windowPositioningOptions.disableWindowPositioningStrategy Whether to disable the window positioning strategy.
+ * @param relatedTo The related monitor or identity or x/y position.
+ * @returns The x and y coordinates of the window position.
+ */
+export async function getWindowPositionUsingStrategy(
+	windowPositioningOptions: WindowPositioningOptions,
+	relatedTo?: OpenFin.MonitorDetails | OpenFin.Identity | { x: number; y: number }
+): Promise<{ x: number; y: number } | undefined> {
+	if (windowPositioningOptions?.disableWindowPositioningStrategy === true) {
+		return;
+	}
+	let targetMonitor: OpenFin.MonitorDetails | undefined;
+
+	if (isEmpty(relatedTo)) {
+		const monitors = await fin.System.getMonitorInfo();
+		targetMonitor = monitors.primaryMonitor;
+	} else if (!isEmpty(relatedTo) && "monitorRect" in relatedTo) {
+		targetMonitor = relatedTo;
+	} else if (!isEmpty(relatedTo) && "x" in relatedTo) {
+		targetMonitor = await findMonitorContainingPoint(relatedTo);
+	} else {
+		const bounds = await getIdentityBounds(relatedTo);
+		if (isEmpty(bounds)) {
+			const monitors = await fin.System.getMonitorInfo();
+			targetMonitor = monitors.primaryMonitor;
+		} else {
+			targetMonitor = await findMonitorContainingPoint({ x: bounds.left, y: bounds.top });
+		}
+	}
+	const windowDefaultLeft = windowPositioningOptions?.defaults?.left ?? 0;
+	const windowDefaultTop = windowPositioningOptions?.defaults?.top ?? 0;
+
+	// Get the available rect for the display so we can take in to account
+	// OS menus, task bar etc
+	const availableLeft = targetMonitor.availableRect.left;
+	const availableTop = targetMonitor.availableRect.top;
+	const windowOffsetsX: number = windowPositioningOptions.windowPositioningStrategy?.x ?? 30;
+	const windowOffsetsY: number = windowPositioningOptions.windowPositioningStrategy?.y ?? 30;
+	const windowOffsetsMaxIncrements: number =
+		windowPositioningOptions?.windowPositioningStrategy?.maxIncrements ?? 8;
+	const visibleWindows = await getAllVisibleWindows();
+	// Get the top left bounds for all the visible windows
+	const topLeftBounds = await Promise.all(
+		visibleWindows.map(async (win) => {
+			try {
+				const bounds = await win.getBounds();
+				return {
+					left: bounds.left,
+					top: bounds.top,
+					right: bounds.left + windowOffsetsX,
+					bottom: bounds.top + windowOffsetsY
+				};
+			} catch {
+				// return a dummy entry.
+				return {
+					left: 0,
+					top: 0,
+					right: 0,
+					bottom: 0
+				};
+			}
+		})
+	);
+
+	let minCountVal: number = 1000;
+	let minCountIndex = windowOffsetsMaxIncrements;
+
+	// Now see how many windows appear in each increment slot
+	for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
+		const xPos = i * windowOffsetsX;
+		const yPos = i * windowOffsetsY;
+		const leftPos = windowDefaultLeft + xPos;
+		const topPos = windowDefaultTop + yPos;
+		const foundWins = topLeftBounds.filter(
+			(topLeftWinBounds) =>
+				topLeftWinBounds.left >= leftPos &&
+				topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
+				topLeftWinBounds.top >= topPos &&
+				topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
+		);
+		// If this slot has less than the current minimum use this slot
+		if (foundWins.length < minCountVal) {
+			minCountVal = foundWins.length;
+			minCountIndex = i;
+		}
+	}
+
+	const xOffset = minCountIndex * windowOffsetsX;
+	const x = windowDefaultLeft + xOffset + availableLeft;
+	const yOffset = minCountIndex * windowOffsetsY;
+	const y = windowDefaultTop + yOffset + availableTop;
+
+	return { x, y };
+}
+
+/**
+ * Get a list of all the visible windows in the platform.
+ * @returns The list of visible windows.
+ */
+export async function getAllVisibleWindows(): Promise<OpenFin.Window[]> {
+	const platform = fin.Platform.getCurrentSync();
+	const windows = await platform.Application.getChildWindows();
+	const availableWindows: OpenFin.Window[] = [];
+	for (const currentWindow of windows) {
+		try {
+			const isShowing = await currentWindow.isShowing();
+			if (isShowing) {
+				availableWindows.push(currentWindow);
+			}
+		} catch {
+			// if the window is destroyed before determining if it is showing then
+			// we should move to the next window but not throw.
+		}
+	}
+	return availableWindows;
 }

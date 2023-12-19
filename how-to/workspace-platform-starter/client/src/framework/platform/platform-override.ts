@@ -22,6 +22,10 @@ import {
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
+import {
+	getWindowPositionOptions,
+	getWindowPositionUsingStrategy
+} from "workspace-platform-starter/utils-position";
 import * as analyticsProvider from "../analytics";
 import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
@@ -31,7 +35,7 @@ import * as Menu from "../menu";
 import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
 import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
-import type { BrowserProviderOptions, CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
+import type { BrowserProviderOptions, WindowPositioningOptions } from "../shapes/browser-shapes";
 import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
@@ -57,7 +61,7 @@ import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { deepMerge, isEmpty } from "../utils";
 import { loadConfig, saveConfig } from "../workspace/dock";
-import { getAllVisibleWindows, getPageBounds } from "./browser";
+import { getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 import {
 	mapPlatformPageFromStorage,
@@ -78,10 +82,7 @@ const PAGE_ENDPOINT_ID_SET = "page-set";
 
 const logger = createLogger("PlatformOverride");
 
-let windowDefaultLeft: number | undefined;
-let windowDefaultTop: number | undefined;
-let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
-let disableWindowPositioningStrategy: boolean | undefined;
+let windowPositioningOptions: WindowPositioningOptions | undefined;
 let disableStorageMapping: boolean | undefined;
 let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
@@ -751,99 +752,26 @@ export function overrideCallback(
 				return super.createWindow(options, identity);
 			}
 
-			if (!disableWindowPositioningStrategy) {
-				if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
+			if (!windowPositioningOptions?.disableWindowPositioningStrategy) {
+				if (isEmpty(windowPositioningOptions)) {
 					const settings = await getSettings();
-					disableWindowPositioningStrategy =
-						settings?.browserProvider?.disableWindowPositioningStrategy ?? false;
-					if (disableWindowPositioningStrategy) {
-						logger.info("Window Positioning Strategy is disabled.");
-					} else {
-						const app = await fin.Application.getCurrent();
-						const platformManifest: OpenFin.Manifest = await app.getManifest();
-						logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
-						windowDefaultLeft =
-							settings?.browserProvider?.defaultWindowOptions?.defaultLeft ??
-							platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
-							0;
-						windowDefaultTop =
-							settings?.browserProvider?.defaultWindowOptions?.defaultTop ??
-							platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
-							0;
-
-						windowPositioningStrategy = settings?.browserProvider?.windowPositioningStrategy;
-					}
+					windowPositioningOptions = await getWindowPositionOptions(settings?.browserProvider);
 				}
 
-				if (!isEmpty(windowDefaultLeft) && !isEmpty(windowDefaultTop)) {
+				if (!isEmpty(windowPositioningOptions)) {
 					logger.info("Create Window", options);
 
 					const hasLeft = !isEmpty(options?.defaultLeft);
 					const hasTop = !isEmpty(options?.defaultTop);
 
 					if (!hasLeft || !hasTop) {
-						// Get the available rect for the display so we can take in to account
-						// OS menus, task bar etc
-						const monitorInfo = await fin.System.getMonitorInfo();
-						const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
-						const availableTop = monitorInfo.primaryMonitor.availableRect.top;
-						const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
-						const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
-						const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
-						const visibleWindows = await getAllVisibleWindows();
-						// Get the top left bounds for all the visible windows
-						const topLeftBounds = await Promise.all(
-							visibleWindows.map(async (win) => {
-								try {
-									const bounds = await win.getBounds();
-									return {
-										left: bounds.left,
-										top: bounds.top,
-										right: bounds.left + windowOffsetsX,
-										bottom: bounds.top + windowOffsetsY
-									};
-								} catch {
-									// return a dummy entry.
-									return {
-										left: 0,
-										top: 0,
-										right: 0,
-										bottom: 0
-									};
-								}
-							})
-						);
+						const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
 
-						let minCountVal: number = 1000;
-						let minCountIndex = windowOffsetsMaxIncrements;
-
-						// Now see how many windows appear in each increment slot
-						for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
-							const xPos = i * windowOffsetsX;
-							const yPos = i * windowOffsetsY;
-							const leftPos = windowDefaultLeft + xPos;
-							const topPos = windowDefaultTop + yPos;
-							const foundWins = topLeftBounds.filter(
-								(topLeftWinBounds) =>
-									topLeftWinBounds.left >= leftPos &&
-									topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
-									topLeftWinBounds.top >= topPos &&
-									topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
-							);
-							// If this slot has less than the current minimum use this slot
-							if (foundWins.length < minCountVal) {
-								minCountVal = foundWins.length;
-								minCountIndex = i;
-							}
+						if (!hasLeft && !isEmpty(position?.x)) {
+							options.defaultLeft = position.x;
 						}
-
-						if (!hasLeft) {
-							const xOffset = minCountIndex * windowOffsetsX;
-							options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
-						}
-						if (!hasTop) {
-							const yOffset = minCountIndex * windowOffsetsY;
-							options.defaultTop = windowDefaultTop + yOffset + availableTop;
+						if (!hasTop && !isEmpty(position?.y)) {
+							options.defaultTop = position.y;
 						}
 					}
 				}
