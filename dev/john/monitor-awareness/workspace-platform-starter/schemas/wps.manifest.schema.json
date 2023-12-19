@@ -48,7 +48,7 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_49"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -250,6 +250,13 @@
 					"description": "The specified app sources may include apps of many different manifest types. Which manifest types do you want\nyour platform to support (only the ones listed will be included in the end result).",
 					"items": {
 						"$ref": "#/definitions/ManifestTypeId"
+					},
+					"type": "array"
+				},
+				"updatableLaunchPreference": {
+					"description": "Do you wish to allow specific launchPreferences to be specified when launching an app by default?",
+					"items": {
+						"$ref": "#/definitions/UpdatableLaunchPreferenceDefinition"
 					},
 					"type": "array"
 				}
@@ -709,7 +716,7 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"ContextGroupInfo": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_53"
 		},
 		"ContextGroupStates": {
 			"$ref": "#/definitions/__type_39"
@@ -1034,7 +1041,7 @@
 			"$ref": "#/definitions/__type_31"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_55"
+			"$ref": "#/definitions/__type_56"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1088,7 +1095,7 @@
 			"$ref": "#/definitions/__type_36"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_54"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1586,7 +1593,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_56"
+			"$ref": "#/definitions/__type_57"
 		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
@@ -1889,13 +1896,13 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_51"
+			"$ref": "#/definitions/__type_52"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_16"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_55"
 		},
 		"LaunchExternalProcessListener": {
 			"$ref": "#/definitions/__type_41"
@@ -1905,18 +1912,8 @@
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"additionalProperties": false,
-					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
-					"properties": {
-						"height": {
-							"type": "number"
-						},
-						"width": {
-							"type": "number"
-						}
-					},
-					"required": ["height", "width"],
-					"type": "object"
+					"$ref": "#/definitions/Partial_13",
+					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
 					"description": "Should the launched UI be positioned in the center of the screen?",
@@ -2924,7 +2921,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>"
+						"$ref": "#/definitions/NativePreference<never>_1"
 					},
 					"type": "array"
 				}
@@ -2933,6 +2930,18 @@
 			"type": "object"
 		},
 		"NativePreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/NativePreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"NativePreference<never>_1": {
 			"additionalProperties": false,
 			"description": "Which Launch Options are updatable and are there any constraints",
 			"properties": {
@@ -3019,7 +3028,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_48"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3305,7 +3314,10 @@
 			"$ref": "#/definitions/__type_45"
 		},
 		"Partial_15": {
-			"$ref": "#/definitions/__type_50"
+			"$ref": "#/definitions/__type_46"
+		},
+		"Partial_16": {
+			"$ref": "#/definitions/__type_51"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_5"
@@ -3700,7 +3712,7 @@
 					"type": "number"
 				},
 				"defaultWindowOptions": {
-					"$ref": "#/definitions/Partial_15",
+					"$ref": "#/definitions/Partial_16",
 					"description": "**Platforms Only.** Default window options apply to all platform windows."
 				},
 				"disableDefaultCommands": {
@@ -3960,7 +3972,7 @@
 			"$ref": "#/definitions/__type_18"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_47"
 		},
 		"RectangleByEdgePositions": {
 			"$ref": "#/definitions/__type_37"
@@ -4073,7 +4085,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_49"
+			"$ref": "#/definitions/__type_50"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -4518,6 +4530,26 @@
 			},
 			"type": "object"
 		},
+		"UpdatableLaunchPreferenceDefinition": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/WindowPreference<never>"
+				},
+				{
+					"$ref": "#/definitions/WindowPreferenceUrl"
+				},
+				{
+					"$ref": "#/definitions/ViewPreference<never>"
+				},
+				{
+					"$ref": "#/definitions/ViewPreferenceUrl"
+				},
+				{
+					"$ref": "#/definitions/NativePreference<never>"
+				}
+			],
+			"description": "A type that contains the available updatable launch preferences"
+		},
 		"VersionInfo": {
 			"additionalProperties": false,
 			"description": "Information about the version of the platform and it's dependencies",
@@ -4606,17 +4638,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreferenceUrl"
+								"$ref": "#/definitions/ViewPreference<never>_1"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_13",
+					"$ref": "#/definitions/Partial_14",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -4830,6 +4862,18 @@
 			"type": "object"
 		},
 		"ViewPreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/ViewPreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"ViewPreference<never>_1": {
 			"additionalProperties": false,
 			"description": "Which Launch Options are updatable and are there any constraints",
 			"properties": {
@@ -5164,17 +5208,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreferenceUrl"
+								"$ref": "#/definitions/WindowPreference<never>_1"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_14",
+					"$ref": "#/definitions/Partial_15",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -5533,6 +5577,18 @@
 			"type": "object"
 		},
 		"WindowPreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/WebPreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"WindowPreference<never>_1": {
 			"additionalProperties": false,
 			"description": "Which Launch Options are updatable and are there any constraints",
 			"properties": {
@@ -7500,14 +7556,17 @@
 		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				"height": {
+					"type": "number"
 				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
+				"left": {
+					"type": "number"
 				},
-				"url": {
-					"type": "string"
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
 				}
 			},
 			"type": "object"
@@ -7529,6 +7588,17 @@
 		},
 		"__type_46": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_47": {
@@ -7536,6 +7606,10 @@
 			"type": "object"
 		},
 		"__type_48": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7564,46 +7638,6 @@
 				}
 			},
 			"required": ["alias", "src", "version"],
-			"type": "object"
-		},
-		"__type_49": {
-			"additionalProperties": false,
-			"properties": {
-				"interopSnapshotDetails": {
-					"additionalProperties": false,
-					"properties": {
-						"contextGroupStates": {
-							"$ref": "#/definitions/ContextGroupStates"
-						}
-					},
-					"required": ["contextGroupStates"],
-					"type": "object"
-				},
-				"snapshotDetails": {
-					"additionalProperties": false,
-					"properties": {
-						"monitorInfo": {
-							"$ref": "#/definitions/MonitorInfo"
-						},
-						"runtimeVersion": {
-							"type": "string"
-						},
-						"timestamp": {
-							"type": "string"
-						}
-					},
-					"required": ["monitorInfo", "runtimeVersion", "timestamp"],
-					"type": "object"
-				},
-				"windows": {
-					"description": "The array of window options objects",
-					"items": {
-						"$ref": "#/definitions/WindowCreationOptions"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["windows"],
 			"type": "object"
 		},
 		"__type_5": {
@@ -7781,6 +7815,46 @@
 			"type": "object"
 		},
 		"__type_50": {
+			"additionalProperties": false,
+			"properties": {
+				"interopSnapshotDetails": {
+					"additionalProperties": false,
+					"properties": {
+						"contextGroupStates": {
+							"$ref": "#/definitions/ContextGroupStates"
+						}
+					},
+					"required": ["contextGroupStates"],
+					"type": "object"
+				},
+				"snapshotDetails": {
+					"additionalProperties": false,
+					"properties": {
+						"monitorInfo": {
+							"$ref": "#/definitions/MonitorInfo"
+						},
+						"runtimeVersion": {
+							"type": "string"
+						},
+						"timestamp": {
+							"type": "string"
+						}
+					},
+					"required": ["monitorInfo", "runtimeVersion", "timestamp"],
+					"type": "object"
+				},
+				"windows": {
+					"description": "The array of window options objects",
+					"items": {
+						"$ref": "#/definitions/WindowCreationOptions"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["windows"],
+			"type": "object"
+		},
+		"__type_51": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -8069,7 +8143,7 @@
 			},
 			"type": "object"
 		},
-		"__type_51": {
+		"__type_52": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -8081,7 +8155,7 @@
 			},
 			"type": "object"
 		},
-		"__type_52": {
+		"__type_53": {
 			"additionalProperties": false,
 			"description": "Information for a Context Group. Contains metadata for displaying the group properly.",
 			"properties": {
@@ -8097,7 +8171,7 @@
 			"required": ["id"],
 			"type": "object"
 		},
-		"__type_53": {
+		"__type_54": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -8116,7 +8190,7 @@
 			},
 			"type": "object"
 		},
-		"__type_54": {
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -8145,7 +8219,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_55": {
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
@@ -8178,7 +8252,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_56": {
+		"__type_57": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
