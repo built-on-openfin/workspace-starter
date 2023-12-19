@@ -84,12 +84,9 @@ export type PlatformApp = App & {
  */
 export interface LaunchPreference {
 	/**
-	 * Do you wish to specify a custom height/width that should be used when this application is launched?
+	 * Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?
 	 */
-	bounds?: {
-		width: number;
-		height: number;
-	};
+	bounds?: Partial<OpenFin.Bounds>;
 	/**
 	 * Should the launched UI be positioned in the center of the screen?
 	 */
@@ -103,6 +100,15 @@ export interface LaunchPreference {
  *
  */
 export type UpdatableLaunchPreference = LaunchPreference;
+/**
+ * A type that contains the available updatable launch preferences
+ */
+export type UpdatableLaunchPreferenceDefinition =
+	| WindowPreference
+	| WindowPreferenceUrl
+	| ViewPreference
+	| ViewPreferenceUrl
+	| NativePreference;
 /**
  * The list of Launch Option Types
  */
@@ -139,13 +145,17 @@ export interface ViewLaunchOptions extends LaunchOptions {
 	updatable?: (ViewPreference | ViewPreferenceUrl)[];
 }
 /**
+ * A list of all the names of possible preferences that can be updated.
+ */
+export type PreferenceName = ViewPreferenceName | WebPreferenceName | NativePreferenceName;
+/**
  * Which Launch Options are updatable and are there any constraints
  */
 export interface Preference<T = unknown> {
 	/**
 	 * What setting is updatable?
 	 */
-	name: ViewPreferenceName | WebPreferenceName | NativePreferenceName;
+	name: PreferenceName;
 	/**
 	 * Is there a constraint that the platform can apply?
 	 */
@@ -452,6 +462,10 @@ export interface AppProviderOptions {
 	 * your platform to support (only the ones listed will be included in the end result).
 	 */
 	manifestTypes?: ManifestTypeId[];
+	/**
+	 * Do you wish to allow specific launchPreferences to be specified when launching an app by default?
+	 */
+	updatableLaunchPreference?: UpdatableLaunchPreferenceDefinition[];
 }
 /**
  * Applications that support specific intent.
