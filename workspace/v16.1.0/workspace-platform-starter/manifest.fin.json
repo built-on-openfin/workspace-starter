@@ -198,6 +198,11 @@
 				"desktop-browser",
 				"connection",
 				"endpoint"
+			],
+			"updatableLaunchPreference": [
+				{
+					"name": "bounds"
+				}
 			]
 		},
 		"endpointProvider": {
