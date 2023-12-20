@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	CustomActionCallerType,
 	getCurrentSync,
@@ -12,12 +13,14 @@ import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import * as menuProvider from "./menu";
 import { closedownModules, initializeModules, loadModules } from "./modules";
-import { launchView } from "./platform/browser";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
+import type { LaunchPreference, PlatformApp } from "./shapes/app-shapes";
+import type { WindowPositioningOptions } from "./shapes/browser-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import * as shareProvider from "./share";
 import * as themeProvider from "./themes";
 import { isEmpty, isStringValue } from "./utils";
+import { getWindowPositionUsingStrategy } from "./utils-position";
 import * as homeComponent from "./workspace/home";
 import * as notificationsComponent from "./workspace/notifications";
 
@@ -27,6 +30,7 @@ let modules: ModuleEntry<Actions>[] | undefined;
 const customActionMap: CustomActionsMap = {};
 let platformActionMap: CustomActionsMap | undefined;
 let isInitialized: boolean = false;
+let windowPositioningOptions: WindowPositioningOptions | undefined;
 
 /**
  * These Ids are for actions built in to the platform.
@@ -44,19 +48,19 @@ export const PLATFORM_ACTION_IDS = {
  * Initialize the actions provider.
  * @param options Options for the actions provider.
  * @param helpers Module helpers to pass to any loaded modules.
+ * @param windowPositioning Options for positioning windows.
  * @returns The platform action map.
  */
 export async function init(
 	options: ActionsProviderOptions | undefined,
-	helpers: ModuleHelpers
+	helpers: ModuleHelpers,
+	windowPositioning: WindowPositioningOptions
 ): Promise<CustomActionsMap | undefined> {
 	if (isInitialized) {
 		logger.error("The actions can only be used once when configuring the platform");
 		return;
 	}
-
 	isInitialized = true;
-
 	if (options) {
 		logger.info("Initializing with options", options);
 
@@ -68,6 +72,10 @@ export async function init(
 			...helpers,
 			updateToolbarButtons
 		});
+	}
+	if (!isEmpty(windowPositioning)) {
+		logger.info("Initializing with window positioning options", windowPositioning);
+		windowPositioningOptions = windowPositioning;
 	}
 
 	await buildActions();
@@ -200,7 +208,7 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			if (payload.customData?.appId) {
 				const app = await getApp(payload.customData.appId as string);
 				if (app) {
-					await launch(app);
+					await launchAppAction(app, payload.windowIdentity);
 				} else {
 					logger.error(
 						`Unable to find app with id '${
@@ -220,7 +228,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			payload.callerType === CustomActionCallerType.CustomDropdownItem
 		) {
 			if (payload.customData?.url) {
-				await launchView(payload.customData?.url as string);
+				const manifest: Partial<OpenFin.ViewOptions> = {
+					url: payload.customData.url
+				};
+				const viewApp = {
+					appId: "action-launch-view",
+					title: "View Url",
+					icons: [],
+					publisher: "",
+					manifestType: "inline-view",
+					manifest
+				};
+				await launchAppAction(viewApp as unknown as PlatformApp, payload.windowIdentity);
 			} else {
 				logger.error("No url specified in payload.customData in launchView action");
 			}
@@ -228,4 +247,22 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 	};
 
 	return actionMap;
+}
+
+/**
+ * Launches an app on the right monitor.
+ * @param app The app to launch.
+ * @param clientIdentity The identity of the client that called the action.
+ */
+async function launchAppAction(app: PlatformApp, clientIdentity: OpenFin.Identity): Promise<void> {
+	if (!isEmpty(app)) {
+		let launchPreference: LaunchPreference | undefined;
+		const bounds = await getWindowPositionUsingStrategy(windowPositioningOptions, clientIdentity);
+		if (!isEmpty(bounds)) {
+			launchPreference = { bounds };
+		}
+		await launch(app, launchPreference);
+	} else {
+		logger.error("Unable to do launch app action as an app object was not passed");
+	}
 }

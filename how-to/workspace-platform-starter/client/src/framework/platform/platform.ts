@@ -4,6 +4,7 @@ import {
 	init as workspacePlatformInit,
 	type BrowserInitConfig
 } from "@openfin/workspace-platform";
+import { getWindowPositionOptions } from "workspace-platform-starter/utils-position";
 import * as actionsProvider from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
@@ -163,8 +164,12 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	}
 
 	logger.info("Specifying following browser options", browser);
-
-	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
+	const windowPositioningOptions = await getWindowPositionOptions(customSettings?.browserProvider);
+	const customActions = await actionsProvider.init(
+		customSettings?.actionsProvider,
+		helpers,
+		windowPositioningOptions
+	);
 	const theme = await getThemes();
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);
