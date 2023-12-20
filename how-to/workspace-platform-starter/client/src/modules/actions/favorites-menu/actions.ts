@@ -4,6 +4,7 @@ import type {
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
+import type { LaunchPreference } from "workspace-platform-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	FAVORITE_TYPE_NAME_PAGE,
@@ -14,6 +15,7 @@ import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/lo
 import type { PopupMenuEntry } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
+import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import type { FavoritesMenuSettings } from "./shapes";
 
 /**
@@ -117,7 +119,15 @@ export class FavoritesMenuProvider implements Actions<FavoritesMenuSettings> {
 
 							if (result.type === FAVORITE_TYPE_NAME_APP) {
 								if (!isEmpty(this._helpers?.launchApp)) {
-									await this._helpers?.launchApp(result.typeId);
+									let launchPreference: LaunchPreference | undefined;
+									const bounds = await getWindowPositionUsingStrategy(
+										undefined, // go with defaults
+										payload.windowIdentity
+									);
+									if (!isEmpty(bounds)) {
+										launchPreference = { bounds };
+									}
+									await this._helpers?.launchApp(result.typeId, launchPreference);
 								}
 							} else if (result.type === FAVORITE_TYPE_NAME_PAGE) {
 								if (!isEmpty(this._helpers?.launchPage)) {

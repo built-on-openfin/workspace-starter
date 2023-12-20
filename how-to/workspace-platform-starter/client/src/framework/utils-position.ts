@@ -272,9 +272,9 @@ export async function getWindowPositionUsingStrategy(
 		const topPos = windowDefaultTop + yPos;
 		const foundWins = topLeftBounds.filter(
 			(topLeftWinBounds) =>
-				topLeftWinBounds.left >= leftPos &&
+				topLeftWinBounds.left >= leftPos + availableLeft &&
 				topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
-				topLeftWinBounds.top >= topPos &&
+				topLeftWinBounds.top >= topPos + availableTop &&
 				topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
 		);
 		// If this slot has less than the current minimum use this slot

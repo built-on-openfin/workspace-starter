@@ -1,3 +1,4 @@
+import type OpenFin from "@openfin/core";
 import {
 	CustomActionCallerType,
 	getCurrentSync,
@@ -12,9 +13,8 @@ import { launch } from "./launch";
 import { createLogger } from "./logger-provider";
 import * as menuProvider from "./menu";
 import { closedownModules, initializeModules, loadModules } from "./modules";
-import { launchView } from "./platform/browser";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
-import type { LaunchPreference } from "./shapes/app-shapes";
+import type { LaunchPreference, PlatformApp } from "./shapes/app-shapes";
 import type { WindowPositioningOptions } from "./shapes/browser-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import * as shareProvider from "./share";
@@ -208,15 +208,7 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			if (payload.customData?.appId) {
 				const app = await getApp(payload.customData.appId as string);
 				if (app) {
-					let launchPreference: LaunchPreference | undefined;
-					const bounds = await getWindowPositionUsingStrategy(
-						windowPositioningOptions,
-						payload.windowIdentity
-					);
-					if (!isEmpty(bounds)) {
-						launchPreference = { bounds };
-					}
-					await launch(app, launchPreference);
+					await launchAppAction(app, payload.windowIdentity);
 				} else {
 					logger.error(
 						`Unable to find app with id '${
@@ -236,7 +228,18 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 			payload.callerType === CustomActionCallerType.CustomDropdownItem
 		) {
 			if (payload.customData?.url) {
-				await launchView(payload.customData?.url as string);
+				const manifest: Partial<OpenFin.ViewOptions> = {
+					url: payload.customData.url
+				};
+				const viewApp = {
+					appId: "action-launch-view",
+					title: "View Url",
+					icons: [],
+					publisher: "",
+					manifestType: "inline-view",
+					manifest
+				};
+				await launchAppAction(viewApp as unknown as PlatformApp, payload.windowIdentity);
 			} else {
 				logger.error("No url specified in payload.customData in launchView action");
 			}
@@ -244,4 +247,22 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
 	};
 
 	return actionMap;
+}
+
+/**
+ * Launches an app on the right monitor.
+ * @param app The app to launch.
+ * @param clientIdentity The identity of the client that called the action.
+ */
+async function launchAppAction(app: PlatformApp, clientIdentity: OpenFin.Identity): Promise<void> {
+	if (!isEmpty(app)) {
+		let launchPreference: LaunchPreference | undefined;
+		const bounds = await getWindowPositionUsingStrategy(windowPositioningOptions, clientIdentity);
+		if (!isEmpty(bounds)) {
+			launchPreference = { bounds };
+		}
+		await launch(app, launchPreference);
+	} else {
+		logger.error("Unable to do launch app action as an app object was not passed");
+	}
 }

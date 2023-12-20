@@ -4,7 +4,14 @@
 
 - Change storage mapper now removes additional defaults based on default window/page/view settings
 - Change storage mapper applies default settings when hydrating from storage
-- Added Example endpoint for page/workspace storage
+- Added Example endpoint for page/workspace storage to server (not production code)
+- Added Additional Monitor Awareness
+  - Initial set of updates to improve the multi-monitor experience.
+  - Extracted Window Positioning Strategy logic from Platform Override to the utils-position.ts file so that it can be used/called from more than one place.
+  - Improved launch preferences so that top and left can now be specified as part of the bounds.
+  - Improved launch preferences by extending appProvider so that you can specify default updatable preferences that should apply across applications (Caution. Preferences such as url should remain app specific).
+  - Dock now takes monitor into account when launching apps using the app entry type or launch-view action or favorites menu option (module). This only applies to views and windows (not snapshots or other types of app).
+  - Interop Broker now takes into account who raised the intent/fdc3.open request when launching a view/window in response (it will position it on the same monitor as the requesting app if possible using the window positioning strategy)
 
 ## v16
 
