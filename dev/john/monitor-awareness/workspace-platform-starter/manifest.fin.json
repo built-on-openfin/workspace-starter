@@ -199,9 +199,11 @@
 				"connection",
 				"endpoint"
 			],
-			"updatableLaunchPreference": [{
-				"name": "bounds"
-			}]
+			"updatableLaunchPreference": [
+				{
+					"name": "bounds"
+				}
+			]
 		},
 		"endpointProvider": {
 			"modules": [
