@@ -17,7 +17,6 @@ let updatableNotificationTimer: number | undefined;
 let loggingElement: HTMLElement | null;
 let codeElement: HTMLTextAreaElement | null;
 
-let activePlatform: string | undefined;
 let connected: boolean = false;
 let connectedVersion: string | null;
 let statusIntervalId: number | undefined;
@@ -54,7 +53,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 		theme: [
 			{
 				label: "Default",
-				default: "light",
+				default: "dark",
 				palettes: {
 					dark: {
 						brandPrimary: "#0A76D3",
@@ -68,6 +67,19 @@ async function initializeWorkspacePlatform(): Promise<void> {
 						// Demonstrate changing the link color for notifications
 						linkDefault: "#FF0000",
 						linkHover: "#00FF00"
+					}
+				},
+				notificationIndicatorColors: {
+					// This custom indicator color will be used in the Notification with Custom Indicator
+					"custom-indicator": {
+						dark: {
+							background: "#FF0000",
+							foreground: "#FFFFDD"
+						},
+						light: {
+							background: "#FF0000",
+							foreground: "#FFFFDD"
+						}
 					}
 				}
 			}
@@ -237,6 +249,13 @@ async function initializeDom(): Promise<void> {
 		btnNotificationWithIndicator.addEventListener("click", async () => showIndicatorNotification());
 	}
 
+	const btnNotificationWithCustomIndicator = document.querySelector("#btnNotificationWithCustomIndicator");
+	if (btnNotificationWithCustomIndicator) {
+		btnNotificationWithCustomIndicator.addEventListener("click", async () =>
+			showCustomIndicatorNotification()
+		);
+	}
+
 	const btnNotificationsCenterShow = document.querySelector<HTMLButtonElement>("#btnNotificationsCenterShow");
 	if (btnNotificationsCenterShow) {
 		btnNotificationsCenterShow.addEventListener("click", async () => {
@@ -404,7 +423,7 @@ async function showSimpleNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform
+		platform: PLATFORM_ID
 	};
 
 	codeShowExample(notification);
@@ -422,7 +441,7 @@ async function showSimpleNotificationBodyDismiss(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		onSelect: { BODY_CLICK: Notifications.ActionBodyClickType.DISMISS_EVENT }
 	};
 
@@ -441,7 +460,7 @@ async function showSimpleNotificationBodyDismissAction(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		onSelect: { BODY_CLICK: Notifications.ActionBodyClickType.DISMISS_EVENT },
 		customData: {
 			action: "custom-action",
@@ -467,7 +486,7 @@ async function showActionableNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		buttons: [
 			{
 				title: "Acknowledged",
@@ -503,7 +522,7 @@ async function showFormNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		form: [
 			{
 				key: "amount",
@@ -559,7 +578,7 @@ async function showFormAdvancedNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		form: [
 			{
 				type: "string",
@@ -612,7 +631,6 @@ async function showFormAdvancedNotification(): Promise<void> {
 						arg: true
 					}
 				},
-				value: new Date(),
 				widget: {
 					type: "Date"
 				}
@@ -650,6 +668,7 @@ async function showFormAdvancedNotification(): Promise<void> {
 				key: "radioGroupDemo",
 				label: "Chose one",
 				helperText: "Some radio choosing helper text",
+				value: "option_1",
 				validation: {
 					required: {
 						arg: true
@@ -678,6 +697,7 @@ async function showFormAdvancedNotification(): Promise<void> {
 				key: "checkboxGroupDemo",
 				label: "Chose Multiple",
 				helperText: "Some checkbox choosing helper text",
+				value: ["option_1", "option_2"],
 				validation: {
 					required: {
 						arg: true
@@ -771,7 +791,7 @@ async function showUpdatableNotification(): Promise<void> {
 			count: 0
 		},
 		id,
-		platform: activePlatform
+		platform: PLATFORM_ID
 	};
 
 	if (Object.keys(updatableNotifications).length === 0) {
@@ -805,7 +825,7 @@ async function showCustomNotification(): Promise<void> {
 		category: "default",
 		template: "custom",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		templateOptions: {
 			body: {
 				compositions: [
@@ -1038,7 +1058,7 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform
+		platform: PLATFORM_ID
 	};
 
 	codeShowExample(notification);
@@ -1059,7 +1079,7 @@ async function showIndicatorNotification(): Promise<void> {
 		category: "default",
 		template: "custom",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		templateOptions: {
 			body: {
 				compositions: [
@@ -1089,6 +1109,57 @@ async function showIndicatorNotification(): Promise<void> {
 		},
 		templateData: {
 			content: "This is a custom notification with a red indicator showing to the left of the toast"
+		}
+	};
+
+	codeShowExample(notification);
+	await Notifications.create(notification);
+}
+
+/**
+ * Display a notification that has an custom indicator bar color theme.
+ */
+async function showCustomIndicatorNotification(): Promise<void> {
+	const notification: Notifications.NotificationOptions = {
+		title: "Custom Indicator Notification",
+		toast: "transient",
+		category: "default",
+		template: "custom",
+		id: randomUUID(),
+		platform: PLATFORM_ID,
+		templateOptions: {
+			body: {
+				compositions: [
+					{
+						minTemplateAPIVersion: "1",
+						layout: {
+							type: "container",
+							style: {
+								display: "flex",
+								flexDirection: "column",
+								gap: "10px"
+							},
+							children: [
+								{
+									type: "text",
+									dataKey: "content"
+								}
+							]
+						}
+					}
+				]
+			},
+			indicator: {
+				align: "right"
+			}
+		},
+		indicator: {
+			color: "custom-indicator",
+			fallback: Notifications.IndicatorColor.RED,
+			text: "ALERT!!!"
+		},
+		templateData: {
+			content: "This is a custom notification with custom indicator styling"
 		}
 	};
 
