@@ -136,7 +136,9 @@ export class TemplateTypesSource {
 				title: "Templates Example",
 				label: "Information",
 				actions: [],
-				data: {},
+				data: {
+					providerId: this._definition?.id
+				},
 				template: CLITemplate.Custom,
 				templateContent: {
 					layout: {
@@ -223,16 +225,16 @@ export class TemplateTypesSource {
 						buttonSplit1Content: {
 							label: "Split Button 1",
 							tooltip: "Click me",
-							action: "primaryAction",
+							action: "split-primary-action",
 							options: [
 								{
 									label: "Menu Option 1",
-									tooltip: "Click for optionAction1",
+									tooltip: "Menu Option 1 Tooltip",
 									action: "split-action-1"
 								},
 								{
 									label: "Menu Option 2",
-									tooltip: "Click for optionAction2",
+									tooltip: "Menu Option 2 Tooltip",
 									action: "split-action-2"
 								}
 							]
@@ -266,6 +268,9 @@ export class TemplateTypesSource {
 				return true;
 			} else if (result.action.name === "button-text-only-action") {
 				console.log("Button Text Only Clicked");
+				return true;
+			} else if (result.action.name === "split-primary-action") {
+				console.log("Split Primary Action");
 				return true;
 			} else if (result.action.name === "split-action-1") {
 				console.log("Split Action 1");

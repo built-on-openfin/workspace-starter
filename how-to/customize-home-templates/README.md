@@ -115,7 +115,7 @@ e.g.
 /templates
 ```
 
-![Customize Home Template Fragments](customize-home-templates-fragments.png)
+![Customize Home Template Fragments](./assets/customize-home-templates-fragments.png)
 
 e.g.
 
@@ -124,7 +124,7 @@ e.g.
 /quote APPL
 ```
 
-![Customize Home Template Quote](customize-home-templates-quote.gif)
+![Customize Home Template Quote](./assets/customize-home-templates-quote.gif)
 
 e.g.
 
@@ -133,7 +133,7 @@ e.g.
 /emoji coffee
 ```
 
-![Customize Home Template Emoji](customize-home-templates-emoji.gif)
+![Customize Home Template Emoji](./assets/customize-home-templates-emoji.gif)
 
 e.g.
 
@@ -144,7 +144,7 @@ Chad
 Dock
 ```
 
-![Customize Home Template Tree](customize-home-templates-tree.gif)
+![Customize Home Template Tree](./assets/customize-home-templates-tree.gif)
 
 e.g.
 
@@ -152,7 +152,7 @@ e.g.
 /loading
 ```
 
-![Customize Home Template Loading](customize-home-templates-loading.gif)
+![Customize Home Template Loading](./assets/customize-home-templates-loading.gif)
 
 e.g.
 
@@ -160,7 +160,7 @@ e.g.
 /error
 ```
 
-![Customize Home Template error](customize-home-templates-error.gif)
+![Customize Home Template error](./assets/customize-home-templates-error.gif)
 
 e.g.
 
@@ -168,7 +168,7 @@ e.g.
 desserts
 ```
 
-![Customize Home Template Suggestion](customize-home-templates-suggestion.png)
+![Customize Home Template Suggestion](./assets/customize-home-templates-suggestion.png)
 
 ### Contact data
 
