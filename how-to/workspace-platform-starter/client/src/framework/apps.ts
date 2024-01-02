@@ -4,7 +4,13 @@ import { addDirectoryEndpoint, init as directoryInit, getPlatformApps } from "./
 import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
-import type { AppFilterOptions, AppProviderOptions, PlatformApp } from "./shapes/app-shapes";
+import type {
+	AppFilterOptions,
+	AppProviderOptions,
+	PlatformApp,
+	PreferenceName,
+	UpdatableLaunchPreferenceDefinition
+} from "./shapes/app-shapes";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
 import { isEmpty, isNumber, isString, randomUUID } from "./utils";
 import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
@@ -17,6 +23,7 @@ let cacheRetrievalStrategy: "on-demand" | "interval" = "on-demand";
 let lastCacheUpdate: number = 0;
 let isInitialized: boolean = false;
 let supportedManifestTypes: string[];
+let updatableLaunchPreference: UpdatableLaunchPreferenceDefinition[];
 let getEntriesResolvers: ((apps: PlatformApp[]) => void)[] | undefined;
 
 /**
@@ -92,6 +99,8 @@ export async function init(
 		}
 		supportedManifestTypes = options?.manifestTypes ?? [];
 
+		updatableLaunchPreference = options?.updatableLaunchPreference ?? [];
+
 		cacheRetrievalStrategy = options?.cacheRetrievalStrategy ?? cacheRetrievalStrategy;
 		if (cacheDuration > 0 && cacheRetrievalStrategy === "interval") {
 			let updateInProgress = false;
@@ -152,6 +161,88 @@ export async function getApps(appFilter?: AppFilterOptions): Promise<PlatformApp
 	}
 
 	return [];
+}
+
+/**
+ * Get a list of application that match the specified tags.
+ * @param tags The tags to match.
+ * @param mustMatchAll The application must have all the tags,
+ * @param appFilter Additional filters to apply to the list of applications.
+ * @returns The list of application that match the specified tags.
+ */
+export async function getAppsByTag(
+	tags: string[],
+	mustMatchAll = false,
+	appFilter?: AppFilterOptions
+): Promise<PlatformApp[]> {
+	const apps = await getApps(appFilter);
+
+	return apps.filter((value) => {
+		if (isEmpty(value.tags)) {
+			return false;
+		}
+		let matchFound = false;
+		for (const tag of tags) {
+			if (value.tags.includes(tag)) {
+				if (mustMatchAll) {
+					matchFound = true;
+				} else {
+					return true;
+				}
+			} else if (mustMatchAll) {
+				return false;
+			}
+		}
+		return matchFound;
+	});
+}
+
+/**
+ * The the app by its id.
+ * @param appId The id of the requested app.
+ * @returns The app if it was found.
+ */
+export async function getApp(appId: string): Promise<PlatformApp | undefined> {
+	if (!appId) {
+		return undefined;
+	}
+
+	const apps = await getApps();
+	let app = apps.find((entry) => entry.appId === appId);
+
+	if (isEmpty(app)) {
+		app = apps.find((entry) => entry.name === appId);
+		logger.info(
+			`App not found when using lookup id: ${appId} against appId. Fell back to name to see if it is a reference against name. App found: ${!isEmpty(
+				app
+			)}`
+		);
+	}
+
+	return app;
+}
+
+/**
+ * Checks to see if a launchPreference is updatable on an app.
+ * @param app The app to check.
+ * @param name The name of the preference.
+ * @returns The preference if it is updatable.
+ */
+export function isAppPreferenceUpdatable(
+	app: PlatformApp,
+	name: PreferenceName
+): UpdatableLaunchPreferenceDefinition | undefined {
+	if (Array.isArray(app?.launchPreference?.options?.updatable)) {
+		for (const preference of app.launchPreference.options.updatable) {
+			if (preference.name === name) {
+				return preference;
+			}
+		}
+	}
+	if (Array.isArray(updatableLaunchPreference)) {
+		return updatableLaunchPreference.find((preference) => preference.name === name);
+	}
+	return undefined;
 }
 
 /**
@@ -285,63 +376,4 @@ async function validateEntries(apps: PlatformApp[]): Promise<PlatformApp[]> {
 	}
 
 	return validatedApps;
-}
-
-/**
- * Get a list of application that match the specified tags.
- * @param tags The tags to match.
- * @param mustMatchAll The application must have all the tags,
- * @param appFilter Additional filters to apply to the list of applications.
- * @returns The list of application that match the specified tags.
- */
-export async function getAppsByTag(
-	tags: string[],
-	mustMatchAll = false,
-	appFilter?: AppFilterOptions
-): Promise<PlatformApp[]> {
-	const apps = await getApps(appFilter);
-
-	return apps.filter((value) => {
-		if (isEmpty(value.tags)) {
-			return false;
-		}
-		let matchFound = false;
-		for (const tag of tags) {
-			if (value.tags.includes(tag)) {
-				if (mustMatchAll) {
-					matchFound = true;
-				} else {
-					return true;
-				}
-			} else if (mustMatchAll) {
-				return false;
-			}
-		}
-		return matchFound;
-	});
-}
-
-/**
- * The the app by its id.
- * @param appId The id of the requested app.
- * @returns The app if it was found.
- */
-export async function getApp(appId: string): Promise<PlatformApp | undefined> {
-	if (!appId) {
-		return undefined;
-	}
-
-	const apps = await getApps();
-	let app = apps.find((entry) => entry.appId === appId);
-
-	if (isEmpty(app)) {
-		app = apps.find((entry) => entry.name === appId);
-		logger.info(
-			`App not found when using lookup id: ${appId} against appId. Fell back to name to see if it is a reference against name. App found: ${!isEmpty(
-				app
-			)}`
-		);
-	}
-
-	return app;
 }

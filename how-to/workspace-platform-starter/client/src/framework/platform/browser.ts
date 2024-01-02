@@ -497,25 +497,3 @@ export async function launchView(
 	}
 	return platform.createView(viewOptions, targetIdentity);
 }
-
-/**
- * Get a list of all the visible windows in the platform.
- * @returns The list of visible windows.
- */
-export async function getAllVisibleWindows(): Promise<OpenFin.Window[]> {
-	const platform = fin.Platform.getCurrentSync();
-	const windows = await platform.Application.getChildWindows();
-	const availableWindows: OpenFin.Window[] = [];
-	for (const currentWindow of windows) {
-		try {
-			const isShowing = await currentWindow.isShowing();
-			if (isShowing) {
-				availableWindows.push(currentWindow);
-			}
-		} catch {
-			// if the window is destroyed before determining if it is showing then
-			// we should move to the next window but not throw.
-		}
-	}
-	return availableWindows;
-}

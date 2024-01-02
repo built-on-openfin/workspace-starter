@@ -15,7 +15,7 @@ To run this sample you can:
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
 - Launch the Github hosted version of this sample to interact with it by going to the following link:
 
-[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fcustomize-home-templates%2Fmanifest.fin.json)
+[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv16.1.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -77,6 +77,7 @@ The commands implemented are:
 
 ```shell
 ? - which displays a list of all the commands with help
+/templates
 /quote <symbol>
 /emoji <code>
 /contacts <contact name>
@@ -87,6 +88,8 @@ The commands implemented are:
 /loading
 /error
 ```
+
+The **/templates** command demonstrates a template containing all the different kinds of fragments that can be display in a home template.
 
 The **/quote** command demonstrates a template that is built dynamically with a graph image.
 
@@ -109,20 +112,16 @@ The contacts commands demonstrate different approaches to retrieving data.
 e.g.
 
 ```shell
-/emoji man
+/templates
+```
+
+![Customize Home Template Fragments](customize-home-templates-fragments.png)
+
+e.g.
+
+```shell
 /quote MSFT
 /quote APPL
-/contacts john
-/contacts emma
-/contacts-sync john
-/contacts-partial john
-acme
-bee
-chad
-dock
-/loading
-/error
-desserts
 ```
 
 ![Customize Home Template Quote](customize-home-templates-quote.gif)
@@ -162,6 +161,14 @@ e.g.
 ```
 
 ![Customize Home Template error](customize-home-templates-error.gif)
+
+e.g.
+
+```shell
+desserts
+```
+
+![Customize Home Template Suggestion](customize-home-templates-suggestion.png)
 
 ### Contact data
 

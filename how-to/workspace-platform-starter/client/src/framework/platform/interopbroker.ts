@@ -7,6 +7,11 @@ import {
 	type IntentResolution
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import type { WindowPositioningOptions } from "workspace-platform-starter/shapes/browser-shapes";
+import {
+	getWindowPositionOptions,
+	getWindowPositionUsingStrategy
+} from "workspace-platform-starter/utils-position";
 import { getApp, getApps } from "../apps";
 import * as connectionProvider from "../connections";
 import { hasEndpoint, requestResponse } from "../endpoint";
@@ -16,7 +21,12 @@ import { bringToFront, launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { MANIFEST_TYPES } from "../manifest-types";
 import { getSettings } from "../settings";
-import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
+import type {
+	AppsForIntent,
+	LaunchPreference,
+	PlatformApp,
+	PlatformAppIdentifier
+} from "../shapes/app-shapes";
 import type { AppMetadata as AppMetadataV1Point2 } from "../shapes/fdc3-1-2-shapes";
 import type {
 	ApiMetadata,
@@ -61,6 +71,8 @@ export function interopOverride(
 
 		private _intentResolverHelper?: IntentResolverHelper;
 
+		private _windowPositionOptions?: WindowPositioningOptions;
+
 		/**
 		 * Create a new instance of InteropBroker.
 		 */
@@ -73,7 +85,10 @@ export function interopOverride(
 				logger
 			);
 			getSettings()
-				.then((customSettings) => {
+				.then(async (customSettings) => {
+					if (!isEmpty(customSettings) && !isEmpty(customSettings.browserProvider)) {
+						this._windowPositionOptions = await getWindowPositionOptions(customSettings.browserProvider);
+					}
 					if (!isEmpty(customSettings) && !isEmpty(customSettings?.platformProvider)) {
 						if (
 							isEmpty(customSettings?.platformProvider?.interop?.intentResolver) &&
@@ -348,7 +363,9 @@ export function interopOverride(
 					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
 						const intentResolver = await this.launchAppWithIntent(
 							intentForSelection.apps[0],
-							intent as OpenFin.Intent
+							intent as OpenFin.Intent,
+							undefined,
+							clientIdentity
 						);
 						if (isEmpty(intentResolver)) {
 							throw new Error(ResolveError.NoAppsFound);
@@ -378,7 +395,11 @@ export function interopOverride(
 			}
 			intent.displayName = userSelection.intent.displayName;
 			intent.name = userSelection.intent.name;
-			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent as OpenFin.Intent);
+			const intentResolver = await this.handleIntentPickerSelection(
+				userSelection,
+				intent as OpenFin.Intent,
+				clientIdentity
+			);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 		}
 
@@ -451,7 +472,12 @@ export function interopOverride(
 					this.useSingleInstance(intentApps[0]) ||
 					this.createNewInstance(intentApps[0])
 				) {
-					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent, appInstanceId);
+					const intentResolver = await this.launchAppWithIntent(
+						intentApps[0],
+						intent,
+						appInstanceId,
+						clientIdentity
+					);
 					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.NoAppsFound);
 					}
@@ -471,7 +497,7 @@ export function interopOverride(
 				throw new Error(ResolveError.ResolverUnavailable);
 			}
 
-			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
 		}
 
@@ -517,7 +543,12 @@ export function interopOverride(
 				}
 
 				if (isOpenByIntent) {
-					const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
+					const result = await this.launchAppWithIntent(
+						requestedApp,
+						openAppIntent,
+						undefined,
+						clientIdentity
+					);
 					if (isString(result.source)) {
 						appId = result.source;
 					} else {
@@ -525,7 +556,13 @@ export function interopOverride(
 						instanceId = result.source.instanceId;
 					}
 				} else {
-					const platformIdentities = await launch(requestedApp);
+					let launchPreference: LaunchPreference | undefined;
+					const bounds = await getWindowPositionUsingStrategy(this._windowPositionOptions, clientIdentity);
+					if (!isEmpty(bounds)) {
+						launchPreference = { bounds };
+					}
+
+					const platformIdentities = await launch(requestedApp, launchPreference);
 					if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
 						appId = platformIdentities[0].appId;
 						const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
@@ -750,12 +787,14 @@ export function interopOverride(
 		 * @param app The application to launch.
 		 * @param intent The intent to open it with.
 		 * @param instanceId The instance of the app.
+		 * @param clientIdentity The identity of the source of the request.
 		 * @returns The intent resolution.
 		 */
 		private async launchAppWithIntent(
 			app: PlatformApp,
 			intent: OpenFin.Intent,
-			instanceId?: string
+			instanceId?: string,
+			clientIdentity?: OpenFin.ClientIdentity
 		): Promise<Omit<IntentResolution, "getResult">> {
 			logger.info("Launching app with intent");
 			let platformIdentities: PlatformAppIdentifier[] | undefined = [];
@@ -786,7 +825,12 @@ export function interopOverride(
 			}
 
 			if (platformIdentities.length === 0) {
-				platformIdentities = await launch(app);
+				let launchPreference: LaunchPreference | undefined;
+				const bounds = await getWindowPositionUsingStrategy(this._windowPositionOptions, clientIdentity);
+				if (!isEmpty(bounds)) {
+					launchPreference = { bounds };
+				}
+				platformIdentities = await launch(app, launchPreference);
 				if (!platformIdentities?.length) {
 					throw new Error(ResolveError.IntentDeliveryFailed);
 				}
@@ -835,11 +879,13 @@ export function interopOverride(
 		 * Handle the intent picker selection.
 		 * @param userSelection The user selection from the intent picker.
 		 * @param intent The intent.
+		 * @param clientIdentity The source of the request.
 		 * @returns The intent resolution.
 		 */
 		private async handleIntentPickerSelection(
 			userSelection: IntentResolverResponse,
-			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
+			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
+			clientIdentity?: OpenFin.ClientIdentity
 		): Promise<Omit<IntentResolution, "getResult">> {
 			let selectedApp = await getApp(userSelection.appId);
 			if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
@@ -849,7 +895,7 @@ export function interopOverride(
 				throw new Error(ResolveError.NoAppsFound);
 			}
 			const instanceId: string | undefined = userSelection.instanceId;
-			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
+			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId, clientIdentity);
 			if (isEmpty(intentResolver)) {
 				throw new Error(ResolveError.NoAppsFound);
 			}
@@ -937,7 +983,8 @@ export function interopOverride(
 					const intentResolver = await this.launchAppWithIntent(
 						targetApp,
 						intent,
-						targetAppIdentifier.instanceId
+						targetAppIdentifier.instanceId,
+						clientIdentity
 					);
 					return intentResolver;
 				}
@@ -947,7 +994,7 @@ export function interopOverride(
 					"intent"
 				);
 				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
-					const intentResolver = await this.launchAppWithIntent(targetApp, intent);
+					const intentResolver = await this.launchAppWithIntent(targetApp, intent, undefined, clientIdentity);
 					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
@@ -1001,7 +1048,7 @@ export function interopOverride(
 				throw new Error(ResolveError.ResolverUnavailable);
 			}
 
-			return this.handleIntentPickerSelection(userSelection, intent);
+			return this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
 		}
 
 		/**
