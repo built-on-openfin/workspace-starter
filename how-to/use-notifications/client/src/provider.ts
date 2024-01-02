@@ -53,7 +53,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 		theme: [
 			{
 				label: "Default",
-				default: "light",
+				default: "dark",
 				palettes: {
 					dark: {
 						brandPrimary: "#0A76D3",
@@ -631,7 +631,6 @@ async function showFormAdvancedNotification(): Promise<void> {
 						arg: true
 					}
 				},
-				value: new Date(),
 				widget: {
 					type: "Date"
 				}
@@ -669,6 +668,7 @@ async function showFormAdvancedNotification(): Promise<void> {
 				key: "radioGroupDemo",
 				label: "Chose one",
 				helperText: "Some radio choosing helper text",
+				value: "option_1",
 				validation: {
 					required: {
 						arg: true
@@ -697,6 +697,7 @@ async function showFormAdvancedNotification(): Promise<void> {
 				key: "checkboxGroupDemo",
 				label: "Chose Multiple",
 				helperText: "Some checkbox choosing helper text",
+				value: ["option_1", "option_2"],
 				validation: {
 					required: {
 						arg: true
