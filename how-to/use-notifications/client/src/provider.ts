@@ -69,6 +69,18 @@ async function initializeWorkspacePlatform(): Promise<void> {
 						linkDefault: "#FF0000",
 						linkHover: "#00FF00"
 					}
+				},
+				notificationIndicatorColors: {
+					"custom-indicator": {
+						dark: {
+							background: "#FF0000",
+							foreground: "#FFFFDD"
+						},
+						light: {
+							background: "#FF0000",
+							foreground: "#FFFFDD"
+						}
+					}
 				}
 			}
 		]
@@ -135,7 +147,7 @@ async function initializeDom(): Promise<void> {
 					codeShowExample(notificationOptions);
 					await Notifications.create(notificationOptions);
 				}
-			} catch {}
+			} catch { }
 		});
 	}
 
@@ -237,6 +249,11 @@ async function initializeDom(): Promise<void> {
 		btnNotificationWithIndicator.addEventListener("click", async () => showIndicatorNotification());
 	}
 
+	const btnNotificationWithCustomIndicator = document.querySelector("#btnNotificationWithCustomIndicator");
+	if (btnNotificationWithCustomIndicator) {
+		btnNotificationWithCustomIndicator.addEventListener("click", async () => showCustomIndicatorNotification());
+	}
+
 	const btnNotificationsCenterShow = document.querySelector<HTMLButtonElement>("#btnNotificationsCenterShow");
 	if (btnNotificationsCenterShow) {
 		btnNotificationsCenterShow.addEventListener("click", async () => {
@@ -305,8 +322,7 @@ async function initializeListeners(): Promise<void> {
 		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
 			if (event.notification?.customData?.action) {
 				loggingAddEntry(
-					`\tData: ${
-						event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"
+					`\tData: ${event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"
 					}`
 				);
 			} else {
@@ -1089,6 +1105,57 @@ async function showIndicatorNotification(): Promise<void> {
 		},
 		templateData: {
 			content: "This is a custom notification with a red indicator showing to the left of the toast"
+		}
+	};
+
+	codeShowExample(notification);
+	await Notifications.create(notification);
+}
+
+/**
+ * Display a notification that has an custom indicator bar color theme.
+ */
+async function showCustomIndicatorNotification(): Promise<void> {
+	const notification: Notifications.NotificationOptions = {
+		title: "Custom Indicator Notification",
+		toast: "transient",
+		indicator: {
+			text: "Alert"
+		},
+		category: "default",
+		template: "custom",
+		id: randomUUID(),
+		platform: activePlatform,
+		templateOptions: {
+			body: {
+				compositions: [
+					{
+						minTemplateAPIVersion: "1",
+						layout: {
+							type: "container",
+							style: {
+								display: "flex",
+								flexDirection: "column",
+								gap: "10px"
+							},
+							children: [
+								{
+									type: "text",
+									dataKey: "content"
+								}
+							]
+						}
+					}
+				]
+			},
+			indicator: {
+				align: "left",
+				color: "custom-indicator"
+				// fallback: Notifications.IndicatorColor.RED
+			}
+		},
+		templateData: {
+			content: "This is a custom notification with custom indicator styling"
 		}
 	};
 
