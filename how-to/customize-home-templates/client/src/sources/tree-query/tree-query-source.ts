@@ -168,36 +168,40 @@ export class TreeQuerySource {
 				if (parts.length === 1) {
 					results = await Promise.all(matchingOrgs.map(async (o) => this.createResult(o, [o.name, ""], "")));
 				} else if (parts.length >= 2) {
-					const queryDep = new RegExp(parts[1], "i");
-					for (const org of matchingOrgs) {
-						let deps: EntityDepartment[] = org.departments;
-						if (parts[1].length > 0) {
-							deps = deps.filter((d) => queryDep.test(d.id) || queryDep.test(d.name));
-						}
+					try {
+						const queryDep = new RegExp(parts[1], "i");
+						for (const org of matchingOrgs) {
+							let deps: EntityDepartment[] = org.departments;
+							if (parts[1].length > 0) {
+								deps = deps.filter((d) => queryDep.test(d.id) || queryDep.test(d.name));
+							}
 
-						if (parts.length === 2) {
-							results = results.concat(
-								await Promise.all(
-									deps.map(async (d) => this.createResult(d, [org.name, d.name, ""], org.name))
-								)
-							);
-						} else if (parts.length === 3) {
-							const queryMem = new RegExp(parts[2], "i");
-
-							for (const dep of deps) {
-								let mems: EntityMember[] = dep.members;
-								if (parts[2].length > 0) {
-									mems = mems.filter((m) => queryMem.test(m.id) || queryMem.test(m.name));
-								}
-
+							if (parts.length === 2) {
 								results = results.concat(
 									await Promise.all(
-										mems.map(async (m) => this.createResult(m, [org.name, dep.name, m.name], `${org.name}/`))
+										deps.map(async (d) => this.createResult(d, [org.name, d.name, ""], org.name))
 									)
 								);
+							} else if (parts.length === 3) {
+								const queryMem = new RegExp(parts[2], "i");
+
+								for (const dep of deps) {
+									let mems: EntityMember[] = dep.members;
+									if (parts[2].length > 0) {
+										mems = mems.filter((m) => queryMem.test(m.id) || queryMem.test(m.name));
+									}
+
+									results = results.concat(
+										await Promise.all(
+											mems.map(async (m) =>
+												this.createResult(m, [org.name, dep.name, m.name], `${org.name}/`)
+											)
+										)
+									);
+								}
 							}
 						}
-					}
+					} catch {}
 				}
 			}
 		}
