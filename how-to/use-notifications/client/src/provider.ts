@@ -17,7 +17,6 @@ let updatableNotificationTimer: number | undefined;
 let loggingElement: HTMLElement | null;
 let codeElement: HTMLTextAreaElement | null;
 
-let activePlatform: string | undefined;
 let connected: boolean = false;
 let connectedVersion: string | null;
 let statusIntervalId: number | undefined;
@@ -71,6 +70,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					}
 				},
 				notificationIndicatorColors: {
+					// This custom indicator color will be used in the Notification with Custom Indicator
 					"custom-indicator": {
 						dark: {
 							background: "#FF0000",
@@ -147,7 +147,7 @@ async function initializeDom(): Promise<void> {
 					codeShowExample(notificationOptions);
 					await Notifications.create(notificationOptions);
 				}
-			} catch { }
+			} catch {}
 		});
 	}
 
@@ -251,7 +251,9 @@ async function initializeDom(): Promise<void> {
 
 	const btnNotificationWithCustomIndicator = document.querySelector("#btnNotificationWithCustomIndicator");
 	if (btnNotificationWithCustomIndicator) {
-		btnNotificationWithCustomIndicator.addEventListener("click", async () => showCustomIndicatorNotification());
+		btnNotificationWithCustomIndicator.addEventListener("click", async () =>
+			showCustomIndicatorNotification()
+		);
 	}
 
 	const btnNotificationsCenterShow = document.querySelector<HTMLButtonElement>("#btnNotificationsCenterShow");
@@ -322,7 +324,8 @@ async function initializeListeners(): Promise<void> {
 		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
 			if (event.notification?.customData?.action) {
 				loggingAddEntry(
-					`\tData: ${event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"
+					`\tData: ${
+						event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"
 					}`
 				);
 			} else {
@@ -420,7 +423,7 @@ async function showSimpleNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform
+		platform: PLATFORM_ID
 	};
 
 	codeShowExample(notification);
@@ -438,7 +441,7 @@ async function showSimpleNotificationBodyDismiss(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		onSelect: { BODY_CLICK: Notifications.ActionBodyClickType.DISMISS_EVENT }
 	};
 
@@ -457,7 +460,7 @@ async function showSimpleNotificationBodyDismissAction(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		onSelect: { BODY_CLICK: Notifications.ActionBodyClickType.DISMISS_EVENT },
 		customData: {
 			action: "custom-action",
@@ -483,7 +486,7 @@ async function showActionableNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		buttons: [
 			{
 				title: "Acknowledged",
@@ -519,7 +522,7 @@ async function showFormNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		form: [
 			{
 				key: "amount",
@@ -575,7 +578,7 @@ async function showFormAdvancedNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		form: [
 			{
 				type: "string",
@@ -787,7 +790,7 @@ async function showUpdatableNotification(): Promise<void> {
 			count: 0
 		},
 		id,
-		platform: activePlatform
+		platform: PLATFORM_ID
 	};
 
 	if (Object.keys(updatableNotifications).length === 0) {
@@ -821,7 +824,7 @@ async function showCustomNotification(): Promise<void> {
 		category: "default",
 		template: "custom",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		templateOptions: {
 			body: {
 				compositions: [
@@ -1054,7 +1057,7 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
-		platform: activePlatform
+		platform: PLATFORM_ID
 	};
 
 	codeShowExample(notification);
@@ -1075,7 +1078,7 @@ async function showIndicatorNotification(): Promise<void> {
 		category: "default",
 		template: "custom",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		templateOptions: {
 			body: {
 				compositions: [
@@ -1119,13 +1122,10 @@ async function showCustomIndicatorNotification(): Promise<void> {
 	const notification: Notifications.NotificationOptions = {
 		title: "Custom Indicator Notification",
 		toast: "transient",
-		indicator: {
-			text: "Alert"
-		},
 		category: "default",
 		template: "custom",
 		id: randomUUID(),
-		platform: activePlatform,
+		platform: PLATFORM_ID,
 		templateOptions: {
 			body: {
 				compositions: [
@@ -1149,10 +1149,13 @@ async function showCustomIndicatorNotification(): Promise<void> {
 				]
 			},
 			indicator: {
-				align: "left",
-				color: "custom-indicator"
-				// fallback: Notifications.IndicatorColor.RED
+				align: "right"
 			}
+		},
+		indicator: {
+			color: "custom-indicator",
+			fallback: Notifications.IndicatorColor.RED,
+			text: "ALERT!!!"
 		},
 		templateData: {
 			content: "This is a custom notification with custom indicator styling"
