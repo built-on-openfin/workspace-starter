@@ -327,18 +327,8 @@
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"additionalProperties": false,
-					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
-					"properties": {
-						"height": {
-							"type": "number"
-						},
-						"width": {
-							"type": "number"
-						}
-					},
-					"required": ["height", "width"],
-					"type": "object"
+					"$ref": "#/definitions/Partial_11",
+					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
 					"description": "Should the launched UI be positioned in the center of the screen?",
@@ -449,6 +439,9 @@
 		},
 		"Partial_12": {
 			"$ref": "#/definitions/__type_34"
+		},
+		"Partial_13": {
+			"$ref": "#/definitions/__type_35"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_7"
@@ -729,17 +722,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreferenceUrl"
+								"$ref": "#/definitions/ViewPreference<never>"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_11",
+					"$ref": "#/definitions/Partial_12",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -872,17 +865,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreferenceUrl"
+								"$ref": "#/definitions/WindowPreference<never>"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_12",
+					"$ref": "#/definitions/Partial_13",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -2123,6 +2116,24 @@
 		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_34": {
+			"additionalProperties": false,
+			"properties": {
 				"customData": {
 					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
 				},
@@ -2135,7 +2146,7 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
