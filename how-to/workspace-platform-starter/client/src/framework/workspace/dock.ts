@@ -186,12 +186,6 @@ function buildWorkspaceButtons(): WorkspaceButton[] {
 async function buildButtons(): Promise<DockButton[]> {
 	if (dockProviderOptions) {
 		const entries = Array.isArray(dockProviderOptions.entries) ? [...dockProviderOptions.entries] : [];
-		if (Array.isArray(dockProviderOptions.apps)) {
-			entries.push(...dockProviderOptions.apps);
-		}
-		if (Array.isArray(dockProviderOptions.buttons)) {
-			entries.push(...dockProviderOptions.buttons);
-		}
 		usedConditions.clear();
 
 		return buildButtonsFromEntries(entries);

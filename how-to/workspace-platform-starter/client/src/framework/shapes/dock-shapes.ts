@@ -40,18 +40,6 @@ export interface DockProviderOptions {
 	entries?: DockButtonTypes[];
 
 	/**
-	 * What apps should be made available via the dock, this property is deprecated, use entries.
-	 * @deprecated
-	 */
-	apps?: DockButtonAppsByTag[];
-
-	/**
-	 * What custom actions should be made available via the dock, this property is deprecated, use entries.
-	 * @deprecated
-	 */
-	buttons?: (DockButtonApp | DockButtonAction | DockButtonDropdown)[];
-
-	/**
 	 * Configured a default for the popup menu style, defaults to platform.
 	 */
 	popupMenuStyle?: PopupMenuStyles;
