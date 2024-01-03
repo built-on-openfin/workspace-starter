@@ -1365,30 +1365,6 @@
             "additionalProperties": false,
             "description": "Options for the dock provider.",
             "properties": {
-                "apps": {
-                    "description": "What apps should be made available via the dock, this property is deprecated, use entries.",
-                    "items": {
-                        "$ref": "#/definitions/DockButtonAppsByTag"
-                    },
-                    "type": "array"
-                },
-                "buttons": {
-                    "description": "What custom actions should be made available via the dock, this property is deprecated, use entries.",
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/DockButtonApp"
-                            },
-                            {
-                                "$ref": "#/definitions/DockButtonAction"
-                            },
-                            {
-                                "$ref": "#/definitions/DockButtonDropdown"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
                 "disableUserRearrangement": {
                     "description": "Disallow rearrangement of dock icons by setting this flag.",
                     "type": "boolean"
