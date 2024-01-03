@@ -1231,9 +1231,9 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/favicon.ico",
 					"title": "Quote Provider",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/js/modules/integrations/quote.bundle.js",
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/integrations/js/modules/integrations/quote.bundle.js",
 					"data": {
-						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/data/quotes/"
+						"rootUrl": "https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/integrations/data/quotes/"
 					}
 				},
 				{
@@ -1241,7 +1241,7 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/favicon.ico",
 					"title": "Emoji Provider",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/js/modules/integrations/emoji.bundle.js",
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/integrations/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
