@@ -1231,9 +1231,9 @@
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Quote Provider",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/quote.bundle.js",
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/integrations/js/modules/integrations/quote.bundle.js",
 					"data": {
-						"rootUrl": "http://localhost:8080/data/quotes/"
+						"rootUrl": "https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/integrations/data/quotes/"
 					}
 				},
 				{
@@ -1241,7 +1241,7 @@
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Emoji Provider",
 					"enabled": true,
-					"url": "http://localhost:8080/js/modules/integrations/emoji.bundle.js",
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/integrations/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
