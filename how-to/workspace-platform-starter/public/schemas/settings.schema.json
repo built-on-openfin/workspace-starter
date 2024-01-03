@@ -50,7 +50,7 @@
             "$ref": "#/definitions/__type_14"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_46"
+            "$ref": "#/definitions/__type_48"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -421,22 +421,6 @@
                 "type"
             ],
             "type": "object"
-        },
-        "BrowserButtonType": {
-            "description": "Types of buttons on browser windows",
-            "enum": [
-                "ShowHideTabs",
-                "ColorLinking",
-                "PresetLayouts",
-                "LockUnlockPage",
-                "SaveMenu",
-                "SavePage",
-                "Minimise",
-                "Maximise",
-                "Close",
-                "Custom"
-            ],
-            "type": "string"
         },
         "BrowserButtonType.Custom": {
             "const": "Custom",
@@ -1374,30 +1358,6 @@
             "additionalProperties": false,
             "description": "Options for the dock provider.",
             "properties": {
-                "apps": {
-                    "description": "What apps should be made available via the dock, this property is deprecated, use entries.",
-                    "items": {
-                        "$ref": "#/definitions/DockButtonAppsByTag"
-                    },
-                    "type": "array"
-                },
-                "buttons": {
-                    "description": "What custom actions should be made available via the dock, this property is deprecated, use entries.",
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/DockButtonApp"
-                            },
-                            {
-                                "$ref": "#/definitions/DockButtonAction"
-                            },
-                            {
-                                "$ref": "#/definitions/DockButtonDropdown"
-                            }
-                        ]
-                    },
-                    "type": "array"
-                },
                 "disableUserRearrangement": {
                     "description": "Disallow rearrangement of dock icons by setting this flag.",
                     "type": "boolean"
@@ -1550,6 +1510,18 @@
                 }
             },
             "type": "object"
+        },
+        "Exclude": {
+            "enum": [
+                "Close",
+                "ColorLinking",
+                "Maximise",
+                "Minimise",
+                "PresetLayouts",
+                "SaveMenu",
+                "SavePage"
+            ],
+            "type": "string"
         },
         "FavoriteProviderOptions": {
             "additionalProperties": false,
@@ -3234,6 +3206,9 @@
             },
             "type": "object"
         },
+        "NotificationIndicatorColorsWithScheme": {
+            "$ref": "#/definitions/__type_47"
+        },
         "NotificationProviderOptions": {
             "additionalProperties": false,
             "description": "Notification Provider Options. Providing settings in order to register your platform against the notification center.",
@@ -3765,6 +3740,10 @@
                 "logoUrl": {
                     "type": "string"
                 },
+                "notificationIndicatorColors": {
+                    "$ref": "#/definitions/Record",
+                    "description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
+                },
                 "palette": {
                     "$ref": "#/definitions/CustomPaletteSet"
                 }
@@ -3801,6 +3780,10 @@
                 },
                 "logoUrl": {
                     "type": "string"
+                },
+                "notificationIndicatorColors": {
+                    "$ref": "#/definitions/NotificationIndicatorColorsWithScheme",
+                    "description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
                 },
                 "palettes": {
                     "additionalProperties": false,
@@ -3914,7 +3897,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/BrowserButtonType",
+                    "$ref": "#/definitions/Exclude",
                     "description": "Type of default browser button"
                 }
             },
@@ -3955,6 +3938,9 @@
         },
         "RGB": {
             "$ref": "#/definitions/__type_18"
+        },
+        "Record": {
+            "$ref": "#/definitions/__type_46"
         },
         "RectangleByEdgePositions": {
             "$ref": "#/definitions/__type_37"
@@ -6525,6 +6511,34 @@
                 "disabled": {
                     "type": "boolean"
                 },
+                "tabsHiddenIconUrl": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "disabled": {
+                            "description": "The URL of the icon to display when the button is disabled and tabs are hidden.\n\nThe button is disabled when the page is locked.",
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "description": "The URL of the icon to display when the button is enabled and tabs are hidden.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "tabsShownIconUrl": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "disabled": {
+                            "description": "The URL of the icon to display when the button is disabled and tabs are hidden.\n\nThe button is disabled when the page is locked.",
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "description": "The URL of the icon to display when the button is enabled and tabs are hidden.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
                 "type": {
                     "$ref": "#/definitions/BrowserButtonType.ShowHideTabs"
                 }
@@ -6541,8 +6555,14 @@
                 "disabled": {
                     "type": "boolean"
                 },
+                "lockedIconUrl": {
+                    "type": "string"
+                },
                 "type": {
                     "$ref": "#/definitions/BrowserButtonType.LockUnlockPage"
+                },
+                "unlockedIconUrl": {
+                    "type": "string"
                 }
             },
             "required": [
@@ -7182,6 +7202,14 @@
             "type": "object"
         },
         "__type_46": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_47": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_48": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
