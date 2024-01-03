@@ -12,7 +12,7 @@ let dialogOptions: DialogProviderOptions | undefined;
  * @param options The options for the dialog.
  */
 export async function init(options?: DialogProviderOptions): Promise<void> {
-	options = dialogOptions;
+	dialogOptions = options;
 }
 
 /**
