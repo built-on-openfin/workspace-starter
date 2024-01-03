@@ -12,6 +12,7 @@
   - Improved launch preferences by extending appProvider so that you can specify default updatable preferences that should apply across applications (Caution. Preferences such as url should remain app specific).
   - Dock now takes monitor into account when launching apps using the app entry type or launch-view action or favorites menu option (module). This only applies to views and windows (not snapshots or other types of app).
   - Interop Broker now takes into account who raised the intent/fdc3.open request when launching a view/window in response (it will position it on the same monitor as the requesting app if possible using the window positioning strategy)
+- Removed the quote and emoji integration code and dependencies, examples of how they are implemented can be seen in the customize-home-templates example
 
 ## v16
 
