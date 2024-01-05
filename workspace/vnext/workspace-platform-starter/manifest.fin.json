@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "33.116.77.11"
+		"version": "34.118.78.76"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-workspace-platform-starter"
@@ -72,7 +72,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - vnext",
+		"name": "Workspace Platform Starter - v17.0.4",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -198,6 +198,11 @@
 				"desktop-browser",
 				"connection",
 				"endpoint"
+			],
+			"updatableLaunchPreference": [
+				{
+					"name": "bounds"
+				}
 			]
 		},
 		"endpointProvider": {
@@ -1226,9 +1231,9 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
 					"title": "Quote Provider",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/integrations/quote.bundle.js",
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/integrations/js/modules/integrations/quote.bundle.js",
 					"data": {
-						"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/data/quotes/"
+						"rootUrl": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/integrations/data/quotes/"
 					}
 				},
 				{
@@ -1236,7 +1241,7 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
 					"title": "Emoji Provider",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/integrations/emoji.bundle.js",
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/integrations/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]

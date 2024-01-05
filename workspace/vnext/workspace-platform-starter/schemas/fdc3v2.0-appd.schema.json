@@ -417,25 +417,15 @@
 			"type": "object"
 		},
 		"InteropConfig": {
-			"$ref": "#/definitions/__type_1"
+			"$ref": "#/definitions/__type_2"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"additionalProperties": false,
-					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
-					"properties": {
-						"height": {
-							"type": "number"
-						},
-						"width": {
-							"type": "number"
-						}
-					},
-					"required": ["height", "width"],
-					"type": "object"
+					"$ref": "#/definitions/Partial",
+					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
 					"description": "Should the launched UI be positioned in the center of the screen?",
@@ -563,7 +553,10 @@
 			"$ref": "#/definitions/__type"
 		},
 		"Partial_1": {
-			"$ref": "#/definitions/__type_2"
+			"$ref": "#/definitions/__type_1"
+		},
+		"Partial_2": {
+			"$ref": "#/definitions/__type_3"
 		},
 		"Preference.T": {
 			"description": "A list of Web related constraints",
@@ -623,17 +616,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreferenceUrl"
+								"$ref": "#/definitions/ViewPreference<never>"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial",
+					"$ref": "#/definitions/Partial_1",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -745,17 +738,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreferenceUrl"
+								"$ref": "#/definitions/WindowPreference<never>"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_1",
+					"$ref": "#/definitions/Partial_2",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -794,6 +787,24 @@
 		"__type": {
 			"additionalProperties": false,
 			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_1": {
+			"additionalProperties": false,
+			"properties": {
 				"customData": {
 					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
 				},
@@ -806,7 +817,7 @@
 			},
 			"type": "object"
 		},
-		"__type_1": {
+		"__type_2": {
 			"additionalProperties": false,
 			"description": "Information relevant to the Interop Broker.",
 			"properties": {
@@ -821,7 +832,7 @@
 			},
 			"type": "object"
 		},
-		"__type_2": {
+		"__type_3": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
