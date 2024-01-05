@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "16.1.0",
+	"version": "17.0.0",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -15,7 +15,7 @@
 		"markdownlint": "node ./scripts/workspaces.mjs markdownlint",
 		"validate": "node ./scripts/workspaces.mjs validate",
 		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,fkill*,node-emoji,@openfin/core,@openfin/node-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,chai,fkill*,node-emoji,@openfin/core,@openfin/node-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
 		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
 		"common-update": "node ./scripts/common-update.mjs"
 	},
@@ -52,7 +52,7 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/node-adapter": "33.77.11",
+		"@openfin/node-adapter": "34.78.76",
 		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",

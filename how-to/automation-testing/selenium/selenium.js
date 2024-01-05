@@ -106,9 +106,9 @@ async function runMochaTests() {
 }
 
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
-// e.g. if the manifest runtime version is 33.116.77.11 then the chromedriver version should be "116.0.0"
+// e.g. if the manifest runtime version is 34.118.78.76 then the chromedriver version should be "118.0.0"
 const testManifestUrl =
-	'https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/register-with-home/manifest.fin.json';
+	'https://built-on-openfin.github.io/workspace-starter/workspace/vnext/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5678;
 const devToolsPort = 9122;
 

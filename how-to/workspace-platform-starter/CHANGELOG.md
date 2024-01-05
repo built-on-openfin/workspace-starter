@@ -1,5 +1,7 @@
 # Changelog
 
+## v17.0.0
+
 ## v16.1.0
 
 - Change storage mapper now removes additional defaults based on default window/page/view settings
