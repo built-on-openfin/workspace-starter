@@ -968,6 +968,29 @@
 									"url": "https://www.youtube.com/user/OpenFinTech"
 								}
 							}
+						},
+						{
+							"tooltip": "Other",
+							"options": [
+								{
+									"tooltip": "LinkedIn",
+									"action": {
+										"id": "launch-view",
+										"customData": {
+											"url": "https://www.linkedin.com/company/openfin"
+										}
+									}
+								},
+								{
+									"tooltip": "GitHub",
+									"action": {
+										"id": "launch-view",
+										"customData": {
+											"url": "https://github.com/openfin"
+										}
+									}
+								}
+							]
 						}
 					]
 				},
