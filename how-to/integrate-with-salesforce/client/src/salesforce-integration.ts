@@ -111,11 +111,6 @@ export class SalesforceIntegration {
 	private _salesForceConnection: SalesforceConnection | undefined;
 
 	/**
-	 * The debounce timer id.
-	 */
-	private _debounceTimerId?: number;
-
-	/**
 	 * Logger for logging info.
 	 * @internal
 	 */
@@ -365,6 +360,31 @@ export class SalesforceIntegration {
 	}
 
 	/**
+	 * Get entries to show while the integration is searching.
+	 * @param query The query to search for.
+	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
+	 * @returns The list of results and new filters.
+	 */
+	public async getSearchResultsProgress?(
+		query: string,
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength: number;
+			queryAgainst: string[];
+			isSuggestion?: boolean;
+		}
+	): Promise<HomeSearchResult[]> {
+		const homeResults = await this.getDefaultEntries(query);
+
+		const minLength = options?.queryMinLength ?? 3;
+		return homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : []);
+	}	
+
+	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
@@ -383,87 +403,76 @@ export class SalesforceIntegration {
 			queryAgainst?: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		const homeResults = await this.getDefaultEntries(query);
-
 		this._lastResponse = lastResponse;
 
 		const minLength = options?.queryMinLength ?? 3;
 
-		if (this._debounceTimerId) {
-			window.clearTimeout(this._debounceTimerId);
-			this._debounceTimerId = undefined;
-		}
+		if (this._salesForceConnection && query.length >= minLength && !query.startsWith("/")) {
+			let selectedObjects: string[] = this._mappings.map((m) => m.label ?? "");
+			if (Array.isArray(filters) && filters.length > 0) {
+				const objectsFilter = filters.find((x) => x.id === SalesforceIntegration._OBJECTS_FILTER_ID);
+				if (objectsFilter) {
+					selectedObjects = (
+						Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options]
+					)
+						.filter((x) => Boolean(x.isSelected))
+						.map((x) => x.value);
+				}
+			}
 
-		this._debounceTimerId = window.setTimeout(async () => {
-			if (this._lastResponse) {
-				if (this._salesForceConnection && query.length >= minLength && !query.startsWith("/")) {
-					let selectedObjects: string[] = this._mappings.map((m) => m.label ?? "");
-					if (Array.isArray(filters) && filters.length > 0) {
-						const objectsFilter = filters.find((x) => x.id === SalesforceIntegration._OBJECTS_FILTER_ID);
-						if (objectsFilter) {
-							selectedObjects = (
-								Array.isArray(objectsFilter.options) ? objectsFilter.options : [objectsFilter.options]
-							)
-								.filter((x) => Boolean(x.isSelected))
-								.map((x) => x.value);
-						}
-					}
+			try {
+				const apiSearchResults = await this.getApiSearchResults(query, selectedObjects);
 
-					try {
-						const apiSearchResults = await this.getApiSearchResults(query, selectedObjects);
+				const maps: { [source: string]: SalesforceMapping } = {};
+				for (const mapping of this._mappings) {
+					maps[mapping.sourceType] = mapping;
+				}
 
-						const maps: { [source: string]: SalesforceMapping } = {};
-						for (const mapping of this._mappings) {
-							maps[mapping.sourceType] = mapping;
-						}
+				const searchResults = await Promise.all(
+					apiSearchResults.results.map(async (r) =>
+						this.buildTemplate(
+							r,
+							// we clone this so reference deletions don't affect the original
+							this.objectClone(maps[r.attributes.type]),
+							CLITemplate.Loading
+						)
+					)
+				);
 
-						const searchResults = await Promise.all(
-							apiSearchResults.results.map(async (r) =>
-								this.buildTemplate(
-									r,
-									// we clone this so reference deletions don't affect the original
-									this.objectClone(maps[r.attributes.type]),
-									CLITemplate.Loading
-								)
-							)
-						);
+				this._lastResponse.respond(searchResults);
 
-						this._lastResponse.respond(searchResults);
-
-						const resultTypes: Set<string> = new Set<string>();
-						for (const searchResult of searchResults) {
-							if (searchResult.label) {
-								resultTypes.add(searchResult.label);
-							}
-						}
-
-						const newFilters = resultTypes.entries();
-						this._lastResponse.updateContext({
-							filters: [
-								{
-									id: SalesforceIntegration._OBJECTS_FILTER_ID as string,
-									title: "Salesforce",
-									options: [...newFilters].map((f) => ({
-										value: f[0],
-										isSelected: true
-									}))
-								}
-							]
-						});
-					} catch (err) {
-						await this.closeConnection();
-						if (err instanceof AuthorizationError) {
-							this._lastResponse.respond([this.getReconnectSearchResult(query, filters)]);
-						}
-						this._logger?.error("Error retrieving Salesforce search results", err);
+				const resultTypes: Set<string> = new Set<string>();
+				for (const searchResult of searchResults) {
+					if (searchResult.label) {
+						resultTypes.add(searchResult.label);
 					}
 				}
-				this._lastResponse.revoke(`${this._definition?.id}-searching`);
+
+				const newFilters = resultTypes.entries();
+				this._lastResponse.updateContext({
+					filters: [
+						{
+							id: SalesforceIntegration._OBJECTS_FILTER_ID as string,
+							title: "Salesforce",
+							options: [...newFilters].map((f) => ({
+								value: f[0],
+								isSelected: true
+							}))
+						}
+					]
+				});
+			} catch (err) {
+				await this.closeConnection();
+				if (err instanceof AuthorizationError) {
+					this._lastResponse.respond([this.getReconnectSearchResult(query, filters)]);
+				}
+				this._logger?.error("Error retrieving Salesforce search results", err);
 			}
-		}, 500);
+		}
+		this._lastResponse.revoke(`${this._definition?.id}-searching`);
 
 		return {
-			results: homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : [])
+			results: []
 		};
 	}
 

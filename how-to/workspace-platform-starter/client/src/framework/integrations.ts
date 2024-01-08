@@ -192,6 +192,59 @@ export async function getSearchResults(
 }
 
 /**
+ * Get the search results from all the integration providers.
+ * @param query The query to get the search results for.
+ * @param lastResponse The last search response used for updating existing results.
+ * @param selectedSources Selected sources filters list.
+ * @param options Options for the search query.
+ * @param options.queryMinLength The minimum length before a query is actioned.
+ * @param options.queryAgainst The fields in the data to query against.
+ * @param options.isSuggestion Is the query from a suggestion.
+ * @returns The search results and new filters.
+ */
+export async function getSearchResultsProgress(
+	query: string,
+	lastResponse: HomeSearchListenerResponse,
+	selectedSources: string[],
+	options: {
+		queryMinLength: number;
+		queryAgainst: string[];
+		isSuggestion?: boolean;
+	}
+): Promise<HomeSearchResult[]> {
+	let homeResponse: HomeSearchResult[] = [];
+
+	if (!isEmpty(integrationProviderOptions)) {
+		const promises: Promise<HomeSearchResult[]>[] = [];
+		for (const integrationModule of integrationModules) {
+			if (
+				integrationModule.isInitialized &&
+				integrationModule.implementation.getSearchResultsProgress &&
+				((integrationModule.definition.excludeFromSourceFilter ?? selectedSources.length === 0) ||
+					selectedSources.includes(integrationModule.definition.title))
+			) {
+				promises.push(
+					integrationModule.implementation.getSearchResultsProgress(query, lastResponse, options)
+				);
+			}
+		}
+
+		const promiseResults = await Promise.allSettled(promises);
+		for (const promiseResult of promiseResults) {
+			if (promiseResult.status === "fulfilled") {
+				if (Array.isArray(promiseResult.value)) {
+					homeResponse = homeResponse.concat(promiseResult.value);
+				}
+			} else {
+				logger.error(promiseResult.reason);
+			}
+		}
+	}
+
+	return homeResponse;
+}
+
+/**
  * Get the help search entries for all the integration providers.
  * @returns The list of help entries.
  */

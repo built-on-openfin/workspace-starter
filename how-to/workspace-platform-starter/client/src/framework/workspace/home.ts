@@ -9,7 +9,12 @@ import {
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse
 } from "@openfin/workspace";
-import { getHelpSearchEntries, getSearchResults, itemSelection } from "../integrations";
+import {
+	getHelpSearchEntries,
+	getSearchResults,
+	getSearchResultsProgress,
+	itemSelection
+} from "../integrations";
 import { createLogger } from "../logger-provider";
 import type { HomeProviderOptions } from "../shapes/home-shapes";
 import { isEmpty } from "../utils";
@@ -22,6 +27,7 @@ const logger = createLogger("Home");
 let homeProviderOptions: HomeProviderOptions | undefined;
 let registrationInfo: HomeRegistration | undefined;
 let lastResponse: HomeSearchListenerResponse;
+let debounceTimerId: number | undefined;
 
 /**
  * Register the home component.
@@ -118,31 +124,41 @@ async function onUserInput(
 		return searchResults;
 	}
 
+	if (debounceTimerId) {
+		window.clearTimeout(debounceTimerId);
+		debounceTimerId = undefined;
+	}
+
 	if (!isEmpty(lastResponse)) {
 		lastResponse.close();
 	}
 	lastResponse = response;
 	lastResponse.open();
 
-	// Perform the search async and return immediately with a dummy filter, so the UI does not "bounce"
-	window.setTimeout(async () => {
-		try {
-			const selectedFilters: CLIFilter[] = request?.context?.selectedFilters ?? [];
+	const selectedFilters: CLIFilter[] = request?.context?.selectedFilters ?? [];
 
-			let selectedSourceFilterOptions: string[] = [];
-			if (enableSourceFilter && selectedFilters) {
-				const sourceFilter = selectedFilters.find((f) => f.id === HOME_SOURCE_FILTERS);
-				if (sourceFilter) {
-					if (Array.isArray(sourceFilter.options)) {
-						selectedSourceFilterOptions = sourceFilter.options
-							.filter((o) => o.isSelected)
-							.map((o) => o.value);
-					} else if (sourceFilter.options.isSelected) {
-						selectedSourceFilterOptions.push(sourceFilter.options.value);
-					}
-				}
+	let selectedSourceFilterOptions: string[] = [];
+	if (enableSourceFilter && selectedFilters) {
+		const sourceFilter = selectedFilters.find((f) => f.id === HOME_SOURCE_FILTERS);
+		if (sourceFilter) {
+			if (Array.isArray(sourceFilter.options)) {
+				selectedSourceFilterOptions = sourceFilter.options.filter((o) => o.isSelected).map((o) => o.value);
+			} else if (sourceFilter.options.isSelected) {
+				selectedSourceFilterOptions.push(sourceFilter.options.value);
 			}
+		}
+	}
 
+	const queryOptions = {
+		queryMinLength: homeProviderOptions?.queryMinLength ?? 3,
+		queryAgainst: homeProviderOptions?.queryAgainst ?? ["title"],
+		isSuggestion: request.context?.isSuggestion ?? false
+	};
+
+	// Debounce the keyboard input, this also means that the method returns
+	// immediately with a dummy filter, so the UI does not "bounce"
+	debounceTimerId = window.setTimeout(async () => {
+		try {
 			logger.info("Search results requested.");
 			const finalFilters: CLIFilter[] = [];
 			let sourceFilter: CLIFilter | undefined;
@@ -187,11 +203,7 @@ async function onUserInput(
 					}
 				},
 				selectedSourceFilterOptions,
-				{
-					queryMinLength: homeProviderOptions?.queryMinLength ?? 3,
-					queryAgainst: homeProviderOptions?.queryAgainst ?? ["title"],
-					isSuggestion: request.context?.isSuggestion ?? false
-				}
+				queryOptions
 			);
 
 			if (!Array.isArray(searchResults?.results)) {
@@ -237,7 +249,14 @@ async function onUserInput(
 		} catch (err) {
 			logger.error("Exception while getting search list results", err);
 		}
-	}, 0);
+	}, 200);
+
+	const integrationProgressResults = await getSearchResultsProgress(
+		request.query,
+		lastResponse,
+		selectedSourceFilterOptions,
+		queryOptions
+	);
 
 	return {
 		results: [
@@ -248,7 +267,8 @@ async function onUserInput(
 				actions: [],
 				template: CLITemplate.Loading,
 				templateContent: ""
-			}
+			},
+			...integrationProgressResults
 		],
 		context: {
 			filters: enableSourceFilter ? [createEmptySourceFilter()] : []
