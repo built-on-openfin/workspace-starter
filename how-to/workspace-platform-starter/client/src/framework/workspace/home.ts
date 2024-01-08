@@ -22,7 +22,6 @@ const logger = createLogger("Home");
 let homeProviderOptions: HomeProviderOptions | undefined;
 let registrationInfo: HomeRegistration | undefined;
 let lastResponse: HomeSearchListenerResponse;
-let debounceTimerId: number | undefined;
 
 /**
  * Register the home component.
@@ -119,20 +118,14 @@ async function onUserInput(
 		return searchResults;
 	}
 
-	if (debounceTimerId) {
-		window.clearTimeout(debounceTimerId);
-		debounceTimerId = undefined;
-	}
-
 	if (!isEmpty(lastResponse)) {
 		lastResponse.close();
 	}
 	lastResponse = response;
 	lastResponse.open();
 
-	// Debounce the keyboard input, this also means that the method returns
-	// immediately with a dummy filter, so the UI does not "bounce"
-	debounceTimerId = window.setTimeout(async () => {
+	// Perform the search async and return immediately with a dummy filter, so the UI does not "bounce"
+	window.setTimeout(async () => {
 		try {
 			const selectedFilters: CLIFilter[] = request?.context?.selectedFilters ?? [];
 
@@ -244,7 +237,7 @@ async function onUserInput(
 		} catch (err) {
 			logger.error("Exception while getting search list results", err);
 		}
-	}, 200);
+	}, 0);
 
 	return {
 		results: [
