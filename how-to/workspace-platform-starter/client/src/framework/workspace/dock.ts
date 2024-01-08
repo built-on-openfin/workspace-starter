@@ -227,7 +227,7 @@ async function buildButtonsFromEntries(
 			} else if ("action" in entry) {
 				await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode, isTopLevel);
 			} else if ("options" in entry) {
-				await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, platform);
+				await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, isTopLevel, platform);
 			} else if ("tags" in entry) {
 				await addEntriesByAppTag(buttons, entry, iconFolder, colorSchemeMode);
 			}
@@ -319,6 +319,7 @@ async function addEntryAsAction(
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @param isTopLevel Is this a top level entry.
  * @param platform The workspace platform for checking conditions.
  */
 async function addEntriesAsDropdown(
@@ -326,12 +327,15 @@ async function addEntriesAsDropdown(
 	entry: DockButtonDropdown,
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode,
+	isTopLevel: boolean,
 	platform: WorkspacePlatformModule
 ): Promise<void> {
 	// Options are present so this is a drop down
 	// The items in the drop down can be an appId or a custom action
-	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
-		logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+	if (!isStringValue(entry.tooltip)) {
+		logger.error("You must specify the tooltip for a DockButtonDropdown");
+	} else if (isTopLevel && !isStringValue(entry.iconUrl)) {
+		logger.error("You must specify the iconUrl for a DockButtonDropdown");
 	} else {
 		const opts: (CustomButtonConfig | CustomDropdownConfig)[] = [];
 
@@ -351,7 +355,7 @@ async function addEntriesAsDropdown(
 				let optionTooltip = option.tooltip;
 				let action: CustomActionSpecifier | undefined;
 				let iconUrl;
-				let subOptions: CustomButtonConfig[] | undefined;
+				let subOptions: (CustomButtonConfig | CustomDropdownConfig)[] | undefined;
 
 				// If there are options this is a submenu
 				if ("options" in option) {
@@ -367,7 +371,11 @@ async function addEntriesAsDropdown(
 								action: dockButton.action
 							});
 						} else if (dockButton.type === DockButtonNames.DropdownButton) {
-							// Only single level of nesting supported
+							subOptions.push({
+								tooltip: dockButton.tooltip,
+								iconUrl: dockButton.iconUrl,
+								options: dockButton.options
+							});
 						}
 					}
 				} else if ("appId" in option) {
