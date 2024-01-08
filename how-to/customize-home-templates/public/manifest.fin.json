@@ -34,7 +34,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Customize Home Templates - v17.0.4",
+		"name": "Customize Home Templates - v17.0.6",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

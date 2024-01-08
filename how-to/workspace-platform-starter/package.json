@@ -40,7 +40,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint",
 		"test": "jest --config ./jest.config.js",
-		"e2e": "of-automation http://localhost:8080/manifest.fin.json ./e2e/**/*.spec.ts --workspace 17.0.4 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
+		"e2e": "of-automation http://localhost:8080/manifest.fin.json ./e2e/**/*.spec.ts --workspace 17.0.6 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [
@@ -53,8 +53,8 @@
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/openid-connect": "^1.0.0",
 		"@openfin/snap-sdk": "0.2.0",
-		"@openfin/workspace": "17.0.4",
-		"@openfin/workspace-platform": "17.0.4",
+		"@openfin/workspace": "17.0.6",
+		"@openfin/workspace-platform": "17.0.6",
 		"csstype": "^3.1.3"
 	},
 	"devDependencies": {
