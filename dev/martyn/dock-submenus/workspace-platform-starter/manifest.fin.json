@@ -989,6 +989,29 @@
 											"url": "https://github.com/openfin"
 										}
 									}
+								},
+								{
+									"tooltip": "Search",
+									"options": [
+										{
+											"tooltip": "Google",
+											"action": {
+												"id": "launch-view",
+												"customData": {
+													"url": "https://www.google.com/search?q=openfin"
+												}
+											}
+										},
+										{
+											"tooltip": "Bing",
+											"action": {
+												"id": "launch-view",
+												"customData": {
+													"url": "https://www.bing.com/search?q=openfin"
+												}
+											}
+										}
+									]
 								}
 							]
 						}
