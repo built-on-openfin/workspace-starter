@@ -253,9 +253,9 @@ export class ServiceNowIntegration {
 			apps.push(await this.createAppResult(this._integrationHelpers?.templateHelpers, palette));
 		}
 
-		return apps.concat(query.length >= minLength ? [this.createSearchingResult()] : [])
-	}	
-	
+		return apps.concat(query.length >= minLength ? [this.createSearchingResult()] : []);
+	}
+
 	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.
@@ -357,9 +357,7 @@ export class ServiceNowIntegration {
 						batchRequest.rest_requests.push({
 							id: "Incident",
 							method: "GET",
-							url: `/api/now/v2/table/${
-								ServiceNowIntegration._TABLE_NAMES.Incident
-							}?${this.buildSearchQuery(
+							url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Incident}?${this.buildSearchQuery(
 								query,
 								["number", "short_description"],
 								["sys_id", "number", "short_description"],

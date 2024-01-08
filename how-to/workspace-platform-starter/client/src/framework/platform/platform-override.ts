@@ -21,6 +21,10 @@ import {
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type {
+	HandleSaveModalOnPageClosePayload,
+	SaveModalOnPageCloseResult
+} from "@openfin/workspace-platform/common/src/api/pages/shapes";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
 import {
 	getWindowPositionOptions,
@@ -35,7 +39,11 @@ import * as Menu from "../menu";
 import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
 import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
-import type { BrowserProviderOptions, WindowPositioningOptions } from "../shapes/browser-shapes";
+import type {
+	BrowserProviderOptions,
+	UnsavedPagePromptStrategy,
+	WindowPositioningOptions
+} from "../shapes/browser-shapes";
 import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
@@ -83,6 +91,7 @@ const PAGE_ENDPOINT_ID_SET = "page-set";
 const logger = createLogger("PlatformOverride");
 
 let windowPositioningOptions: WindowPositioningOptions | undefined;
+let unsavedPagePromptStrategy: UnsavedPagePromptStrategy | undefined;
 let disableStorageMapping: boolean | undefined;
 let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
@@ -863,6 +872,37 @@ export function overrideCallback(
 		 */
 		public async saveDockProviderConfig(config: DockProviderConfigWithIdentity): Promise<void> {
 			return saveConfig(config, async (providerConfig) => super.saveDockProviderConfig(providerConfig));
+		}
+
+		/**
+		 * Determine whether or not a dialog should be shown.
+		 * @param payload the page that is going to be closed.
+		 * @returns Whether or not a modal should be shown
+		 */
+		public async handleSaveModalOnPageClose(
+			payload: HandleSaveModalOnPageClosePayload
+		): Promise<SaveModalOnPageCloseResult> {
+			// close confirmation modal will not be shown if the page is locked
+			if (isEmpty(unsavedPagePromptStrategy)) {
+				const settings = await getSettings();
+				unsavedPagePromptStrategy = settings?.browserProvider?.unsavedPagePromptStrategy ?? "default";
+			}
+			if (unsavedPagePromptStrategy === "default") {
+				return super.handleSaveModalOnPageClose(payload);
+			}
+			if (unsavedPagePromptStrategy === "never") {
+				return { shouldShowModal: false };
+			}
+			if (unsavedPagePromptStrategy === "skip-untitled") {
+				const platform = getCurrentSync();
+				const defaultPageTitle = await platform.Browser.getUniquePageTitle();
+				const defaultPagePrefix = defaultPageTitle.split(" ")[0];
+				if (payload.page.title.startsWith(defaultPagePrefix)) {
+					return { shouldShowModal: false };
+				}
+			}
+			logger.warn("Unsaved page prompt strategy is not valid. Using default.");
+			return super.handleSaveModalOnPageClose(payload);
 		}
 	}
 	return new Override();
