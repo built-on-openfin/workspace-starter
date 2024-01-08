@@ -428,7 +428,7 @@ async function addEntriesAsDropdown(
 				entry.id,
 				entry.tooltip ?? "",
 				themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
-				opts as CustomButtonConfig[]
+				opts
 			)
 		);
 	}
@@ -690,7 +690,7 @@ async function addDropdownOrMenu(
 	id: string,
 	tooltip: string,
 	iconUrl: string | undefined,
-	options: CustomButtonConfig[]
+	options: (CustomButtonConfig | CustomDropdownConfig)[]
 ): Promise<DockButton> {
 	const popupMenuStyle = dockProviderOptions?.popupMenuStyle ?? Menu.getPopupMenuStyle();
 
