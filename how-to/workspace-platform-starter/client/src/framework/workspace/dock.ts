@@ -3,6 +3,7 @@ import {
 	DockButtonNames,
 	type CustomActionSpecifier,
 	type CustomButtonConfig,
+	type CustomDropdownConfig,
 	type DockButton,
 	type DockProvider,
 	type DockProviderRegistration,
@@ -188,7 +189,7 @@ async function buildButtons(): Promise<DockButton[]> {
 		const entries = Array.isArray(dockProviderOptions.entries) ? [...dockProviderOptions.entries] : [];
 		usedConditions.clear();
 
-		return buildButtonsFromEntries(entries);
+		return buildButtonsFromEntries(entries, true);
 	}
 
 	return [];
@@ -197,9 +198,13 @@ async function buildButtons(): Promise<DockButton[]> {
 /**
  * Build the buttons to display on the dock from config.
  * @param entries The entries to build the buttons from
+ * @param isTopLevel Is this a top level entry.
  * @returns The dock buttons to display.
  */
-async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<DockButton[]> {
+async function buildButtonsFromEntries(
+	entries: DockButtonTypes[],
+	isTopLevel: boolean
+): Promise<DockButton[]> {
 	const buttons: DockButton[] = [];
 
 	const iconFolder = await getCurrentIconFolder();
@@ -220,9 +225,9 @@ async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<Dock
 			if ("appId" in entry) {
 				await addEntryAsApp(buttons, entry, iconFolder, colorSchemeMode);
 			} else if ("action" in entry) {
-				await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode);
+				await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode, isTopLevel);
 			} else if ("options" in entry) {
-				await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, platform);
+				await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, isTopLevel, platform);
 			} else if ("tags" in entry) {
 				await addEntriesByAppTag(buttons, entry, iconFolder, colorSchemeMode);
 			}
@@ -284,15 +289,19 @@ async function addEntryAsApp(
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @param isTopLevel Is this a top level entry.
  */
 async function addEntryAsAction(
 	buttons: DockButton[],
 	entry: DockButtonAction,
 	iconFolder: string,
-	colorSchemeMode: ColorSchemeMode
+	colorSchemeMode: ColorSchemeMode,
+	isTopLevel: boolean
 ): Promise<void> {
-	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
-		logger.error("You must specify the tooltip and iconUrl for a DockButtonAction");
+	if (!isStringValue(entry.tooltip)) {
+		logger.error("You must specify the tooltip for a DockButtonAction");
+	} else if (isTopLevel && !isStringValue(entry.iconUrl)) {
+		logger.error("You must specify the iconUrl for a DockButtonAction");
 	} else {
 		buttons.push({
 			id: entry.id,
@@ -310,6 +319,7 @@ async function addEntryAsAction(
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @param isTopLevel Is this a top level entry.
  * @param platform The workspace platform for checking conditions.
  */
 async function addEntriesAsDropdown(
@@ -317,14 +327,17 @@ async function addEntriesAsDropdown(
 	entry: DockButtonDropdown,
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode,
+	isTopLevel: boolean,
 	platform: WorkspacePlatformModule
 ): Promise<void> {
 	// Options are present so this is a drop down
 	// The items in the drop down can be an appId or a custom action
-	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
-		logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+	if (!isStringValue(entry.tooltip)) {
+		logger.error("You must specify the tooltip for a DockButtonDropdown");
+	} else if (isTopLevel && !isStringValue(entry.iconUrl)) {
+		logger.error("You must specify the iconUrl for a DockButtonDropdown");
 	} else {
-		const opts: CustomButtonConfig[] = [];
+		const opts: (CustomButtonConfig | CustomDropdownConfig)[] = [];
 
 		for (const option of entry.options) {
 			if (Array.isArray(option.conditions)) {
@@ -342,10 +355,33 @@ async function addEntriesAsDropdown(
 				let optionTooltip = option.tooltip;
 				let action: CustomActionSpecifier | undefined;
 				let iconUrl;
+				let subOptions: (CustomButtonConfig | CustomDropdownConfig)[] | undefined;
 
-				// If the options has an appId we are going to launch that
-				// otherwise we use the custom action.
-				if ("appId" in option) {
+				// If there are options this is a submenu
+				if ("options" in option) {
+					subOptions = [];
+
+					const dockButtons = await buildButtonsFromEntries(option.options as DockButtonTypes[], false);
+
+					for (const dockButton of dockButtons) {
+						if (dockButton.type === DockButtonNames.ActionButton) {
+							subOptions.push({
+								tooltip: dockButton.tooltip,
+								iconUrl: dockButton.iconUrl,
+								action: dockButton.action
+							});
+						} else if (dockButton.type === DockButtonNames.DropdownButton) {
+							subOptions.push({
+								tooltip: dockButton.tooltip,
+								iconUrl: dockButton.iconUrl,
+								options: dockButton.options
+							});
+						}
+					}
+				} else if ("appId" in option) {
+					// If the options has an appId we are going to launch that
+					// otherwise we use the custom action.
+
 					const app = await getApp(option.appId);
 					if (!isStringValue(option.iconUrl) && app) {
 						iconUrl = getAppIcon(app);
@@ -372,8 +408,14 @@ async function addEntriesAsDropdown(
 				if (!isEmpty(action)) {
 					opts.push({
 						tooltip: optionTooltip ?? "",
-						action,
-						iconUrl
+						iconUrl,
+						action
+					});
+				} else if (!isEmpty(subOptions)) {
+					opts.push({
+						tooltip: optionTooltip ?? "",
+						iconUrl,
+						options: subOptions
 					});
 				}
 			}
@@ -656,7 +698,7 @@ async function addDropdownOrMenu(
 	id: string,
 	tooltip: string,
 	iconUrl: string | undefined,
-	options: CustomButtonConfig[]
+	options: (CustomButtonConfig | CustomDropdownConfig)[]
 ): Promise<DockButton> {
 	const popupMenuStyle = dockProviderOptions?.popupMenuStyle ?? Menu.getPopupMenuStyle();
 

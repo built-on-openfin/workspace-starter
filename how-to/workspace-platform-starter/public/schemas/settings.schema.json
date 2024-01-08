@@ -50,7 +50,7 @@
             "$ref": "#/definitions/__type_3"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_52"
+            "$ref": "#/definitions/__type_53"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -713,7 +713,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_45"
+            "$ref": "#/definitions/__type_46"
         },
         "ConditionsProviderOptions": {
             "$ref": "#/definitions/ModuleList_3",
@@ -831,7 +831,7 @@
             "$ref": "#/definitions/__type_15"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_42"
+            "$ref": "#/definitions/__type_43"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_9"
@@ -1162,7 +1162,7 @@
         },
         "Data": {},
         "DeepPartial": {
-            "$ref": "#/definitions/__type_34"
+            "$ref": "#/definitions/__type_35"
         },
         "DelayStrategy": {
             "additionalProperties": false,
@@ -1219,7 +1219,7 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_39"
+            "$ref": "#/definitions/__type_40"
         },
         "DockButtonAction": {
             "additionalProperties": false,
@@ -1395,6 +1395,9 @@
                             },
                             {
                                 "$ref": "#/definitions/Omit_2"
+                            },
+                            {
+                                "$ref": "#/definitions/Omit_3"
                             }
                         ]
                     },
@@ -1904,7 +1907,7 @@
             "$ref": "#/definitions/__type_4"
         },
         "Identity_5_1": {
-            "$ref": "#/definitions/__type_35"
+            "$ref": "#/definitions/__type_36"
         },
         "Image": {
             "additionalProperties": false,
@@ -2074,7 +2077,7 @@
             "$ref": "#/definitions/__type_12"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_44"
+            "$ref": "#/definitions/__type_45"
         },
         "LaunchPreference": {
             "additionalProperties": false,
@@ -3108,10 +3111,10 @@
             "type": "object"
         },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_41"
+            "$ref": "#/definitions/__type_42"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_38"
         },
         "NativeLaunchOptions": {
             "additionalProperties": false,
@@ -3258,7 +3261,7 @@
             "type": "object"
         },
         "NotificationIndicatorColorsWithScheme": {
-            "$ref": "#/definitions/__type_51"
+            "$ref": "#/definitions/__type_52"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -3297,6 +3300,9 @@
         },
         "Omit_2": {
             "$ref": "#/definitions/__type_33"
+        },
+        "Omit_3": {
+            "$ref": "#/definitions/__type_34"
         },
         "OpenExternalPermission": {
             "additionalProperties": false,
@@ -3586,22 +3592,22 @@
             "$ref": "#/definitions/__type_2"
         },
         "Partial_10": {
-            "$ref": "#/definitions/__type_36"
+            "$ref": "#/definitions/__type_37"
         },
         "Partial_11": {
-            "$ref": "#/definitions/__type_43"
+            "$ref": "#/definitions/__type_44"
         },
         "Partial_12": {
-            "$ref": "#/definitions/__type_46"
-        },
-        "Partial_13": {
             "$ref": "#/definitions/__type_47"
         },
-        "Partial_14": {
+        "Partial_13": {
             "$ref": "#/definitions/__type_48"
         },
-        "Partial_15": {
+        "Partial_14": {
             "$ref": "#/definitions/__type_49"
+        },
+        "Partial_15": {
+            "$ref": "#/definitions/__type_50"
         },
         "Partial_2": {
             "$ref": "#/definitions/__type_6"
@@ -3944,7 +3950,7 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_38"
+            "$ref": "#/definitions/__type_39"
         },
         "PopupMenuStyles": {
             "description": "The styles that can be used to display the popup menus.",
@@ -4020,10 +4026,10 @@
             "$ref": "#/definitions/__type_19"
         },
         "Record_1": {
-            "$ref": "#/definitions/__type_50"
+            "$ref": "#/definitions/__type_51"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_40"
+            "$ref": "#/definitions/__type_41"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_11"
@@ -6934,6 +6940,55 @@
         "__type_34": {
             "additionalProperties": false,
             "properties": {
+                "conditions": {
+                    "description": "Condition to determine if the item should be shown.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "iconUrl": {
+                    "description": "The icon to use to distinguish this entry from others",
+                    "type": "string"
+                },
+                "noEntries": {
+                    "description": "Text to display if there are no entries because conditions have excluded options.",
+                    "type": "string"
+                },
+                "options": {
+                    "description": "List of button options",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/Omit_1"
+                            },
+                            {
+                                "$ref": "#/definitions/Omit_2"
+                            },
+                            {
+                                "$ref": "#/definitions/Omit_3"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "tooltip": {
+                    "description": "The tooltip to be shown for this button/entry",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Is the dock entry visible.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "options"
+            ],
+            "type": "object"
+        },
+        "__type_35": {
+            "additionalProperties": false,
+            "properties": {
                 "clientAPIVersion": {
                     "description": "version of client SDK,  set by the API",
                     "type": "string"
@@ -6989,7 +7044,7 @@
             },
             "type": "object"
         },
-        "__type_35": {
+        "__type_36": {
             "additionalProperties": false,
             "properties": {
                 "name": {
@@ -7003,7 +7058,7 @@
             },
             "type": "object"
         },
-        "__type_36": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -7048,7 +7103,7 @@
             },
             "type": "object"
         },
-        "__type_37": {
+        "__type_38": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -7145,7 +7200,7 @@
             ],
             "type": "object"
         },
-        "__type_38": {
+        "__type_39": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -7160,22 +7215,6 @@
             "required": [
                 "x",
                 "y"
-            ],
-            "type": "object"
-        },
-        "__type_39": {
-            "additionalProperties": false,
-            "properties": {
-                "dipRect": {
-                    "$ref": "#/definitions/RectangleByEdgePositions"
-                },
-                "scaledRect": {
-                    "$ref": "#/definitions/RectangleByEdgePositions"
-                }
-            },
-            "required": [
-                "dipRect",
-                "scaledRect"
             ],
             "type": "object"
         },
@@ -7201,6 +7240,22 @@
         "__type_40": {
             "additionalProperties": false,
             "properties": {
+                "dipRect": {
+                    "$ref": "#/definitions/RectangleByEdgePositions"
+                },
+                "scaledRect": {
+                    "$ref": "#/definitions/RectangleByEdgePositions"
+                }
+            },
+            "required": [
+                "dipRect",
+                "scaledRect"
+            ],
+            "type": "object"
+        },
+        "__type_41": {
+            "additionalProperties": false,
+            "properties": {
                 "bottom": {
                     "type": "number"
                 },
@@ -7222,7 +7277,7 @@
             ],
             "type": "object"
         },
-        "__type_41": {
+        "__type_42": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -7280,7 +7335,7 @@
             ],
             "type": "object"
         },
-        "__type_42": {
+        "__type_43": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -7311,7 +7366,7 @@
             },
             "type": "object"
         },
-        "__type_43": {
+        "__type_44": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -7348,11 +7403,11 @@
             },
             "type": "object"
         },
-        "__type_44": {
+        "__type_45": {
             "additionalProperties": false,
             "type": "object"
         },
-        "__type_45": {
+        "__type_46": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -7373,7 +7428,7 @@
             },
             "type": "object"
         },
-        "__type_46": {
+        "__type_47": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -7403,7 +7458,7 @@
             },
             "type": "object"
         },
-        "__type_47": {
+        "__type_48": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -7417,21 +7472,6 @@
                 },
                 "width": {
                     "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "__type_48": {
-            "additionalProperties": false,
-            "properties": {
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "url": {
-                    "type": "string"
                 }
             },
             "type": "object"
@@ -7470,6 +7510,17 @@
         },
         "__type_50": {
             "additionalProperties": false,
+            "properties": {
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "__type_51": {
@@ -7477,6 +7528,10 @@
             "type": "object"
         },
         "__type_52": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_53": {
             "additionalProperties": false,
             "properties": {
                 "alias": {

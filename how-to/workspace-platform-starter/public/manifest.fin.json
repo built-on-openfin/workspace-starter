@@ -968,6 +968,52 @@
 									"url": "https://www.youtube.com/user/OpenFinTech"
 								}
 							}
+						},
+						{
+							"tooltip": "Other",
+							"options": [
+								{
+									"tooltip": "LinkedIn",
+									"action": {
+										"id": "launch-view",
+										"customData": {
+											"url": "https://www.linkedin.com/company/openfin"
+										}
+									}
+								},
+								{
+									"tooltip": "GitHub",
+									"action": {
+										"id": "launch-view",
+										"customData": {
+											"url": "https://github.com/openfin"
+										}
+									}
+								},
+								{
+									"tooltip": "Search",
+									"options": [
+										{
+											"tooltip": "Google",
+											"action": {
+												"id": "launch-view",
+												"customData": {
+													"url": "https://www.google.com/search?q=openfin"
+												}
+											}
+										},
+										{
+											"tooltip": "Bing",
+											"action": {
+												"id": "launch-view",
+												"customData": {
+													"url": "https://www.bing.com/search?q=openfin"
+												}
+											}
+										}
+									]
+								}
+							]
 						}
 					]
 				},
