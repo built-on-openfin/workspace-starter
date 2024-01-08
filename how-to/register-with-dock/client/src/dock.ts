@@ -374,8 +374,8 @@ export async function loadDockConfig(config: DockProviderConfigWithIdentity): Pr
 			favorites = favoritesDropdown.options
 				.filter((favButton) => !favButton.disabled)
 				.map((favButton) => ({
-					title: favButton.action.customData.title,
-					url: favButton.action.customData.url
+					title: favButton.action?.customData.title,
+					url: favButton.action?.customData.url
 				}));
 		}
 	}
