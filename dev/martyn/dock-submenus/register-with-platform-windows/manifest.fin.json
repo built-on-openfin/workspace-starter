@@ -26,7 +26,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/martyn/dock-submenus/register-with-platform-windows/favicon.ico",
-		"name": "Register With Platform Windows - v17.0.4",
+		"name": "Register With Platform Windows - v17.0.6",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
