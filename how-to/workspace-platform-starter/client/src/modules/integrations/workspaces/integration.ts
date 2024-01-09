@@ -271,8 +271,8 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
@@ -280,13 +280,14 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 			const themeClient = await this._integrationHelpers.getThemeClient();
 			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
 			const queryLower = query.toLowerCase();
+			const queryMinLength = options?.queryMinLength ?? 3;
 
 			let workspaces: Workspace[] = await platform.Storage.getWorkspaces();
 			let matchQuery = queryLower;
 
 			this._lastResponse = lastResponse;
 			this._lastQuery = queryLower;
-			this._lastQueryMinLength = options.queryMinLength;
+			this._lastQueryMinLength = queryMinLength;
 
 			if (queryLower.startsWith("/w ")) {
 				const title = queryLower.replace("/w ", "");
@@ -352,7 +353,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 				platform,
 				workspaces,
 				matchQuery,
-				options.queryMinLength
+				queryMinLength
 			);
 
 			this._lastResults = workspaceResults;

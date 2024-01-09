@@ -20,6 +20,7 @@ const PLATFORM_TITLE = "Integrate with Microsoft 365";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 let ms365Integration: Microsoft365Integration | undefined;
+let debounceTimerId: number | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
@@ -105,18 +106,34 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 			lastResponse = response;
 			lastResponse.open();
 
-			if (ms365Integration) {
-				// Get any home results from the ms365 integration
-				const ms365Results = await ms365Integration.getSearchResults(
-					request.query,
-					selectedFilters,
-					lastResponse,
-					{ queryMinLength: 3 }
-				);
-				results = results.concat(ms365Results.results);
-				if (ms365Results.context?.filters) {
-					filters = filters.concat(ms365Results.context?.filters);
+			if (debounceTimerId) {
+				window.clearTimeout(debounceTimerId);
+				debounceTimerId = undefined;
+			}
+
+			// Debounce the keyboard input
+			debounceTimerId = window.setTimeout(async () => {
+				if (ms365Integration) {
+					// Get any home results from the ms365 integration
+					const ms365Results = await ms365Integration.getSearchResults(
+						request.query,
+						selectedFilters,
+						lastResponse,
+						{ queryMinLength: 3 }
+					);
+					results = results.concat(ms365Results.results);
+					if (ms365Results.context?.filters) {
+						filters = filters.concat(ms365Results.context?.filters);
+					}
 				}
+			}, 200);
+
+			// Show the searching entry
+			if (ms365Integration?.getSearchResultsProgress) {
+				const searching = await ms365Integration.getSearchResultsProgress(request.query, lastResponse, {
+					queryMinLength: 3
+				});
+				results.push(...searching);
 			}
 
 			if (apps) {

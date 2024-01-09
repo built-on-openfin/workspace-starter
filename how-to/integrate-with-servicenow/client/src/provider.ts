@@ -19,6 +19,7 @@ const PLATFORM_TITLE = "Integrate with ServiceNow";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 let serviceNowIntegration: ServiceNowIntegration | undefined;
+let debounceTimerId: number | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
@@ -106,18 +107,34 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 			lastResponse = response;
 			lastResponse.open();
 
-			if (serviceNowIntegration) {
-				// Get any home results from the ServiceNow integration
-				const serviceNowResults = await serviceNowIntegration.getSearchResults(
-					request.query,
-					selectedFilters,
-					lastResponse,
-					{ queryMinLength: 3 }
-				);
-				results = results.concat(serviceNowResults.results);
-				if (serviceNowResults.context?.filters) {
-					filters = filters.concat(serviceNowResults.context?.filters);
+			if (debounceTimerId) {
+				window.clearTimeout(debounceTimerId);
+				debounceTimerId = undefined;
+			}
+
+			// Debounce the keyboard input
+			debounceTimerId = window.setTimeout(async () => {
+				if (serviceNowIntegration) {
+					// Get any home results from the ServiceNow integration
+					const serviceNowResults = await serviceNowIntegration.getSearchResults(
+						request.query,
+						selectedFilters,
+						lastResponse,
+						{ queryMinLength: 3 }
+					);
+					results = results.concat(serviceNowResults.results);
+					if (serviceNowResults.context?.filters) {
+						filters = filters.concat(serviceNowResults.context?.filters);
+					}
 				}
+			}, 200);
+
+			// Show the searching entry
+			if (serviceNowIntegration?.getSearchResultsProgress) {
+				const searching = await serviceNowIntegration.getSearchResultsProgress(request.query, lastResponse, {
+					queryMinLength: 3
+				});
+				results.push(...searching);
 			}
 
 			if (apps) {

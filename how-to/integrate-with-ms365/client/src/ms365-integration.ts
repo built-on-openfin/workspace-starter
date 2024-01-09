@@ -362,8 +362,8 @@ export class Microsoft365Integration {
 		query: string,
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResult[]> {
@@ -384,7 +384,7 @@ export class Microsoft365Integration {
 		}
 
 		const minLength = options?.queryMinLength ?? 3;
-		return query.length >= minLength ? [this.createSearchingResult()] : []
+		return query.length >= minLength ? [this.createSearchingResult()] : [];
 	}
 
 	/**
@@ -540,8 +540,8 @@ export class Microsoft365Integration {
 							url: isRecent
 								? "/me/drive/recent"
 								: `/me/drive/root/search(q=${encodeURIComponent(
-									fileSearchQuery
-								)})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
+										fileSearchQuery
+									)})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
 							method: "GET"
 						});
 					}
@@ -803,7 +803,8 @@ export class Microsoft365Integration {
 		if (this._ms365Connection && actionData.emails) {
 			this._logger?.info("Teams Meeting", this._ms365Connection.currentUser.mail, actionData.emails);
 			await fin.System.openUrlWithBrowser(
-				`${Microsoft365Integration._TEAMS_PROTOCOL}/l/meeting/new?attendees=${this._ms365Connection.currentUser.mail
+				`${Microsoft365Integration._TEAMS_PROTOCOL}/l/meeting/new?attendees=${
+					this._ms365Connection.currentUser.mail
 				},${actionData.emails.join(",")}`
 			);
 			return true;
@@ -1475,31 +1476,31 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "callTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CALL,
-					imageKey: "callImage",
-					imageAltText: "Teams Call"
-				},
-				{
-					titleKey: "emailTitle",
-					action: Microsoft365Integration._ACTION_OUTLOOK_EMAIL,
-					imageKey: "emailImage",
-					imageAltText: "E-mail"
-				},
-				{
-					titleKey: "meetingTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_MEETING,
-					imageKey: "meetingImage",
-					imageAltText: "Meeting"
-				},
-				{
-					titleKey: "chatTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CHAT,
-					imageKey: "chatImage",
-					imageAltText: "Chat"
-				}
-			];
+			{
+				titleKey: "callTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CALL,
+				imageKey: "callImage",
+				imageAltText: "Teams Call"
+			},
+			{
+				titleKey: "emailTitle",
+				action: Microsoft365Integration._ACTION_OUTLOOK_EMAIL,
+				imageKey: "emailImage",
+				imageAltText: "E-mail"
+			},
+			{
+				titleKey: "meetingTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_MEETING,
+				imageKey: "meetingImage",
+				imageAltText: "Meeting"
+			},
+			{
+				titleKey: "chatTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CHAT,
+				imageKey: "chatImage",
+				imageAltText: "Chat"
+			}
+		];
 
 		return {
 			key: `${this._definition?.id}-${user.id}`,
@@ -1834,13 +1835,13 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Integration._ACTION_OPEN,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Integration._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		return {
 			key: `${this._definition?.id}-${message.id}`,
@@ -1966,13 +1967,13 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Integration._ACTION_OPEN,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Integration._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		return {
 			key: `${this._definition?.id}-${event.id}`,
@@ -2103,13 +2104,13 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CHAT,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CHAT,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		return {
 			key: `${this._definition?.id}-${chatMessage.id}`,
@@ -2211,31 +2212,31 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CALL,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				},
-				{
-					titleKey: "emailTitle",
-					action: Microsoft365Integration._ACTION_OUTLOOK_EMAIL,
-					imageKey: "emailImage",
-					imageAltText: "Email"
-				},
-				{
-					titleKey: "meetingTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_MEETING,
-					imageKey: "meetingImage",
-					imageAltText: "Meeting"
-				},
-				{
-					titleKey: "chatTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CHAT,
-					imageKey: "chatImage",
-					imageAltText: "Chat"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CALL,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			},
+			{
+				titleKey: "emailTitle",
+				action: Microsoft365Integration._ACTION_OUTLOOK_EMAIL,
+				imageKey: "emailImage",
+				imageAltText: "Email"
+			},
+			{
+				titleKey: "meetingTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_MEETING,
+				imageKey: "meetingImage",
+				imageAltText: "Meeting"
+			},
+			{
+				titleKey: "chatTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CHAT,
+				imageKey: "chatImage",
+				imageAltText: "Chat"
+			}
+		];
 
 		return {
 			key: `${this._definition?.id}-${team.id}`,
@@ -2340,31 +2341,31 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CALL,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				},
-				{
-					titleKey: "emailTitle",
-					action: Microsoft365Integration._ACTION_OUTLOOK_EMAIL,
-					imageKey: "emailImage",
-					imageAltText: "Email"
-				},
-				{
-					titleKey: "meetingTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_MEETING,
-					imageKey: "meetingImage",
-					imageAltText: "Meeting"
-				},
-				{
-					titleKey: "chatTitle",
-					action: Microsoft365Integration._ACTION_TEAMS_CHAT,
-					imageKey: "chatImage",
-					imageAltText: "Chat"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CALL,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			},
+			{
+				titleKey: "emailTitle",
+				action: Microsoft365Integration._ACTION_OUTLOOK_EMAIL,
+				imageKey: "emailImage",
+				imageAltText: "Email"
+			},
+			{
+				titleKey: "meetingTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_MEETING,
+				imageKey: "meetingImage",
+				imageAltText: "Meeting"
+			},
+			{
+				titleKey: "chatTitle",
+				action: Microsoft365Integration._ACTION_TEAMS_CHAT,
+				imageKey: "chatImage",
+				imageAltText: "Chat"
+			}
+		];
 
 		return {
 			key: `${this._definition?.id}-${channel.id}`,
@@ -2474,13 +2475,13 @@ export class Microsoft365Integration {
 			imageKey: string;
 			imageAltText: string;
 		}[] = [
-				{
-					titleKey: "openTitle",
-					action: Microsoft365Integration._ACTION_OPEN,
-					imageKey: "openImage",
-					imageAltText: "Open"
-				}
-			];
+			{
+				titleKey: "openTitle",
+				action: Microsoft365Integration._ACTION_OPEN,
+				imageKey: "openImage",
+				imageAltText: "Open"
+			}
+		];
 
 		const isFolder = this.driveItemIsFolder(driveItem);
 		const typeName = isFolder ? "Folder" : "File";

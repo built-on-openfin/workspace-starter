@@ -373,8 +373,8 @@ export class SalesforceIntegration {
 		query: string,
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResult[]> {
@@ -382,7 +382,7 @@ export class SalesforceIntegration {
 
 		const minLength = options?.queryMinLength ?? 3;
 		return homeResults.concat(query.length >= minLength ? [this.createSearchingResult()] : []);
-	}	
+	}
 
 	/**
 	 * Get a list of search results based on the query and filters.
