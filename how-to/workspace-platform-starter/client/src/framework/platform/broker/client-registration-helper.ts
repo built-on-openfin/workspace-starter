@@ -9,7 +9,7 @@ import type {
 	ApiMetadata
 } from "../../shapes/interopbroker-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
-import { isEmpty } from "../../utils";
+import { isEmpty, isStringValue } from "../../utils";
 
 /**
  * Used to track client interactions with a broker.
@@ -192,7 +192,7 @@ export class ClientRegistrationHelper {
 				const payloadApiVersion = payload?.apiVersion;
 				if (!isEmpty(payloadApiVersion) && !isEmpty(payloadApiVersion?.type)) {
 					apiVersion = payloadApiVersion;
-				} else if (!isEmpty(id.connectionUrl)) {
+				} else if (isStringValue(id.connectionUrl)) {
 					// if they haven't specified apiVersion meta data and it is external and has a url then we will assume fdc3 2.0
 					apiVersion = { type: "fdc3", version: "2.0" };
 				} else {

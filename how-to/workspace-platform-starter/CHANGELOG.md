@@ -77,6 +77,7 @@
 - Added sharing for pages moved into module
 - Added sharing for workspaces moved into module
 - Added example dummy share server for testing locally (stores in memory), to use update manifest.fin.json `https://workspace.openfin.co` references to `http://localhost:8080`
+- Fixed Interop Broker client registration helper logic to ensure that a connectionUrl has a value. Empty strings were resulting in native apps being identified as supporting FDC3 2.0 instead of interop.
 
 ## v15
 
