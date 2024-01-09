@@ -130,6 +130,27 @@ export function overrideCallback(
 	 */
 	class Override extends WorkspacePlatformProvider {
 		/**
+		 * Create a new instance of the platform.
+		 */
+		constructor() {
+			super();
+			logger.info("Platform Override Constructor fetching settings.");
+			getSettings()
+				.then(async (customSettings) => {
+					if (!isEmpty(customSettings) && !isEmpty(customSettings.browserProvider)) {
+						windowPositioningOptions = await getWindowPositionOptions(customSettings?.browserProvider);
+						unsavedPagePromptStrategy =
+							customSettings?.browserProvider?.unsavedPagePromptStrategy ?? "default";
+						return true;
+					}
+					return false;
+				})
+				.catch((error) => {
+					logger.error("Settings unavailable at platform construction.", error);
+				});
+		}
+
+		/**
 		 * Supports launching a manifest into a platform.
 		 * @param payload The manifest to load into the platform
 		 * @returns nothing.
@@ -761,27 +782,20 @@ export function overrideCallback(
 				return super.createWindow(options, identity);
 			}
 
-			if (!windowPositioningOptions?.disableWindowPositioningStrategy) {
-				if (isEmpty(windowPositioningOptions)) {
-					const settings = await getSettings();
-					windowPositioningOptions = await getWindowPositionOptions(settings?.browserProvider);
-				}
+			if (!isEmpty(windowPositioningOptions) && !windowPositioningOptions?.disableWindowPositioningStrategy) {
+				const hasLeft = !isEmpty(options?.defaultLeft);
+				const hasTop = !isEmpty(options?.defaultTop);
 
-				if (!isEmpty(windowPositioningOptions)) {
-					logger.info("Create Window", options);
+				if (!hasLeft || !hasTop) {
+					const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
 
-					const hasLeft = !isEmpty(options?.defaultLeft);
-					const hasTop = !isEmpty(options?.defaultTop);
-
-					if (!hasLeft || !hasTop) {
-						const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
-
-						if (!hasLeft && !isEmpty(position?.left)) {
-							options.defaultLeft = position.left;
-						}
-						if (!hasTop && !isEmpty(position?.top)) {
-							options.defaultTop = position.top;
-						}
+					if (!hasLeft && !isEmpty(position?.left)) {
+						options.defaultLeft = position.left;
+						logger.debug(`Updating default left to ${position.left} using window positioning strategy`);
+					}
+					if (!hasTop && !isEmpty(position?.top)) {
+						options.defaultTop = position.top;
+						logger.debug(`Updating default top to ${position.top} using window positioning strategy`);
 					}
 				}
 			}
@@ -883,11 +897,7 @@ export function overrideCallback(
 			payload: HandleSaveModalOnPageClosePayload
 		): Promise<SaveModalOnPageCloseResult> {
 			// close confirmation modal will not be shown if the page is locked
-			if (isEmpty(unsavedPagePromptStrategy)) {
-				const settings = await getSettings();
-				unsavedPagePromptStrategy = settings?.browserProvider?.unsavedPagePromptStrategy ?? "default";
-			}
-			if (unsavedPagePromptStrategy === "default") {
+			if (isEmpty(unsavedPagePromptStrategy) || unsavedPagePromptStrategy === "default") {
 				return super.handleSaveModalOnPageClose(payload);
 			}
 			if (unsavedPagePromptStrategy === "never") {
