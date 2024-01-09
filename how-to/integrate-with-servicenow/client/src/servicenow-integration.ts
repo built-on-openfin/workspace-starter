@@ -117,11 +117,6 @@ export class ServiceNowIntegration {
 	private _serviceNowConnection?: ServiceNowConnection;
 
 	/**
-	 * The debounce timer id.
-	 */
-	private _debounceTimerId?: number;
-
-	/**
 	 * Any errors during connection.
 	 */
 	private _connectionError?: string;
@@ -213,6 +208,55 @@ export class ServiceNowIntegration {
 	}
 
 	/**
+	 * Get entries to show while the integration is searching.
+	 * @param query The query to search for.
+	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
+	 * @returns The list of results and new filters.
+	 */
+	public async getSearchResultsProgress?(
+		query: string,
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength?: number;
+			queryAgainst?: string[];
+			isSuggestion?: boolean;
+		}
+	): Promise<HomeSearchResult[]> {
+		if (!this._serviceNowConnection && this._integrationHelpers) {
+			this._connectLastResponse = lastResponse;
+			const results = [];
+			if (this._connectionError) {
+				const themeClient = await this._integrationHelpers.getThemeClient();
+				const palette = await themeClient.getPalette();
+				const connectResult = await this.createConnectResult(
+					this._integrationHelpers.templateHelpers,
+					palette
+				);
+				if (connectResult) {
+					results.push(connectResult);
+				}
+			}
+			return results;
+		}
+
+		const minLength = options?.queryMinLength ?? 3;
+
+		const apps: HomeSearchResult[] = [];
+
+		if ((query.length === 0 || "servicenow".startsWith(query.toLowerCase())) && this._integrationHelpers) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			const palette = await themeClient.getPalette();
+			apps.push(await this.createAppResult(this._integrationHelpers?.templateHelpers, palette));
+		}
+
+		return apps.concat(query.length >= minLength ? [this.createSearchingResult()] : []);
+	}
+
+	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
@@ -231,216 +275,180 @@ export class ServiceNowIntegration {
 			queryAgainst?: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		if (!this._serviceNowConnection && this._integrationHelpers) {
-			this._connectLastResponse = lastResponse;
-			const results = [];
-			if (this._connectionError) {
-				const themeClient = await this._integrationHelpers.getThemeClient();
-				const palette = await themeClient.getPalette();
-				const connectResult = await this.createConnectResult(
-					this._integrationHelpers.templateHelpers,
-					palette
-				);
-				if (connectResult) {
-					results.push(connectResult);
-				}
-			}
-			return {
-				results
-			};
-		}
-
-		if (this._debounceTimerId) {
-			window.clearTimeout(this._debounceTimerId);
-			this._debounceTimerId = undefined;
-		}
-
 		const defaultFilters: ServiceNowObjectTypes[] = ["Contact", "Account", "Case", "Task", "Incident"];
 
 		const minLength = options?.queryMinLength ?? 3;
 
-		const apps: HomeSearchResult[] = [];
+		if (this._serviceNowConnection && this._integrationHelpers) {
+			try {
+				if (query.length >= minLength && !query.startsWith("/")) {
+					const serviceNowFilter = filters?.find((f) => f.id === ServiceNowIntegration._FILTERS);
 
-		if ((query.length === 0 || "servicenow".startsWith(query.toLowerCase())) && this._integrationHelpers) {
-			const themeClient = await this._integrationHelpers.getThemeClient();
-			const palette = await themeClient.getPalette();
-			apps.push(await this.createAppResult(this._integrationHelpers?.templateHelpers, palette));
-		}
+					let includeOptions: ServiceNowObjectTypes[] = [...defaultFilters];
 
-		this._debounceTimerId = window.setTimeout(async () => {
-			if (this._serviceNowConnection && this._integrationHelpers) {
-				try {
-					if (query.length >= minLength && !query.startsWith("/")) {
-						const serviceNowFilter = filters?.find((f) => f.id === ServiceNowIntegration._FILTERS);
+					if (serviceNowFilter?.options && Array.isArray(serviceNowFilter.options)) {
+						includeOptions = serviceNowFilter.options
+							.filter((o) => o.isSelected)
+							.map((o) => o.value as ServiceNowObjectTypes);
+					}
 
-						let includeOptions: ServiceNowObjectTypes[] = [...defaultFilters];
+					const homeResults: HomeSearchResult[] = [];
 
-						if (serviceNowFilter?.options && Array.isArray(serviceNowFilter.options)) {
-							includeOptions = serviceNowFilter.options
-								.filter((o) => o.isSelected)
-								.map((o) => o.value as ServiceNowObjectTypes);
-						}
+					const batchRequest: ServiceNowBatchRequest = {
+						// eslint-disable-next-line camelcase
+						batch_request_id: "1",
+						// eslint-disable-next-line camelcase
+						rest_requests: []
+					};
 
-						const homeResults: HomeSearchResult[] = [];
-
-						const batchRequest: ServiceNowBatchRequest = {
-							// eslint-disable-next-line camelcase
-							batch_request_id: "1",
-							// eslint-disable-next-line camelcase
-							rest_requests: []
-						};
-
-						if (includeOptions.includes("Contact")) {
-							batchRequest.rest_requests.push({
-								id: "Contact",
-								method: "GET",
-								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Contact}?${this.buildSearchQuery(
-									query,
-									["name"],
-									["sys_id", "name"],
-									10
-								)}`
-							});
-						}
-
-						if (includeOptions.includes("Account")) {
-							batchRequest.rest_requests.push({
-								id: "Account",
-								method: "GET",
-								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Account}?${this.buildSearchQuery(
-									query,
-									["name"],
-									["sys_id", "name"],
-									10
-								)}`
-							});
-						}
-
-						if (includeOptions.includes("Case")) {
-							batchRequest.rest_requests.push({
-								id: "Case",
-								method: "GET",
-								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Case}?${this.buildSearchQuery(
-									query,
-									["number", "case", "short_description"],
-									["sys_id", "number", "short_description"],
-									10
-								)}`
-							});
-						}
-
-						if (includeOptions.includes("Task")) {
-							batchRequest.rest_requests.push({
-								id: "Task",
-								method: "GET",
-								url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Task}?${this.buildSearchQuery(
-									query,
-									["number", "short_description"],
-									["sys_id", "number", "short_description"],
-									10
-								)}`
-							});
-						}
-
-						if (includeOptions.includes("Incident")) {
-							batchRequest.rest_requests.push({
-								id: "Incident",
-								method: "GET",
-								url: `/api/now/v2/table/${
-									ServiceNowIntegration._TABLE_NAMES.Incident
-								}?${this.buildSearchQuery(
-									query,
-									["number", "short_description"],
-									["sys_id", "number", "short_description"],
-									10
-								)}`
-							});
-						}
-
-						const results: {
-							[id: string]: ServiceNowEntities.Core.BaseEntity[];
-						} = {};
-
-						for (const request of batchRequest.rest_requests) {
-							const response = await this._serviceNowConnection.executeApiRequest(
-								request.url,
-								request.method,
-								request.body,
-								false,
-								request.headers
-							);
-
-							if (response.status === 200 && Array.isArray(response.data)) {
-								results[request.id] = response.data;
-							}
-						}
-
-						if (results.Contact) {
-							for (const contact of results.Contact as ServiceNowEntities.Core.Contact[]) {
-								homeResults.push(await this.createLoadingResult(contact, "name", undefined, "Contact"));
-							}
-						}
-						if (results.Account) {
-							for (const account of results.Account as ServiceNowEntities.CSM.Account[]) {
-								homeResults.push(await this.createLoadingResult(account, "name", undefined, "Account"));
-							}
-						}
-						if (results.Case) {
-							for (const cs of results.Case as ServiceNowEntities.CSM.Case[]) {
-								homeResults.push(await this.createLoadingResult(cs, "short_description", "number", "Case"));
-							}
-						}
-						if (results.Task) {
-							for (const task of results.Task as ServiceNowEntities.CSM.Task[]) {
-								homeResults.push(await this.createLoadingResult(task, "short_description", "number", "Task"));
-							}
-						}
-						if (results.Incident) {
-							for (const incident of results.Incident as ServiceNowEntities.Core.Incident[]) {
-								homeResults.push(
-									await this.createLoadingResult(incident, "short_description", "number", "Incident")
-								);
-							}
-						}
-
-						lastResponse.respond(homeResults);
-
-						const resultTypes: Set<string> = new Set<string>();
-						for (const searchResult of homeResults) {
-							if (searchResult.data?.objType) {
-								resultTypes.add(searchResult.data?.objType);
-							}
-						}
-
-						const newFilters = resultTypes.entries();
-						lastResponse.updateContext({
-							filters: [
-								{
-									id: ServiceNowIntegration._FILTERS as string,
-									title: "Service Now",
-									options: [...newFilters].map((f) => ({
-										value: f[0],
-										isSelected: true
-									}))
-								}
-							]
+					if (includeOptions.includes("Contact")) {
+						batchRequest.rest_requests.push({
+							id: "Contact",
+							method: "GET",
+							url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Contact}?${this.buildSearchQuery(
+								query,
+								["name"],
+								["sys_id", "name"],
+								10
+							)}`
 						});
 					}
-				} catch (err) {
-					if (err instanceof AuthTokenExpiredError) {
-						this._logger?.error("Auth token expired, reconnecting");
-						this._serviceNowConnection = undefined;
-						await this.connectToServiceNow();
-					} else {
-						this._logger?.error(this.formatError(err));
+
+					if (includeOptions.includes("Account")) {
+						batchRequest.rest_requests.push({
+							id: "Account",
+							method: "GET",
+							url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Account}?${this.buildSearchQuery(
+								query,
+								["name"],
+								["sys_id", "name"],
+								10
+							)}`
+						});
 					}
+
+					if (includeOptions.includes("Case")) {
+						batchRequest.rest_requests.push({
+							id: "Case",
+							method: "GET",
+							url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Case}?${this.buildSearchQuery(
+								query,
+								["number", "case", "short_description"],
+								["sys_id", "number", "short_description"],
+								10
+							)}`
+						});
+					}
+
+					if (includeOptions.includes("Task")) {
+						batchRequest.rest_requests.push({
+							id: "Task",
+							method: "GET",
+							url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Task}?${this.buildSearchQuery(
+								query,
+								["number", "short_description"],
+								["sys_id", "number", "short_description"],
+								10
+							)}`
+						});
+					}
+
+					if (includeOptions.includes("Incident")) {
+						batchRequest.rest_requests.push({
+							id: "Incident",
+							method: "GET",
+							url: `/api/now/v2/table/${ServiceNowIntegration._TABLE_NAMES.Incident}?${this.buildSearchQuery(
+								query,
+								["number", "short_description"],
+								["sys_id", "number", "short_description"],
+								10
+							)}`
+						});
+					}
+
+					const results: {
+						[id: string]: ServiceNowEntities.Core.BaseEntity[];
+					} = {};
+
+					for (const request of batchRequest.rest_requests) {
+						const response = await this._serviceNowConnection.executeApiRequest(
+							request.url,
+							request.method,
+							request.body,
+							false,
+							request.headers
+						);
+
+						if (response.status === 200 && Array.isArray(response.data)) {
+							results[request.id] = response.data;
+						}
+					}
+
+					if (results.Contact) {
+						for (const contact of results.Contact as ServiceNowEntities.Core.Contact[]) {
+							homeResults.push(await this.createLoadingResult(contact, "name", undefined, "Contact"));
+						}
+					}
+					if (results.Account) {
+						for (const account of results.Account as ServiceNowEntities.CSM.Account[]) {
+							homeResults.push(await this.createLoadingResult(account, "name", undefined, "Account"));
+						}
+					}
+					if (results.Case) {
+						for (const cs of results.Case as ServiceNowEntities.CSM.Case[]) {
+							homeResults.push(await this.createLoadingResult(cs, "short_description", "number", "Case"));
+						}
+					}
+					if (results.Task) {
+						for (const task of results.Task as ServiceNowEntities.CSM.Task[]) {
+							homeResults.push(await this.createLoadingResult(task, "short_description", "number", "Task"));
+						}
+					}
+					if (results.Incident) {
+						for (const incident of results.Incident as ServiceNowEntities.Core.Incident[]) {
+							homeResults.push(
+								await this.createLoadingResult(incident, "short_description", "number", "Incident")
+							);
+						}
+					}
+
+					lastResponse.respond(homeResults);
+
+					const resultTypes: Set<string> = new Set<string>();
+					for (const searchResult of homeResults) {
+						if (searchResult.data?.objType) {
+							resultTypes.add(searchResult.data?.objType);
+						}
+					}
+
+					const newFilters = resultTypes.entries();
+					lastResponse.updateContext({
+						filters: [
+							{
+								id: ServiceNowIntegration._FILTERS as string,
+								title: "Service Now",
+								options: [...newFilters].map((f) => ({
+									value: f[0],
+									isSelected: true
+								}))
+							}
+						]
+					});
+				}
+			} catch (err) {
+				if (err instanceof AuthTokenExpiredError) {
+					this._logger?.error("Auth token expired, reconnecting");
+					this._serviceNowConnection = undefined;
+					await this.connectToServiceNow();
+				} else {
+					this._logger?.error(this.formatError(err));
 				}
 			}
-			lastResponse.revoke(`${this._definition?.id}-searching`);
-		}, 500);
+		}
+		lastResponse.revoke(`${this._definition?.id}-searching`);
 
 		return {
-			results: apps.concat(query.length >= minLength ? [this.createSearchingResult()] : [])
+			results: []
 		};
 	}
 

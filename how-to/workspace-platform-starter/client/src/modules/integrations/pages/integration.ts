@@ -233,8 +233,8 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
@@ -243,13 +243,14 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 		if (this._integrationHelpers?.getPlatform) {
 			const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
 			const queryLower = query.toLowerCase();
+			const queryMinLength = options?.queryMinLength ?? 3;
 
 			let pages: Page[] = await platform.Storage.getPages();
 			let matchQuery = queryLower;
 
 			this._lastResponse = lastResponse;
 			this._lastQuery = queryLower;
-			this._lastQueryMinLength = options.queryMinLength;
+			this._lastQueryMinLength = queryMinLength;
 
 			const { favoriteClient, favoriteInfo } = await this.getFavInfo(FAVORITE_TYPE_NAME_PAGE);
 
@@ -265,7 +266,7 @@ export class PagesProvider implements IntegrationModule<PagesSettings> {
 				matchQuery = "";
 			}
 
-			pageResults = await this.buildResults(pages, matchQuery, options.queryMinLength);
+			pageResults = await this.buildResults(pages, matchQuery, queryMinLength);
 
 			this._lastResults = pageResults;
 		}

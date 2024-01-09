@@ -17,6 +17,7 @@ const PLATFORM_TITLE = "Integrate with Salesforce";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 let salesforceIntegration: SalesforceIntegration | undefined;
+let debounceTimerId: number | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
@@ -102,18 +103,34 @@ async function initializeWorkspaceComponents(): Promise<void> {
 			lastResponse = response;
 			lastResponse.open();
 
-			if (salesforceIntegration) {
-				// Get any home results from the salesforce integration
-				const salesforceResults = await salesforceIntegration.getSearchResults(
-					request.query,
-					selectedFilters,
-					lastResponse,
-					{ queryMinLength: 3 }
-				);
-				results = results.concat(salesforceResults.results);
-				if (salesforceResults.context?.filters) {
-					filters = filters.concat(salesforceResults.context?.filters);
+			if (debounceTimerId) {
+				window.clearTimeout(debounceTimerId);
+				debounceTimerId = undefined;
+			}
+
+			// Debounce the keyboard input
+			debounceTimerId = window.setTimeout(async () => {
+				if (salesforceIntegration) {
+					// Get any home results from the salesforce integration
+					const salesforceResults = await salesforceIntegration.getSearchResults(
+						request.query,
+						selectedFilters,
+						lastResponse,
+						{ queryMinLength: 3 }
+					);
+					results = results.concat(salesforceResults.results);
+					if (salesforceResults.context?.filters) {
+						filters = filters.concat(salesforceResults.context?.filters);
+					}
 				}
+			}, 200);
+
+			// Show the searching entry
+			if (salesforceIntegration?.getSearchResultsProgress) {
+				const searching = await salesforceIntegration.getSearchResultsProgress(request.query, lastResponse, {
+					queryMinLength: 3
+				});
+				results.push(...searching);
 			}
 
 			return {
