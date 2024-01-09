@@ -26,10 +26,7 @@ import type {
 	SaveModalOnPageCloseResult
 } from "@openfin/workspace-platform/common/src/api/pages/shapes";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
-import {
-	getWindowPositionOptions,
-	getWindowPositionUsingStrategy
-} from "workspace-platform-starter/utils-position";
+import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import * as analyticsProvider from "../analytics";
 import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
@@ -37,7 +34,6 @@ import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import * as Menu from "../menu";
 import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
-import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
 import type {
 	BrowserProviderOptions,
@@ -90,7 +86,6 @@ const PAGE_ENDPOINT_ID_SET = "page-set";
 
 const logger = createLogger("PlatformOverride");
 
-let windowPositioningOptions: WindowPositioningOptions | undefined;
 let unsavedPagePromptStrategy: UnsavedPagePromptStrategy | undefined;
 let disableStorageMapping: boolean | undefined;
 let globalMenuStyle: PopupMenuStyles | undefined;
@@ -110,6 +105,7 @@ let defaultOptions:
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @param platformProviderSettings The settings for the platform provider.
  * @param browserProviderSettings The settings for the browser provider.
+ * @param windowPositioningOptions The window positioning options.
  * @param versionInfo The app version info.
  * @returns The overridden class.
  */
@@ -117,39 +113,21 @@ export function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>,
 	platformProviderSettings: PlatformProviderOptions | undefined,
 	browserProviderSettings: BrowserProviderOptions | undefined,
+	windowPositioningOptions: WindowPositioningOptions | undefined,
 	versionInfo: VersionInfo
 ): WorkspacePlatformProvider {
 	disableStorageMapping = platformProviderSettings?.disableStorageMapping ?? false;
 	globalMenuStyle = browserProviderSettings?.menuOptions?.styles?.globalMenu;
 	pageMenuStyle = browserProviderSettings?.menuOptions?.styles?.pageMenu;
 	viewMenuStyle = browserProviderSettings?.menuOptions?.styles?.viewMenu;
+	unsavedPagePromptStrategy = browserProviderSettings?.unsavedPagePromptStrategy ?? "default";
+
 	workspaceApplied = false;
 
 	/**
 	 * Create a class which overrides the platform provider.
 	 */
 	class Override extends WorkspacePlatformProvider {
-		/**
-		 * Create a new instance of the platform.
-		 */
-		constructor() {
-			super();
-			logger.info("Platform Override Constructor fetching settings.");
-			getSettings()
-				.then(async (customSettings) => {
-					if (!isEmpty(customSettings) && !isEmpty(customSettings.browserProvider)) {
-						windowPositioningOptions = await getWindowPositionOptions(customSettings?.browserProvider);
-						unsavedPagePromptStrategy =
-							customSettings?.browserProvider?.unsavedPagePromptStrategy ?? "default";
-						return true;
-					}
-					return false;
-				})
-				.catch((error) => {
-					logger.error("Settings unavailable at platform construction.", error);
-				});
-		}
-
 		/**
 		 * Supports launching a manifest into a platform.
 		 * @param payload The manifest to load into the platform
