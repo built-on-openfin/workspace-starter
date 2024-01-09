@@ -90,6 +90,30 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 	}
 
 	/**
+	 * Get entries to show while the integration is searching.
+	 * @param query The query to search for.
+	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
+	 * @returns The list of results and new filters.
+	 */
+	public async getSearchResultsProgress(
+		query: string,
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength?: number;
+			queryAgainst?: string[];
+			isSuggestion?: boolean;
+		}
+	): Promise<HomeSearchResult[]> {
+		// TODO: Add results for progress entries e.g. a Searching... entry
+		// TODO: You must remove it yourself when the search is complete
+		return [];
+	}
+
+	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
