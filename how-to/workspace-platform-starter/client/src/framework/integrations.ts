@@ -130,8 +130,8 @@ export async function getSearchResults(
 	lastResponse: HomeSearchListenerResponse,
 	selectedSources: string[],
 	options: {
-		queryMinLength: number;
-		queryAgainst: string[];
+		queryMinLength?: number;
+		queryAgainst?: string[];
 		isSuggestion?: boolean;
 	}
 ): Promise<HomeSearchResponse & { sourceFilters?: string[] }> {
@@ -207,8 +207,8 @@ export async function getSearchResultsProgress(
 	lastResponse: HomeSearchListenerResponse,
 	selectedSources: string[],
 	options: {
-		queryMinLength: number;
-		queryAgainst: string[];
+		queryMinLength?: number;
+		queryAgainst?: string[];
 		isSuggestion?: boolean;
 	}
 ): Promise<HomeSearchResult[]> {

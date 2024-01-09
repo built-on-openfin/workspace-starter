@@ -105,8 +105,8 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {

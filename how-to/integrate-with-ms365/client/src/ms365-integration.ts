@@ -362,8 +362,8 @@ export class Microsoft365Integration {
 		query: string,
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResult[]> {

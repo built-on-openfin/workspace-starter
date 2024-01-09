@@ -109,8 +109,8 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse>;
@@ -129,8 +129,8 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 		query: string,
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResult[]>;

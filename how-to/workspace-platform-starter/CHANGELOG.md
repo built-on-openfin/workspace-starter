@@ -61,6 +61,8 @@
 - Fixed async filters so they don't replace the current filters
 - Added a home searching panel when querying, and debounced requests
 - Improved the Home UI experience so that it does not appear to bounce when typing search requests
+- Removed debounce from integrations as it is now performed by the platform
+- Added new method to integrations to allow them to provide an initial "searching..." entry `getSearchResultsProgress`
 - Improved platform now starts correctly when no customSettings are provided in manifest
 - Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
 - InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`
