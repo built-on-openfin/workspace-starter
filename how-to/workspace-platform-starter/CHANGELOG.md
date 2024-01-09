@@ -17,6 +17,10 @@
 - Added theming support for the new multi state icon urls for browser buttons
 - Added additional FDC3 support so that [context metadata](https://fdc3.finos.org/docs/api/ref/Metadata#contextmetadata) is passed when context is broadcast, an intent is raised or fdc3.open is used. This can be used with fdc3.getInfo to see if the context you received was sent from your app.
 - Updated example call app so that it logs the new context metadata when an intent is raised or context received. Added context support to the call app. Updated the example participant history app so that it console logs the context metadata received.
+- Added UnsavedPagePromptStrategy support to the browserProvider. This takes advantage of the enhancement in Workspace 16.1 to decide whether or not the page should prompt the user if it has unsaved changes (in the platform override: handleSaveModalOnPageClose). The options are:
+  - "default" - use the default platform behavior
+  - "skip-untitled" - any page that hasn't been assigned a title shouldn't prompt the user to save unsaved changes.
+  - "never" - you never want workspace to show a prompt. Unsaved changes will be lost if the user doesn't save before closing.
 
 ## v16
 

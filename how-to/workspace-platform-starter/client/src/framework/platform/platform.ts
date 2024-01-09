@@ -205,6 +205,7 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 				platformConstructor,
 				customSettings?.platformProvider,
 				customSettings?.browserProvider,
+				await getWindowPositionOptions(customSettings?.browserProvider),
 				await versionProvider.getVersionInfo()
 			),
 		integrations,

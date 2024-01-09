@@ -21,11 +21,12 @@ import {
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type {
+	HandleSaveModalOnPageClosePayload,
+	SaveModalOnPageCloseResult
+} from "@openfin/workspace-platform/common/src/api/pages/shapes";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
-import {
-	getWindowPositionOptions,
-	getWindowPositionUsingStrategy
-} from "workspace-platform-starter/utils-position";
+import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import * as analyticsProvider from "../analytics";
 import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
@@ -33,9 +34,12 @@ import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import * as Menu from "../menu";
 import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
-import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
-import type { BrowserProviderOptions, WindowPositioningOptions } from "../shapes/browser-shapes";
+import type {
+	BrowserProviderOptions,
+	UnsavedPagePromptStrategy,
+	WindowPositioningOptions
+} from "../shapes/browser-shapes";
 import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
@@ -82,7 +86,7 @@ const PAGE_ENDPOINT_ID_SET = "page-set";
 
 const logger = createLogger("PlatformOverride");
 
-let windowPositioningOptions: WindowPositioningOptions | undefined;
+let unsavedPagePromptStrategy: UnsavedPagePromptStrategy | undefined;
 let disableStorageMapping: boolean | undefined;
 let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
@@ -101,6 +105,7 @@ let defaultOptions:
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @param platformProviderSettings The settings for the platform provider.
  * @param browserProviderSettings The settings for the browser provider.
+ * @param windowPositioningOptions The window positioning options.
  * @param versionInfo The app version info.
  * @returns The overridden class.
  */
@@ -108,12 +113,15 @@ export function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>,
 	platformProviderSettings: PlatformProviderOptions | undefined,
 	browserProviderSettings: BrowserProviderOptions | undefined,
+	windowPositioningOptions: WindowPositioningOptions | undefined,
 	versionInfo: VersionInfo
 ): WorkspacePlatformProvider {
 	disableStorageMapping = platformProviderSettings?.disableStorageMapping ?? false;
 	globalMenuStyle = browserProviderSettings?.menuOptions?.styles?.globalMenu;
 	pageMenuStyle = browserProviderSettings?.menuOptions?.styles?.pageMenu;
 	viewMenuStyle = browserProviderSettings?.menuOptions?.styles?.viewMenu;
+	unsavedPagePromptStrategy = browserProviderSettings?.unsavedPagePromptStrategy ?? "default";
+
 	workspaceApplied = false;
 
 	/**
@@ -752,27 +760,20 @@ export function overrideCallback(
 				return super.createWindow(options, identity);
 			}
 
-			if (!windowPositioningOptions?.disableWindowPositioningStrategy) {
-				if (isEmpty(windowPositioningOptions)) {
-					const settings = await getSettings();
-					windowPositioningOptions = await getWindowPositionOptions(settings?.browserProvider);
-				}
+			if (!isEmpty(windowPositioningOptions) && !windowPositioningOptions?.disableWindowPositioningStrategy) {
+				const hasLeft = !isEmpty(options?.defaultLeft);
+				const hasTop = !isEmpty(options?.defaultTop);
 
-				if (!isEmpty(windowPositioningOptions)) {
-					logger.info("Create Window", options);
+				if (!hasLeft || !hasTop) {
+					const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
 
-					const hasLeft = !isEmpty(options?.defaultLeft);
-					const hasTop = !isEmpty(options?.defaultTop);
-
-					if (!hasLeft || !hasTop) {
-						const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
-
-						if (!hasLeft && !isEmpty(position?.left)) {
-							options.defaultLeft = position.left;
-						}
-						if (!hasTop && !isEmpty(position?.top)) {
-							options.defaultTop = position.top;
-						}
+					if (!hasLeft && !isEmpty(position?.left)) {
+						options.defaultLeft = position.left;
+						logger.debug(`Updating default left to ${position.left} using window positioning strategy`);
+					}
+					if (!hasTop && !isEmpty(position?.top)) {
+						options.defaultTop = position.top;
+						logger.debug(`Updating default top to ${position.top} using window positioning strategy`);
 					}
 				}
 			}
@@ -863,6 +864,33 @@ export function overrideCallback(
 		 */
 		public async saveDockProviderConfig(config: DockProviderConfigWithIdentity): Promise<void> {
 			return saveConfig(config, async (providerConfig) => super.saveDockProviderConfig(providerConfig));
+		}
+
+		/**
+		 * Determine whether or not a dialog should be shown.
+		 * @param payload the page that is going to be closed.
+		 * @returns Whether or not a modal should be shown
+		 */
+		public async handleSaveModalOnPageClose(
+			payload: HandleSaveModalOnPageClosePayload
+		): Promise<SaveModalOnPageCloseResult> {
+			// close confirmation modal will not be shown if the page is locked
+			if (isEmpty(unsavedPagePromptStrategy) || unsavedPagePromptStrategy === "default") {
+				return super.handleSaveModalOnPageClose(payload);
+			}
+			if (unsavedPagePromptStrategy === "never") {
+				return { shouldShowModal: false };
+			}
+			if (unsavedPagePromptStrategy === "skip-untitled") {
+				const platform = getCurrentSync();
+				const defaultPageTitle = await platform.Browser.getUniquePageTitle();
+				const defaultPagePrefix = defaultPageTitle.split(" ")[0];
+				if (payload.page.title.startsWith(defaultPagePrefix)) {
+					return { shouldShowModal: false };
+				}
+			}
+			logger.warn("Unsaved page prompt strategy is not valid. Using default.");
+			return super.handleSaveModalOnPageClose(payload);
 		}
 	}
 	return new Override();
