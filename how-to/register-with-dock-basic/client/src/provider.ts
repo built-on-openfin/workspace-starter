@@ -7,12 +7,14 @@ import {
 	type WorkspaceButton
 } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
-import { dockGetCustomActions, register } from "./dock";
+import { dockGetCustomActions, register, updateDock } from "./dock";
 
 let registerButton: HTMLButtonElement | null;
 let showButton: HTMLButtonElement | null;
 let minimizeButton: HTMLButtonElement | null;
 let deregisterButton: HTMLButtonElement | null;
+let enableButton: HTMLButtonElement | null;
+let disableButton: HTMLButtonElement | null;
 let showHomeButton: HTMLInputElement | null;
 let showNotificationButton: HTMLInputElement | null;
 let showStorefrontButton: HTMLInputElement | null;
@@ -114,8 +116,10 @@ async function initializeDOM(): Promise<void> {
 	enableRearrangementButton = document.querySelector<HTMLInputElement>("#enableRearrangement");
 	customIconUrlInput = document.querySelector<HTMLInputElement>("#customIconUrl");
 	customOpenUrlInput = document.querySelector<HTMLInputElement>("#customOpenUrl");
+	enableButton = document.querySelector<HTMLButtonElement>("#enable");
+	disableButton = document.querySelector<HTMLButtonElement>("#disable");
 
-	if (registerButton && deregisterButton && showButton && minimizeButton) {
+	if (registerButton && deregisterButton && showButton && minimizeButton && enableButton && disableButton) {
 		setStates(false);
 
 		registerButton.addEventListener("click", async () => {
@@ -162,6 +166,16 @@ async function initializeDOM(): Promise<void> {
 
 		minimizeButton.addEventListener("click", async () => {
 			await Dock.minimize();
+		});
+
+		enableButton.addEventListener("click", async () => {
+			console.log("Enable Clicked!");
+			await updateDock(true);
+		});
+
+		disableButton.addEventListener("click", async () => {
+			console.log("Disable Clicked!");
+			await updateDock(false);
 		});
 	}
 }
