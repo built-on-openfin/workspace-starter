@@ -48,7 +48,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_54"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -669,7 +669,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_47"
 		},
 		"ConditionsProviderOptions": {
 			"$ref": "#/definitions/ModuleList_3",
@@ -780,7 +780,7 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_44"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_9"
@@ -1099,10 +1099,10 @@
 		},
 		"Data": {},
 		"DeepPartial": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_59"
+			"$ref": "#/definitions/__type_60"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1153,10 +1153,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_41"
 		},
 		"DisplayMetadata_3": {
-			"$ref": "#/definitions/__type_57"
+			"$ref": "#/definitions/__type_58"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1321,6 +1321,9 @@
 							},
 							{
 								"$ref": "#/definitions/Omit_3"
+							},
+							{
+								"$ref": "#/definitions/Omit_4"
 							}
 						]
 					},
@@ -1636,7 +1639,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_60"
+			"$ref": "#/definitions/__type_61"
 		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
@@ -1780,7 +1783,7 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Identity_5_1": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"Image": {
 			"additionalProperties": false,
@@ -1939,16 +1942,16 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_56"
+			"$ref": "#/definitions/__type_57"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_58"
+			"$ref": "#/definitions/__type_59"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_46"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
@@ -2899,10 +2902,10 @@
 			"type": "object"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_43"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_39"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -3041,7 +3044,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_53"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3079,6 +3082,9 @@
 		},
 		"Omit_3": {
 			"$ref": "#/definitions/__type_34"
+		},
+		"Omit_4": {
+			"$ref": "#/definitions/__type_35"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -3334,25 +3340,25 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_38"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_45"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_47"
-		},
-		"Partial_13": {
 			"$ref": "#/definitions/__type_48"
 		},
-		"Partial_14": {
+		"Partial_13": {
 			"$ref": "#/definitions/__type_49"
 		},
-		"Partial_15": {
+		"Partial_14": {
 			"$ref": "#/definitions/__type_50"
 		},
+		"Partial_15": {
+			"$ref": "#/definitions/__type_51"
+		},
 		"Partial_16": {
-			"$ref": "#/definitions/__type_55"
+			"$ref": "#/definitions/__type_56"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -3940,7 +3946,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_40"
 		},
 		"PopupMenuStyles": {
 			"description": "The styles that can be used to display the popup menus.",
@@ -4010,10 +4016,10 @@
 			"$ref": "#/definitions/__type_19"
 		},
 		"Record_1": {
-			"$ref": "#/definitions/__type_51"
+			"$ref": "#/definitions/__type_52"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_42"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_11"
@@ -4123,7 +4129,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_55"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -7149,6 +7155,48 @@
 		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
+				"conditions": {
+					"description": "Condition to determine if the item should be shown.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"display": {
+					"description": "Should this entry show a single app or a group of apps.",
+					"enum": ["group", "individual"],
+					"type": "string"
+				},
+				"iconUrl": {
+					"description": "The icon to use to distinguish this entry from others",
+					"type": "string"
+				},
+				"noEntries": {
+					"description": "Text to display if there are no entries because there are no tagged apps.",
+					"type": "string"
+				},
+				"tags": {
+					"description": "The tags to use to find the single app or a collection of apps that need to be listed. This will be compared\nagainst the tags associated with apps returned from the app data sources.",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"tooltip": {
+					"description": "The tooltip to be shown for this button/entry",
+					"type": "string"
+				},
+				"visible": {
+					"description": "Is the dock entry visible.",
+					"type": "boolean"
+				}
+			},
+			"required": ["display"],
+			"type": "object"
+		},
+		"__type_33": {
+			"additionalProperties": false,
+			"properties": {
 				"appId": {
 					"description": "Launch an app by it's id.",
 					"type": "string"
@@ -7176,7 +7224,7 @@
 			"required": ["appId"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"action": {
@@ -7217,7 +7265,7 @@
 			"required": ["action"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7247,6 +7295,9 @@
 							},
 							{
 								"$ref": "#/definitions/Omit_3"
+							},
+							{
+								"$ref": "#/definitions/Omit_4"
 							}
 						]
 					},
@@ -7264,7 +7315,7 @@
 			"required": ["options"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"clientAPIVersion": {
@@ -7322,7 +7373,7 @@
 			},
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"name": {
@@ -7336,7 +7387,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7375,7 +7426,7 @@
 			},
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -7466,21 +7517,6 @@
 			],
 			"type": "object"
 		},
-		"__type_39": {
-			"additionalProperties": false,
-			"properties": {
-				"x": {
-					"description": "The mouse x position",
-					"type": "number"
-				},
-				"y": {
-					"description": "The mouse y position",
-					"type": "number"
-				}
-			},
-			"required": ["x", "y"],
-			"type": "object"
-		},
 		"__type_4": {
 			"additionalProperties": false,
 			"description": "Unique identifier for a window, view or iframe.",
@@ -7500,6 +7536,21 @@
 		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
+				"x": {
+					"description": "The mouse x position",
+					"type": "number"
+				},
+				"y": {
+					"description": "The mouse y position",
+					"type": "number"
+				}
+			},
+			"required": ["x", "y"],
+			"type": "object"
+		},
+		"__type_41": {
+			"additionalProperties": false,
+			"properties": {
 				"dipRect": {
 					"$ref": "#/definitions/RectangleByEdgePositions"
 				},
@@ -7510,7 +7561,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -7529,7 +7580,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -7581,7 +7632,7 @@
 			],
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_44": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -7610,7 +7661,7 @@
 			},
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7647,11 +7698,11 @@
 			},
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_46": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_47": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -7672,7 +7723,7 @@
 			},
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_48": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7702,7 +7753,7 @@
 			},
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -7716,21 +7767,6 @@
 				},
 				"width": {
 					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_49": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"type": "string"
 				}
 			},
 			"type": "object"
@@ -7767,6 +7803,17 @@
 		},
 		"__type_51": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_52": {
@@ -7774,6 +7821,10 @@
 			"type": "object"
 		},
 		"__type_53": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_54": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7804,7 +7855,7 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_54": {
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7844,7 +7895,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_55": {
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -8144,7 +8195,7 @@
 			},
 			"type": "object"
 		},
-		"__type_56": {
+		"__type_57": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -8172,7 +8223,7 @@
 			},
 			"type": "object"
 		},
-		"__type_57": {
+		"__type_58": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -8191,7 +8242,7 @@
 			},
 			"type": "object"
 		},
-		"__type_58": {
+		"__type_59": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -8218,39 +8269,6 @@
 				}
 			},
 			"required": ["afterAction", "beforeAction"],
-			"type": "object"
-		},
-		"__type_59": {
-			"additionalProperties": false,
-			"properties": {
-				"rules": {
-					"items": {
-						"additionalProperties": false,
-						"properties": {
-							"match": {
-								"items": {
-									"type": "string"
-								},
-								"type": "array"
-							},
-							"options": {
-								"additionalProperties": false,
-								"properties": {
-									"downloadSettings": {
-										"$ref": "#/definitions/FileDownloadSettings"
-									}
-								},
-								"required": ["downloadSettings"],
-								"type": "object"
-							}
-						},
-						"required": ["match", "options"],
-						"type": "object"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
 			"type": "object"
 		},
 		"__type_6": {
@@ -8550,6 +8568,39 @@
 			"type": "object"
 		},
 		"__type_60": {
+			"additionalProperties": false,
+			"properties": {
+				"rules": {
+					"items": {
+						"additionalProperties": false,
+						"properties": {
+							"match": {
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							"options": {
+								"additionalProperties": false,
+								"properties": {
+									"downloadSettings": {
+										"$ref": "#/definitions/FileDownloadSettings"
+									}
+								},
+								"required": ["downloadSettings"],
+								"type": "object"
+							}
+						},
+						"required": ["match", "options"],
+						"type": "object"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_61": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
