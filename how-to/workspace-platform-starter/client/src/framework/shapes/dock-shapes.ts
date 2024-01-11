@@ -132,7 +132,12 @@ export interface DockButtonDropdown extends DockButtonBase {
 	/**
 	 * List of button options
 	 */
-	options: (Omit<DockButtonApp, "id"> | Omit<DockButtonAction, "id"> | Omit<DockButtonDropdown, "id">)[];
+	options: (
+		| Omit<DockButtonAppsByTag, "id">
+		| Omit<DockButtonApp, "id">
+		| Omit<DockButtonAction, "id">
+		| Omit<DockButtonDropdown, "id">
+	)[];
 
 	/**
 	 * Text to display if there are no entries because conditions have excluded options.
