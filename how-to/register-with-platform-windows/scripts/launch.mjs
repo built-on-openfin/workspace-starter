@@ -31,7 +31,13 @@ async function run(manifestUrl) {
 							await platform.quit();
 						}
 					} catch (err) {
-						console.error(err);
+						if (err.toString().includes('no longer connected')) {
+							console.log('Platform no longer connected');
+							console.log('Exiting process');
+							process.exit();
+						} else {
+							console.error(err);
+						}
 					}
 				};
 				console.log(`Wrapped target platform: ${manifest.platform.uuid}`);
