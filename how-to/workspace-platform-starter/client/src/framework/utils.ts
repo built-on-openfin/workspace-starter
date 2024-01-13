@@ -240,3 +240,20 @@ export function sanitizeString(content: unknown): string {
 	}
 	return "";
 }
+
+/**
+ * Get the command line arguments from a command line string.
+ * Examples of command line strings: arg1 key1=value1 key2="value with spaces" key3='value3' key4='value with more spaces'`.
+ * @param commandLine The command line string.
+ * @returns The command line arguments or an empty array if none
+ */
+export function getCommandLineArgs(commandLine: string): string[] {
+	if (!isStringValue(commandLine)) {
+		return [];
+	}
+	const matches = commandLine.match(/(\w+=)?("[^"]*"|'[^']*'|[^ ]+)/g);
+	if (isEmpty(matches)) {
+		return [];
+	}
+	return matches;
+}

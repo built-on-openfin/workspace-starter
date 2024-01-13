@@ -27,6 +27,7 @@
 - Updated the Winform Interop Example to be an updated copy that can auto connect if passed command line arguments and now supports raising more intents (ViewContact, ViewInstrument, ViewNews) and well as listening to those intents. A logging view has also been added.
 - BREAKING CHANGE: manifest.fin.json was the only manifest without a security realm specified. This has been updated but may result in saved data being lost when developing locally. We recommend a security realm to isolate your platform from others and so decided to apply it here as well.
 - Fixed - when launching multiple instances of an inline app asset it is possible to try and re-download an app asset that has just been downloaded or exists. We now fetch the app asset info to see if the platform already has the app asset and if it is the required version.
+- Added util getCommandLineArgs to extract multiple command line arguments from a string into an array. Snap accepts an array of arguments and app assets and external apps take a string as an args parameter. This lets you specify arguments that cover scenarios where snap is disabled and enabled. Added tests to verify getCommandLineArgs behavior.
 
 ## v16
 

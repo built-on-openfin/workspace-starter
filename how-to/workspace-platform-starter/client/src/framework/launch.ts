@@ -29,7 +29,7 @@ import type {
 	HostLaunchOptions
 } from "./shapes/app-shapes";
 import * as snapProvider from "./snap";
-import { isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
+import { getCommandLineArgs, isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
@@ -1030,6 +1030,12 @@ async function launchExternalProcess(
 				instanceId = app.instanceMode === "single" ? app.appId : randomUUID();
 			}
 
+			// snap needs multiple args to be passed as an array
+			// converting from app asset or launch external definitions where args is a string
+			// cannot be passed as a single string in an array.
+			if (args.length === 1) {
+				args = getCommandLineArgs(args[0]);
+			}
 			const launchIdentity = await snapProvider.launchApp(
 				path,
 				args,
