@@ -861,14 +861,18 @@ export async function launchAppAsset(
 		options.alias = appAssetApp.manifest;
 	} else if (appAssetApp.manifestType === MANIFEST_TYPES.InlineAppAsset.id) {
 		const appAssetInfo: OpenFin.AppAssetInfo = getInlineManifest(appAssetApp);
-		try {
-			await fin.System.downloadAsset(appAssetInfo, (progress) => {
-				const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
-				logger.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${appAssetApp.appId}`);
-			});
-		} catch (error) {
-			logger.error(`Error trying to download app asset with app id: ${appAssetApp.appId}`, error);
-			return;
+		const inMemoryAppAsset = await fin.System.getAppAssetInfo({ alias: appAssetInfo.alias });
+		if (isEmpty(inMemoryAppAsset) || appAssetInfo.version !== inMemoryAppAsset.version) {
+			logger.info(`App asset with alias: ${appAssetInfo.alias} does not exist in memory. Fetching it.`);
+			try {
+				await fin.System.downloadAsset(appAssetInfo, (progress) => {
+					const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
+					logger.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${appAssetApp.appId}`);
+				});
+			} catch (error) {
+				logger.error(`Error trying to download app asset with app id: ${appAssetApp.appId}`, error);
+				return;
+			}
 		}
 		options.alias = appAssetInfo.alias;
 		options.arguments = appAssetInfo.args;
@@ -882,7 +886,9 @@ export async function launchAppAsset(
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
 		options.uuid = options.uuid ?? appAssetApp.appId;
 	} else {
-		options.uuid = `${options.uuid ?? appAssetApp.appId}/${isStringValue(instanceId) ? instanceId : randomUUID()}`;
+		options.uuid = `${options.uuid ?? appAssetApp.appId}/${
+			isStringValue(instanceId) ? instanceId : randomUUID()
+		}`;
 	}
 	try {
 		logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
@@ -923,7 +929,9 @@ export async function launchExternal(
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
 		options.uuid = options.uuid ?? externalApp.appId;
 	} else {
-		options.uuid = `${options.uuid ?? externalApp.appId}/${isStringValue(instanceId) ? instanceId : randomUUID()}`;
+		options.uuid = `${options.uuid ?? externalApp.appId}/${
+			isStringValue(instanceId) ? instanceId : randomUUID()
+		}`;
 	}
 
 	try {
@@ -993,8 +1001,9 @@ async function launchExternalProcess(
 	const externalUUIDToken = "{OF-EXT-UUID}";
 	const externalUUIDValue = options.uuid ?? app.appId;
 
-	const updatedArgs = args.map<string>((arg) => arg
-	.replace(platformUUIDToken, platformUUIDValue).replace(externalUUIDToken, externalUUIDValue));
+	const updatedArgs = args.map<string>((arg) =>
+		arg.replace(platformUUIDToken, platformUUIDValue).replace(externalUUIDToken, externalUUIDValue)
+	);
 
 	args = updatedArgs;
 
