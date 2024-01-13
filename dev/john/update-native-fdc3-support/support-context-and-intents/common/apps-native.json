@@ -7,7 +7,7 @@
 		"manifestType": "inline-appasset",
 		"manifest": {
 			"alias": "winform-interop-example",
-			"version": "3.0.2",
+			"version": "4.0.0",
 			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-native-fdc3-support/support-context-and-intents/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe"
 		},

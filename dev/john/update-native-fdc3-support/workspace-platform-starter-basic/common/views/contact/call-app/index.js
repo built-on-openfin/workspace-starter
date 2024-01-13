@@ -72,15 +72,21 @@ function initializeDOM() {
 	if (window.fdc3 !== undefined) {
 		const startCallIntent = 'StartCall';
 		const openAppIntent = 'OpenApp';
-		fdc3.addIntentListener(startCallIntent, (ctx) => {
+		fdc3.addIntentListener(startCallIntent, (ctx, metadata) => {
+			console.log(`Received Context For Intent: ${startCallIntent}`, ctx, metadata);
 			updateCallInformation(ctx, startCallIntent);
 			return new Promise((resolve) => {
 				// To demonstrate getResult in fdc3 2.0 we simply return the context that was sent.
 				resolve(ctx);
 			});
 		});
-		fdc3.addIntentListener(openAppIntent, (ctx) => {
+		fdc3.addIntentListener(openAppIntent, (ctx, metadata) => {
+			console.log(`Received Context For Intent: ${openAppIntent}`, ctx, metadata);
 			updateCallInformation(ctx, openAppIntent);
+		});
+		fdc3.addContextListener('fdc3.contact', (ctx, metadata) => {
+			console.log('Received Context', ctx, metadata);
+			updateCallInformation(ctx);
 		});
 	}
 }
