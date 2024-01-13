@@ -880,7 +880,9 @@ export async function launchAppAsset(
 	}
 	if (appAssetApp.instanceMode === "single") {
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
-		options.uuid = appAssetApp.appId;
+		options.uuid = options.uuid ?? appAssetApp.appId;
+	} else {
+		options.uuid = `${options.uuid ?? appAssetApp.appId}/${isStringValue(instanceId) ? instanceId : randomUUID()}`;
 	}
 	try {
 		logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
@@ -919,7 +921,9 @@ export async function launchExternal(
 	}
 	if (externalApp.instanceMode === "single") {
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
-		options.uuid = externalApp.appId;
+		options.uuid = options.uuid ?? externalApp.appId;
+	} else {
+		options.uuid = `${options.uuid ?? externalApp.appId}/${isStringValue(instanceId) ? instanceId : randomUUID()}`;
 	}
 
 	try {
@@ -983,6 +987,17 @@ async function launchExternalProcess(
 		args = [];
 	}
 
+	// check for supported tokens and replace them if they exist
+	const platformUUIDToken = "{OF-PLAT-UUID}";
+	const platformUUIDValue = fin.me.identity.uuid;
+	const externalUUIDToken = "{OF-EXT-UUID}";
+	const externalUUIDValue = options.uuid ?? app.appId;
+
+	const updatedArgs = args.map<string>((arg) => arg
+	.replace(platformUUIDToken, platformUUIDValue).replace(externalUUIDToken, externalUUIDValue));
+
+	args = updatedArgs;
+
 	if (
 		snapProvider.isEnabled() &&
 		nativeOptions?.type === "native" &&
@@ -1025,6 +1040,17 @@ async function launchExternalProcess(
 			logger.warn(
 				`The app with id ${app.appId} specifies a snap launch strategy, but it has neither a path property or app asset alias/version/target combination, falling back to launch without snap`
 			);
+		}
+	}
+
+	if (isEmpty(identity) && app.instanceMode === "single") {
+		// if the app is in single instance mode it means we assign the app Id to the uuid so that we can only have one instance of the app
+		// we should check for the existence of the app before launching it.
+		const externalApplications = await fin.System.getAllExternalApplications();
+		const existingApp = externalApplications.find((externalApp) => externalApp.uuid === options.uuid);
+		if (existingApp) {
+			logger.info(`External application with App id ${app.appId} already exists. Returning identity.`);
+			identity = { uuid: existingApp.uuid, name: existingApp.name ?? existingApp.uuid, appId: app.appId };
 		}
 	}
 

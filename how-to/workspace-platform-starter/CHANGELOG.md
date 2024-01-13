@@ -21,6 +21,7 @@
   - "default" - use the default platform behavior
   - "skip-untitled" - any page that hasn't been assigned a title shouldn't prompt the user to save unsaved changes.
   - "never" - you never want workspace to show a prompt. Unsaved changes will be lost if the user doesn't save before closing.
+- Added better support for firing intents at .NET apps and updated the sample winform application.
 
 ## v16
 
