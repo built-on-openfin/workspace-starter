@@ -1045,7 +1045,11 @@ async function launchExternalProcess(
 			);
 
 			if (launchIdentity) {
-				identity = { uuid: fin.me.identity.uuid, name: launchIdentity, appId: app.appId };
+				identity = {
+					uuid: options.uuid ?? app.appId,
+					name: options.uuid ?? launchIdentity,
+					appId: app.appId
+				};
 			} else {
 				logger.warn(
 					`The app with id ${app.appId} could not be launched with snap support, falling back to launch without snap`
@@ -1073,7 +1077,11 @@ async function launchExternalProcess(
 		const clonedOptions = objectClone(options);
 		clonedOptions.arguments = args.join(" ");
 		const launchIdentity = await fin.System.launchExternalProcess(clonedOptions);
-		identity = { ...launchIdentity, appId: app.appId };
+		identity = {
+			uuid: launchIdentity.uuid ?? app.appId,
+			name: launchIdentity.name ?? launchIdentity.uuid,
+			appId: app.appId
+		};
 	}
 
 	return identity;
