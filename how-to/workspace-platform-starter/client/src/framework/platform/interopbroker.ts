@@ -1068,7 +1068,16 @@ export function interopOverride(
 					clientIdentity,
 					"intent"
 				);
-				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
+				// the launch logic is single instance aware but can also bring content to front where possible
+				// this will let the context be set and the content brought to front.
+				const launchSingleInstanceApp =
+					specifiedAppInstances.length === 1 && this.useSingleInstance(targetApp);
+
+				if (
+					specifiedAppInstances.length === 0 ||
+					this.createNewInstance(targetApp) ||
+					launchSingleInstanceApp
+				) {
 					const intentResolver = await this.launchAppWithIntent(targetApp, intent, undefined, clientIdentity);
 					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.IntentDeliveryFailed);

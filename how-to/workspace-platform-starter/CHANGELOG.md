@@ -21,6 +21,14 @@
   - "default" - use the default platform behavior
   - "skip-untitled" - any page that hasn't been assigned a title shouldn't prompt the user to save unsaved changes.
   - "never" - you never want workspace to show a prompt. Unsaved changes will be lost if the user doesn't save before closing.
+- Added better support for firing intents at .NET apps and updated the sample winform application.
+- Native applications now use an appId for the UUID (if the uuid is not provided) and instanceId (if provided)
+- Support for replacing two tokens if specified in native app (external or app asset) command line args: {OF-PLAT-UUID} will be replaced with the UUID of the platform that launched the native app (useful if you want to validate that it is an expected UUID you are allowed to connect to) and {OF-EXT-UUID} which will pass the UUID we launched your external application with.
+- Updated the Winform Interop Example to be an updated copy that can auto connect if passed command line arguments and now supports raising more intents (ViewContact, ViewInstrument, ViewNews) and well as listening to those intents. A logging view has also been added.
+- BREAKING CHANGE: manifest.fin.json was the only manifest without a security realm specified. This has been updated but may result in saved data being lost when developing locally. We recommend a security realm to isolate your platform from others and so decided to apply it here as well.
+- Fixed - when launching multiple instances of an inline app asset it is possible to try and re-download an app asset that has just been downloaded or exists. We now fetch the app asset info to see if the platform already has the app asset and if it is the required version.
+- Added util getCommandLineArgs to extract multiple command line arguments from a string into an array. Snap accepts an array of arguments and app assets and external apps take a string as an args parameter. This lets you specify arguments that cover scenarios where snap is disabled and enabled. Added tests to verify getCommandLineArgs behavior.
+- Updated identity returned when launching a native app or app asset (either normally or through snap). The UUID is the app id if the app has been marked as instanceMode = "single" otherwise the uuid is appId/guid (guid being an instanceId). The name is the same as the UUID (as name is not specified in app asset/external process options). If your app supports having multiple instances and it registers intent handlers then we recommend passing the created UUID for your app instance using {OF-EXT-UUD} as part of the command line args so that the uuid can be used when you connect to the OpenFin runtime. When you then connect to the workspace platform interop broker (as the platform will be waiting on that connection to fire an intent against it) it will use the expected UUID as it's connection id.
 
 ## v16
 

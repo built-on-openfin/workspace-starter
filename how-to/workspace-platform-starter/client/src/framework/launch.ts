@@ -29,7 +29,7 @@ import type {
 	HostLaunchOptions
 } from "./shapes/app-shapes";
 import * as snapProvider from "./snap";
-import { isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
+import { getCommandLineArgs, isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
@@ -861,14 +861,18 @@ export async function launchAppAsset(
 		options.alias = appAssetApp.manifest;
 	} else if (appAssetApp.manifestType === MANIFEST_TYPES.InlineAppAsset.id) {
 		const appAssetInfo: OpenFin.AppAssetInfo = getInlineManifest(appAssetApp);
-		try {
-			await fin.System.downloadAsset(appAssetInfo, (progress) => {
-				const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
-				logger.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${appAssetApp.appId}`);
-			});
-		} catch (error) {
-			logger.error(`Error trying to download app asset with app id: ${appAssetApp.appId}`, error);
-			return;
+		const inMemoryAppAsset = await fin.System.getAppAssetInfo({ alias: appAssetInfo.alias });
+		if (isEmpty(inMemoryAppAsset) || appAssetInfo.version !== inMemoryAppAsset.version) {
+			logger.info(`App asset with alias: ${appAssetInfo.alias} does not exist in memory. Fetching it.`);
+			try {
+				await fin.System.downloadAsset(appAssetInfo, (progress) => {
+					const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
+					logger.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${appAssetApp.appId}`);
+				});
+			} catch (error) {
+				logger.error(`Error trying to download app asset with app id: ${appAssetApp.appId}`, error);
+				return;
+			}
 		}
 		options.alias = appAssetInfo.alias;
 		options.arguments = appAssetInfo.args;
@@ -880,7 +884,11 @@ export async function launchAppAsset(
 	}
 	if (appAssetApp.instanceMode === "single") {
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
-		options.uuid = appAssetApp.appId;
+		options.uuid = options.uuid ?? appAssetApp.appId;
+	} else {
+		options.uuid = `${options.uuid ?? appAssetApp.appId}/${
+			isStringValue(instanceId) ? instanceId : randomUUID()
+		}`;
 	}
 	try {
 		logger.info(`Launching app asset with appId: ${appAssetApp.appId} with the following options:`, options);
@@ -919,7 +927,11 @@ export async function launchExternal(
 	}
 	if (externalApp.instanceMode === "single") {
 		// use the appId as the UUID and OpenFin will only be able to launch a single instance
-		options.uuid = externalApp.appId;
+		options.uuid = options.uuid ?? externalApp.appId;
+	} else {
+		options.uuid = `${options.uuid ?? externalApp.appId}/${
+			isStringValue(instanceId) ? instanceId : randomUUID()
+		}`;
 	}
 
 	try {
@@ -983,6 +995,18 @@ async function launchExternalProcess(
 		args = [];
 	}
 
+	// check for supported tokens and replace them if they exist
+	const platformUUIDToken = "{OF-PLAT-UUID}";
+	const platformUUIDValue = fin.me.identity.uuid;
+	const externalUUIDToken = "{OF-EXT-UUID}";
+	const externalUUIDValue = options.uuid ?? app.appId;
+
+	const updatedArgs = args.map<string>((arg) =>
+		arg.replace(platformUUIDToken, platformUUIDValue).replace(externalUUIDToken, externalUUIDValue)
+	);
+
+	args = updatedArgs;
+
 	if (
 		snapProvider.isEnabled() &&
 		nativeOptions?.type === "native" &&
@@ -1006,6 +1030,12 @@ async function launchExternalProcess(
 				instanceId = app.instanceMode === "single" ? app.appId : randomUUID();
 			}
 
+			// snap needs multiple args to be passed as an array
+			// converting from app asset or launch external definitions where args is a string
+			// cannot be passed as a single string in an array.
+			if (args.length === 1) {
+				args = getCommandLineArgs(args[0]);
+			}
 			const launchIdentity = await snapProvider.launchApp(
 				path,
 				args,
@@ -1015,7 +1045,11 @@ async function launchExternalProcess(
 			);
 
 			if (launchIdentity) {
-				identity = { uuid: fin.me.identity.uuid, name: launchIdentity, appId: app.appId };
+				identity = {
+					uuid: options.uuid ?? app.appId,
+					name: options.uuid ?? launchIdentity,
+					appId: app.appId
+				};
 			} else {
 				logger.warn(
 					`The app with id ${app.appId} could not be launched with snap support, falling back to launch without snap`
@@ -1028,11 +1062,26 @@ async function launchExternalProcess(
 		}
 	}
 
+	if (isEmpty(identity) && app.instanceMode === "single") {
+		// if the app is in single instance mode it means we assign the app Id to the uuid so that we can only have one instance of the app
+		// we should check for the existence of the app before launching it.
+		const externalApplications = await fin.System.getAllExternalApplications();
+		const existingApp = externalApplications.find((externalApp) => externalApp.uuid === options.uuid);
+		if (existingApp) {
+			logger.info(`External application with App id ${app.appId} already exists. Returning identity.`);
+			identity = { uuid: existingApp.uuid, name: existingApp.name ?? existingApp.uuid, appId: app.appId };
+		}
+	}
+
 	if (isEmpty(identity)) {
 		const clonedOptions = objectClone(options);
 		clonedOptions.arguments = args.join(" ");
 		const launchIdentity = await fin.System.launchExternalProcess(clonedOptions);
-		identity = { ...launchIdentity, appId: app.appId };
+		identity = {
+			uuid: launchIdentity.uuid ?? app.appId,
+			name: launchIdentity.name ?? launchIdentity.uuid,
+			appId: app.appId
+		};
 	}
 
 	return identity;
