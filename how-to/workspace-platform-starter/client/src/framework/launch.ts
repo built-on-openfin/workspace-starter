@@ -29,7 +29,7 @@ import type {
 	HostLaunchOptions
 } from "./shapes/app-shapes";
 import * as snapProvider from "./snap";
-import { getCommandLineArgs, isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
+import { formatError, getCommandLineArgs, isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
 
 const logger = createLogger("Launch");
 
@@ -861,8 +861,17 @@ export async function launchAppAsset(
 		options.alias = appAssetApp.manifest;
 	} else if (appAssetApp.manifestType === MANIFEST_TYPES.InlineAppAsset.id) {
 		const appAssetInfo: OpenFin.AppAssetInfo = getInlineManifest(appAssetApp);
-		const inMemoryAppAsset = await fin.System.getAppAssetInfo({ alias: appAssetInfo.alias });
-		if (isEmpty(inMemoryAppAsset) || appAssetInfo.version !== inMemoryAppAsset.version) {
+		let availableAppAsset: OpenFin.AppAssetInfo | undefined;
+		try {
+			availableAppAsset = await fin.System.getAppAssetInfo({ alias: appAssetInfo.alias });
+		} catch (appAssetError) {
+			logger.debug(
+				`App asset info for alias: ${
+					appAssetInfo.alias
+				} is not available. Response from getAppAssetInfo: ${formatError(appAssetError)}`
+			);
+		}
+		if (isEmpty(availableAppAsset) || appAssetInfo.version !== availableAppAsset.version) {
 			logger.info(`App asset with alias: ${appAssetInfo.alias} does not exist in memory. Fetching it.`);
 			try {
 				await fin.System.downloadAsset(appAssetInfo, (progress) => {
