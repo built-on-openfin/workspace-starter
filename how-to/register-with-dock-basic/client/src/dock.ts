@@ -14,7 +14,6 @@ import {
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
 
-
 let platformTitle: string | undefined;
 let platformIcon: string | undefined;
 let customIconUrl: string | undefined;

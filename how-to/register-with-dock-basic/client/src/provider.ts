@@ -190,6 +190,8 @@ function setStates(isRegistered: boolean | null): void {
 		deregisterButton &&
 		showButton &&
 		minimizeButton &&
+		enableButton &&
+		disableButton &&
 		showHomeButton &&
 		showNotificationButton &&
 		showStorefrontButton &&
@@ -202,6 +204,8 @@ function setStates(isRegistered: boolean | null): void {
 		deregisterButton.disabled = isRegistered === null || !isRegistered;
 		showButton.disabled = isRegistered === null || !isRegistered;
 		minimizeButton.disabled = isRegistered === null || !isRegistered;
+		enableButton.disabled = isRegistered === null || !isRegistered;
+		disableButton.disabled = isRegistered === null || !isRegistered;
 		showHomeButton.disabled = isRegistered === null || isRegistered;
 		showNotificationButton.disabled = isRegistered === null || isRegistered;
 		showStorefrontButton.disabled = isRegistered === null || isRegistered;

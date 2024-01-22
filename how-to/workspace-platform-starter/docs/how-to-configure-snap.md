@@ -7,7 +7,7 @@
 The OpenFin Snap SDK provides the ability to snap windows together, include native applications.
 For more detailed information see [OpenFin Snap SDK](https://developers.openfin.co/of-docs/docs/snap)
 
-To enable snap support in your platform you can add the following in your manifest.fin.json. As the Snap SDK is currently in beta you must contact OpenFin to get the real url for the `SNAP_ASSET_URL`
+To enable snap support in your platform you can add the following in your manifest.fin.json.
 
 ```json
 {
@@ -17,7 +17,7 @@ To enable snap support in your platform you can add the following in your manife
          "enabled": true,
          "id": "workspace-platform-starter",
          "serverAssetInfo": {
-            "src": "SNAP_ASSET_URL",
+            "src": "https://cdn.openfin.co/release/snap/0.2.0/snap.zip",
             "alias": "openfin-snap",
             "version": "0.2.0",
             "target": "OpenFinSnap.exe"
