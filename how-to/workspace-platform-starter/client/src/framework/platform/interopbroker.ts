@@ -4,7 +4,8 @@ import {
 	type AppIdentifier,
 	type AppMetadata,
 	type ImplementationMetadata,
-	type IntentResolution
+	type IntentResolution,
+	type ContextMetadata
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { WindowPositioningOptions } from "workspace-platform-starter/shapes/browser-shapes";
@@ -40,7 +41,7 @@ import type {
 	IntentTargetMetaData,
 	ProcessedContext
 } from "../shapes/interopbroker-shapes";
-import { formatError, isEmpty, isString, isStringValue, sanitizeString } from "../utils";
+import { formatError, isEmpty, isString, isStringValue, randomUUID, sanitizeString } from "../utils";
 import { AppIntentHelper } from "./broker/app-intent-helper";
 import { ClientRegistrationHelper } from "./broker/client-registration-helper";
 import { IntentResolverHelper } from "./broker/intent-resolver-helper";
@@ -73,6 +74,8 @@ export function interopOverride(
 
 		private _windowPositionOptions?: WindowPositioningOptions;
 
+		private readonly _metadataKey: Readonly<string>;
+
 		/**
 		 * Create a new instance of InteropBroker.
 		 */
@@ -84,6 +87,7 @@ export function interopOverride(
 				async (clientIdentity: OpenFin.ClientIdentity) => this.lookupAppId(clientIdentity),
 				logger
 			);
+			this._metadataKey = `_metadata_${randomUUID()}`;
 			getSettings()
 				.then(async (customSettings) => {
 					if (!isEmpty(customSettings) && !isEmpty(customSettings.browserProvider)) {
@@ -160,7 +164,36 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<void> {
 			sentContext.context = await this.processContext(sentContext.context);
+			const contextMetadata = await this.getContextMetadata(clientIdentity);
+
+			sentContext.context = {
+				...sentContext.context,
+				[this._metadataKey]: contextMetadata
+			} as unknown as OpenFin.Context;
 			super.setContext(sentContext, clientIdentity);
+		}
+
+		/**
+		 * Invokes the context handler.
+		 * @param clientIdentity The client identity.
+		 * @param handlerId The handler ID.
+		 * @param context The context to invoke.
+		 * @returns A promise that resolves when the context handler is invoked.
+		 */
+		public async invokeContextHandler(
+			clientIdentity: OpenFin.ClientIdentity,
+			handlerId: string,
+			context: OpenFin.Context
+		): Promise<void> {
+			const passedContext: { [key: string]: unknown } = { ...context };
+			const contextMetadata = passedContext[this._metadataKey];
+			if (!isEmpty(contextMetadata)) {
+				delete passedContext[this._metadataKey];
+			}
+			return super.invokeContextHandler(clientIdentity, handlerId, {
+				...passedContext,
+				contextMetadata
+			} as unknown as OpenFin.Context);
 		}
 
 		/**
@@ -502,6 +535,37 @@ export function interopOverride(
 		}
 
 		/**
+		 * Invoke the intent handler.
+		 * @param clientIdentity The client identity.
+		 * @param handlerId The handler ID.
+		 * @param intent The intent to invoke.
+		 * @returns A promise that resolves when the intent handler is invoked.
+		 */
+		public async invokeIntentHandler(
+			clientIdentity: OpenFin.ClientIdentity,
+			handlerId: string,
+			intent: OpenFin.Intent
+		): Promise<void> {
+			const { context } = intent;
+			let contextMetadata: ContextMetadata | undefined;
+			let passedContext: { [key: string]: unknown } | undefined;
+			if (!isEmpty(context)) {
+				passedContext = { ...context };
+				contextMetadata = passedContext[this._metadataKey] as ContextMetadata;
+				if (!isEmpty(contextMetadata)) {
+					delete passedContext[this._metadataKey];
+				}
+			}
+			return super.invokeIntentHandler(clientIdentity, handlerId, {
+				...intent,
+				context: {
+					...passedContext,
+					contextMetadata
+				} as unknown as OpenFin.Context
+			});
+		}
+
+		/**
 		 * Handle the FDC3 open.
 		 * @param fdc3OpenOptions The options for the open.
 		 * @param fdc3OpenOptions.app The platform app or its id.
@@ -600,10 +664,16 @@ export function interopOverride(
 							}
 
 							if (!isEmpty(trackedHandler)) {
-								await super.invokeContextHandler(
+								const contextToPass = await this.processContext(fdc3OpenOptions.context);
+								const contextMetadata = await this.getContextMetadata(clientIdentity);
+								const updatedContext: OpenFin.Context = {
+									...contextToPass,
+									[this._metadataKey]: contextMetadata
+								};
+								await this.invokeContextHandler(
 									trackedHandler.clientIdentity,
 									trackedHandler.handlerId,
-									fdc3OpenOptions.context
+									updatedContext
 								);
 							} else {
 								logger.warn(
@@ -799,9 +869,14 @@ export function interopOverride(
 			logger.info("Launching app with intent");
 			let platformIdentities: PlatformAppIdentifier[] | undefined = [];
 			let existingInstance = true;
+			let contextMetadata: ContextMetadata | undefined;
 
 			if (!isEmpty(intent?.context)) {
 				intent.context = await this.processContext(intent.context);
+				if (!isEmpty(clientIdentity)) {
+					contextMetadata = await this.getContextMetadata(clientIdentity);
+					intent.context = { ...intent.context, [this._metadataKey]: contextMetadata };
+				}
 			}
 
 			if (!isEmpty(instanceId)) {
@@ -993,7 +1068,16 @@ export function interopOverride(
 					clientIdentity,
 					"intent"
 				);
-				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
+				// the launch logic is single instance aware but can also bring content to front where possible
+				// this will let the context be set and the content brought to front.
+				const launchSingleInstanceApp =
+					specifiedAppInstances.length === 1 && this.useSingleInstance(targetApp);
+
+				if (
+					specifiedAppInstances.length === 0 ||
+					this.createNewInstance(targetApp) ||
+					launchSingleInstanceApp
+				) {
 					const intentResolver = await this.launchAppWithIntent(targetApp, intent, undefined, clientIdentity);
 					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
@@ -1279,6 +1363,21 @@ export function interopOverride(
 				}
 			}
 			return context;
+		}
+
+		/**
+		 * Get the context metadata for a client identity.
+		 * @param clientIdentity The client identity.
+		 * @returns The context metadata.
+		 */
+		private async getContextMetadata(clientIdentity: OpenFin.ClientIdentity): Promise<ContextMetadata> {
+			const appId = (await this.lookupAppId(clientIdentity)) ?? clientIdentity.name;
+			return {
+				source: {
+					appId,
+					instanceId: clientIdentity.endpointId
+				}
+			};
 		}
 	}
 
