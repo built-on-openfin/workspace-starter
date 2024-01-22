@@ -68,11 +68,9 @@ In the title bar of the window the pages are listed, by default the plus button 
 
 The theming for the browser window is configured in the platform using a pallette, see [How To Theme Your Platform](./how-to-theme-your-platform.md).
 
-## windowOptions vs defaultWindowOptions backwards compatibility
+## defaultWindowOptions
 
-We have extended the browser provider to support the same defaultWindowOptions as the workspace platform instead of restricting you to a subset. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
-
-We have added comments and deprecated information to say that we have moved from windowOptions to defaultWindowOptions but to maintain backwards compatibility we still check for windowOptions and re-use the settings.
+We have extended the browser provider to support the same defaultWindowOptions as the workspace platform. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
 
 ## defaultPageOptions
 
@@ -101,6 +99,18 @@ We now support adding defaultViewOptions to the browserProvider like you would i
 ## Menu And Buttons
 
 In addition to the window itself the menus and buttons can be customized, see [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md) and see [How To Customize Browser Menus](./how-to-customize-browser-menus.md).
+
+## Window Positioning Strategy
+
+We provide window positioning strategy so launched windows are offset from each other. The windowPositioningStrategy setting lets you configure specific settings although we have provided some sensible defaults so it works without change. The is an option to disable window positioning strategy as well should you wish to turn it off (e.g. during UI automation tests where positioning isn't important).
+
+## Unsaved Page Prompt Strategy
+
+By default the platform will prompt you any time you try to close a page or a window containing one or more pages that have unsaved changes. In the browser provider you can specify one of three options:
+
+- "default" - the same as leaving it empty. Always prompt.
+- "skip-untitled"- if a page has the default untitled label then do not prompt to save. Only prompt to save if a page has been given a name.
+- "never"- never prompt the user. If a user wishes to save they will do so before closing the window/page.
 
 ## Source Reference
 

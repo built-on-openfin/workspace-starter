@@ -18,13 +18,11 @@ import {
 	type UpdateSavedWorkspaceRequest,
 	type ViewTabMenuData,
 	type Workspace,
-	type WorkspacePlatformProvider
+	type WorkspacePlatformProvider,
+	type HandleSaveModalOnPageClosePayload,
+	type SaveModalOnPageCloseResult
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
-import type {
-	HandleSaveModalOnPageClosePayload,
-	SaveModalOnPageCloseResult
-} from "@openfin/workspace-platform/common/src/api/pages/shapes";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
 import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import * as analyticsProvider from "../analytics";
