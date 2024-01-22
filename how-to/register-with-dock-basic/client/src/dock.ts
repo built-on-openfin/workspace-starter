@@ -1,8 +1,11 @@
 import {
 	Dock,
 	DockButtonNames,
+	type DockButton,
 	type RegistrationMetaInfo,
-	type WorkspaceButtonsConfig
+	type DockProviderRegistration,
+	type WorkspaceButtonsConfig,
+	type DockProviderConfig
 } from "@openfin/workspace";
 import {
 	CustomActionCallerType,
@@ -11,6 +14,11 @@ import {
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
 
+let platformTitle: string | undefined;
+let platformIcon: string | undefined;
+let customIconUrl: string | undefined;
+let customOpenUrl: string | undefined;
+let registration: DockProviderRegistration | undefined;
 /**
  * Register the dock provider.
  * @param id The id to register the provider with.
@@ -37,7 +45,11 @@ export async function register(
 	console.log("Initializing the dock provider.");
 
 	try {
-		const metaInfo = await Dock.register({
+		platformTitle = title;
+		platformIcon = icon;
+		customIconUrl = options.customIconUrl;
+		customOpenUrl = options.customOpenUrl;
+		registration = await Dock.register({
 			id,
 			title,
 			icon,
@@ -90,9 +102,9 @@ export async function register(
 				}
 			]
 		});
-		console.log(metaInfo);
+		console.log(registration);
 		console.log("Dock provider initialized.");
-		return metaInfo;
+		return registration;
 	} catch (err) {
 		console.error("An error was encountered while trying to register the content dock provider", err);
 	}
@@ -131,4 +143,80 @@ export function dockGetCustomActions(): CustomActionsMap {
 			}
 		}
 	};
+}
+
+/**
+ * Create the configuration for the dock, including a drop down for favorites if there are any. Normally, you would pass this into the initial
+ * register method above, but this is only for demonstrating the ability to change the dock dynamically.
+ * @param isEnabled Passes a boolean accounting for buttons in the dock being usable or not.
+ * @returns The dock configuration.
+ */
+function buildDockConfiguration(isEnabled: boolean): DockProviderConfig {
+	const buttons: DockButton[] = [
+		{
+			tooltip: "Google",
+			iconUrl: "https://www.google.com/favicon.ico",
+			action: {
+				id: "launch-google"
+			},
+			disabled: !isEnabled
+		},
+		{
+			tooltip: "Bing",
+			iconUrl: "https://www.bing.com/favicon.ico",
+			action: {
+				id: "launch-bing"
+			},
+			disabled: !isEnabled
+		},
+		{
+			tooltip: "Custom",
+			iconUrl: customIconUrl,
+			action: {
+				id: "launch-custom",
+				customData: customOpenUrl
+			},
+			disabled: !isEnabled
+		},
+		{
+			type: DockButtonNames.DropdownButton,
+			tooltip: "Social",
+			iconUrl: "http://localhost:8080/assets/spanner.svg",
+			options: [
+				{
+					tooltip: "Twitter",
+					action: {
+						id: "launch-tools",
+						customData: "twitter"
+					}
+				},
+				{
+					tooltip: "Facebook",
+					action: {
+						id: "launch-tools",
+						customData: "facebook"
+					}
+				}
+			],
+			disabled: !isEnabled
+		}
+	];
+
+	return {
+		title: platformTitle ?? "",
+		icon: platformIcon ?? "",
+		workspaceComponents: ["home", "notifications", "store", "switchWorkspace"],
+		disableUserRearrangement: false,
+		buttons
+	};
+}
+
+/**
+ * Update the dock when something has changed.
+ * @param isEnabled Tells us whether or not the Dock buttons should be clickable.
+ */
+export async function updateDock(isEnabled: boolean): Promise<void> {
+	if (registration) {
+		await registration.updateDockProviderConfig(buildDockConfiguration(isEnabled));
+	}
 }

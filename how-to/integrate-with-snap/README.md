@@ -12,7 +12,7 @@ This example demonstrates saving and restoring native applications as part of a 
 
 The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.com/package/@openfin/snap-sdk).
 
-> The **@openfin/snap-sdk** is currently in beta, this sample requires the Snap Asset Url for the Snap Server. Please ask OpenFin for the url and then replace the `SNAP_ASSET_URL` in `manifest.fin.json` with it.
+> The **@openfin/snap-sdk** is currently in beta. The version of the Snap SDK is referenced in package.json and the app asset defined in `manifest.fin.json`.
 
 ## Getting Started
 
