@@ -132,6 +132,7 @@ The app provider definition can either come from your manifest or from an extern
 | cacheDurationInMinutes           | How many minutes should we wait before refreshing the list from the server? Can be used on it's own or with cacheDurationInSeconds.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | cacheDurationInSeconds           | How many seconds should we wait before refreshing the list from the server? Can be used on it's own or with cacheDurationInMinutes.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | manifestTypes                    | An array of the manifestTypes the app should support from the apps.json feed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| updatablePreference              | An array of the launch preferences that should be updatable for apps by default (e.g. you want bounds to be dynamic when launching an app)                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ### An Example Of What These Settings Would Look Like (Taken From [manifest.fin.json](../public/manifest.fin.json))
 
@@ -154,6 +155,9 @@ The app provider definition can either come from your manifest or from an extern
              "manifest",
              "desktop-browser",
              "connection"
+           ],
+           "updatableLaunchPreference": [
+            { "name": "bounds" }
            ]
         },
 ```

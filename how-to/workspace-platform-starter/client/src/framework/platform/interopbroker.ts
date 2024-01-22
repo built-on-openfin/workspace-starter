@@ -4,9 +4,15 @@ import {
 	type AppIdentifier,
 	type AppMetadata,
 	type ImplementationMetadata,
-	type IntentResolution
+	type IntentResolution,
+	type ContextMetadata
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import type { WindowPositioningOptions } from "workspace-platform-starter/shapes/browser-shapes";
+import {
+	getWindowPositionOptions,
+	getWindowPositionUsingStrategy
+} from "workspace-platform-starter/utils-position";
 import { getApp, getApps } from "../apps";
 import * as connectionProvider from "../connections";
 import { hasEndpoint, requestResponse } from "../endpoint";
@@ -16,7 +22,12 @@ import { bringToFront, launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { MANIFEST_TYPES } from "../manifest-types";
 import { getSettings } from "../settings";
-import type { AppsForIntent, PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
+import type {
+	AppsForIntent,
+	LaunchPreference,
+	PlatformApp,
+	PlatformAppIdentifier
+} from "../shapes/app-shapes";
 import type { AppMetadata as AppMetadataV1Point2 } from "../shapes/fdc3-1-2-shapes";
 import type {
 	ApiMetadata,
@@ -30,7 +41,7 @@ import type {
 	IntentTargetMetaData,
 	ProcessedContext
 } from "../shapes/interopbroker-shapes";
-import { formatError, isEmpty, isString, isStringValue, sanitizeString } from "../utils";
+import { formatError, isEmpty, isString, isStringValue, randomUUID, sanitizeString } from "../utils";
 import { AppIntentHelper } from "./broker/app-intent-helper";
 import { ClientRegistrationHelper } from "./broker/client-registration-helper";
 import { IntentResolverHelper } from "./broker/intent-resolver-helper";
@@ -61,6 +72,10 @@ export function interopOverride(
 
 		private _intentResolverHelper?: IntentResolverHelper;
 
+		private _windowPositionOptions?: WindowPositioningOptions;
+
+		private readonly _metadataKey: Readonly<string>;
+
 		/**
 		 * Create a new instance of InteropBroker.
 		 */
@@ -72,8 +87,12 @@ export function interopOverride(
 				async (clientIdentity: OpenFin.ClientIdentity) => this.lookupAppId(clientIdentity),
 				logger
 			);
+			this._metadataKey = `_metadata_${randomUUID()}`;
 			getSettings()
-				.then((customSettings) => {
+				.then(async (customSettings) => {
+					if (!isEmpty(customSettings) && !isEmpty(customSettings.browserProvider)) {
+						this._windowPositionOptions = await getWindowPositionOptions(customSettings.browserProvider);
+					}
 					if (!isEmpty(customSettings) && !isEmpty(customSettings?.platformProvider)) {
 						if (
 							isEmpty(customSettings?.platformProvider?.interop?.intentResolver) &&
@@ -145,7 +164,36 @@ export function interopOverride(
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<void> {
 			sentContext.context = await this.processContext(sentContext.context);
+			const contextMetadata = await this.getContextMetadata(clientIdentity);
+
+			sentContext.context = {
+				...sentContext.context,
+				[this._metadataKey]: contextMetadata
+			} as unknown as OpenFin.Context;
 			super.setContext(sentContext, clientIdentity);
+		}
+
+		/**
+		 * Invokes the context handler.
+		 * @param clientIdentity The client identity.
+		 * @param handlerId The handler ID.
+		 * @param context The context to invoke.
+		 * @returns A promise that resolves when the context handler is invoked.
+		 */
+		public async invokeContextHandler(
+			clientIdentity: OpenFin.ClientIdentity,
+			handlerId: string,
+			context: OpenFin.Context
+		): Promise<void> {
+			const passedContext: { [key: string]: unknown } = { ...context };
+			const contextMetadata = passedContext[this._metadataKey];
+			if (!isEmpty(contextMetadata)) {
+				delete passedContext[this._metadataKey];
+			}
+			return super.invokeContextHandler(clientIdentity, handlerId, {
+				...passedContext,
+				contextMetadata
+			} as unknown as OpenFin.Context);
 		}
 
 		/**
@@ -348,7 +396,9 @@ export function interopOverride(
 					if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
 						const intentResolver = await this.launchAppWithIntent(
 							intentForSelection.apps[0],
-							intent as OpenFin.Intent
+							intent as OpenFin.Intent,
+							undefined,
+							clientIdentity
 						);
 						if (isEmpty(intentResolver)) {
 							throw new Error(ResolveError.NoAppsFound);
@@ -378,7 +428,11 @@ export function interopOverride(
 			}
 			intent.displayName = userSelection.intent.displayName;
 			intent.name = userSelection.intent.name;
-			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent as OpenFin.Intent);
+			const intentResolver = await this.handleIntentPickerSelection(
+				userSelection,
+				intent as OpenFin.Intent,
+				clientIdentity
+			);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentity);
 		}
 
@@ -451,7 +505,12 @@ export function interopOverride(
 					this.useSingleInstance(intentApps[0]) ||
 					this.createNewInstance(intentApps[0])
 				) {
-					const intentResolver = await this.launchAppWithIntent(intentApps[0], intent, appInstanceId);
+					const intentResolver = await this.launchAppWithIntent(
+						intentApps[0],
+						intent,
+						appInstanceId,
+						clientIdentity
+					);
 					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.NoAppsFound);
 					}
@@ -471,8 +530,39 @@ export function interopOverride(
 				throw new Error(ResolveError.ResolverUnavailable);
 			}
 
-			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent);
+			const intentResolver = await this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
 			return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
+		}
+
+		/**
+		 * Invoke the intent handler.
+		 * @param clientIdentity The client identity.
+		 * @param handlerId The handler ID.
+		 * @param intent The intent to invoke.
+		 * @returns A promise that resolves when the intent handler is invoked.
+		 */
+		public async invokeIntentHandler(
+			clientIdentity: OpenFin.ClientIdentity,
+			handlerId: string,
+			intent: OpenFin.Intent
+		): Promise<void> {
+			const { context } = intent;
+			let contextMetadata: ContextMetadata | undefined;
+			let passedContext: { [key: string]: unknown } | undefined;
+			if (!isEmpty(context)) {
+				passedContext = { ...context };
+				contextMetadata = passedContext[this._metadataKey] as ContextMetadata;
+				if (!isEmpty(contextMetadata)) {
+					delete passedContext[this._metadataKey];
+				}
+			}
+			return super.invokeIntentHandler(clientIdentity, handlerId, {
+				...intent,
+				context: {
+					...passedContext,
+					contextMetadata
+				} as unknown as OpenFin.Context
+			});
 		}
 
 		/**
@@ -517,7 +607,12 @@ export function interopOverride(
 				}
 
 				if (isOpenByIntent) {
-					const result = await this.launchAppWithIntent(requestedApp, openAppIntent);
+					const result = await this.launchAppWithIntent(
+						requestedApp,
+						openAppIntent,
+						undefined,
+						clientIdentity
+					);
 					if (isString(result.source)) {
 						appId = result.source;
 					} else {
@@ -525,7 +620,13 @@ export function interopOverride(
 						instanceId = result.source.instanceId;
 					}
 				} else {
-					const platformIdentities = await launch(requestedApp);
+					let launchPreference: LaunchPreference | undefined;
+					const bounds = await getWindowPositionUsingStrategy(this._windowPositionOptions, clientIdentity);
+					if (!isEmpty(bounds)) {
+						launchPreference = { bounds };
+					}
+
+					const platformIdentities = await launch(requestedApp, launchPreference);
 					if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
 						appId = platformIdentities[0].appId;
 						const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
@@ -563,10 +664,16 @@ export function interopOverride(
 							}
 
 							if (!isEmpty(trackedHandler)) {
-								await super.invokeContextHandler(
+								const contextToPass = await this.processContext(fdc3OpenOptions.context);
+								const contextMetadata = await this.getContextMetadata(clientIdentity);
+								const updatedContext: OpenFin.Context = {
+									...contextToPass,
+									[this._metadataKey]: contextMetadata
+								};
+								await this.invokeContextHandler(
 									trackedHandler.clientIdentity,
 									trackedHandler.handlerId,
-									fdc3OpenOptions.context
+									updatedContext
 								);
 							} else {
 								logger.warn(
@@ -750,19 +857,26 @@ export function interopOverride(
 		 * @param app The application to launch.
 		 * @param intent The intent to open it with.
 		 * @param instanceId The instance of the app.
+		 * @param clientIdentity The identity of the source of the request.
 		 * @returns The intent resolution.
 		 */
 		private async launchAppWithIntent(
 			app: PlatformApp,
 			intent: OpenFin.Intent,
-			instanceId?: string
+			instanceId?: string,
+			clientIdentity?: OpenFin.ClientIdentity
 		): Promise<Omit<IntentResolution, "getResult">> {
 			logger.info("Launching app with intent");
 			let platformIdentities: PlatformAppIdentifier[] | undefined = [];
 			let existingInstance = true;
+			let contextMetadata: ContextMetadata | undefined;
 
 			if (!isEmpty(intent?.context)) {
 				intent.context = await this.processContext(intent.context);
+				if (!isEmpty(clientIdentity)) {
+					contextMetadata = await this.getContextMetadata(clientIdentity);
+					intent.context = { ...intent.context, [this._metadataKey]: contextMetadata };
+				}
 			}
 
 			if (!isEmpty(instanceId)) {
@@ -786,7 +900,12 @@ export function interopOverride(
 			}
 
 			if (platformIdentities.length === 0) {
-				platformIdentities = await launch(app);
+				let launchPreference: LaunchPreference | undefined;
+				const bounds = await getWindowPositionUsingStrategy(this._windowPositionOptions, clientIdentity);
+				if (!isEmpty(bounds)) {
+					launchPreference = { bounds };
+				}
+				platformIdentities = await launch(app, launchPreference);
 				if (!platformIdentities?.length) {
 					throw new Error(ResolveError.IntentDeliveryFailed);
 				}
@@ -835,11 +954,13 @@ export function interopOverride(
 		 * Handle the intent picker selection.
 		 * @param userSelection The user selection from the intent picker.
 		 * @param intent The intent.
+		 * @param clientIdentity The source of the request.
 		 * @returns The intent resolution.
 		 */
 		private async handleIntentPickerSelection(
 			userSelection: IntentResolverResponse,
-			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>
+			intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
+			clientIdentity?: OpenFin.ClientIdentity
 		): Promise<Omit<IntentResolution, "getResult">> {
 			let selectedApp = await getApp(userSelection.appId);
 			if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
@@ -849,7 +970,7 @@ export function interopOverride(
 				throw new Error(ResolveError.NoAppsFound);
 			}
 			const instanceId: string | undefined = userSelection.instanceId;
-			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId);
+			const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId, clientIdentity);
 			if (isEmpty(intentResolver)) {
 				throw new Error(ResolveError.NoAppsFound);
 			}
@@ -937,7 +1058,8 @@ export function interopOverride(
 					const intentResolver = await this.launchAppWithIntent(
 						targetApp,
 						intent,
-						targetAppIdentifier.instanceId
+						targetAppIdentifier.instanceId,
+						clientIdentity
 					);
 					return intentResolver;
 				}
@@ -946,8 +1068,17 @@ export function interopOverride(
 					clientIdentity,
 					"intent"
 				);
-				if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
-					const intentResolver = await this.launchAppWithIntent(targetApp, intent);
+				// the launch logic is single instance aware but can also bring content to front where possible
+				// this will let the context be set and the content brought to front.
+				const launchSingleInstanceApp =
+					specifiedAppInstances.length === 1 && this.useSingleInstance(targetApp);
+
+				if (
+					specifiedAppInstances.length === 0 ||
+					this.createNewInstance(targetApp) ||
+					launchSingleInstanceApp
+				) {
+					const intentResolver = await this.launchAppWithIntent(targetApp, intent, undefined, clientIdentity);
 					if (isEmpty(intentResolver)) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
@@ -1001,7 +1132,7 @@ export function interopOverride(
 				throw new Error(ResolveError.ResolverUnavailable);
 			}
 
-			return this.handleIntentPickerSelection(userSelection, intent);
+			return this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
 		}
 
 		/**
@@ -1232,6 +1363,21 @@ export function interopOverride(
 				}
 			}
 			return context;
+		}
+
+		/**
+		 * Get the context metadata for a client identity.
+		 * @param clientIdentity The client identity.
+		 * @returns The context metadata.
+		 */
+		private async getContextMetadata(clientIdentity: OpenFin.ClientIdentity): Promise<ContextMetadata> {
+			const appId = (await this.lookupAppId(clientIdentity)) ?? clientIdentity.name;
+			return {
+				source: {
+					appId,
+					instanceId: clientIdentity.endpointId
+				}
+			};
 		}
 	}
 

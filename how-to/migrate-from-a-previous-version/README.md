@@ -3,9 +3,13 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v16.0 to v16.1
+
+- [Please see the v16.1 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=16.1.6)
+
 ## Migrate from a previous version - From v15.0 to v16
 
-- To be defined when 16 hits beta.
+- [Please see the v16 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=16.0.9)
 
 ## Migrate from a previous version - From v14.0 to v15
 

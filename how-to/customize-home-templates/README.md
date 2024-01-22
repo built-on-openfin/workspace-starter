@@ -15,7 +15,7 @@ To run this sample you can:
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
 - Launch the Github hosted version of this sample to interact with it by going to the following link:
 
-[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv16.0.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
+[Github Workspace Starter Customize Home Templates](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv16.1.0%2Fcustomize-home-templates%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -25,7 +25,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 16.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 16.1.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -77,6 +77,7 @@ The commands implemented are:
 
 ```shell
 ? - which displays a list of all the commands with help
+/templates
 /quote <symbol>
 /emoji <code>
 /contacts <contact name>
@@ -87,6 +88,8 @@ The commands implemented are:
 /loading
 /error
 ```
+
+The **/templates** command demonstrates a template containing all the different kinds of fragments that can be display in a home template.
 
 The **/quote** command demonstrates a template that is built dynamically with a graph image.
 
@@ -109,23 +112,19 @@ The contacts commands demonstrate different approaches to retrieving data.
 e.g.
 
 ```shell
-/emoji man
-/quote MSFT
-/quote APPL
-/contacts john
-/contacts emma
-/contacts-sync john
-/contacts-partial john
-acme
-bee
-chad
-dock
-/loading
-/error
-desserts
+/templates
 ```
 
-![Customize Home Template Quote](customize-home-templates-quote.gif)
+![Customize Home Template Fragments](./assets/customize-home-templates-fragments.png)
+
+e.g.
+
+```shell
+/quote MSFT
+/quote APPL
+```
+
+![Customize Home Template Quote](./assets/customize-home-templates-quote.gif)
 
 e.g.
 
@@ -134,7 +133,7 @@ e.g.
 /emoji coffee
 ```
 
-![Customize Home Template Emoji](customize-home-templates-emoji.gif)
+![Customize Home Template Emoji](./assets/customize-home-templates-emoji.gif)
 
 e.g.
 
@@ -145,7 +144,7 @@ Chad
 Dock
 ```
 
-![Customize Home Template Tree](customize-home-templates-tree.gif)
+![Customize Home Template Tree](./assets/customize-home-templates-tree.gif)
 
 e.g.
 
@@ -153,7 +152,7 @@ e.g.
 /loading
 ```
 
-![Customize Home Template Loading](customize-home-templates-loading.gif)
+![Customize Home Template Loading](./assets/customize-home-templates-loading.gif)
 
 e.g.
 
@@ -161,7 +160,15 @@ e.g.
 /error
 ```
 
-![Customize Home Template error](customize-home-templates-error.gif)
+![Customize Home Template error](./assets/customize-home-templates-error.gif)
+
+e.g.
+
+```shell
+desserts
+```
+
+![Customize Home Template Suggestion](./assets/customize-home-templates-suggestion.png)
 
 ### Contact data
 

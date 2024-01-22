@@ -539,62 +539,6 @@ const configs = [
 		}
 	},
 	{
-		entry: './client/src/modules/integrations/quote/index.ts',
-		devtool: 'inline-source-map',
-		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js'],
-			alias
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'quote.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'integrations')
-		},
-		experiments: {
-			outputModule: true
-		}
-	},
-	{
-		entry: './client/src/modules/integrations/emoji/index.ts',
-		devtool: 'inline-source-map',
-		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js'],
-			alias
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'emoji.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'integrations')
-		},
-		experiments: {
-			outputModule: true
-		}
-	},
-	{
 		entry: './client/src/modules/endpoint/example-context-processor/index.ts',
 		devtool: 'inline-source-map',
 		module: {

@@ -4,6 +4,7 @@ import {
 	getCurrentSync,
 	type AnalyticsEvent,
 	type ApplyWorkspacePayload,
+	type BrowserCreateWindowRequest,
 	type ColorSchemeOptionType,
 	type CreateSavedPageRequest,
 	type CreateSavedWorkspaceRequest,
@@ -17,10 +18,13 @@ import {
 	type UpdateSavedWorkspaceRequest,
 	type ViewTabMenuData,
 	type Workspace,
-	type WorkspacePlatformProvider
+	type WorkspacePlatformProvider,
+	type HandleSaveModalOnPageClosePayload,
+	type SaveModalOnPageCloseResult
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
+import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import * as analyticsProvider from "../analytics";
 import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
 import * as endpointProvider from "../endpoint";
@@ -28,9 +32,12 @@ import { fireLifecycleEvent } from "../lifecycle";
 import { createLogger } from "../logger-provider";
 import * as Menu from "../menu";
 import { getGlobalMenu, getPageMenu, getViewMenu, showPopupMenu } from "../menu";
-import { getSettings } from "../settings";
 import type { PlatformAnalyticsEvent } from "../shapes/analytics-shapes";
-import type { BrowserProviderOptions, CascadingWindowOffsetStrategy } from "../shapes/browser-shapes";
+import type {
+	BrowserProviderOptions,
+	UnsavedPagePromptStrategy,
+	WindowPositioningOptions
+} from "../shapes/browser-shapes";
 import type {
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
@@ -54,11 +61,16 @@ import type { VersionInfo } from "../shapes/version-shapes";
 import * as snapProvider from "../snap";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
-import { isEmpty } from "../utils";
+import { deepMerge, isEmpty } from "../utils";
 import { loadConfig, saveConfig } from "../workspace/dock";
-import { getAllVisibleWindows, getPageBounds } from "./browser";
+import { getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
-import { mapPlatformPageToStorage, mapPlatformWorkspaceToStorage } from "./platform-mapper";
+import {
+	mapPlatformPageFromStorage,
+	mapPlatformPageToStorage,
+	mapPlatformWorkspaceToStorage,
+	mapStorageToPlatformWorkspace
+} from "./platform-mapper";
 
 const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
@@ -72,21 +84,26 @@ const PAGE_ENDPOINT_ID_SET = "page-set";
 
 const logger = createLogger("PlatformOverride");
 
-let windowDefaultLeft: number | undefined;
-let windowDefaultTop: number | undefined;
-let windowPositioningStrategy: CascadingWindowOffsetStrategy | undefined;
-let disableWindowPositioningStrategy: boolean | undefined;
+let unsavedPagePromptStrategy: UnsavedPagePromptStrategy | undefined;
 let disableStorageMapping: boolean | undefined;
 let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
 let viewMenuStyle: PopupMenuStyles | undefined;
 let workspaceApplied: boolean;
+let defaultOptions:
+	| {
+			window: Partial<BrowserCreateWindowRequest> | undefined;
+			page: Partial<Page> | undefined;
+			view: Partial<OpenFin.ViewOptions> | undefined;
+	  }
+	| undefined;
 
 /**
  * Override methods in the platform.
  * @param WorkspacePlatformProvider The workspace platform class to extend.
  * @param platformProviderSettings The settings for the platform provider.
  * @param browserProviderSettings The settings for the browser provider.
+ * @param windowPositioningOptions The window positioning options.
  * @param versionInfo The app version info.
  * @returns The overridden class.
  */
@@ -94,12 +111,15 @@ export function overrideCallback(
 	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>,
 	platformProviderSettings: PlatformProviderOptions | undefined,
 	browserProviderSettings: BrowserProviderOptions | undefined,
+	windowPositioningOptions: WindowPositioningOptions | undefined,
 	versionInfo: VersionInfo
 ): WorkspacePlatformProvider {
 	disableStorageMapping = platformProviderSettings?.disableStorageMapping ?? false;
 	globalMenuStyle = browserProviderSettings?.menuOptions?.styles?.globalMenu;
 	pageMenuStyle = browserProviderSettings?.menuOptions?.styles?.pageMenu;
 	viewMenuStyle = browserProviderSettings?.menuOptions?.styles?.viewMenu;
+	unsavedPagePromptStrategy = browserProviderSettings?.unsavedPagePromptStrategy ?? "default";
+
 	workspaceApplied = false;
 
 	/**
@@ -209,7 +229,8 @@ export function overrideCallback(
 				>(WORKSPACE_ENDPOINT_ID_GET, { platform: fin.me.identity.uuid, id });
 				if (workspaceResponse) {
 					logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
-					return workspaceResponse.payload;
+					const defaultOpts = await buildDefaultOptions();
+					return mapStorageToPlatformWorkspace(workspaceResponse.payload, defaultOpts);
 				}
 				logger.warn(`No response getting saved workspace from custom storage for workspace id: ${id}`);
 				return {} as Workspace;
@@ -240,7 +261,9 @@ export function overrideCallback(
 								platformClient: versionInfo.platformClient
 							}
 						},
-						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+						payload: disableStorageMapping
+							? req.workspace
+							: mapPlatformWorkspaceToStorage(req.workspace, await buildDefaultOptions())
 					}
 				);
 				if (success) {
@@ -283,7 +306,9 @@ export function overrideCallback(
 								platformClient: versionInfo.platformClient
 							}
 						},
-						payload: disableStorageMapping ? req.workspace : mapPlatformWorkspaceToStorage(req.workspace)
+						payload: disableStorageMapping
+							? req.workspace
+							: mapPlatformWorkspaceToStorage(req.workspace, await buildDefaultOptions())
 					}
 				);
 				if (success) {
@@ -440,7 +465,8 @@ export function overrideCallback(
 				});
 				if (pageResponse) {
 					logger.info(`Returning saved page from custom storage for page id: ${id}`);
-					return pageResponse.payload;
+					const defaultOpts = await buildDefaultOptions();
+					return mapPlatformPageFromStorage(pageResponse.payload, defaultOpts);
 				}
 
 				logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
@@ -481,7 +507,9 @@ export function overrideCallback(
 							platformClient: versionInfo.platformClient
 						}
 					},
-					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
+					payload: disableStorageMapping
+						? req.page
+						: mapPlatformPageToStorage(req.page, await buildDefaultOptions())
 				});
 				if (success) {
 					logger.info(`Saved page with id: ${req.page.pageId} to custom storage`);
@@ -527,7 +555,9 @@ export function overrideCallback(
 							platformClient: versionInfo.platformClient
 						}
 					},
-					payload: disableStorageMapping ? req.page : mapPlatformPageToStorage(req.page)
+					payload: disableStorageMapping
+						? req.page
+						: mapPlatformPageToStorage(req.page, await buildDefaultOptions())
 				});
 				if (success) {
 					logger.info(`Updated page with id: ${req.page.pageId} against custom storage`);
@@ -728,100 +758,20 @@ export function overrideCallback(
 				return super.createWindow(options, identity);
 			}
 
-			if (!disableWindowPositioningStrategy) {
-				if (!windowPositioningStrategy || isEmpty(windowDefaultLeft) || isEmpty(windowDefaultTop)) {
-					const settings = await getSettings();
-					disableWindowPositioningStrategy =
-						settings?.browserProvider?.disableWindowPositioningStrategy ?? false;
-					if (disableWindowPositioningStrategy) {
-						logger.info("Window Positioning Strategy is disabled.");
-					} else {
-						const app = await fin.Application.getCurrent();
-						const platformManifest: OpenFin.Manifest = await app.getManifest();
-						logger.info("Platform Default Window Options", platformManifest?.platform?.defaultWindowOptions);
-						windowDefaultLeft =
-							settings?.browserProvider?.defaultWindowOptions?.defaultLeft ??
-							platformManifest?.platform?.defaultWindowOptions?.defaultLeft ??
-							0;
-						windowDefaultTop =
-							settings?.browserProvider?.defaultWindowOptions?.defaultTop ??
-							platformManifest?.platform?.defaultWindowOptions?.defaultTop ??
-							0;
+			if (!isEmpty(windowPositioningOptions) && !windowPositioningOptions?.disableWindowPositioningStrategy) {
+				const hasLeft = !isEmpty(options?.defaultLeft);
+				const hasTop = !isEmpty(options?.defaultTop);
 
-						windowPositioningStrategy = settings?.browserProvider?.windowPositioningStrategy;
+				if (!hasLeft || !hasTop) {
+					const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
+
+					if (!hasLeft && !isEmpty(position?.left)) {
+						options.defaultLeft = position.left;
+						logger.debug(`Updating default left to ${position.left} using window positioning strategy`);
 					}
-				}
-
-				if (!isEmpty(windowDefaultLeft) && !isEmpty(windowDefaultTop)) {
-					logger.info("Create Window", options);
-
-					const hasLeft = !isEmpty(options?.defaultLeft);
-					const hasTop = !isEmpty(options?.defaultTop);
-
-					if (!hasLeft || !hasTop) {
-						// Get the available rect for the display so we can take in to account
-						// OS menus, task bar etc
-						const monitorInfo = await fin.System.getMonitorInfo();
-						const availableLeft = monitorInfo.primaryMonitor.availableRect.left;
-						const availableTop = monitorInfo.primaryMonitor.availableRect.top;
-						const windowOffsetsX: number = windowPositioningStrategy?.x ?? 30;
-						const windowOffsetsY: number = windowPositioningStrategy?.y ?? 30;
-						const windowOffsetsMaxIncrements: number = windowPositioningStrategy?.maxIncrements ?? 8;
-						const visibleWindows = await getAllVisibleWindows();
-						// Get the top left bounds for all the visible windows
-						const topLeftBounds = await Promise.all(
-							visibleWindows.map(async (win) => {
-								try {
-									const bounds = await win.getBounds();
-									return {
-										left: bounds.left,
-										top: bounds.top,
-										right: bounds.left + windowOffsetsX,
-										bottom: bounds.top + windowOffsetsY
-									};
-								} catch {
-									// return a dummy entry.
-									return {
-										left: 0,
-										top: 0,
-										right: 0,
-										bottom: 0
-									};
-								}
-							})
-						);
-
-						let minCountVal: number = 1000;
-						let minCountIndex = windowOffsetsMaxIncrements;
-
-						// Now see how many windows appear in each increment slot
-						for (let i = 0; i < windowOffsetsMaxIncrements; i++) {
-							const xPos = i * windowOffsetsX;
-							const yPos = i * windowOffsetsY;
-							const leftPos = windowDefaultLeft + xPos;
-							const topPos = windowDefaultTop + yPos;
-							const foundWins = topLeftBounds.filter(
-								(topLeftWinBounds) =>
-									topLeftWinBounds.left >= leftPos &&
-									topLeftWinBounds.right <= leftPos + windowOffsetsX + availableLeft &&
-									topLeftWinBounds.top >= topPos &&
-									topLeftWinBounds.bottom <= topPos + windowOffsetsY + availableTop
-							);
-							// If this slot has less than the current minimum use this slot
-							if (foundWins.length < minCountVal) {
-								minCountVal = foundWins.length;
-								minCountIndex = i;
-							}
-						}
-
-						if (!hasLeft) {
-							const xOffset = minCountIndex * windowOffsetsX;
-							options.defaultLeft = windowDefaultLeft + xOffset + availableLeft;
-						}
-						if (!hasTop) {
-							const yOffset = minCountIndex * windowOffsetsY;
-							options.defaultTop = windowDefaultTop + yOffset + availableTop;
-						}
+					if (!hasTop && !isEmpty(position?.top)) {
+						options.defaultTop = position.top;
+						logger.debug(`Updating default top to ${position.top} using window positioning strategy`);
 					}
 				}
 			}
@@ -913,6 +863,60 @@ export function overrideCallback(
 		public async saveDockProviderConfig(config: DockProviderConfigWithIdentity): Promise<void> {
 			return saveConfig(config, async (providerConfig) => super.saveDockProviderConfig(providerConfig));
 		}
+
+		/**
+		 * Determine whether or not a dialog should be shown.
+		 * @param payload the page that is going to be closed.
+		 * @returns Whether or not a modal should be shown
+		 */
+		public async handleSaveModalOnPageClose(
+			payload: HandleSaveModalOnPageClosePayload
+		): Promise<SaveModalOnPageCloseResult> {
+			// close confirmation modal will not be shown if the page is locked
+			if (isEmpty(unsavedPagePromptStrategy) || unsavedPagePromptStrategy === "default") {
+				return super.handleSaveModalOnPageClose(payload);
+			}
+			if (unsavedPagePromptStrategy === "never") {
+				return { shouldShowModal: false };
+			}
+			if (unsavedPagePromptStrategy === "skip-untitled") {
+				const platform = getCurrentSync();
+				const defaultPageTitle = await platform.Browser.getUniquePageTitle();
+				const defaultPagePrefix = defaultPageTitle.split(" ")[0];
+				if (payload.page.title.startsWith(defaultPagePrefix)) {
+					return { shouldShowModal: false };
+				}
+			}
+			logger.warn("Unsaved page prompt strategy is not valid. Using default.");
+			return super.handleSaveModalOnPageClose(payload);
+		}
 	}
 	return new Override();
+}
+
+/**
+ * Build the default options for the window, page and view.
+ * @param browserProvider The browser provider options.
+ * @returns The default options.
+ */
+async function buildDefaultOptions(browserProvider?: BrowserProviderOptions): Promise<{
+	window: Partial<BrowserCreateWindowRequest> | undefined;
+	page: Partial<Page> | undefined;
+	view: Partial<OpenFin.ViewOptions> | undefined;
+}> {
+	if (defaultOptions) {
+		return defaultOptions;
+	}
+	const app = await fin.Application.getCurrent();
+	const manifest = await app.getManifest();
+
+	return {
+		window: deepMerge(
+			{},
+			manifest.platform?.defaultWindowOptions as Partial<BrowserCreateWindowRequest>,
+			browserProvider?.defaultWindowOptions
+		),
+		page: deepMerge({}, browserProvider?.defaultPageOptions),
+		view: deepMerge({}, manifest.platform?.defaultViewOptions, browserProvider?.defaultViewOptions)
+	};
 }

@@ -143,7 +143,7 @@ function buildDockConfiguration(): DockProviderConfig {
 								id: "favorite-open",
 								customData: fav
 							}
-					  }))
+						}))
 					: [
 							{
 								tooltip: "No favorites",
@@ -152,7 +152,7 @@ function buildDockConfiguration(): DockProviderConfig {
 									id: "favorite-open"
 								}
 							}
-					  ]
+						]
 		},
 		{
 			tooltip: "Custom Menu",

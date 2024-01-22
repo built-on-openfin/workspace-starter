@@ -527,7 +527,7 @@ export class RssIntegration {
 			: {
 					name: viewId,
 					uuid: platformId
-			  };
+				};
 
 		const pageId = `rss-feed-page-${feed.id}`;
 

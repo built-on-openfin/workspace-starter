@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-excel",
-	"version": "16.0.0",
+	"version": "16.1.0",
 	"description": "OpenFin Workspace -- Integrate with Excel",
 	"main": "index.js",
 	"scripts": {
@@ -20,26 +20,26 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/excel": "^1.4.1",
-		"@openfin/workspace": "16.0.9",
-		"@openfin/workspace-platform": "16.0.9"
+		"@openfin/excel": "^1.5.0",
+		"@openfin/workspace": "16.1.6",
+		"@openfin/workspace-platform": "16.1.6"
 	},
 	"devDependencies": {
 		"@openfin/core": "33.77.11",
 		"@openfin/node-adapter": "33.77.11",
-		"eslint": "8.55.0",
+		"eslint": "8.56.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.1.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-import": "2.26.0",
-		"eslint-plugin-jsdoc": "46.9.0",
-		"eslint-plugin-prettier": "5.0.1",
+		"eslint-plugin-jsdoc": "47.0.2",
+		"eslint-plugin-prettier": "5.1.2",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",
-		"eslint-plugin-unicorn": "49.0.0",
+		"eslint-plugin-unicorn": "50.0.1",
 		"eslint-plugin-unused-imports": "3.0.0",
-		"markdownlint-cli": "0.37.0",
-		"prettier": "3.1.0",
+		"markdownlint-cli": "0.38.0",
+		"prettier": "3.1.1",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.3.3",
 		"webpack": "^5.89.0",

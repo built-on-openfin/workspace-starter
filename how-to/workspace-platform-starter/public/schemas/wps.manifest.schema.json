@@ -48,7 +48,7 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_49"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -252,6 +252,13 @@
 						"$ref": "#/definitions/ManifestTypeId"
 					},
 					"type": "array"
+				},
+				"updatableLaunchPreference": {
+					"description": "Do you wish to allow specific launchPreferences to be specified when launching an app by default?",
+					"items": {
+						"$ref": "#/definitions/UpdatableLaunchPreferenceDefinition"
+					},
+					"type": "array"
 				}
 			},
 			"type": "object"
@@ -390,22 +397,6 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"BrowserButtonType": {
-			"description": "Types of buttons on browser windows",
-			"enum": [
-				"ShowHideTabs",
-				"ColorLinking",
-				"PresetLayouts",
-				"LockUnlockPage",
-				"SaveMenu",
-				"SavePage",
-				"Minimise",
-				"Maximise",
-				"Close",
-				"Custom"
-			],
-			"type": "string"
-		},
 		"BrowserButtonType.Custom": {
 			"const": "Custom",
 			"type": "string"
@@ -503,6 +494,10 @@
 						"$ref": "#/definitions/WorkspacePlatformToolbarButton"
 					},
 					"type": "array"
+				},
+				"unsavedPagePromptStrategy": {
+					"$ref": "#/definitions/UnsavedPagePromptStrategy",
+					"description": "Some options for whether or not a closing page will prompt the user to save unsaved changes."
 				},
 				"viewMenu": {
 					"description": "This setting lets you customize the view right click context menu and add your own entries.",
@@ -725,7 +720,7 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"ContextGroupInfo": {
-			"$ref": "#/definitions/__type_50"
+			"$ref": "#/definitions/__type_53"
 		},
 		"ContextGroupStates": {
 			"$ref": "#/definitions/__type_39"
@@ -1050,7 +1045,7 @@
 			"$ref": "#/definitions/__type_31"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_56"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1104,7 +1099,7 @@
 			"$ref": "#/definitions/__type_36"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_51"
+			"$ref": "#/definitions/__type_54"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1304,30 +1299,6 @@
 			"additionalProperties": false,
 			"description": "Options for the dock provider.",
 			"properties": {
-				"apps": {
-					"description": "What apps should be made available via the dock, this property is deprecated, use entries.",
-					"items": {
-						"$ref": "#/definitions/DockButtonAppsByTag"
-					},
-					"type": "array"
-				},
-				"buttons": {
-					"description": "What custom actions should be made available via the dock, this property is deprecated, use entries.",
-					"items": {
-						"anyOf": [
-							{
-								"$ref": "#/definitions/DockButtonApp"
-							},
-							{
-								"$ref": "#/definitions/DockButtonAction"
-							},
-							{
-								"$ref": "#/definitions/DockButtonDropdown"
-							}
-						]
-					},
-					"type": "array"
-				},
 				"disableUserRearrangement": {
 					"description": "Disallow rearrangement of dock icons by setting this flag.",
 					"type": "boolean"
@@ -1475,6 +1446,10 @@
 			},
 			"type": "object"
 		},
+		"Exclude": {
+			"enum": ["Close", "ColorLinking", "Maximise", "Minimise", "PresetLayouts", "SaveMenu", "SavePage"],
+			"type": "string"
+		},
 		"FavoriteProviderOptions": {
 			"additionalProperties": false,
 			"description": "Options for the favorite provider.",
@@ -1598,7 +1573,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_57"
 		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
@@ -1901,13 +1876,13 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_49"
+			"$ref": "#/definitions/__type_52"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_16"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_55"
 		},
 		"LaunchExternalProcessListener": {
 			"$ref": "#/definitions/__type_41"
@@ -1917,18 +1892,8 @@
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"additionalProperties": false,
-					"description": "Do you wish to specify a custom height/width that should be used when this application is launched?",
-					"properties": {
-						"height": {
-							"type": "number"
-						},
-						"width": {
-							"type": "number"
-						}
-					},
-					"required": ["height", "width"],
-					"type": "object"
+					"$ref": "#/definitions/Partial_13",
+					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
 					"description": "Should the launched UI be positioned in the center of the screen?",
@@ -2936,7 +2901,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>"
+						"$ref": "#/definitions/NativePreference<never>_1"
 					},
 					"type": "array"
 				}
@@ -2945,6 +2910,18 @@
 			"type": "object"
 		},
 		"NativePreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/NativePreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"NativePreference<never>_1": {
 			"additionalProperties": false,
 			"description": "Which Launch Options are updatable and are there any constraints",
 			"properties": {
@@ -3029,6 +3006,9 @@
 				}
 			},
 			"type": "object"
+		},
+		"NotificationIndicatorColorsWithScheme": {
+			"$ref": "#/definitions/__type_48"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3314,7 +3294,10 @@
 			"$ref": "#/definitions/__type_45"
 		},
 		"Partial_15": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_46"
+		},
+		"Partial_16": {
+			"$ref": "#/definitions/__type_51"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_5"
@@ -3517,6 +3500,10 @@
 				"logoUrl": {
 					"type": "string"
 				},
+				"notificationIndicatorColors": {
+					"$ref": "#/definitions/Record",
+					"description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
+				},
 				"palette": {
 					"$ref": "#/definitions/CustomPaletteSet"
 				}
@@ -3546,6 +3533,10 @@
 				},
 				"logoUrl": {
 					"type": "string"
+				},
+				"notificationIndicatorColors": {
+					"$ref": "#/definitions/NotificationIndicatorColorsWithScheme",
+					"description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
 				},
 				"palettes": {
 					"additionalProperties": false,
@@ -3701,7 +3692,7 @@
 					"type": "number"
 				},
 				"defaultWindowOptions": {
-					"$ref": "#/definitions/Partial_15",
+					"$ref": "#/definitions/Partial_16",
 					"description": "**Platforms Only.** Default window options apply to all platform windows."
 				},
 				"disableDefaultCommands": {
@@ -3920,7 +3911,7 @@
 					"type": "string"
 				},
 				"type": {
-					"$ref": "#/definitions/BrowserButtonType",
+					"$ref": "#/definitions/Exclude",
 					"description": "Type of default browser button"
 				}
 			},
@@ -3959,6 +3950,9 @@
 		},
 		"RGB": {
 			"$ref": "#/definitions/__type_18"
+		},
+		"Record": {
+			"$ref": "#/definitions/__type_47"
 		},
 		"RectangleByEdgePositions": {
 			"$ref": "#/definitions/__type_37"
@@ -4071,7 +4065,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_50"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -4516,6 +4510,31 @@
 			},
 			"type": "object"
 		},
+		"UnsavedPagePromptStrategy": {
+			"description": "The behavior you wish to have when a page is closed and there are unsaved changes.\n- default: Show a modal asking the user if they want to save changes.\n- skip-untitled: Skip the modal if the page is untitled.\n- never: Never show the modal.",
+			"enum": ["default", "never", "skip-untitled"],
+			"type": "string"
+		},
+		"UpdatableLaunchPreferenceDefinition": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/WindowPreference<never>"
+				},
+				{
+					"$ref": "#/definitions/WindowPreferenceUrl"
+				},
+				{
+					"$ref": "#/definitions/ViewPreference<never>"
+				},
+				{
+					"$ref": "#/definitions/ViewPreferenceUrl"
+				},
+				{
+					"$ref": "#/definitions/NativePreference<never>"
+				}
+			],
+			"description": "A type that contains the available updatable launch preferences"
+		},
 		"VersionInfo": {
 			"additionalProperties": false,
 			"description": "Information about the version of the platform and it's dependencies",
@@ -4604,17 +4623,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreferenceUrl"
+								"$ref": "#/definitions/ViewPreference<never>_1"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_13",
+					"$ref": "#/definitions/Partial_14",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -4828,6 +4847,18 @@
 			"type": "object"
 		},
 		"ViewPreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/ViewPreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"ViewPreference<never>_1": {
 			"additionalProperties": false,
 			"description": "Which Launch Options are updatable and are there any constraints",
 			"properties": {
@@ -5162,17 +5193,17 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreferenceUrl"
+								"$ref": "#/definitions/WindowPreference<never>_1"
 							}
 						]
 					},
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_14",
+					"$ref": "#/definitions/Partial_15",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -5531,6 +5562,18 @@
 			"type": "object"
 		},
 		"WindowPreference<never>": {
+			"additionalProperties": false,
+			"description": "Which Launch Options are updatable and are there any constraints",
+			"properties": {
+				"name": {
+					"$ref": "#/definitions/WebPreferenceName",
+					"description": "What setting is updatable?"
+				}
+			},
+			"required": ["name"],
+			"type": "object"
+		},
+		"WindowPreference<never>_1": {
 			"additionalProperties": false,
 			"description": "Which Launch Options are updatable and are there any constraints",
 			"properties": {
@@ -6881,6 +6924,34 @@
 				"disabled": {
 					"type": "boolean"
 				},
+				"tabsHiddenIconUrl": {
+					"additionalProperties": false,
+					"properties": {
+						"disabled": {
+							"description": "The URL of the icon to display when the button is disabled and tabs are hidden.\n\nThe button is disabled when the page is locked.",
+							"type": "string"
+						},
+						"enabled": {
+							"description": "The URL of the icon to display when the button is enabled and tabs are hidden.",
+							"type": "string"
+						}
+					},
+					"type": "object"
+				},
+				"tabsShownIconUrl": {
+					"additionalProperties": false,
+					"properties": {
+						"disabled": {
+							"description": "The URL of the icon to display when the button is disabled and tabs are hidden.\n\nThe button is disabled when the page is locked.",
+							"type": "string"
+						},
+						"enabled": {
+							"description": "The URL of the icon to display when the button is enabled and tabs are hidden.",
+							"type": "string"
+						}
+					},
+					"type": "object"
+				},
 				"type": {
 					"$ref": "#/definitions/BrowserButtonType.ShowHideTabs"
 				}
@@ -6895,8 +6966,14 @@
 				"disabled": {
 					"type": "boolean"
 				},
+				"lockedIconUrl": {
+					"type": "string"
+				},
 				"type": {
 					"$ref": "#/definitions/BrowserButtonType.LockUnlockPage"
+				},
+				"unlockedIconUrl": {
+					"type": "string"
 				}
 			},
 			"required": ["type"],
@@ -7464,14 +7541,17 @@
 		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				"height": {
+					"type": "number"
 				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
+				"left": {
+					"type": "number"
 				},
-				"url": {
-					"type": "string"
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
 				}
 			},
 			"type": "object"
@@ -7492,6 +7572,29 @@
 			"type": "object"
 		},
 		"__type_46": {
+			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_47": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_48": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7522,7 +7625,181 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_5": {
+			"additionalProperties": false,
+			"properties": {
+				"_internalWorkspaceData": {},
+				"accelerator": {
+					"$ref": "#/definitions/Partial_6",
+					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				},
+				"api": {
+					"$ref": "#/definitions/Api",
+					"description": "Configurations for API injection."
+				},
+				"autoResize": {
+					"$ref": "#/definitions/AutoResizeOptions"
+				},
+				"autoplayPolicy": {
+					"$ref": "#/definitions/AutoplayPolicyOptions",
+					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+				},
+				"backgroundColor": {
+					"description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+					"type": "string"
+				},
+				"bounds": {
+					"$ref": "#/definitions/Bounds",
+					"description": "Initial bounds given relative to the window."
+				},
+				"contentCreation": {
+					"$ref": "#/definitions/ContentCreationOptions",
+					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+				},
+				"contentNavigation": {
+					"$ref": "#/definitions/ContentNavigation",
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+				},
+				"contentRedirect": {
+					"$ref": "#/definitions/ContentRedirect"
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"contextMenuOptions": {
+					"$ref": "#/definitions/ContextMenuOptions",
+					"description": "Configure the context menu when right-clicking on a window."
+				},
+				"contextMenuSettings": {
+					"$ref": "#/definitions/ContextMenuSettings"
+				},
+				"customContext": {
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. For usage example, see {@link MutableWindowOptionscustomContext Example}."
+				},
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"customRequestHeaders": {
+					"description": "Custom headers for requests sent by the view.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Custom headers for requests sent by the window.",
+						"properties": {
+							"headers": {
+								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+								"items": {
+									"additionalProperties": {
+										"type": "string"
+									},
+									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"urlPatterns": {
+								"description": "The URL patterns for which the headers will be applied.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": ["headers", "urlPatterns"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"detachOnClose": {
+					"type": "boolean"
+				},
+				"enableBeforeUnload": {
+					"type": "boolean"
+				},
+				"experimental": {},
+				"fdc3InteropApi": {
+					"type": "string"
+				},
+				"hotkeys": {
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example, see {@link MutableWindowOptionshotkeys Example}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A hotkey binding.",
+						"properties": {
+							"keys": {
+								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+								"type": "string"
+							},
+							"preventDefault": {
+								"type": "boolean"
+							}
+						},
+						"required": ["keys"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"isClosable": {
+					"type": "boolean"
+				},
+				"manifestUrl": {
+					"description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
+					"type": "string"
+				},
+				"name": {
+					"description": "The name of the view.",
+					"type": "string"
+				},
+				"permissions": {
+					"$ref": "#/definitions/Partial_3"
+				},
+				"preloadScripts": {
+					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A script that is run before page load.",
+						"properties": {
+							"mandatory": {
+								"type": "boolean"
+							},
+							"state": {
+								"description": "Preload script execution state.",
+								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
+								"type": "string"
+							},
+							"url": {
+								"description": "The URL from which the script was loaded.",
+								"type": "string"
+							}
+						},
+						"required": ["url"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"preventDragOut": {
+					"type": "boolean"
+				},
+				"processAffinity": {
+					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"type": "string"
+				},
+				"target": {
+					"$ref": "#/definitions/Identity_5",
+					"description": "The identity of the window this view should be attached to."
+				},
+				"url": {
+					"type": "string"
+				},
+				"zoomLevel": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_50": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7562,7 +7839,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_51": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -7851,7 +8128,7 @@
 			},
 			"type": "object"
 		},
-		"__type_49": {
+		"__type_52": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -7863,181 +8140,7 @@
 			},
 			"type": "object"
 		},
-		"__type_5": {
-			"additionalProperties": false,
-			"properties": {
-				"_internalWorkspaceData": {},
-				"accelerator": {
-					"$ref": "#/definitions/Partial_6",
-					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
-				},
-				"api": {
-					"$ref": "#/definitions/Api",
-					"description": "Configurations for API injection."
-				},
-				"autoResize": {
-					"$ref": "#/definitions/AutoResizeOptions"
-				},
-				"autoplayPolicy": {
-					"$ref": "#/definitions/AutoplayPolicyOptions",
-					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
-				},
-				"backgroundColor": {
-					"description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
-					"type": "string"
-				},
-				"bounds": {
-					"$ref": "#/definitions/Bounds",
-					"description": "Initial bounds given relative to the window."
-				},
-				"contentCreation": {
-					"$ref": "#/definitions/ContentCreationOptions",
-					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
-				},
-				"contentNavigation": {
-					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
-				},
-				"contentRedirect": {
-					"$ref": "#/definitions/ContentRedirect"
-				},
-				"contextMenu": {
-					"type": "boolean"
-				},
-				"contextMenuOptions": {
-					"$ref": "#/definitions/ContextMenuOptions",
-					"description": "Configure the context menu when right-clicking on a window."
-				},
-				"contextMenuSettings": {
-					"$ref": "#/definitions/ContextMenuSettings"
-				},
-				"customContext": {
-					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. For usage example, see {@link MutableWindowOptionscustomContext Example}."
-				},
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"customRequestHeaders": {
-					"description": "Custom headers for requests sent by the view.",
-					"items": {
-						"additionalProperties": false,
-						"description": "Custom headers for requests sent by the window.",
-						"properties": {
-							"headers": {
-								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
-								"items": {
-									"additionalProperties": {
-										"type": "string"
-									},
-									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
-									"type": "object"
-								},
-								"type": "array"
-							},
-							"urlPatterns": {
-								"description": "The URL patterns for which the headers will be applied.",
-								"items": {
-									"type": "string"
-								},
-								"type": "array"
-							}
-						},
-						"required": ["headers", "urlPatterns"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"detachOnClose": {
-					"type": "boolean"
-				},
-				"enableBeforeUnload": {
-					"type": "boolean"
-				},
-				"experimental": {},
-				"fdc3InteropApi": {
-					"type": "string"
-				},
-				"hotkeys": {
-					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example, see {@link MutableWindowOptionshotkeys Example}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
-					"items": {
-						"additionalProperties": false,
-						"description": "A hotkey binding.",
-						"properties": {
-							"keys": {
-								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
-								"type": "string"
-							},
-							"preventDefault": {
-								"type": "boolean"
-							}
-						},
-						"required": ["keys"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"isClosable": {
-					"type": "boolean"
-				},
-				"manifestUrl": {
-					"description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
-					"type": "string"
-				},
-				"name": {
-					"description": "The name of the view.",
-					"type": "string"
-				},
-				"permissions": {
-					"$ref": "#/definitions/Partial_3"
-				},
-				"preloadScripts": {
-					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
-					"items": {
-						"additionalProperties": false,
-						"description": "A script that is run before page load.",
-						"properties": {
-							"mandatory": {
-								"type": "boolean"
-							},
-							"state": {
-								"description": "Preload script execution state.",
-								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
-								"type": "string"
-							},
-							"url": {
-								"description": "The URL from which the script was loaded.",
-								"type": "string"
-							}
-						},
-						"required": ["url"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"preventDragOut": {
-					"type": "boolean"
-				},
-				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
-					"type": "string"
-				},
-				"target": {
-					"$ref": "#/definitions/Identity_5",
-					"description": "The identity of the window this view should be attached to."
-				},
-				"url": {
-					"type": "string"
-				},
-				"zoomLevel": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_50": {
+		"__type_53": {
 			"additionalProperties": false,
 			"description": "Information for a Context Group. Contains metadata for displaying the group properly.",
 			"properties": {
@@ -8053,7 +8156,7 @@
 			"required": ["id"],
 			"type": "object"
 		},
-		"__type_51": {
+		"__type_54": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -8072,7 +8175,7 @@
 			},
 			"type": "object"
 		},
-		"__type_52": {
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -8101,7 +8204,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_53": {
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
@@ -8134,7 +8237,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_54": {
+		"__type_57": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {

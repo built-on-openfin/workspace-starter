@@ -92,6 +92,7 @@ async function notifyColorScheme(): Promise<void> {
 export function getThemeButton(): ToolbarButton {
 	return {
 		type: BrowserButtonType.Custom,
+		tooltip: "Theme",
 		iconUrl: `http://localhost:8080/common/icons/default/${currentColorScheme}/theme.svg`,
 		action: {
 			id: "change-theme"

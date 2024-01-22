@@ -90,7 +90,38 @@ export type BrowserProviderOptions = Pick<
 	 * can set this value to true.
 	 */
 	disableWindowPositioningStrategy?: boolean;
+
+	/**
+	 * Some options for whether or not a closing page will prompt the user to save unsaved changes.
+	 */
+	unsavedPagePromptStrategy?: UnsavedPagePromptStrategy;
 };
+
+/**
+ * Options for window positioning.
+ */
+export interface WindowPositioningOptions {
+	/**
+	 * The strategy for window positioning.
+	 */
+	windowPositioningStrategy?: CascadingWindowOffsetStrategy;
+
+	/**
+	 * By default we implement a Window Positioning Strategy that will try and position launched windows with an
+	 * offset. The way the windows are offset can be configured by specifying windowPositioningStrategy.
+	 * If you want to turn this off (e.g. automation tests that do not care about the layout of windows) then you
+	 * can set this value to true.
+	 */
+	disableWindowPositioningStrategy?: boolean;
+
+	/**
+	 * The default position for new windows.
+	 */
+	defaults?: {
+		top?: number;
+		left?: number;
+	};
+}
 
 /**
  * The cascading window strategy for positioning new windows.
@@ -136,3 +167,11 @@ export interface WorkspacePlatformToolbarButton {
 	 */
 	conditions?: string[];
 }
+
+/**
+ * The behavior you wish to have when a page is closed and there are unsaved changes.
+ * - default: Show a modal asking the user if they want to save changes.
+ * - skip-untitled: Skip the modal if the page is untitled.
+ * - never: Never show the modal.
+ */
+export type UnsavedPagePromptStrategy = "default" | "skip-untitled" | "never";

@@ -1,5 +1,35 @@
 # Changelog
 
+## v16.1.0
+
+- Change storage mapper now removes additional defaults based on default window/page/view settings
+- Change storage mapper applies default settings when hydrating from storage
+- Added Example endpoint for page/workspace storage to server (not production code)
+- Added Additional Monitor Awareness
+  - Initial set of updates to improve the multi-monitor experience.
+  - Extracted Window Positioning Strategy logic from Platform Override to the utils-position.ts file so that it can be used/called from more than one place.
+  - Improved launch preferences so that top and left can now be specified as part of the bounds.
+  - Improved launch preferences by extending appProvider so that you can specify default updatable preferences that should apply across applications (Caution. Preferences such as url should remain app specific).
+  - Dock now takes monitor into account when launching apps using the app entry type or launch-view action or favorites menu option (module). This only applies to views and windows (not snapshots or other types of app).
+  - Interop Broker now takes into account who raised the intent/fdc3.open request when launching a view/window in response (it will position it on the same monitor as the requesting app if possible using the window positioning strategy)
+- Removed the quote and emoji integration code and dependencies, examples of how they are implemented can be seen in the customize-home-templates example
+- Removed the deprecated dock config for `buttons` and `apps`
+- Added theming support for the new multi state icon urls for browser buttons
+- Added additional FDC3 support so that [context metadata](https://fdc3.finos.org/docs/api/ref/Metadata#contextmetadata) is passed when context is broadcast, an intent is raised or fdc3.open is used. This can be used with fdc3.getInfo to see if the context you received was sent from your app.
+- Updated example call app so that it logs the new context metadata when an intent is raised or context received. Added context support to the call app. Updated the example participant history app so that it console logs the context metadata received.
+- Added UnsavedPagePromptStrategy support to the browserProvider. This takes advantage of the enhancement in Workspace 16.1 to decide whether or not the page should prompt the user if it has unsaved changes (in the platform override: handleSaveModalOnPageClose). The options are:
+  - "default" - use the default platform behavior
+  - "skip-untitled" - any page that hasn't been assigned a title shouldn't prompt the user to save unsaved changes.
+  - "never" - you never want workspace to show a prompt. Unsaved changes will be lost if the user doesn't save before closing.
+- Added better support for firing intents at .NET apps and updated the sample winform application.
+- Native applications now use an appId for the UUID (if the uuid is not provided) and instanceId (if provided)
+- Support for replacing two tokens if specified in native app (external or app asset) command line args: {OF-PLAT-UUID} will be replaced with the UUID of the platform that launched the native app (useful if you want to validate that it is an expected UUID you are allowed to connect to) and {OF-EXT-UUID} which will pass the UUID we launched your external application with.
+- Updated the Winform Interop Example to be an updated copy that can auto connect if passed command line arguments and now supports raising more intents (ViewContact, ViewInstrument, ViewNews) and well as listening to those intents. A logging view has also been added.
+- BREAKING CHANGE: manifest.fin.json was the only manifest without a security realm specified. This has been updated but may result in saved data being lost when developing locally. We recommend a security realm to isolate your platform from others and so decided to apply it here as well.
+- Fixed - when launching multiple instances of an inline app asset it is possible to try and re-download an app asset that has just been downloaded or exists. We now fetch the app asset info to see if the platform already has the app asset and if it is the required version.
+- Added util getCommandLineArgs to extract multiple command line arguments from a string into an array. Snap accepts an array of arguments and app assets and external apps take a string as an args parameter. This lets you specify arguments that cover scenarios where snap is disabled and enabled. Added tests to verify getCommandLineArgs behavior.
+- Updated identity returned when launching a native app or app asset (either normally or through snap). The UUID is the app id if the app has been marked as instanceMode = "single" otherwise the uuid is appId/guid (guid being an instanceId). The name is the same as the UUID (as name is not specified in app asset/external process options). If your app supports having multiple instances and it registers intent handlers then we recommend passing the created UUID for your app instance using {OF-EXT-UUD} as part of the command line args so that the uuid can be used when you connect to the OpenFin runtime. When you then connect to the workspace platform interop broker (as the platform will be waiting on that connection to fire an intent against it) it will use the expected UUID as it's connection id.
+
 ## v16
 
 - Update the applyWorkspace override so that the following applySnapshot options are applied: closeExistingWindows: false, closeSnapshotWindows: true
@@ -39,6 +69,8 @@
 - Fixed async filters so they don't replace the current filters
 - Added a home searching panel when querying, and debounced requests
 - Improved the Home UI experience so that it does not appear to bounce when typing search requests
+- Removed debounce from integrations as it is now performed by the platform
+- Added new method to integrations to allow them to provide an initial "searching..." entry `getSearchResultsProgress`
 - Improved platform now starts correctly when no customSettings are provided in manifest
 - Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
 - InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`

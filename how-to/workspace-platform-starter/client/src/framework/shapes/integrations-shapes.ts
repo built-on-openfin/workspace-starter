@@ -109,11 +109,31 @@ export interface IntegrationModule<O = unknown> extends ModuleImplementation<O, 
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse>;
+
+	/**
+	 * Get entries to show while the integration is searching.
+	 * @param query The query to search for.
+	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
+	 * @returns The list of results and new filters.
+	 */
+	getSearchResultsProgress?(
+		query: string,
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength?: number;
+			queryAgainst?: string[];
+			isSuggestion?: boolean;
+		}
+	): Promise<HomeSearchResult[]>;
 
 	/**
 	 * Get a list of the static help entries.
