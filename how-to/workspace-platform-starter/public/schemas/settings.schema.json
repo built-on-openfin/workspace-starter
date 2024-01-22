@@ -4176,6 +4176,10 @@
                     "description": "This defaults to manifest.platform.icon if not provided.",
                     "type": "string"
                 },
+                "taskbarIcon": {
+                    "description": "The taskbar icon. Falls back to icon if not provided.",
+                    "type": "string"
+                },
                 "textColor": {
                     "description": "The text color, defaults to theme text.",
                     "type": "string"
