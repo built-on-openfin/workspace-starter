@@ -55,12 +55,9 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 	): Promise<MenuEntry[] | undefined> {
 		if (menuType === "global" && !isEmpty(relatedMenuId?.windowIdentity)) {
 			// you can customize the browser main menu here
-			const includeShowAllWindows =
-				isEmpty(this._settings?.showAllWindows?.include) || this._settings?.showAllWindows?.include;
-			const includeHideAllWindows =
-				isEmpty(this._settings?.hideAllWindows?.include) || this._settings?.hideAllWindows?.include;
-			const includeHideOtherWindows =
-				isEmpty(this._settings?.hideOtherWindows?.include) || this._settings?.hideOtherWindows?.include;
+			const includeShowAllWindows = this._settings?.showAllWindows?.include ?? true;
+			const includeHideAllWindows = this._settings?.hideAllWindows?.include ?? true;
+			const includeHideOtherWindows = this._settings?.hideOtherWindows?.include ?? true;
 
 			const userWindows = await getAllUserWindows();
 

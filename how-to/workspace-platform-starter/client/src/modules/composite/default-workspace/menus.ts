@@ -102,7 +102,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 					...this._settings?.defaultWorkspace?.menuPosition
 				}
 			};
-			const includeReset = isEmpty(this._settings?.reset?.include) || this._settings?.reset?.include;
+			const includeReset = this._settings?.reset?.include ?? true;
 			defaultWorkspaceMenuEntry.submenu?.push({
 				label: this._settings?.reset?.menuLabel ?? "None",
 				icon: this._settings?.reset?.menuIcon,
@@ -121,8 +121,7 @@ export class SetDefaultWorkspaceProvider implements Menus<DefaultWorkspaceProvid
 					}
 				}
 			});
-			const includeLastActive =
-				isEmpty(this._settings?.lastActive?.include) || this._settings?.lastActive?.include;
+			const includeLastActive = this._settings?.lastActive?.include ?? true;
 			defaultWorkspaceMenuEntry.submenu?.push({
 				label: this._settings?.lastActive?.menuLabel ?? "Last Active Workspace",
 				icon: this._settings?.lastActive?.menuIcon,
