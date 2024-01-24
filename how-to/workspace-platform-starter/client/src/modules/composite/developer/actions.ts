@@ -135,6 +135,31 @@ export class DeveloperActions implements Actions {
 			}
 		};
 
+		actionMap["copy-url"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.ViewTabContextMenu) {
+				const urls: string[] = [];
+				for (let i = 0; i < payload.selectedViews.length; i++) {
+					const viewIdentity = payload.selectedViews[i];
+					try {
+						const view = fin.View.wrapSync(viewIdentity);
+						const info = await view.getInfo();
+						urls.push(info.url);
+					} catch (error) {
+						this._logger?.error(
+							`Error while trying to capture view url for view ${viewIdentity.name}`,
+							error
+						);
+					}
+				}
+				if (urls.length > 0) {
+					const url = urls.join("\n");
+					await fin.Clipboard.writeText({
+						data: url
+					});
+				}
+			}
+		};
+
 		return actionMap;
 	}
 }

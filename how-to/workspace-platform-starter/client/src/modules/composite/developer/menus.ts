@@ -99,8 +99,8 @@ export class DeveloperMenus implements Menus {
 						}
 					},
 					position: {
-						operation: "after",
-						type: "Print"
+						operation: "before",
+						type: "CloseTab"
 					},
 					separator: "before"
 				},
@@ -118,6 +118,22 @@ export class DeveloperMenus implements Menus {
 						type: "Custom",
 						customId: "developer-inspect"
 					}
+				},
+				{
+					include: true,
+					label: "Copy Url",
+					data: {
+						type: "Custom",
+						action: {
+							id: "copy-url"
+						}
+					},
+					position: {
+						operation: "after",
+						type: "Custom",
+						customId: "raise-create-app-definition-intent"
+					},
+					separator: "after"
 				}
 			];
 		}
