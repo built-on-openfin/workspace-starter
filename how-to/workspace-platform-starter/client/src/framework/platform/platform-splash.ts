@@ -78,6 +78,7 @@ export async function open(): Promise<void> {
 				resizable: false,
 				saveWindowState: false,
 				showTaskbarIcon: true,
+				icon: customSettings?.splashScreenProvider?.taskbarIcon ?? icon,
 				customData: {
 					channelName,
 					style: {

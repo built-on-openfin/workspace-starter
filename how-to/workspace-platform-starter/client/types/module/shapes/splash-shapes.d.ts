@@ -38,4 +38,8 @@ export interface SplashScreenProviderOptions {
 	 * The border color, defaults to theme border.
 	 */
 	borderColor?: string;
+	/**
+	 * The taskbar icon. Falls back to icon if not provided.
+	 */
+	taskbarIcon?: string;
 }
