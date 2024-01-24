@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "34.118.78.76"
+		"version": "34.118.78.77"
 	},
 	"startup_app": {
 		"name": "empty-workspace-starter-how-to-workspace-platform-starter"
@@ -20,7 +20,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/c/splash-screen-icon/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - v17.0.6",
+		"name": "Workspace Platform Starter - v17.0.8",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
