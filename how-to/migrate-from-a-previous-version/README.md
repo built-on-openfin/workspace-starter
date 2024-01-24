@@ -5,7 +5,7 @@
 
 ## Migrate from a previous version - From v16.0 to v16.1
 
-- [Please see the v16.1 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.0.6)
+- [Please see the v16.1 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.0.8)
 
 ## Migrate from a previous version - From v15.0 to v16
 
@@ -193,7 +193,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "34.78.76"
+                    "@openfin/core": "34.78.77"
                    }
 ```
 

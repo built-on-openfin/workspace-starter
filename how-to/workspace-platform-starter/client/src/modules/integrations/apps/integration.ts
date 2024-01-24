@@ -199,8 +199,8 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		filters: CLIFilter[],
 		lastResponse: HomeSearchListenerResponse,
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		}
 	): Promise<HomeSearchResponse> {
@@ -272,16 +272,19 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 		queryLower: string,
 		filters: CLIFilter[],
 		options: {
-			queryMinLength: number;
-			queryAgainst: string[];
+			queryMinLength?: number;
+			queryAgainst?: string[];
 			isSuggestion?: boolean;
 		},
 		cachedApps?: PlatformApp[]
 	): Promise<HomeSearchResponse> {
 		if (this._integrationHelpers?.getApps) {
+			const queryMinLength = options?.queryMinLength ?? 3;
+			const queryAgainst = options?.queryAgainst ?? ["title"];
+
 			this._lastQuery = queryLower;
-			this._lastQueryMinLength = options?.queryMinLength;
-			this._lastQueryAgainst = options?.queryAgainst;
+			this._lastQueryMinLength = queryMinLength;
+			this._lastQueryAgainst = queryAgainst;
 			this._lastCLIFilters = filters;
 
 			let apps: PlatformApp[] = cachedApps ?? (await this._integrationHelpers.getApps());
@@ -313,8 +316,8 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 
 					const isCommand = matchQuery.startsWith("/");
 
-					if (matchQuery.length >= options.queryMinLength || isCommand) {
-						textMatchFound = options.queryAgainst.some((target) => {
+					if (matchQuery.length >= queryMinLength || isCommand) {
+						textMatchFound = queryAgainst.some((target) => {
 							const entryObject = entry as unknown as {
 								[id: string]: string | string[] | { [id: string]: string | string[] };
 							};
@@ -649,8 +652,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			if (favoriteClient) {
 				favoriteInfo = favoriteClient.getInfo();
 				if (favoriteInfo.isEnabled) {
-					const isSupported =
-						isEmpty(favoriteInfo.enabledTypes) || favoriteInfo.enabledTypes.includes(favoriteTypeNames);
+					const isSupported = favoriteInfo?.enabledTypes?.includes(favoriteTypeNames) ?? true;
 					if (!isSupported) {
 						favoriteInfo = undefined;
 						favoriteClient = undefined;

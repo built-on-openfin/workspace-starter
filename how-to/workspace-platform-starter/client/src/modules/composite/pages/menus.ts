@@ -57,9 +57,8 @@ export class PageMenus implements Menus<PageMenuSettings> {
 			// you can customize the browser main menu here
 			const pages: Page[] = await platform.Storage.getPages();
 			pages.sort((a, b) => a.title.localeCompare(b.title));
-			const includeDeletePage =
-				isEmpty(this._settings?.deletePage?.include) || this._settings?.deletePage?.include;
-			const includeShowPage = isEmpty(this._settings?.showPage?.include) || this._settings?.showPage?.include;
+			const includeDeletePage = this._settings?.deletePage?.include ?? true;
+			const includeShowPage = this._settings?.showPage?.include ?? true;
 			const showPagesMenu: OpenFin.MenuItemTemplate[] = [];
 			const showPageMenuEntry: MenuEntry = {
 				label: this._settings?.showPage?.menuLabel ?? "Show Page",

@@ -47,12 +47,11 @@
 		"ameet.jayawant@openfin.co",
 		"john.mandia@openfin.co",
 		"martyn.janes@openfin.co",
-		"pj.singh@openfin.co",
 		"richard.browne@openfin.co"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/node-adapter": "34.78.76",
+		"@openfin/node-adapter": "34.78.77",
 		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",

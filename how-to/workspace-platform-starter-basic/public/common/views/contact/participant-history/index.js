@@ -11,9 +11,10 @@ function initializeDOM() {
 /**
  * Handler for setting the context.
  * @param ctx The FDC3 context.
+ * @param metadata The FDC3 metadata.
  */
-function contextHandler(ctx) {
-	console.log('Context Received:', ctx);
+function contextHandler(ctx, metadata) {
+	console.log('Context Received:', ctx, metadata);
 	if (ctx.type === 'fdc3.contact') {
 		setContact(ctx);
 	}

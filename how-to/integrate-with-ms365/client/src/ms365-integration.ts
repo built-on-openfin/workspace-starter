@@ -168,11 +168,6 @@ export class Microsoft365Integration {
 	private _ms365Connection?: Microsoft365Connection;
 
 	/**
-	 * The debounce timer id.
-	 */
-	private _debounceTimerId?: number;
-
-	/**
 	 * Any errors during connection.
 	 */
 	private _connectionError?: string;
@@ -354,6 +349,45 @@ export class Microsoft365Integration {
 	}
 
 	/**
+	 * Get entries to show while the integration is searching.
+	 * @param query The query to search for.
+	 * @param lastResponse The last search response used for updating existing results.
+	 * @param options Options for the search query.
+	 * @param options.queryMinLength The minimum length before a query is actioned.
+	 * @param options.queryAgainst The fields in the data to query against.
+	 * @param options.isSuggestion Is the query from a suggestion.
+	 * @returns The list of results and new filters.
+	 */
+	public async getSearchResultsProgress?(
+		query: string,
+		lastResponse: HomeSearchListenerResponse,
+		options: {
+			queryMinLength?: number;
+			queryAgainst?: string[];
+			isSuggestion?: boolean;
+		}
+	): Promise<HomeSearchResult[]> {
+		if (!this._ms365Connection && this._integrationHelpers) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			this._connectLastResponse = lastResponse;
+			const results = [];
+			if (this._connectionError) {
+				const connectResult = await this.createConnectResult(
+					this._integrationHelpers.templateHelpers,
+					await themeClient.getPalette()
+				);
+				if (connectResult) {
+					results.push(connectResult);
+				}
+			}
+			return results;
+		}
+
+		const minLength = options?.queryMinLength ?? 3;
+		return query.length >= minLength ? [this.createSearchingResult()] : [];
+	}
+
+	/**
 	 * Get a list of search results based on the query and filters.
 	 * @param query The query to search for.
 	 * @param filters The filters to apply.
@@ -372,29 +406,6 @@ export class Microsoft365Integration {
 			queryAgainst?: string[];
 		}
 	): Promise<HomeSearchResponse> {
-		if (!this._ms365Connection && this._integrationHelpers) {
-			const themeClient = await this._integrationHelpers.getThemeClient();
-			this._connectLastResponse = lastResponse;
-			const results = [];
-			if (this._connectionError) {
-				const connectResult = await this.createConnectResult(
-					this._integrationHelpers.templateHelpers,
-					await themeClient.getPalette()
-				);
-				if (connectResult) {
-					results.push(connectResult);
-				}
-			}
-			return {
-				results
-			};
-		}
-
-		if (this._debounceTimerId) {
-			window.clearTimeout(this._debounceTimerId);
-			this._debounceTimerId = undefined;
-		}
-
 		const isRecent = query === "/recent";
 		const defaultFilters: Microsoft365ObjectTypes[] = isRecent
 			? ["File"]
@@ -402,227 +413,225 @@ export class Microsoft365Integration {
 
 		const minLength = options?.queryMinLength ?? 3;
 
-		this._debounceTimerId = window.setTimeout(async () => {
-			if (this._ms365Connection && this._integrationHelpers) {
-				const themeClient = await this._integrationHelpers.getThemeClient();
-				const palette = await themeClient.getPalette();
+		if (this._ms365Connection && this._integrationHelpers) {
+			const themeClient = await this._integrationHelpers.getThemeClient();
+			const palette = await themeClient.getPalette();
 
-				try {
-					// If query starts with ms just do a passthrough to the graph API
-					if (
-						!this._settings?.disableGraphExplorer &&
-						query.startsWith(`/${this._settings?.graphExplorerPrefix}/`)
-					) {
-						const path = query.replace(`/${this._settings?.graphExplorerPrefix}/`, "");
-						if (path.length > 0) {
-							const fullPath = `/v1.0/${path}`;
+			try {
+				// If query starts with ms just do a passthrough to the graph API
+				if (
+					!this._settings?.disableGraphExplorer &&
+					query.startsWith(`/${this._settings?.graphExplorerPrefix}/`)
+				) {
+					const path = query.replace(`/${this._settings?.graphExplorerPrefix}/`, "");
+					if (path.length > 0) {
+						const fullPath = `/v1.0/${path}`;
 
-							this._logger?.info("Graph API Request", fullPath);
+						this._logger?.info("Graph API Request", fullPath);
 
-							const response = await this._ms365Connection.executeApiRequest(fullPath);
-							const jsonResult = await this.createGraphJsonResult(
-								this._integrationHelpers.templateHelpers,
-								palette,
-								response
-							);
-							lastResponse.respond([jsonResult]);
-						}
-					} else if (isRecent || (query.length >= minLength && !query.startsWith("/"))) {
-						const ms365Filter = filters?.find((f) => f.id === Microsoft365Integration._MS365_FILTERS);
-
-						let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];
-
-						if (ms365Filter?.options && Array.isArray(ms365Filter.options)) {
-							includeOptions = ms365Filter.options
-								.filter((o) => o.isSelected)
-								.map((o) => o.value as Microsoft365ObjectTypes);
-						}
-
-						const batchRequests: GraphBatchRequest[] = [];
-
-						if (includeOptions.includes("User")) {
-							const userSearchFields: (keyof User)[] = [
-								"displayName",
-								"givenName",
-								"surname",
-								"department",
-								"jobTitle",
-								"mobilePhone"
-							];
-							const userSearchQuery = userSearchFields.map((s) => `"${s}:${query}"`).join(" OR ");
-
-							batchRequests.push({
-								id: "User",
-								method: "GET",
-								url: `/users?$search=${encodeURIComponent(userSearchQuery)}&$top=10`,
-								headers: {
-									ConsistencyLevel: "eventual"
-								}
-							});
-						}
-						if (includeOptions.includes("Contact")) {
-							const contactSearchQuery = `"${query}"`;
-							batchRequests.push({
-								id: "Contact",
-								method: "GET",
-								url: `/me/contacts?$search=${encodeURIComponent(contactSearchQuery)}&$top=10`
-							});
-						}
-						if (includeOptions.includes("Message")) {
-							const messageSearchQuery = `"${query}"`;
-							batchRequests.push({
-								id: "Message",
-								method: "GET",
-								url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodeURIComponent(
-									messageSearchQuery
-								)}&$top=10`
-							});
-						}
-						if (includeOptions.includes("Event")) {
-							batchRequests.push({
-								id: "Event",
-								url: "/search/query",
-								method: "POST",
-								body: {
-									requests: [
-										{
-											entityTypes: ["event"],
-											query: {
-												queryString: query
-											},
-											from: 0,
-											size: 10
-										}
-									]
-								},
-								headers: {
-									"Content-Type": "application/json"
-								}
-							});
-						}
-						if (includeOptions.includes("ChatMessage")) {
-							batchRequests.push({
-								id: "ChatMessage",
-								url: "/search/query",
-								method: "POST",
-								body: {
-									requests: [
-										{
-											entityTypes: ["chatMessage"],
-											query: {
-												queryString: query
-											},
-											from: 0,
-											size: 10
-										}
-									]
-								},
-								headers: {
-									"Content-Type": "application/json"
-								}
-							});
-						}
-
-						if (includeOptions.includes("File")) {
-							const fileSearchQuery = `'${query}'`;
-							batchRequests.push({
-								id: "File",
-								url: isRecent
-									? "/me/drive/recent"
-									: `/me/drive/root/search(q=${encodeURIComponent(
-											fileSearchQuery
-										)})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
-								method: "GET"
-							});
-						}
-
-						const homeResults: HomeSearchResult[] = await this.sendBatchQuery(
-							query,
-							includeOptions,
-							batchRequests
+						const response = await this._ms365Connection.executeApiRequest(fullPath);
+						const jsonResult = await this.createGraphJsonResult(
+							this._integrationHelpers.templateHelpers,
+							palette,
+							response
 						);
+						lastResponse.respond([jsonResult]);
+					}
+				} else if (isRecent || (query.length >= minLength && !query.startsWith("/"))) {
+					const ms365Filter = filters?.find((f) => f.id === Microsoft365Integration._MS365_FILTERS);
 
-						if (includeOptions.includes("Team") || includeOptions.includes("Channel")) {
-							const lowerQuery = query.toLowerCase();
+					let includeOptions: Microsoft365ObjectTypes[] = [...defaultFilters];
 
-							for (const teamAndChannels of this._teamsAndChannelsCache) {
-								if (
-									includeOptions.includes("Team") &&
-									(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ??
-										teamAndChannels.team.description?.toLowerCase().includes(lowerQuery))
-								) {
-									homeResults.push(
-										await this.createLoadingResult(
-											this._integrationHelpers.templateHelpers,
-											palette,
-											teamAndChannels.team,
-											"displayName",
-											"Team"
-										)
-									);
-								}
-								if (includeOptions.includes("Channel")) {
-									for (const channel of teamAndChannels.channels) {
-										if (
-											channel.displayName?.toLowerCase().includes(lowerQuery) ??
-											channel.description?.toLowerCase().includes(lowerQuery)
-										) {
-											homeResults.push(
-												await this.createLoadingResult(
-													this._integrationHelpers.templateHelpers,
-													palette,
-													{
-														...channel,
-														team: teamAndChannels.team
-													},
-													"displayName",
-													"Channel"
-												)
-											);
-										}
+					if (ms365Filter?.options && Array.isArray(ms365Filter.options)) {
+						includeOptions = ms365Filter.options
+							.filter((o) => o.isSelected)
+							.map((o) => o.value as Microsoft365ObjectTypes);
+					}
+
+					const batchRequests: GraphBatchRequest[] = [];
+
+					if (includeOptions.includes("User")) {
+						const userSearchFields: (keyof User)[] = [
+							"displayName",
+							"givenName",
+							"surname",
+							"department",
+							"jobTitle",
+							"mobilePhone"
+						];
+						const userSearchQuery = userSearchFields.map((s) => `"${s}:${query}"`).join(" OR ");
+
+						batchRequests.push({
+							id: "User",
+							method: "GET",
+							url: `/users?$search=${encodeURIComponent(userSearchQuery)}&$top=10`,
+							headers: {
+								ConsistencyLevel: "eventual"
+							}
+						});
+					}
+					if (includeOptions.includes("Contact")) {
+						const contactSearchQuery = `"${query}"`;
+						batchRequests.push({
+							id: "Contact",
+							method: "GET",
+							url: `/me/contacts?$search=${encodeURIComponent(contactSearchQuery)}&$top=10`
+						});
+					}
+					if (includeOptions.includes("Message")) {
+						const messageSearchQuery = `"${query}"`;
+						batchRequests.push({
+							id: "Message",
+							method: "GET",
+							url: `/me/messages?$select=sender,subject,bodyPreview,receivedDateTime,webLink&$search=${encodeURIComponent(
+								messageSearchQuery
+							)}&$top=10`
+						});
+					}
+					if (includeOptions.includes("Event")) {
+						batchRequests.push({
+							id: "Event",
+							url: "/search/query",
+							method: "POST",
+							body: {
+								requests: [
+									{
+										entityTypes: ["event"],
+										query: {
+											queryString: query
+										},
+										from: 0,
+										size: 10
+									}
+								]
+							},
+							headers: {
+								"Content-Type": "application/json"
+							}
+						});
+					}
+					if (includeOptions.includes("ChatMessage")) {
+						batchRequests.push({
+							id: "ChatMessage",
+							url: "/search/query",
+							method: "POST",
+							body: {
+								requests: [
+									{
+										entityTypes: ["chatMessage"],
+										query: {
+											queryString: query
+										},
+										from: 0,
+										size: 10
+									}
+								]
+							},
+							headers: {
+								"Content-Type": "application/json"
+							}
+						});
+					}
+
+					if (includeOptions.includes("File")) {
+						const fileSearchQuery = `'${query}'`;
+						batchRequests.push({
+							id: "File",
+							url: isRecent
+								? "/me/drive/recent"
+								: `/me/drive/root/search(q=${encodeURIComponent(
+										fileSearchQuery
+									)})?$top=10&$orderby=lastModifiedDateTime desc&$expand=thumbnails`,
+							method: "GET"
+						});
+					}
+
+					const homeResults: HomeSearchResult[] = await this.sendBatchQuery(
+						query,
+						includeOptions,
+						batchRequests
+					);
+
+					if (includeOptions.includes("Team") || includeOptions.includes("Channel")) {
+						const lowerQuery = query.toLowerCase();
+
+						for (const teamAndChannels of this._teamsAndChannelsCache) {
+							if (
+								includeOptions.includes("Team") &&
+								(teamAndChannels.team.displayName?.toLowerCase().includes(lowerQuery) ??
+									teamAndChannels.team.description?.toLowerCase().includes(lowerQuery))
+							) {
+								homeResults.push(
+									await this.createLoadingResult(
+										this._integrationHelpers.templateHelpers,
+										palette,
+										teamAndChannels.team,
+										"displayName",
+										"Team"
+									)
+								);
+							}
+							if (includeOptions.includes("Channel")) {
+								for (const channel of teamAndChannels.channels) {
+									if (
+										channel.displayName?.toLowerCase().includes(lowerQuery) ??
+										channel.description?.toLowerCase().includes(lowerQuery)
+									) {
+										homeResults.push(
+											await this.createLoadingResult(
+												this._integrationHelpers.templateHelpers,
+												palette,
+												{
+													...channel,
+													team: teamAndChannels.team
+												},
+												"displayName",
+												"Channel"
+											)
+										);
 									}
 								}
 							}
 						}
-
-						lastResponse.respond(homeResults);
-
-						const resultTypes: Set<string> = new Set<string>();
-						for (const searchResult of homeResults) {
-							if (searchResult.label) {
-								resultTypes.add(searchResult.label);
-							}
-						}
-
-						const newFilters = resultTypes.entries();
-						lastResponse.updateContext({
-							filters: [
-								{
-									id: Microsoft365Integration._MS365_FILTERS,
-									title: "Microsoft 365",
-									options: [...newFilters].map((f) => ({
-										value: f[0],
-										isSelected: true
-									}))
-								}
-							]
-						});
 					}
-				} catch (err) {
-					const message = err instanceof Error ? err.message : err;
-					lastResponse.respond([
-						await this.createGraphJsonResult(this._integrationHelpers.templateHelpers, palette, {
-							status: 400,
-							data: message
-						})
-					]);
+
+					lastResponse.respond(homeResults);
+
+					const resultTypes: Set<string> = new Set<string>();
+					for (const searchResult of homeResults) {
+						if (searchResult.label) {
+							resultTypes.add(searchResult.label);
+						}
+					}
+
+					const newFilters = resultTypes.entries();
+					lastResponse.updateContext({
+						filters: [
+							{
+								id: Microsoft365Integration._MS365_FILTERS,
+								title: "Microsoft 365",
+								options: [...newFilters].map((f) => ({
+									value: f[0],
+									isSelected: true
+								}))
+							}
+						]
+					});
 				}
+			} catch (err) {
+				const message = err instanceof Error ? err.message : err;
+				lastResponse.respond([
+					await this.createGraphJsonResult(this._integrationHelpers.templateHelpers, palette, {
+						status: 400,
+						data: message
+					})
+				]);
 			}
-			lastResponse.revoke(`${this._definition?.id}-searching`);
-		}, 500);
+		}
+		lastResponse.revoke(`${this._definition?.id}-searching`);
 
 		return {
-			results: query.length >= minLength ? [this.createSearchingResult()] : []
+			results: []
 		};
 	}
 

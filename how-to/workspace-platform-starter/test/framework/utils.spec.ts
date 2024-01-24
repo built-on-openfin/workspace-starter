@@ -12,7 +12,8 @@ import {
 	isStringValue,
 	objectClone,
 	randomUUID,
-	sanitizeString
+	sanitizeString,
+	getCommandLineArgs
 } from "../../client/src/framework/utils";
 
 describe("utils", () => {
@@ -600,6 +601,42 @@ describe("utils", () => {
 
 		it("should return an sanitized string for a string containing multiple line breaks", () => {
 			expect(sanitizeString("\n\n\n\nfoo\n\n\n\n")).toEqual("\nfoo\n");
+		});
+	});
+
+	describe("getCommandLineArgs", () => {
+		it("should return an empty array if passed an empty string", () => {
+			expect(getCommandLineArgs("").length).toEqual(0);
+		});
+
+		it("should return a single arg", () => {
+			expect(getCommandLineArgs("arg").length).toEqual(1);
+		});
+
+		it("should return a single value for a name value pair no quotes", () => {
+			expect(getCommandLineArgs("arg=value").length).toEqual(1);
+		});
+
+		it("should return a single value for a name value pair with single quotes", () => {
+			expect(getCommandLineArgs("arg='value'").length).toEqual(1);
+		});
+
+		it("should return a single value for a name value pair with double quotes", () => {
+			expect(getCommandLineArgs('arg="value"').length).toEqual(1);
+		});
+
+		it("should return a two values for two args", () => {
+			expect(getCommandLineArgs("arg1 arg2").length).toEqual(2);
+		});
+
+		it("should return a two values for two name value pairs", () => {
+			// eslint-disable-next-line @typescript-eslint/quotes
+			expect(getCommandLineArgs(`arg1='value1' arg2="value2"`).length).toEqual(2);
+		});
+
+		it("should return a three values for two name value pairs and a single arg", () => {
+			// eslint-disable-next-line @typescript-eslint/quotes
+			expect(getCommandLineArgs(`arg1='value1' arg2="value2" arg3`).length).toEqual(3);
 		});
 	});
 });
