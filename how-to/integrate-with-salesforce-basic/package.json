@@ -21,12 +21,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/salesforce": "2.3.0",
-		"@openfin/workspace": "17.0.8",
-		"@openfin/workspace-platform": "17.0.8"
+		"@openfin/workspace": "17.0.12",
+		"@openfin/workspace-platform": "17.0.12"
 	},
 	"devDependencies": {
-		"@openfin/core": "34.78.77",
-		"@openfin/node-adapter": "34.78.77",
+		"@openfin/core": "34.78.79",
+		"@openfin/node-adapter": "34.78.79",
 		"eslint": "8.56.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.1.0",
