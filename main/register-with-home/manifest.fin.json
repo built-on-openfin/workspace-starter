@@ -63,6 +63,9 @@
 			"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-home/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
+		},
+		"keys": {
+			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }
