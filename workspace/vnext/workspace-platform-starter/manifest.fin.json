@@ -1712,7 +1712,7 @@
 			"enabled": false,
 			"id": "workspace-platform-starter",
 			"serverAssetInfo": {
-				"src": "SNAP_ASSET_URL",
+				"src": "https://cdn.openfin.co/release/snap/0.2.0/snap.zip",
 				"alias": "openfin-snap",
 				"version": "0.2.0",
 				"target": "OpenFinSnap.exe"
@@ -1792,6 +1792,9 @@
 		},
 		"dialogProvider": {
 			"dialogHtml": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/popups/dialog/index.html"
+		},
+		"keys": {
+			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }

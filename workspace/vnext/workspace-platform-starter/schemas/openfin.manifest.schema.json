@@ -12,7 +12,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -43,7 +43,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -99,7 +99,7 @@
 			"$ref": "#/definitions/__type_12"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_3"
@@ -108,7 +108,7 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"DipRect": {
 			"additionalProperties": false,
@@ -124,10 +124,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"DisplayMetadata_3": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_14"
@@ -137,28 +137,28 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_38"
 		},
 		"Identity_5": {
 			"$ref": "#/definitions/__type_17"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_6"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"LayoutSnapshot": {
 			"$ref": "#/definitions/__type_15"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -379,7 +379,10 @@
 			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_24"
+		},
+		"Partial_9": {
+			"$ref": "#/definitions/__type_33"
 		},
 		"PlatformOptions": {
 			"additionalProperties": false,
@@ -484,14 +487,14 @@
 					"type": "number"
 				},
 				"defaultViewOptions": {
-					"$ref": "#/definitions/Partial_7",
+					"$ref": "#/definitions/Partial_8",
 					"description": "**Platforms Only.** Default view options apply to all platform views."
 				},
 				"defaultWidth": {
 					"type": "number"
 				},
 				"defaultWindowOptions": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "**Platforms Only.** Default window options apply to all platform windows."
 				},
 				"disableDefaultCommands": {
@@ -656,7 +659,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -690,7 +693,7 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_5"
@@ -763,7 +766,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_7",
+					"$ref": "#/definitions/Partial_8",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -993,6 +996,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1289,6 +1296,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1733,6 +1744,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -2289,6 +2304,24 @@
 		"__type_23": {
 			"additionalProperties": false,
 			"properties": {
+				"customContext": {
+					"type": "boolean"
+				},
+				"customData": {
+					"type": "boolean"
+				},
+				"icon": {
+					"type": "boolean"
+				},
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_24": {
+			"additionalProperties": false,
+			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
@@ -2477,7 +2510,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2496,7 +2529,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2518,7 +2551,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2609,7 +2642,7 @@
 			],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2624,7 +2657,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -2635,25 +2668,6 @@
 				}
 			},
 			"required": ["dipRect", "scaledRect"],
-			"type": "object"
-		},
-		"__type_29": {
-			"additionalProperties": false,
-			"properties": {
-				"bottom": {
-					"type": "number"
-				},
-				"left": {
-					"type": "number"
-				},
-				"right": {
-					"type": "number"
-				},
-				"top": {
-					"type": "number"
-				}
-			},
-			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
 		"__type_3": {
@@ -2672,6 +2686,25 @@
 			"type": "object"
 		},
 		"__type_30": {
+			"additionalProperties": false,
+			"properties": {
+				"bottom": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"right": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				}
+			},
+			"required": ["bottom", "left", "right", "top"],
+			"type": "object"
+		},
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2723,7 +2756,7 @@
 			],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2752,7 +2785,7 @@
 			},
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -2917,6 +2950,10 @@
 				"includeInSnapshots": {
 					"type": "boolean"
 				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
 				},
@@ -3052,7 +3089,7 @@
 			},
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -3080,7 +3117,7 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -3099,7 +3136,7 @@
 			},
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -3128,7 +3165,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
@@ -3161,7 +3198,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {

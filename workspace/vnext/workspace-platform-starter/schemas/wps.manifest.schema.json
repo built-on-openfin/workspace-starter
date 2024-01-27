@@ -48,7 +48,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_55"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -335,7 +335,7 @@
 			"type": "object"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -405,7 +405,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"BrokerConnection": {
 			"additionalProperties": false,
@@ -464,7 +464,7 @@
 					"description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl`, `panels` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."
 				},
 				"defaultViewOptions": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "The default options when creating a new browser window. Any option not included in WorkspacePlatform.getCurrentSync().Browser.createView(options) call will default to the value provided in this field."
 				},
 				"defaultWindowOptions": {
@@ -673,7 +673,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_48"
 		},
 		"ConditionsProviderOptions": {
 			"$ref": "#/definitions/ModuleList_3",
@@ -784,7 +784,7 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_45"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_9"
@@ -1103,10 +1103,10 @@
 		},
 		"Data": {},
 		"DeepPartial": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_60"
+			"$ref": "#/definitions/__type_61"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1157,10 +1157,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_42"
 		},
 		"DisplayMetadata_3": {
-			"$ref": "#/definitions/__type_58"
+			"$ref": "#/definitions/__type_59"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1643,7 +1643,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_61"
+			"$ref": "#/definitions/__type_62"
 		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
@@ -1787,7 +1787,7 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Identity_5_1": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_38"
 		},
 		"Image": {
 			"additionalProperties": false,
@@ -1946,23 +1946,23 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_57"
+			"$ref": "#/definitions/__type_58"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_59"
+			"$ref": "#/definitions/__type_60"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_47"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"$ref": "#/definitions/Partial_13",
+					"$ref": "#/definitions/Partial_14",
 					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
@@ -2051,7 +2051,7 @@
 			"description": "List of modules."
 		},
 		"LockUnlockPageConfig": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"LoggerProviderOptions": {
 			"$ref": "#/definitions/ModuleList_1",
@@ -2906,10 +2906,10 @@
 			"type": "object"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_44"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_40"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -3048,7 +3048,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_54"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3076,19 +3076,19 @@
 		},
 		"O": {},
 		"Omit": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"Omit_1": {
-			"$ref": "#/definitions/__type_32"
-		},
-		"Omit_2": {
 			"$ref": "#/definitions/__type_33"
 		},
-		"Omit_3": {
+		"Omit_2": {
 			"$ref": "#/definitions/__type_34"
 		},
-		"Omit_4": {
+		"Omit_3": {
 			"$ref": "#/definitions/__type_35"
+		},
+		"Omit_4": {
+			"$ref": "#/definitions/__type_36"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -3344,13 +3344,13 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_26"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_39"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_46"
 		},
 		"Partial_13": {
 			"$ref": "#/definitions/__type_49"
@@ -3362,7 +3362,10 @@
 			"$ref": "#/definitions/__type_51"
 		},
 		"Partial_16": {
-			"$ref": "#/definitions/__type_56"
+			"$ref": "#/definitions/__type_52"
+		},
+		"Partial_17": {
+			"$ref": "#/definitions/__type_57"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -3389,7 +3392,7 @@
 			"$ref": "#/definitions/__type_25"
 		},
 		"Pick": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -3451,19 +3454,19 @@
 				"manifest": {
 					"anyOf": [
 						{
-							"$ref": "#/definitions/Partial_9"
+							"$ref": "#/definitions/Partial_10"
 						},
 						{
 							"$ref": "#/definitions/Partial_2"
-						},
-						{
-							"$ref": "#/definitions/Partial_10"
 						},
 						{
 							"$ref": "#/definitions/Partial_11"
 						},
 						{
 							"$ref": "#/definitions/Partial_12"
+						},
+						{
+							"$ref": "#/definitions/Partial_13"
 						},
 						{
 							"type": "string"
@@ -3750,14 +3753,14 @@
 					"type": "number"
 				},
 				"defaultViewOptions": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "**Platforms Only.** Default view options apply to all platform views."
 				},
 				"defaultWidth": {
 					"type": "number"
 				},
 				"defaultWindowOptions": {
-					"$ref": "#/definitions/Partial_16",
+					"$ref": "#/definitions/Partial_17",
 					"description": "**Platforms Only.** Default window options apply to all platform windows."
 				},
 				"disableDefaultCommands": {
@@ -3950,7 +3953,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_41"
 		},
 		"PopupMenuStyles": {
 			"description": "The styles that can be used to display the popup menus.",
@@ -4020,10 +4023,10 @@
 			"$ref": "#/definitions/__type_19"
 		},
 		"Record_1": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_53"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_43"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_11"
@@ -4083,7 +4086,7 @@
 			"type": "object"
 		},
 		"ShowHideTabsConfig": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -4133,7 +4136,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_55"
+			"$ref": "#/definitions/__type_56"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -4693,7 +4696,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -4728,7 +4731,7 @@
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_14",
+					"$ref": "#/definitions/Partial_15",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -5128,7 +5131,7 @@
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_15",
+					"$ref": "#/definitions/Partial_16",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -5299,6 +5302,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_9",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -5772,6 +5779,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_9",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -6632,6 +6643,24 @@
 		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
+				"customContext": {
+					"type": "boolean"
+				},
+				"customData": {
+					"type": "boolean"
+				},
+				"icon": {
+					"type": "boolean"
+				},
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_26": {
+			"additionalProperties": false,
+			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_4",
@@ -6820,7 +6849,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -6839,7 +6868,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -6861,7 +6890,7 @@
 			},
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -7044,7 +7073,32 @@
 			},
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configurations for API injection.",
+			"properties": {
+				"iframe": {
+					"additionalProperties": false,
+					"description": "Configure injection of OpenFin API into iframes based on domain",
+					"properties": {
+						"crossOriginInjection": {
+							"description": "Inject OpenFin API into cross-origin iframes",
+							"type": "boolean"
+						},
+						"enableDeprecatedSharedName": {
+							"type": "boolean"
+						},
+						"sameOriginInjection": {
+							"description": "Inject OpenFin API into same-origin iframes",
+							"type": "boolean"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the show/hide tabs button within the browser toolbar",
 			"properties": {
@@ -7086,32 +7140,7 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configurations for API injection.",
-			"properties": {
-				"iframe": {
-					"additionalProperties": false,
-					"description": "Configure injection of OpenFin API into iframes based on domain",
-					"properties": {
-						"crossOriginInjection": {
-							"description": "Inject OpenFin API into cross-origin iframes",
-							"type": "boolean"
-						},
-						"enableDeprecatedSharedName": {
-							"type": "boolean"
-						},
-						"sameOriginInjection": {
-							"description": "Inject OpenFin API into same-origin iframes",
-							"type": "boolean"
-						}
-					},
-					"type": "object"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the page lock/unlock button within the browser toolbar",
 			"properties": {
@@ -7131,7 +7160,7 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"closeButton": {
@@ -7165,7 +7194,7 @@
 			},
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7207,7 +7236,7 @@
 			"required": ["display"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"appId": {
@@ -7237,7 +7266,7 @@
 			"required": ["appId"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"action": {
@@ -7278,7 +7307,7 @@
 			"required": ["action"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7328,7 +7357,7 @@
 			"required": ["options"],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"clientAPIVersion": {
@@ -7386,7 +7415,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"name": {
@@ -7400,7 +7429,7 @@
 			},
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7439,7 +7468,23 @@
 			},
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_4": {
+			"additionalProperties": false,
+			"description": "Unique identifier for a window, view or iframe.",
+			"properties": {
+				"name": {
+					"description": "The name of the component.  Must be unique within the owning application.",
+					"type": "string"
+				},
+				"uuid": {
+					"description": "Universally unique identifier of the application that owns the component.",
+					"type": "string"
+				}
+			},
+			"required": ["name", "uuid"],
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -7530,23 +7575,7 @@
 			],
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"description": "Unique identifier for a window, view or iframe.",
-			"properties": {
-				"name": {
-					"description": "The name of the component.  Must be unique within the owning application.",
-					"type": "string"
-				},
-				"uuid": {
-					"description": "Universally unique identifier of the application that owns the component.",
-					"type": "string"
-				}
-			},
-			"required": ["name", "uuid"],
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -7561,7 +7590,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -7574,7 +7603,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -7593,7 +7622,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -7645,7 +7674,7 @@
 			],
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_45": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -7674,7 +7703,7 @@
 			},
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_46": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7711,11 +7740,11 @@
 			},
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_47": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_48": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -7736,7 +7765,7 @@
 			},
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7766,24 +7795,6 @@
 			},
 			"type": "object"
 		},
-		"__type_49": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"left": {
-					"type": "number"
-				},
-				"top": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
 		"__type_5": {
 			"additionalProperties": false,
 			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
@@ -7802,14 +7813,17 @@
 		"__type_50": {
 			"additionalProperties": false,
 			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				"height": {
+					"type": "number"
 				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
+				"left": {
+					"type": "number"
 				},
-				"url": {
-					"type": "string"
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
 				}
 			},
 			"type": "object"
@@ -7831,6 +7845,17 @@
 		},
 		"__type_52": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_53": {
@@ -7838,6 +7863,10 @@
 			"type": "object"
 		},
 		"__type_54": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7868,7 +7897,7 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_55": {
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7908,7 +7937,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_56": {
+		"__type_57": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -8073,6 +8102,10 @@
 				"includeInSnapshots": {
 					"type": "boolean"
 				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_9",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
 				},
@@ -8208,7 +8241,7 @@
 			},
 			"type": "object"
 		},
-		"__type_57": {
+		"__type_58": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -8236,7 +8269,7 @@
 			},
 			"type": "object"
 		},
-		"__type_58": {
+		"__type_59": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -8253,35 +8286,6 @@
 					"type": "string"
 				}
 			},
-			"type": "object"
-		},
-		"__type_59": {
-			"additionalProperties": false,
-			"properties": {
-				"afterAction": {
-					"additionalProperties": false,
-					"description": "Define whether to enable interop action logging.",
-					"properties": {
-						"enabled": {
-							"type": "boolean"
-						}
-					},
-					"required": ["enabled"],
-					"type": "object"
-				},
-				"beforeAction": {
-					"additionalProperties": false,
-					"description": "Define whether to enable interop action logging.",
-					"properties": {
-						"enabled": {
-							"type": "boolean"
-						}
-					},
-					"required": ["enabled"],
-					"type": "object"
-				}
-			},
-			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
 		"__type_6": {
@@ -8449,6 +8453,10 @@
 				"includeInSnapshots": {
 					"type": "boolean"
 				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_9",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
 				},
@@ -8583,6 +8591,35 @@
 		"__type_60": {
 			"additionalProperties": false,
 			"properties": {
+				"afterAction": {
+					"additionalProperties": false,
+					"description": "Define whether to enable interop action logging.",
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						}
+					},
+					"required": ["enabled"],
+					"type": "object"
+				},
+				"beforeAction": {
+					"additionalProperties": false,
+					"description": "Define whether to enable interop action logging.",
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						}
+					},
+					"required": ["enabled"],
+					"type": "object"
+				}
+			},
+			"required": ["afterAction", "beforeAction"],
+			"type": "object"
+		},
+		"__type_61": {
+			"additionalProperties": false,
+			"properties": {
 				"rules": {
 					"items": {
 						"additionalProperties": false,
@@ -8613,7 +8650,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_61": {
+		"__type_62": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
