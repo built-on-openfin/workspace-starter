@@ -143,7 +143,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -174,7 +174,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -200,7 +200,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"ContentCreationOptions": {
 			"$ref": "#/definitions/__type_3"
@@ -233,7 +233,7 @@
 			"$ref": "#/definitions/__type_13"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_7"
@@ -286,7 +286,7 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_15"
@@ -357,14 +357,14 @@
 			"$ref": "#/definitions/__type_10"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"$ref": "#/definitions/Partial_11",
+					"$ref": "#/definitions/Partial_12",
 					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
@@ -405,10 +405,10 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -491,7 +491,7 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_33"
 		},
 		"Partial_11": {
 			"$ref": "#/definitions/__type_36"
@@ -501,6 +501,9 @@
 		},
 		"Partial_13": {
 			"$ref": "#/definitions/__type_38"
+		},
+		"Partial_14": {
+			"$ref": "#/definitions/__type_39"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_8"
@@ -521,10 +524,10 @@
 			"$ref": "#/definitions/__type_20"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_26"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -592,13 +595,13 @@
 							"$ref": "#/definitions/Partial_1"
 						},
 						{
-							"$ref": "#/definitions/Partial_8"
-						},
-						{
 							"$ref": "#/definitions/Partial_9"
 						},
 						{
 							"$ref": "#/definitions/Partial_10"
+						},
+						{
+							"$ref": "#/definitions/Partial_11"
 						},
 						{
 							"type": "string"
@@ -665,7 +668,7 @@
 			"description": "Application interop."
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -699,7 +702,7 @@
 			"$ref": "#/definitions/__type_17"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_9"
@@ -817,7 +820,7 @@
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_12",
+					"$ref": "#/definitions/Partial_13",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -996,7 +999,7 @@
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_13",
+					"$ref": "#/definitions/Partial_14",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -1702,6 +1705,24 @@
 		"__type_23": {
 			"additionalProperties": false,
 			"properties": {
+				"customContext": {
+					"type": "boolean"
+				},
+				"customData": {
+					"type": "boolean"
+				},
+				"icon": {
+					"type": "boolean"
+				},
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_24": {
+			"additionalProperties": false,
+			"properties": {
 				"height": {
 					"type": "number"
 				},
@@ -1718,7 +1739,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1740,7 +1761,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -1779,7 +1800,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -1870,7 +1891,7 @@
 			],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -1885,7 +1906,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -1896,25 +1917,6 @@
 				}
 			},
 			"required": ["dipRect", "scaledRect"],
-			"type": "object"
-		},
-		"__type_29": {
-			"additionalProperties": false,
-			"properties": {
-				"bottom": {
-					"type": "number"
-				},
-				"left": {
-					"type": "number"
-				},
-				"right": {
-					"type": "number"
-				},
-				"top": {
-					"type": "number"
-				}
-			},
-			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
 		"__type_3": {
@@ -1933,6 +1935,25 @@
 			"type": "object"
 		},
 		"__type_30": {
+			"additionalProperties": false,
+			"properties": {
+				"bottom": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"right": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				}
+			},
+			"required": ["bottom", "left", "right", "top"],
+			"type": "object"
+		},
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -1984,7 +2005,7 @@
 			],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2013,7 +2034,7 @@
 			},
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2050,11 +2071,11 @@
 			},
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -2075,7 +2096,7 @@
 			},
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2105,7 +2126,7 @@
 			},
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2123,7 +2144,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
@@ -2138,7 +2159,7 @@
 			},
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
@@ -2317,6 +2338,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_8",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"

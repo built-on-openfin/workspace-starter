@@ -12,7 +12,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -43,7 +43,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -159,6 +159,9 @@
 		"Partial_7": {
 			"$ref": "#/definitions/__type_22"
 		},
+		"Partial_8": {
+			"$ref": "#/definitions/__type_23"
+		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
 			"enum": [
@@ -221,7 +224,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_7",
+					"$ref": "#/definitions/Partial_8",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -990,6 +993,24 @@
 		"__type_22": {
 			"additionalProperties": false,
 			"properties": {
+				"customContext": {
+					"type": "boolean"
+				},
+				"customData": {
+					"type": "boolean"
+				},
+				"icon": {
+					"type": "boolean"
+				},
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_23": {
+			"additionalProperties": false,
+			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_2",
@@ -1178,7 +1199,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1197,7 +1218,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1383,6 +1404,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"

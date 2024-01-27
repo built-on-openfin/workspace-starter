@@ -12,7 +12,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -43,7 +43,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -99,7 +99,7 @@
 			"$ref": "#/definitions/__type_11"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_2"
@@ -121,7 +121,7 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_13"
@@ -136,10 +136,10 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -184,8 +184,11 @@
 		"Partial_7": {
 			"$ref": "#/definitions/__type_22"
 		},
+		"Partial_8": {
+			"$ref": "#/definitions/__type_23"
+		},
 		"Point": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -214,7 +217,7 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_4"
@@ -267,7 +270,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_7",
+					"$ref": "#/definitions/Partial_8",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -497,6 +500,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -836,6 +843,10 @@
 				},
 				"includeInSnapshots": {
 					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_7",
+					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1388,6 +1399,24 @@
 		"__type_22": {
 			"additionalProperties": false,
 			"properties": {
+				"customContext": {
+					"type": "boolean"
+				},
+				"customData": {
+					"type": "boolean"
+				},
+				"icon": {
+					"type": "boolean"
+				},
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_23": {
+			"additionalProperties": false,
+			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_1",
@@ -1576,7 +1605,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1595,7 +1624,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1617,7 +1646,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -1708,7 +1737,7 @@
 			],
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -1723,7 +1752,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -1736,7 +1765,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -1755,7 +1784,19 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -1807,19 +1848,7 @@
 			],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,

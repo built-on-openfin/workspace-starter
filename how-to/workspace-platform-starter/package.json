@@ -45,8 +45,7 @@
 	"author": "john.mandia@openfin.co",
 	"contributors": [
 		"adam.saland@openfin.co",
-		"martyn.janes@openfin.co",
-		"pj.singh@openfin.co"
+		"martyn.janes@openfin.co"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
