@@ -1746,6 +1746,9 @@
 		},
 		"dialogProvider": {
 			"dialogHtml": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.1.0/workspace-platform-starter/common/popups/dialog/index.html"
+		},
+		"keys": {
+			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }
