@@ -34,7 +34,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/cam/dock-order-lifecycle/customize-home-templates/favicon.ico",
-		"name": "Customize Home Templates - v17.0.12",
+		"name": "Customize Home Templates - v17.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
