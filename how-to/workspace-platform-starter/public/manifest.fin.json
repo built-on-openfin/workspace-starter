@@ -355,7 +355,10 @@
 					"title": "Browser Starter",
 					"favicon": "http://localhost:8080/favicon.ico",
 					"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
-					"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
+					"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+					"navigationButtons": {
+						"enabled": true
+					}
 				}
 			},
 			"defaultViewOptions": {
