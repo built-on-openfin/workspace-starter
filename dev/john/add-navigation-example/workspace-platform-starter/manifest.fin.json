@@ -355,7 +355,10 @@
 					"title": "Browser Starter",
 					"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-navigation-example/workspace-platform-starter/favicon.ico",
 					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-navigation-example/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
-					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-navigation-example/workspace-platform-starter/common/views/platform/new-tab/new-tab.html"
+					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/add-navigation-example/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
+					"navigationButtons": {
+						"enabled": true
+					}
 				}
 			},
 			"defaultViewOptions": {
