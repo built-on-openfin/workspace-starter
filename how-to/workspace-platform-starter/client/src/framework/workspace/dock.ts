@@ -596,6 +596,33 @@ export async function saveConfig(
 	config: DockProviderConfigWithIdentity,
 	defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
 ): Promise<void> {
+	// we need to store the new stored config in the dockProviderOptions
+	if (dockProviderOptions?.entries) {
+		const orderedButtons: DockButtonTypes[] = [];
+
+		// store the buttons in a map for fast, easy lookup
+		const currentButtons = new Map<string, DockButtonTypes>();
+		for (const entry of dockProviderOptions.entries) {
+			currentButtons.set(entry.id, entry);
+		}
+
+		// new extract the new buttons from the config
+		for (const button of config.buttons ?? []) {
+			if (isStringValue(button.id)) {
+				const foundButton = currentButtons.get(button.id);
+				if (foundButton) {
+					orderedButtons.push(foundButton);
+					currentButtons.delete(button.id);
+				}
+			}
+		}
+
+		// add any remaining buttons that we failed to find in the config
+		orderedButtons.push(...currentButtons.values());
+
+		dockProviderOptions.entries = orderedButtons;
+	}
+
 	logger.info(`Checking for custom dock storage with endpoint id: ${DOCK_ENDPOINT_ID_SET}`);
 
 	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
