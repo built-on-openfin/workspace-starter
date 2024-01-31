@@ -37,6 +37,7 @@
 - Added util getCommandLineArgs to extract multiple command line arguments from a string into an array. Snap accepts an array of arguments and app assets and external apps take a string as an args parameter. This lets you specify arguments that cover scenarios where snap is disabled and enabled. Added tests to verify getCommandLineArgs behavior.
 - Updated identity returned when launching a native app or app asset (either normally or through snap). The UUID is the app id if the app has been marked as instanceMode = "single" otherwise the uuid is appId/guid (guid being an instanceId). The name is the same as the UUID (as name is not specified in app asset/external process options). If your app supports having multiple instances and it registers intent handlers then we recommend passing the created UUID for your app instance using {OF-EXT-UUD} as part of the command line args so that the uuid can be used when you connect to the OpenFin runtime. When you then connect to the workspace platform interop broker (as the platform will be waiting on that connection to fire an intent against it) it will use the expected UUID as it's connection id.
 - Update developer composite menu to use the Close menu option instead of Print as the positioning hook. Add Copy Url to the developer view context menu options.
+- FIX: Home Queries are now debounced from home but there existed a condition where a previous queries response came in after the last queries results. This could result in unexpected results being shown in Home.
 
 ## v16
 
