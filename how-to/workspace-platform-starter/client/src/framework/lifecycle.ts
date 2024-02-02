@@ -72,10 +72,13 @@ export async function fireLifecycleEvent<T = unknown>(
 		// Clone the subscribers, otherwise if calling the handler performs an unsubscribe
 		// the loop gets out of sync and items can be missed
 		const subscribers = [...eventHandlers.subscribers];
-		for (const idHandler of subscribers) {
-			logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
-			await idHandler.handler(platform, payload);
-		}
+
+		await Promise.all(
+			subscribers.map(async (idHandler) => {
+				logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
+				await idHandler.handler(platform, payload);
+			})
+		);
 	}
 }
 

@@ -156,10 +156,11 @@ export async function getCurrentIconFolder(): Promise<string> {
  */
 export async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
-	const settings = await getSettings();
-
-	const schemeType = await getCurrentColorSchemeMode();
-	const palette = await getCurrentPalette();
+	const [settings, schemeType, palette] = await Promise.all([
+		getSettings(),
+		getCurrentColorSchemeMode(),
+		getCurrentPalette()
+	] as const);
 
 	await fireLifecycleEvent<ThemeChangedLifecyclePayload>(platform, "theme-changed", {
 		schemeType,

@@ -6,6 +6,7 @@
 - Added support for customizing the taskbar icon for the splash screen window
 - Added an example of navigating content using navigation controls. Enabled through default window options in the main [manifest.fin.json](./public/manifest.fin.json) and in our developer docs snapshot [developer.snapshot.fin.json](./public/common/snapshots/developer.snapshot.fin.json)
 - Fixed an issue where the order of entries within dock would change when toggling between light and dark theme.
+- Improved performance when switching themes
 
 ## v16.1.0
 
