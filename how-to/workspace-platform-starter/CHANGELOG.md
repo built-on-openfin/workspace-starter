@@ -7,6 +7,7 @@
 - Added an example of navigating content using navigation controls. Enabled through default window options in the main [manifest.fin.json](./public/manifest.fin.json) and in our developer docs snapshot [developer.snapshot.fin.json](./public/common/snapshots/developer.snapshot.fin.json)
 - Fixed an issue where the order of entries within dock would change when toggling between light and dark theme.
 - Improved performance when switching themes
+- Fixed an issue where the order of Workspace component entries within dock may change when toggling between light and dark theme.
 
 ## v16.1.0
 
