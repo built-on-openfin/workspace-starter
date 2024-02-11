@@ -3238,6 +3238,10 @@
                 "includeInPlatform": {
                     "description": "Should this notification client be defaulted into the platform tab. Default is true\nunless a custom platform id is specified. If false then the current platform's id\nwill not be allowed if passed",
                     "type": "boolean"
+                },
+                "restricted": {
+                    "description": "Should this module's notification client be scoped to it's id or prefix and it's settings controlled (e.g. icon)?\nDefault is true.\nThis means it will only be able to clear and read notifications scoped to that id.\nIf false then it will be get the standard notifications implementation that is not restricted.",
+                    "type": "boolean"
                 }
             },
             "required": [
