@@ -87,6 +87,13 @@ export interface NotificationClientOptions extends NotificationClientDefaultOpti
 	 * Should this module have a notification client. Default is true.
 	 */
 	enabled?: boolean;
+	/**
+	 * Should this module's notification client be scoped to it's id or prefix and it's settings controlled (e.g. icon)?
+	 * Default is true.
+	 * This means it will only be able to clear and read notifications scoped to that id.
+	 * If false then it will be get the standard notifications implementation that is not restricted.
+	 */
+	restricted?: boolean;
 }
 /**
  * Mapping of all notification events.
