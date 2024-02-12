@@ -8,6 +8,7 @@
 - Fixed an issue where the order of entries within dock would change when toggling between light and dark theme.
 - Improved performance when switching themes
 - Fixed an issue where the order of Workspace component entries within dock may change when toggling between light and dark theme.
+- FDC3 2.0 Open improvement - You can now specify instance id if you wish to open an existing instance of an app and optionally pass it context.
 
 ## v16.1.0
 
