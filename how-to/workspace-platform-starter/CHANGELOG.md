@@ -9,6 +9,7 @@
 - Improved performance when switching themes
 - Fixed an issue where the order of Workspace component entries within dock may change when toggling between light and dark theme.
 - FDC3 2.0 Open improvement - You can now specify instance id if you wish to open an existing instance of an app and optionally pass it context.
+- Add option to allow specific modules to get unrestricted notificationClients if they want to implement custom platform logic without importing notifications directly via the npm package. The notification client options in the notification provider now has a 'restricted' setting which can be set to false.
 
 ## v16.1.0
 
