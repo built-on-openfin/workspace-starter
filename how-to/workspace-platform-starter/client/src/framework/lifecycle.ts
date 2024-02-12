@@ -73,12 +73,18 @@ export async function fireLifecycleEvent<T = unknown>(
 		// the loop gets out of sync and items can be missed
 		const subscribers = [...eventHandlers.subscribers];
 
-		await Promise.all(
+		const subscriberResults = await Promise.allSettled(
 			subscribers.map(async (idHandler) => {
 				logger.info(`Notifying subscriber ${idHandler.id} of event ${lifecycleEvent}`);
 				await idHandler.handler(platform, payload);
+				return idHandler.id;
 			})
 		);
+		for (const result of subscriberResults) {
+			if (result.status === "rejected") {
+				logger.error(`Error notifying subscriber of lifecycle event ${lifecycleEvent}`, result.reason);
+			}
+		}
 	}
 }
 
