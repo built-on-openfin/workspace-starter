@@ -186,7 +186,6 @@
 								"position": "Top",
 								"height": "40px",
 								"viewOptions": {
-									"name": "manager-portal-header-panel",
 									"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/copy-duplicate/workspace-platform-starter/common/panels/header-panel.html",
 									"preloadScripts": [
 										{
@@ -200,7 +199,6 @@
 								"width": "40px",
 								"extendToTop": true,
 								"viewOptions": {
-									"name": "manager-portal-nav-panel",
 									"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/copy-duplicate/workspace-platform-starter/common/panels/nav-panel.html",
 									"preloadScripts": [
 										{
@@ -213,7 +211,6 @@
 								"position": "Bottom",
 								"height": "40px",
 								"viewOptions": {
-									"name": "manager-portal-footer-panel",
 									"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/copy-duplicate/workspace-platform-starter/common/panels/footer-panel.html",
 									"preloadScripts": [
 										{
