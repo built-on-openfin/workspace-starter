@@ -20,7 +20,8 @@ import {
 	type Workspace,
 	type WorkspacePlatformProvider,
 	type HandleSaveModalOnPageClosePayload,
-	type SaveModalOnPageCloseResult
+	type SaveModalOnPageCloseResult,
+	type CopyPagePayload
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
@@ -61,7 +62,7 @@ import type { VersionInfo } from "../shapes/version-shapes";
 import * as snapProvider from "../snap";
 import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
-import { deepMerge, isEmpty } from "../utils";
+import { deepMerge, isEmpty, isStringValue, randomUUID } from "../utils";
 import { loadConfig, saveConfig } from "../workspace/dock";
 import { getPageBounds } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
@@ -890,6 +891,27 @@ export function overrideCallback(
 			logger.warn("Unsaved page prompt strategy is not valid. Using default.");
 			return super.handleSaveModalOnPageClose(payload);
 		}
+
+		/**
+		 * Copies a page, respecting conventions for page and panel names.
+		 * @param payload The payload for the copy page request.
+		 * @returns The copied page.
+		 */
+		public async copyPage(payload: CopyPagePayload): Promise<Page> {
+			const panels = isEmpty(payload?.page?.panels)
+				? payload?.page?.panels
+				: duplicateLayout(payload.page.panels);
+
+			const layout = duplicateLayout(payload.page.layout);
+
+			return {
+				...payload.page,
+				panels,
+				layout,
+				pageId: randomUUID(),
+				isReadOnly: false
+			};
+		}
 	}
 	return new Override();
 }
@@ -919,4 +941,29 @@ async function buildDefaultOptions(browserProvider?: BrowserProviderOptions): Pr
 		page: deepMerge({}, browserProvider?.defaultPageOptions),
 		view: deepMerge({}, manifest.platform?.defaultViewOptions, browserProvider?.defaultViewOptions)
 	};
+}
+
+/**
+ * Takes a layout and walks through all the nodes and applies logic to nodes that have
+ * a url and a name that matches a pattern. Updates the name to make it unique (if applicable)
+ * while retaining information related to an application's identity if present.
+ * @param layout The layout to duplicate
+ * @returns The duplicated layout.
+ */
+function duplicateLayout<T>(layout: T): T {
+	return JSON.parse(
+		JSON.stringify(layout, (_, nestedValue) => {
+			// check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
+			if (isStringValue(nestedValue?.name) && !isEmpty(nestedValue.url)) {
+				if (/\/[\d,a-z-]{36}$/.test(nestedValue.name)) {
+					nestedValue.name = nestedValue.name.replace(/([\d,a-z-]{36}$)/, randomUUID());
+				}
+				// case: internal-generated-view-<uuid>
+				if (/-[\d,a-z-]{36}$/.test(nestedValue.name)) {
+					nestedValue.name = nestedValue.name.replace(/(-[\d,a-z-]{36}$)/, randomUUID());
+				}
+			}
+			return nestedValue as unknown;
+		})
+	);
 }
