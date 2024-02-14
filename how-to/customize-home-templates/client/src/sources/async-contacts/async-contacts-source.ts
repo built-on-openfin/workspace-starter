@@ -5,7 +5,11 @@ import {
 	type HomeSearchListenerResponse,
 	type HomeSearchResponse,
 	type HomeSearchResult,
-	type ListPairs
+	ButtonStyle,
+	type ListPairs,
+	TemplateFragment,
+	SplitButtonFragment,
+	CLISearchResultCustom
 } from "@openfin/workspace";
 import type { AsyncSettings, Contact, ContactFull, ContactsResult } from "./shapes";
 
@@ -18,6 +22,12 @@ export class AsyncContactsSource {
 	 * @internal
 	 */
 	private static readonly _ASYNC_PROVIDER_DETAILS_ACTION = "Async Details";
+
+	/**
+	 * The key to use for a async result.
+	 * @internal
+	 */
+	private static readonly _ASYNC_PROVIDER_CONTEXT_ACTION = "Context Push";
 
 	/**
 	 * The helpers for the source.
@@ -320,6 +330,17 @@ export class AsyncContactsSource {
 
 				lastResponse.respond([this.createResult(contactFull)]);
 			}, 0);
+		} else if (
+			result.action.trigger === "user-action" &&
+			result.action.name === AsyncContactsSource._ASYNC_PROVIDER_CONTEXT_ACTION
+		) {
+			setTimeout(async () => {
+				const contactResponse = await fetch(`${this._settings?.rootUrl}${result.data.contact.id}.json`);
+
+				const contactFull: ContactFull = await contactResponse.json();
+
+				await this.pushContext(contactFull, "green");
+			}, 0);
 		}
 
 		return false;
@@ -445,27 +466,125 @@ export class AsyncContactsSource {
 	 * @param contact The contact.
 	 * @returns The search result.
 	 */
-	private createResult(contact: Partial<ContactFull>): HomeSearchResult {
-		const fullName = `${contact.firstName} ${contact.lastName}`;
-		const details: ListPairs[] = [];
-		if (contact.email) {
-			details.push([["E-mail", contact.email]]);
-		}
+	// private createResult(contact: Partial<ContactFull>): HomeSearchResult {
+	// 	const fullName = `${contact.firstName} ${contact.lastName}`;
+	// 	const details: ListPairs[] = [];
+	// 	if (contact.email) {
+	// 		details.push([["E-mail", contact.email]]);
+	// 	}
+	// 	return {
+	// 		key: `contact-${contact.id}`,
+	// 		title: fullName,
+	// 		label: "Information",
+	// 		actions: [],
+	// 		data: {
+	// 			providerId: this._definition?.id,
+	// 			contact
+	// 		},
+	// 		template: CLITemplate.Contact,
+	// 		templateContent: {
+	// 			name: fullName,
+	// 			details
+	// 		}
+	// 	};
+	// }
+
+	private createResult(
+		contact: Partial<ContactFull>
+	): HomeSearchResult {
+		const first = contact?.firstName;
+		const last = contact?.lastName;
+		const id = contact?.id;
+		const email = contact?.email;
+		const fullName = `${contact?.firstName} ${contact?.lastName}`;
 		return {
 			key: `contact-${contact.id}`,
-			title: fullName,
+			title: `${fullName}`,
 			label: "Information",
-			actions: [],
+			actions: [
+				{
+					name: AsyncContactsSource._ASYNC_PROVIDER_CONTEXT_ACTION,
+					hotkey: "Enter"
+				}
+			],
 			data: {
 				providerId: this._definition?.id,
 				contact
 			},
-			template: CLITemplate.Contact,
+			template: CLITemplate.Custom,
 			templateContent: {
-				name: fullName,
-				details
+				layout: {
+					type: "Container",
+					style: { display: "flex", flexDirection: "column", padding: "10px" },
+					children: [
+						{
+							type: "Container",
+							style: { display: "flex", flexDirection: "row", justifyContent: "space-between" },
+							children: [
+								{ type: "Text", dataKey: "firstName", style: { fontSize: "18px", fontWeight: "bold" } },
+								{ type: "Text", dataKey: "lastName", style: { fontSize: "18px" } }
+							]
+						},
+						{
+							type: "Text",
+							dataKey: "contactId",
+							style: { fontSize: "12px", color: "#FFFFFF", margin: "5px 0px" }
+						},
+						{
+							type: "Text",
+							dataKey: "contactEmail",
+							style: { fontSize: "12px", color: "#FFFFFF", margin: "5px 0px" }
+						},
+						{
+							type: "Container",
+							style: {
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "flex-end",
+								paddingTop: "10px"
+							},
+							children: [
+								{
+									type: "Button",
+									buttonStyle: ButtonStyle.Primary,
+									children: [{ type: "Text", dataKey: "detailsTitle", style: { fontSize: "12px" } }],
+									action: AsyncContactsSource._ASYNC_PROVIDER_CONTEXT_ACTION,
+									style: { fontSize: "12px" }
+								}
+							]
+						}
+					]
+				},
+				data: {
+					firstName: `${first}`,
+					lastName: `${last}`,
+					contactId: `${id}`,
+					contactEmail: `${email}`,
+					fullName,
+					detailsTitle: "Push Context"
+				}
 			}
 		};
+	}
+
+	/**
+	 * Hijacks an Intent to Push Context to an Interop Channel.
+	 * @param ctx context to push
+	 * @param channel channel to push it to.
+	 * @returns a promise.
+	 */
+	private async pushContext(ctx: Partial<ContactFull>, channel: string): Promise<void> {
+		const groups = fin.me.interop.getAllClientsInContextGroup(channel);
+		console.log(`These are the groups: ${JSON.stringify(groups)}`);
+		// Define channel logic if there isn't a given channel here.
+		// Ideally, we know where to point the user's action.
+		return fin.me.interop.setContext({
+			type: "fdc3.contact",
+			name: `${ctx.firstName} ${ctx.lastName}`,
+			id: {
+				email: `${ctx.email}`
+			}
+		});
 	}
 
 	/**
