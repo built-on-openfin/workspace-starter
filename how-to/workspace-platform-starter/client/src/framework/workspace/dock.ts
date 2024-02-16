@@ -1,8 +1,8 @@
 import {
 	Dock,
 	DockButtonNames,
-	type CustomActionSpecifier,
 	type CustomButtonConfig,
+	type CustomDropdownConfig,
 	type DockButton,
 	type DockProvider,
 	type DockProviderRegistration,
@@ -140,7 +140,9 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 			id: dockProviderOptions.id,
 			title: dockProviderOptions.title,
 			icon: dockProviderOptions.icon,
-			workspaceComponents: buildWorkspaceButtons(),
+			workspaceComponents: buildWorkspaceButtons(
+				Array.isArray(registration?.workspaceComponents) ? registration?.workspaceComponents : undefined
+			),
 			disableUserRearrangement: dockProviderOptions?.disableUserRearrangement ?? false,
 			buttons: objectClone(registeredButtons)
 		};
@@ -149,31 +151,45 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 
 /**
  * Build the workspace buttons based on config.
+ * @param previousOrder The previous order of workspace buttons.
  * @returns The list of workspace buttons.
  */
-function buildWorkspaceButtons(): WorkspaceButton[] {
-	const workspaceButtons: WorkspaceButton[] = [];
+function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): WorkspaceButton[] {
+	const workspaceButtonsSet = new Set<WorkspaceButton>();
 
 	if (!(dockProviderOptions?.workspaceComponents?.hideWorkspacesButton ?? false)) {
-		workspaceButtons.push("switchWorkspace");
+		workspaceButtonsSet.add("switchWorkspace");
 	}
 	if (
 		!(dockProviderOptions?.workspaceComponents?.hideHomeButton ?? false) &&
 		(registeredBootstrapOptions?.home ?? false)
 	) {
-		workspaceButtons.push("home");
+		workspaceButtonsSet.add("home");
 	}
 	if (
 		!(dockProviderOptions?.workspaceComponents?.hideNotificationsButton ?? false) &&
 		(registeredBootstrapOptions?.notifications ?? false)
 	) {
-		workspaceButtons.push("notifications");
+		workspaceButtonsSet.add("notifications");
 	}
 	if (
 		!(dockProviderOptions?.workspaceComponents?.hideStorefrontButton ?? false) &&
 		(registeredBootstrapOptions?.store ?? false)
 	) {
-		workspaceButtons.push("store");
+		workspaceButtonsSet.add("store");
+	}
+
+	const workspaceButtons: WorkspaceButton[] = [];
+
+	for (const button of previousOrder) {
+		if (workspaceButtonsSet.has(button)) {
+			workspaceButtons.push(button);
+			workspaceButtonsSet.delete(button);
+		}
+	}
+
+	if (workspaceButtonsSet.size > 0) {
+		workspaceButtons.push(...workspaceButtonsSet);
 	}
 
 	return workspaceButtons;
@@ -241,7 +257,7 @@ async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<Dock
  */
 async function addEntryAsApp(
 	buttons: DockButton[],
-	entry: DockButtonApp,
+	entry: Omit<DockButtonApp, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
 ): Promise<void> {
@@ -287,12 +303,12 @@ async function addEntryAsApp(
  */
 async function addEntryAsAction(
 	buttons: DockButton[],
-	entry: DockButtonAction,
+	entry: Omit<DockButtonAction, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
 ): Promise<void> {
-	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
-		logger.error("You must specify the tooltip and iconUrl for a DockButtonAction");
+	if (!isStringValue(entry.tooltip)) {
+		logger.error("You must specify the tooltip for a DockButtonAction");
 	} else {
 		buttons.push({
 			id: entry.id,
@@ -314,17 +330,17 @@ async function addEntryAsAction(
  */
 async function addEntriesAsDropdown(
 	buttons: DockButton[],
-	entry: DockButtonDropdown,
+	entry: Omit<DockButtonDropdown, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode,
 	platform: WorkspacePlatformModule
 ): Promise<void> {
 	// Options are present so this is a drop down
 	// The items in the drop down can be an appId or a custom action
-	if (!isStringValue(entry.tooltip) || !isStringValue(entry.iconUrl)) {
-		logger.error("You must specify the tooltip and iconUrl for a DockButtonDropdown");
+	if (!isStringValue(entry.tooltip)) {
+		logger.error("You must specify the tooltip for a DockButtonDropdown");
 	} else {
-		const opts: CustomButtonConfig[] = [];
+		const opts: DockButton[] = [];
 
 		for (const option of entry.options) {
 			if (Array.isArray(option.conditions)) {
@@ -339,41 +355,46 @@ async function addEntriesAsDropdown(
 					customData: { ...option, id: "" }
 				})
 			) {
-				let optionTooltip = option.tooltip;
-				let action: CustomActionSpecifier | undefined;
-				let iconUrl;
+				// If there are options this is a submenu
+				if ("options" in option) {
+					const subOptions = await buildButtonsFromEntries(option.options as DockButtonTypes[]);
 
-				// If the options has an appId we are going to launch that
-				// otherwise we use the custom action.
-				if ("appId" in option) {
+					opts.push({
+						type: DockButtonNames.DropdownButton,
+						tooltip: option.tooltip ?? "",
+						iconUrl: option.iconUrl,
+						options: subOptions
+					});
+				} else if ("appId" in option) {
+					// If the options has an appId we are going to launch that
+					// otherwise we use the custom action.
+
 					const app = await getApp(option.appId);
+					let iconUrl = option.iconUrl;
 					if (!isStringValue(option.iconUrl) && app) {
 						iconUrl = getAppIcon(app);
 					}
 
-					// If the tooltip is not set we can use the app title
-					if (!isStringValue(optionTooltip)) {
-						optionTooltip = app?.title ?? "";
-					}
-					action = {
-						id: PLATFORM_ACTION_IDS.launchApp,
-						customData: {
-							source: "dock",
-							appId: option.appId
-						}
-					};
-				} else if (!isStringValue(optionTooltip)) {
-					logger.error("You must specify the tooltip for a DockButtonAction in a DockButtonDropdown");
-				} else {
-					action = option.action;
-					iconUrl = option.iconUrl;
-				}
-
-				if (!isEmpty(action)) {
 					opts.push({
-						tooltip: optionTooltip ?? "",
-						action,
-						iconUrl
+						type: DockButtonNames.ActionButton,
+						tooltip: option.tooltip ?? app?.title ?? "",
+						iconUrl,
+						action: {
+							id: PLATFORM_ACTION_IDS.launchApp,
+							customData: {
+								source: "dock",
+								appId: option.appId
+							}
+						}
+					});
+				} else if ("tags" in option) {
+					await addEntriesByAppTag(opts, option, iconFolder, colorSchemeMode);
+				} else if ("action" in option) {
+					opts.push({
+						type: DockButtonNames.ActionButton,
+						tooltip: option.tooltip ?? "",
+						iconUrl: option.iconUrl,
+						action: option.action
 					});
 				}
 			}
@@ -409,7 +430,7 @@ async function addEntriesAsDropdown(
  */
 async function addEntriesByAppTag(
 	buttons: DockButton[],
-	entry: DockButtonAppsByTag,
+	entry: Omit<DockButtonAppsByTag, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
 ): Promise<void> {
@@ -576,7 +597,9 @@ export async function loadConfig(
 		// Always build the workspace buttons based on the config,
 		// otherwise loaded config can show buttons that it is
 		// not supposed to
-		config.workspaceComponents = buildWorkspaceButtons();
+		config.workspaceComponents = buildWorkspaceButtons(
+			Array.isArray(config.workspaceComponents) ? config.workspaceComponents : undefined
+		);
 	}
 
 	return config;
@@ -591,6 +614,43 @@ export async function saveConfig(
 	config: DockProviderConfigWithIdentity,
 	defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
 ): Promise<void> {
+	// we need to store the new stored config in the dockProviderOptions
+	if (dockProviderOptions?.entries) {
+		const orderedButtons: DockButtonTypes[] = [];
+
+		// store the buttons in a map for fast, easy lookup
+		const currentButtons = new Map<string, DockButtonTypes>();
+		for (const entry of dockProviderOptions.entries) {
+			currentButtons.set(entry.id, entry);
+		}
+
+		// new extract the new buttons from the config
+		for (const button of config.buttons ?? []) {
+			if (isStringValue(button.id)) {
+				const foundButton = currentButtons.get(button.id);
+				if (foundButton) {
+					orderedButtons.push(foundButton);
+					currentButtons.delete(button.id);
+				}
+			}
+		}
+
+		// add any remaining buttons that we failed to find in the config
+		const remainingButtons = currentButtons.values();
+		if (currentButtons.size > 0) {
+			logger.warn(
+				`Failed to find ${currentButtons.size} buttons in the new config, they will be appended to the end of the dock`
+			);
+		}
+		orderedButtons.push(...remainingButtons);
+
+		dockProviderOptions.entries = orderedButtons;
+	}
+
+	if (registration?.workspaceComponents) {
+		registration.workspaceComponents = config.workspaceComponents;
+	}
+
 	logger.info(`Checking for custom dock storage with endpoint id: ${DOCK_ENDPOINT_ID_SET}`);
 
 	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
@@ -653,10 +713,10 @@ function getAppIcon(app: PlatformApp): string | undefined {
  * @returns The dock entry.
  */
 async function addDropdownOrMenu(
-	id: string,
+	id: string | undefined,
 	tooltip: string,
 	iconUrl: string | undefined,
-	options: CustomButtonConfig[]
+	options: (CustomButtonConfig | CustomDropdownConfig)[]
 ): Promise<DockButton> {
 	const popupMenuStyle = dockProviderOptions?.popupMenuStyle ?? Menu.getPopupMenuStyle();
 

@@ -652,8 +652,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 			if (favoriteClient) {
 				favoriteInfo = favoriteClient.getInfo();
 				if (favoriteInfo.isEnabled) {
-					const isSupported =
-						isEmpty(favoriteInfo.enabledTypes) || favoriteInfo.enabledTypes.includes(favoriteTypeNames);
+					const isSupported = favoriteInfo?.enabledTypes?.includes(favoriteTypeNames) ?? true;
 					if (!isSupported) {
 						favoriteInfo = undefined;
 						favoriteClient = undefined;

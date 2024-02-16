@@ -1,5 +1,17 @@
 # Changelog
 
+## v17.0.0
+
+- Added support for dock submenus
+- Added support for customizing the taskbar icon for the splash screen window
+- Added an example of navigating content using navigation controls. Enabled through default window options in the main [manifest.fin.json](./public/manifest.fin.json) and in our developer docs snapshot [developer.snapshot.fin.json](./public/common/snapshots/developer.snapshot.fin.json)
+- Fixed an issue where the order of entries within dock would change when toggling between light and dark theme.
+- Improved performance when switching themes
+- Fixed an issue where the order of Workspace component entries within dock may change when toggling between light and dark theme.
+- FDC3 2.0 Open improvement - You can now specify instance id if you wish to open an existing instance of an app and optionally pass it context.
+- Add option to allow specific modules to get unrestricted notificationClients if they want to implement custom platform logic without importing notifications directly via the npm package. The notification client options in the notification provider now has a 'restricted' setting which can be set to false.
+- Update Save Page As and Duplicate Page logic using the copyPage platform override introduced in 16.1. When a page is duplicated we generated a copy of the page but generate the instance id associated with a view's name while retaining the app Id (previously you would get a new randomly generated name for the app). If your app is a singleton then the name remains unique. So you will have two pages referencing the same instance. When you switch between them it will be displaying the same instance. However, please note if you move a page to a new window then the single instance view will move with it and leave the other page's layout (a single instance can only exist on one window if you need multiple instances then instanceMode should not be set to single). Duplicate view (view context menu) currently generates a new unlinked id for a view so if you do not want this behavior you can remove Duplicate View from the View Context Menu. Feedback on this behavior is of interest.
+
 ## v16.1.0
 
 - Change storage mapper now removes additional defaults based on default window/page/view settings
@@ -42,7 +54,7 @@
 - Docs - Added a document showing [How To Add A Service](./docs/how-to-add-a-service.md)
 - Improved launchPreference so that now args for a native app (app asset or external) can be specified via launchPreference. Launch preference can also be configured to allow args to be specified dynamically when the launch request is made. Please see [how to define app launch preference](./docs/how-to-define-app-launch-preference.md).
 - Improved launchPreference so additional options such as url, interop, customData can be specified. Modules can now pass a launchPreference when launching an app by appId. They can see if the app supports being updated by getting the app by id and checking for the updatable setting under launchPreference.options. Only inline-view/view and inline-window/window support updatable launch preferences. Please see [how to define app launch preference](./docs/how-to-define-app-launch-preference.md).
-- Added support for Snap, enable by setting `customSettings.snapProvider.enabled` to true. Enable the Snap debugging window by setting `customSettings.snapProvider.showDebugWindow` to true.
+- Added support for Snap, enable by setting `customSettings.snapProvider.enabled` to true. Configure the `customSettings.snapProvider.serverAssetInfo` to point to the `SNAP_ASSET_URL`. Enable the Snap debugging window by setting `customSettings.snapProvider.showDebugWindow` to true.
 - Added new module type `content-creation`, these modules can be used to define content creation rules and handle the associated events. Modules are added in `customSettings.contentCreationProvider` section in manifest.
 - Added example content creation module which interrogates the `features` property from `window.open` to determine where to place a view in relation to where it was launched from. An example app `Content Creation Example` demonstrates this in use.
 - Added CustomActionCallerType enum to actions-shapes, use these in preference to the workspace-platform CustomActionCallerType type to avoid importing the whole npm package into your modules.
@@ -71,8 +83,6 @@
 - Fixed async filters so they don't replace the current filters
 - Added a home searching panel when querying, and debounced requests
 - Improved the Home UI experience so that it does not appear to bounce when typing search requests
-- Removed debounce from integrations as it is now performed by the platform
-- Added new method to integrations to allow them to provide an initial "searching..." entry `getSearchResultsProgress`
 - Improved platform now starts correctly when no customSettings are provided in manifest
 - Fixed dock shows correct workspace buttons to match those configured when restoring from saved config
 - InitOptions handlers now have the calling context passed to them, so they know if they were called from `launch` or already `running`

@@ -113,6 +113,31 @@ In this second group example we override both the `tooltip` and `iconUrl` and it
 }
 ```
 
+If you wanted a single menu with two submenus for the above tags entries you could add the following:
+
+```json
+"dockProvider": {
+    "entries": [
+        {
+            "tooltip": "FDC3 and Manager",
+            "iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
+            "options": [
+                {
+                    "display": "group",
+                    "tooltip": "FDC3",
+                    "tags": ["fdc3"]
+                },
+                {
+                    "display": "group",
+                    "tooltip": "Manager",
+                    "tags": ["manager", "feedback"]
+                }
+            ]
+        }
+    ]
+}
+```
+
 ### Entries for buttons
 
 The buttons provide more flexibility than the apps and can be used to show dock entries which can launch apps or custom actions.

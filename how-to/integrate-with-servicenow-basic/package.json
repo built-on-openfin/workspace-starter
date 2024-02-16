@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-servicenow-basic",
-	"version": "16.1.0",
+	"version": "17.0.0",
 	"description": "OpenFin Workspace -- Integrate with ServiceNow - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -21,18 +21,18 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/servicenow": "^1.0.1",
-		"@openfin/workspace": "16.1.6",
-		"@openfin/workspace-platform": "16.1.6"
+		"@openfin/workspace": "17.0.14",
+		"@openfin/workspace-platform": "17.0.14"
 	},
 	"devDependencies": {
-		"@openfin/core": "33.77.11",
-		"@openfin/node-adapter": "33.77.11",
+		"@openfin/core": "34.78.80",
+		"@openfin/node-adapter": "34.78.80",
 		"eslint": "8.56.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "17.1.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-import": "2.26.0",
-		"eslint-plugin-jsdoc": "47.0.2",
+		"eslint-plugin-jsdoc": "48.0.2",
 		"eslint-plugin-prettier": "5.1.2",
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "10.0.0",

@@ -154,9 +154,9 @@ async function getConfigToolbarButtons(): Promise<WorkspacePlatformToolbarButton
 		// Update all the browser windows with the new buttons.
 		const platform = getCurrentSync();
 		const browserWindows = await platform.Browser.getAllWindows();
-		for (const browserWindow of browserWindows) {
-			await updateBrowserWindowButtonsColorScheme(browserWindow);
-		}
+		await Promise.all(
+			browserWindows.map(async (browserWindow) => updateBrowserWindowButtonsColorScheme(browserWindow))
+		);
 	});
 
 	return configToolbarButtons;

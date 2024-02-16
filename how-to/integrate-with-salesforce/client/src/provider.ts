@@ -17,7 +17,6 @@ const PLATFORM_TITLE = "Integrate with Salesforce";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 let salesforceIntegration: SalesforceIntegration | undefined;
-let debounceTimerId: number | undefined;
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
@@ -103,34 +102,18 @@ async function initializeWorkspaceComponents(): Promise<void> {
 			lastResponse = response;
 			lastResponse.open();
 
-			if (debounceTimerId) {
-				window.clearTimeout(debounceTimerId);
-				debounceTimerId = undefined;
-			}
-
-			// Debounce the keyboard input
-			debounceTimerId = window.setTimeout(async () => {
-				if (salesforceIntegration) {
-					// Get any home results from the salesforce integration
-					const salesforceResults = await salesforceIntegration.getSearchResults(
-						request.query,
-						selectedFilters,
-						lastResponse,
-						{ queryMinLength: 3 }
-					);
-					results = results.concat(salesforceResults.results);
-					if (salesforceResults.context?.filters) {
-						filters = filters.concat(salesforceResults.context?.filters);
-					}
+			if (salesforceIntegration) {
+				// Get any home results from the salesforce integration
+				const salesforceResults = await salesforceIntegration.getSearchResults(
+					request.query,
+					selectedFilters,
+					lastResponse,
+					{ queryMinLength: 3 }
+				);
+				results = results.concat(salesforceResults.results);
+				if (salesforceResults.context?.filters) {
+					filters = filters.concat(salesforceResults.context?.filters);
 				}
-			}, 200);
-
-			// Show the searching entry
-			if (salesforceIntegration?.getSearchResultsProgress) {
-				const searching = await salesforceIntegration.getSearchResultsProgress(request.query, lastResponse, {
-					queryMinLength: 3
-				});
-				results.push(...searching);
 			}
 
 			return {
@@ -198,7 +181,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v16.1.0/interop/fdc3/intent/fdc3-intent-view.html",
+							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v17.0.0/interop/fdc3/intent/fdc3-intent-view.html",
 							fdc3InteropApi: "1.2",
 							interop: {
 								currentContextGroup: "green"

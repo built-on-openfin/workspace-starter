@@ -574,7 +574,7 @@ export function interopOverride(
 		 * @returns The application identifier.
 		 */
 		public async fdc3HandleOpen(
-			fdc3OpenOptions: { app: PlatformApp | string; context: OpenFin.Context },
+			fdc3OpenOptions: { app: (PlatformApp & AppIdentifier) | string; context: OpenFin.Context },
 			clientIdentity: OpenFin.ClientIdentity
 		): Promise<AppIdentifier> {
 			if (isEmpty(fdc3OpenOptions?.app)) {
@@ -582,35 +582,65 @@ export function interopOverride(
 				throw new Error(ResolveError.NoAppsFound);
 			}
 
-			const requestedId = isString(fdc3OpenOptions.app)
-				? fdc3OpenOptions.app
-				: fdc3OpenOptions.app.appId ?? fdc3OpenOptions.app.name;
-			const openAppIntent: OpenFin.Intent = {
-				context: fdc3OpenOptions.context,
-				name: "OpenApp",
-				metadata: {
-					target: { appId: requestedId }
-				}
-			};
 			logger.info(
 				`A request to Open has been sent to the platform by uuid: ${clientIdentity?.uuid}, name: ${clientIdentity?.name}, endpointId: ${clientIdentity.endpointId} with passed context:`,
 				fdc3OpenOptions.context
 			);
 			try {
-				const isOpenByIntent = this._openOptions?.openStrategy === "intent";
-				let appId: string | undefined;
+				let requestedId: string;
 				let instanceId: string | undefined;
+				let platformIdentities: PlatformAppIdentifier[] | undefined;
+				let focusApp = false;
+				let appId: string | undefined;
+
+				if (isString(fdc3OpenOptions.app)) {
+					requestedId = fdc3OpenOptions.app;
+				} else {
+					requestedId = fdc3OpenOptions.app.appId ?? fdc3OpenOptions.app.name;
+					instanceId = fdc3OpenOptions.app.instanceId;
+				}
 
 				const requestedApp = await getApp(requestedId);
 				if (isEmpty(requestedApp)) {
 					throw new Error(OpenError.AppNotFound);
 				}
 
+				if (!isEmpty(instanceId)) {
+					// an instance of an application was selected now look up the uuid and name
+					const allConnectedClients = await this.getAllClientInfo();
+					const clientInfo = allConnectedClients.find(
+						(connectedClient) => connectedClient.endpointId === instanceId
+					);
+					if (!isEmpty(clientInfo)) {
+						logger.info(`App Id: ${requestedId} and instance Id: ${instanceId} was provided and found.`);
+						// the connected instance is available
+						platformIdentities = [
+							{
+								uuid: clientInfo.uuid,
+								name: clientInfo.name,
+								appId: requestedId,
+								instanceId
+							}
+						];
+					} else {
+						throw new Error(ResolveError.TargetInstanceUnavailable);
+					}
+				}
+
+				const isOpenByIntent = this._openOptions?.openStrategy === "intent";
+
 				if (isOpenByIntent) {
+					const openAppIntent: OpenFin.Intent = {
+						context: fdc3OpenOptions.context,
+						name: "OpenApp",
+						metadata: {
+							target: { appId: requestedId }
+						}
+					};
 					const result = await this.launchAppWithIntent(
 						requestedApp,
 						openAppIntent,
-						undefined,
+						instanceId,
 						clientIdentity
 					);
 					if (isString(result.source)) {
@@ -620,13 +650,18 @@ export function interopOverride(
 						instanceId = result.source.instanceId;
 					}
 				} else {
-					let launchPreference: LaunchPreference | undefined;
-					const bounds = await getWindowPositionUsingStrategy(this._windowPositionOptions, clientIdentity);
-					if (!isEmpty(bounds)) {
-						launchPreference = { bounds };
+					if (isEmpty(platformIdentities)) {
+						let launchPreference: LaunchPreference | undefined;
+						const options = this._windowPositionOptions;
+						const bounds = await getWindowPositionUsingStrategy(options, clientIdentity);
+						if (!isEmpty(bounds)) {
+							launchPreference = { bounds };
+						}
+						platformIdentities = await launch(requestedApp, launchPreference);
+					} else {
+						focusApp = true;
 					}
 
-					const platformIdentities = await launch(requestedApp, launchPreference);
 					if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
 						appId = platformIdentities[0].appId;
 						const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
@@ -685,6 +720,9 @@ export function interopOverride(
 				}
 
 				if (!isEmpty(appId)) {
+					if (focusApp && !isEmpty(platformIdentities)) {
+						await bringToFront(requestedApp, platformIdentities);
+					}
 					return { appId, instanceId };
 				}
 
