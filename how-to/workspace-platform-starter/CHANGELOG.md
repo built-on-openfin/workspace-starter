@@ -1,6 +1,6 @@
 # Changelog
 
-## v17.0.0
+## v17.2.0
 
 - Added support for dock submenus
 - Added support for customizing the taskbar icon for the splash screen window
