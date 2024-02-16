@@ -16,14 +16,14 @@ import {
 import { createLogger } from "workspace-platform-starter/logger-provider";
 import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
 import type {
-	NotificationClient as NotificationClientInterface,
+	NotificationClient,
 	NotificationClientOptions,
 	NotificationsEventMap
 } from "../shapes/notification-shapes";
 /**
  * Notification client for use by modules to be able to create, remove and update notifications against a platform.
  */
-export class NotificationClient implements NotificationClientInterface {
+export class NotificationClientImplementation implements NotificationClient {
 	private readonly _options: NotificationClientOptions;
 
 	private readonly _idPrefix: string;

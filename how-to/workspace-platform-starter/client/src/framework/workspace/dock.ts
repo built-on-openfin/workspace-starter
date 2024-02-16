@@ -140,7 +140,9 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 			id: dockProviderOptions.id,
 			title: dockProviderOptions.title,
 			icon: dockProviderOptions.icon,
-			workspaceComponents: buildWorkspaceButtons(),
+			workspaceComponents: buildWorkspaceButtons(
+				Array.isArray(registration?.workspaceComponents) ? registration?.workspaceComponents : undefined
+			),
 			disableUserRearrangement: dockProviderOptions?.disableUserRearrangement ?? false,
 			buttons: objectClone(registeredButtons)
 		};
@@ -149,31 +151,45 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 
 /**
  * Build the workspace buttons based on config.
+ * @param previousOrder The previous order of workspace buttons.
  * @returns The list of workspace buttons.
  */
-function buildWorkspaceButtons(): WorkspaceButton[] {
-	const workspaceButtons: WorkspaceButton[] = [];
+function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): WorkspaceButton[] {
+	const workspaceButtonsSet = new Set<WorkspaceButton>();
 
 	if (!(dockProviderOptions?.workspaceComponents?.hideWorkspacesButton ?? false)) {
-		workspaceButtons.push("switchWorkspace");
+		workspaceButtonsSet.add("switchWorkspace");
 	}
 	if (
 		!(dockProviderOptions?.workspaceComponents?.hideHomeButton ?? false) &&
 		(registeredBootstrapOptions?.home ?? false)
 	) {
-		workspaceButtons.push("home");
+		workspaceButtonsSet.add("home");
 	}
 	if (
 		!(dockProviderOptions?.workspaceComponents?.hideNotificationsButton ?? false) &&
 		(registeredBootstrapOptions?.notifications ?? false)
 	) {
-		workspaceButtons.push("notifications");
+		workspaceButtonsSet.add("notifications");
 	}
 	if (
 		!(dockProviderOptions?.workspaceComponents?.hideStorefrontButton ?? false) &&
 		(registeredBootstrapOptions?.store ?? false)
 	) {
-		workspaceButtons.push("store");
+		workspaceButtonsSet.add("store");
+	}
+
+	const workspaceButtons: WorkspaceButton[] = [];
+
+	for (const button of previousOrder) {
+		if (workspaceButtonsSet.has(button)) {
+			workspaceButtons.push(button);
+			workspaceButtonsSet.delete(button);
+		}
+	}
+
+	if (workspaceButtonsSet.size > 0) {
+		workspaceButtons.push(...workspaceButtonsSet);
 	}
 
 	return workspaceButtons;
@@ -581,7 +597,9 @@ export async function loadConfig(
 		// Always build the workspace buttons based on the config,
 		// otherwise loaded config can show buttons that it is
 		// not supposed to
-		config.workspaceComponents = buildWorkspaceButtons();
+		config.workspaceComponents = buildWorkspaceButtons(
+			Array.isArray(config.workspaceComponents) ? config.workspaceComponents : undefined
+		);
 	}
 
 	return config;
@@ -596,6 +614,43 @@ export async function saveConfig(
 	config: DockProviderConfigWithIdentity,
 	defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
 ): Promise<void> {
+	// we need to store the new stored config in the dockProviderOptions
+	if (dockProviderOptions?.entries) {
+		const orderedButtons: DockButtonTypes[] = [];
+
+		// store the buttons in a map for fast, easy lookup
+		const currentButtons = new Map<string, DockButtonTypes>();
+		for (const entry of dockProviderOptions.entries) {
+			currentButtons.set(entry.id, entry);
+		}
+
+		// new extract the new buttons from the config
+		for (const button of config.buttons ?? []) {
+			if (isStringValue(button.id)) {
+				const foundButton = currentButtons.get(button.id);
+				if (foundButton) {
+					orderedButtons.push(foundButton);
+					currentButtons.delete(button.id);
+				}
+			}
+		}
+
+		// add any remaining buttons that we failed to find in the config
+		const remainingButtons = currentButtons.values();
+		if (currentButtons.size > 0) {
+			logger.warn(
+				`Failed to find ${currentButtons.size} buttons in the new config, they will be appended to the end of the dock`
+			);
+		}
+		orderedButtons.push(...remainingButtons);
+
+		dockProviderOptions.entries = orderedButtons;
+	}
+
+	if (registration?.workspaceComponents) {
+		registration.workspaceComponents = config.workspaceComponents;
+	}
+
 	logger.info(`Checking for custom dock storage with endpoint id: ${DOCK_ENDPOINT_ID_SET}`);
 
 	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {

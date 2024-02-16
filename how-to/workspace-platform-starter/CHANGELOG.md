@@ -4,6 +4,13 @@
 
 - Added support for dock submenus
 - Added support for customizing the taskbar icon for the splash screen window
+- Added an example of navigating content using navigation controls. Enabled through default window options in the main [manifest.fin.json](./public/manifest.fin.json) and in our developer docs snapshot [developer.snapshot.fin.json](./public/common/snapshots/developer.snapshot.fin.json)
+- Fixed an issue where the order of entries within dock would change when toggling between light and dark theme.
+- Improved performance when switching themes
+- Fixed an issue where the order of Workspace component entries within dock may change when toggling between light and dark theme.
+- FDC3 2.0 Open improvement - You can now specify instance id if you wish to open an existing instance of an app and optionally pass it context.
+- Add option to allow specific modules to get unrestricted notificationClients if they want to implement custom platform logic without importing notifications directly via the npm package. The notification client options in the notification provider now has a 'restricted' setting which can be set to false.
+- Update Save Page As and Duplicate Page logic using the copyPage platform override introduced in 16.1. When a page is duplicated we generated a copy of the page but generate the instance id associated with a view's name while retaining the app Id (previously you would get a new randomly generated name for the app). If your app is a singleton then the name remains unique. So you will have two pages referencing the same instance. When you switch between them it will be displaying the same instance. However, please note if you move a page to a new window then the single instance view will move with it and leave the other page's layout (a single instance can only exist on one window if you need multiple instances then instanceMode should not be set to single). Duplicate view (view context menu) currently generates a new unlinked id for a view so if you do not want this behavior you can remove Duplicate View from the View Context Menu. Feedback on this behavior is of interest.
 
 ## v16.1.0
 
@@ -35,6 +42,7 @@
 - Added util getCommandLineArgs to extract multiple command line arguments from a string into an array. Snap accepts an array of arguments and app assets and external apps take a string as an args parameter. This lets you specify arguments that cover scenarios where snap is disabled and enabled. Added tests to verify getCommandLineArgs behavior.
 - Updated identity returned when launching a native app or app asset (either normally or through snap). The UUID is the app id if the app has been marked as instanceMode = "single" otherwise the uuid is appId/guid (guid being an instanceId). The name is the same as the UUID (as name is not specified in app asset/external process options). If your app supports having multiple instances and it registers intent handlers then we recommend passing the created UUID for your app instance using {OF-EXT-UUD} as part of the command line args so that the uuid can be used when you connect to the OpenFin runtime. When you then connect to the workspace platform interop broker (as the platform will be waiting on that connection to fire an intent against it) it will use the expected UUID as it's connection id.
 - Update developer composite menu to use the Close menu option instead of Print as the positioning hook. Add Copy Url to the developer view context menu options.
+- FIX: Home Queries are now debounced from home but there existed a condition where a previous queries response came in after the last queries results. This could result in unexpected results being shown in Home.
 
 ## v16
 

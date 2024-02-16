@@ -28,6 +28,7 @@ let homeProviderOptions: HomeProviderOptions | undefined;
 let registrationInfo: HomeRegistration | undefined;
 let lastResponse: HomeSearchListenerResponse;
 let debounceTimerId: number | undefined;
+let lastQueryId: string | undefined;
 
 /**
  * Register the home component.
@@ -111,6 +112,15 @@ async function onUserInput(
 	response: HomeSearchListenerResponse
 ): Promise<HomeSearchResponse> {
 	const enableSourceFilter = !(homeProviderOptions?.sourceFilter?.disabled ?? false);
+	lastQueryId = request.id;
+	if (debounceTimerId) {
+		window.clearTimeout(debounceTimerId);
+		debounceTimerId = undefined;
+	}
+
+	if (!isEmpty(lastResponse)) {
+		lastResponse.close();
+	}
 
 	if (request.query === "?") {
 		logger.info("Integration Help requested.");
@@ -124,17 +134,8 @@ async function onUserInput(
 		return searchResults;
 	}
 
-	if (debounceTimerId) {
-		window.clearTimeout(debounceTimerId);
-		debounceTimerId = undefined;
-	}
-
-	if (!isEmpty(lastResponse)) {
-		lastResponse.close();
-	}
 	lastResponse = response;
 	lastResponse.open();
-
 	const selectedFilters: CLIFilter[] = request?.context?.selectedFilters ?? [];
 
 	let selectedSourceFilterOptions: string[] = [];
@@ -159,7 +160,13 @@ async function onUserInput(
 	// immediately with a dummy filter, so the UI does not "bounce"
 	debounceTimerId = window.setTimeout(async () => {
 		try {
-			logger.info("Search results requested.");
+			if (request.id !== lastQueryId) {
+				logger.info(
+					`This request was scheduled to handle a query which is no longer the latest query. The query will not be actioned. Assigned Query Id: ${request.id}, latest Query Id: ${lastQueryId}`
+				);
+				return;
+			}
+			logger.info(`Search results requested. Query Id: ${request.id}. Last Query Id: ${lastQueryId}.`);
 			const finalFilters: CLIFilter[] = [];
 			let sourceFilter: CLIFilter | undefined;
 
@@ -206,10 +213,21 @@ async function onUserInput(
 				queryOptions
 			);
 
+			if (request.id !== lastQueryId) {
+				logger.info(
+					`This request was scheduled to handle a query which is no longer the latest query. The results for the previous query have come in but they will not be applied. Assigned Query Id: ${request.id}, latest Query Id: ${lastQueryId}`
+				);
+				return;
+			}
+
 			if (!Array.isArray(searchResults?.results)) {
-				logger.info("No results array returned.");
+				logger.info(
+					`No results array returned for query: ${request.query} with Query Id: ${request.id}. Last Query Id: ${lastQueryId}.`
+				);
 			} else {
-				logger.info(`${searchResults.results.length} results returned.`);
+				logger.info(
+					`${searchResults.results.length} results returned for query: ${request.query} with Query Id: ${request.id}. Last Query Id: ${lastQueryId}.`
+				);
 			}
 
 			// Return all the results and filters async so that the method

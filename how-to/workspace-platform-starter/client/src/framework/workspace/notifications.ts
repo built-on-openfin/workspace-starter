@@ -5,10 +5,11 @@ import { getSettings } from "../settings";
 import type {
 	NotificationClientDefaultOptions,
 	NotificationClientOptions,
-	NotificationProviderOptions
+	NotificationProviderOptions,
+	NotificationClient
 } from "../shapes/notification-shapes";
 import { isEmpty } from "../utils";
-import { NotificationClient } from "./notification-client";
+import { NotificationClientImplementation } from "./notification-client-implementation";
 
 const logger = createLogger("Notifications");
 
@@ -171,6 +172,13 @@ export async function getNotificationClient(
 		return undefined;
 	}
 
+	if (!isEmpty(listedClientOptions) && listedClientOptions.restricted === false) {
+		logger.info(
+			`The options passed to create a notification client requests a non-scoped notification client for the module with Id: ${options.id}`
+		);
+		return Notifications;
+	}
+
 	const clientOptions = Object.assign(options, notificationClientDefaults, listedClientOptions ?? {});
 
 	if (isEmpty(clientOptions.icon)) {
@@ -179,5 +187,5 @@ export async function getNotificationClient(
 		);
 		clientOptions.icon = notificationsProviderOptions?.icon;
 	}
-	return new NotificationClient(clientOptions, notificationPlatformId);
+	return new NotificationClientImplementation(clientOptions, notificationPlatformId);
 }
