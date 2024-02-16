@@ -11,6 +11,7 @@
 - FDC3 2.0 Open improvement - You can now specify instance id if you wish to open an existing instance of an app and optionally pass it context.
 - Add option to allow specific modules to get unrestricted notificationClients if they want to implement custom platform logic without importing notifications directly via the npm package. The notification client options in the notification provider now has a 'restricted' setting which can be set to false.
 - Update Save Page As and Duplicate Page logic using the copyPage platform override introduced in 16.1. When a page is duplicated we generated a copy of the page but generate the instance id associated with a view's name while retaining the app Id (previously you would get a new randomly generated name for the app). If your app is a singleton then the name remains unique. So you will have two pages referencing the same instance. When you switch between them it will be displaying the same instance. However, please note if you move a page to a new window then the single instance view will move with it and leave the other page's layout (a single instance can only exist on one window if you need multiple instances then instanceMode should not be set to single). Duplicate view (view context menu) currently generates a new unlinked id for a view so if you do not want this behavior you can remove Duplicate View from the View Context Menu. Feedback on this behavior is of interest.
+- Improved performance of switching schemes
 
 ## v16.1.0
 
