@@ -824,9 +824,7 @@ export function overrideCallback(
 		 */
 		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
 			// The color scheme has been updated, so update the theme
-			await setCurrentColorSchemeMode(schemeType);
-
-			return super.setSelectedScheme(schemeType);
+			await Promise.all([setCurrentColorSchemeMode(schemeType), super.setSelectedScheme(schemeType)]);
 		}
 
 		/**

@@ -2,6 +2,10 @@
 
 ## v17.2.0
 
+- Improved performance of switching schemes
+
+## v17.0.0
+
 - Added support for dock submenus
 - Added support for customizing the taskbar icon for the splash screen window
 - Added an example of navigating content using navigation controls. Enabled through default window options in the main [manifest.fin.json](./public/manifest.fin.json) and in our developer docs snapshot [developer.snapshot.fin.json](./public/common/snapshots/developer.snapshot.fin.json)
