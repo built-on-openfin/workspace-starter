@@ -1,6 +1,6 @@
 import { isStringValue } from "./utils";
 
-const IMAGE_CACHE: { [key: string]: string } = {};
+const IMAGE_CACHE = new Map<string, { dataUri: string | undefined }>();
 
 /**
  * Load an image to a data url containing base64 image data.
@@ -18,8 +18,9 @@ export async function imageUrlToDataUrl(
 
 	const key = `${url}_${dimensions}`;
 
-	if (IMAGE_CACHE[key]) {
-		return IMAGE_CACHE[key];
+	const cachedValue = IMAGE_CACHE.get(key);
+	if (cachedValue) {
+		return cachedValue.dataUri;
 	}
 
 	return new Promise<string | undefined>((resolve) => {
@@ -41,17 +42,19 @@ export async function imageUrlToDataUrl(
 					if (ctx) {
 						ctx.drawImage(img, 0, 0, dimensions, dimensions);
 						dataUri = canvas.toDataURL("image/png", 1);
-						IMAGE_CACHE[key] = dataUri;
+						IMAGE_CACHE.set(key, { dataUri });
 					}
 				} catch {}
 				resolve(dataUri);
 			});
 			img.addEventListener("error", () => {
+				IMAGE_CACHE.set(key, { dataUri: undefined });
 				// eslint-disable-next-line unicorn/no-useless-undefined
 				resolve(undefined);
 			});
 			img.src = url;
 		} catch {
+			IMAGE_CACHE.set(key, { dataUri: undefined });
 			// eslint-disable-next-line unicorn/no-useless-undefined
 			resolve(undefined);
 		}

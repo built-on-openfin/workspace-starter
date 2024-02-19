@@ -216,51 +216,54 @@ async function buildButtons(): Promise<DockButton[]> {
  * @returns The dock buttons to display.
  */
 async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<DockButton[]> {
-	const buttons: DockButton[] = [];
+	const [iconFolder, colorSchemeMode] = await Promise.all([
+		getCurrentIconFolder(),
+		getCurrentColorSchemeMode()
+	]);
 
-	const iconFolder = await getCurrentIconFolder();
-	const colorSchemeMode = await getCurrentColorSchemeMode();
 	const platform = getCurrentSync();
 
-	for (const entry of entries) {
+	const buttonPromises = entries.map(async (entry) => {
 		const visible = entry.visible ?? true;
 		if (Array.isArray(entry.conditions)) {
 			for (const c of entry.conditions) {
 				usedConditions.add(c);
 			}
 		}
-		if (
-			visible &&
-			(await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry }))
-		) {
+
+		const conditionsMet = visible
+			? await checkConditions(platform, entry.conditions, { callerType: "dock", customData: entry })
+			: false;
+
+		if (conditionsMet) {
 			if ("appId" in entry) {
-				await addEntryAsApp(buttons, entry, iconFolder, colorSchemeMode);
+				return addEntryAsApp(entry, iconFolder, colorSchemeMode);
 			} else if ("action" in entry) {
-				await addEntryAsAction(buttons, entry, iconFolder, colorSchemeMode);
+				return addEntryAsAction(entry, iconFolder, colorSchemeMode);
 			} else if ("options" in entry) {
-				await addEntriesAsDropdown(buttons, entry, iconFolder, colorSchemeMode, platform);
+				return addEntriesAsDropdown(entry, iconFolder, colorSchemeMode, platform);
 			} else if ("tags" in entry) {
-				await addEntriesByAppTag(buttons, entry, iconFolder, colorSchemeMode);
+				return addEntriesByAppTag(entry, iconFolder, colorSchemeMode);
 			}
 		}
-	}
+	});
 
-	return buttons;
+	const buttons = await Promise.all(buttonPromises);
+	return buttons.filter((button): button is DockButton => !isEmpty(button));
 }
 
 /**
  * Add an entry to the dock as an app.
- * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @returns The dock entry.
  */
 async function addEntryAsApp(
-	buttons: DockButton[],
 	entry: Omit<DockButtonApp, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
-): Promise<void> {
+): Promise<DockButton | undefined> {
 	// If the button has an appId we are going to launch that
 	// but the config can override the tooltip or icon
 	let tooltip = entry.tooltip;
@@ -279,7 +282,7 @@ async function addEntryAsApp(
 		}
 	}
 
-	buttons.push({
+	return {
 		id: entry.id,
 		type: DockButtonNames.ActionButton,
 		tooltip: tooltip ?? "",
@@ -291,149 +294,148 @@ async function addEntryAsApp(
 				appId: entry.appId
 			}
 		}
-	});
+	};
 }
 
 /**
  * Add an entry to the dock as an action.
- * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @returns The dock entry.
  */
 async function addEntryAsAction(
-	buttons: DockButton[],
 	entry: Omit<DockButtonAction, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
-): Promise<void> {
+): Promise<DockButton | undefined> {
 	if (!isStringValue(entry.tooltip)) {
 		logger.error("You must specify the tooltip for a DockButtonAction");
 	} else {
-		buttons.push({
+		return {
 			id: entry.id,
 			type: DockButtonNames.ActionButton,
 			tooltip: entry.tooltip,
 			iconUrl: themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
 			action: entry.action
-		});
+		};
 	}
 }
 
 /**
  * Add an entry to the dock as an drop down.
- * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
  * @param platform The workspace platform for checking conditions.
+ * @returns The dock entry
  */
 async function addEntriesAsDropdown(
-	buttons: DockButton[],
 	entry: Omit<DockButtonDropdown, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode,
 	platform: WorkspacePlatformModule
-): Promise<void> {
+): Promise<DockButton | undefined> {
 	// Options are present so this is a drop down
 	// The items in the drop down can be an appId or a custom action
 	if (!isStringValue(entry.tooltip)) {
 		logger.error("You must specify the tooltip for a DockButtonDropdown");
 	} else {
-		const opts: DockButton[] = [];
-
-		for (const option of entry.options) {
-			if (Array.isArray(option.conditions)) {
-				for (const c of option.conditions) {
-					usedConditions.add(c);
-				}
-			}
-
-			if (
-				await checkConditions(platform, option.conditions, {
-					callerType: "dock",
-					customData: { ...option, id: "" }
-				})
-			) {
-				// If there are options this is a submenu
-				if ("options" in option) {
-					const subOptions = await buildButtonsFromEntries(option.options as DockButtonTypes[]);
-
-					opts.push({
-						type: DockButtonNames.DropdownButton,
-						tooltip: option.tooltip ?? "",
-						iconUrl: option.iconUrl,
-						options: subOptions
-					});
-				} else if ("appId" in option) {
-					// If the options has an appId we are going to launch that
-					// otherwise we use the custom action.
-
-					const app = await getApp(option.appId);
-					let iconUrl = option.iconUrl;
-					if (!isStringValue(option.iconUrl) && app) {
-						iconUrl = getAppIcon(app);
+		const opts: Promise<DockButton | undefined>[] = entry.options.map(
+			async (option): Promise<DockButton | undefined> => {
+				if (Array.isArray(option.conditions)) {
+					for (const c of option.conditions) {
+						usedConditions.add(c);
 					}
-
-					opts.push({
-						type: DockButtonNames.ActionButton,
-						tooltip: option.tooltip ?? app?.title ?? "",
-						iconUrl,
-						action: {
-							id: PLATFORM_ACTION_IDS.launchApp,
-							customData: {
-								source: "dock",
-								appId: option.appId
-							}
-						}
-					});
-				} else if ("tags" in option) {
-					await addEntriesByAppTag(opts, option, iconFolder, colorSchemeMode);
-				} else if ("action" in option) {
-					opts.push({
-						type: DockButtonNames.ActionButton,
-						tooltip: option.tooltip ?? "",
-						iconUrl: option.iconUrl,
-						action: option.action
-					});
 				}
-			}
-		}
 
-		if (opts.length === 0) {
-			opts.push({
+				if (
+					await checkConditions(platform, option.conditions, {
+						callerType: "dock",
+						customData: { ...option, id: "" }
+					})
+				) {
+					// If there are options this is a submenu
+					if ("options" in option) {
+						const subOptions = await buildButtonsFromEntries(option.options as DockButtonTypes[]);
+
+						return {
+							type: DockButtonNames.DropdownButton,
+							tooltip: option.tooltip ?? "",
+							iconUrl: option.iconUrl,
+							options: subOptions
+						};
+					} else if ("appId" in option) {
+						// If the options has an appId we are going to launch that
+						// otherwise we use the custom action.
+
+						const app = await getApp(option.appId);
+						let iconUrl = option.iconUrl;
+						if (!isStringValue(option.iconUrl) && app) {
+							iconUrl = getAppIcon(app);
+						}
+
+						return {
+							type: DockButtonNames.ActionButton,
+							tooltip: option.tooltip ?? app?.title ?? "",
+							iconUrl,
+							action: {
+								id: PLATFORM_ACTION_IDS.launchApp,
+								customData: {
+									source: "dock",
+									appId: option.appId
+								}
+							}
+						};
+					} else if ("tags" in option) {
+						return addEntriesByAppTag(option, iconFolder, colorSchemeMode);
+					} else if ("action" in option) {
+						return {
+							type: DockButtonNames.ActionButton,
+							tooltip: option.tooltip ?? "",
+							iconUrl: option.iconUrl,
+							action: option.action
+						};
+					}
+				}
+				return undefined;
+			}
+		);
+
+		const optionPromises = await Promise.all(opts);
+		const filteredOptions = optionPromises.filter((o): o is DockButton => !isEmpty(o));
+
+		if (filteredOptions.length === 0) {
+			return {
 				tooltip: entry.noEntries ?? "There are no entries",
 				disabled: true,
 				action: {
 					id: "noop"
 				}
-			});
+			};
 		}
 
-		buttons.push(
-			await addDropdownOrMenu(
-				entry.id,
-				entry.tooltip ?? "",
-				themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
-				opts
-			)
+		return addDropdownOrMenu(
+			entry.id,
+			entry.tooltip ?? "",
+			themeUrl(entry.iconUrl, iconFolder, colorSchemeMode),
+			filteredOptions
 		);
 	}
 }
 
 /**
  * Add entries to the dock based on their app tags as either multiple buttons or a drop down.
- * @param buttons The list of buttons to add to.
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
+ * @returns The dock entry
  */
 async function addEntriesByAppTag(
-	buttons: DockButton[],
 	entry: Omit<DockButtonAppsByTag, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
-): Promise<void> {
+): Promise<DockButton | undefined> {
 	if (!Array.isArray(entry.tags)) {
 		logger.error("You must specify an array for the tags parameter for an DockButtonAppsByTag");
 	} else {
@@ -445,7 +447,7 @@ async function addEntriesByAppTag(
 			// Individual so show a button for each app
 			for (const dockApp of dockApps) {
 				const icon = entry.iconUrl ?? getAppIcon(dockApp);
-				buttons.push({
+				return {
 					id: `${entry.id}-${dockApp.appId}`,
 					tooltip: entry.tooltip ?? dockApp.title,
 					iconUrl: themeUrl(icon, iconFolder, colorSchemeMode),
@@ -456,7 +458,7 @@ async function addEntriesByAppTag(
 							appId: dockApp.appId
 						}
 					}
-				});
+				};
 			}
 		} else if (entry.display === "group") {
 			// Group display so show a drop down with all the entries in it
@@ -496,13 +498,11 @@ async function addEntriesByAppTag(
 					});
 				}
 
-				buttons.push(
-					await addDropdownOrMenu(
-						entry.id,
-						entry.tooltip ?? "",
-						themeUrl(iconUrl, iconFolder, colorSchemeMode),
-						opts
-					)
+				return addDropdownOrMenu(
+					entry.id,
+					entry.tooltip ?? "",
+					themeUrl(iconUrl, iconFolder, colorSchemeMode),
+					opts
 				);
 			}
 		}
@@ -722,9 +722,11 @@ async function addDropdownOrMenu(
 
 	if (popupMenuStyle === "platform") {
 		// Built-in native dock menus require the entry icons as base64, so convert them
-		for (const opt of options) {
-			opt.iconUrl = await imageUrlToDataUrl(opt.iconUrl, 20);
-		}
+		await Promise.all(
+			options.map(async (opt) => {
+				opt.iconUrl = await imageUrlToDataUrl(opt.iconUrl, 20);
+			})
+		);
 		return {
 			id,
 			type: DockButtonNames.DropdownButton,

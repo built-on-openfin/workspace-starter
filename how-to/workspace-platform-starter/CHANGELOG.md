@@ -3,6 +3,7 @@
 ## v17.2.0
 
 - Improved performance of switching schemes
+- Improved performance of computing dock configuration, especially on theme changes.
 
 ## v17.0.0
 
