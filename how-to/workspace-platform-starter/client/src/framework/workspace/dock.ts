@@ -249,7 +249,8 @@ async function buildButtonsFromEntries(entries: DockButtonTypes[]): Promise<Dock
 	});
 
 	const buttons = await Promise.all(buttonPromises);
-	return buttons.filter((button): button is DockButton => !isEmpty(button));
+	const buttonsFlat = buttons.flat();
+	return buttonsFlat.filter((button): button is DockButton => !isEmpty(button));
 }
 
 /**
@@ -341,8 +342,8 @@ async function addEntriesAsDropdown(
 	if (!isStringValue(entry.tooltip)) {
 		logger.error("You must specify the tooltip for a DockButtonDropdown");
 	} else {
-		const opts: Promise<DockButton | undefined>[] = entry.options.map(
-			async (option): Promise<DockButton | undefined> => {
+		const opts = entry.options.map(
+			async (option): Promise<DockButton | undefined | (DockButton | undefined)[]> => {
 				if (Array.isArray(option.conditions)) {
 					for (const c of option.conditions) {
 						usedConditions.add(c);
@@ -403,7 +404,8 @@ async function addEntriesAsDropdown(
 		);
 
 		const optionPromises = await Promise.all(opts);
-		const filteredOptions = optionPromises.filter((o): o is DockButton => !isEmpty(o));
+		const optionsFlat = optionPromises.flat();
+		const filteredOptions = optionsFlat.filter((o): o is DockButton => !isEmpty(o));
 
 		if (filteredOptions.length === 0) {
 			return {
@@ -435,7 +437,7 @@ async function addEntriesByAppTag(
 	entry: Omit<DockButtonAppsByTag, "id"> & { id?: string },
 	iconFolder: string,
 	colorSchemeMode: ColorSchemeMode
-): Promise<DockButton | undefined> {
+): Promise<(DockButton | undefined)[] | undefined> {
 	if (!Array.isArray(entry.tags)) {
 		logger.error("You must specify an array for the tags parameter for an DockButtonAppsByTag");
 	} else {
@@ -444,10 +446,11 @@ async function addEntriesByAppTag(
 		const dockApps = await getAppsByTag(entry.tags, false, { private: false });
 
 		if (entry.display === "individual") {
+			const entries: DockButton[] = [];
 			// Individual so show a button for each app
 			for (const dockApp of dockApps) {
 				const icon = entry.iconUrl ?? getAppIcon(dockApp);
-				return {
+				entries.push({
 					id: `${entry.id}-${dockApp.appId}`,
 					tooltip: entry.tooltip ?? dockApp.title,
 					iconUrl: themeUrl(icon, iconFolder, colorSchemeMode),
@@ -458,8 +461,10 @@ async function addEntriesByAppTag(
 							appId: dockApp.appId
 						}
 					}
-				};
+				});
 			}
+
+			return entries;
 		} else if (entry.display === "group") {
 			// Group display so show a drop down with all the entries in it
 			if (!isStringValue(entry.tooltip)) {
@@ -498,12 +503,14 @@ async function addEntriesByAppTag(
 					});
 				}
 
-				return addDropdownOrMenu(
-					entry.id,
-					entry.tooltip ?? "",
-					themeUrl(iconUrl, iconFolder, colorSchemeMode),
-					opts
-				);
+				return [
+					await addDropdownOrMenu(
+						entry.id,
+						entry.tooltip ?? "",
+						themeUrl(iconUrl, iconFolder, colorSchemeMode),
+						opts
+					)
+				];
 			}
 		}
 	}
