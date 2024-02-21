@@ -373,7 +373,7 @@ The goal for content providers should be:
 
 For the final point we will show how you could update your external content so that it could share context from within a Workspace Platform inside of an OpenFin container or a Workspace Platform within the desktop browser (e.g. Edge).
 
-### Adding the Fin API to content loaded in a Desktop/Mobile Browser
+### Adding the Fin API to content loaded in a Desktop/Mobile Browser Dynamically
 
 When your content is loaded into an OpenFin Container (our desktop application) we automatically inject the **fin** API and it is always available. A desktop browser like Edge does not allow the injection of APIs from an iframe so your webpage will need to use our npm package to request the fin API.
 
@@ -405,11 +405,7 @@ Below we have an example webpage that you can create and drop in the public fold
    async function initApi(connectionOptions, target) {
     try {
      // We are using jsdelivr as an example. 
-     // We would recommend you create your own esmodule that packages the web-interop library and it's dependencies.
-     // You would then provide your own init api that is exported from that module that would have similar 
-     // logic as below. 
-     // This custom library would be something your content providers (internal teams) depend on and you would 
-     // control the version of web-interop that was used.
+     // You can create your own esmodule that packages the web-interop library and it's dependencies.
      const moduleUrl =
       'https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.0.1-v37.80.36-preview.0/+esm';
      const workspaceMobile = await import(moduleUrl);
@@ -499,7 +495,7 @@ Below we have an example webpage that you can create and drop in the public fold
 </html>
 ```
 
-This example is a complete webpage and it is using vanilla JavaScript. You might have a npm module that you give your content providers. This may package includes @openfin/web-interop and it's dependencies and your content developers would only import this module if needed. 
+This example is a complete webpage and it is using vanilla JavaScript. You might have a npm module that you give your content providers. This may package includes @openfin/web-interop and it's dependencies and your content developers would only import this module if needed.
 
 The flow could be:
 
@@ -507,6 +503,45 @@ The flow could be:
 - If yes then continue with common functionality.
 - If no then dynamically import an additional package that you control. It could export an initApi/getFinAPI function. The package would use the @openfin/web-interop package as a dependency.
 - Once the fin api is available continue with common functionality.
+
+### Adding the Fin API to content loaded in a Desktop/Mobile Browser statically
+
+You may decide that you just want to import the @openfin/web-interop and initializes the connection to get the fin API.
+
+You would npm install the package e.g:
+
+```bash
+npm install @openfin/web-interop@0.0.1-v37.80.36-preview.0 --save
+```
+
+You would then import the connect function at the top of your TypeScript file.
+
+```javascript
+import { connect } from "@openfin/web-interop";
+```
+
+You could use this connect function in a initApi function similar to the one you saw above.
+
+```javascript
+async function initApi(connectionOptions, target) {
+    try {
+     const connectedFin = await connect(connectionOptions);
+     if (connectedFin !== undefined) {
+      console.log('The fin api has been fetched and will be returned.');
+      if (target !== undefined) {
+        target.fin = connectedFin;
+        console.log('The fin api has been applied to the passed target');
+      }
+     }
+
+     return connectedFin;
+    } catch (error) {
+     console.error('An error occurred while trying to fetch the fin API', error);
+    }
+   }
+```
+
+Everything would then be packaged inside of your bundle and would work in the Desktop Container Workspace or Desktop Browser Workspace without any dynamic loading.
 
 ### Interop API
 
