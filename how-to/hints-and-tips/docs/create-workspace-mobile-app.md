@@ -334,7 +334,7 @@ Experiment with the configuration to try different combinations and load differe
 > 1. `DENY`: The page cannot be displayed in a frame, regardless of the site attempting to do so.
 > 2. `SAMEORIGIN`: The page can only be displayed in a frame on the same origin as the page itself.
 > 3. `ALLOW-FROM uri`: The page can only be displayed in a frame on the specified origin.
-> 
+>
 > If a website has set `X-Frame-Options` to `DENY` or `SAMEORIGIN`, you won't be able to display its content in an iframe unless you control the website and can change this setting.
 >
 > In addition to `X-Frame-Options`, the newer `Content-Security-Policy` header with the `frame-ancestors` directive provides more granular control over which sites can embed a page in an iframe.
@@ -342,7 +342,6 @@ Experiment with the configuration to try different combinations and load differe
 > To resolve this issue, you would need to control the server that serves the page and configure it to send the appropriate `X-Frame-Options` or `Content-Security-Policy` header. If you don't control the server, you'll need to contact the server's administrator or the website's owner to request a change.
 
 ### How are platform settings and content wired together?
-
 
 With the platform settings defined and the content defined the example platform calls the init function from @openfin/workspace-mobile-app to initialize and bind the layout against the specified html element.
 
@@ -384,80 +383,119 @@ Below we have an example webpage that you can create and drop in the public fold
 
 ```html
 <html>
-    <head>
-        <title>Test Context Aware Page</title>
-        <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-                color: white;
-                background-color: rgb(30, 31, 35);
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Test Context Aware Page</h1>
-        <p>Name of the context received: <span id="context-name">Not Set</span></p>
-        <script type="module">
-            async function initApi(connectionOptions, target) {
-              try {
-                // We are just using jsdelivr as an example. You could have this dependency or a library that does the fetching and
-                // assigning hosted on your own server.
-                const moduleUrl = "https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.0.1-v37.80.36-preview.0/+esm";
-                const workspaceMobile = await import(moduleUrl);
-                const connectedFin = await workspaceMobile.connect(connectionOptions);
-                if(connectedFin !== undefined) {
-                  console.log("The fin api has been fetched and will be returned.");    
-                }
-                if(connectedFin !== undefined && target !== undefined) {
-                  target.fin = connectedFin;
-                  console.log("The fin api has been applied to the passed target");
-                }
-                return connectedFin;
-              } catch(error) {
-                console.error("An error occurred while trying to fetch the fin API", error);
-              }
-            }
+ <head>
+  <title>Test Context Aware Page</title>
+  <style>
+   body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    color: white;
+    background-color: rgb(30, 31, 35);
+   }
+  </style>
+ </head>
+ <body>
+  <h1>Test Context Aware Page</h1>
+  <p>
+   Name of the context received:
+   <span id="context-name">Not Set</span>
+  </p>
+  <p><button id="broadcast">Broadcast Tesla Instrument</button></p>
+  <script type="module">
+   async function initApi(connectionOptions, target) {
+    try {
+     // We are using jsdelivr as an example. 
+     // We would recommend you create your own esmodule that packages the web-interop library and it's dependencies.
+     // You would then provide your own init api that is exported from that module that would have similar 
+     // logic as below. 
+     // This custom library would be something your content providers (internal teams) depend on and you would 
+     // control the version of web-interop that was used.
+     const moduleUrl =
+      'https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.0.1-v37.80.36-preview.0/+esm';
+     const workspaceMobile = await import(moduleUrl);
+     const connectedFin = await workspaceMobile.connect(connectionOptions);
+     if (connectedFin !== undefined) {
+      console.log('The fin api has been fetched and will be returned.');
+      if (target !== undefined) {
+        target.fin = connectedFin;
+        console.log('The fin api has been applied to the passed target');
+      }
+     }
 
-            async function checkAndAssignFin() {
-              if(window.fin === undefined) {
-                // we are not loaded into a host that dynamically provides the OpenFin API. Fetch and initialize the OpenFin API
-                try {
-                    const connectionOptions = {
-                        connectionInheritance: "enabled"
-                    };
-                    const connectedFin = await initApi(connectionOptions, window);
-                    if(connectedFin !== undefined) {
-                        console.log("The fin api has been fetched. We could assign it here but window was passed as a target so this is just a confirmation that the API was fetched. Fin exists on the window: " + window.fin !== undefined);
-                    } else {
-                        console.error("The fin api was not returned.");
-                    }
-                } catch(error) {
-                  console.error("An error occurred while trying to fetch the fin API", error);
-                }
-              }
-            }
-            
-            async function init() {
-              await checkAndAssignFin();
-              if(window.fin !== undefined) {
-                // start of example of how to use the interop API
-                const contextName = document.getElementById("context-name");
-                fin.me.interop.addContextHandler((ctx)=> {
-                    console.log("Context received: ", ctx);
-                    if(contextName !== null) {
-                        contextName.innerText = ctx.name;
-                    }
-                });
-                console.log("Listening for context changes");
-                // end of example of how to use the interop API
-              } else {
-                console.log("The fin api is still not available even after the check and assignment have been performed.");
-              }
-            }
+     return connectedFin;
+    } catch (error) {
+     console.error('An error occurred while trying to fetch the fin API', error);
+    }
+   }
 
-            await init();
-        </script>
-    </body>
+   async function checkAndAssignFin() {
+    if (window.fin === undefined) {
+     // we are not loaded into a host that dynamically provides the OpenFin API. Fetch and initialize the OpenFin API
+     try {
+      const connectionOptions = {
+       connectionInheritance: 'enabled'
+      };
+      const connectedFin = await initApi(connectionOptions, window);
+      if (connectedFin !== undefined) {
+       console.log(
+        'The fin api has been fetched. We could assign it here but window was passed as a target so this is just a confirmation that the API was fetched. Fin exists on the window: ' +
+         window.fin !==
+         undefined
+       );
+      } else {
+       console.error('The fin api was not returned.');
+      }
+     } catch (error) {
+      console.error('An error occurred while trying to fetch the fin API', error);
+     }
+    }
+   }
+
+   async function init() {
+    await checkAndAssignFin();
+    if (window.fin !== undefined) {
+     // start of example of how to use the interop API
+     const contextName = document.getElementById('context-name');
+     const broadcast = document.getElementById('broadcast');
+     fin.me.interop.addContextHandler((ctx) => {
+      console.log('Context received: ', ctx);
+      if (contextName !== null) {
+       contextName.innerText = ctx.name;
+      }
+     });
+     console.log('Listening for context changes');
+     broadcast.addEventListener('click', () => {
+      const context = {
+       type: 'fdc3.instrument',
+       name: 'Tesla Inc',
+       id: {
+        ticker: 'TSLA',
+        BBG: 'TSLA US Equity',
+        ISIN: 'US88160R1014'
+       }
+      };
+
+      try {
+       console.log('setting context on system contextual group', context);
+       fin.me.interop.setContext(context);
+      } catch (error) {
+       console.warn(
+        'You are not bound to a system context group and are unable to set context',
+        error
+       );
+      }
+     });
+     // end of example of how to use the interop API
+    } else {
+     console.log(
+      'The fin api is still not available even after the check and assignment have been performed.'
+     );
+    }
+   }
+
+   await init();
+  </script>
+ </body>
 </html>
 ```
 
