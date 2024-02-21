@@ -499,13 +499,14 @@ Below we have an example webpage that you can create and drop in the public fold
 </html>
 ```
 
-This could be inline in your html page or it could be imported as the first JavaScript module on a page or you could package this logic as a library that is webpacked into your standard code.
+This example is a complete webpage and it is using vanilla JavaScript. You might have a npm module that you give your content providers. This may package includes @openfin/web-interop and it's dependencies and your content developers would only import this module if needed. 
 
-If you are using webpack and you don't wish to bundle the code and just let it fall through to vanilla JavaScript so that it can do the import then you can indicate this to webpack using the following (this assumes you can calling import from within an async function).
+The flow could be:
 
-```javascript
-const workspaceMobile = await import(/* webpackIgnore: true */ moduleUrl);
-```
+- Page Load - check to see if the fin API exists.
+- If yes then continue with common functionality.
+- If no then dynamically import an additional package that you control. It could export an initApi/getFinAPI function. The package would use the @openfin/web-interop package as a dependency.
+- Once the fin api is available continue with common functionality.
 
 ### Interop API
 
@@ -513,7 +514,7 @@ We have support for the FDC3 API in our container but it isn't available just ye
 
 For now you can use our interop api to share and listen to contextual data changes.
 
-If you add the logic shown above then your content will be able to share contextual data or listen for contextual data regardless of the host.
+If you add the logic shown above then your content will be able to share contextual data or listen for contextual data regardless of the host. We include interop API usage in the example above but here is an additional example for clarity.
 
 ```javascript
 // --------------------------------
