@@ -21,7 +21,7 @@ This is an npm package that generates a PWA shell with some sample content using
 The generated code supports:
 
 - Tabbed Pages to support different layouts
-- Interoperability between the content in the layouts. Each view is automatically included in the mobile channel, and joins the default context group. Not configurable. The default example demonstrates the /chart amd /instrument contexts.
+- Interoperability between the content in the layouts. Each view is automatically included in the mobile channel, and joins the default context group. Not configurable. The default example demonstrates the /chart and /instrument contexts.
 - The ability to load content from multiple domains and have them work with interop.
 
 ### What is the Architecture?
