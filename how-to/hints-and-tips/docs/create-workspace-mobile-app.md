@@ -30,9 +30,9 @@ This solution builds on top of a number of npm packages.
 
 ```mermaid
 graph TD
-    style A fill:#F9E79F,stroke:#F9E79F;
-    style B fill:#AED6F1,stroke:#AED6F1;
-    style C fill:#D4AC0D,stroke:#D4AC0D;
+    style A fill:#F9E79F,stroke:#F9E79F,color:#00008B;
+    style B fill:#AED6F1,stroke:#AED6F1,color:#00008B;
+    style C fill:#D4AC0D,stroke:#D4AC0D,color:#00008B;
     A["@openfin/create-workspace-mobile-app"] --> B["@openfin/workspace-mobile-app"]
     B --> C["@openfin/web-interop"]
 ```
@@ -341,7 +341,7 @@ Experiment with the configuration to try different combinations and load differe
 >
 > To resolve this issue, you would need to control the server that serves the page and configure it to send the appropriate `X-Frame-Options` or `Content-Security-Policy` header. If you don't control the server, you'll need to contact the server's administrator or the website's owner to request a change.
 
-### How is platform settings and content wired together?
+### How are platform settings and content wired together?
 
 
 With the platform settings defined and the content defined the example platform calls the init function from @openfin/workspace-mobile-app to initialize and bind the layout against the specified html element.
