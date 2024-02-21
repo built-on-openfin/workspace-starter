@@ -123,7 +123,7 @@ This will ask you to install the PWA or if you wish to browse the site in the br
 
 ![Install Dialog](./create-workspace-mobile-install-dialog.png)
 
-When you navigate to the main page as you will have the option of selecting a row in the blotter/grid. This will broadcast the selected instrument to the other apps loaded into the layout. You should see the other applications update to reflect the change as you click on different rows.
+When you navigate to the main page you will have the option of selecting a row in the blotter/grid. This will broadcast the selected instrument to the other apps loaded into the layout. You should see the other applications update to reflect the change as you click on different rows.
 
 ## What do I do next?
 
