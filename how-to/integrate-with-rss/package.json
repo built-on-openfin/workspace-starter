@@ -21,8 +21,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "17.2.11",
-		"@openfin/workspace-platform": "17.2.11",
+		"@openfin/workspace": "17.2.12",
+		"@openfin/workspace-platform": "17.2.12",
 		"fast-xml-parser": "4.3.2"
 	},
 	"devDependencies": {
