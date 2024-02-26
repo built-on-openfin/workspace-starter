@@ -33,12 +33,12 @@ graph TD
     style A fill:#F9E79F,stroke:#F9E79F,color:#00008B;
     style B fill:#AED6F1,stroke:#AED6F1,color:#00008B;
     style C fill:#D4AC0D,stroke:#D4AC0D,color:#00008B;
-    A["@openfin/create-workspace-mobile-app"] --> B["@openfin/workspace-mobile-app"]
+    A["@openfin/create-workspace-mobile-app"] --> B["@openfin/workspace-mobile"]
     B --> C["@openfin/web-interop"]
 ```
 
 - [@openfin/create-workspace-mobile-app](https://www.npmjs.com/package/@openfin/create-workspace-mobile-app) - This package is the main package you will be using and it generates the initial shell of your PWA. It brings in the layout and interop support and wires up a default interop channel.
-- [@openfin/workspace-mobile-app](https://www.npmjs.com/package/@openfin/workspace-mobile-app) - This is the package that contains the layout system.
+- [@openfin/workspace-mobile](https://www.npmjs.com/package/@openfin/workspace-mobile) - This is the package that contains the layout system.
 - [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) - The base library used to bring interop support to desktop and mobile browsers.
 
 ## How do I begin?
@@ -343,7 +343,7 @@ Experiment with the configuration to try different combinations and load differe
 
 ### How are platform settings and content wired together?
 
-With the platform settings defined and the content defined the example platform calls the init function from @openfin/workspace-mobile-app to initialize and bind the layout against the specified html element.
+With the platform settings defined and the content defined the example platform calls the init function from @openfin/workspace-mobile to initialize and bind the layout against the specified html element.
 
 ```javascript
  init(platformConfig, content, interopOptions);
@@ -594,3 +594,13 @@ if (window.fin !== undefined) {
 ```
 
 Please let us know if you have found this hints and tips article useful.
+
+## What about upgrades?
+
+The create-workspace-mobile-app generates a starting point. It includes examples and is not meant to be used as a means of upgrading previous versions.
+
+If you are interested in what has changed between releases you can compare the generated output from current and prior releases and use a comparison tool like the one included in Visual Studio Code. ALternatively if you had one clean output from version x checked in and then replaced it with the output of version y then you would see the differences.
+
+The examples use the main package @openfin/workspace-mobile and this package contains the layout system and wires up the web interop. This package exports a set of functions that you can import into your application as shown in the example. Any changes to the functions will show up in Visual Studio and when you tried to do a build.
+
+To keep things clearer we recommend you have one codebase that represents the host/platform (This is where the entrypoint starts, authentication takes place and the applications/content a user can access is determined). Then build content as a separate application (this will make the separation of concerns clear and if more teams wish to be loaded into your platform then you already know how to treat them because you have been doing the same for your own applications/content).
