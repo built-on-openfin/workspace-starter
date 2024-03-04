@@ -1,6 +1,6 @@
 # Changelog
 
-## v17.2.0
+## v17.4.0
 
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-servicenow",
-	"version": "17.2.0",
+	"version": "17.4.0",
 	"description": "OpenFin Workspace -- Integrate with ServiceNow",
 	"main": "index.js",
 	"scripts": {
@@ -21,8 +21,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/servicenow": "^1.0.1",
-		"@openfin/workspace": "17.2.13",
-		"@openfin/workspace-platform": "17.2.13",
+		"@openfin/workspace": "17.4.0",
+		"@openfin/workspace-platform": "17.4.0",
 		"csstype": "^3.1.3"
 	},
 	"devDependencies": {

@@ -5,7 +5,7 @@
 
 ## Migrate from a previous version - From v16.1 to v17.0
 
-- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.2.13)
+- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.4.0)
 
 ## Migrate from a previous version - From v16.0 to v16.1
 

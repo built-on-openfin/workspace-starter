@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-store",
-	"version": "17.2.0",
+	"version": "17.4.0",
 	"description": "OpenFin Workspace -- Register with store",
 	"main": "index.js",
 	"scripts": {
@@ -20,8 +20,8 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "17.2.13",
-		"@openfin/workspace-platform": "17.2.13"
+		"@openfin/workspace": "17.4.0",
+		"@openfin/workspace-platform": "17.4.0"
 	},
 	"devDependencies": {
 		"@openfin/core": "34.78.80",
