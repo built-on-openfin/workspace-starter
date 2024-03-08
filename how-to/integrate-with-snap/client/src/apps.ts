@@ -66,11 +66,7 @@ const OPENFIN_WINDOW_APP: PlatformApp = {
 	supportEmail: "support@example.com",
 	publisher: "OpenFin",
 	intents: [],
-	images: [
-		{
-			src: "http://localhost:8080/common/images/previews/of-info.png"
-		}
-	],
+	images: [],
 	tags: ["view", "openfin", "developer-tools"]
 };
 
