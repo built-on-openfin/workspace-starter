@@ -9,7 +9,7 @@ import { randomUUID } from "./utils";
  * @returns List of app definitions.
  */
 export async function getApps(): Promise<PlatformApp[]> {
-	return [OPENFIN_INFORMATION_APP, SNAP_NATIVE_TEST_APP];
+	return [OPENFIN_INFORMATION_APP, SNAP_NATIVE_TEST_APP, OPENFIN_WINDOW_APP];
 }
 
 /**
@@ -46,6 +46,28 @@ const OPENFIN_INFORMATION_APP: PlatformApp = {
 		}
 	],
 	tags: ["view", "openfin", "versions"]
+};
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_WINDOW_APP: PlatformApp = {
+	appId: "openfin-window-options-builder",
+	title: "Window Options Builder",
+	description: "A tool to create a classic window and demonstrate the different window options available",
+	manifest: "http://localhost:8080/common/views/window-options/window.options.builder.view.fin.json",
+	manifestType: "view",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [],
+	tags: ["view", "openfin", "developer-tools"]
 };
 
 /**
