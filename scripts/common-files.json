@@ -427,7 +427,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-snap/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/icon-blue.png", "style/app.css", "dos.json", "views/window-options/window.options.builder.view.fin.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
