@@ -122,5 +122,24 @@
 			}
 		],
 		"tags": ["view", "analytics", "tools"]
+	},
+	{
+		"appId": "window-options-builder",
+		"name": "window-options-builder",
+		"title": "Window Options Builder",
+		"description": "A developer tool to help evaluate the options available when creating classic windows",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.0.0/workspace-platform-starter/common/views/window-options/window.options.builder.view.fin.json",
+		"manifestType": "view",
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.0.0/workspace-platform-starter/common/images/icon-blue.png" }],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.0.0/workspace-platform-starter/common/images/previews/window-options-builder.png"
+			}
+		],
+		"tags": ["view", "window", "tools"]
 	}
 ]
