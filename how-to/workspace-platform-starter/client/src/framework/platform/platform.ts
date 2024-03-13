@@ -27,7 +27,7 @@ import type { CustomSettings } from "../shapes/setting-shapes";
 import * as shareProvider from "../share";
 import * as snapProvider from "../snap";
 import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
-import { isEmpty, randomUUID } from "../utils";
+import { isEmpty, isStringValue, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
 import { getDefaultWindowOptions } from "./browser";
@@ -197,7 +197,11 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 
 	await workspacePlatformInit({
 		browser,
+		language: isStringValue(customSettings?.platformProvider?.language?.initialLanguage)
+			? { initialLanguage: customSettings?.platformProvider?.language?.initialLanguage }
+			: undefined,
 		theme,
+		notifications: customSettings?.notificationProvider?.notificationsCustomManifest,
 		customActions,
 		interopOverride,
 		overrideCallback: async (platformConstructor) =>
