@@ -4,6 +4,10 @@
 
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
+- Added lifecycle events for `language-changed` which includes the selected locale and updated `page-changed` so that you can listen for when a page is focused as there is now a focus event.
+- Added additional context event to the app channel `platform/events` when a language is changed: type: `platform.language` which includes the selected locale.
+- Added ability to specify initial language through platformProvider.language.initialLanguage in your settings. Default browser menu options and tooltips support the following locales: en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE. More information about this feature can be found here: <https://developers.openfin.co/of-docs/docs/localization>
+- Added support for specifying notificationsCustomManifest ([self hosted notifications center](https://developers.openfin.co/of-docs/docs/register-notifications#host-on-your-cdn)) in the notificationsProvider settings so that it is used by the platform and the notificationClient passed to modules. As these settings are passed into the platform it will be available through the new platform api call of platform.getNotificationsConfig() (assuming you have used the getCurrentSync function from @openfin/workspace-platform or the function exposed by the module helper if you are building a module for workspace platform starter). Modules shouldn't need this as the notification client returned via the helper takes into account these settings.
 
 ## v17.0.0
 

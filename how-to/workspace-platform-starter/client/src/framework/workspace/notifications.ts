@@ -37,11 +37,15 @@ export async function register(
 		logger.info("Registering platform with Notification Center.");
 		const settings = await getSettings();
 		if (!isEmpty(settings) && !isEmpty(settings?.notificationProvider)) {
-			const { notificationClients, ...notificationsPlatformOptions } = settings.notificationProvider;
+			const { notificationClients, notificationsCustomManifest, ...notificationsPlatformOptions } =
+				settings.notificationProvider;
 			notificationPlatformId = notificationsPlatformOptions?.id ?? fin.me.identity.uuid;
 			notificationsPlatformOptions.id = notificationPlatformId;
 			try {
-				const registrationResponse = await Notifications.register({ notificationsPlatformOptions });
+				const registrationResponse = await Notifications.register({
+					notificationsPlatformOptions,
+					notificationsCustomManifest
+				});
 
 				metaInfo = {
 					workspaceVersion: registrationResponse.notificationsVersion ?? "",
