@@ -1,5 +1,5 @@
 import type { DockButton } from "@openfin/workspace";
-import type { Page, Workspace } from "@openfin/workspace-platform";
+import type { Locale, Page, Workspace } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 
@@ -11,6 +11,16 @@ export interface PlatformProviderOptions {
 	 * What is the root url of you platform e.g. https://mydomain.com
 	 */
 	rootUrl: string;
+
+	/**
+	 * The language settings for the platform
+	 */
+	language?: {
+		/**
+		 * The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE
+		 */
+		initialLanguage: Locale | string;
+	};
 
 	/**
 	 * This is optional and only needed if you are using shell mode where you wish to load a small module with just auth

@@ -244,6 +244,13 @@ async function initializeDom(): Promise<void> {
 		);
 	}
 
+	const btnNotificationCenterUserSettings = document.querySelector("#btnNotificationCenterUserSettings");
+	if (btnNotificationCenterUserSettings) {
+		btnNotificationCenterUserSettings.addEventListener("click", async () =>
+			getNotificationCenterUserSettings()
+		);
+	}
+
 	const btnNotificationWithIndicator = document.querySelector("#btnNotificationWithIndicator");
 	if (btnNotificationWithIndicator) {
 		btnNotificationWithIndicator.addEventListener("click", async () => showIndicatorNotification());
@@ -357,6 +364,10 @@ async function initializeListeners(): Promise<void> {
 		showNotificationCount(event.count);
 	});
 
+	await Notifications.addEventListener("notification-sound-toggled", (event) => {
+		loggingAddEntry(`Sound Enabled: ${event.notificationSoundEnabled}`);
+	});
+
 	addConnectionChangedEventListener((status) => {
 		if (status.connected !== connected) {
 			connected = status.connected;
@@ -423,6 +434,9 @@ async function showSimpleNotification(): Promise<void> {
 		category: "default",
 		template: "markdown",
 		id: randomUUID(),
+		soundOptions: {
+			mode: "silent"
+		},
 		platform: PLATFORM_ID
 	};
 
@@ -1051,12 +1065,14 @@ async function showCustomNotification(): Promise<void> {
  * @param notificationSoundUrl The url of the sounds file to play.
  */
 async function showSoundNotification(notificationSoundUrl: string): Promise<void> {
+	// we disable the sound if it is enabled at the Notification Center level
 	const notification: Notifications.NotificationOptions = {
 		title: "Sound Notification",
 		body: "This is a notification with sound 🔉",
 		toast: "transient",
 		category: "default",
 		template: "markdown",
+		soundOptions: { mode: "silent" },
 		id: randomUUID(),
 		platform: PLATFORM_ID
 	};
@@ -1064,6 +1080,14 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
 	codeShowExample(notification);
 	await Notifications.create(notification);
 	await playNotification(notificationSoundUrl);
+}
+
+/**
+ * Get the user settings for the notification center.
+ */
+async function getNotificationCenterUserSettings(): Promise<void> {
+	const status = await Notifications.getUserSettingStatus(Notifications.UserSettings.SOUND_ENABLED);
+	loggingAddEntry(`Sound Enabled: ${status}`);
 }
 
 /**

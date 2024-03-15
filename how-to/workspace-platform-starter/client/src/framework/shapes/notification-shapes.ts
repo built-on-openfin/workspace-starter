@@ -1,3 +1,4 @@
+import type { NotificationsCustomManifestOptions } from "@openfin/workspace/common/src/api/shapes/notifications";
 import type {
 	NotificationsPlatform,
 	create,
@@ -26,6 +27,11 @@ export interface NotificationProviderOptions extends NotificationsPlatform {
 	 * A collection of rules and settings for notification clients that fall under this platform.
 	 */
 	notificationClients?: NotificationClients;
+
+	/**
+	 * If you have licensed support for a custom notification manifest then you can provide the settings here.
+	 */
+	notificationsCustomManifest?: NotificationsCustomManifestOptions;
 }
 
 /**

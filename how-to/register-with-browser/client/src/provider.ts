@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import type {
 	CustomActionPayload,
 	GlobalContextMenuItemData,
+	Locale,
 	WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import {
@@ -20,7 +21,8 @@ import {
 	type UpdateSavedPageRequest,
 	type UpdateSavedWorkspaceRequest,
 	type Workspace,
-	type WorkspacePlatformModule
+	type WorkspacePlatformModule,
+	SUPPORTED_LANGUAGES
 } from "@openfin/workspace-platform";
 import type { CustomSettings } from "./shapes";
 
@@ -176,6 +178,12 @@ function getCustomActions(): CustomActionsMap {
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
 				console.info("Print called with payload:", payload);
 				await showPrintMenu({ x: payload.x, y: payload.y });
+			}
+		},
+		"set-language": async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.GlobalContextMenu) {
+				console.info("Set Language called with payload:", payload);
+				await getCurrentSync().setLanguage(payload.customData);
 			}
 		}
 	};
@@ -364,6 +372,31 @@ function overrideCallback(
 		}
 
 		/**
+		 * Implementation for getting current selected language.
+		 * @returns language in ISO language code
+		 */
+		public async getLanguage(): Promise<Locale> {
+			const currentLanguage = await super.getLanguage();
+			console.log(`Current language requested: ${currentLanguage}`);
+			return currentLanguage;
+		}
+
+		/**
+		 * Implementation for setting the language.
+		 * @param locale The locale in ISO language code format.
+		 */
+		public async setLanguage(locale: Locale): Promise<void> {
+			if (!SUPPORTED_LANGUAGES.includes(locale)) {
+				console.warn(
+					`Language ${locale} is not supported. Supported languages are: ${SUPPORTED_LANGUAGES.join(", ")}`
+				);
+			} else {
+				console.log(`Setting language to: ${locale}`);
+			}
+			await super.setLanguage(locale);
+		}
+
+		/**
 		 * Implementation for showing a global context menu given a menu template,
 		 * handler callback, and screen coordinates.
 		 * @param req the payload received by the provider call
@@ -375,14 +408,61 @@ function overrideCallback(
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
 			// you can customize the browser main menu here
-			const template = req.template;
 			const platform = getCurrentSync();
+			const lang = await platform.getLanguage();
+			let openPageLabel;
+			let languageLabel;
+			let englishLabel;
+			let germanLabel;
+
+			if (lang === "en-US") {
+				openPageLabel = "Open Page";
+				languageLabel = "Language";
+				englishLabel = "English";
+				germanLabel = "German";
+			} else if (lang === "de-DE") {
+				openPageLabel = "Seite öffnen";
+				languageLabel = "Sprache";
+				englishLabel = "Englisch";
+				germanLabel = "Deutsch";
+			}
+			const template = req.template;
 			const pages: Page[] = await platform.Storage.getPages();
 			const pagesMenu: OpenFin.MenuItemTemplate<GlobalContextMenuItemData>[] = [];
 			const menuEntry: GlobalContextMenuItemTemplate = {
-				label: "Open Page",
+				label: openPageLabel,
 				submenu: []
 			};
+			const languageMenu: GlobalContextMenuItemTemplate = {
+				label: languageLabel,
+				submenu: [
+					{
+						label: englishLabel,
+						type: "normal",
+						enabled: lang !== "en-US",
+						data: {
+							type: GlobalContextMenuOptionType.Custom,
+							action: {
+								id: "set-language",
+								customData: "en-US"
+							}
+						}
+					},
+					{
+						label: germanLabel,
+						type: "normal",
+						enabled: lang !== "de-DE",
+						data: {
+							type: GlobalContextMenuOptionType.Custom,
+							action: {
+								id: "set-language",
+								customData: "de-DE"
+							}
+						}
+					}
+				]
+			};
+			template.unshift(languageMenu);
 			const allOpenPages = await platform.Browser.getAllAttachedPages();
 			if (pages.length > 0) {
 				for (const page of pages) {

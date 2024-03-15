@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-selenium",
-	"version": "17.0.0",
+	"version": "17.2.0",
 	"description": "OpenFin Workspace Starter Selenium Example",
 	"scripts": {
 		"build": "echo Nothing to build",
@@ -17,7 +17,7 @@
 		"chromedriver": "118.0.0",
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
-		"mocha": "10.2.0",
-		"selenium-webdriver": "4.16.0"
+		"mocha": "10.3.0",
+		"selenium-webdriver": "4.18.1"
 	}
 }

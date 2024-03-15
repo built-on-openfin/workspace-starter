@@ -1,5 +1,5 @@
 import type { Workspace } from "@openfin/workspace";
-import type { CustomPaletteSet, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { CustomPaletteSet, Locale, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { FavoriteEntry } from "./favorite-shapes";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 import type { ColorSchemeMode } from "./theme-shapes";
@@ -17,7 +17,8 @@ export type LifecycleEvents =
 	| "page-changed"
 	| "apps-changed"
 	| "favorite-changed"
-	| "condition-changed";
+	| "condition-changed"
+	| "language-changed";
 /**
  * The type for a lifecycle event handler.
  */
@@ -67,7 +68,7 @@ export interface PageChangedLifecyclePayload {
 	/**
 	 * The action that happened to the page.
 	 */
-	action: "create" | "update" | "delete";
+	action: "create" | "update" | "delete" | "focus";
 	/**
 	 * The id of the page.
 	 */
@@ -120,4 +121,13 @@ export interface ConditionChangedLifecyclePayload {
 	 * The condition that changed, or empty to determine many might have changed.
 	 */
 	conditionId?: string;
+}
+/**
+ * Language changed event payload.
+ */
+export interface LanguageChangedLifecyclePayload {
+	/**
+	 * The Locale.
+	 */
+	locale?: Locale;
 }

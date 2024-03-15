@@ -70,10 +70,11 @@ The lifecycle events that are available to connect to are:
 - `before-quit` - The event is called before all the modules and components are torn down during the quit process, this allows your modules to perform any persistence or cleanup operations of their own.
 - `theme-changed` - The event is called when the theme is changed in the system, it is passed the `ThemeChangedLifecyclePayload` payload which contains the `schemeType` and the `palette`.
 - `workspace-changed` - The event is called when a workspace is added/updated/deleted, it is passed the `WorkspaceChangedLifecyclePayload` payload which contains the `action` and information about the workspace.
-- `page-changed` - The event is called when a page is added/updated/deleted, it is passed the `PageChangedLifecyclePayload` payload which contains the `action` and information about the page.
+- `page-changed` - The event is called when a page is added/updated/deleted/focused, it is passed the `PageChangedLifecyclePayload` payload which contains the `action` and information about the page.
 - `apps-changed` - The event is called when the list of apps available to the platform changes.
 - `favorite-changed` - The event is called when a favorite is set/delete, it is passed the `FavoriteChangedLifecyclePayload` payload which contains the `action` and information about the favorite.
 - `condition-changed` - The event is called when a condition is changed, it is passed the `ConditionChangedLifecyclePayload` payload which contains `conditionId` of the condition that changed, if `conditionId` us undefined, a number of conditions might have changed.
+- `language-changed` - The event is called when a language is changed, it is passed the `LanguageChangedLifecyclePayload` payload which contains `locale` which is the locale that was selected.
 
 ## Generate From Template
 
