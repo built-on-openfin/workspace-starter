@@ -95,7 +95,7 @@
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
 			"language": {
-				"initialLanguage": "ja-JP"
+				"initialLanguage": "en-US"
 			},
 			"interop": {
 				"intentResolver": {
