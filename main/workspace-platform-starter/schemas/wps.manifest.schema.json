@@ -48,7 +48,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_55"
+			"$ref": "#/definitions/__type_56"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -673,7 +673,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_49"
 		},
 		"ConditionsProviderOptions": {
 			"$ref": "#/definitions/ModuleList_3",
@@ -784,7 +784,7 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_46"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_9"
@@ -1106,7 +1106,7 @@
 			"$ref": "#/definitions/__type_37"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_61"
+			"$ref": "#/definitions/__type_62"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1157,10 +1157,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_43"
 		},
 		"DisplayMetadata_3": {
-			"$ref": "#/definitions/__type_59"
+			"$ref": "#/definitions/__type_60"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1643,7 +1643,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_62"
+			"$ref": "#/definitions/__type_63"
 		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
@@ -1946,16 +1946,16 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_58"
+			"$ref": "#/definitions/__type_59"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_60"
+			"$ref": "#/definitions/__type_61"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_48"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
@@ -2906,10 +2906,10 @@
 			"type": "object"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_45"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_41"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -3052,7 +3052,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_55"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3070,6 +3070,10 @@
 					"$ref": "#/definitions/NotificationClients",
 					"description": "A collection of rules and settings for notification clients that fall under this platform."
 				},
+				"notificationsCustomManifest": {
+					"$ref": "#/definitions/NotificationsCustomManifestOptions",
+					"description": "If you have licensed support for a custom notification manifest then you can provide the settings here."
+				},
 				"title": {
 					"description": "Stream title.\n\nProviding a different displayName for an existing stream id will update the\ndisplayName of the stream stored in Notification Center.",
 					"type": "string"
@@ -3077,6 +3081,9 @@
 			},
 			"required": ["icon", "id", "title"],
 			"type": "object"
+		},
+		"NotificationsCustomManifestOptions": {
+			"$ref": "#/definitions/__type_39"
 		},
 		"O": {},
 		"Omit": {
@@ -3351,25 +3358,25 @@
 			"$ref": "#/definitions/__type_26"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_40"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_47"
 		},
 		"Partial_13": {
-			"$ref": "#/definitions/__type_49"
-		},
-		"Partial_14": {
 			"$ref": "#/definitions/__type_50"
 		},
-		"Partial_15": {
+		"Partial_14": {
 			"$ref": "#/definitions/__type_51"
 		},
-		"Partial_16": {
+		"Partial_15": {
 			"$ref": "#/definitions/__type_52"
 		},
+		"Partial_16": {
+			"$ref": "#/definitions/__type_53"
+		},
 		"Partial_17": {
-			"$ref": "#/definitions/__type_57"
+			"$ref": "#/definitions/__type_58"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -3948,6 +3955,17 @@
 					"$ref": "#/definitions/PlatformInteropBrokerOptions",
 					"description": "interop settings related to this platform"
 				},
+				"language": {
+					"additionalProperties": false,
+					"description": "The language settings for the platform",
+					"properties": {
+						"initialLanguage": {
+							"description": "The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE"
+						}
+					},
+					"required": ["initialLanguage"],
+					"type": "object"
+				},
 				"rootUrl": {
 					"description": "What is the root url of you platform e.g. https://mydomain.com",
 					"type": "string"
@@ -3957,7 +3975,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_42"
 		},
 		"PopupMenuStyles": {
 			"description": "The styles that can be used to display the popup menus.",
@@ -4027,10 +4045,10 @@
 			"$ref": "#/definitions/__type_19"
 		},
 		"Record_1": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_54"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_44"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_11"
@@ -4140,7 +4158,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_56"
+			"$ref": "#/definitions/__type_57"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -7435,6 +7453,38 @@
 		},
 		"__type_39": {
 			"additionalProperties": false,
+			"description": "Options for using privately hosted notification service.",
+			"properties": {
+				"manifestUrl": {
+					"description": "A custom manifest location to start the notification service from.\nThe UUID cannot be OpenFin hosted Notification Service UUID, 'notifications-service'.",
+					"type": "string"
+				},
+				"manifestUuid": {
+					"description": "The UUID of the provided custom notifications service manifest.\nThis value **MUST** match the UUID of the manifest provided in `manifestUrl`.",
+					"type": "string"
+				}
+			},
+			"required": ["manifestUrl", "manifestUuid"],
+			"type": "object"
+		},
+		"__type_4": {
+			"additionalProperties": false,
+			"description": "Unique identifier for a window, view or iframe.",
+			"properties": {
+				"name": {
+					"description": "The name of the component.  Must be unique within the owning application.",
+					"type": "string"
+				},
+				"uuid": {
+					"description": "Universally unique identifier of the application that owns the component.",
+					"type": "string"
+				}
+			},
+			"required": ["name", "uuid"],
+			"type": "object"
+		},
+		"__type_40": {
+			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
 					"additionalProperties": false,
@@ -7472,23 +7522,7 @@
 			},
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"description": "Unique identifier for a window, view or iframe.",
-			"properties": {
-				"name": {
-					"description": "The name of the component.  Must be unique within the owning application.",
-					"type": "string"
-				},
-				"uuid": {
-					"description": "Universally unique identifier of the application that owns the component.",
-					"type": "string"
-				}
-			},
-			"required": ["name", "uuid"],
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -7579,7 +7613,7 @@
 			],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -7594,7 +7628,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -7607,7 +7641,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -7626,7 +7660,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -7678,7 +7712,7 @@
 			],
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_46": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -7707,7 +7741,7 @@
 			},
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_47": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7744,11 +7778,11 @@
 			},
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_48": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -7769,7 +7803,22 @@
 			},
 			"type": "object"
 		},
-		"__type_49": {
+		"__type_5": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_50": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7799,22 +7848,7 @@
 			},
 			"type": "object"
 		},
-		"__type_5": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_50": {
+		"__type_51": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -7828,21 +7862,6 @@
 				},
 				"width": {
 					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_51": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"type": "string"
 				}
 			},
 			"type": "object"
@@ -7864,6 +7883,17 @@
 		},
 		"__type_53": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_54": {
@@ -7871,6 +7901,10 @@
 			"type": "object"
 		},
 		"__type_55": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7901,7 +7935,7 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_56": {
+		"__type_57": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7941,7 +7975,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_57": {
+		"__type_58": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -8245,7 +8279,7 @@
 			},
 			"type": "object"
 		},
-		"__type_58": {
+		"__type_59": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -8269,25 +8303,6 @@
 				},
 				"logging": {
 					"$ref": "#/definitions/InteropLoggingOptions"
-				}
-			},
-			"type": "object"
-		},
-		"__type_59": {
-			"additionalProperties": false,
-			"description": "The display data for a context group.",
-			"properties": {
-				"color": {
-					"description": "The color that should be associated within this context group when displaying this context group in a UI, e.g: `0xFF0000`.",
-					"type": "string"
-				},
-				"glyph": {
-					"description": "A URL of an image that can be used to display this context group",
-					"type": "string"
-				},
-				"name": {
-					"description": "A user-readable name for this context group, e.g: `\"Red\"`",
-					"type": "string"
 				}
 			},
 			"type": "object"
@@ -8594,6 +8609,25 @@
 		},
 		"__type_60": {
 			"additionalProperties": false,
+			"description": "The display data for a context group.",
+			"properties": {
+				"color": {
+					"description": "The color that should be associated within this context group when displaying this context group in a UI, e.g: `0xFF0000`.",
+					"type": "string"
+				},
+				"glyph": {
+					"description": "A URL of an image that can be used to display this context group",
+					"type": "string"
+				},
+				"name": {
+					"description": "A user-readable name for this context group, e.g: `\"Red\"`",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_61": {
+			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
 					"additionalProperties": false,
@@ -8621,7 +8655,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_61": {
+		"__type_62": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
@@ -8654,7 +8688,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_62": {
+		"__type_63": {
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
