@@ -54,64 +54,8 @@ npm install -g @openfin/create-workspace-mobile-app
 npx @openfin/create-workspace-mobile-app my-app
 cd my-app
 npm run build
-npm start
+npm run start
 ```
-
-### If you encounter an error while running npm run build
-
-> :warning: **Warning:** On Windows you may see the following error depending on the version being used when running **npm run build**.
->
-> [Error: EPERM: operation not permitted, symlink 'C:\Code\my-directory\pwa\my-app\node_modules\@openfin\web-interop\out\shared-worker.js' -> 'C:\Code\my-directory\pwa\my-app\public\worker.js']
->
-> This is a copy step that copies a dependency from node_modules to the public directory of the sample application using symlinks.
->
-
-If you encounter the error you can navigate to scripts/symlink-worker.js and:
-
-Replace:
-
-```javascript
-const fs = require('fs/promises');
-const path = require('path');
-
-const worker = require.resolve('@openfin/web-interop/shared-worker');
-const symlinkPath = path.resolve(__dirname, '../public/worker.js');
-async function main() {
-    const shouldUnlink = await fs.stat(symlinkPath).catch(() => false);
-    if ((shouldUnlink && shouldUnlink.isFile) || shouldUnlink.isSymbolicLink) {
-        await fs.unlink(symlinkPath);
-    }
-    await fs.symlink(worker, symlinkPath);
-}
-
-main()
-    .then(() => {
-        console.log(`Linked ${worker} to ${symlinkPath}`);
-    })
-    .catch(console.error);
-```
-
-With this:
-
-```javascript
-const fs = require('fs/promises');
-const path = require('path');
-
-const worker = require.resolve('@openfin/web-interop/shared-worker');
-const targetPath = path.resolve(__dirname, '../public/worker.js');
-async function main() {
-    await fs.copyFile(worker, targetPath);
-}
-
-main()
-    .then(() => {
-        console.log(`Copied ${worker} to ${targetPath}`);
-    })
-    .catch(console.error);
-
-```
-
-After you have saved this change then the file should copy from node_modules to the target location when you run **npm run build** without reporting errors.
 
 ### After running build and start
 

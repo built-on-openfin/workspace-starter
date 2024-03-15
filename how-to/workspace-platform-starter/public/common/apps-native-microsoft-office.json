@@ -1,0 +1,135 @@
+[
+	{
+		"appId": "ms-outlook-mail",
+		"name": "ms-outlook-mail",
+		"title": "Microsoft Outlook",
+		"description": "Launch Microsoft Outlook.",
+		"manifest": {
+			"path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE"
+		},
+		"manifestType": "inline-external",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/ms/apps/outlook-mail.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"intents": [],
+		"images": [],
+		"tags": ["native", "microsoft", "outlook", "mail"],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "waitForWindowOfClass",
+						"timeoutMs": 15000,
+						"matchRegex": "^(rctrl_renwnd32|OlkWV2Frame)"
+					}
+				}
+			}
+		}
+	},
+	{
+		"appId": "ms-word",
+		"name": "ms-word",
+		"title": "Microsoft Word",
+		"description": "Launch Microsoft Word.",
+		"manifest": {
+			"path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
+		},
+		"manifestType": "inline-external",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/ms/apps/word.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"intents": [],
+		"images": [],
+		"tags": ["native", "microsoft", "word"],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "waitForWindowOfClass",
+						"timeoutMs": 15000,
+						"matchRegex": "^OpusApp"
+					}
+				}
+			}
+		}
+	},
+	{
+		"appId": "ms-excel",
+		"name": "ms-excel",
+		"title": "Microsoft Excel",
+		"description": "Launch Microsoft Excel.",
+		"manifest": {
+			"path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+			"arguments": "/x"
+		},
+		"manifestType": "inline-external",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/ms/apps/excel.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"intents": [],
+		"images": [],
+		"tags": ["native", "microsoft", "excel"],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "waitForWindowOfClass",
+						"timeoutMs": 15000,
+						"matchRegex": "^XLMAIN"
+					}
+				}
+			}
+		}
+	},
+	{
+		"appId": "ms-powerpoint",
+		"name": "ms-powerpoint",
+		"title": "Microsoft PowerPoint",
+		"description": "Launch Microsoft PowerPoint.",
+		"manifest": {
+			"path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE"
+		},
+		"manifestType": "inline-external",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/ms/apps/powerpoint.svg"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"intents": [],
+		"images": [],
+		"tags": ["native", "microsoft", "powerpoint"],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "waitForWindowOfClass",
+						"timeoutMs": 15000,
+						"matchRegex": "^PPTFrameClass"
+					}
+				}
+			}
+		}
+	}
+]
