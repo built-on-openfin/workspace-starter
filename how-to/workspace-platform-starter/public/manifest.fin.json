@@ -94,6 +94,9 @@
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
+			"language": { 
+				"initialLanguage": "en-US"
+			},
 			"interop": {
 				"intentResolver": {
 					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
