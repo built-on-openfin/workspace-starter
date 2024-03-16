@@ -369,8 +369,9 @@ export async function launchPage(
 
 	// First find out if the page is already attached to a browser window
 	const attachedPages = await platform.Browser.getAllAttachedPages();
-	const attachedWindowId: OpenFin.Identity | undefined = attachedPages.find((pg) => pg.pageId === page.pageId)
-		?.parentIdentity;
+	const attachedWindowId: OpenFin.Identity | undefined = attachedPages.find(
+		(pg) => pg.pageId === page.pageId
+	)?.parentIdentity;
 
 	const targetWindowIdentity = options?.targetWindowIdentity;
 	if (!isEmpty(targetWindowIdentity)) {

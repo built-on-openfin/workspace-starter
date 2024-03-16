@@ -21,7 +21,11 @@ import {
 	type WorkspacePlatformProvider,
 	type HandleSaveModalOnPageClosePayload,
 	type SaveModalOnPageCloseResult,
-	type CopyPagePayload
+	type CopyPagePayload,
+	type HandlePageChangesPayload,
+	type ModifiedPageState,
+	type SetActivePageForWindowPayload,
+	type Locale
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
@@ -40,6 +44,7 @@ import type {
 	WindowPositioningOptions
 } from "../shapes/browser-shapes";
 import type {
+	LanguageChangedLifecyclePayload,
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
 } from "../shapes/lifecycle-shapes";
@@ -828,6 +833,15 @@ export function overrideCallback(
 		}
 
 		/**
+		 * Implementation for setting the language.
+		 * @param locale The locale in ISO language code format.
+		 */
+		public async setLanguage(locale: Locale): Promise<void> {
+			logger.info(`Setting language to: ${locale}`);
+			await Promise.all([notifyLanguageChange(locale), super.setLanguage(locale)]);
+		}
+
+		/**
 		 * Implementation for handling Workspace analytics events.
 		 * @param events The list of analytics events to process.
 		 * @returns Nothing.
@@ -910,6 +924,32 @@ export function overrideCallback(
 				isReadOnly: false
 			};
 		}
+
+		/**
+		 * Implementation for detecting if a page change qualifies as putting the page in an unsaved state.
+		 * @param payload the page with new changes and the identity of the OF window where the page change occured.
+		 * @returns modified page state
+		 */
+		public async handlePageChanges(payload: HandlePageChangesPayload): Promise<ModifiedPageState> {
+			return super.handlePageChanges(payload);
+		}
+
+		/**
+		 * Implementation for setting the active page in a browser window.
+		 * Called when the active page is changed and on browser window creation.
+		 * @param payload The page which is about to become active.
+		 * @returns nothing.
+		 */
+		public async setActivePage(payload: SetActivePageForWindowPayload): Promise<void> {
+			const platform = getCurrentSync();
+			await Promise.all([
+				super.setActivePage(payload),
+				fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
+					action: "focus",
+					id: payload.pageId
+				})
+			]);
+		}
 	}
 	return new Override();
 }
@@ -964,4 +1004,22 @@ function duplicateLayout<T>(layout: T): T {
 			return nestedValue as unknown;
 		})
 	);
+}
+
+/**
+ * Notify the platform that the language has changed.
+ * @param locale the locale that was selected
+ */
+async function notifyLanguageChange(locale: Locale): Promise<void> {
+	const platform = getCurrentSync();
+	await fireLifecycleEvent<LanguageChangedLifecyclePayload>(platform, "language-changed", {
+		locale
+	});
+
+	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
+
+	await appSessionContextGroup.setContext({
+		type: "platform.language",
+		locale
+	} as OpenFin.Context);
 }

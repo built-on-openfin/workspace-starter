@@ -28,7 +28,14 @@
 														"componentState": {
 															"url": "https://developers.openfin.co/of-docs/docs/workspace-overview",
 															"componentName": "view",
-															"interop": {}
+															"interop": {},
+															"workspacePlatform": {
+																"browserNavigationButtons": {
+																	"back": true,
+																	"forward": true,
+																	"reload": true
+																}
+															}
 														},
 														"title": "Workspace Docs"
 													}
@@ -55,7 +62,14 @@
 																"componentState": {
 																	"url": "https://developer.openfin.co/docs/javascript/stable/index.html",
 																	"componentName": "view",
-																	"interop": {}
+																	"interop": {},
+																	"workspacePlatform": {
+																		"browserNavigationButtons": {
+																			"back": true,
+																			"forward": true,
+																			"reload": true
+																		}
+																	}
 																},
 																"title": "OpenFin API Docs"
 															}
