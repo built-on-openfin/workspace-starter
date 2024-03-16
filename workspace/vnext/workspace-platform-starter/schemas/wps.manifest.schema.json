@@ -636,8 +636,48 @@
 					"type": "boolean"
 				},
 				"title": {
-					"description": "A UI friendly title for the created browser window.",
-					"type": "string"
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"const": "custom",
+									"type": "string"
+								},
+								"value": {
+									"type": "string"
+								}
+							},
+							"required": ["type", "value"],
+							"type": "object"
+						},
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"const": "page-title",
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"const": "view-title",
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "string"
+						}
+					],
+					"description": "A UI friendly title for the created browser window.\nType string for window title is deprecated, please use WindowTitle type instead."
 				},
 				"toolbarOptions": {
 					"$ref": "#/definitions/ToolbarOptions"
