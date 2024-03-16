@@ -275,7 +275,8 @@ export type ModuleTypes =
 	| "analytics"
 	| "menus"
 	| "contentCreation"
-	| "share";
+	| "share"
+	| "interopOverride";
 
 /**
  * The definition of a module with typed entry points.
