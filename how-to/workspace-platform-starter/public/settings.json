@@ -94,7 +94,20 @@
 						"contexts": ["fdc3.instrument"]
 					}
 				]
-			}
+			},
+			"modules": [
+				{
+					"id": "wps-interop-override",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Workspace Platform Starter Interop Broker",
+					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/interop-override/wps-interop-override.bundle.js",
+					"data": {
+						"loggerName": "WpsInteropOverride"
+					}
+				}
+			]
 		}
 	},
 	"appProvider": {
@@ -275,7 +288,31 @@
 					"logProcessedContext": true
 				}
 			}
-		]
+		],
+		"endpointClients": {
+			"clientOptions": [
+				{
+					"enabled": true,
+					"id": "default-workspace",
+					"endpointIds": ["get-default-workspace", "set-default-workspace"]
+				},
+				{
+					"enabled": true,
+					"id": "pages-share",
+					"endpointIds": ["share-get", "share-set"]
+				},
+				{
+					"enabled": true,
+					"id": "workspaces-share",
+					"endpointIds": ["share-get", "share-set"]
+				},
+				{
+					"enabled": true,
+					"id": "wps-interop-override",
+					"endpointIds": ["*"]
+				}
+			]
+		}
 	},
 	"browserProvider": {
 		"defaultWindowOptions": {

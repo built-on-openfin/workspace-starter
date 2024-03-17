@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { PlatformApp, UpdatableLaunchPreference } from "./app-shapes";
+import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
 import type { DialogClient } from "./dialog-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
@@ -12,6 +12,7 @@ import type { NotificationClient } from "./notification-shapes";
 import type { ShareClient } from "./share-shapes";
 import type { ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
+import { ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
 /**
  * List of modules.
  */
@@ -67,6 +68,13 @@ export interface ModuleHelpers {
 	 * platform or a restarted instance of the platform.
 	 */
 	sessionId: string;
+	/**
+	 * Given an application definition and some platform identifiers bring the application to the front.
+	 * @param platformApp The app to determine how to bring the application to the front
+	 * @param platformAppIdentifiers The platform identifiers to bring to the front.
+	 * @returns Nothing.
+	 */
+	bringAppToFront?(platformApp: PlatformApp, platformAppIdentifiers: PlatformAppIdentifier[]): Promise<void>;
 	/**
 	 * Get the current platform.
 	 * @returns The current platform.
@@ -143,13 +151,28 @@ export interface ModuleHelpers {
 	 */
 	getDialogClient?(): Promise<DialogClient | undefined>;
 	/**
+	 * If the platform has been configured to list supported connections then this API can provide a way of validating the connection.
+	 * @param identity The identity of the connection.
+	 * @param payload The payload to validate if provided.
+	 * @param options The options for the validation (provides additional information such as the type of connection that is trying to be made).
+	 * @returns The response from the validation.
+	 */
+	isConnectionValid?<T>(
+		identity: OpenFin.Identity,
+		payload?: unknown,
+		options?: ConnectionValidationOptions<T>
+	): Promise<ConnectionValidationResponse>;
+	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and
 	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
 	 * @param launchPreference If the app supports launch preferences then these can be passed.
-	 * @returns Nothing.
+	 * @returns An array of the platform identities that related from the launch or nothing if nothing was launched.
 	 */
-	launchApp?(appId: string, launchPreference?: UpdatableLaunchPreference): Promise<void>;
+	launchApp?(
+		appId: string,
+		launchPreference?: UpdatableLaunchPreference
+	): Promise<PlatformAppIdentifier[] | undefined>;
 	/**
 	 * Launch a page in the workspace.
 	 * @param pageId The page to launch.

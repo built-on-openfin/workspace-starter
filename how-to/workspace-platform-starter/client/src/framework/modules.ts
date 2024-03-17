@@ -6,18 +6,20 @@ import {
 } from "@openfin/workspace-platform";
 import { getApp, getApps } from "./apps";
 import { checkCondition, conditionChanged } from "./conditions";
+import * as connectionProvider from "./connections";
 import * as Dialog from "./dialog";
 import { getEndpointClient } from "./endpoint";
 import type { EndpointClient } from "./endpoint-client";
 import * as favoriteProvider from "./favorite";
-import { launch } from "./launch";
+import { bringToFront, launch } from "./launch";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import * as Menu from "./menu";
 import { launchPage, launchView } from "./platform/browser";
-import type { PlatformApp, UpdatableLaunchPreference } from "./shapes/app-shapes";
+import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./shapes/app-shapes";
 import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
+import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./shapes/connection-shapes";
 import type { DialogClient } from "./shapes/dialog-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
@@ -279,6 +281,7 @@ export async function closedownModule<
 export function getDefaultHelpers(): ModuleHelpers {
 	return {
 		sessionId: passedSessionId,
+		bringAppToFront: bringToFront,
 		getPlatform: getCurrentSync,
 		getApps: async (): Promise<PlatformApp[]> => {
 			logger.info("getApps: getting public apps for module.");
@@ -293,16 +296,27 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getConditionsClient,
 		getShareClient,
 		getDialogClient,
-		launchApp: async (appId: string, launchPreference?: UpdatableLaunchPreference): Promise<void> => {
+		isConnectionValid: async <T>(
+			identity: OpenFin.Identity,
+			payload?: unknown,
+			options?: ConnectionValidationOptions<T>
+		): Promise<ConnectionValidationResponse> =>
+			connectionProvider.isConnectionValid<T>(identity, payload, options),
+		launchApp: async (
+			appId: string,
+			launchPreference?: UpdatableLaunchPreference
+		): Promise<PlatformAppIdentifier[] | undefined> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
+			let result: PlatformAppIdentifier[] | undefined;
 			if (isEmpty(app)) {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);
-				await launch(app, launchPreference);
+				result = await launch(app, launchPreference);
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
+			return result;
 		},
 		launchPage: async (
 			pageId: string,

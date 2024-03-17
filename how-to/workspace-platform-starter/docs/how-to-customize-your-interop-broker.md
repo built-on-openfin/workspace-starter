@@ -4,32 +4,27 @@
 
 # How To Customize Your Interop Broker
 
-Workspace Platform Starter includes a default [interop broker override](../client/src/framework/platform/broker/interop-override.ts) that includes support for FDC3 2.0 and intents as well as context. If has been built to support interop with support for the Platform Apps format used by Workspace Platform Starter (directories can still use the FDC3 1.2 & 2.0 format as these are mapped internally to the PlatformApp format).
+Workspace Platform Starter includes a default interop broker override that includes support for FDC3 2.0 and intents as well as context. If has been built to support interop with support for the Platform Apps format used by Workspace Platform Starter (directories can still use the FDC3 1.2 & 2.0 format as these are mapped internally to the PlatformApp format).
 
 OpenFin Workspace 17.4+ lets you specify an array of interop overrides that can be layered on top of each other so that different overrides can add custom behavior.
 
-Workspace Platform Starter 17.4 supports this ability by adding two new settings to the platformProvider.interop settings.
+Workspace Platform Starter 17.4 supports this ability by adding module support to platformProvider.interop.
 
-## moduleInheritance
+## default workspace platform interop override is now a module
 
-This setting lets you how we should treat the interop overrides defined in the modules array:
+We have broken the interop broker from the main codebase so that it is now a module (this is similar to when we took our opinionated app, page and workspace Home integrations out of the framework and made them into optional modules). The new module can be found here: [wps-interop-override](../client/src/modules/interop-override/wps-interop-override/).
 
-- derived (default) - Your interop overrides will be derived from our default interop override and your modules will use our implementation as a base.
-- base - Your interop overrides will be the base class for our default interop override and when we call super we are calling your module implementations.
-- standalone - Your modules do not use our default implementation and will be responsible for InteropBroker functionality (extending from the default InteropBroker provided by the OpenFin Workspace Platform NPM Package)
+If you wish to keep the existing interop broker support you will need to ensure that the wps interop override is added to the new modules array (we have added it to our sample manifests but if you have your own settings or manifest then you will need to add this support to your setup). You can see this in platformProvider.interop section of the [manifest.fin.json](../public/manifest.fin.json) and [settings.json](../public/settings.json) files (an example is shown below).
 
-```json
-"platformProvider": {
-  ...
-  "interop": {
-   "moduleInheritance": "derived"
-  }
-}
-```
+The module helpers have been updated to include bringAppToFront and isConnectionValid to the helpers (as these are features used by the default broker implementation that may be useful if you are implementing your own broker or just extending the broker through additional interop overrides).
+
+If you do not include our default implementation in the modules array then you will have the default implementation from the Workspace Platform NPM package and you will be responsible for customizing your Interop Broker behavior.
 
 ## modules
 
-These are interop modules that provide custom interop broker logic. If there are more than one then they will extend each other (the earlier entries will act as the base for subsequent entries). By default the first module (and subsequently the ones that follow) will use our default interop override as a base (this can be configured as described above through the module inheritance).
+The ability to specify an [array of interop override constructors](https://cdn.openfin.co/docs/javascript/stable/interfaces/OpenFin.InitPlatformOptions.html#interopOverride) was introduced in the v33 release of the OpenFin runtime and is now exposed to your workspace platform in version 17.4 of workspace.
+
+These are interop modules that provide custom interop broker logic. If there are more than one then they will extend each other (the earlier entries will act as the base for subsequent entries). If you wish to use the Workspace Platform Starter interop override module as a base for your interop overrides so it should be at the start of the modules array. Here is an extract from [manifest.fin.json](../public/manifest.fin.json):
 
 ```json
 "platformProvider": {
@@ -37,67 +32,60 @@ These are interop modules that provide custom interop broker logic. If there are
   "interop": {
    "modules": [
     {
-     "enabled": true,
-     "id": "my-interop-override",
-     "url": "http://localhost:8080/js/modules/interop-override/my-interop-override.bundle.js",
-     "data": {
-      "customSetting": "a custom setting that will be passed to the interop override module for use"
+      "id": "wps-interop-override",
+      "icon": "http://localhost:8080/favicon.ico",
+      "title": "Workspace Platform Starter Interop Broker",
+      "description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+      "enabled": true,
+      "url": "http://localhost:8080/js/modules/interop-override/wps-interop-override.bundle.js",
+      "data": {
+       "loggerName": "WpsInteropOverride"
+      }
      }
-    }
    ]
   }
 }
 ```
 
-- Also added the option of changing when/if the Workspace Platform Starter default interop override runs:
-  - after (default) - run the Workspace Platform Starter default broker implementation after your interop override modules (so the default implementation is the base class)
-  - before - run the Workspace Platform Starter default broker implementation before your interop override modules (so your interop overrides are the base class for our default implementation)
-  - never - never use the Workspace Platform Starter default implementation (So you will be responsible for adding full interop broker support through your modules)
+If you wish to keep the default behavior you will need to ensure your settings service or manifest includes the modules array with a reference to the wps-interop-override.bundle.js file.
 
-## Analytics Provider
+## endpoint client
 
-You can configure where analytics should be sent by using our Analytics Provider. You can then specify 1 or more modules (see [how to add a module](./how-to-add-a-module.md)) that will receive the analytic events and any config you specify. We have created a [console analytics module](../client/src/modules/analytics/console/) and configured it in [manifest.fin.json](../public/manifest.fin.json) and [second.manifest.fin.json's settings.json file](../public/settings.json). It isn't configured in our [third.manifest.fin.json](../public/third.manifest.fin.json) to show that this is an optional feature.
+The default implementation checks to see if there are endpoints that should be used for enriching a context object. It does this by checking to see if there are endpoints with the context type available e.g. `interopbroker.process.${context.type}`.
+
+In order for the wps interop override module to be able to use endpoints (just like other modules) it will need to be added to the endpointClient list in the endpointProvider settings. An example can be seen in [manifest.fin.json](../public/manifest.fin.json):
 
 ```json
-"analyticsProvider": {
-   "modules": [
-    {
-     "enabled": true,
-     "id": "analytics.console",
-     "url": "http://localhost:8080/js/modules/analytics/console.bundle.js",
-     "data": {
-      "eventLogLevel": "info"
+"endpointProvider": {
+  ...
+   "endpointClients": {
+    "clientOptions": [
+     {
+      "enabled": true,
+      "id": "wps-interop-override",
+      "endpointIds": [
+       "*"
+      ]
      }
-    }
-   ]
-  }
-```
-
-## Platform Override
-
-We call the analytics provider from the [platform override](../client/src/framework/platform/platform-override.ts) file:
-
-```javascript
-public async handleAnalytics(events: AnalyticsEvent[]) {
-  // we call the analytics provider from here and pass the events generated by the workspace components.
-}
+    ]
+   }
+  },
 ```
 
 ## Generate From Template
 
-You can generate the scaffold for a new module by using the following command line, where "My Analytics" is the name you want to give your module:
+You can generate the scaffold for a new module by using the following command line, where "my interop override" is the name you want to give your module:
 
 ```shell
-npm run generate-module analytics "My Analytics"
+npm run generate-module interopOverride "my interop override"
 ```
 
-This will generate the code in the modules/analytics folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+This will generate the code in the modules/interopOverride folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded (via platformProvider.interop.modules).
+
+This now opens up the capability to add your own logic to the default interop broker (e.g. when setContext is called) and then calling the base class to keep the existing behavior. Interop Override Modules can be passed custom settings through the module definition's data property and it will be passed the settings entered in platformProvider.interop so your implementation can re-use those settings.
 
 ## Source Reference
 
-- [Analytics](../client/src/framework/analytics.ts)
-- [PlatformAnalyticsEvent](../client/src/framework/shapes/analytics-shapes.ts)
-- [Console Analytics Module](../client/src/modules/analytics/console/)
-- [Platform Override](../client/src/framework/platform/platform-override.ts)
+- [Default Workspace Starter Interop Override Module](../client/src/modules/interop-override/wps-interop-override/)
 
 [<- Back to Table Of Contents](../README.md)

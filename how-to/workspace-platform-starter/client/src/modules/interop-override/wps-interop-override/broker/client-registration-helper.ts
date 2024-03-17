@@ -7,9 +7,9 @@ import type {
 	IntentRegistrationPayload,
 	CaptureApiPayload,
 	ApiMetadata
-} from "../../shapes/interopbroker-shapes";
-import type { Logger } from "../../shapes/logger-shapes";
-import { isEmpty, isStringValue } from "../../utils";
+} from "workspace-platform-starter/shapes/interopbroker-shapes";
+import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 
 /**
  * Used to track client interactions with a broker.

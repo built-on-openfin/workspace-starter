@@ -84,7 +84,6 @@
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
-			"sharing": true,
 			"interop": {
 				"intentResolver": {
 					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
@@ -153,7 +152,19 @@
 						}
 					]
 				},
-				"modules": []
+				"modules": [
+					{
+						"id": "wps-interop-override",
+						"icon": "http://localhost:8080/favicon.ico",
+						"title": "Workspace Platform Starter Interop Broker",
+						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+						"enabled": true,
+						"url": "http://localhost:8080/js/modules/interop-override/wps-interop-override.bundle.js",
+						"data": {
+							"loggerName": "WpsInteropOverride"
+						}
+					}
+				]
 			}
 		},
 		"appProvider": {

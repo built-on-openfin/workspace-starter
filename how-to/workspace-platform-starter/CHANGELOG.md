@@ -4,10 +4,7 @@
 
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
-- Added modules as an option for platformProvider.interop settings and added interopOverride as a module generation option when calling npm run generate-module e.g. npm run generate-module interopOverride 'my override'. Also added the option of changing when/if the Workspace Platform Starter default interop override runs:
-  - after (default) - run the Workspace Platform Starter default broker implementation after your interop override modules (so the default implementation is the base class)
-  - before - run the Workspace Platform Starter default broker implementation before your interop override modules (so your interop overrides are the base class for our default implementation)
-  - never - never use the Workspace Platform Starter default implementation (So you will be responsible for adding full interop broker support through your modules)
+- Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider.interop settings and made the workspace platform starter interop override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your interop broker](./docs/how-to-customize-your-interop-broker.md). If you want the default interop broker to check endpoints to see if a context type should be enriched through an endpoint then you need to add the wps-interop-override module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
 
 ## v17.2.0
 

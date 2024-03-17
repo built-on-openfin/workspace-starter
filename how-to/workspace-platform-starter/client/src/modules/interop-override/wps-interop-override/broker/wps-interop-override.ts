@@ -8,21 +8,17 @@ import {
 	type ContextMetadata
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
-import { getApp, getApps } from "../../apps";
-import * as connectionProvider from "../../connections";
-import { hasEndpoint, requestResponse } from "../../endpoint";
-import { mapToAppMetaData as mapTo12AppMetaData } from "../../fdc3/1.2/mapper";
-import { mapToAppMetaData as mapTo20AppMetaData } from "../../fdc3/2.0/mapper";
-import { bringToFront, launch } from "../../launch";
-import { createLogger } from "../../logger-provider";
-import { MANIFEST_TYPES } from "../../manifest-types";
+import { mapToAppMetaData as mapTo12AppMetaData } from "workspace-platform-starter/fdc3/1.2/mapper";
+import { mapToAppMetaData as mapTo20AppMetaData } from "workspace-platform-starter/fdc3/2.0/mapper";
+import { MANIFEST_TYPES } from "workspace-platform-starter/manifest-types";
+import type { EndpointClient } from "workspace-platform-starter/shapes";
 import type {
 	AppsForIntent,
 	LaunchPreference,
 	PlatformApp,
 	PlatformAppIdentifier
-} from "../../shapes/app-shapes";
-import type { AppMetadata as AppMetadataV1Point2 } from "../../shapes/fdc3-1-2-shapes";
+} from "workspace-platform-starter/shapes/app-shapes";
+import type { AppMetadata as AppMetadataV1Point2 } from "workspace-platform-starter/shapes/fdc3-1-2-shapes";
 import type {
 	ApiMetadata,
 	CaptureApiPayload,
@@ -33,23 +29,47 @@ import type {
 	IntentTargetMetaData,
 	ProcessedContext,
 	PlatformInteropOverrideOptions
-} from "../../shapes/interopbroker-shapes";
-import { formatError, isEmpty, isString, isStringValue, randomUUID, sanitizeString } from "../../utils";
-import { getWindowPositionUsingStrategy } from "../../utils-position";
+} from "workspace-platform-starter/shapes/interopbroker-shapes";
+import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
+import type { ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import {
+	formatError,
+	isEmpty,
+	isString,
+	isStringValue,
+	randomUUID,
+	sanitizeString
+} from "workspace-platform-starter/utils";
+import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import { AppIntentHelper } from "./app-intent-helper";
 import { ClientRegistrationHelper } from "./client-registration-helper";
 import { IntentResolverHelper } from "./intent-resolver-helper";
 
-const logger = createLogger("InteropBroker");
-
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
  * @param options The options for the interop broker defined as part of the platform.
+ * @param logger The logger to use.
+ * @param helpers A collection of helper methods.
  * @returns The override constructor to be used in an array.
  */
 export async function getConstructorOverride(
-	options: PlatformInteropOverrideOptions
+	options: PlatformInteropOverrideOptions,
+	logger: Logger,
+	helpers: ModuleHelpers
 ): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
+	if (!helpers?.getApp || !helpers?.getApps || !helpers.launchApp) {
+		throw new Error(
+			"Interop Broker Constructor is missing required helpers. The broker will not function correctly so this error is to flag the issue."
+		);
+	}
+	const getApp = helpers.getApp;
+	const getApps = helpers.getApps;
+	let endpointClient: EndpointClient | undefined;
+	if (helpers?.getEndpointClient) {
+		endpointClient = await helpers?.getEndpointClient();
+	}
+
+	const launch = helpers.launchApp;
 	return (Base: OpenFin.Constructor<OpenFin.InteropBroker>) =>
 		/**
 		 * Extend the InteropBroker to handle intents.
@@ -105,14 +125,23 @@ export async function getConstructorOverride(
 					"Interop connection being made by the following identity. About to verify connection",
 					id
 				);
-				const response = await connectionProvider.isConnectionValid(id, payload, { type: "broker" });
-				if (response.isValid) {
-					logger.info("Connection validation request was validated and is valid.");
-					await this._clientRegistrationHelper.clientConnectionRegistered(id, payload as CaptureApiPayload);
-				} else {
-					logger.warn(`Connection request from ${JSON.stringify(id)} was validated and rejected.`);
+				const apiPayload: CaptureApiPayload = payload as CaptureApiPayload;
+				if (!isEmpty(helpers.isConnectionValid)) {
+					const response = await helpers.isConnectionValid(id, payload, { type: "broker" });
+					if (response.isValid) {
+						logger.info("Connection validation request was validated and is valid.");
+						await this._clientRegistrationHelper.clientConnectionRegistered(id, apiPayload);
+					} else {
+						logger.warn(`Connection request from ${JSON.stringify(id)} was validated and rejected.`);
+					}
+					return response.isValid;
 				}
-				return response.isValid;
+				// we have not been provided with a means to validate the connection so fallback to default behavior and register the connection
+				const isValid = await super.isConnectionAuthorized(id, payload);
+				if (isValid) {
+					await this._clientRegistrationHelper.clientConnectionRegistered(id, apiPayload);
+				}
+				return isValid;
 			}
 
 			/**
@@ -198,7 +227,7 @@ export async function getConstructorOverride(
 				const isFDC32 = apiVersion?.type === "fdc3" && apiVersion.version === "2.0";
 				const mappedIntents = intents.map((entry) => ({
 					intent: entry.intent,
-					apps: entry.apps.map((app) => {
+					apps: entry.apps.map((app: PlatformApp) => {
 						let resultType: string | undefined;
 						const listensFor = app?.interop?.intents?.listensFor;
 						if (!isEmpty(listensFor) && !isEmpty(listensFor[entry.intent.name])) {
@@ -247,7 +276,7 @@ export async function getConstructorOverride(
 				const isFDC32 = apiVersion?.type === "fdc3" && apiVersion.version === "2.0";
 				const response = {
 					intent: result.intent,
-					apps: result.apps.map((app) => {
+					apps: result.apps.map((app: PlatformApp) => {
 						let resultType: string | undefined;
 						const listensFor = app?.interop?.intents?.listensFor;
 						if (!isEmpty(listensFor) && !isEmpty(listensFor[result.intent.name])) {
@@ -621,7 +650,7 @@ export async function getConstructorOverride(
 							if (!isEmpty(bounds)) {
 								launchPreference = { bounds };
 							}
-							platformIdentities = await launch(requestedApp, launchPreference);
+							platformIdentities = await launch(requestedApp?.appId, launchPreference);
 						} else {
 							focusApp = true;
 						}
@@ -684,8 +713,8 @@ export async function getConstructorOverride(
 					}
 
 					if (!isEmpty(appId)) {
-						if (focusApp && !isEmpty(platformIdentities)) {
-							await bringToFront(requestedApp, platformIdentities);
+						if (focusApp && !isEmpty(platformIdentities) && !isEmpty(helpers?.bringAppToFront)) {
+							await helpers.bringAppToFront(requestedApp, platformIdentities);
 						}
 						return { appId, instanceId };
 					}
@@ -909,7 +938,7 @@ export async function getConstructorOverride(
 					if (!isEmpty(bounds)) {
 						launchPreference = { bounds };
 					}
-					platformIdentities = await launch(app, launchPreference);
+					platformIdentities = await launch(app.appId, launchPreference);
 					if (!platformIdentities?.length) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
@@ -937,7 +966,9 @@ export async function getConstructorOverride(
 					await super.setIntentTarget(intent, target);
 					if (existingInstance) {
 						try {
-							await bringToFront(app, [target]);
+							if (helpers.bringAppToFront) {
+								await helpers.bringAppToFront(app, [target]);
+							}
 						} catch (bringToFrontError) {
 							logger.warn(
 								`There was an error bringing app: ${target.appId}, and instance ${target.instanceId} with name: ${target.name} to front.`,
@@ -1370,12 +1401,18 @@ export async function getConstructorOverride(
 			 * @returns The processed context.
 			 */
 			private async processContext(context: OpenFin.Context): Promise<OpenFin.Context> {
+				if (isEmpty(endpointClient)) {
+					return context;
+				}
 				const endpointId = `interopbroker.process.${context.type}`;
-				if (hasEndpoint(endpointId)) {
+				if (endpointClient.hasEndpoint(endpointId)) {
 					logger.info(`Processing context ${context.type} with endpoint ${endpointId}`);
-					const processedContext = await requestResponse<ContextToProcess, ProcessedContext>(endpointId, {
-						context
-					});
+					const processedContext = await endpointClient.requestResponse<ContextToProcess, ProcessedContext>(
+						endpointId,
+						{
+							context
+						}
+					);
 					if (processedContext?.context) {
 						return processedContext?.context;
 					}

@@ -5,8 +5,6 @@ import type { WindowPositioningOptions } from "../shapes/browser-shapes";
 import type { PlatformInteropOverride, PlatformInteropOverrideOptions } from "../shapes/interopbroker-shapes";
 import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "../shapes/module-shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
-import { isEmpty } from "../utils";
-import { getConstructorOverride } from "./broker/interop-override";
 
 const logger = createLogger("InteropProvider");
 const allOverrides: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [];
@@ -24,7 +22,7 @@ export async function init(
 	windowPositioningOptions: WindowPositioningOptions,
 	helpers: ModuleHelpers
 ): Promise<void> {
-	if (options) {
+	if (options && !isInitialized) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { modules: moduleOptions, ...settings } = options?.interop ?? {};
 		const interopOverrideSettings: PlatformInteropOverrideOptions | undefined = settings;
@@ -52,27 +50,11 @@ export async function init(
 
 		logger.info("Getting interop overrides...");
 
-		if (
-			interopOverrideSettings?.defaultBrokerStrategy === "after" ||
-			isEmpty(interopOverrideSettings?.defaultBrokerStrategy)
-		) {
-			logger.info(
-				"Adding default interop override so it executes after the list of custom interop overrides"
-			);
-			allOverrides.push(await getConstructorOverride(interopOverrideSettings));
-		}
 		for (const interopModule of modules) {
 			const interopConstructor =
 				await interopModule.implementation.getConstructorOverride(interopOverrideSettings);
 			allOverrides.push(interopConstructor);
 			logger.info(`Added interopOverride module: ${interopModule.definition.id}`);
-		}
-		if (interopOverrideSettings?.defaultBrokerStrategy === "before") {
-			logger.info("Adding default interop override so it runs before the list of custom interop overrides");
-			allOverrides.push(await getConstructorOverride(interopOverrideSettings));
-		}
-		if (interopOverrideSettings?.defaultBrokerStrategy === "never") {
-			logger.info("The default interop override will not be added and will not be executed.");
 		}
 		logger.info("Finished setting up interop overrides.");
 		isInitialized = true;
