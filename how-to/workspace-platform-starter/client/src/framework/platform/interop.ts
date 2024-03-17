@@ -53,10 +53,12 @@ export async function init(
 		logger.info("Getting interop overrides...");
 
 		if (
-			interopOverrideSettings?.defaultBrokerStrategy === "first" ||
+			interopOverrideSettings?.defaultBrokerStrategy === "after" ||
 			isEmpty(interopOverrideSettings?.defaultBrokerStrategy)
 		) {
-			logger.info("Adding default interop override first");
+			logger.info(
+				"Adding default interop override so it executes after the list of custom interop overrides"
+			);
 			allOverrides.push(await getConstructorOverride(interopOverrideSettings));
 		}
 		for (const interopModule of modules) {
@@ -65,9 +67,12 @@ export async function init(
 			allOverrides.push(interopConstructor);
 			logger.info(`Added interopOverride module: ${interopModule.definition.id}`);
 		}
-		if (interopOverrideSettings?.defaultBrokerStrategy === "last") {
-			logger.info("Adding default interop override last");
+		if (interopOverrideSettings?.defaultBrokerStrategy === "before") {
+			logger.info("Adding default interop override so it runs before the list of custom interop overrides");
 			allOverrides.push(await getConstructorOverride(interopOverrideSettings));
+		}
+		if (interopOverrideSettings?.defaultBrokerStrategy === "never") {
+			logger.info("The default interop override will not be added and will not be executed.");
 		}
 		logger.info("Finished setting up interop overrides.");
 		isInitialized = true;

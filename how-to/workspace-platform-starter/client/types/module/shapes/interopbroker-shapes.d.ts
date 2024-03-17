@@ -35,13 +35,13 @@ export type PlatformInteropOverrideOptions = Omit<PlatformInteropBrokerOptions, 
  */
 export interface PlatformInteropBrokerOptions extends ModuleList {
 	/**
-	 * The platform includes a default broker override. The default 'first' is to have our built-in implementation added to the start of the array of overrides (so it will execute last).
-	 * If you wish to have your logic called after the default implementation set this to 'last'.
-	 * If you wish to only have your logic called set this to 'omit'.
-	 * If you wish to have your logic called before the default implementation set this to 'first' or leave it as the default.
-	 * The default is first. Please note that if you omit the default implementation you will need to handle all the logic for the interop broker other than what is provided by OpenFin out of the box.
+	 * The platform includes a default broker override and this setting allows you to control when it is called.
+	 * If you wish to have the default interop override execute after your logic (it is the base) then set this to "after" (the default if not set).
+	 * If you wish to have the default interop override execute before your logic (your modules are the base) then set this to "before".
+	 * If you wish to just use your modules then you can specify "never" and the default interop override will not execute anywhere (Please note this
+	 * will mean you will be responsible for implementing all interop broker logic beyond the base runtime implementation).
 	 */
-	defaultBrokerStrategy?: "first" | "last" | "omit";
+	defaultBrokerStrategy?: "before" | "after" | "never";
 	/**
 	 * Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the
 	 * platform

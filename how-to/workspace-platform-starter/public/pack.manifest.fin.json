@@ -158,7 +158,8 @@
 							"contexts": ["fdc3.instrument"]
 						}
 					]
-				}
+				},
+				"modules": []
 			}
 		},
 		"appProvider": {
@@ -320,7 +321,9 @@
 				},
 				"workspacePlatform": {
 					"pages": [],
-					"title": "Browser Starter",
+					"title": {
+						"type": "view-title"
+					},
 					"favicon": "http://localhost:8080/favicon.ico"
 				}
 			},

@@ -152,7 +152,8 @@
 							"contexts": ["fdc3.instrument"]
 						}
 					]
-				}
+				},
+				"modules": []
 			}
 		},
 		"appProvider": {

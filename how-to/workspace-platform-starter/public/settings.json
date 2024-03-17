@@ -287,7 +287,9 @@
 			},
 			"workspacePlatform": {
 				"pages": [],
-				"title": "Second Browser Starter",
+				"title": {
+					"type": "view-title"
+				},
 				"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html"
 			}
