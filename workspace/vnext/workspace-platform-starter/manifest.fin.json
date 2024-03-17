@@ -164,7 +164,8 @@
 							"contexts": ["fdc3.instrument"]
 						}
 					]
-				}
+				},
+				"modules": []
 			}
 		},
 		"appProvider": {
@@ -1282,7 +1283,7 @@
 					"id": "quote",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
 					"title": "Quote Provider",
-					"enabled": true,
+					"enabled": false,
 					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v17.4.0/integrations/js/modules/integrations/quote.bundle.js",
 					"data": {
 						"rootUrl": "https://built-on-openfin.github.io/dev-extensions/extensions/v17.4.0/integrations/data/quotes/"
@@ -1292,7 +1293,7 @@
 					"id": "emoji",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
 					"title": "Emoji Provider",
-					"enabled": true,
+					"enabled": false,
 					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v17.4.0/integrations/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
