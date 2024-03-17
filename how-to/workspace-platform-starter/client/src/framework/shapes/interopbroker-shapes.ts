@@ -1,28 +1,22 @@
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import type { WindowPositioningOptions } from "./browser-shapes";
 import type { Endpoint, EndpointDefinition } from "./endpoint-shapes";
-import type { ModuleEntry, ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
-import { WindowPositioningOptions } from "./browser-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
  * Definition for conditions module type.
  */
 export interface PlatformInteropOverride<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**
-	 * Get the override callback for the interop broker (useful if this is the only implementation and you wish to assign it to a platform's initialization object).
-	 * @param options The options for the interop broker defined as part of the platform.
-	 * @returns The override callback.
-	 */
-	getOverrideCallback(options: PlatformInteropOverrideOptions):
-	Promise<OpenFin.OverrideCallback<OpenFin.InteropBroker, OpenFin.InteropBroker>>;
-	/**
 	 * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
 	 * @param options The options for the interop broker defined as part of the platform.
 	 * @returns The override constructor to be used in an array.
 	 */
-	getConstructorOverride(options: PlatformInteropOverrideOptions):
-	Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>>;
+	getConstructorOverride(
+		options: PlatformInteropOverrideOptions
+	): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>>;
 }
 
 /**
@@ -42,12 +36,13 @@ export type PlatformInteropOverrideOptions = Omit<PlatformInteropBrokerOptions, 
 /**
  * Options for the platform interop broker.
  */
-export interface PlatformInteropBrokerOptions extends ModuleList{
+export interface PlatformInteropBrokerOptions extends ModuleList {
 	/**
-	 * The platform includes a default broker override. The default is to have our built-in implementation added to the end of the array of overrides.
-	 * If you wish to have your logic called after the default implementation set this to first. If you wish to only have
-	 * your logic called set this to omit. If you wish to have your logic called before the default implementation set this to last.
-	 * The default is last. Please note that if you omit the default implementation you will need to handle all the logic for the interop broker other than what is provided by OpenFin out of the box.
+	 * The platform includes a default broker override. The default 'first' is to have our built-in implementation added to the start of the array of overrides (so it will execute last).
+	 * If you wish to have your logic called after the default implementation set this to 'last'.
+	 * If you wish to only have your logic called set this to 'omit'.
+	 * If you wish to have your logic called before the default implementation set this to 'first' or leave it as the default.
+	 * The default is first. Please note that if you omit the default implementation you will need to handle all the logic for the interop broker other than what is provided by OpenFin out of the box.
 	 */
 	defaultBrokerStrategy?: "first" | "last" | "omit";
 	/**

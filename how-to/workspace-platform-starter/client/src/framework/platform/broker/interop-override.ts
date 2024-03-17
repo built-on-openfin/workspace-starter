@@ -27,19 +27,15 @@ import type {
 	ApiMetadata,
 	CaptureApiPayload,
 	ContextToProcess,
-	IntentOptions,
 	OpenOptions,
 	IntentResolverResponse,
 	IntentRegistrationPayload,
-	IntentResolverOptions,
 	IntentTargetMetaData,
 	ProcessedContext,
 	PlatformInteropOverrideOptions
 } from "../../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue, randomUUID, sanitizeString } from "../../utils";
-import {
-	getWindowPositionUsingStrategy
-} from "../../utils-position";
+import { getWindowPositionUsingStrategy } from "../../utils-position";
 import { AppIntentHelper } from "./app-intent-helper";
 import { ClientRegistrationHelper } from "./client-registration-helper";
 import { IntentResolverHelper } from "./intent-resolver-helper";
@@ -51,22 +47,14 @@ const logger = createLogger("InteropBroker");
  * @param options The options for the interop broker defined as part of the platform.
  * @returns The override constructor to be used in an array.
  */
-export async function getConstructorOverride(options: PlatformInteropOverrideOptions):
-Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
-	return (Base: OpenFin.Constructor<OpenFin.InteropBroker>) => {
-		const platformIntentOptions: IntentOptions | undefined = {
-			intentTimeout: 15000,
-			...options?.intentOptions
-		};
-		const intentResolverOptions: IntentResolverOptions = options?.intentResolver ?? {
-			 								fdc3InteropApi: "2.0",
-			 								url: `${options.platformRootUrl}/common/windows/intents/instance-picker.html`,
-			 								title: "Intent Resolver"
-			 							};
+export async function getConstructorOverride(
+	options: PlatformInteropOverrideOptions
+): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
+	return (Base: OpenFin.Constructor<OpenFin.InteropBroker>) =>
 		/**
 		 * Extend the InteropBroker to handle intents.
 		 */
-		return class InteropOverride extends Base {
+		class InteropOverride extends Base {
 			private readonly _openOptions?: OpenOptions;
 
 			private readonly _unregisteredApp: PlatformApp | undefined;
@@ -84,22 +72,22 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 			 */
 			constructor() {
 				super();
-				logger.info("Interop Broker Constructor fetching settings.");
+				logger.info("Interop Broker Constructor applying settings.");
 				this._appIntentHelper = new AppIntentHelper(getApps, logger);
 				this._clientRegistrationHelper = new ClientRegistrationHelper(
 					async (clientIdentity: OpenFin.ClientIdentity) => this.lookupAppId(clientIdentity),
 					logger
 				);
 				this._metadataKey = `_metadata_${randomUUID()}`;
-				this._intentResolverHelper = new IntentResolverHelper(
-					intentResolverOptions,
-					logger,
-					options?.unregisteredApp?.appId
-				);
-				this._openOptions = {
-					openStrategy: "fdc3",
-					...options?.openOptions
-				};
+				if (options.intentResolver) {
+					this._intentResolverHelper = new IntentResolverHelper(
+						options.intentResolver,
+						logger,
+						options?.unregisteredApp?.appId
+					);
+				}
+
+				this._openOptions = options?.openOptions;
 				this._unregisteredApp = options?.unregisteredApp;
 				if (!isEmpty(this._unregisteredApp)) {
 					this._unregisteredApp.manifestType = MANIFEST_TYPES.UnregisteredApp.id;
@@ -113,7 +101,10 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 			 * @returns True if the connection is authorized.
 			 */
 			public async isConnectionAuthorized(id: OpenFin.ClientIdentity, payload?: unknown): Promise<boolean> {
-				logger.info("Interop connection being made by the following identity. About to verify connection", id);
+				logger.info(
+					"Interop connection being made by the following identity. About to verify connection",
+					id
+				);
 				const response = await connectionProvider.isConnectionValid(id, payload, { type: "broker" });
 				if (response.isValid) {
 					logger.info("Connection validation request was validated and is valid.");
@@ -623,8 +614,10 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 					} else {
 						if (isEmpty(platformIdentities)) {
 							let launchPreference: LaunchPreference | undefined;
-							const bounds = await getWindowPositionUsingStrategy(options.windowPositionOptions,
-								clientIdentity);
+							const bounds = await getWindowPositionUsingStrategy(
+								options.windowPositionOptions,
+								clientIdentity
+							);
 							if (!isEmpty(bounds)) {
 								launchPreference = { bounds };
 							}
@@ -648,7 +641,7 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 								);
 							}
 							if (!isEmpty(fdc3OpenOptions?.context)) {
-								const contextTimeout: number | undefined = platformIntentOptions?.intentTimeout;
+								const contextTimeout: number | undefined = options?.intentOptions?.intentTimeout;
 								const contextTypeName = fdc3OpenOptions.context.type;
 								// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 								const clientReadyInstanceId = await this._clientRegistrationHelper.onContextClientReady(
@@ -756,7 +749,8 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 					if (!isEmpty(app.instanceId)) {
 						const allConnectedClients = await this.getAllClientInfo();
 						const connectedClient = allConnectedClients.find(
-							(client) => client.endpointId === app.instanceId);
+							(client) => client.endpointId === app.instanceId
+						);
 						if (!isEmpty(connectedClient) && connectedClient.uuid === fin.me.identity.uuid) {
 							const identity = { uuid: connectedClient.uuid, name: connectedClient.name };
 							let title: string | undefined;
@@ -921,7 +915,7 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 					}
 					existingInstance = false;
 					if (platformIdentities.length === 1) {
-						const intentTimeout: number | undefined = platformIntentOptions?.intentTimeout;
+						const intentTimeout: number | undefined = options?.intentOptions?.intentTimeout;
 						// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 						try {
 							instanceId = await this._clientRegistrationHelper.onIntentClientReady(
@@ -980,7 +974,12 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 					throw new Error(ResolveError.NoAppsFound);
 				}
 				const instanceId: string | undefined = userSelection.instanceId;
-				const intentResolver = await this.launchAppWithIntent(selectedApp, intent, instanceId, clientIdentity);
+				const intentResolver = await this.launchAppWithIntent(
+					selectedApp,
+					intent,
+					instanceId,
+					clientIdentity
+				);
 				if (isEmpty(intentResolver)) {
 					throw new Error(ResolveError.NoAppsFound);
 				}
@@ -1028,7 +1027,8 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 						!availableAppInstances.some(
 							(entry) =>
 								// eslint-disable-next-line max-len
-								entry.appId === targetAppIdentifier.appId && entry.instanceId === targetAppIdentifier.instanceId
+								entry.appId === targetAppIdentifier.appId &&
+								entry.instanceId === targetAppIdentifier.instanceId
 						)
 					) {
 						throw new Error(ResolveError.TargetInstanceUnavailable);
@@ -1088,8 +1088,12 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 						this.createNewInstance(targetApp) ||
 						launchSingleInstanceApp
 					) {
-						const intentResolver = await this.launchAppWithIntent(targetApp,
-							intent, undefined, clientIdentity);
+						const intentResolver = await this.launchAppWithIntent(
+							targetApp,
+							intent,
+							undefined,
+							clientIdentity
+						);
 						if (isEmpty(intentResolver)) {
 							throw new Error(ResolveError.IntentDeliveryFailed);
 						}
@@ -1338,7 +1342,10 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 				const appNotFound = isEmpty(app);
 
 				if (appNotFound && clientIdentity.uuid !== fin.me.identity.uuid) {
-					logger.warn("Lookup made by a non-registered app that is outside of this platform.", clientIdentity);
+					logger.warn(
+						"Lookup made by a non-registered app that is outside of this platform.",
+						clientIdentity
+					);
 					return;
 				}
 
@@ -1391,5 +1398,4 @@ Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 				};
 			}
 		};
-	};
 }

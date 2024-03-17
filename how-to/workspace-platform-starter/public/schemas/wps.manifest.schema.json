@@ -3682,6 +3682,11 @@
 			"additionalProperties": false,
 			"description": "Options for the platform interop broker.",
 			"properties": {
+				"defaultBrokerStrategy": {
+					"description": "The platform includes a default broker override. The default 'first' is to have our built-in implementation added to the start of the array of overrides (so it will execute last).\nIf you wish to have your logic called after the default implementation set this to 'last'.\nIf you wish to only have your logic called set this to 'omit'.\nIf you wish to have your logic called before the default implementation set this to 'first' or leave it as the default.\nThe default is first. Please note that if you omit the default implementation you will need to handle all the logic for the interop broker other than what is provided by OpenFin out of the box.",
+					"enum": ["first", "last", "omit"],
+					"type": "string"
+				},
 				"intentOptions": {
 					"$ref": "#/definitions/IntentOptions",
 					"description": "Options related to the way this platform supports intents"
@@ -3689,6 +3694,13 @@
 				"intentResolver": {
 					"$ref": "#/definitions/IntentResolverOptions",
 					"description": "Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the\nplatform"
+				},
+				"modules": {
+					"description": "The list of modules.",
+					"items": {
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
+					},
+					"type": "array"
 				},
 				"openOptions": {
 					"$ref": "#/definitions/OpenOptions",

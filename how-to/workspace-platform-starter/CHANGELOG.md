@@ -4,6 +4,7 @@
 
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
+- Added modules as an option for platformProvider.interop settings and added interopOverride as a module generation option when calling npm run generate-module e.g. npm run generate-module interopOverride 'my override'. Also added the option of changing the order where the default interop override included with WPS is included (first or last or omit) via platformProvider.interop.defaultBrokerStrategy.
 
 ## v17.2.0
 

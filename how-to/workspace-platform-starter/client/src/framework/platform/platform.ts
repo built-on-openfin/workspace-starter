@@ -32,10 +32,10 @@ import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
 import { getDefaultWindowOptions } from "./browser";
 import * as interopProvider from "./interop";
+import { getInteropConstructorOverrides } from "./interop";
 import { overrideCallback } from "./platform-override";
 import * as platformSplashProvider from "./platform-splash";
 import { PLATFORM_VERSION } from "./platform-version";
-import { getInteropConstructorOverrides } from "./interop";
 
 const logger = loggerProvider.createLogger("Platform");
 
