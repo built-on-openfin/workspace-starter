@@ -334,14 +334,6 @@
 		},
 		"browserProvider": {
 			"defaultWindowOptions": {
-				"permissions": {
-					"System": {
-						"openUrlWithBrowser": {
-							"enabled": true,
-							"protocols": ["mailto", "msteams", "tel"]
-						}
-					}
-				},
 				"viewVisibility": {
 					"showViewsOnTabDrag": {
 						"enabled": true
@@ -364,16 +356,7 @@
 					}
 				}
 			},
-			"defaultViewOptions": {
-				"permissions": {
-					"System": {
-						"openUrlWithBrowser": {
-							"enabled": true,
-							"protocols": ["mailto", "msteams", "tel"]
-						}
-					}
-				}
-			},
+			"defaultViewOptions": {},
 			"windowPositioningStrategy": {
 				"x": 30,
 				"y": 30,
