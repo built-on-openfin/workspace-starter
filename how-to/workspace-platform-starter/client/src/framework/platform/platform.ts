@@ -154,6 +154,9 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
 
+	if (!isEmpty(customSettings?.browserProvider?.title)) {
+		browser.title = customSettings?.browserProvider?.title;
+	}
 	if (!isEmpty(customSettings?.browserProvider)) {
 		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings?.browserProvider);
 	}
