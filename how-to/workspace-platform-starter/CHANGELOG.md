@@ -5,6 +5,7 @@
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
 - Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider.interop settings and made the workspace platform starter interop override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your interop broker](./docs/how-to-customize-your-interop-broker.md). If you want the default interop broker to check endpoints to see if a context type should be enriched through an endpoint then you need to add the wps-interop-override module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
+- Added support for a title to be specified in the browserProvider that will be used as the platform name in the browser Quit menu option and the confirmation dialog.
 
 ## v17.2.0
 

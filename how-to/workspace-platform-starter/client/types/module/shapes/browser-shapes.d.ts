@@ -11,7 +11,7 @@ import type { MenuEntry, PopupMenuStyles } from "./menu-shapes";
  */
 export type BrowserProviderOptions = Pick<
 	BrowserInitConfig,
-	"defaultWindowOptions" | "defaultPageOptions" | "defaultViewOptions"
+	"defaultWindowOptions" | "defaultPageOptions" | "defaultViewOptions" | "title"
 > & {
 	/**
 	 * This setting lets you override the default workspace browser buttons and specify your own.

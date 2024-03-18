@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
+import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
 import type { DialogClient } from "./dialog-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
@@ -12,7 +13,6 @@ import type { NotificationClient } from "./notification-shapes";
 import type { ShareClient } from "./share-shapes";
 import type { ThemeClient } from "./theme-shapes";
 import type { VersionInfo } from "./version-shapes";
-import { ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
 /**
  * List of modules.
  */
