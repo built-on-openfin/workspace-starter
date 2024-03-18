@@ -72,7 +72,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/cam/browser-label/workspace-platform-starter/favicon.ico",
-		"name": "Default Workspace Platform - v17.2.0",
+		"name": "Default Workspace Platform - v17.4.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -158,7 +158,20 @@
 							"contexts": ["fdc3.instrument"]
 						}
 					]
-				}
+				},
+				"modules": [
+					{
+						"id": "wps-interop-override",
+						"icon": "https://built-on-openfin.github.io/workspace-starter/dev/cam/browser-label/workspace-platform-starter/favicon.ico",
+						"title": "Workspace Platform Starter Interop Broker",
+						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+						"enabled": true,
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/cam/browser-label/workspace-platform-starter/js/modules/interop-override/wps-interop-override.bundle.js",
+						"data": {
+							"loggerName": "WpsInteropOverride"
+						}
+					}
+				]
 			}
 		},
 		"appProvider": {
@@ -320,7 +333,9 @@
 				},
 				"workspacePlatform": {
 					"pages": [],
-					"title": "Browser Starter",
+					"title": {
+						"type": "view-title"
+					},
 					"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/cam/browser-label/workspace-platform-starter/favicon.ico"
 				}
 			},
