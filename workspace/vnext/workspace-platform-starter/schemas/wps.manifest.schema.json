@@ -534,6 +534,10 @@
 					},
 					"type": "array"
 				},
+				"title": {
+					"description": "The platform title. UI friendly title for the platform in browser.",
+					"type": "string"
+				},
 				"toolbarButtons": {
 					"description": "This setting lets you override the default workspace browser buttons and specify your own.",
 					"items": {
