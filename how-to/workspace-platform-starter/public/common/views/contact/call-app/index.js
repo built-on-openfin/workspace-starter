@@ -45,6 +45,16 @@ function initializeDOM() {
 		} else {
 			action.textContent = `End Call${contactNameLabel}`;
 			seconds = 0;
+			const userChannel = await fdc3.getCurrentChannel();
+			if (
+				window.fdc3 !== undefined &&
+				userChannel !== undefined &&
+				userChannel !== null &&
+				currentContact !== undefined
+			) {
+				console.log(`Current Channel: ${userChannel.id}`);
+				fdc3.broadcast(currentContact);
+			}
 			update();
 			intervalId = setInterval(() => {
 				update();
@@ -60,7 +70,7 @@ function initializeDOM() {
 	 * @param intentName The intent name.
 	 */
 	function updateCallInformation(ctx, intentName) {
-		if (ctx !== undefined) {
+		if (ctx !== undefined && (currentContact === undefined || currentContact.name !== ctx.name)) {
 			if (ctx.type === 'fdc3.contact') {
 				contactNameLabel = ` To ${ctx.name}`;
 				contactHeaderLabel.textContent = ctx.name;
