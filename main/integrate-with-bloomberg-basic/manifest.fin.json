@@ -10,11 +10,38 @@
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-bloomberg-basic/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-bloomberg-basic/platform/provider.html",
-		"preventQuitOnLastWindowClosed": false
+		"preventQuitOnLastWindowClosed": false,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"launchExternalProcess": true,
+					"terminateExternalProcess": true,
+					"downloadAsset": true
+				}
+			}
+		},
+		"defaultViewOptions": {
+			"permissions": {
+				"System": {
+					"launchExternalProcess": true,
+					"terminateExternalProcess": true,
+					"downloadAsset": true
+				}
+			}
+		}
 	},
 	"snapshot": {
 		"windows": [
 			{
+				"defaultHeight": 500,
+				"defaultWidth": 800,				
 				"layout": {
 					"content": [
 						{
