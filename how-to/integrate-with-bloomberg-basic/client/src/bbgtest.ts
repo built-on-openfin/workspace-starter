@@ -1,7 +1,6 @@
 import {
 	connect,
 	enableLogging,
-	isBloombergTerminalReady,
 	type BloombergConnection
 } from "@openfin/bloomberg";
 import type OpenFin from "@openfin/core";
@@ -20,6 +19,8 @@ let btnQuery: HTMLButtonElement | null;
 let intentTypeElement: HTMLSelectElement | null;
 let intentValueElement: HTMLSelectElement | null;
 let logOutput: HTMLPreElement | null;
+
+const API_KEY = "<Please insert your API key here>";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// Enable logging in the BBG package
@@ -191,14 +192,7 @@ async function connectToBBGTerminal(): Promise<void> {
 	try {
 		logInformation("Checking Bloomberg Terminal Status");
 
-		if (!(await isBloombergTerminalReady())) {
-			const error = new Error("Failed to connect to Bloomberg terminal.");
-			console.log(error);
-			logInformation("Failed to connect to Bloomberg terminal.");
-			throw error;
-		}
-
-		bbgConnection = await connect();
+		bbgConnection = await connect(API_KEY);
 		logInformation("Connection successful");
 	} catch (error) {
 		bbgConnection = undefined;
