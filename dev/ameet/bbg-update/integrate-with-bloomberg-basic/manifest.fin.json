@@ -12,27 +12,27 @@
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/bbg-update/integrate-with-bloomberg-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": false,
 		"permissions": {
-            "System": {
-                "launchExternalProcess": true,
+			"System": {
+				"launchExternalProcess": true,
 				"terminateExternalProcess": true,
-				"downloadAsset": true             
-            }
-        },
+				"downloadAsset": true
+			}
+		},
 		"defaultWindowOptions": {
-            "permissions": {
-                "System": {
+			"permissions": {
+				"System": {
 					"launchExternalProcess": true,
 					"terminateExternalProcess": true,
-					"downloadAsset": true             
+					"downloadAsset": true
 				}
-            }            
-        },
+			}
+		},
 		"defaultViewOptions": {
 			"permissions": {
 				"System": {
 					"launchExternalProcess": true,
 					"terminateExternalProcess": true,
-					"downloadAsset": true             
+					"downloadAsset": true
 				}
 			}
 		}
