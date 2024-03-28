@@ -1,8 +1,4 @@
-import {
-	connect,
-	enableLogging,
-	type BloombergConnection
-} from "@openfin/bloomberg";
+import { connect, enableLogging, type BloombergConnection } from "@openfin/bloomberg";
 import type OpenFin from "@openfin/core";
 
 let bbgConnection: BloombergConnection | undefined;
