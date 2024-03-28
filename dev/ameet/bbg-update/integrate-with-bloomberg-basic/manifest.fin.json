@@ -40,6 +40,8 @@
 	"snapshot": {
 		"windows": [
 			{
+				"defaultHeight": 500,
+				"defaultWidth": 800,				
 				"layout": {
 					"content": [
 						{
