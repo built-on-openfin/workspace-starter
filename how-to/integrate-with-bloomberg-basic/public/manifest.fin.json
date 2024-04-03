@@ -10,11 +10,38 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
-		"preventQuitOnLastWindowClosed": false
+		"preventQuitOnLastWindowClosed": false,
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true
+			}
+		},
+		"defaultWindowOptions": {
+			"permissions": {
+				"System": {
+					"launchExternalProcess": true,
+					"terminateExternalProcess": true,
+					"downloadAsset": true
+				}
+			}
+		},
+		"defaultViewOptions": {
+			"permissions": {
+				"System": {
+					"launchExternalProcess": true,
+					"terminateExternalProcess": true,
+					"downloadAsset": true
+				}
+			}
+		}
 	},
 	"snapshot": {
 		"windows": [
 			{
+				"defaultHeight": 500,
+				"defaultWidth": 800,				
 				"layout": {
 					"content": [
 						{
