@@ -9,7 +9,6 @@
 ## Pre-requisites
 
 - Bloomberg Terminal software installed, running and with a user logged in. Software can be acquired from here: <https://www.bloomberg.com/professional/support/software-updates/>
-- An API key provided by Bloomberg. This should be inserted in the place indicated in the file bbgtest.ts
 - Please see the documentation online for more information - <https://developers.openfin.co/of-docs/docs/integration-with-terminal-connect>
 
 ## Notes about this sample
@@ -32,6 +31,7 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
+- An API key provided by Bloomberg. This should be inserted in the place indicated in the file bbgtest.ts
 
 ## Getting Started
 
