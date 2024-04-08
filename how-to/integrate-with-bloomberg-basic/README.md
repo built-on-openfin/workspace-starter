@@ -9,7 +9,6 @@
 ## Pre-requisites
 
 - Bloomberg Terminal software installed, running and with a user logged in. Software can be acquired from here: <https://www.bloomberg.com/professional/support/software-updates/>
-- An API key provided by Bloomberg. This should be inserted in the place indicated in the file bbgtest.ts
 - Please see the documentation online for more information - <https://developers.openfin.co/of-docs/docs/integration-with-terminal-connect>
 
 ## Notes about this sample
@@ -26,6 +25,14 @@ This application you are about to install is a simple example of connecting to a
 | ViewQuote      | fdc3.instrument | Q                 |
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+
+## Configuring the Sample
+
+To run this sample you must first acquire an API key from Bloomberg. This API key should be inserted in the place indicated in the file bbgtest.ts
+
+```js
+const API_KEY = '<Please insert your API key here>';
+```
 
 ## Running the Sample
 
