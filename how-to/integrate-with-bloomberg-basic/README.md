@@ -29,8 +29,9 @@ This example assumes you have already [set up your development environment](http
 ## Configuring the Sample
 
 To run this sample you must first acquire an API key from Bloomberg. This API key should be inserted in the place indicated in the file bbgtest.ts
+
 ```js
-const API_KEY = "<Please insert your API key here>";
+const API_KEY = '<Please insert your API key here>';
 ```
 
 ## Running the Sample
