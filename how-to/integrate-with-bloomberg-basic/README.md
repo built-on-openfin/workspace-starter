@@ -26,12 +26,15 @@ This application you are about to install is a simple example of connecting to a
 
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
+## Configuring the Sample
+
+To run this sample you must first acquire an API key from Bloomberg. This API key should be inserted in the place indicated in the file bbgtest.ts
+
 ## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- An API key provided by Bloomberg. This should be inserted in the place indicated in the file bbgtest.ts
 
 ## Getting Started
 
