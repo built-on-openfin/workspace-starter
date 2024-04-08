@@ -96,7 +96,7 @@ The module should be compiled as a JavaScript ESM module, an example webpack con
 ```js
 {
     entry: './client/src/modules/log/console/index.ts',
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     module: {
         rules: [
             {

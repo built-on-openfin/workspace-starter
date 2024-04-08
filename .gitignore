@@ -9,6 +9,8 @@ how-to/integrate-with-salesforce/public/js/preload.js
 how-to/integrate-with-salesforce-basic/public/js/preload.js
 # Bundle/builds
 **/*.bundle.js
+**/*.bundle.js.map
+**/*.bundle.js.LICENSE.txt
 **/build
 ./public*/
 updatable-packages.txt
