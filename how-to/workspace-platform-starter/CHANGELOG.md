@@ -2,6 +2,10 @@
 
 ## v17.2.0
 
+- Updated default build options. No longer bundling fdc3 module just for error strings. We have a copy of the strings to remove the dependency from the output (as it increased the size of the provider js)
+- Updated webpack config to use source-map instead of inline-source-map to have smaller js files by default (devtools will import the sourcemap). It also gives you the option of whether or not you copy source map files alongside the files.
+- Changed to production instead of development for the webpack build in package.json to have a more efficient js file.
+- Added some useful commands `npm run explore-platform` and `npm run explore-modules` which should be run after you have run an initial build `npm run build`. This provides an overview of the bundles that are produced and lets you track the size of your modules as well as the platform.
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
 - Added lifecycle events for `language-changed` which includes the selected locale and updated `page-changed` so that you can listen for when a page is focused as there is now a focus event.

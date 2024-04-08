@@ -8,7 +8,7 @@ const alias = {
 const configs = [
 	{
 		entry: './client/src/provider.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -36,7 +36,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/shell.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -64,7 +64,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/auth/example/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -92,7 +92,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/endpoint/local-storage/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -120,7 +120,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/endpoint/channel/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -148,7 +148,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/endpoint/inline-apps/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -176,7 +176,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/init-options/interop/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -204,7 +204,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/init-options/launch-app/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -232,7 +232,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/log/console/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -260,7 +260,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/actions/opacity/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -288,7 +288,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/endpoint/example-connection-validation/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -316,7 +316,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/analytics/console/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -344,7 +344,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/composite/developer/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -372,7 +372,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/integrations/apps/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -400,7 +400,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/integrations/workspaces/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -428,7 +428,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/integrations/pages/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -456,7 +456,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/composite/about/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -484,7 +484,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/composite/pages/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -512,7 +512,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/composite/windows/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -540,7 +540,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/endpoint/example-context-processor/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -568,7 +568,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/framework/fdc3/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -596,7 +596,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/actions/custom-menu/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -624,7 +624,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/auth/openid-connect/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -652,7 +652,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/endpoint/favorite-local-storage/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -680,7 +680,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/actions/favorites-menu/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -708,7 +708,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/composite/include-in-snapshot/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -736,7 +736,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/lifecycle/example-notification-service/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -764,7 +764,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/init-options/launch-workspace/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -792,7 +792,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/composite/default-workspace/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -820,7 +820,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/content-creation/view-position/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -848,7 +848,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/actions/window-platform/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -876,7 +876,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/share/pages/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -904,7 +904,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/share/workspaces/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
