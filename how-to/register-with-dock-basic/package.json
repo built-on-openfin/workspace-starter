@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-dock-basic",
-	"version": "17.4.0",
+	"version": "18.0.0",
 	"description": "OpenFin Workspace -- Register with dock basic",
 	"main": "index.js",
 	"scripts": {
@@ -20,12 +20,12 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "17.4.7",
-		"@openfin/workspace-platform": "17.4.7"
+		"@openfin/workspace": "18.0.7",
+		"@openfin/workspace-platform": "18.0.7"
 	},
 	"devDependencies": {
-		"@openfin/core": "34.78.80",
-		"@openfin/node-adapter": "34.78.80",
+		"@openfin/core": "36.80.8",
+		"@openfin/node-adapter": "36.80.8",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

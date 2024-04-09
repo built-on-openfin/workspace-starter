@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace-starter",
-	"version": "17.4.0",
+	"version": "18.0.0",
 	"description": "OpenFin Workspace Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -51,7 +51,7 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/node-adapter": "34.78.80",
+		"@openfin/node-adapter": "36.80.8",
 		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",

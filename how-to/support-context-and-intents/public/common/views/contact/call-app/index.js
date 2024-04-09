@@ -12,6 +12,7 @@ function initializeDOM() {
 	let seconds = 0;
 	let min;
 	let sec;
+	let currentContact;
 
 	/**
 	 * Update the timer display.
@@ -28,7 +29,7 @@ function initializeDOM() {
 	/**
 	 * Start or stop the timer.
 	 */
-	function startStopTimer() {
+	async function startStopTimer() {
 		if (intervalId) {
 			clearInterval(intervalId);
 			intervalId = null;
@@ -37,9 +38,23 @@ function initializeDOM() {
 			timeLabel.textContent = '00:00';
 			document.title = originalTitle;
 			contactHeaderLabel.textContent = '';
+			if (currentContact !== undefined) {
+				await notifyCallEndListeners(currentContact);
+			}
+			currentContact = undefined;
 		} else {
 			action.textContent = `End Call${contactNameLabel}`;
 			seconds = 0;
+			const userChannel = await fdc3.getCurrentChannel();
+			if (
+				window.fdc3 !== undefined &&
+				userChannel !== undefined &&
+				userChannel !== null &&
+				currentContact !== undefined
+			) {
+				console.log(`Current Channel: ${userChannel.id}`);
+				fdc3.broadcast(currentContact);
+			}
 			update();
 			intervalId = setInterval(() => {
 				update();
@@ -55,18 +70,38 @@ function initializeDOM() {
 	 * @param intentName The intent name.
 	 */
 	function updateCallInformation(ctx, intentName) {
-		if (ctx !== undefined) {
+		if (ctx !== undefined && (currentContact === undefined || currentContact.name !== ctx.name)) {
 			if (ctx.type === 'fdc3.contact') {
 				contactNameLabel = ` To ${ctx.name}`;
 				contactHeaderLabel.textContent = ctx.name;
 				action.textContent = `Start Call${contactNameLabel}`;
 				document.title = `${originalTitle} - ${ctx.name}`;
+				currentContact = ctx;
 			} else {
 				console.warn('Passed context was not of type fdc3.contact.', ctx);
 			}
 		} else {
 			console.log(`Received Context For Intent: ${intentName}`, ctx);
 		}
+	}
+
+	/**
+	 * Notifies interested parties that a call conversation just ended.
+	 * @param context The contact that was just on the call.
+	 */
+	async function notifyCallEndListeners(context) {
+		if (window.fdc3 === undefined) {
+			console.warn(
+				`fdc3 is not available and we therefore cannot notify interested parties that the call has ended for user ${context.name}.`
+			);
+			return;
+		}
+		const channel = 'openfin/demo/call-end';
+		const appChannel = await window.fdc3.getOrCreateChannel(channel);
+		console.log(
+			`Notifying interested parties that the call has ended for user ${context.name} on app channel ${channel}.`
+		);
+		await appChannel.broadcast(context);
 	}
 
 	if (window.fdc3 !== undefined) {

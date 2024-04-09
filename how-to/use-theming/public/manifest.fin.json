@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "34.118.78.80"
+		"version": "36.122.80.8"
 	},
 	"platform": {
 		"uuid": "use-theming",
@@ -35,7 +35,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Use Theming - v17.4.0",
+		"name": "Use Theming - v18.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
