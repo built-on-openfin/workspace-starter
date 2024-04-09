@@ -7,7 +7,7 @@ const alias = {
 const configs = [
 	{
 		entry: './templates/src/actions/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -35,7 +35,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/analytics/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -63,7 +63,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/auth/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -91,7 +91,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/conditions/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -119,7 +119,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/endpoint/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -147,7 +147,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/init-options/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -175,7 +175,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/integrations/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -203,7 +203,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/lifecycle/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -231,7 +231,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/log/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -259,7 +259,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/menus/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -287,7 +287,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/content-creation/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
@@ -315,7 +315,7 @@ const configs = [
 	},
 	{
 		entry: './templates/src/share/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{

@@ -1,6 +1,6 @@
-import { ResolveError } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
+import { RESOLVE_ERROR as ResolveError } from "../../fdc3/errors";
 import type { PlatformApp } from "../../shapes/app-shapes";
 import type { IntentResolverResponse, IntentResolverOptions } from "../../shapes/interopbroker-shapes";
 import type { Logger } from "../../shapes/logger-shapes";

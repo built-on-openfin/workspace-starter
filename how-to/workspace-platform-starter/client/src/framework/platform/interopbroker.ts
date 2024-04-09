@@ -1,11 +1,9 @@
-import {
-	OpenError,
-	ResolveError,
-	type AppIdentifier,
-	type AppMetadata,
-	type ImplementationMetadata,
-	type IntentResolution,
-	type ContextMetadata
+import type {
+	AppIdentifier,
+	AppMetadata,
+	ImplementationMetadata,
+	IntentResolution,
+	ContextMetadata
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { WindowPositioningOptions } from "workspace-platform-starter/shapes/browser-shapes";
@@ -18,6 +16,7 @@ import * as connectionProvider from "../connections";
 import { hasEndpoint, requestResponse } from "../endpoint";
 import { mapToAppMetaData as mapTo12AppMetaData } from "../fdc3/1.2/mapper";
 import { mapToAppMetaData as mapTo20AppMetaData } from "../fdc3/2.0/mapper";
+import { OPEN_ERROR as OpenError, RESOLVE_ERROR as ResolveError } from "../fdc3/errors";
 import { bringToFront, launch } from "../launch";
 import { createLogger } from "../logger-provider";
 import { MANIFEST_TYPES } from "../manifest-types";
