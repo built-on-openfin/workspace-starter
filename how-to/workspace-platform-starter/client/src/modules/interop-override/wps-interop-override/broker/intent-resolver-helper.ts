@@ -1,6 +1,6 @@
-import { ResolveError } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
+import { RESOLVE_ERROR as ResolveError } from "workspace-platform-starter/fdc3/errors";
 import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import type {
 	IntentResolverResponse,
