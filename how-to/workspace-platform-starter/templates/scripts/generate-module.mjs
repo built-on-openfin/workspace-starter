@@ -190,13 +190,7 @@ async function addWebPackEntry(moduleOutputDir, kebabType, kebabName) {
 		entry: './${path.relative('.', path.join(moduleOutputDir, 'index.ts')).replace(/\\/g, '/')}',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],

@@ -2,6 +2,7 @@
 
 ## v18.0.0
 
+- Added support for rspack for faster builds. `npm run build-client-rspack` will npx install rspack and use the webpack config file to build the JavaScript from the TypeScript files. It is faster but no type checking is performed so we still recommend doing validated builds using `npm run build` or `npm run build-client`.
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
 - Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider.interop settings and made the workspace platform starter interop override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your interop broker](./docs/how-to-customize-your-interop-broker.md). If you want the default interop broker to check endpoints to see if a context type should be enriched through an endpoint then you need to add the wps-interop-override module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).

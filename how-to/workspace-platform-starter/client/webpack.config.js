@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/better-regex */
 const path = require('path');
 
 const alias = {
@@ -5,18 +6,51 @@ const alias = {
 	'workspace-platform-starter/utils': path.resolve(__dirname, '../client/src/framework/utils')
 };
 
+const request = process.argv;
+
+let loaderRule = {
+	test: /\.tsx?$/,
+	use: 'ts-loader',
+	exclude: /node_modules/
+};
+
+if (request.length > 1 && request[1].includes('rspack')) {
+	console.log(
+		'-------------------------------------------------------------------------------------------------'
+	);
+	console.log('Using rspack with SWC Loader.');
+	console.log(
+		'This will transpile TypeScript files to JavaScript but will not perform TypeScript type checking.'
+	);
+	console.log('Use npm run build or npm run build-client if you want the files built with type checking.');
+	console.log(
+		'-------------------------------------------------------------------------------------------------'
+	);
+	loaderRule = {
+		test: /\.(j|t)s$/,
+		exclude: [/[\\/]node_modules[\\/]/],
+		loader: 'builtin:swc-loader',
+		options: {
+			sourceMap: true,
+			jsc: {
+				parser: {
+					syntax: 'typescript'
+				},
+				externalHelpers: true
+			},
+			env: {
+				targets: 'Chrome >= 110'
+			}
+		}
+	};
+}
+
 const configs = [
 	{
 		entry: './client/src/provider.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -38,13 +72,7 @@ const configs = [
 		entry: './client/src/shell.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -66,13 +94,7 @@ const configs = [
 		entry: './client/src/modules/auth/example/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -94,13 +116,7 @@ const configs = [
 		entry: './client/src/modules/endpoint/local-storage/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -122,13 +138,7 @@ const configs = [
 		entry: './client/src/modules/endpoint/channel/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -150,13 +160,7 @@ const configs = [
 		entry: './client/src/modules/endpoint/inline-apps/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -178,13 +182,7 @@ const configs = [
 		entry: './client/src/modules/init-options/interop/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -206,13 +204,7 @@ const configs = [
 		entry: './client/src/modules/init-options/launch-app/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -234,13 +226,7 @@ const configs = [
 		entry: './client/src/modules/log/console/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -262,13 +248,7 @@ const configs = [
 		entry: './client/src/modules/actions/opacity/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -290,13 +270,7 @@ const configs = [
 		entry: './client/src/modules/endpoint/example-connection-validation/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -318,13 +292,7 @@ const configs = [
 		entry: './client/src/modules/analytics/console/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -346,13 +314,7 @@ const configs = [
 		entry: './client/src/modules/composite/developer/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -374,13 +336,7 @@ const configs = [
 		entry: './client/src/modules/integrations/apps/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -402,13 +358,7 @@ const configs = [
 		entry: './client/src/modules/integrations/workspaces/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -430,13 +380,7 @@ const configs = [
 		entry: './client/src/modules/integrations/pages/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -458,13 +402,7 @@ const configs = [
 		entry: './client/src/modules/composite/about/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -486,13 +424,7 @@ const configs = [
 		entry: './client/src/modules/composite/pages/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -514,13 +446,7 @@ const configs = [
 		entry: './client/src/modules/composite/windows/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -542,13 +468,7 @@ const configs = [
 		entry: './client/src/modules/endpoint/example-context-processor/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -570,13 +490,7 @@ const configs = [
 		entry: './client/src/framework/fdc3/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -598,13 +512,7 @@ const configs = [
 		entry: './client/src/modules/actions/custom-menu/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -626,13 +534,7 @@ const configs = [
 		entry: './client/src/modules/auth/openid-connect/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -654,13 +556,7 @@ const configs = [
 		entry: './client/src/modules/endpoint/favorite-local-storage/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -682,13 +578,7 @@ const configs = [
 		entry: './client/src/modules/actions/favorites-menu/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -710,13 +600,7 @@ const configs = [
 		entry: './client/src/modules/composite/include-in-snapshot/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -738,13 +622,7 @@ const configs = [
 		entry: './client/src/modules/lifecycle/example-notification-service/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -766,13 +644,7 @@ const configs = [
 		entry: './client/src/modules/init-options/launch-workspace/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -794,13 +666,7 @@ const configs = [
 		entry: './client/src/modules/composite/default-workspace/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -822,13 +688,7 @@ const configs = [
 		entry: './client/src/modules/content-creation/view-position/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -850,13 +710,7 @@ const configs = [
 		entry: './client/src/modules/actions/window-platform/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -878,13 +732,7 @@ const configs = [
 		entry: './client/src/modules/share/pages/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -906,13 +754,7 @@ const configs = [
 		entry: './client/src/modules/share/workspaces/index.ts',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -934,13 +776,7 @@ const configs = [
 		entry: './client/src/modules/interop-override/wps-interop-override/index.ts',
 		devtool: 'inline-source-map',
 		module: {
-			rules: [
-				{
-					test: /\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
