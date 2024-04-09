@@ -38,7 +38,7 @@ graph TD
 ```
 
 - [@openfin/create-workspace-mobile-app](https://www.npmjs.com/package/@openfin/create-workspace-mobile-app) - This package is the main package you will be using and it generates the initial shell of your PWA. It brings in the layout and interop support and wires up a default interop channel.
-- [@openfin/workspace-mobile](https://www.npmjs.com/package/@openfin/workspace-mobile) - This is the package that contains the layout system.
+- [@openfin/workspace-mobile](https://www.npmjs.com/package/@openfin/workspace-mobile) - This is the package that contains the layout system used by the example and provides the binding of views to the default interop channel.
 - [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) - The base library used to bring interop support to desktop and mobile browsers.
 
 ## How do I begin?
@@ -341,24 +341,28 @@ Below we have an example webpage that you can create and drop in the public fold
  <body>
   <h1>Test Context Aware Page</h1>
   <p>
-   Name of the context received:
-   <span id="context-name">Not Set</span>
+   Name of the context received using Interop:
+   <span id="interop-context-name">Not Set</span>
   </p>
-  <p><button id="broadcast">Broadcast Tesla Instrument</button></p>
+  <p>
+   Name of the context received using FDC3:
+   <span id="fdc3-context-name">Not Set</span>
+  </p>
+  <p><button id="setContext">SetContext of Tesla Instrument using Interop</button></p>
+  <p><button id="broadcast">Broadcast Apple Instrument using FDC3 2.0</button></p>
   <script type="module">
    async function initApi(connectionOptions, target) {
     try {
-     // We are using jsdelivr as an example. 
+     // We are using jsdelivr as an example.
      // You can create your own esmodule that packages the web-interop library and it's dependencies.
-     const moduleUrl =
-      'https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.0.1-v37.80.36-preview.0/+esm';
+     const moduleUrl = 'https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.37.17/+esm';
      const workspaceMobile = await import(moduleUrl);
      const connectedFin = await workspaceMobile.connect(connectionOptions);
      if (connectedFin !== undefined) {
       console.log('The fin api has been fetched and will be returned.');
       if (target !== undefined) {
-        target.fin = connectedFin;
-        console.log('The fin api has been applied to the passed target');
+       target.fin = connectedFin;
+       console.log('The fin api has been applied to the passed target');
       }
      }
 
@@ -394,17 +398,27 @@ Below we have an example webpage that you can create and drop in the public fold
    async function init() {
     await checkAndAssignFin();
     if (window.fin !== undefined) {
-     // start of example of how to use the interop API
-     const contextName = document.getElementById('context-name');
+     // start of example of how to use the interop API and FDC3 API
+     const fdc3 = await fin.me.interop.getFDC3('2.0');
+     const interopContextName = document.getElementById('interop-context-name');
+     const fdc3ContextName = document.getElementById('fdc3-context-name');
      const broadcast = document.getElementById('broadcast');
+     const setContext = document.getElementById('setContext');
      fin.me.interop.addContextHandler((ctx) => {
-      console.log('Context received: ', ctx);
-      if (contextName !== null) {
-       contextName.innerText = ctx.name;
+      console.log('Interop Context received: ', ctx);
+      if (interopContextName !== null) {
+       interopContextName.innerText = ctx.name;
       }
      });
+     fdc3.addContextListener('fdc3.instrument', (ctx) => {
+      console.log('User Context Received', ctx);
+      if (fdc3ContextName !== null) {
+       fdc3ContextName.innerText = ctx.name;
+      }
+     });
+
      console.log('Listening for context changes');
-     broadcast.addEventListener('click', () => {
+     setContext.addEventListener('click', () => {
       const context = {
        type: 'fdc3.instrument',
        name: 'Tesla Inc',
@@ -416,8 +430,30 @@ Below we have an example webpage that you can create and drop in the public fold
       };
 
       try {
-       console.log('setting context on system contextual group', context);
+       console.log('setting context on system contextual group through interop', context);
        fin.me.interop.setContext(context);
+      } catch (error) {
+       console.warn(
+        'You are not bound to a system context group and are unable to set context',
+        error
+       );
+      }
+     });
+
+     broadcast.addEventListener('click', () => {
+      const context = {
+       type: 'fdc3.instrument',
+       name: 'Apple Inc.',
+       id: {
+        ticker: 'AAPL',
+        BBG: 'AAPL US Equity',
+        ISIN: 'US0378331005'
+       }
+      };
+
+      try {
+       console.log('setting context on system contextual group through fdc3', context);
+       fdc3.broadcast(context);
       } catch (error) {
        console.warn(
         'You are not bound to a system context group and are unable to set context',
@@ -439,7 +475,7 @@ Below we have an example webpage that you can create and drop in the public fold
 </html>
 ```
 
-This example is a complete webpage and it is using vanilla JavaScript. You might have a npm module that you give your content providers. This may package includes @openfin/web-interop and it's dependencies and your content developers would only import this module if needed.
+This example is a complete webpage and it is using vanilla JavaScript. You might have a npm module that you give your content providers. This package would include @openfin/web-interop and it's dependencies and your content developers would only import this module if needed. We recommend you come up with your own module to import rather than the approach used above (which is just for demonstration purposes).
 
 The flow could be:
 
@@ -455,7 +491,7 @@ You may decide that you just want to import the @openfin/web-interop and initial
 You would npm install the package e.g:
 
 ```bash
-npm install @openfin/web-interop@0.0.1-v37.80.36-preview.0 --save
+npm install @openfin/web-interop@0.37.17 --save
 ```
 
 You would then import the connect function at the top of your TypeScript file.
@@ -489,17 +525,13 @@ Everything would then be packaged inside of your bundle and would work in the De
 
 ### Interop API
 
-We have support for the FDC3 API in our container but it isn't available just yet when running inside of a desktop/mobile browser (this article will be updated when this capability is exposed).
-
-For now you can use our interop api to share and listen to contextual data changes.
-
 If you add the logic shown above then your content will be able to share contextual data or listen for contextual data regardless of the host. We include interop API usage in the example above but here is an additional example for clarity.
 
 ```javascript
 // --------------------------------
 // SetContext code
 // --------------------------------  
-if (window.fin !== undefined) {
+if (fin !== undefined) {
    const context = {
       "type": "fdc3.instrument",
       "name": "Tesla Inc",
@@ -526,7 +558,7 @@ if (window.fin !== undefined) {
 // --------------------------------
 // Listening code
 // --------------------------------
-if (window.fin !== undefined) {
+if (fin !== undefined) {
 
    const systemHandler = (ctx) => {
        console.log("System Context Received: ", ctx);
@@ -534,6 +566,60 @@ if (window.fin !== undefined) {
 
    const systemListener = fin.me.interop.addContextHandler(systemHandler);
 
+}
+```
+
+### FDC3 API
+
+Once you have the fin api available (using our web-interop package) you can request the fdc3 API. If you are running inside of the container then the need for fdc3 and the version would have been specified in your view/window options and you would already have the fdc3 api on the window object i.e. window.fdc3.
+
+If it doesn't exist then you can request it:
+
+```javascript
+// request an fdc3 2.0 api. Alternatively specify 1.2
+const fdc3 = await fin.me.interop.getFDC3("2.0");
+```
+
+Once you have the fdc3 api then you can use it as follows:
+
+```javascript
+// --------------------------------
+// Broadcast code
+// --------------------------------  
+if (fdc3 !== undefined) {
+   const context = {
+        type: "fdc3.instrument",
+        name: "Apple Inc.",
+        id: { 
+            ticker: "AAPL", 
+            BBG: "AAPL US Equity", 
+            ISIN: "US0378331005" 
+            }
+        };
+
+   try {
+       console.log("setting context on system contextual group", context);
+
+       fdc3.broadcast(context);
+     } catch(error) {
+      console.warn(
+         "You are not bound to a system context group and are unable to set context using broadcast",
+         error
+      );
+   }
+
+}
+
+// --------------------------------
+// Listening code
+// --------------------------------
+if (fdc3 !== undefined) {
+
+   const contextHandler = (ctx) => {
+       console.log("FDC3 Context Received: ", ctx);
+   };
+
+   const contextListener = fdc3.addContextListener("fdc3.instrument", contextHandler);
 }
 ```
 

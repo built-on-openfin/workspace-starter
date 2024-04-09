@@ -24,7 +24,7 @@
 	"author": "ameet.jayawant@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/bloomberg": "^1.2.0",
+		"@openfin/bloomberg": "^2.0.0",
 		"@openfin/core": "34.78.80",
 		"@openfin/workspace": "17.4.7",
 		"@openfin/workspace-platform": "17.4.7"

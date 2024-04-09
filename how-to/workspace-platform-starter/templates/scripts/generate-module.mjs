@@ -188,7 +188,7 @@ async function addWebPackEntry(moduleOutputDir, kebabType, kebabName) {
 	entries += `,
 	{
 		entry: './${path.relative('.', path.join(moduleOutputDir, 'index.ts')).replace(/\\/g, '/')}',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [
 				{
