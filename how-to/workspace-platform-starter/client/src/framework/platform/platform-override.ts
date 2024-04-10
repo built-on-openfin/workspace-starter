@@ -412,7 +412,7 @@ export function overrideCallback(
 			}
 
 			await fireLifecycleEvent<WorkspaceChangedLifecyclePayload>(platform, "workspace-changed", {
-				action: "update",
+				action: "apply",
 				id: payload.workspaceId,
 				workspace: payload
 			});
