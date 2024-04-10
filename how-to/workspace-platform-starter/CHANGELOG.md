@@ -2,6 +2,9 @@
 
 ## v18.0.0
 
+- Improvement: Added `apply` as an action on the WorkspaceChangedLifecyclePayload. Previously we had `create`, `update`, `delete`. `update` was being fired when a workspace was updated and when a workspace was applied. `apply` now makes it clear when a particular workspace platform override has been triggered.
+- Improvement: modules/integrations/workspaces this module now refreshes the entries when a workspace is applied. So if a workspace entry in Home said it was selected it would be updated and the newly selected workspace would be updated to reflect it is the currently selected workspace.
+- Updated: modules/composite/default-workspace/lifecycle logic to listen out for the new `apply` action.
 - Added support for rspack for faster builds. `npm run build-client-rspack` will npx install rspack and use the webpack config file to build the JavaScript from the TypeScript files. It is faster but no type checking is performed so we still recommend doing validated builds using `npm run build` or `npm run build-client`.
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.

@@ -57,7 +57,7 @@ export interface WorkspaceChangedLifecyclePayload {
 	/**
 	 * The action that happened to the workspace.
 	 */
-	action: "create" | "update" | "delete";
+	action: "create" | "apply" | "update" | "delete";
 
 	/**
 	 * The id of the workspace.
