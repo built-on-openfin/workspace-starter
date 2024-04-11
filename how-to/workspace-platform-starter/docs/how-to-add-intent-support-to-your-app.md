@@ -129,6 +129,36 @@ This app supports FDC3 raiseIntent and raiseIntentByContext, it lists all the su
 
 ![Intents Using FDC3](./assets/view-intents-fdc3.png)
 
+#### Can I use that tool within my own platform?
+
+Yes, to make development easier you can define a view that uses our app. We follow the versioning used by workspace so that you can stay in sync:
+
+##### FDC3 2.0 Tool - View Options
+
+```javascript
+{
+ "url": "https://samples.openfin.co/dev-extensions/extensions/v17.2.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
+ "fdc3InteropApi": "2.0",
+ "customData": {
+  "contextData": null,
+  "intentData": null
+ }
+}
+```
+
+##### FDC3 1.2 Tool - View Options
+
+```javascript
+{
+ "url": "https://samples.openfin.co/dev-extensions/extensions/v17.2.0/interop/fdc3/intent/fdc3-intent-view.html",
+ "fdc3InteropApi": "1.2",
+ "customData": {
+  "contextData": null,
+  "intentData": null
+ }
+}
+```
+
 ### FDC3 Workbench
 
 This is the FinOS test harness to show our compatibility:
