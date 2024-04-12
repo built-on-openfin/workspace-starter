@@ -496,11 +496,11 @@ export function overrideCallback(
 					req.page.customData = {};
 				}
 				// only set if it hasn't been provided by the caller
-				if(isEmpty(req.page?.customData?.windowBounds)) {
+				if (isEmpty(req.page?.customData?.windowBounds)) {
 					req.page.customData.windowBounds = windowBoundsAndState.bounds;
 				}
 
-				if(isEmpty(req.page?.customData?.windowState)) {
+				if (isEmpty(req.page?.customData?.windowState)) {
 					req.page.customData.windowState = windowBoundsAndState.state;
 				}
 			}

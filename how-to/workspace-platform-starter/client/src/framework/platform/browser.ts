@@ -302,8 +302,8 @@ export async function getPageForView(view: OpenFin.View): Promise<AttachedPage |
 export async function getPageBoundsAndState(
 	pageId: string,
 	fromStorage = false
-): Promise<{ bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal"} | undefined> {
-	let boundsAndState: { bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal"} | undefined;
+): Promise<{ bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal" } | undefined> {
+	let boundsAndState: { bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal" } | undefined;
 	const platform = getCurrentSync();
 	if (fromStorage) {
 		const page = await platform.Storage.getPage(pageId);
@@ -336,8 +336,10 @@ export async function getPageBoundsAndState(
 
 	if (!isEmpty(windowId)) {
 		const hostWindow = platform.Browser.wrapSync(windowId);
-		boundsAndState = { bounds: await hostWindow.openfinWindow.getBounds(),
-			state: await hostWindow.openfinWindow.getState() };
+		boundsAndState = {
+			bounds: await hostWindow.openfinWindow.getBounds(),
+			state: await hostWindow.openfinWindow.getState()
+		};
 	}
 
 	return boundsAndState;
@@ -475,7 +477,7 @@ export async function launchPage(
 		}
 	}
 
-	if(!isEmpty(customState)) {
+	if (!isEmpty(customState)) {
 		newWindowRequest.state = customState;
 	}
 
