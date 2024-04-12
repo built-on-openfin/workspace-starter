@@ -774,7 +774,7 @@ const configs = [
 	},
 	{
 		entry: './client/src/modules/interop-override/wps-interop-override/index.ts',
-		devtool: 'inline-source-map',
+		devtool: 'source-map',
 		module: {
 			rules: [loaderRule]
 		},

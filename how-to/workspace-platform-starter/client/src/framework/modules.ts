@@ -322,6 +322,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			pageId: string,
 			options?: {
 				bounds?: OpenFin.Bounds;
+				state?: "normal" | "minimized" | "maximized";
 				targetWindowIdentity?: OpenFin.Identity;
 				createCopyIfExists?: boolean;
 			},

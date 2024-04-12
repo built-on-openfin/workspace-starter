@@ -299,16 +299,16 @@ export async function getPageForView(view: OpenFin.View): Promise<AttachedPage |
  * @param fromStorage Get the bounds from storage instead of the actual page if available.
  * @returns The bounds for the page.
  */
-export async function getPageBounds(
+export async function getPageBoundsAndState(
 	pageId: string,
 	fromStorage = false
-): Promise<OpenFin.Bounds | undefined> {
-	let bounds: OpenFin.Bounds | undefined;
+): Promise<{ bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal"} | undefined> {
+	let boundsAndState: { bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal"} | undefined;
 	const platform = getCurrentSync();
 	if (fromStorage) {
 		const page = await platform.Storage.getPage(pageId);
 		if (!isEmpty(page?.customData?.windowBounds)) {
-			return page?.customData?.windowBounds;
+			return { bounds: page?.customData?.windowBounds, state: page?.customData?.windowState };
 		}
 	}
 
@@ -327,7 +327,7 @@ export async function getPageBounds(
 		const savedPage = await platform.Storage.getPage(pageId);
 		if (!isEmpty(savedPage)) {
 			// the requested page is not currently open but is a saved page so try and fetch it from storage as a fallback
-			return savedPage?.customData?.windowBounds;
+			return { bounds: savedPage?.customData?.windowBounds, state: savedPage?.customData?.windowState };
 		}
 		// it is not an active page and it isn't saved so it is likely a new instance of an existing page (save as)
 		// use the current windowId
@@ -336,10 +336,11 @@ export async function getPageBounds(
 
 	if (!isEmpty(windowId)) {
 		const hostWindow = platform.Browser.wrapSync(windowId);
-		bounds = await hostWindow.openfinWindow.getBounds();
+		boundsAndState = { bounds: await hostWindow.openfinWindow.getBounds(),
+			state: await hostWindow.openfinWindow.getState() };
 	}
 
-	return bounds;
+	return boundsAndState;
 }
 
 /**
@@ -347,6 +348,7 @@ export async function getPageBounds(
  * @param page The page to launch.
  * @param options The options for the launch.
  * @param options.bounds The optional bounds for the page.
+ * @param options.state The optional window state of the page.
  * @param options.targetWindowIdentity The optional target window for the page.
  * @param options.createCopyIfExists Create a copy of the page if it exists.
  * @param logger Log output from the operation.
@@ -356,6 +358,7 @@ export async function launchPage(
 	page: Page,
 	options?: {
 		bounds?: OpenFin.Bounds;
+		state?: "maximized" | "minimized" | "normal";
 		targetWindowIdentity?: OpenFin.Identity;
 		createCopyIfExists?: boolean;
 	},
@@ -441,7 +444,10 @@ export async function launchPage(
 	if (isEmpty(customBounds) && !isEmpty(page.customData?.windowBounds)) {
 		customBounds = page.customData.windowBounds;
 	}
-
+	let customState = options?.state;
+	if (isEmpty(customState) && !isEmpty(page.customData?.windowState)) {
+		customState = page.customData.windowState;
+	}
 	const newWindowRequest: BrowserCreateWindowRequest = {
 		workspacePlatform: {
 			pages: [page]
@@ -467,6 +473,10 @@ export async function launchPage(
 				newWindowRequest.defaultTop = customBounds.top;
 			}
 		}
+	}
+
+	if(!isEmpty(customState)) {
+		newWindowRequest.state = customState;
 	}
 
 	const newWindow = await platform.Browser.createWindow(newWindowRequest);

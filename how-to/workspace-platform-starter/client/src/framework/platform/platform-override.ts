@@ -69,7 +69,7 @@ import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
 import { setCurrentColorSchemeMode } from "../themes";
 import { deepMerge, isEmpty, isStringValue, randomUUID } from "../utils";
 import { loadConfig, saveConfig } from "../workspace/dock";
-import { getPageBounds } from "./browser";
+import { getPageBoundsAndState } from "./browser";
 import { closedown as closedownPlatform } from "./platform";
 import {
 	mapPlatformPageFromStorage,
@@ -490,13 +490,19 @@ export function overrideCallback(
 		 */
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
 			const platform = getCurrentSync();
-
-			const windowBounds = await getPageBounds(req.page.pageId);
-			if (!isEmpty(windowBounds)) {
+			const windowBoundsAndState = await getPageBoundsAndState(req.page.pageId);
+			if (!isEmpty(windowBoundsAndState)) {
 				if (isEmpty(req.page.customData)) {
 					req.page.customData = {};
 				}
-				req.page.customData.windowBounds = windowBounds;
+				// only set if it hasn't been provided by the caller
+				if(isEmpty(req.page?.customData?.windowBounds)) {
+					req.page.customData.windowBounds = windowBoundsAndState.bounds;
+				}
+
+				if(isEmpty(req.page?.customData?.windowState)) {
+					req.page.customData.windowState = windowBoundsAndState.state;
+				}
 			}
 
 			// you can add your own custom implementation here if you are storing your pages
@@ -540,12 +546,13 @@ export function overrideCallback(
 		 * @param req the update saved page request.
 		 */
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
-			const windowBounds = await getPageBounds(req.page.pageId);
-			if (!isEmpty(windowBounds)) {
+			const windowBoundsAndState = await getPageBoundsAndState(req.page.pageId);
+			if (!isEmpty(windowBoundsAndState)) {
 				if (isEmpty(req.page.customData)) {
 					req.page.customData = {};
 				}
-				req.page.customData.windowBounds = windowBounds;
+				req.page.customData.windowBounds = windowBoundsAndState.bounds;
+				req.page.customData.windowState = windowBoundsAndState.state;
 			}
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
