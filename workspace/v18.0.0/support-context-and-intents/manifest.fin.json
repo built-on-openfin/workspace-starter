@@ -69,6 +69,18 @@
 				"window",
 				"inline-appasset"
 			]
+		},
+		"cloudInteropProvider": {
+			"enabled": false,
+			"connectParams": {
+				"url": "",
+				"userId": "<DO NOT COMMIT CREDENTIALS>",
+				"password": "<DO NOT COMMIT CREDENTIALS>",
+				"platformId": "",
+				"sourceId": "",
+				"sourceDisplayName": "",
+				"realm": "default"
+			}
 		}
 	}
 }
