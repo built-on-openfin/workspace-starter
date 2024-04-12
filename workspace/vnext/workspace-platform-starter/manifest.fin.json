@@ -176,6 +176,22 @@
 						"data": {
 							"loggerName": "WpsInteropOverride"
 						}
+					},
+					{
+						"id": "openfin-cloud-interop",
+						"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
+						"title": "OpenFin Cloud Interop",
+						"description": "OpenFin Cloud Interop",
+						"enabled": false,
+						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/js/modules/interop-override/openfin-cloud-interop.bundle.js",
+						"data": {
+							"userId": "",
+							"password": "",
+							"platformId": "",
+							"url": "",
+							"sourceDisplayName": "",
+							"sourceId": ""
+						}
 					}
 				]
 			}
