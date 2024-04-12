@@ -43,7 +43,7 @@ We provide a basic example authentication module to give you an idea of how it w
 
 This is an example of a module (see [How To Add A Module](./how-to-add-a-module.md)) that has been created and referenced in the authProvider modules array. Each module can be passed data in a format that the specific module understands.
 
-The source for this example module can be found here: [auth-provider.ts](../client/src/modules/auth/example/auth-provider.ts). It is exported from [index.ts](../client/src/modules/auth/example/index.ts) and it is built on it's own via a [webpack](../client/webpack.config.js) entry.
+The source for this example module can be found here: [auth-provider.ts](../client/src/modules/auth/example/auth-provider.ts). It is exported from [index.ts](../client/src/modules/auth/example/index.ts) and it is built on it's own via a [webpack](../client/starter-modules.webpack.config.js) entry.
 
 This example module is there for you to test different auth flows (e.g. autoLogin) and to give an example of how a module could be built and plugged in. The settings are:
 

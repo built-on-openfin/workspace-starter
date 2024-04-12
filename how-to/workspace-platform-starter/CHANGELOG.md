@@ -2,6 +2,7 @@
 
 ## v18.0.0
 
+- Broke up the build process to make it easier to just build your modules. `npm run build` still builds everything and `npm run build-client` still builds all client related code but now if you change framework files you can use `npm run build-framework`, or if you modify our starter modules you can use `npm run build-starter-modules` or if you just want to build your modules (that are listed in webpack.config.js) then you can use `npm run build-client-modules`. This will let you have a much faster build.
 - npm run launch now launches via the fins link when running on mac instead of the node adapter.
 - We now capture the window state when saving a page and apply it if a page is being launched into a new window.
 - Improvement: Added `apply` as an action on the WorkspaceChangedLifecyclePayload. Previously we had `create`, `update`, `delete`. `update` was being fired when a workspace was updated and when a workspace was applied. `apply` now makes it clear when a particular workspace platform override has been triggered.

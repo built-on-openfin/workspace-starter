@@ -185,8 +185,11 @@ async function addWebPackEntry(moduleOutputDir, kebabType, kebabName) {
 	// eslint-disable-next-line no-div-regex
 	const entriesRegEx = /= \[([\S\s]*)];/;
 	let entries = entriesRegEx.exec(webPackConfig)[1].trim();
-	entries += `,
-	{
+	if (entries.length > 0) {
+		entries += `,
+	`;
+	}
+	entries += `{
 		entry: './${path.relative('.', path.join(moduleOutputDir, 'index.ts')).replace(/\\/g, '/')}',
 		devtool: 'source-map',
 		module: {
