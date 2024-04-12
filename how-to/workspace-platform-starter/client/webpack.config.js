@@ -6,44 +6,11 @@ const alias = {
 	'workspace-platform-starter/utils': path.resolve(__dirname, '../client/src/framework/utils')
 };
 
-const request = process.argv;
-
-let loaderRule = {
+const loaderRule = {
 	test: /\.tsx?$/,
 	use: 'ts-loader',
 	exclude: /node_modules/
 };
-
-if (request.length > 1 && request[1].includes('rspack')) {
-	console.log(
-		'-------------------------------------------------------------------------------------------------'
-	);
-	console.log('Using rspack with SWC Loader.');
-	console.log(
-		'This will transpile TypeScript files to JavaScript but will not perform TypeScript type checking.'
-	);
-	console.log('Use npm run build or npm run build-client if you want the files built with type checking.');
-	console.log(
-		'-------------------------------------------------------------------------------------------------'
-	);
-	loaderRule = {
-		test: /\.(j|t)s$/,
-		exclude: [/[\\/]node_modules[\\/]/],
-		loader: 'builtin:swc-loader',
-		options: {
-			sourceMap: true,
-			jsc: {
-				parser: {
-					syntax: 'typescript'
-				},
-				externalHelpers: true
-			},
-			env: {
-				targets: 'Chrome >= 110'
-			}
-		}
-	};
-}
 
 const configs = [
 	{
