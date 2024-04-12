@@ -2,10 +2,13 @@
 
 ## v18.0.0
 
+- Added a cloud interop override module so that you can easily test out OpenFin's cloud interop offering. See [How To Add Cloud Interop To Your Interop Broker](./docs/how-to-add-cloud-interop-to-your-interop-broker.md).
+- Broke up the build process to make it easier to just build your modules. `npm run build` still builds everything and `npm run build-client` still builds all client related code but now if you change framework files you can use `npm run build-framework`, or if you modify our starter modules you can use `npm run build-starter-modules` or if you just want to build your modules (that are listed in webpack.config.js) then you can use `npm run build-client-modules`. This will let you have a much faster build.
+- npm run launch now launches via the fins link when running on mac instead of the node adapter.
+- We now capture the window state when saving a page and apply it if a page is being launched into a new window.
 - Improvement: Added `apply` as an action on the WorkspaceChangedLifecyclePayload. Previously we had `create`, `update`, `delete`. `update` was being fired when a workspace was updated and when a workspace was applied. `apply` now makes it clear when a particular workspace platform override has been triggered.
 - Improvement: modules/integrations/workspaces this module now refreshes the entries when a workspace is applied. So if a workspace entry in Home said it was selected it would be updated and the newly selected workspace would be updated to reflect it is the currently selected workspace.
 - Updated: modules/composite/default-workspace/lifecycle logic to listen out for the new `apply` action.
-- Added support for rspack for faster builds. `npm run build-client-rspack` will npx install rspack and use the webpack config file to build the JavaScript from the TypeScript files. It is faster but no type checking is performed so we still recommend doing validated builds using `npm run build` or `npm run build-client`.
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
 - Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider.interop settings and made the workspace platform starter interop override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your interop broker](./docs/how-to-customize-your-interop-broker.md). If you want the default interop broker to check endpoints to see if a context type should be enriched through an endpoint then you need to add the wps-interop-override module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).

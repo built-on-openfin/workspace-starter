@@ -1,3 +1,4 @@
+import { cloudInteropOverride } from "@openfin/cloud-interop";
 import type OpenFin from "@openfin/core";
 import { CLITemplate, Home, type App, type HomeSearchListenerRequest } from "@openfin/workspace";
 import { init } from "@openfin/workspace-platform";
@@ -28,6 +29,18 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
 	console.log("Initializing workspace platform");
+
+	const defaultBroker = createInteropOverride(customSettings);
+	const interopOverride: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [defaultBroker];
+
+	if (customSettings?.cloudInteropProvider?.enabled === true) {
+		console.log("Initializing the cloud interop override");
+		const initializedCloudInteropOverride = (await cloudInteropOverride(
+			customSettings.cloudInteropProvider
+		)) as unknown as OpenFin.ConstructorOverride<OpenFin.InteropBroker>;
+		interopOverride.push(initializedCloudInteropOverride);
+	}
+
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -50,7 +63,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 			}
 		],
 		// Use an override for the platform interop to handle the context and intents
-		interopOverride: (interopBroker) => createInteropOverride(customSettings, interopBroker)
+		interopOverride
 	});
 }
 

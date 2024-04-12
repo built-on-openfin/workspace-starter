@@ -52,11 +52,37 @@ This runs the same code with slightly different settings to load an FDC3 directo
 7. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
    The [apps](../public/common/apps.json) are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](../public/manifest.fin.json).
 
-8. If you modify the project and want to rebuild.
+8. If you modify the project and want to rebuild everything.
 
 ```shell
 npm run build
 ```
+
+9. If you modify the [client/src/provider.ts](../client/src/provider.ts), [client/src/shell.ts](../client/src/shell.ts) or anything under [client/src/framework](../client/src/framework) you can build just those files.
+
+```shell
+npm run build-framework
+```
+
+10. If you modify any of the workspace platform starter modules in [client/src/modules](../client/src/modules) you can rebuild the workspace platform starter modules.
+
+```shell
+npm run build-starter-modules
+```
+
+11. If you are generating and working on your own modules in [client/src/modules](../client/src/modules) you can rebuild the your modules.
+
+```shell
+npm run build-client-modules
+```
+
+12. If you have changed the sample server logic in [server/src](../server/src) you can rebuild the just the server.
+
+```shell
+npm run build-server
+```
+
+You will need to do a complete build at least once. From there you may end up only needing to use `npm run build-client-modules` to quickly build just your modules.
 
 Once you have built the project it is easy to extend through config (either the manifest file or settings returned from a service) and custom JavaScript Modules. The remaining guides will walk you through the process.
 

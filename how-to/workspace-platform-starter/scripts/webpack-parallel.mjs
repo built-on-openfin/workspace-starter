@@ -6,10 +6,13 @@ import path from 'path';
  * Run the process.
  * @param packageDir The directory for the package json.
  * @param configFile The config file to read.
+ * @param buildTarget The build target to use.
  */
-async function run(packageDir, configFile) {
+async function run(packageDir, configFile, buildTarget) {
 	console.log('packagerDir:', packageDir);
 	console.log('configFile:', configFile);
+	console.log('buildTarget:', buildTarget);
+	const serialTaskTarget = `build-${buildTarget}-serial`;
 
 	const fullConfigFilename = path.join(packageDir, configFile);
 
@@ -26,7 +29,7 @@ async function run(packageDir, configFile) {
 		for (let i = chunk * chunkSize; i < Math.min(configModule.default.length, (chunk + 1) * chunkSize); i++) {
 			promises.push(
 				new Promise((resolve, reject) => {
-					const sp = spawn('npm', ['run', 'build-client-serial'], {
+					const sp = spawn('npm', ['run', serialTaskTarget], {
 						stdio: 'inherit',
 						env: { ...process.env, WEBPACK_CONFIG_INDEX: i },
 						shell: true
@@ -51,4 +54,4 @@ async function run(packageDir, configFile) {
 	}
 }
 
-run(path.resolve(path.join(path.dirname(process.argv[1]), '..')), process.argv[2]);
+run(path.resolve(path.join(path.dirname(process.argv[1]), '..')), process.argv[2], process.argv[3]);

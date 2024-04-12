@@ -8,6 +8,7 @@ This sample covers:
 
 - Supporting Interop/FDC3 Context messages
 - Supporting Interop/FDC3 Intents
+- Optionally supporting OpenFin Cloud Interop for context sharing: <https://www.npmjs.com/package/@openfin/cloud-interop>
 - Using a golden data source (in [apps](./public/common/) apps\*.json) to drive the apps that show up in Home and in intent resolution
 - Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file)
 
@@ -71,6 +72,8 @@ This runs the same code with slightly different settings to show a different the
 npm run build
 ```
 
+8. If you wish to test Cloud Interop so that you can launch the two platforms and see them communicating via the cloud then please contact your OpenFin sales account manager to get your connection information. Once you have that you can update the cloudInteropProvider settings in the [manifest](public/manifest.fin.json) and/or [second.manifest.fin.json](public/second.manifest.fin.json). Once enabled you will be able to share context across user channels between platforms regardless of whether they are running on the same machine or not.
+
 ## How it works
 
 The Server in this example provides two sets of content over HTTP GET.
@@ -104,6 +107,15 @@ Intent support is added to the sample in the following ways:
 - Provide an example intent/app picker if a context supports more than one intent or an intent supports more than one application: [picker.html](./public/common/windows/intents/picker.html)
 - Update [apps.json](./public/common/apps.json) to add the new views/pages and specify that they support intents in their metadata.
 - Update [apps.ts](client/src/apps.ts) to support getting apps that support intents or context types.
+
+# Cloud Interop Support implemented?
+
+Adding cloud interop support is very simple.
+
+- We npm install [@openfin/cloud-interop](https://www.npmjs.com/package/@openfin/cloud-interop)
+- We provide a way of providing cloud interop configuration through a manifest (in a real application you should be fetching this information from a service).
+- We pass the settings to the cloudInteropOverride function provided by the @openfin/cloud-interop library.
+- We add the initialized cloudInteropOverride to the interopOverride array that is set as part of your [platform's initialization](./client/src/provider.ts).
 
 ## Using the Sample
 

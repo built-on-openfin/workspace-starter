@@ -4,11 +4,11 @@
 
 # How To Customize Your Interop Broker
 
-Workspace Platform Starter includes a default interop broker override that includes support for FDC3 2.0 and intents as well as context. If has been built to support interop with support for the Platform Apps format used by Workspace Platform Starter (directories can still use the FDC3 1.2 & 2.0 format as these are mapped internally to the PlatformApp format).
+Workspace Platform Starter includes a default interop broker override that includes support for FDC3 2.0 and intents as well as context. It has been built to support interop with support for the Platform Apps format used by Workspace Platform Starter (directories can still use the FDC3 1.2 & 2.0 format as these are mapped internally to the PlatformApp format).
 
-OpenFin Workspace 17.4+ lets you specify an array of interop overrides that can be layered on top of each other so that different overrides can add custom behavior.
+OpenFin Workspace 18.0+ lets you specify an array of interop overrides that can be layered on top of each other so that different overrides can add custom behavior.
 
-Workspace Platform Starter 17.4 supports this ability by adding module support to platformProvider.interop.
+Workspace Platform Starter 18.0 supports this ability by adding module support to platformProvider.interop.
 
 ## default workspace platform interop override is now a module
 
@@ -22,7 +22,7 @@ If you do not include our default implementation in the modules array then you w
 
 ## modules
 
-The ability to specify an [array of interop override constructors](https://cdn.openfin.co/docs/javascript/stable/interfaces/OpenFin.InitPlatformOptions.html#interopOverride) was introduced in the v33 release of the OpenFin runtime and is now exposed to your workspace platform in version 17.4 of workspace.
+The ability to specify an [array of interop override constructors](https://cdn.openfin.co/docs/javascript/stable/interfaces/OpenFin.InitPlatformOptions.html#interopOverride) was introduced in the v33 release of the OpenFin runtime and is now exposed to your workspace platform in version 18.0 of workspace.
 
 These are interop modules that provide custom interop broker logic. If there are more than one then they will extend each other (the earlier entries will act as the base for subsequent entries). If you wish to use the Workspace Platform Starter interop override module as a base for your interop overrides so it should be at the start of the modules array. Here is an extract from [manifest.fin.json](../public/manifest.fin.json):
 
