@@ -2,6 +2,8 @@
 
 ## v18.0.0
 
+- npm run launch now launches via the fins link when running on mac instead of the node adapter.
+- We now capture the window state when saving a page and apply it if a page is being launched into a new window.
 - Improvement: Added `apply` as an action on the WorkspaceChangedLifecyclePayload. Previously we had `create`, `update`, `delete`. `update` was being fired when a workspace was updated and when a workspace was applied. `apply` now makes it clear when a particular workspace platform override has been triggered.
 - Improvement: modules/integrations/workspaces this module now refreshes the entries when a workspace is applied. So if a workspace entry in Home said it was selected it would be updated and the newly selected workspace would be updated to reflect it is the currently selected workspace.
 - Updated: modules/composite/default-workspace/lifecycle logic to listen out for the new `apply` action.
