@@ -54,6 +54,18 @@
 			],
 			"cacheDurationInMinutes": 1,
 			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
+		},
+		"cloudInteropProvider": {
+			"enabled": false,
+			"connectParams": {
+				"url": "",
+				"userId": "<DO NOT COMMIT CREDENTIALS>",
+				"password": "<DO NOT COMMIT CREDENTIALS>",
+				"platformId": "",
+				"sourceId": "",
+				"sourceDisplayName": "",
+				"realm": "default"
+			}
 		}
 	}
 }

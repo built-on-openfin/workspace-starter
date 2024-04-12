@@ -716,6 +716,28 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/interop-override/openfin-cloud-interop/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [loaderRule]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'openfin-cloud-interop.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'interop-override')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

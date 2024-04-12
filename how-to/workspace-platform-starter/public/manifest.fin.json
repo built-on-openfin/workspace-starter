@@ -176,6 +176,22 @@
 						"data": {
 							"loggerName": "WpsInteropOverride"
 						}
+					},
+					{
+						"id": "openfin-cloud-interop",
+						"icon": "http://localhost:8080/favicon.ico",
+						"title": "OpenFin Cloud Interop",
+						"description": "OpenFin Cloud Interop",
+						"enabled": false,
+						"url": "http://localhost:8080/js/modules/interop-override/openfin-cloud-interop.bundle.js",
+						"data": {
+							"userId": "",
+							"password": "",
+							"platformId": "",
+							"url": "",
+							"sourceDisplayName": "",
+							"sourceId": ""
+						}
 					}
 				]
 			}
