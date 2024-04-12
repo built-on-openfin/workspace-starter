@@ -190,6 +190,36 @@ This app supports FDC3 System and App Channels, lists all the supported context 
 
 ![Context Using FDC3](./assets/view-context-fdc3.png)
 
+#### Can I use that tool within my own platform?
+
+Yes, to make development easier you can define a view that uses our app. We follow the versioning used by workspace so that you can stay in sync:
+
+##### FDC3 2.0 Tool - View Options
+
+```javascript
+{
+    "url": "https://samples.openfin.co/dev-extensions/extensions/v17.2.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+    "fdc3InteropApi": "2.0",
+    "customData": {
+        "contextData": null,
+        "customChannel": ""
+    }
+}
+```
+
+##### FDC3 1.2 Tool - View Options
+
+```javascript
+{
+    "url": "https://samples.openfin.co/dev-extensions/extensions/v17.2.0/interop/fdc3/context/fdc3-broadcast-view.html",
+    "fdc3InteropApi": "1.2",
+    "customData": {
+        "contextData": null,
+        "customChannel": ""
+    }
+}
+```
+
 ### FDC3 Workbench
 
 This is the FinOS test harness to show our compatibility:
