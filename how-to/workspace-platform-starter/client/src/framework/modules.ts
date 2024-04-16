@@ -4,6 +4,7 @@ import {
 	type BrowserWindowModule,
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import { handleAnalytics } from "./analytics";
 import { getApp, getApps } from "./apps";
 import { checkCondition, conditionChanged } from "./conditions";
 import * as connectionProvider from "./connections";
@@ -17,6 +18,12 @@ import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import * as Menu from "./menu";
 import { launchPage, launchView } from "./platform/browser";
+import {
+	MODULE_ANALYTICS_SOURCE,
+	type AnalyticsClient,
+	type ModuleAnalyticsEvent,
+	type PlatformAnalyticsEvent
+} from "./shapes/analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./shapes/app-shapes";
 import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
 import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./shapes/connection-shapes";
@@ -283,6 +290,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 		sessionId: passedSessionId,
 		bringAppToFront: bringToFront,
 		getPlatform: getCurrentSync,
+		getAnalyticsClient,
 		getApps: async (): Promise<PlatformApp[]> => {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
@@ -442,6 +450,23 @@ async function getMenuClient(): Promise<MenuClient> {
 	return {
 		getPopupMenuStyle: Menu.getPopupMenuStyle,
 		showPopupMenu: Menu.showPopupMenu
+	};
+}
+
+/**
+ * Get analytics client.
+ * @returns The analytics client.
+ */
+async function getAnalyticsClient(): Promise<AnalyticsClient | undefined> {
+	return {
+		handleAnalytics: async (events: ModuleAnalyticsEvent[]): Promise<void> => {
+			if (Array.isArray(events)) {
+				const platformAnalyticEvents: PlatformAnalyticsEvent[] = events.map<PlatformAnalyticsEvent>(
+					(entry) => ({ ...entry, source: MODULE_ANALYTICS_SOURCE })
+				);
+				return handleAnalytics(platformAnalyticEvents);
+			}
+		}
 	};
 }
 

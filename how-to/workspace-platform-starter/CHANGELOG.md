@@ -2,6 +2,7 @@
 
 ## v18.0.0
 
+- Module Helpers now provide a getAnalyticsClient (it is marked as optional and the result could be undefined so it leaves the option for it to be denied to a module or removed). This client supports a ModuleAnalytic event which will have a source of Module assigned to it (you can still specify type and use the data property to provide additional module specific information). This data will be passed to the analyticProviders that receive the Workspace Analytic events. See [How to Configure Analytics](./docs/how-to-configure-analytics.md).
 - Added a cloud interop override module so that you can easily test out OpenFin's cloud interop offering. See [How To Add Cloud Interop To Your Interop Broker](./docs/how-to-add-cloud-interop-to-your-interop-broker.md).
 - Broke up the build process to make it easier to just build your modules. `npm run build` still builds everything and `npm run build-client` still builds all client related code but now if you change framework files you can use `npm run build-framework`, or if you modify our starter modules you can use `npm run build-starter-modules` or if you just want to build your modules (that are listed in webpack.config.js) then you can use `npm run build-client-modules`. This will let you have a much faster build.
 - npm run launch now launches via the fins link when running on mac instead of the node adapter.

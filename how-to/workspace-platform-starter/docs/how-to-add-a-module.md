@@ -12,11 +12,15 @@ The following features are currently extendable using modules:
 - analytics
 - auth
 - conditions
+- content-creation
 - endpoint
-- initOptions
+- init-options
 - integrations
+- interop-override
 - lifecycle
 - log
+- menus
+- share
 
 ## Configuration
 

@@ -23,7 +23,15 @@ export async function init(
 	if (options) {
 		logger.info("Initializing with options", options);
 		modules = await loadModules<AnalyticsModule>(options, "analytics");
-		await initializeModules(modules, helpers);
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		const { getAnalyticsClient, ...analyticsHelper } = helpers;
+
+		if (getAnalyticsClient) {
+			logger.info(
+				"getAnalyticsClient is defined as part of helpers but not passed to analytics modules. This is to prevent an endless loop where an analytics module may be feeding events to itself."
+			);
+		}
+		await initializeModules(modules, analyticsHelper);
 		isAnalyticsEnabled = modules.length > 0;
 	}
 }
