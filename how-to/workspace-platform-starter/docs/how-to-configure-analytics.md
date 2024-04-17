@@ -35,6 +35,34 @@ public async handleAnalytics(events: AnalyticsEvent[]) {
 }
 ```
 
+## Module Helper - getAnalyticsClient
+
+The module helper that gets passed to modules has an optional getAnalyticsClient function that might be available to your module. If available you can use it to request an analytics client. This may come back undefined if there is a reason why it cannot be provided to that module. If available it will let you pass one or more ModuleAnalyticEvents. These events do not have a source setting as this is set to Module but you can specify type and there is a data setting where you can put event/module specific information. This will be passed to the analytics modules so that they can take that feed and do something with it (send to a backend, display on as a report etc).
+
+> **INFO:** This helper method is not passed to an analytics module to prevent accidental endless loops where submitting an analytical event would go back to the module that submitted it.
+
+```javascript
+  if(helpers?.getAnalyticsClient !== undefined) {
+   const analyticsClient = await helpers.getAnalyticsClient();
+   ...
+   if(analyticsClient !== undefined) {
+      analyticsClient.handleAnalytics([
+      {
+      action: "Event Happened",
+      timestamp: new Date(),
+      type: this._definition?.id ?? "my module",
+      value: "Custom Value",
+      data: { }
+      }
+    ]);
+   }
+  }
+```
+
+### Existing analytics
+
+If you are creating an action for the Browser or a Home result through an integration then please remember that since they are being actioned by Workspace Components (Browser/Home) they will already be generating analytical events so you might not need to make use of this helper client.
+
 ## Generate From Template
 
 You can generate the scaffold for a new module by using the following command line, where "My Analytics" is the name you want to give your module:

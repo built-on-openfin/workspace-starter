@@ -1,5 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
+import type { AnalyticsClient } from "./analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
 import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
@@ -80,6 +81,11 @@ export interface ModuleHelpers {
 	 * @returns The current platform.
 	 */
 	getPlatform?(): WorkspacePlatformModule;
+	/**
+	 * Get Analytics Client.
+	 * @returns The analytics client that can be used to feed analytics to the analytics provider or undefined if it isn't available.
+	 */
+	getAnalyticsClient?(): Promise<AnalyticsClient | undefined>;
 	/**
 	 * Get the list of apps supported by this platform and/or user.
 	 * @returns The list of platform apps available from the module.
