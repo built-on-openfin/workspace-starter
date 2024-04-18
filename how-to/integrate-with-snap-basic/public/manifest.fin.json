@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "36.122.80.8"
+		"version": "36.122.80.10"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",
