@@ -43,6 +43,7 @@ import {
 	sanitizeString
 } from "workspace-platform-starter/utils";
 import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
+import { AppIdHelper } from "./app-id-helper";
 import { AppIntentHelper } from "./app-intent-helper";
 import { ClientRegistrationHelper } from "./client-registration-helper";
 import { IntentResolverHelper } from "./intent-resolver-helper";
@@ -70,8 +71,8 @@ export async function getConstructorOverride(
 	if (helpers?.getEndpointClient) {
 		endpointClient = await helpers?.getEndpointClient();
 	}
-
 	const launch = helpers.launchApp;
+
 	return (Base: OpenFin.Constructor<OpenFin.InteropBroker>) =>
 		/**
 		 * Extend the InteropBroker to handle intents.
@@ -89,6 +90,8 @@ export async function getConstructorOverride(
 
 			private readonly _metadataKey: Readonly<string>;
 
+			private readonly _appIdHelper: AppIdHelper;
+
 			/**
 			 * Create a new instance of InteropBroker.
 			 */
@@ -96,10 +99,6 @@ export async function getConstructorOverride(
 				super();
 				logger.info("Interop Broker Constructor applying settings.");
 				this._appIntentHelper = new AppIntentHelper(getApps, logger);
-				this._clientRegistrationHelper = new ClientRegistrationHelper(
-					async (clientIdentity: OpenFin.ClientIdentity) => this.lookupAppId(clientIdentity),
-					logger
-				);
 				this._metadataKey = `_metadata_${randomUUID()}`;
 				if (options.intentResolver) {
 					this._intentResolverHelper = new IntentResolverHelper(
@@ -114,6 +113,11 @@ export async function getConstructorOverride(
 				if (!isEmpty(this._unregisteredApp)) {
 					this._unregisteredApp.manifestType = MANIFEST_TYPES.UnregisteredApp.id;
 				}
+				this._appIdHelper = new AppIdHelper(getApp, fin.me.identity.uuid, logger, this._unregisteredApp);
+				this._clientRegistrationHelper = new ClientRegistrationHelper(
+					async (clientIdentity: OpenFin.ClientIdentity) => this._appIdHelper.lookupAppId(clientIdentity),
+					logger
+				);
 			}
 
 			/**
@@ -845,7 +849,7 @@ export async function getConstructorOverride(
 						payload,
 						clientIdentity
 					)) as ImplementationMetadata;
-					const appId = await this.lookupAppId(clientIdentity);
+					const appId = await this._appIdHelper.lookupAppId(clientIdentity);
 					if (!isEmpty(appId)) {
 						const updatedResponse = {
 							...response,
@@ -1357,47 +1361,6 @@ export async function getConstructorOverride(
 			}
 
 			/**
-			 * Lookup an application identity.
-			 * @param clientIdentity The client identity to use.
-			 * @returns The application identity.
-			 */
-			private async lookupAppId(clientIdentity: OpenFin.ClientIdentity): Promise<string | undefined> {
-				const nameParts = clientIdentity.name.split("/");
-				let app: PlatformApp | undefined;
-
-				if (nameParts.length === 1 || nameParts.length === 2) {
-					app = await getApp(nameParts[0]);
-				}
-				if (nameParts.length > 2) {
-					app = await getApp(`${nameParts[0]}/${nameParts[1]}`);
-				}
-
-				const appNotFound = isEmpty(app);
-
-				if (appNotFound && clientIdentity.uuid !== fin.me.identity.uuid) {
-					logger.warn(
-						"Lookup made by a non-registered app that is outside of this platform.",
-						clientIdentity
-					);
-					return;
-				}
-
-				if (appNotFound && isEmpty(this._unregisteredApp)) {
-					logger.warn(
-						"Lookup made by a non-registered app that falls under this platform. No unregistered placeholder app is specified.",
-						clientIdentity
-					);
-					return;
-				}
-
-				if (appNotFound) {
-					app = this._unregisteredApp;
-					logger.info("Assigned the following unregistered app to represent the app.", app);
-				}
-				return app?.appId;
-			}
-
-			/**
 			 * Process a context.
 			 * @param context The context to process.
 			 * @returns The processed context.
@@ -1428,7 +1391,7 @@ export async function getConstructorOverride(
 			 * @returns The context metadata.
 			 */
 			private async getContextMetadata(clientIdentity: OpenFin.ClientIdentity): Promise<ContextMetadata> {
-				const appId = (await this.lookupAppId(clientIdentity)) ?? clientIdentity.name;
+				const appId = (await this._appIdHelper.lookupAppId(clientIdentity)) ?? "unknown";
 				return {
 					source: {
 						appId,
