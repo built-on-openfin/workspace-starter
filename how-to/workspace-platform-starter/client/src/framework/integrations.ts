@@ -66,7 +66,7 @@ export async function init(
 		integrationHelpers = {
 			...helpers,
 			templateHelpers,
-			openUrl: async (url) => fin.System.openUrlWithBrowser(url),
+			openUrl: async (url): Promise<void> => fin.System.openUrlWithBrowser(url),
 			setSearchQuery
 		};
 
