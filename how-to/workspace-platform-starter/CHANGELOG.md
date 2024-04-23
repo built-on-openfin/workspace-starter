@@ -2,6 +2,7 @@
 
 ## v17.2.0
 
+- Updated SnapSDK to version 0.3.0 - This includes a new feature in the developer tool that comes with Snap that lets you identity Snap Strategies, bug fixes and new features (windows excluded from snapshots are not tracked by the Snap Server).
 - Updated default build options. No longer bundling fdc3 module just for error strings. We have a copy of the strings to remove the dependency from the output (as it increased the size of the provider js)
 - Updated webpack config to use source-map instead of inline-source-map to have smaller js files by default (devtools will import the sourcemap). It also gives you the option of whether or not you copy source map files alongside the files.
 - Changed to production instead of development for the webpack build in package.json to have a more efficient js file.

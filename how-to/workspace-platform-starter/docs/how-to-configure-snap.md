@@ -17,9 +17,9 @@ To enable snap support in your platform you can add the following in your manife
          "enabled": true,
          "id": "workspace-platform-starter",
          "serverAssetInfo": {
-            "src": "https://cdn.openfin.co/release/snap/0.2.0/snap.zip",
+            "src": "https://cdn.openfin.co/release/snap/0.3.0/snap.zip",
             "alias": "openfin-snap",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "target": "OpenFinSnap.exe"
          },
          "showDebugWindow": false

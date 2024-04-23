@@ -53,7 +53,7 @@
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/openid-connect": "^1.0.0",
-		"@openfin/snap-sdk": "0.2.0",
+		"@openfin/snap-sdk": "0.3.0",
 		"@openfin/workspace": "17.2.14",
 		"@openfin/workspace-platform": "17.2.14",
 		"csstype": "^3.1.3"
