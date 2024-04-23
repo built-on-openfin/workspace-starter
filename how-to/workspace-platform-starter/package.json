@@ -61,7 +61,7 @@
 		"@finos/fdc3": "^2.0.3",
 		"@openfin/cloud-interop": "^0.4.0",
 		"@openfin/openid-connect": "^1.0.0",
-		"@openfin/snap-sdk": "0.2.0",
+		"@openfin/snap-sdk": "0.3.0",
 		"@openfin/workspace": "18.0.8",
 		"@openfin/workspace-platform": "18.0.8",
 		"csstype": "^3.1.3"
