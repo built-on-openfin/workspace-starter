@@ -43,7 +43,7 @@ describe("Register with Home", () => {
 	it("The runtime version should be set", async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal("36.122.80.10");
+		expect(version).to.equal("36.122.80.11");
 	});
 
 	it("The identity should be set", async () => {
