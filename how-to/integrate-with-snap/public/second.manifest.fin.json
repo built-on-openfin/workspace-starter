@@ -19,7 +19,28 @@
 		"preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.bundle.js" }],
 		"permissions": {
 			"System": {
-				"launchExternalProcess": true,
+				"launchExternalProcess": {
+					"enabled": true,
+					"assets": {
+						"enabled": true,
+						"srcRules": [
+							{
+								"match": ["https://cdn.openfin.co/release/snap/*"],
+								"behavior": "allow"
+							},
+							{
+								"match": ["<all_urls>"],
+								"behavior": "block"
+							}
+						]
+					},
+					"downloads": {
+						"enabled": false
+					},
+					"executables": {
+						"enabled": false
+					}
+				},
 				"downloadAsset": true
 			}
 		}
