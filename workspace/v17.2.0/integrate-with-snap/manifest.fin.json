@@ -13,24 +13,22 @@
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
-				"launchExternalProcess": true,
-				"downloadAsset": true,
-				"openUrlWithBrowser": {
+				"launchExternalProcess": {
 					"enabled": true,
-					"protocols": ["mailto"]
-				}
+					"assets": {
+						"enabled": true
+					},
+					"downloads": {
+						"enabled": false
+					},
+					"executables": {
+						"enabled": true
+					}
+				},
+				"downloadAsset": true
 			}
 		},
-		"defaultWindowOptions": {
-			"permissions": {
-				"System": {
-					"openUrlWithBrowser": {
-						"enabled": true,
-						"protocols": ["mailto"]
-					}
-				}
-			}
-		}
+		"defaultWindowOptions": {}
 	},
 	"shortcut": {
 		"company": "OpenFin",
