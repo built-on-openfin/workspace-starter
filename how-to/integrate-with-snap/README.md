@@ -14,6 +14,8 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 
 > The **@openfin/snap-sdk** is currently in beta. The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
 
+- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv17.2.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
+
 ## Getting Started
 
 1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
@@ -130,6 +132,87 @@ Run step 5 mentioned above to build the sample. Start the sample using step 4 me
 You app should now be listed and you should be able to launch it and snap it with the sample content.
 
 ![Launch Your App](my-app.png)
+
+### Testing Snap with an existing Platform/Classic App
+
+We have a [preload.ts](./client/src/preload.ts) file that is a preload script that can be added to your platform provider or classic app to show Snap working without any coding. Your manifest will need to load the preload script snap.preload.bundle.js (this is how it is defined in our [webpack.config.js](./client/webpack.config.js)) and you will need to request the permissions and define the app asset.
+
+#### Preload Script Entry
+
+This is the preload definition inside of "startup_app" or "platform" within your manifest.
+
+If you are running the local example you will see:
+
+```json
+  "preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.bundle.js" }],
+```
+
+If you just want to test Snap within your own manifest by using a hosted preload script then you can add the following to the "startup_app" or "platform" definition in your manifest:
+
+```json
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+```
+
+#### Permissions
+
+These permissions need to be added at the platform or startup_app level depending on the type of application you are building. We are using the restrictive permission model so we are only allowing launch external process for an app asset that comes from a particular url.
+
+```json
+  "permissions": {
+   "System": {
+    "launchExternalProcess": {
+     "enabled": true,
+     "assets": {
+      "enabled": true,
+      "srcRules": [
+       {
+        "match": [
+         "https://cdn.openfin.co/release/snap/*"
+        ],
+        "behavior": "allow"
+       },
+       {
+        "match": [
+         "<all_urls>"
+        ],
+        "behavior": "block"
+       }
+      ]
+     },
+     "downloads": {
+      "enabled": false
+     },
+     "executables": {
+      "enabled": false
+     }
+    },
+    "downloadAsset": true
+   }
+  }
+```
+
+#### App Asset
+
+Your manifest will need to include the following app asset information:
+
+```json
+"appAssets": [
+  {
+   "src": "https://cdn.openfin.co/release/snap/0.3.0/snap.zip",
+   "alias": "openfin-snap",
+   "version": "0.3.0",
+   "target": "OpenFinSnap.exe"
+  }
+ ]
+```
+
+#### Running an example
+
+To see an example of a classic app using the preload please launch our second manifest:
+
+```shell
+npm run secondclient
+```
 
 ---
 
