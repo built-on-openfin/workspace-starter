@@ -21,12 +21,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/snap-sdk": "0.3.0",
-		"@openfin/workspace": "18.0.8",
-		"@openfin/workspace-platform": "18.0.8"
+		"@openfin/workspace": "18.0.9",
+		"@openfin/workspace-platform": "18.0.9"
 	},
 	"devDependencies": {
-		"@openfin/core": "36.80.10",
-		"@openfin/node-adapter": "36.80.10",
+		"@openfin/core": "36.80.11",
+		"@openfin/node-adapter": "36.80.11",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
