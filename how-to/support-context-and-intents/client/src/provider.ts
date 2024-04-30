@@ -33,10 +33,13 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 	const defaultBroker = createInteropOverride(customSettings);
 	const interopOverride: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [defaultBroker];
 
-	if (customSettings?.cloudInteropProvider?.enabled === true) {
+	if (
+		customSettings?.cloudInteropProvider?.enabled === true &&
+		customSettings?.cloudInteropProvider?.connectParams !== undefined
+	) {
 		console.log("Initializing the cloud interop override");
 		const initializedCloudInteropOverride = (await cloudInteropOverride(
-			customSettings.cloudInteropProvider
+			customSettings?.cloudInteropProvider?.connectParams
 		)) as unknown as OpenFin.ConstructorOverride<OpenFin.InteropBroker>;
 		interopOverride.push(initializedCloudInteropOverride);
 	}
