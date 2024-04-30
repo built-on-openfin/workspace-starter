@@ -80,7 +80,6 @@ OpenFin provides some packages to assist in automation testing of your apps.
 
 - [@openfin/automation-cli](https://www.npmjs.com/package/@openfin/automation-cli) - A command line tool for running tests in an OpenFin environment.
 - [@openfin/automation-helpers](https://www.npmjs.com/package/@openfin/automation-helpers) - A package of helper methods for interacting with OpenFin components.
-- [@openfin/automation-native](https://www.npmjs.com/package/@openfin/automation-native) - Helper methods to help interacting with native mouse and keyboard elements, such as context menus.
 
 | Example                                           | Description                                                                                    | Live Launch |
 | ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- |
