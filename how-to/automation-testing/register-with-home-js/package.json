@@ -19,7 +19,6 @@
 	"devDependencies": {
 		"@openfin/automation-cli": "^1.2.0",
 		"@openfin/automation-helpers": "^1.2.0",
-		"@openfin/automation-native": "^1.2.0",
 		"chai": "4.3.10",
 		"jasmine-pretty-html-reporter": "0.2.5",
 		"jest-html-reporters": "3.1.7",

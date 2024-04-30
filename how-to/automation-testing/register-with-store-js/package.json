@@ -17,7 +17,6 @@
 	"devDependencies": {
 		"@openfin/automation-cli": "^1.2.0",
 		"@openfin/automation-helpers": "^1.2.0",
-		"@openfin/automation-native": "^1.2.0",
 		"chai": "4.3.10"
 	}
 }

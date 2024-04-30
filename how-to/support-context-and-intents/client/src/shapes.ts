@@ -1,4 +1,4 @@
-import type { ConnectParams } from "@openfin/cloud-interop/dist/interfaces";
+import type { CloudInteropOverrideParams } from "@openfin/cloud-interop";
 
 /**
  * The custom settings stored in the manifest.fin.json.
@@ -57,7 +57,7 @@ export interface AppProviderSettings {
 /**
  * Settings for the cloud interop provider.
  */
-export interface CloudInteropProviderSettings extends ConnectParams {
+export interface CloudInteropProviderSettings {
 	/**
 	 * Is the cloud interop provider enabled
 	 */
@@ -66,5 +66,5 @@ export interface CloudInteropProviderSettings extends ConnectParams {
 	/**
 	 * The connect parameters for the cloud interop provider.
 	 */
-	connectParams: ConnectParams;
+	connectParams: CloudInteropOverrideParams;
 }
