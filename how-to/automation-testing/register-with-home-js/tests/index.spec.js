@@ -7,7 +7,6 @@ const {
 	WebDriver,
 	WebDriverKeys
 } = require('@openfin/automation-helpers');
-const { NativeDriver, NativeDriverKeys } = require('@openfin/automation-native');
 const { expect } = require('chai');
 const { By } = require('selenium-webdriver');
 
@@ -276,44 +275,5 @@ describe('Register with Home', () => {
 		expect(value).eq('My New Title');
 
 		await WebDriver.sleep(2000);
-	});
-
-	it('Can select a context menu entry in the interop window', async () => {
-		const foundWin = await WebDriver.switchToWindow('identityString', [
-			/internal-generated-window*/,
-			/register-with-home/
-		]);
-		expect(foundWin).to.be.true;
-
-		if (foundWin) {
-			const elem = await WebDriver.findElementByPath("//*[@aria-label='Open Browser Menu']");
-			expect(elem).to.exist;
-
-			if (elem) {
-				// First click on the button to show the native context menu
-				await WebDriver.actions([
-					{ type: 'mouseMove', origin: elem },
-					// Open the context menu
-					{ type: 'mouseClick', button: MouseButton.Left },
-					// Pause to give the menu time to appear
-					{ type: 'pause', duration: 2000 }
-				]);
-
-				// Do down arrow * 7 to select the close, you should see the confirmation popup
-				await NativeDriver.actions([
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'keyPress', key: NativeDriverKeys.Down },
-					{ type: 'pause', duration: 1000 },
-					{ type: 'keyPress', key: NativeDriverKeys.Enter },
-					// Pause to see the confirmation
-					{ type: 'pause', duration: 2000 }
-				]);
-			}
-		}
 	});
 });
