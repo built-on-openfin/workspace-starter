@@ -75,32 +75,5 @@
 			
 		],
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
-	},
-	{
-		"appId": "snapshot-forty-window",
-		"name": "snapshot-forty-window",
-		"title": "Windows - 40 Windows",
-		"manifestType": "snapshot",
-		"description": "Shows forty blank windows",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/CSE-970/workspace-platform-starter-basic/common/snapshots/forty-windows.snapshot.fin.json",
-		"icons": [
-			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/ameet/CSE-970/workspace-platform-starter-basic/common/images/icon-blue.png"
-			}
-		],
-		"contactEmail": "contact@example.com",
-		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"]
-			}
-		],
-		"images": [
-			
-		],
-		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	}
 ]
