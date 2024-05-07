@@ -21,5 +21,59 @@
 			}
 		],
 		"tags": ["view", "openfin", "versions"]
+	},
+	{
+		"appId": "snapshot-ten-window",
+		"name": "snapshot-ten-window",
+		"title": "Windows - 10 Windows",
+		"manifestType": "snapshot",
+		"description": "Shows ten blank windows",
+		"manifest": "http://localhost:8080/common/snapshots/ten-windows.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			
+		],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "snapshot-twenty-window",
+		"name": "snapshot-twenty-window",
+		"title": "Windows - 20 Windows",
+		"manifestType": "snapshot",
+		"description": "Shows twenty blank windows",
+		"manifest": "http://localhost:8080/common/snapshots/twenty-windows.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			}
+		],
+		"images": [
+			
+		],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	}
 ]
