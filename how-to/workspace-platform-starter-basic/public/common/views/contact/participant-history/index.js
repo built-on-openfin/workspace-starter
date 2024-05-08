@@ -2,9 +2,24 @@
  * Initialize the DOM.
  */
 function initializeDOM() {
-	if (window.fdc3) {
+	if (window.fdc3 !== undefined) {
+		setupListeners();
+	} else {
+		window.addEventListener('fdc3Ready', async () => {
+			setupListeners();
+		});
+	}
+}
+
+/**
+ * Sets up the related fdc3 listeners once fdc3 is available.
+ */
+function setupListeners() {
+	try {
 		window.fdc3.addContextListener(contextHandler);
 		window.fdc3.addIntentListener('ViewContact', contextHandler);
+	} catch (error) {
+		console.error('There was an error while setting up all of the fdc3 listeners', error);
 	}
 }
 
