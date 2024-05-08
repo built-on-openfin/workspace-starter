@@ -59,7 +59,7 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
-		"@openfin/cloud-interop": "0.36.11",
+		"@openfin/cloud-interop": "0.36.12",
 		"@openfin/openid-connect": "^1.0.0",
 		"@openfin/snap-sdk": "0.3.0",
 		"@openfin/workspace": "18.0.9",

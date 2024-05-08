@@ -21,7 +21,7 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/cloud-interop": "0.36.11",
+		"@openfin/cloud-interop": "0.36.12",
 		"@openfin/workspace": "18.0.9",
 		"@openfin/workspace-platform": "18.0.9"
 	},
