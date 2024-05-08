@@ -104,24 +104,38 @@ function initializeDOM() {
 		await appChannel.broadcast(context);
 	}
 
-	if (window.fdc3 !== undefined) {
+	/**
+	 * Sets up the related fdc3 listeners once fdc3 is available.
+	 */
+	function setupListeners() {
 		const startCallIntent = 'StartCall';
 		const openAppIntent = 'OpenApp';
-		fdc3.addIntentListener(startCallIntent, (ctx, metadata) => {
-			console.log(`Received Context For Intent: ${startCallIntent}`, ctx, metadata);
-			updateCallInformation(ctx, startCallIntent);
-			return new Promise((resolve) => {
-				// To demonstrate getResult in fdc3 2.0 we simply return the context that was sent.
-				resolve(ctx);
+		try {
+			fdc3.addContextListener('fdc3.contact', (ctx, metadata) => {
+				console.log('Received Context', ctx, metadata);
+				updateCallInformation(ctx);
 			});
-		});
-		fdc3.addIntentListener(openAppIntent, (ctx, metadata) => {
-			console.log(`Received Context For Intent: ${openAppIntent}`, ctx, metadata);
-			updateCallInformation(ctx, openAppIntent);
-		});
-		fdc3.addContextListener('fdc3.contact', (ctx, metadata) => {
-			console.log('Received Context', ctx, metadata);
-			updateCallInformation(ctx);
+			fdc3.addIntentListener(startCallIntent, (ctx, metadata) => {
+				console.log(`Received Context For Intent: ${startCallIntent}`, ctx, metadata);
+				updateCallInformation(ctx, startCallIntent);
+				return new Promise((resolve) => {
+					// To demonstrate getResult in fdc3 2.0 we simply return the context that was sent.
+					resolve(ctx);
+				});
+			});
+			fdc3.addIntentListener(openAppIntent, (ctx, metadata) => {
+				console.log(`Received Context For Intent: ${openAppIntent}`, ctx, metadata);
+				updateCallInformation(ctx, openAppIntent);
+			});
+		} catch (error) {
+			console.error('Error setting up all of the fdc3 listeners', error);
+		}
+	}
+	if (window.fdc3 !== undefined) {
+		setupListeners();
+	} else {
+		window.addEventListener('fdc3Ready', async () => {
+			setupListeners();
 		});
 	}
 }
