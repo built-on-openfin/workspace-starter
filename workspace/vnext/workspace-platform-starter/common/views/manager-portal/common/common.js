@@ -117,6 +117,11 @@ export async function initFdc3Listener(contextHandler) {
 	if (window.fdc3 !== undefined) {
 		// add a listener
 		window.fdc3.addContextListener(contextHandler);
+	} else {
+		window.addEventListener('fdc3Ready', async () => {
+			// add a listener
+			window.fdc3.addContextListener(contextHandler);
+		});
 	}
 }
 

@@ -21,8 +21,10 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 function initDom() {
 	document.querySelector('#btnReview').addEventListener('click', async () => {
-		const plat = fin.Platform.getCurrentSync();
-		await plat.createView({ target: null, url: 'https://www.expensify.com/reports' });
+		if (window.fin) {
+			const plat = fin.Platform.getCurrentSync();
+			await plat.createView({ target: null, url: 'https://www.expensify.com/reports' });
+		}
 	});
 }
 
