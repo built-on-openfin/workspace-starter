@@ -37,13 +37,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"]
-			}
-		],
+		"intents": [],
 		"images": [
 			
 		],
@@ -64,13 +58,7 @@
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
-		"intents": [
-			{
-				"name": "ViewContact",
-				"displayName": "View Contact",
-				"contexts": ["fdc3.contact"]
-			}
-		],
+		"intents": [],
 		"images": [
 			
 		],
