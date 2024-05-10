@@ -16,3 +16,6 @@ how-to/integrate-with-salesforce-basic/public/js/preload.js
 updatable-packages.txt
 public-github
 chromedriver*
+how-to/workspace-platform-starter/public/common/snapshots/XYZten-windows.snapshot.fin.json
+how-to/workspace-platform-starter/public/common/snapshots/old-ten-windows.snapshot.fin.json
+how-to/workspace-platform-starter-basic/public/common/snapshots/forty-windows.snapshot.fin.json
