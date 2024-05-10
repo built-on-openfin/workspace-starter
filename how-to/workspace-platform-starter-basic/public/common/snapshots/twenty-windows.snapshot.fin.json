@@ -1,7 +1,7 @@
 {
     "snapshotDetails": {
         "timestamp": "2024-05-06T12:00:35.527Z",
-        "runtimeVersion": "34.118.78.80",
+        "runtimeVersion": "36.122.80.11",
         "monitorInfo": {
             "deviceScaleFactor": 1.5,
             "dpi": {
@@ -262,7 +262,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -276,7 +276,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -359,7 +359,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 201,
             "center": false,
@@ -1078,7 +1078,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -1092,7 +1092,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -1175,7 +1175,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 201,
             "center": false,
@@ -1894,7 +1894,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -1908,7 +1908,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -1991,7 +1991,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 201,
             "center": false,
@@ -2710,7 +2710,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -2724,7 +2724,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -2807,7 +2807,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 200,
             "center": false,
@@ -3526,7 +3526,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -3540,7 +3540,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -3623,7 +3623,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 200,
             "center": false,
@@ -4342,7 +4342,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -4356,7 +4356,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -4439,7 +4439,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 201,
             "center": false,
@@ -5158,7 +5158,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -5172,7 +5172,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -5255,7 +5255,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 200,
             "center": false,
@@ -5974,7 +5974,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -5988,7 +5988,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -6071,7 +6071,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 201,
             "center": false,
@@ -6790,7 +6790,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -6804,7 +6804,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -6887,7 +6887,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 201,
             "center": false,
@@ -7609,7 +7609,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -7623,7 +7623,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -7706,7 +7706,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 201,
             "center": false,
@@ -8425,7 +8425,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -8439,7 +8439,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -8522,7 +8522,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 137,
             "width": 201,
             "center": false,
@@ -9241,7 +9241,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -9255,7 +9255,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -9338,7 +9338,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 133,
             "width": 201,
             "center": false,
@@ -10057,7 +10057,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -10071,7 +10071,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -10154,7 +10154,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 200,
             "center": false,
@@ -10873,7 +10873,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -10887,7 +10887,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -10970,7 +10970,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 201,
             "center": false,
@@ -11689,7 +11689,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -11703,7 +11703,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -11786,7 +11786,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 200,
             "center": false,
@@ -12505,7 +12505,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -12519,7 +12519,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -12602,7 +12602,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 200,
             "center": false,
@@ -13321,7 +13321,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -13335,7 +13335,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -13418,7 +13418,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 201,
             "width": 201,
             "center": false,
@@ -14137,7 +14137,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -14151,7 +14151,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -14234,7 +14234,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 201,
             "center": false,
@@ -14953,7 +14953,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -14967,7 +14967,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -15050,7 +15050,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 200,
             "center": false,
@@ -15769,7 +15769,7 @@
                 },
                 "v2Api": true,
                 "showFavicons": true,
-                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/17.2.14/icons/defaultFavicon.svg"
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.9/icons/defaultFavicon.svg"
             },
             "includeInSnapshots": true,
             "resizable": true,
@@ -15783,7 +15783,7 @@
             "state": "normal",
             "taskbarIcon": "",
             "taskbarIconGroup": "workspace-platform-start-basic",
-            "url": "https://workspace.openfin.co/workspace/17.2.14/browser/",
+            "url": "https://workspace.openfin.co/workspace/18.0.9/browser/",
             "waitForPageLoad": false,
             "backgroundColor": "#1E1F23",
             "fdc3InteropApi": "",
@@ -15866,7 +15866,7 @@
                 }
             },
             "autoplayPolicy": "no-user-gesture-required",
-            "title": "workspace.openfin.co/workspace/17.2.14/browser/",
+            "title": "workspace.openfin.co/workspace/18.0.9/browser/",
             "height": 200,
             "width": 201,
             "center": false,
