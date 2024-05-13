@@ -2,10 +2,11 @@
 import type OpenFin from "@openfin/core";
 import type {
 	PlatformInteropOverride,
-	PlatformInteropOverrideOptions
+	PlatformInteropOverrideOptions,
+	PlatformInteropBrokerHelpers
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import type { ExampleInteropOverrideOptions } from "./shapes";
 
 /**
@@ -28,7 +29,7 @@ export class ExampleInteropOverride implements PlatformInteropOverride<ExampleIn
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers: PlatformInteropBrokerHelpers | undefined;
 
 	/**
 	 * Initialize the module.
@@ -40,7 +41,7 @@ export class ExampleInteropOverride implements PlatformInteropOverride<ExampleIn
 	public async initialize(
 		definition: ModuleDefinition<ExampleInteropOverrideOptions>,
 		loggerCreator: LoggerCreator,
-		helpers: ModuleHelpers
+		helpers: PlatformInteropBrokerHelpers
 	): Promise<void> {
 		this._definition = definition;
 		this._logger = loggerCreator("ExampleInteropOverride");

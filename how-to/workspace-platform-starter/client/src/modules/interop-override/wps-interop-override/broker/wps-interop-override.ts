@@ -30,10 +30,10 @@ import type {
 	IntentRegistrationPayload,
 	IntentTargetMetaData,
 	ProcessedContext,
-	PlatformInteropOverrideOptions
+	PlatformInteropOverrideOptions,
+	PlatformInteropBrokerHelpers
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import {
 	formatError,
 	isEmpty,
@@ -58,7 +58,7 @@ import { IntentResolverHelper } from "./intent-resolver-helper";
 export async function getConstructorOverride(
 	options: PlatformInteropOverrideOptions,
 	logger: Logger,
-	helpers: ModuleHelpers
+	helpers: PlatformInteropBrokerHelpers
 ): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 	if (!helpers?.getApp || !helpers?.getApps || !helpers.launchApp) {
 		throw new Error(

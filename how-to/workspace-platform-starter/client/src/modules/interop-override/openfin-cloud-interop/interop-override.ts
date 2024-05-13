@@ -3,10 +3,11 @@ import { cloudInteropOverride } from "@openfin/cloud-interop";
 import type OpenFin from "@openfin/core";
 import type {
 	PlatformInteropOverride,
-	PlatformInteropOverrideOptions
+	PlatformInteropOverrideOptions,
+	PlatformInteropBrokerHelpers
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isStringValue } from "workspace-platform-starter/utils";
 import type { OpenFinCloudInteropOptions } from "./shapes";
 
@@ -30,7 +31,7 @@ export class OpenFinCloudInterop implements PlatformInteropOverride<OpenFinCloud
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers: PlatformInteropBrokerHelpers | undefined;
 
 	/**
 	 * Initialize the module.
@@ -42,7 +43,7 @@ export class OpenFinCloudInterop implements PlatformInteropOverride<OpenFinCloud
 	public async initialize(
 		definition: ModuleDefinition<OpenFinCloudInteropOptions>,
 		loggerCreator: LoggerCreator,
-		helpers: ModuleHelpers
+		helpers: PlatformInteropBrokerHelpers
 	): Promise<void> {
 		this._definition = definition;
 		const loggerName = definition.data?.loggerName ?? "OpenfinCloudInterop";

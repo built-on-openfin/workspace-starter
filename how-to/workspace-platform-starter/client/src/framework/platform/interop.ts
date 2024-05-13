@@ -1,11 +1,15 @@
 import type OpenFin from "@openfin/core";
+import { getApps } from "../apps";
 import { createLogger } from "../logger-provider";
 import { initializeModules, loadModules } from "../modules";
 import type { WindowPositioningOptions } from "../shapes/browser-shapes";
-import type { PlatformInteropOverride, PlatformInteropOverrideOptions } from "../shapes/interopbroker-shapes";
+import type {
+	PlatformInteropBrokerHelpers,
+	PlatformInteropOverride,
+	PlatformInteropOverrideOptions
+} from "../shapes/interopbroker-shapes";
 import type { ModuleDefinition, ModuleEntry, ModuleHelpers } from "../shapes/module-shapes";
 import type { PlatformProviderOptions } from "../shapes/platform-shapes";
-
 const logger = createLogger("InteropProvider");
 const allOverrides: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [];
 let modules: ModuleEntry<PlatformInteropOverride, unknown, unknown, ModuleDefinition>[] = [];
@@ -43,9 +47,17 @@ export async function init(
 			...interopOverrideSettings?.openOptions
 		};
 
+		// interop broker will need access to all apps where as general modules
+		// have access to public apps and will need the specific appId or intent
+		// if they want to read/launch them.
+		const platformInteropBrokeHelpers: PlatformInteropBrokerHelpers = {
+			...helpers,
+			getApps
+		};
+
 		if (Array.isArray(moduleOptions)) {
 			modules = await loadModules<PlatformInteropOverride>(options.interop, "interopOverride");
-			await initializeModules<PlatformInteropOverride>(modules, helpers);
+			await initializeModules<PlatformInteropOverride>(modules, platformInteropBrokeHelpers);
 		}
 
 		logger.info("Getting interop overrides...");
