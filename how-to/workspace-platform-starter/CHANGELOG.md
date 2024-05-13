@@ -2,6 +2,7 @@
 
 ## v18.0.0
 
+- Update the interop broker override module pattern so that it is now passed a PlatformInteropBrokerHelpers object instead of the standard ModuleHelpers object. There are no additional functions at the moment but getApps returns all apps (even private ones) for the interop broker as it needs access to everything in order to perform intent resolution.
 - Added example of supporting workspace and desktop browser (through openfin/core-web as part of OpenFin anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an OpenFin Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v18.0.0>).
 - More efficient validation of appIds associated with views/windows for faster interop based actions. The appId validation in our wps module (modules directory) has extracted into its own file and tests to ensure it continues to behave as expected across future updates have been added to the test directory.
 - Module Helpers now provide a getAnalyticsClient (it is marked as optional and the result could be undefined so it leaves the option for it to be denied to a module or removed). This client supports a ModuleAnalytic event which will have a source of Module assigned to it (you can still specify type and use the data property to provide additional module specific information). This data will be passed to the analyticProviders that receive the Workspace Analytic events. See [How to Configure Analytics](./docs/how-to-configure-analytics.md).

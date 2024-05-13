@@ -2,10 +2,11 @@
 import type OpenFin from "@openfin/core";
 import type {
 	PlatformInteropOverride,
-	PlatformInteropOverrideOptions
+	PlatformInteropOverrideOptions,
+	PlatformInteropBrokerHelpers
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { getConstructorOverride as wpsConstructorOverride } from "./broker/wps-interop-override";
 import type { WpsInteropOverrideOptions } from "./shapes";
 /**
@@ -28,7 +29,7 @@ export class WpsInteropOverride implements PlatformInteropOverride<WpsInteropOve
 	 * Helper methods for the module.
 	 * @internal
 	 */
-	private _helpers: ModuleHelpers | undefined;
+	private _helpers: PlatformInteropBrokerHelpers | undefined;
 
 	/**
 	 * Initialize the module.
@@ -40,7 +41,7 @@ export class WpsInteropOverride implements PlatformInteropOverride<WpsInteropOve
 	public async initialize(
 		definition: ModuleDefinition<WpsInteropOverrideOptions>,
 		loggerCreator: LoggerCreator,
-		helpers: ModuleHelpers
+		helpers: PlatformInteropBrokerHelpers
 	): Promise<void> {
 		this._definition = definition;
 		const loggerName = definition.data?.loggerName ?? "WpsInteropOverride";

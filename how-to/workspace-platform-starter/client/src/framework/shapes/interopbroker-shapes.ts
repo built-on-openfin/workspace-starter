@@ -282,3 +282,8 @@ export interface OpenOptions {
 	 */
 	connectionTimeout?: number;
 }
+
+/**
+ * Interop Broker helpers provides environment methods and data.
+ */
+export type PlatformInteropBrokerHelpers = ModuleHelpers;
