@@ -56,7 +56,8 @@ export async function init(
 		endpointProvider = {
 			hasEndpoint,
 			action,
-			requestResponse
+			requestResponse,
+			requestStream
 		};
 	}
 }
@@ -206,6 +207,32 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
 			return;
 		}
 		return resolvedEndpoint.requestResponse(endpoint, request) as R;
+	}
+	logger.warn(`${endpointId} specifies a type: ${endpointType} that is not supported`);
+}
+
+/**
+ * Perform a requestStream on an endpoint.
+ * @param endpointId The id of the endpoint to perform the requestStream on.
+ * @param request The request to send.
+ * @returns The readable stream response from the endpoint.
+ */
+export async function requestStream<T, R>(endpointId: string, request?: T): Promise<ReadableStream<R> | undefined> {
+	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
+
+	if (isEmpty(endpoint)) {
+		return;
+	}
+
+	const endpointType = endpoint.type;
+
+	if (endpointType === "module") {
+		const resolvedEndpoint = await getModuleEndpoint(endpoint.typeId);
+
+		if (!resolvedEndpoint?.requestStream) {
+			return;
+		}
+		return resolvedEndpoint.requestStream(endpoint, request) as Promise<ReadableStream<R>>;
 	}
 	logger.warn(`${endpointId} specifies a type: ${endpointType} that is not supported`);
 }

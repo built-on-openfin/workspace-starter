@@ -71,4 +71,19 @@ export class EndpointClient implements EndpointClientInterface {
 			`The endpoint Id ${endpointId} does not exist or you do not have permission to use it for a request/response. Returning undefined.`
 		);
 	}
+
+	/**
+	 * Perform a request/response on an endpoint.
+	 * @param endpointId The id of the endpoint to perform the request/response on.
+	 * @param request The request to send.
+	 * @returns The readable stream from the endpoint.
+	 */
+	public async requestStream<T, R>(endpointId: string, request?: T): Promise<ReadableStream<R> | undefined> {
+		if (this.hasEndpoint(endpointId)) {
+			return this._endpointProvider.requestStream(endpointId, request);
+		}
+		this._logger.warn(
+			`The endpoint Id ${endpointId} does not exist or you do not have permission to use it for a requestStream. Returning undefined.`
+		);
+	}
 }
