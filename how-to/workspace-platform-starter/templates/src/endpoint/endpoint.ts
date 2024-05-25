@@ -85,8 +85,10 @@ export class ExampleEndpointProvider implements Endpoint<ExampleEndpointProvider
 	 * @param request The request to process if needed.
 	 * @returns The readable stream response to the request, or undefined if not handled.
 	 */
-	public async requestStream(endpointDefinition: EndpointDefinition,
-		request?: unknown): Promise<ReadableStream<unknown> | undefined> {
+	public async requestStream(
+		endpointDefinition: EndpointDefinition,
+		request?: unknown
+	): Promise<ReadableStream<unknown> | undefined> {
 		// An example is shown below that sends a message every second and below that is an example of code consuming a stream.
 		// Readable streams can be used in OpenFin and in the browser: https://caniuse.com/?search=ReadableStream
 		// More information about how you can consume a readable stream can be found here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams

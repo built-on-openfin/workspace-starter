@@ -217,7 +217,10 @@ export async function requestResponse<T, R>(endpointId: string, request?: T): Pr
  * @param request The request to send.
  * @returns The readable stream response from the endpoint.
  */
-export async function requestStream<T, R>(endpointId: string, request?: T): Promise<ReadableStream<R> | undefined> {
+export async function requestStream<T, R>(
+	endpointId: string,
+	request?: T
+): Promise<ReadableStream<R> | undefined> {
 	const endpoint = endpointDefinitions.find((entry) => entry.id === endpointId);
 
 	if (isEmpty(endpoint)) {

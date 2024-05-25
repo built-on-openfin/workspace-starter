@@ -42,8 +42,10 @@ export interface Endpoint<O = unknown, H = ModuleHelpers> extends ModuleImplemen
 	 * @param request The request to process.
 	 * @returns The response to the request, or null if not handled.
 	 */
-	requestStream?(endpointDefinition: EndpointDefinition,
-		request?: unknown): Promise<ReadableStream<unknown> | undefined>;
+	requestStream?(
+		endpointDefinition: EndpointDefinition,
+		request?: unknown
+	): Promise<ReadableStream<unknown> | undefined>;
 }
 
 /**

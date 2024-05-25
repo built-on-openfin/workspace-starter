@@ -33,10 +33,20 @@ export interface ExampleNotificationHandlerProviderOptions {
 		enabled: boolean;
 		/**
 		 * Do you want to specify a custom channel name that gets appended to platform-uuid/ default is
-		 * notification-handler which will expose a create function. So the channel name is 
+		 * notification-handler which will expose a create function. So the channel name is
 		 * platform-uuid/notification-handler.
 		 */
 		name?: string;
+	};
+
+	/**
+	 * Options to support the raising of intents in response to notifications.
+	 */
+	intentLauncher?: {
+		/**
+		 * If an instanceId is provided and it is not found, should a new instance be created or should it fallback to an existing instance. The default is to use an existing instance.
+		 */
+		instanceIdFallback: "existing" | "new";
 	};
 }
 
@@ -51,11 +61,16 @@ export interface NotificationCustomData {
 	/** The Context you wish to pass */
 	context: OpenFin.Context & { form?: { [key: string]: unknown } };
 	/**
-	 * The app related information you wish to launch or target 
+	 * The app related information you wish to launch or target
 	 */
 	target?: { appId: string; instanceId?: string };
 	/**
 	 * Information related about a broadcast you wish to do.
 	 */
-	broadcast?: { isUserChannel: boolean };
+	broadcastOptions?: {
+		/**
+		 * Is the target specified for broadcast a user channel (colors) or an app channel. Default is user channel.
+		 */
+		isUserChannel: boolean;
+	};
 }
