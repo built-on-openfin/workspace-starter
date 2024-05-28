@@ -1,13 +1,13 @@
 import type OpenFin from "@openfin/core";
+import type { NotificationOptions, UpdatableNotificationOptions } from "@openfin/workspace/notifications";
 /**
  * Options for the example notification handler lifecycle provider.
  */
 export interface ExampleNotificationHandlerProviderOptions {
 	/**
-	 * Notification source endpoint id. If specified, the handler will only respond to notifications from this endpoint and push notifications to this endpoint.
-	 * Default is notification-source.
+	 * Notification source root endpoint id. It will use this root and append -create, -update, -clear, and -stream and use that as an endpoint. The default is notification-source as the root endpoint id.
 	 */
-	notificationSourceEndpointId?: string;
+	notificationSourceRootEndpointId?: string;
 	/**
 	 * does this handler support notification requests as an intent.
 	 * Default is true with CreateNotification as an intent name expecting an openfin.notification context object.
@@ -18,9 +18,13 @@ export interface ExampleNotificationHandlerProviderOptions {
 		 */
 		enabled: boolean;
 		/**
-		 * Do you want a custom name for the intent. Default is CreateNotification.
+		 * Do you want a custom name for the intent. Default is CreateNotification, UpdateNotification and ClearNotification.
 		 */
-		name?: string;
+		name?: {
+			create: string;
+			update: string;
+			clear: string;
+		};
 	};
 
 	/**
@@ -48,6 +52,70 @@ export interface ExampleNotificationHandlerProviderOptions {
 		 */
 		instanceIdFallback: "existing" | "new";
 	};
+}
+
+/**
+ * A notification event that is raised by the notification source.
+ */
+export interface NotificationSourceEvent {
+	/**
+	 * The different types of events
+	 */
+	eventId: "create" | "update" | "clear" | "close";
+}
+/**
+ * A notification event for creating a notification.
+ */
+export interface NotificationSourceCreateEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "create";
+	/**
+	 * The notification options to create.
+	 */
+	notification: NotificationOptions;
+}
+/**
+ * A notification event for updating a notification.
+ */
+export interface NotificationSourceUpdateEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "update";
+	/**
+	 * The notification options to update.
+	 */
+	notification: UpdatableNotificationOptions;
+}
+
+/**
+ * A notification event for clearing a notification.
+ */
+export interface NotificationSourceClearEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "clear";
+	/**
+	 * The notification to clear.
+	 */
+	notificationId: string;
+}
+
+/**
+ * A notification event for when a notification is closed (removed from the Notification Center).
+ */
+export interface NotificationSourceCloseEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "close";
+	/**
+	 * The notification to clear.
+	 */
+	notificationId: string;
 }
 
 /**

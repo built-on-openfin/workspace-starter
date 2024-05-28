@@ -3,8 +3,10 @@ import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	NotificationActionEvent,
+	NotificationClosedEvent,
 	NotificationFormSubmittedEvent,
-	NotificationOptions
+	NotificationOptions,
+	UpdatableNotificationOptions
 } from "@openfin/workspace/notifications";
 import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
@@ -15,7 +17,14 @@ import type {
 	NotificationsEventMap
 } from "workspace-platform-starter/shapes/notification-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
-import type { ExampleNotificationHandlerProviderOptions, NotificationCustomData } from "./shapes";
+import type {
+	NotificationSourceClearEvent,
+	NotificationSourceCreateEvent,
+	NotificationSourceUpdateEvent,
+	ExampleNotificationHandlerProviderOptions,
+	NotificationCustomData,
+	NotificationSourceCloseEvent
+} from "./shapes";
 
 /**
  * Implementation for the example notification handler lifecycle provider.
@@ -117,14 +126,28 @@ export class ExampleNotificationHandlerProvider
 	 * Starts the notification service.
 	 */
 	private async startNotificationService(): Promise<void> {
-		const notificationSourceEndpointId =
-			this._definition?.data?.notificationSourceEndpointId ?? "notification-source";
+		const notificationSourceRootEndpointId =
+			this._definition?.data?.notificationSourceRootEndpointId ?? "notification-source";
+		const createEndpointId = `${notificationSourceRootEndpointId}-create`;
+		const updateEndpointId = `${notificationSourceRootEndpointId}-update`;
+		const closeEndpointId = `${notificationSourceRootEndpointId}-close`;
+		const streamEndpointId = `${notificationSourceRootEndpointId}-stream`;
+
+		const createNotificationContextType = "openfin.notificationoptions";
+		const updateNotificationContextType = "openfin.updatablenotificationoptions";
+		const clearNotificationContextType = "openfin.notification";
+
 		if (!isEmpty(this._helpers?.getEndpointClient)) {
 			const endpointClient = await this._helpers.getEndpointClient();
-			if (!isEmpty(endpointClient)) {
-				this._endpointClient = endpointClient.hasEndpoint(notificationSourceEndpointId)
-					? endpointClient
-					: undefined;
+			if (
+				!isEmpty(endpointClient) &&
+				endpointClient.hasEndpoint(createEndpointId) &&
+				endpointClient.hasEndpoint(updateEndpointId) &&
+				endpointClient.hasEndpoint(clearEndpointId) &&
+				endpointClient.hasEndpoint(closeEndpointId) &&
+				endpointClient.hasEndpoint(streamEndpointId)
+			) {
+				this._endpointClient = endpointClient;
 			}
 		}
 
@@ -139,17 +162,66 @@ export class ExampleNotificationHandlerProvider
 				this._interopClient = interopClient;
 				this._logger?.info("Registering intent handler.");
 				await this._interopClient?.registerIntentHandler(async (intentRequest) => {
-					if (intentRequest.context.type === "openfin.notification") {
+					if (intentRequest.context.type === createNotificationContextType) {
 						const notification = (intentRequest.context as unknown as { notification: NotificationOptions })
 							.notification;
-						const sent = await this._endpointClient?.action(notificationSourceEndpointId, notification);
+						// eslint-disable-next-line max-len
+						const sent = await this._endpointClient?.action<NotificationSourceCreateEvent>(createEndpointId, {
+							eventId: "create",
+							notification
+						});
 						this._logger?.info(`Intent handler called and notification sent: ${sent}.`, intentRequest);
 					} else {
 						this._logger?.warn(
-							`A create notification intent was raised but it wasn't passed and openfin.notification context. Type: ${intentRequest.context.type}.`
+							`A create notification intent was raised but it wasn't passed and ${createNotificationContextType} context. Type: ${intentRequest.context.type}.`
 						);
 					}
-				}, this._definition?.data?.intentHandler?.name ?? "CreateNotification");
+				}, this._definition?.data?.intentHandler?.name?.create ?? "CreateNotification");
+
+				await this._interopClient?.registerIntentHandler(async (intentRequest) => {
+					if (intentRequest.context.type === updateNotificationContextType) {
+						const notification = (
+							intentRequest.context as unknown as { notification: UpdatableNotificationOptions }
+						).notification;
+						// eslint-disable-next-line max-len
+						const sent = await this._endpointClient?.action<NotificationSourceUpdateEvent>(updateEndpointId, {
+							eventId: "update",
+							notification
+						});
+						this._logger?.info(`Intent handler called and notification sent: ${sent}.`, intentRequest);
+					} else {
+						this._logger?.warn(
+							`A update notification intent was raised but it wasn't passed an ${updateNotificationContextType} context. Type: ${intentRequest.context.type}.`
+						);
+					}
+				}, this._definition?.data?.intentHandler?.name?.update ?? "UpdateNotification");
+
+				await this._interopClient?.registerIntentHandler(async (intentRequest) => {
+					if (intentRequest.context.type === clearNotificationContextType) {
+						const notification = (intentRequest.context as unknown as { notification: { id: string } })
+							.notification;
+						const notificationId = notification?.id;
+						if (!isEmpty(notificationId)) {
+							// eslint-disable-next-line max-len
+							const sent = await this._endpointClient?.action<NotificationSourceClearEvent>(clearEndpointId, {
+								eventId: "clear",
+								notificationId
+							});
+							this._logger?.info(
+								`Intent handler called and notification clear request sent: ${sent}.`,
+								intentRequest
+							);
+						} else {
+							this._logger?.warn(
+								"A clear notification intent was raised but it wasn't passed a notification id."
+							);
+						}
+					} else {
+						this._logger?.warn(
+							`A clear notification intent was raised but it wasn't passed and ${clearNotificationContextType} context. Type: ${intentRequest.context.type}.`
+						);
+					}
+				}, this._definition?.data?.intentHandler?.name?.clear ?? "ClearNotification");
 			}
 		}
 
@@ -172,16 +244,63 @@ export class ExampleNotificationHandlerProvider
 			});
 			notificationChannel.register("create", async (payload) => {
 				const request = payload as { type: string; notification: NotificationOptions };
-				if (request.type === "openfin.notification") {
+				if (request.type === createNotificationContextType) {
 					const notification = request.notification;
-					const sent = await this._endpointClient?.action(notificationSourceEndpointId, notification);
+					const sent = await this._endpointClient?.action<NotificationSourceCreateEvent>(createEndpointId, {
+						eventId: "create",
+						notification
+					});
 					this._logger?.info(
 						`${notificationChannelName} channel create function called and notification sent: ${sent}.`,
 						payload
 					);
 				} else {
 					this._logger?.warn(
-						`${notificationChannelName} channel create function called but it wasn't passed an openfin.notification context. Type: ${request.type}.`
+						`${notificationChannelName} channel create function called but it wasn't passed an ${createNotificationContextType} context. Type: ${request.type}.`
+					);
+				}
+			});
+
+			notificationChannel.register("update", async (payload) => {
+				const request = payload as { type: string; notification: UpdatableNotificationOptions };
+				if (request.type === updateNotificationContextType) {
+					const notification = request.notification;
+					const sent = await this._endpointClient?.action<NotificationSourceUpdateEvent>(updateEndpointId, {
+						eventId: "update",
+						notification
+					});
+					this._logger?.info(
+						`${notificationChannelName} channel update function called and event sent: ${sent}.`,
+						payload
+					);
+				} else {
+					this._logger?.warn(
+						`${notificationChannelName} channel update function called but it wasn't passed an ${updateNotificationContextType} context. Type: ${request.type}.`
+					);
+				}
+			});
+
+			notificationChannel.register("clear", async (payload) => {
+				const request = payload as { type: string; notification: { id: string } };
+				if (request.type === clearNotificationContextType) {
+					const notificationId = request.notification.id;
+					if (!isEmpty(notificationId)) {
+						const sent = await this._endpointClient?.action<NotificationSourceClearEvent>(clearEndpointId, {
+							eventId: "clear",
+							notificationId
+						});
+						this._logger?.info(
+							`${notificationChannelName} channel clear function called and event sent: ${sent}.`,
+							payload
+						);
+					} else {
+						this._logger?.warn(
+							`${notificationChannelName} channel clear function called but it wasn't passed a notification id.`
+						);
+					}
+				} else {
+					this._logger?.warn(
+						`${notificationChannelName} channel clear function called but it wasn't passed an ${clearNotificationContextType} context. Type: ${request.type}.`
 					);
 				}
 			});
@@ -194,11 +313,15 @@ export class ExampleNotificationHandlerProvider
 			this._notificationClient = await this._helpers.getNotificationClient();
 
 			if (this._notificationClient) {
-				await this.setupNotificationEventListeners();
+				await this.setupNotificationEventListeners(closeEndpointId);
 				if (this._endpointClient) {
-					const stream = await this._endpointClient.requestStream<unknown, NotificationOptions>(
-						notificationSourceEndpointId
-					);
+					const stream = await this._endpointClient.requestStream<
+						unknown,
+						| NotificationSourceCreateEvent
+						| NotificationSourceUpdateEvent
+						| NotificationSourceClearEvent
+						| NotificationSourceCloseEvent
+					>(streamEndpointId);
 					if (!isEmpty(stream)) {
 						const reader = stream.getReader();
 						this._logger?.info("Reading from stream");
@@ -211,7 +334,21 @@ export class ExampleNotificationHandlerProvider
 									logger?.info("Stream ended");
 									return;
 								}
-								notificationClient?.create(value);
+								if (value.eventId === "create") {
+									notificationClient?.create(value.notification);
+								} else if (value.eventId === "update") {
+									notificationClient?.update(value.notification);
+								} else if (value.eventId === "clear") {
+									notificationClient?.clear(value.notificationId);
+								} else if (value.eventId === "close") {
+									// in a real system the source would know that the close event
+									// was sent from this user/machine and app and would not send it back
+									// to trigger a clear that would never clear it as it has already been
+									// closed. This is just an example.
+									notificationClient?.clear(value.notificationId);
+								} else {
+									logger?.warn("Unknown event type: received", value);
+								}
 								// eslint-disable-next-line promise/no-nesting
 								return reader.read().then(pump);
 							})
@@ -234,10 +371,17 @@ export class ExampleNotificationHandlerProvider
 
 	/**
 	 * Setup listeners using the notification client fetched via a helper.
+	 * @param closeEndpointId The endpoint id to indicate a notification has been closed.
 	 */
-	private async setupNotificationEventListeners(): Promise<void> {
+	private async setupNotificationEventListeners(closeEndpointId: string): Promise<void> {
 		if (!isEmpty(this._notificationClient) && !isEmpty(this._notificationSubscriptions)) {
 			const actionEventHandler = async (event: NotificationActionEvent): Promise<void> => {
+				if (isEmpty(event?.result)) {
+					this._logger?.warn(
+						"Event for notification action received but it was empty or didn't have a result."
+					);
+					return;
+				}
 				this._logger?.info("Event for notification action received.", event);
 				const action = event.result.task;
 				await this.handleNotificationResponse(action, event.result.customData);
@@ -247,6 +391,12 @@ export class ExampleNotificationHandlerProvider
 			this._notificationSubscriptions["notification-action"] = actionEventHandler;
 
 			const formSubmittedEventHandler = async (event: NotificationFormSubmittedEvent): Promise<void> => {
+				if (isEmpty(event?.form)) {
+					this._logger?.warn(
+						"Event for notification form received but it was empty or didn't have a form result."
+					);
+					return;
+				}
 				this._logger?.info("Event for notification form submitted received.", event);
 				const { task, ...otherCustomData } = event.notification.customData; // Remove task
 				const customData = { ...otherCustomData };
@@ -259,6 +409,32 @@ export class ExampleNotificationHandlerProvider
 				formSubmittedEventHandler
 			);
 			this._notificationSubscriptions["notification-form-submitted"] = formSubmittedEventHandler;
+
+			const closedEventHandler = (event: NotificationClosedEvent): void => {
+				this._logger?.info("Event for notification closed received.", event);
+				const notificationId = event.notification.id;
+				if (!isEmpty(notificationId)) {
+					this._endpointClient
+						?.action<NotificationSourceCloseEvent>(closeEndpointId, {
+							eventId: "close",
+							notificationId
+						})
+						.then((sent) => {
+							this._logger?.info(
+								`Notification was closed, sending clear request for other machines. Notification Id: ${notificationId}. Sent: ${sent}`
+							);
+							return true;
+						})
+						.catch((error) => {
+							this._logger?.error("A close event passed to the endpoint but had the following error.", error);
+						});
+				} else {
+					this._logger?.warn("A notification was closed but it didn't have a notification id.");
+				}
+			};
+
+			await this._notificationClient.addEventListener("notification-closed", closedEventHandler);
+			this._notificationSubscriptions["notification-closed"] = closedEventHandler;
 		}
 	}
 
