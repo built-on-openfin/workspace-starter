@@ -130,6 +130,7 @@ export class ExampleNotificationHandlerProvider
 			this._definition?.data?.notificationSourceRootEndpointId ?? "notification-source";
 		const createEndpointId = `${notificationSourceRootEndpointId}-create`;
 		const updateEndpointId = `${notificationSourceRootEndpointId}-update`;
+		const clearEndpointId = `${notificationSourceRootEndpointId}-clear`;
 		const closeEndpointId = `${notificationSourceRootEndpointId}-close`;
 		const streamEndpointId = `${notificationSourceRootEndpointId}-stream`;
 
