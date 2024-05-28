@@ -351,7 +351,31 @@
 					}
 				},
 				{
-					"id": "notification-source",
+					"id": "notification-source-create",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-clear",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-close",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-update",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-stream",
 					"type": "module",
 					"typeId": "example-notification-source",
 					"options": {}
@@ -382,7 +406,13 @@
 					{
 						"enabled": true,
 						"id": "example-notification-handler",
-						"endpointIds": ["notification-source"]
+						"endpointIds": [
+							"notification-source-create",
+							"notification-source-clear",
+							"notification-source-close",
+							"notification-source-update",
+							"notification-source-stream"
+						]
 					}
 				]
 			}

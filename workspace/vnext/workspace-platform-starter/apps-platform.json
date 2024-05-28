@@ -22,6 +22,16 @@
 			{
 				"name": "CreateNotification",
 				"displayName": "Create Notification",
+				"contexts": ["openfin.notificationoptions"]
+			},
+			{
+				"name": "UpdateNotification",
+				"displayName": "Update Notification",
+				"contexts": ["openfin.updatablenotificationoptions"]
+			},
+			{
+				"name": "ClearNotification",
+				"displayName": "Clear Notification",
 				"contexts": ["openfin.notification"]
 			}
 		],
