@@ -146,7 +146,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 					platform: WorkspacePlatformModule,
 					payload?: WorkspaceChangedLifecyclePayload
 				): Promise<void> => {
-					if (payload?.action === "create") {
+					if (payload?.action === "create" || payload?.action === "apply") {
 						if (!isEmpty(this._lastQuery) && !this._lastQuery.startsWith("/w ")) {
 							await this.rebuildResults(platform);
 						}

@@ -19,6 +19,7 @@ const MODULE_TYPES = [
 	'endpoint',
 	'initOptions',
 	'integrations',
+	'interopOverride',
 	'lifecycle',
 	'log',
 	'menus',
@@ -33,6 +34,7 @@ const MANIFEST_TYPE_MAPPING = {
 	endpoint: 'endpointProvider',
 	initOptions: 'initOptionsProvider',
 	integrations: 'integrationProvider',
+	interopOverride: 'platformProvider.interop',
 	lifecycle: 'lifecycleProvider',
 	log: 'loggerProvider',
 	menus: 'menusProvider',
@@ -183,18 +185,15 @@ async function addWebPackEntry(moduleOutputDir, kebabType, kebabName) {
 	// eslint-disable-next-line no-div-regex
 	const entriesRegEx = /= \[([\S\s]*)];/;
 	let entries = entriesRegEx.exec(webPackConfig)[1].trim();
-	entries += `,
-	{
+	if (entries.length > 0) {
+		entries += `,
+	`;
+	}
+	entries += `{
 		entry: './${path.relative('.', path.join(moduleOutputDir, 'index.ts')).replace(/\\/g, '/')}',
 		devtool: 'source-map',
 		module: {
-			rules: [
-				{
-					test: /\\.tsx?$/,
-					use: 'ts-loader',
-					exclude: /node_modules/
-				}
-			]
+			rules: [loaderRule]
 		},
 		resolve: {
 			extensions: ['.tsx', '.ts', '.js'],
@@ -237,17 +236,9 @@ async function addManifestEntry(moduleType, moduleNameTitleCase, kebabType, keba
 
 	const settingsType = MANIFEST_TYPE_MAPPING[moduleType];
 
-	if (!manifest.customSettings[settingsType]) {
-		manifest.customSettings[settingsType] = {};
-	}
+	const settingsTypeParts = settingsType.split('.');
 
-	if (!manifest.customSettings[settingsType].modules) {
-		manifest.customSettings[settingsType].modules = [];
-	}
-
-	console.log('Adding module entry to', `manifest.customSettings.${settingsType}.modules`);
-
-	manifest.customSettings[settingsType].modules.push({
+	const moduleEntry = {
 		id: kebabName,
 		icon: 'http://localhost:8080/favicon.ico',
 		title: moduleNameTitleCase,
@@ -257,7 +248,35 @@ async function addManifestEntry(moduleType, moduleNameTitleCase, kebabType, keba
 		data: {
 			exampleProp: 'value'
 		}
-	});
+	};
+
+	if (settingsTypeParts.length === 1) {
+		if (!manifest.customSettings[settingsType]) {
+			manifest.customSettings[settingsType] = {};
+		}
+		if (!manifest.customSettings[settingsType].modules) {
+			manifest.customSettings[settingsType].modules = [];
+		}
+		manifest.customSettings[settingsType].modules.push(moduleEntry);
+	} else if (settingsTypeParts.length === 2) {
+		const settingsTypeFirst = settingsTypeParts[0];
+		const settingsTypeSecond = settingsTypeParts[1];
+		if (!manifest.customSettings[settingsTypeFirst]) {
+			manifest.customSettings[settingsTypeFirst] = {};
+		}
+		if (settingsTypeSecond && !manifest.customSettings[settingsTypeFirst][settingsTypeSecond]) {
+			manifest.customSettings[settingsTypeFirst][settingsTypeSecond] = {};
+		}
+		if (!manifest.customSettings[settingsTypeFirst][settingsTypeSecond].modules) {
+			manifest.customSettings[settingsTypeFirst][settingsTypeSecond].modules = [];
+		}
+		manifest.customSettings[settingsTypeFirst][settingsTypeSecond].modules.push(moduleEntry);
+	} else {
+		console.error('Error: Invalid settingsType. It can not be nested more than two levels.', settingsType);
+		return;
+	}
+
+	console.log('Added module entry to', `manifest.customSettings.${settingsType}.modules`);
 
 	await fs.writeFile(MANIFEST_FILE, JSON.stringify(manifest, undefined, '\t'), 'utf8');
 }

@@ -79,10 +79,17 @@ export function userToFdc3Context(user) {
  * @returns The custom settings from the manifest.
  */
 async function getManifestCustomSettings() {
-	// Get the manifest for the current application
-	const app = await fin.Application.getCurrent();
+	try {
+		if (window.fin) {
+			// Get the manifest for the current application
+			const app = await fin.Application.getCurrent();
 
-	// Extract the custom settings for this application
-	const manifest = await app.getManifest();
-	return manifest.customSettings ?? {};
+			// Extract the custom settings for this application
+			const manifest = await app.getManifest();
+			return manifest.customSettings ?? {};
+		}
+	} catch {
+		// not in an OpenFin container.
+	}
+	return {};
 }

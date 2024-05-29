@@ -1,0 +1,41 @@
+[
+	{
+		"appId": "workspace-platform-starter",
+		"name": "workspace-platform-starter",
+		"title": "Workspace Platform Starter Platform",
+		"description": "The platform that is currently running.",
+		"manifest": {
+			"url": "http://localhost:8080/platform/provider.html"
+		},
+		"manifestType": "inline-window",
+		"icons": [
+			{
+				"src": "http://localhost:8080/common/images/icon-blue.png"
+			}
+		],
+		"instanceMode": "single",
+		"private": true,
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "CreateNotification",
+				"displayName": "Create Notification",
+				"contexts": ["openfin.notificationoptions"]
+			},
+			{
+				"name": "UpdateNotification",
+				"displayName": "Update Notification",
+				"contexts": ["openfin.updatablenotificationoptions"]
+			},
+			{
+				"name": "ClearNotification",
+				"displayName": "Clear Notification",
+				"contexts": ["openfin.notification"]
+			}
+		],
+		"images": [],
+		"tags": ["platform"]
+	}
+]

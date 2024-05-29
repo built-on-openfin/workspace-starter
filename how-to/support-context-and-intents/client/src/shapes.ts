@@ -1,3 +1,5 @@
+import type { CloudInteropOverrideParams } from "@openfin/cloud-interop";
+
 /**
  * The custom settings stored in the manifest.fin.json.
  */
@@ -11,6 +13,11 @@ export interface CustomSettings {
 	 * Provider for platform configuration.
 	 */
 	platformProvider?: PlatformProviderSettings;
+
+	/**
+	 * Provider for cloud interop configuration.
+	 */
+	cloudInteropProvider?: CloudInteropProviderSettings;
 }
 
 /**
@@ -45,4 +52,19 @@ export interface AppProviderSettings {
 	 * How long to store the apps before getting a new list.
 	 */
 	cacheDurationInMinutes?: number;
+}
+
+/**
+ * Settings for the cloud interop provider.
+ */
+export interface CloudInteropProviderSettings {
+	/**
+	 * Is the cloud interop provider enabled
+	 */
+	enabled: boolean;
+
+	/**
+	 * The connect parameters for the cloud interop provider.
+	 */
+	connectParams: CloudInteropOverrideParams;
 }

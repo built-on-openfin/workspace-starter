@@ -1,11 +1,39 @@
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
 import type { PlatformApp } from "./app-shapes";
+import type { WindowPositioningOptions } from "./browser-shapes";
 import type { Endpoint, EndpointDefinition } from "./endpoint-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+/**
+ * Definition for conditions module type.
+ */
+export interface PlatformInteropOverride<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
+	/**
+	 * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+	 * @param options The options for the interop broker defined as part of the platform.
+	 * @returns The override constructor to be used in an array.
+	 */
+	getConstructorOverride(
+		options: PlatformInteropOverrideOptions
+	): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>>;
+}
+/**
+ * The options passed to the platform interop broker override.
+ */
+export type PlatformInteropOverrideOptions = Omit<PlatformInteropBrokerOptions, "modules"> & {
+	/**
+	 * The platform's window positioning options that can be passed to the getWindowPositionUsingStrategy function along with an identity to determine where a window should be placed.
+	 */
+	windowPositionOptions?: WindowPositioningOptions;
+	/**
+	 * The platform's root url that can be used to resolve relative urls.
+	 */
+	platformRootUrl?: string;
+};
 /**
  * Options for the platform interop broker.
  */
-export interface PlatformInteropBrokerOptions {
+export interface PlatformInteropBrokerOptions extends ModuleList {
 	/**
 	 * Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the
 	 * platform
@@ -224,3 +252,7 @@ export interface OpenOptions {
 	 */
 	connectionTimeout?: number;
 }
+/**
+ * Interop Broker helpers provides environment methods and data.
+ */
+export type PlatformInteropBrokerHelpers = ModuleHelpers;

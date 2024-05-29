@@ -1,11 +1,14 @@
 import type OpenFin from "@openfin/core";
 import type { AppIntent } from "@openfin/workspace-platform";
-import { RESOLVE_ERROR as ResolveError } from "../../fdc3/errors";
-import type { PlatformApp } from "../../shapes/app-shapes";
-import type { IntentResolverResponse, IntentResolverOptions } from "../../shapes/interopbroker-shapes";
-import type { Logger } from "../../shapes/logger-shapes";
-import { formatError, isEmpty } from "../../utils";
-import { centerContentInIdentity } from "../../utils-position";
+import { RESOLVE_ERROR as ResolveError } from "workspace-platform-starter/fdc3/errors";
+import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import type {
+	IntentResolverResponse,
+	IntentResolverOptions
+} from "workspace-platform-starter/shapes/interopbroker-shapes";
+import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
+import { formatError, isEmpty } from "workspace-platform-starter/utils";
+import { centerContentInIdentity } from "workspace-platform-starter/utils-position";
 
 /**
  * An Intent Resolver Used for resolving intent selection.

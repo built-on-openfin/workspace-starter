@@ -92,7 +92,9 @@ export class ApplyDefaultWorkspaceProvider implements Lifecycle<DefaultWorkspace
 			if (!isEmpty(customData)) {
 				const workspaceUpdate = customData as WorkspaceChangedLifecyclePayload;
 				if (
-					(workspaceUpdate.action === "update" || workspaceUpdate.action === "create") &&
+					(workspaceUpdate.action === "update" ||
+						workspaceUpdate.action === "create" ||
+						workspaceUpdate.action === "apply") &&
 					!isEmpty(this._defaultWorkspaceStorage)
 				) {
 					try {

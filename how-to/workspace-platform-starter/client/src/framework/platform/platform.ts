@@ -31,7 +31,8 @@ import { isEmpty, isStringValue, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
 import { getDefaultWindowOptions } from "./browser";
-import { interopOverride } from "./interopbroker";
+import * as interopProvider from "./interop";
+import { getInteropConstructorOverrides } from "./interop";
 import { overrideCallback } from "./platform-override";
 import * as platformSplashProvider from "./platform-splash";
 import { PLATFORM_VERSION } from "./platform-version";
@@ -153,6 +154,9 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	logger.info("Initializing platform");
 	const browser: BrowserInitConfig = {};
 
+	if (!isEmpty(customSettings?.browserProvider?.title)) {
+		browser.title = customSettings?.browserProvider?.title;
+	}
 	if (!isEmpty(customSettings?.browserProvider)) {
 		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings?.browserProvider);
 	}
@@ -188,6 +192,8 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		await contentCreationProvider.populateRules(browser.defaultWindowOptions);
 	}
 
+	await interopProvider.init(customSettings?.platformProvider, windowPositioningOptions, helpers);
+
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => {
 		logger.info("Platform API Ready");
@@ -203,7 +209,7 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		theme,
 		notifications: customSettings?.notificationProvider?.notificationsCustomManifest,
 		customActions,
-		interopOverride,
+		interopOverride: getInteropConstructorOverrides(),
 		overrideCallback: async (platformConstructor) =>
 			overrideCallback(
 				platformConstructor,

@@ -1,7 +1,7 @@
-import type { AppsForIntent, PlatformApp } from "../../shapes/app-shapes";
-import type { AppIntents } from "../../shapes/fdc3-2-0-shapes";
-import type { Logger } from "../../shapes/logger-shapes";
-import { isEmpty } from "../../utils";
+import type { AppsForIntent, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import type { AppIntents } from "workspace-platform-starter/shapes/fdc3-2-0-shapes";
+import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
+import { isEmpty } from "workspace-platform-starter/utils";
 
 /**
  * The App Intent Helper inspects app catalogs to discover supported intents and contexts.

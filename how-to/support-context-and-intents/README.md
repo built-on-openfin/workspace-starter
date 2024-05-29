@@ -8,6 +8,7 @@ This sample covers:
 
 - Supporting Interop/FDC3 Context messages
 - Supporting Interop/FDC3 Intents
+- Optionally supporting OpenFin Cloud Interop for context sharing: <https://www.npmjs.com/package/@openfin/cloud-interop>
 - Using a golden data source (in [apps](./public/common/) apps\*.json) to drive the apps that show up in Home and in intent resolution
 - Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file)
 
@@ -18,8 +19,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv17.2.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
-- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv17.2.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv18.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
+- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv18.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -29,7 +30,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 17.2.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 18.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -71,6 +72,8 @@ This runs the same code with slightly different settings to show a different the
 npm run build
 ```
 
+8. If you wish to test Cloud Interop so that you can launch the two platforms and see them communicating via the cloud then please contact your OpenFin sales account manager to get your connection information. Once you have that you can update the cloudInteropProvider settings in the [manifest](public/manifest.fin.json) and/or [second.manifest.fin.json](public/second.manifest.fin.json). Once enabled you will be able to share context across user channels between platforms regardless of whether they are running on the same machine or not.
+
 ## How it works
 
 The Server in this example provides two sets of content over HTTP GET.
@@ -104,6 +107,15 @@ Intent support is added to the sample in the following ways:
 - Provide an example intent/app picker if a context supports more than one intent or an intent supports more than one application: [picker.html](./public/common/windows/intents/picker.html)
 - Update [apps.json](./public/common/apps.json) to add the new views/pages and specify that they support intents in their metadata.
 - Update [apps.ts](client/src/apps.ts) to support getting apps that support intents or context types.
+
+# Cloud Interop Support implemented?
+
+Adding cloud interop support is very simple.
+
+- We npm install [@openfin/cloud-interop](https://www.npmjs.com/package/@openfin/cloud-interop)
+- We provide a way of providing cloud interop configuration through a manifest (in a real application you should be fetching this information from a service).
+- We pass the settings to the cloudInteropOverride function provided by the @openfin/cloud-interop library.
+- We add the initialized cloudInteropOverride to the interopOverride array that is set as part of your [platform's initialization](./client/src/provider.ts).
 
 ## Using the Sample
 

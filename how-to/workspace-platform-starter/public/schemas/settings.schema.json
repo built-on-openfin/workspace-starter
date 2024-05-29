@@ -49,6 +49,9 @@
         "Api": {
             "$ref": "#/definitions/__type_3"
         },
+        "ApiSettings": {
+            "$ref": "#/definitions/__type_3"
+        },
         "AppAssetInfo": {
             "$ref": "#/definitions/__type_56"
         },
@@ -380,7 +383,7 @@
                     "description": "custom property"
                 },
                 "match": {
-                    "description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+                    "description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
                     "items": {
                         "type": "string"
                     },
@@ -480,7 +483,7 @@
                     "description": "custom property"
                 },
                 "match": {
-                    "description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+                    "description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
                     "items": {
                         "type": "string"
                     },
@@ -571,6 +574,10 @@
                         "$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
                     },
                     "type": "array"
+                },
+                "title": {
+                    "description": "The platform title. UI friendly title for the platform in browser.",
+                    "type": "string"
                 },
                 "toolbarButtons": {
                     "description": "This setting lets you override the default workspace browser buttons and specify your own.",
@@ -678,8 +685,55 @@
                     "type": "boolean"
                 },
                 "title": {
-                    "description": "A UI friendly title for the created browser window.",
-                    "type": "string"
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "type": {
+                                    "const": "custom",
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "value"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "type": {
+                                    "const": "page-title",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "type": {
+                                    "const": "view-title",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "description": "A UI friendly title for the created browser window.\nType string for window title is deprecated, please use WindowTitle type instead."
                 },
                 "toolbarOptions": {
                     "$ref": "#/definitions/ToolbarOptions"
@@ -807,7 +861,7 @@
             "$ref": "#/definitions/ModuleList_5",
             "description": "List of modules."
         },
-        "ContentCreationRule<ContentCreationBehaviorNames>": {
+        "ContentCreationRule<ContentCreationBehavior>": {
             "anyOf": [
                 {
                     "$ref": "#/definitions/WindowContentCreationRule",
@@ -892,6 +946,9 @@
                 "iconUrl": {
                     "description": "icon URL for icon image",
                     "type": "string"
+                },
+                "parentHover": {
+                    "type": "boolean"
                 },
                 "tooltip": {
                     "description": "Button name text when hovered over",
@@ -1941,6 +1998,14 @@
         "InitOptionsProviderOptions": {
             "$ref": "#/definitions/ModuleList",
             "description": "List of modules."
+        },
+        "InjectionType": {
+            "description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
+            "enum": [
+                "global",
+                "none"
+            ],
+            "type": "string"
         },
         "IntegrationModuleDefinition<unknown>": {
             "additionalProperties": false,
@@ -3535,6 +3600,9 @@
                 "Rename",
                 "Save",
                 "Save As",
+                "SaveWorkspaceAs",
+                "Refresh",
+                "Close others",
                 "Custom"
             ],
             "type": "string"
@@ -3932,6 +4000,13 @@
                     "$ref": "#/definitions/IntentResolverOptions",
                     "description": "Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the\nplatform"
                 },
+                "modules": {
+                    "description": "The list of modules.",
+                    "items": {
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                    },
+                    "type": "array"
+                },
                 "openOptions": {
                     "$ref": "#/definitions/OpenOptions",
                     "description": "When fdc3.open is used what settings should be applied?"
@@ -4011,6 +4086,9 @@
                 "iconUrl": {
                     "description": "icon URL for icon image",
                     "type": "string"
+                },
+                "parentHover": {
+                    "type": "boolean"
                 },
                 "tooltip": {
                     "description": "Button name text when hovered over",
@@ -4240,6 +4318,9 @@
                 },
                 "disabled": {
                     "description": "Disable custom button true or false",
+                    "type": "boolean"
+                },
+                "parentHover": {
                     "type": "boolean"
                 },
                 "title": {
@@ -4780,7 +4861,7 @@
                     "description": "custom property"
                 },
                 "match": {
-                    "description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+                    "description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
                     "items": {
                         "type": "string"
                     },
@@ -5018,7 +5099,7 @@
                     "description": "custom property"
                 },
                 "match": {
-                    "description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+                    "description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
                     "items": {
                         "type": "string"
                     },
@@ -5265,11 +5346,11 @@
                 },
                 "contentNavigation": {
                     "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contentRedirect": {
                     "$ref": "#/definitions/Partial_5",
-                    "description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contextMenu": {
                     "type": "boolean"
@@ -5391,7 +5472,7 @@
                 },
                 "inheritance": {
                     "$ref": "#/definitions/Partial_9",
-                    "description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+                    "description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
                 },
                 "interop": {
                     "$ref": "#/definitions/InteropConfig"
@@ -5804,7 +5885,7 @@
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
-                    "$ref": "#/definitions/Api",
+                    "$ref": "#/definitions/ApiSettings",
                     "description": "Configurations for API injection."
                 },
                 "autoResize": {
@@ -5837,7 +5918,7 @@
                 },
                 "contentNavigation": {
                     "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contentRedirect": {
                     "$ref": "#/definitions/ContentRedirect"
@@ -6358,7 +6439,7 @@
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
-                    "$ref": "#/definitions/Api",
+                    "$ref": "#/definitions/ApiSettings",
                     "description": "Configurations for API injection."
                 },
                 "autoResize": {
@@ -6391,7 +6472,7 @@
                 },
                 "contentNavigation": {
                     "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contentRedirect": {
                     "$ref": "#/definitions/ContentRedirect"
@@ -6614,7 +6695,7 @@
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
                 "api": {
-                    "$ref": "#/definitions/Api",
+                    "$ref": "#/definitions/ApiSettings",
                     "description": "Configurations for API injection."
                 },
                 "autoResize": {
@@ -6643,7 +6724,7 @@
                 },
                 "contentNavigation": {
                     "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contentRedirect": {
                     "$ref": "#/definitions/ContentRedirect"
@@ -6811,9 +6892,13 @@
             "additionalProperties": false,
             "description": "Configurations for API injection.",
             "properties": {
+                "fin": {
+                    "$ref": "#/definitions/InjectionType",
+                    "description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
+                },
                 "iframe": {
                     "additionalProperties": false,
-                    "description": "Configure injection of OpenFin API into iframes based on domain",
+                    "description": "Configure conditional injection of OpenFin API into iframes",
                     "properties": {
                         "crossOriginInjection": {
                             "description": "Inject OpenFin API into cross-origin iframes",
@@ -7576,7 +7661,7 @@
                 "rules": {
                     "description": "List of rules for creation of new content.",
                     "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>"
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
                     },
                     "type": "array"
                 }
@@ -7753,11 +7838,11 @@
                 },
                 "contentNavigation": {
                     "$ref": "#/definitions/ContentNavigation",
-                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contentRedirect": {
                     "$ref": "#/definitions/Partial_5",
-                    "description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+                    "description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contextMenu": {
                     "type": "boolean"
@@ -7879,7 +7964,7 @@
                 },
                 "inheritance": {
                     "$ref": "#/definitions/Partial_9",
-                    "description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+                    "description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
                 },
                 "interop": {
                     "$ref": "#/definitions/InteropConfig"

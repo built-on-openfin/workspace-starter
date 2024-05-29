@@ -40,7 +40,7 @@ We are not going to specify any particular server technology or approach. The id
 
 A [lifecycle module](./how-to-use-lifecycle-events.md) is instantiated when the platform is bootstrapped.
 
-In the initialize function of your lifecycle module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [ExampleNotificationService](../client/src/modules/lifecycle/example-notification-service/README.md) that uses the notification client and simulates a trigger for notifications by subscribing to lifecycle events.
+In the initialize function of your lifecycle module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [example-notification-service README.md](../client/src/modules/lifecycle/example-notification-service/README.md) that uses the notification client and simulates a trigger for notifications by subscribing to lifecycle events. We also have a second example lifecycle module that supports creating, updating and clearing notifications through a Channel API or FDC3/Interop Intents: [example-notification-handler README.md](../client/src/modules/lifecycle/example-notification-handler/README.md).
 
 ##### Point 3
 
@@ -49,7 +49,7 @@ The lifecycle module can use the notification client to add an event listener to
 Remote notifications (notifications coming from the server to the client and being pushed to the notification center):
 
 - For informational notifications your module might just publish it using the notification client (although you may want to allow the backend to specify that a notification should be revoked)
-- For Call To Action notifications your module might have a contract where actions are mapped to intents (e.g. on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification). Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app or user channel.
+- For Call To Action notifications your module might have a contract where actions are mapped to intents (e.g. on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification). Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app or user channel. The [example-notification-handler](../client/src/modules/lifecycle/example-notification-handler/README.md) has an example of this.
 - For form based notifications you might pass the captured data to the backend.
 
 Local notifications (notifications submitted by apps running on the desktop):

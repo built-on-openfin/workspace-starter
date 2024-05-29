@@ -3,9 +3,17 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
-## Migrate from a previous version - From v16.1 to v17.0
+## Migrate from a previous version - From v17.2 to v18.0
+
+- [Please see the v18.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=18.0.10)
+
+## Migrate from a previous version - From v17.0 to v17.2
 
 - [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.2.14)
+
+## Migrate from a previous version - From v16.1 to v17.0
+
+- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.0.15)
 
 ## Migrate from a previous version - From v16.0 to v16.1
 
@@ -197,7 +205,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "34.78.80"
+                    "@openfin/core": "36.80.11"
                    }
 ```
 

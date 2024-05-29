@@ -7,14 +7,30 @@ window.addEventListener('DOMContentLoaded', initializeDOM);
  */
 async function initializeDOM() {
 	const contextPicker = document.querySelector('#context-group-picker');
-	contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
+	if (window.fin) {
+		contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
+	}
 
-	if (window.fdc3) {
+	if (window.fdc3 !== undefined) {
+		setupListeners();
+	} else {
+		window.addEventListener('fdc3Ready', async () => {
+			setupListeners();
+		});
+	}
+}
+
+/**
+ * Sets up the related fdc3 listeners once fdc3 is available.
+ */
+async function setupListeners() {
+	try {
 		await usersModule.initialize();
 
 		window.fdc3.addContextListener(contextHandler);
-
 		window.fdc3.addIntentListener('ViewContact', contextHandler);
+	} catch (error) {
+		console.error('There was an error while setting up all of the fdc3 listeners', error);
 	}
 }
 

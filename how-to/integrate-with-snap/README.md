@@ -12,11 +12,9 @@ This example demonstrates saving and restoring native applications as part of a 
 
 The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.com/package/@openfin/snap-sdk).
 
-> The version of **@openfin/snap-sdk** is referenced in package.json and the app asset defined in manifest.fin.json.
+> The **@openfin/snap-sdk** is currently in beta. The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
 
-- [Live Launch Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv17.2.0%2Fintegrate-with-snap%2Fmanifest.fin.json)
-
-- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv17.2.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
+- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv18.0.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -26,7 +24,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 17.2.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 18.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -137,7 +135,7 @@ You app should now be listed and you should be able to launch it and snap it wit
 
 ### Testing Snap with an existing Platform/Classic App
 
-We have a [preload.ts](./client/src/preload.ts) file that is a preload script that can be added to your platform provider or classic app to show Snap working without any coding. Your manifest will need to load the preload script snap.preload.bundle.js (this is how it is defined in our [webpack.config.js](./client/webpack.config.js)) and you will need to request the permissions and define the app asset.
+We have a [preload.ts](./client/src/preload/preload.ts) file that is a preload script that can be added to your platform provider or classic app to show Snap working without any coding. Your manifest will need to load the preload script snap.preload.bundle.js (this is how it is defined in our [webpack.config.js](./client/webpack.config.js)) and you will need to request the permissions and define the app asset. There is a version of the preload script that sets the debug window provided by Snap to true: [preload.debug.ts](./client/src/preload/preload.debug.ts).
 
 #### Preload Script Entry
 
@@ -149,10 +147,22 @@ If you are running the local example you will see:
   "preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.bundle.js" }],
 ```
 
+You can change this to the debug version by updating the preloadScript to the following:
+
+```json
+  "preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.debug.bundle.js" }],
+```
+
 If you just want to test Snap within your own manifest by using a hosted preload script then you can add the following to the "startup_app" or "platform" definition in your manifest:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+```
+
+If you want the debug version with the debug window automatically showing then you can reference this preload script:
+
+```json
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
 ```
 
 #### Permissions

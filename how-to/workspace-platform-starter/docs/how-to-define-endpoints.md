@@ -10,17 +10,83 @@ E.g.:
 
 - I want to execute an action where I pass a request and just get a boolean saying it was successful or not (I don't need a response). An endpoint could be calling a rest endpoint, local storage or something that uses the OpenFin Message Bus ( [Channel API](https://developers.openfin.co/of-docs/docs/channels) for example).
 - I want to execute a request and get a response back. I don't care how that request is executed or where the response comes from. My main focus is I pass you a request type and I get a response type back.
+- I want to execute a request and get a stream of data back. I don't care how that request is executed or where the stream of data comes from. My main focus is I pass you a request type and I get back one or more responses.
 
 Endpoints are defined via an id and that is how they are looked up and executed.
 
-We have a built-in fetch implementation but you can provide a module (see [How To Add A Module](./how-to-add-a-module.md)) that can receive module level data (when it is initialized) as well as endpoint specific configuration.
+We have a built-in fetch implementation that applies to action and request/response, but you can provide a module (see [How To Add A Module](./how-to-add-a-module.md)) that can receive module level data (when it is initialized) as well as endpoint specific configuration.
 
 An endpoint provider module implementation would support the following interface (see source reference below for the latest representation):
 
 ```javascript
-export interface Endpoint extends ModuleImplementation {
-  action<T>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<boolean>;
-  requestResponse<T, R>(endpointDefinition: EndpointDefinition<unknown>, request?: T): Promise<R | null>;
+/**
+ * Definition for an endpoint provider module.
+ */
+export interface Endpoint<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
+ /**
+  * Handle an action sent to the endpoint.
+  * @param endpointDefinition The definition of the endpoint.
+  * @param request The request to process.
+  * @returns True if processed.
+  */
+ action?(endpointDefinition: EndpointDefinition, request?: unknown): Promise<boolean>;
+
+ /**
+  * Handle a request response on an endpoint.
+  * @param endpointDefinition The definition of the endpoint.
+  * @param request The request to process.
+  * @returns The response to the request, or null if not handled.
+  */
+ requestResponse?(endpointDefinition: EndpointDefinition, request?: unknown): Promise<unknown>;
+
+ /**
+  * Handle a request for a stream of data.
+  * @param endpointDefinition The definition of the endpoint.
+  * @param request The request to process.
+  * @returns The response to the request, or null if not handled.
+  */
+ requestStream?(
+  endpointDefinition: EndpointDefinition,
+  request?: unknown
+ ): Promise<ReadableStream<unknown> | undefined>;
+}
+```
+
+The interface uses Generics which means types required for a certain behavior can be created and then endpoints that support that behavior can reference the types. Here is an example of a request/response type from one of our example modules where we get the default workspace to launch: [client/src/modules/composite/default-workspace/shapes.ts](../client/src/modules/composite/default-workspace/shapes.ts):
+
+```js
+/**
+ * A request type for the WorkspaceEndpoint that gets the default entry
+ */
+export interface EndpointDefaultWorkspaceGetRequest {
+ /**
+  * The id of the platform making the request
+  */
+ platform: string;
+
+ /**
+  * The key used to fetch the payload containing the default workspace id.
+  */
+ id: string;
+}
+
+/**
+ * The saved default workspace id to use.
+ */
+export interface EndpointDefaultWorkspaceGetResponse {
+ /**
+  * The platform versions it was originally saved against
+  */
+ metaData: PlatformStorageMetadata;
+ /**
+  * The id representing where the workspace id payload was stored.
+  */
+ id: string;
+
+ /**
+  * The payload containing the default workspace to load.
+  */
+ payload: DefaultWorkspacePayload;
 }
 ```
 
@@ -72,6 +138,7 @@ We include examples of endpoint modules in the modules folder (this is a small s
 - channel - lets you provide endpoint settings that specify a channel api you wish to connect to and whether you wish to pass a payload and return (action) or perform a requestResponse and get something back from the channel
 - inline-apps - can be used to provide an array of apps inline inside of the endpointsProvider through the platform's manifest or the endpointProvider returned from a settings service (see [how to define apps](./how-to-define-apps.md))
 - example-connection-validation - an example of a module that can receive the uuid and payload of an application trying to connect to your platform and return whether or not the connection should be allowed. This module always returns true as it is an example and **not for production use**.
+- [example-notification-source](../client/src/modules/endpoint/example-notification-source/endpoint.ts) is an example of an endpoint that can be used by a notification related module to post notifications to a server while also listening for incoming notifications and providing them as a stream (this is an example of a requestStream implementation). We have an example lifecycle module that uses this endpoint: [example-notification-handler](../client/src/modules/lifecycle/example-notification-handler/README.md). The documentation includes examples of exposing notification capability through a platform and complements the [use notifications](./how-to-use-notifications.md) documentation.
 
 Endpoints can be defined as:
 
@@ -85,6 +152,8 @@ Endpoints can be defined as:
 - an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported](./what-manifest-types-are-supported.md)
 - version validation - You can configure the versionProvider options to specify an endpointId that should be called. This endpoint will return an object that defines what versions the platform should work against. See - [How To Add Versioning Support](./how-to-add-versioning-support.md)
 - Context Object enrichment (either when a context object is broadcast or a context object is passed when raising an intent or calling fdc3.open) See [How to add context support to your app](./how-to-add-context-support-to-your-app.md) and [How to add intent support to your app](./how-to-add-intent-support-to-your-app.md). The interop broker will check to see if any endpoints match the id of a context type: e.g. **interopbroker.process.fdc3.contact** or **interopbroker.process.org.dayofinterest**. The latter is not an official fdc3 context type. It is an example of an organization specific namespace that takes a date as an id but also has other optional id settings that could be used by other apps. We have created a module [example-context-processor](../client/src/modules/endpoint/example-context-processor/endpoint.ts) and added an entry into the endpoints and endpoint module section of the endpointProvider settings in manifest.fin.json and settings.json found in the public directory.
+- endpoints for your own modules (as shown here).
+- An endpoint for getting manifest JSON files (when app definitions are not inline). By default the platform uses fetch to get manifest files but if that isn't sufficient and a platform owner needs their own implementation then they can add an endpoint called "manifest-get" to intercept and manage all manifest requests or they can implement a specific endpoint for a specific app if it is a special case: "manifest-get-appid".
 
 ## How to use an Endpoint from a Module?
 
@@ -99,16 +168,15 @@ Modules are passed a helpers function via the initialize function of a module.
 The helper has an optional getEndpointClient.
 
 ```js
-if (
-  !isEmpty(this._helpers?.getEndpointClient) &&
-  isEmpty(this._endpointClient) &&
-  this._endpointClientEnabled
-) {
-  // we want to generate a single instance and re-use it for this module instance
+if (this._helpers?.getEndpointClient !== undefined && this._endpointClient === undefined) {
+  // we want to generate a single instance and re-use it for this module instance. This could be done in your module's initialize
+  // function
   this._endpointClient = await this._helpers?.getEndpointClient();
-  // if your module is allowed to get an endpointClient then you will have an instance otherwise the endpoint client
-  // will be undefined
-  this._endpointClientEnabled = this._endpointClient !== undefined;
+}
+
+// we can then check to see if we have an endpoint client to use
+if (this._endpointClient !== undefined) {
+  // check to see if we have access to required endpoints and use them.
 }
 ```
 
@@ -117,6 +185,7 @@ You can then use the main endpoint client functions:
 - hasEndpoint - use this to check to see if you have been given access to the endpoint you are trying to use
 - action - send a fire an forget message to the endpoint you have access to
 - requestResponse - send a message and handle the response from the endpoint you have access to
+- requestStream - request a readable stream of data.
 
 ### How to configure endpoint access from a platform owner perspective
 
@@ -227,5 +296,6 @@ This will generate the code in the modules/endpoint folder, add an entry into we
 - inline-apps [endpoint](../client/src/modules/endpoint/inline-apps/endpoint.ts)
 - example-connection-validation [endpoint](../client/src/modules/endpoint/example-connection-validation/endpoint.ts)
 - example-context-processor [endpoint](../client/src/modules/endpoint/example-context-processor/endpoint.ts)
+- example-notification-source [endpoint](../client/src/modules/endpoint/example-notification-source/endpoint.ts)
 
 [<- Back to Table Of Contents](../README.md)

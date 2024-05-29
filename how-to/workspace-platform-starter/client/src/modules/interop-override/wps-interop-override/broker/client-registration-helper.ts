@@ -1,6 +1,9 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
-import { OPEN_ERROR as OpenError, RESOLVE_ERROR as ResolveError } from "../../fdc3/errors";
+import {
+	OPEN_ERROR as OpenError,
+	RESOLVE_ERROR as ResolveError
+} from "workspace-platform-starter/fdc3/errors";
 import type {
 	IntentRegistrationEntry,
 	ContextRegistrationEntry,
@@ -8,9 +11,9 @@ import type {
 	IntentRegistrationPayload,
 	CaptureApiPayload,
 	ApiMetadata
-} from "../../shapes/interopbroker-shapes";
-import type { Logger } from "../../shapes/logger-shapes";
-import { isEmpty, isStringValue } from "../../utils";
+} from "workspace-platform-starter/shapes/interopbroker-shapes";
+import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 
 /**
  * Used to track client interactions with a broker.
