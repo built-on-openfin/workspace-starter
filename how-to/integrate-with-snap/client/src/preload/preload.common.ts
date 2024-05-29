@@ -1,14 +1,6 @@
 import type OpenFin from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
-import type { SnapProviderOptions } from "./shapes";
-
-if (window === window.top) {
-	console.log("Adding snap support through a preload.");
-
-	window.addEventListener("DOMContentLoaded", async () => {
-		await initialize({ platformId: fin.me.identity.uuid, showDebugWindow: true });
-	});
-}
+import type { SnapProviderOptions } from "../shapes";
 
 /**
  * Initialize the snap components.
