@@ -211,7 +211,8 @@
 				"https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/apps-preload.json",
 				"https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/apps-tools.json",
 				"https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/apps-fdc3-1-2.json",
-				"https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/apps-fdc3-2-0.json"
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/apps-fdc3-2-0.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/apps-platform.json"
 			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
@@ -256,6 +257,15 @@
 					"enabled": true,
 					"id": "context-processor",
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/js/modules/endpoint/example.context.processor.bundle.js"
+				},
+				{
+					"id": "example-notification-source",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/favicon.ico",
+					"title": "Example Notification Source",
+					"description": "Example Notification Source",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/js/modules/endpoint/example-notification-source.bundle.js",
+					"data": {}
 				}
 			],
 			"endpoints": [
@@ -339,6 +349,36 @@
 						"method": "SET",
 						"dataType": "default-workspace"
 					}
+				},
+				{
+					"id": "notification-source-create",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-clear",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-close",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-update",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-stream",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
 				}
 			],
 			"endpointClients": {
@@ -362,6 +402,17 @@
 						"enabled": true,
 						"id": "wps-interop-override",
 						"endpointIds": ["*"]
+					},
+					{
+						"enabled": true,
+						"id": "example-notification-handler",
+						"endpointIds": [
+							"notification-source-create",
+							"notification-source-clear",
+							"notification-source-close",
+							"notification-source-update",
+							"notification-source-stream"
+						]
 					}
 				]
 			}
@@ -1729,6 +1780,15 @@
 					"description": "set and apply your default workspace.",
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "example-notification-handler",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/favicon.ico",
+					"title": "example notification handler",
+					"description": "example notification handler",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/js/modules/lifecycle/example-notification-handler.bundle.js",
 					"data": {}
 				}
 			]
