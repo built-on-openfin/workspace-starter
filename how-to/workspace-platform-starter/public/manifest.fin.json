@@ -211,7 +211,8 @@
 				"http://localhost:8080/common/apps-preload.json",
 				"http://localhost:8080/common/apps-tools.json",
 				"http://localhost:8080/common/apps-fdc3-1-2.json",
-				"http://localhost:8080/common/apps-fdc3-2-0.json"
+				"http://localhost:8080/common/apps-fdc3-2-0.json",
+				"http://localhost:8080/apps-platform.json"
 			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
@@ -256,6 +257,15 @@
 					"enabled": true,
 					"id": "context-processor",
 					"url": "http://localhost:8080/js/modules/endpoint/example.context.processor.bundle.js"
+				},
+				{
+					"id": "example-notification-source",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Example Notification Source",
+					"description": "Example Notification Source",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/endpoint/example-notification-source.bundle.js",
+					"data": {}
 				}
 			],
 			"endpoints": [
@@ -339,6 +349,36 @@
 						"method": "SET",
 						"dataType": "default-workspace"
 					}
+				},
+				{
+					"id": "notification-source-create",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-clear",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-close",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-update",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-stream",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
 				}
 			],
 			"endpointClients": {
@@ -362,6 +402,17 @@
 						"enabled": true,
 						"id": "wps-interop-override",
 						"endpointIds": ["*"]
+					},
+					{
+						"enabled": true,
+						"id": "example-notification-handler",
+						"endpointIds": [
+							"notification-source-create",
+							"notification-source-clear",
+							"notification-source-close",
+							"notification-source-update",
+							"notification-source-stream"
+						]
 					}
 				]
 			}
@@ -1729,6 +1780,15 @@
 					"description": "set and apply your default workspace.",
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "example-notification-handler",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "example notification handler",
+					"description": "example notification handler",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/lifecycle/example-notification-handler.bundle.js",
 					"data": {}
 				}
 			]

@@ -6,6 +6,7 @@ import type {
 	ContextMetadata
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+
 import { mapToAppMetaData as mapTo12AppMetaData } from "workspace-platform-starter/fdc3/1.2/mapper";
 import { mapToAppMetaData as mapTo20AppMetaData } from "workspace-platform-starter/fdc3/2.0/mapper";
 import {
@@ -45,6 +46,7 @@ import {
 import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import { AppIdHelper } from "./app-id-helper";
 import { AppIntentHelper } from "./app-intent-helper";
+import { getAppsMetaData } from "./app-meta-data-helper";
 import { ClientRegistrationHelper } from "./client-registration-helper";
 import { IntentResolverHelper } from "./intent-resolver-helper";
 
@@ -230,20 +232,22 @@ export async function getConstructorOverride(
 					throw new Error(ResolveError.NoAppsFound);
 				}
 
-				const isFDC32 = apiVersion?.type === "fdc3" && apiVersion.version === "2.0";
-				const mappedIntents = intents.map((entry) => ({
-					intent: entry.intent,
-					apps: entry.apps.map((app: PlatformApp) => {
-						let resultType: string | undefined;
-						const listensFor = app?.interop?.intents?.listensFor;
-						if (!isEmpty(listensFor) && !isEmpty(listensFor[entry.intent.name])) {
-							resultType = listensFor[entry.intent.name].resultType;
-						}
-						const appEntry = isFDC32 ? mapTo20AppMetaData(app, resultType) : mapTo12AppMetaData(app);
+				const mappedIntents: {
+					intent: { name: string; displayName?: string };
+					apps: (AppMetadataV1Point2 | AppMetadata)[];
+				}[] = [];
 
-						return appEntry;
-					})
-				}));
+				for (const entry of intents) {
+					const appMetaData = await getAppsMetaData(
+						entry.apps,
+						apiVersion?.version ?? "2.0",
+						mapTo12AppMetaData,
+						mapTo20AppMetaData,
+						async (appId: string) =>
+							this._clientRegistrationHelper.findAppInstances({ appId }, clientIdentity, "intent")
+					);
+					mappedIntents.push({ intent: entry.intent, apps: appMetaData });
+				}
 
 				return mappedIntents;
 			}
@@ -278,20 +282,16 @@ export async function getConstructorOverride(
 				if (isEmpty(result)) {
 					throw new Error(ResolveError.NoAppsFound);
 				}
-
-				const isFDC32 = apiVersion?.type === "fdc3" && apiVersion.version === "2.0";
 				const response = {
 					intent: result.intent,
-					apps: result.apps.map((app: PlatformApp) => {
-						let resultType: string | undefined;
-						const listensFor = app?.interop?.intents?.listensFor;
-						if (!isEmpty(listensFor) && !isEmpty(listensFor[result.intent.name])) {
-							resultType = listensFor[result.intent.name].resultType;
-						}
-						const appEntry = isFDC32 ? mapTo20AppMetaData(app, resultType) : mapTo12AppMetaData(app);
-
-						return appEntry;
-					})
+					apps: await getAppsMetaData(
+						result.apps,
+						apiVersion?.version ?? "2.0",
+						mapTo12AppMetaData,
+						mapTo20AppMetaData,
+						async (appId: string) =>
+							this._clientRegistrationHelper.findAppInstances({ appId }, clientIdentity, "intent")
+					)
 				};
 
 				return response;

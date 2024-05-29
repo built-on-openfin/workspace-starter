@@ -28,9 +28,19 @@ export interface Endpoint<O = unknown, H = ModuleHelpers> extends ModuleImplemen
 	 * Handle a request response on an endpoint.
 	 * @param endpointDefinition The definition of the endpoint.
 	 * @param request The request to process.
-	 * @returns The response to the request, or null of not handled.
+	 * @returns The response to the request, or null if not handled.
 	 */
 	requestResponse?(endpointDefinition: EndpointDefinition, request?: unknown): Promise<unknown>;
+	/**
+	 * Handle a request for a stream of data.
+	 * @param endpointDefinition The definition of the endpoint.
+	 * @param request The request to process.
+	 * @returns The response to the request, or null if not handled.
+	 */
+	requestStream?(
+		endpointDefinition: EndpointDefinition,
+		request?: unknown
+	): Promise<ReadableStream<unknown> | undefined>;
 }
 /**
  * Definition for the platform endpoint provider.
@@ -62,6 +72,13 @@ export interface EndpointProvider {
 	 * @returns The response from the endpoint.
 	 */
 	requestResponse<T, R>(endpointId: string, request?: T): Promise<R | undefined>;
+	/**
+	 * Perform a request/response on an endpoint.
+	 * @param endpointId The id of the endpoint to perform the request/response on.
+	 * @param request The request to send.
+	 * @returns The stream from the endpoint.
+	 */
+	requestStream<T, R>(endpointId: string, request?: T): Promise<ReadableStream<R> | undefined>;
 }
 /**
  * A client to access controlled access to endpoints using the endpoint provider for guidance.

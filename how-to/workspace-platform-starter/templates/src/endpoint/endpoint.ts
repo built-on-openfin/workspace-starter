@@ -72,10 +72,82 @@ export class ExampleEndpointProvider implements Endpoint<ExampleEndpointProvider
 	 * Handle a request response on an endpoint.
 	 * @param endpointDefinition The definition of the endpoint.
 	 * @param request The request to process.
-	 * @returns The response to the request, or null of not handled.
+	 * @returns The response to the request, or undefined if not handled.
 	 */
 	public async requestResponse(endpointDefinition: EndpointDefinition, request?: unknown): Promise<unknown> {
 		// TODO: Perform logic for a request response
+		return undefined;
+	}
+
+	/**
+	 * Handle a requestStream request on an endpoint.
+	 * @param endpointDefinition The definition of the endpoint.
+	 * @param request The request to process if needed.
+	 * @returns The readable stream response to the request, or undefined if not handled.
+	 */
+	public async requestStream(
+		endpointDefinition: EndpointDefinition,
+		request?: unknown
+	): Promise<ReadableStream<unknown> | undefined> {
+		// An example is shown below that sends a message every second and below that is an example of code consuming a stream.
+		// Readable streams can be used in OpenFin and in the browser: https://caniuse.com/?search=ReadableStream
+		// More information about how you can consume a readable stream can be found here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+
+		// You can cache the stream and return the same stream for each request and optionally use stream.tee() to split the stream or you can create a new stream for each request.
+
+		// let intervalId: number | NodeJS.Timeout | undefined;
+		// const stream = new ReadableStream<unknown>({
+		// 	/**
+		// 	 * Starts the stream and sends a message every second.
+		// 	 * @param controller The controller to push values to the stream.
+		// 	 */
+		// 	start(controller): void {
+		// 		intervalId = setInterval(() => {
+		// 			controller.enqueue({ message: `Hello. The time is now ${new Date().toUTCString()}.` });
+		// 		}, 1000);
+		// 	},
+		// 	/**
+		// 	 * When the stream is cancelled this function is called.
+		// 	 */
+		// 	cancel(): void {
+		// 		clearInterval(intervalId);
+		// 	}
+		// });
+		// return stream;
+
+		// someone could consume the stream like this:
+
+		// The consuming code could look like this: const readableStream = await endpoint.requestStream("example"); but we have included the line below so it compiles. Alternatively use the example stream above as the readableStream.
+		// const readableStream: ReadableStream = new ReadableStream();
+		// const reader = readableStream.getReader();
+
+		// // approach one: using await
+		// // eslint-disable-next-line no-constant-condition
+		// while (true) {
+		// 	const { done, value } = await reader.read();
+		// 	if (done) {
+		// 		this._logger?.info("Stream ended");
+		// 		break;
+		// 	}
+		// 	console.log(value);
+		// }
+
+		// // approach two: using promises
+		// const logger = this._logger;
+		// reader.read().then(function pump({ done, value }): unknown {
+		// 	if (done) {
+		// 		logger?.info("Stream ended");
+		// 		return;
+		// 	}
+		// 	console.log(value);
+		// 	// eslint-disable-next-line promise/no-nesting
+		// 	return reader.read().then(pump);
+		// })
+		// .catch((error) => {
+		// 	this._logger?.error(`Error reading stream: ${error}`);
+		// });
+
+		// TODO: Perform logic for a request for a readable stream
 		return undefined;
 	}
 }
