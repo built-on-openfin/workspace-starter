@@ -38,9 +38,7 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [
-			
-		],
+		"images": [],
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
@@ -59,9 +57,7 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [
-			
-		],
+		"images": [],
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	}
 ]

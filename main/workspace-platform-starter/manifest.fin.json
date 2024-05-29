@@ -2,8 +2,8 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--v=1 --inspect",
-		"version": "34.118.78.80"
+		"arguments": "--v=1 --inspect --enable-mesh --security-realm=workspace-platform-starter",
+		"version": "36.122.80.11"
 	},
 	"startup_app": {
 		"name": "workspace-starter-how-to-workspace-platform-starter"
@@ -72,7 +72,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - v17.2.0",
+		"name": "Workspace Platform Starter - v18.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -164,7 +164,36 @@
 							"contexts": ["fdc3.instrument"]
 						}
 					]
-				}
+				},
+				"modules": [
+					{
+						"id": "wps-interop-override",
+						"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+						"title": "Workspace Platform Starter Interop Broker",
+						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+						"enabled": true,
+						"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/interop-override/wps-interop-override.bundle.js",
+						"data": {
+							"loggerName": "WpsInteropOverride"
+						}
+					},
+					{
+						"id": "openfin-cloud-interop",
+						"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+						"title": "OpenFin Cloud Interop",
+						"description": "OpenFin Cloud Interop",
+						"enabled": false,
+						"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/interop-override/openfin-cloud-interop.bundle.js",
+						"data": {
+							"userId": "",
+							"password": "",
+							"platformId": "",
+							"url": "",
+							"sourceDisplayName": "",
+							"sourceId": ""
+						}
+					}
+				]
 			}
 		},
 		"appProvider": {
@@ -182,7 +211,8 @@
 				"https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/apps-preload.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/apps-tools.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/apps-fdc3-1-2.json",
-				"https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/apps-fdc3-2-0.json"
+				"https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/apps-fdc3-2-0.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/apps-platform.json"
 			],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
@@ -227,6 +257,15 @@
 					"enabled": true,
 					"id": "context-processor",
 					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/endpoint/example.context.processor.bundle.js"
+				},
+				{
+					"id": "example-notification-source",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+					"title": "Example Notification Source",
+					"description": "Example Notification Source",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/endpoint/example-notification-source.bundle.js",
+					"data": {}
 				}
 			],
 			"endpoints": [
@@ -310,6 +349,36 @@
 						"method": "SET",
 						"dataType": "default-workspace"
 					}
+				},
+				{
+					"id": "notification-source-create",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-clear",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-close",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-update",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
+				},
+				{
+					"id": "notification-source-stream",
+					"type": "module",
+					"typeId": "example-notification-source",
+					"options": {}
 				}
 			],
 			"endpointClients": {
@@ -328,6 +397,22 @@
 						"enabled": true,
 						"id": "workspaces-share",
 						"endpointIds": ["share-get", "share-set"]
+					},
+					{
+						"enabled": true,
+						"id": "wps-interop-override",
+						"endpointIds": ["*"]
+					},
+					{
+						"enabled": true,
+						"id": "example-notification-handler",
+						"endpointIds": [
+							"notification-source-create",
+							"notification-source-clear",
+							"notification-source-close",
+							"notification-source-update",
+							"notification-source-stream"
+						]
 					}
 				]
 			}
@@ -347,7 +432,9 @@
 				},
 				"workspacePlatform": {
 					"pages": [],
-					"title": "Browser Starter",
+					"title": {
+						"type": "view-title"
+					},
 					"favicon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
 					"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
 					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
@@ -1154,35 +1241,35 @@
 				},
 				{
 					"id": "salesforce",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/favicon.ico",
 					"title": "Salesforce",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
 						"consumerKey": "",
 						"orgUrl": "",
-						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/js/preload.js",
+						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/preload.js",
 						"enableLibLogging": true,
 						"iconMap": {
-							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/salesforce.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/account.svg",
-							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/chatter.svg",
-							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/note.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/task.svg",
-							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/dashboard.svg",
-							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/phone.svg",
-							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/chat.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/email.svg"
+							"salesforce": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/salesforce.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/account.svg",
+							"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/chatter.svg",
+							"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/note.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/task.svg",
+							"dashboard": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/dashboard.svg",
+							"phone": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/phone.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/chat.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/email.svg"
 						}
 					}
 				},
 				{
 					"id": "ms365",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/favicon.ico",
 					"title": "Microsoft 365",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/js/integrations/ms365.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/js/integrations/ms365.bundle.js",
 					"data": {
 						"clientId": "",
 						"tenantId": "",
@@ -1206,48 +1293,48 @@
 						"disableGraphExplorer": false,
 						"enableLibLogging": true,
 						"images": {
-							"microsoft365": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/microsoft365.svg",
-							"teams": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/teams.svg",
-							"word": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/word.svg",
-							"excel": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/excel.svg",
-							"onenote": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/onenote.svg",
-							"powerpoint": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/powerpoint.svg",
-							"outlook": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/apps/outlook-mail.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/email.svg",
-							"calendar": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/calendar.svg",
-							"share": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/share.svg",
-							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/chat.svg",
-							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/call.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/contact.svg",
-							"team": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/team.svg",
-							"file": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/file.svg",
-							"folder": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/folder.svg",
-							"channel": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/channel.svg",
-							"clock": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/clock.svg",
-							"check": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/check.svg",
-							"cross": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-ms365/images/icons/cross.svg"
+							"microsoft365": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/microsoft365.svg",
+							"teams": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/teams.svg",
+							"word": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/word.svg",
+							"excel": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/excel.svg",
+							"onenote": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/onenote.svg",
+							"powerpoint": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/powerpoint.svg",
+							"outlook": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/apps/outlook-mail.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/email.svg",
+							"calendar": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/calendar.svg",
+							"share": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/share.svg",
+							"chat": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/chat.svg",
+							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/call.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/contact.svg",
+							"team": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/team.svg",
+							"file": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/file.svg",
+							"folder": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/folder.svg",
+							"channel": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/channel.svg",
+							"clock": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/clock.svg",
+							"check": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/check.svg",
+							"cross": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-ms365/images/icons/cross.svg"
 						}
 					}
 				},
 				{
 					"id": "servicenow",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/favicon.ico",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/favicon.ico",
 					"title": "ServiceNow",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/js/integrations/servicenow.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/js/integrations/servicenow.bundle.js",
 					"data": {
 						"instanceUrl": "",
 						"clientId": "",
 						"enableLibLogging": true,
 						"images": {
-							"servicenow": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/apps/servicenow.svg",
-							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/types/contact.svg",
-							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/types/account.svg",
-							"case": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/types/case.svg",
-							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/types/task.svg",
-							"incident": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/types/incident.svg",
-							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/icons/call.svg",
-							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-servicenow/images/icons/email.svg"
+							"servicenow": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/apps/servicenow.svg",
+							"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/types/contact.svg",
+							"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/types/account.svg",
+							"case": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/types/case.svg",
+							"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/types/task.svg",
+							"incident": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/types/incident.svg",
+							"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/icons/call.svg",
+							"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-servicenow/images/icons/email.svg"
 						}
 					}
 				},
@@ -1265,18 +1352,18 @@
 					"id": "quote",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
 					"title": "Quote Provider",
-					"enabled": true,
-					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v17.2.0/integrations/js/modules/integrations/quote.bundle.js",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/integrations/js/modules/integrations/quote.bundle.js",
 					"data": {
-						"rootUrl": "https://built-on-openfin.github.io/dev-extensions/extensions/v17.2.0/integrations/data/quotes/"
+						"rootUrl": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/integrations/data/quotes/"
 					}
 				},
 				{
 					"id": "emoji",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
 					"title": "Emoji Provider",
-					"enabled": true,
-					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v17.2.0/integrations/js/modules/integrations/emoji.bundle.js",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/integrations/js/modules/integrations/emoji.bundle.js",
 					"data": {}
 				}
 			]
@@ -1693,6 +1780,15 @@
 					"description": "set and apply your default workspace.",
 					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js",
+					"data": {}
+				},
+				{
+					"id": "example-notification-handler",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+					"title": "example notification handler",
+					"description": "example notification handler",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/lifecycle/example-notification-handler.bundle.js",
 					"data": {}
 				}
 			]

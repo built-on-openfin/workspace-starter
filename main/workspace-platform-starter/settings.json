@@ -94,7 +94,36 @@
 						"contexts": ["fdc3.instrument"]
 					}
 				]
-			}
+			},
+			"modules": [
+				{
+					"id": "wps-interop-override",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+					"title": "Workspace Platform Starter Interop Broker",
+					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+					"enabled": true,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/interop-override/wps-interop-override.bundle.js",
+					"data": {
+						"loggerName": "WpsInteropOverride"
+					}
+				},
+				{
+					"id": "openfin-cloud-interop",
+					"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/favicon.ico",
+					"title": "OpenFin Cloud Interop",
+					"description": "OpenFin Cloud Interop",
+					"enabled": false,
+					"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/js/modules/interop-override/openfin-cloud-interop.bundle.js",
+					"data": {
+						"userId": "",
+						"password": "",
+						"platformId": "",
+						"url": "",
+						"sourceDisplayName": "",
+						"sourceId": ""
+					}
+				}
+			]
 		}
 	},
 	"appProvider": {
@@ -275,7 +304,31 @@
 					"logProcessedContext": true
 				}
 			}
-		]
+		],
+		"endpointClients": {
+			"clientOptions": [
+				{
+					"enabled": true,
+					"id": "default-workspace",
+					"endpointIds": ["get-default-workspace", "set-default-workspace"]
+				},
+				{
+					"enabled": true,
+					"id": "pages-share",
+					"endpointIds": ["share-get", "share-set"]
+				},
+				{
+					"enabled": true,
+					"id": "workspaces-share",
+					"endpointIds": ["share-get", "share-set"]
+				},
+				{
+					"enabled": true,
+					"id": "wps-interop-override",
+					"endpointIds": ["*"]
+				}
+			]
+		}
 	},
 	"browserProvider": {
 		"defaultWindowOptions": {
@@ -287,7 +340,9 @@
 			},
 			"workspacePlatform": {
 				"pages": [],
-				"title": "Second Browser Starter",
+				"title": {
+					"type": "view-title"
+				},
 				"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
 				"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html"
 			}
@@ -924,20 +979,20 @@
 			},
 			{
 				"id": "salesforce",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/favicon.ico",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/favicon.ico",
 				"title": "Salesforce",
 				"enabled": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
-					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/js/preload.js",
+					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/preload.js",
 					"iconMap": {
-						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/contact.svg",
-						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/account.svg",
-						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/chatter.svg",
-						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/note.svg",
-						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v17.2.0/integrate-with-salesforce/images/task.svg"
+						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/contact.svg",
+						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/account.svg",
+						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/chatter.svg",
+						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/note.svg",
+						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/images/task.svg"
 					}
 				}
 			},

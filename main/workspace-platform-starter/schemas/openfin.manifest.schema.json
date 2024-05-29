@@ -5,6 +5,9 @@
 		"Api": {
 			"$ref": "#/definitions/__type_9"
 		},
+		"ApiSettings": {
+			"$ref": "#/definitions/__type_9"
+		},
 		"Array": {
 			"items": {
 				"$ref": "#/definitions/PrebuiltContextMenuItem"
@@ -32,7 +35,7 @@
 					"description": "custom property"
 				},
 				"match": {
-					"description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+					"description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
 					"items": {
 						"type": "string"
 					},
@@ -58,7 +61,7 @@
 					"description": "custom property"
 				},
 				"match": {
-					"description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+					"description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
 					"items": {
 						"type": "string"
 					},
@@ -71,7 +74,7 @@
 		"ContentCreationOptions": {
 			"$ref": "#/definitions/__type_10"
 		},
-		"ContentCreationRule<ContentCreationBehaviorNames>": {
+		"ContentCreationRule<ContentCreationBehavior>": {
 			"anyOf": [
 				{
 					"$ref": "#/definitions/WindowContentCreationRule",
@@ -129,10 +132,17 @@
 		"DisplayMetadata_3": {
 			"$ref": "#/definitions/__type_35"
 		},
+		"DomainApiSettings": {
+			"$ref": "#/definitions/__type_39"
+		},
+		"DomainSettings": {
+			"$ref": "#/definitions/__type_37"
+		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_14"
 		},
-		"FileDownloadBehaviorNames": {
+		"FileDownloadBehavior": {
+			"description": "Whether file downloads raise a user prompt.",
 			"enum": ["no-prompt", "prompt"],
 			"type": "string"
 		},
@@ -141,6 +151,11 @@
 		},
 		"Identity_5": {
 			"$ref": "#/definitions/__type_17"
+		},
+		"InjectionType": {
+			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
+			"enum": ["global", "none"],
+			"type": "string"
 		},
 		"InteropBrokerOptions": {
 			"$ref": "#/definitions/__type_34"
@@ -393,6 +408,9 @@
 					"$ref": "#/definitions/Partial_1",
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
 				},
+				"allowLaunchIntoPlatform": {
+					"type": "boolean"
+				},
 				"alwaysOnTop": {
 					"type": "boolean"
 				},
@@ -427,7 +445,7 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -474,8 +492,7 @@
 					"type": "boolean"
 				},
 				"defaultDomainSettings": {
-					"$ref": "#/definitions/DefaultDomainSettings",
-					"description": "Define the file download rules.\nSee [here](https://developers.openfin.co/of-docs/docs/file-download#manifest-properties-for-file-downloads) for more details."
+					"$ref": "#/definitions/DefaultDomainSettings"
 				},
 				"defaultHeight": {
 					"type": "number"
@@ -502,6 +519,10 @@
 				},
 				"disableIabSecureLogging": {
 					"type": "boolean"
+				},
+				"domainSettings": {
+					"$ref": "#/definitions/DomainSettings",
+					"description": "Define the {@link https://developers.openfin.co/of-docs/docs/file-download#manifest-properties-for-file-downloads file download rules} and domain-based api injection rules."
 				},
 				"enableBeforeUnload": {
 					"type": "boolean"
@@ -759,7 +780,7 @@
 					"description": "custom property"
 				},
 				"match": {
-					"description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+					"description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
 					"items": {
 						"type": "string"
 					},
@@ -817,7 +838,7 @@
 					"description": "custom property"
 				},
 				"match": {
-					"description": "List of [match patterns](https://developer.chrome.com/extensions/match_patterns) that indicate the specified\nbehavior should be used",
+					"description": "List of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) that indicate the specified\nbehavior should be used",
 					"items": {
 						"type": "string"
 					},
@@ -878,11 +899,11 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contentRedirect": {
 					"$ref": "#/definitions/Partial_3",
-					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -999,7 +1020,7 @@
 				},
 				"inheritance": {
 					"$ref": "#/definitions/Partial_7",
-					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1178,11 +1199,11 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contentRedirect": {
 					"$ref": "#/definitions/Partial_3",
-					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -1299,7 +1320,7 @@
 				},
 				"inheritance": {
 					"$ref": "#/definitions/Partial_7",
-					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1572,7 +1593,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehaviorNames>"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -1626,11 +1647,11 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contentRedirect": {
 					"$ref": "#/definitions/Partial_3",
-					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -1747,7 +1768,7 @@
 				},
 				"inheritance": {
 					"$ref": "#/definitions/Partial_7",
-					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -2328,7 +2349,7 @@
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
 				},
 				"api": {
-					"$ref": "#/definitions/Api",
+					"$ref": "#/definitions/ApiSettings",
 					"description": "Configurations for API injection."
 				},
 				"autoResize": {
@@ -2357,7 +2378,7 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contentRedirect": {
 					"$ref": "#/definitions/ContentRedirect"
@@ -2831,11 +2852,11 @@
 				},
 				"contentNavigation": {
 					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contentRedirect": {
 					"$ref": "#/definitions/Partial_3",
-					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/extensions/match_patterns) for more details."
+					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
 					"type": "boolean"
@@ -2952,7 +2973,7 @@
 				},
 				"inheritance": {
 					"$ref": "#/definitions/Partial_7",
-					"description": "Controls whether an option is inherited from the parent application. Use { <option>: false } to disable a specific <option>. All inheritable properties will be inherited by default if omitted.\""
+					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -3169,10 +3190,12 @@
 			"additionalProperties": false,
 			"properties": {
 				"rules": {
+					"description": "{@inheritDoc DomainSettingsRule}",
 					"items": {
 						"additionalProperties": false,
 						"properties": {
 							"match": {
+								"description": "Array of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) specifying\nthe domain(s) for which the rule applies.",
 								"items": {
 									"type": "string"
 								},
@@ -3180,12 +3203,17 @@
 							},
 							"options": {
 								"additionalProperties": false,
+								"description": "Settings applied when a webcontents has been navigated to a matched domain.",
 								"properties": {
+									"api": {
+										"$ref": "#/definitions/DomainApiSettings",
+										"description": "{@inheritDoc ApiInjection}"
+									},
 									"downloadSettings": {
-										"$ref": "#/definitions/FileDownloadSettings"
+										"$ref": "#/definitions/FileDownloadSettings",
+										"description": "{@inheritDoc FileDownloadSettings}"
 									}
 								},
-								"required": ["downloadSettings"],
 								"type": "object"
 							}
 						},
@@ -3200,15 +3228,19 @@
 		},
 		"__type_38": {
 			"additionalProperties": false,
+			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
 				"rules": {
+					"description": "{@inheritDoc DownloadRule}",
 					"items": {
 						"additionalProperties": false,
 						"properties": {
 							"behavior": {
-								"$ref": "#/definitions/FileDownloadBehaviorNames"
+								"$ref": "#/definitions/FileDownloadBehavior",
+								"description": "{@inheritDoc FileDownloadBehavior}"
 							},
 							"match": {
+								"description": "Array of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) specifying\nURL(s) of the resource(s) being downloaded.",
 								"items": {
 									"type": "string"
 								},
@@ -3222,6 +3254,17 @@
 				}
 			},
 			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_39": {
+			"additionalProperties": false,
+			"properties": {
+				"fin": {
+					"$ref": "#/definitions/InjectionType",
+					"description": "Injection setting for the `fin` API for contexts on a matched domain.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available."
+				}
+			},
+			"required": ["fin"],
 			"type": "object"
 		},
 		"__type_4": {
@@ -3313,9 +3356,13 @@
 			"additionalProperties": false,
 			"description": "Configurations for API injection.",
 			"properties": {
+				"fin": {
+					"$ref": "#/definitions/InjectionType",
+					"description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
+				},
 				"iframe": {
 					"additionalProperties": false,
-					"description": "Configure injection of OpenFin API into iframes based on domain",
+					"description": "Configure conditional injection of OpenFin API into iframes",
 					"properties": {
 						"crossOriginInjection": {
 							"description": "Inject OpenFin API into cross-origin iframes",
