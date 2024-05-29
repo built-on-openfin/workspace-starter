@@ -20,8 +20,8 @@
 	"author": "adam.saland@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "18.0.9",
-		"@openfin/workspace-platform": "18.0.9"
+		"@openfin/workspace": "18.0.10",
+		"@openfin/workspace-platform": "18.0.10"
 	},
 	"devDependencies": {
 		"@openfin/core": "36.80.11",
