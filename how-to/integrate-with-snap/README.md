@@ -135,7 +135,7 @@ You app should now be listed and you should be able to launch it and snap it wit
 
 ### Testing Snap with an existing Platform/Classic App
 
-We have a [preload.ts](./client/src/preload.ts) file that is a preload script that can be added to your platform provider or classic app to show Snap working without any coding. Your manifest will need to load the preload script snap.preload.bundle.js (this is how it is defined in our [webpack.config.js](./client/webpack.config.js)) and you will need to request the permissions and define the app asset.
+We have a [preload.ts](./client/src/preload/preload.ts) file that is a preload script that can be added to your platform provider or classic app to show Snap working without any coding. Your manifest will need to load the preload script snap.preload.bundle.js (this is how it is defined in our [webpack.config.js](./client/webpack.config.js)) and you will need to request the permissions and define the app asset. There is a version of the preload script that sets the debug window provided by Snap to true: [preload.debug.ts](./client/src/preload/preload.debug.ts).
 
 #### Preload Script Entry
 
@@ -147,10 +147,22 @@ If you are running the local example you will see:
   "preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.bundle.js" }],
 ```
 
+You can change this to the debug version by updating the preloadScript to the following:
+
+```json
+  "preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.debug.bundle.js" }],
+```
+
 If you just want to test Snap within your own manifest by using a hosted preload script then you can add the following to the "startup_app" or "platform" definition in your manifest:
 
 ```json
   "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+```
+
+If you want the debug version with the debug window automatically showing then you can reference this preload script:
+
+```json
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
 ```
 
 #### Permissions
