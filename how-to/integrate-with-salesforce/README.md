@@ -26,6 +26,7 @@ Once you have completed the configuration steps, update the `customSettings` sec
 
 - **`orgUrl`**: the URL of your Salesforce org (ending in "my.salesforce.com")
 - **`consumerKey`**: the Consumer Key of the Connected App you just created
+- **`contextGroupStrategy`**: When you launch a result from home do you want to assign a context group to the view. Options are: none, first, rotation (rotation is the default)
 
 Optionally, if the enhanced notes feature is [enabled](https://help.salesforce.com/s/articleView?id=sf.notes_admin_setup.htm&type=5), this sample will include notes in the search results displayed in Home.
 

@@ -39,6 +39,7 @@
 			"orgUrl": "",
 			"enableLibLogging": true,
 			"preload": "http://localhost:8080/js/preload.js",
+			"contextGroupStrategy": "rotation",
 			"iconMap": {
 				"salesforce": "http://localhost:8080/images/salesforce.svg",
 				"contact": "http://localhost:8080/images/contact.svg",
