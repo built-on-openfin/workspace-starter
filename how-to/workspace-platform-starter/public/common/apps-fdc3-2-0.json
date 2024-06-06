@@ -45,6 +45,10 @@
 							"displayName": "View Contact Details",
 							"contexts": ["fdc3.contact"]
 						},
+						"ViewProfile": {
+							"displayName": "View Profile",
+							"contexts": ["fdc3.contact"]
+						},
 						"ViewQuote": {
 							"displayName": "View Quote",
 							"contexts": ["fdc3.instrument"]
