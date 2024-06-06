@@ -311,6 +311,14 @@ export interface SalesforceSettings {
 	appId?: string;
 
 	/**
+	 * Content Context Group
+	 * none - a context group is not assigned to the content
+	 * first - the first context group of available context groups is always assigned.
+	 * rotation - the context group is rotated through the available context groups.
+	 */
+	contextGroupStrategy?: "none" | "first" | "rotation";
+
+	/**
 	 * Map the data from SF to templates, if you just include the type field the default display will be used.
 	 */
 	mappings?: SalesforceMapping[];
