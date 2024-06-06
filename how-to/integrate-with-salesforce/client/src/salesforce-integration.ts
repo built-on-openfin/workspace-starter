@@ -85,6 +85,16 @@ export class SalesforceIntegration {
 	private _integrationHelpers: IntegrationHelpers | undefined;
 
 	/**
+	 * Context groups for the module when launching content.
+	 */
+	private _contextGroups: string[] | undefined;
+
+	/**
+	 * Last context group index.
+	 */
+	private _contextGroupIndex: number = -1;
+
+	/**
 	 * The module definition.
 	 * @internal
 	 */
@@ -763,13 +773,16 @@ export class SalesforceIntegration {
 	 * @param data The data to use for opening.
 	 */
 	private async openSalesforceContent(data: SalesforceResultData): Promise<void> {
-		const interop: OpenFin.InteropConfig = {
-			currentContextGroup: "green"
-		};
+		const currentContextGroup = await this.getCurrentContextGroup();
+		const interop: OpenFin.InteropConfig | undefined = currentContextGroup
+			? {
+					currentContextGroup
+				}
+			: undefined;
 		const customData = { buttonLabel: "Process Participant" };
 		const url = data.url;
 
-		if (this._settings?.appId && this._integrationHelpers?.launchApp) {
+		if (this._settings?.appId && this._settings?.appId.length > 0 && this._integrationHelpers?.launchApp) {
 			await this._integrationHelpers?.launchApp(this._settings.appId, {
 				options: {
 					type: "view",
@@ -784,7 +797,7 @@ export class SalesforceIntegration {
 			const preload = this._settings?.preload;
 			const viewOptions: OpenFin.PlatformViewCreationOptions = {
 				url,
-				fdc3InteropApi: "1.2",
+				fdc3InteropApi: "2.0",
 				interop,
 				customData,
 				preloadScripts: [{ url: preload ?? "" }]
@@ -1621,6 +1634,52 @@ export class SalesforceIntegration {
 		}
 
 		return finalActions;
+	}
+
+	/**
+	 * Populate the context groups for the integration.
+	 */
+	private async populateContextGroups(): Promise<void> {
+		if (this._contextGroups === undefined) {
+			if (this._integrationHelpers?.getInteropClient) {
+				const interopClient = await this._integrationHelpers.getInteropClient();
+				if (interopClient) {
+					this._contextGroups = [];
+					const contextGroups = await interopClient.getContextGroups();
+					for (const contextGroup of contextGroups) {
+						this._contextGroups.push(contextGroup.id);
+					}
+				}
+			}
+			if (this._contextGroups === undefined) {
+				// if the context groups are still undefined, set the default
+				this._contextGroups = ["green"];
+			}
+		}
+	}
+
+	/**
+	 * Returns the context group to use for the integration.
+	 * @returns The context group to use.
+	 */
+	private async getCurrentContextGroup(): Promise<string | undefined> {
+		await this.populateContextGroups();
+		if (
+			this._contextGroups === undefined ||
+			this._contextGroups.length === 0 ||
+			this._settings?.contextGroupStrategy === "none"
+		) {
+			return undefined;
+		}
+		if (this._settings?.contextGroupStrategy === "first") {
+			return this._contextGroups[0];
+		}
+
+		if (this._contextGroupIndex === this._contextGroups.length) {
+			this._contextGroupIndex = -1;
+		}
+		this._contextGroupIndex++;
+		return this._contextGroups[this._contextGroupIndex];
 	}
 
 	/**
