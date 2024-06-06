@@ -1246,6 +1246,7 @@
 					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 					"data": {
+						"appId": "",
 						"consumerKey": "",
 						"orgUrl": "",
 						"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/preload.js",
