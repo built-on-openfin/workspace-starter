@@ -52,7 +52,12 @@ async function initDom() {
 		memberNameElem.classList.add('team-member-name');
 		memberNameElem.textContent = teamMember.name;
 		memberNameElem.addEventListener('click', () => {
-			fin.System.openUrlWithBrowser(`mailto:${teamMember.email}`);
+			const address = `mailto:${teamMember.email}`;
+			if (window.fin.me.isBrowserEnvironment()) {
+				window.open(address);
+			} else {
+				fin.System.openUrlWithBrowser(address);
+			}
 		});
 
 		const memberRoleElem = document.createElement('div');
