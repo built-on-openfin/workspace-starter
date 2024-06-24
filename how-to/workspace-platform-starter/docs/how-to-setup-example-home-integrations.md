@@ -18,6 +18,7 @@ Our Salesforce example already exists in the main [manifest.fin.json](../public/
      "enabled": false,
      "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
      "data": {
+      "appId": "",
       "consumerKey": "",
       "orgUrl": "",
       "preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-salesforce/js/preload.js",
@@ -41,6 +42,17 @@ Our Salesforce example already exists in the main [manifest.fin.json](../public/
 This examples supports a number of configuration settings (covered in the sample) so that you can adapt it to your needs. It can give you a UI similar to the following:
 
 ![Salesforce](./assets/home-salesforce.png)
+
+### Add Intent Support to search results
+
+If you wish to have content launched from the Salesforce integration to be an intent target for ViewContact/ViewProfile then you will need:
+
+- An app definition - We have included one in [apps-connector.json](../public/common/apps-connector.json) although you will need to add your salesforce org url. You will also need to add the [apps-connector.json](../public/common/apps-connector.json) directory to your [appsProvider](./what-is-an-apps-provider.md) so that it is included when looking up which applications support ViewContact/ViewProfile.
+- Add the appId (salesforce-app is the id we use in our apps-connector.json file) to the salesforce integration entry in your manifest or settings file. This will tell the integration to launch Salesforce urls as part of the app.
+
+### Preload scripts
+
+In the integration definition and the salesforce app definition you will see a reference to preload scripts. If you are using a [Lightning Web Security Salesforce application](https://developer.salesforce.com/docs/platform/lwc/guide/security-lwsec-intro.html) then you can delete the preload script entries as they are not needed. For more information about the OpenFin SalesForce app which simplifies Salesforce integration please visit: <https://developers.openfin.co/of-docs/docs/salesforce-appexchange>.
 
 ## ServiceNow
 

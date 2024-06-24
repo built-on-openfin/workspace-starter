@@ -162,7 +162,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 		public async handleFiredIntent(intent: OpenFin.Intent): Promise<void> {
 			console.log("Received request for a raised intent:", intent);
 
-			if (intent.name === "ViewContact") {
+			if (intent.name === "ViewContact" || intent.name === "ViewProfile") {
 				const viewIdentity = { uuid: fin.me.identity.uuid, name: "fdc3-intent-view" };
 				let hasView = false;
 				try {
@@ -181,8 +181,8 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: " https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/intent/fdc3-intent-view.html",
-							fdc3InteropApi: "1.2",
+							url: "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
+							fdc3InteropApi: "2.0",
 							interop: {
 								currentContextGroup: "green"
 							}

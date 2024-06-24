@@ -2,6 +2,7 @@
 
 ## v18.0.0
 
+- Added [apps-connector.json](./public/common/apps-connector.json) which includes an example salesforce app that can be added as the appId in the salesforce integration in the main [manifest.fin.json](./public/manifest.fin.json). The [apps-connector.json](./public/common/apps-connector.json) directory would also need to be added to the appProvider for it to be loaded. See [how to use our integrations](./docs/how-to-setup-example-home-integrations.md)
 - Updated WPS Interop Broker implementation so that it includes fdc3 app instances if they exist in the array of apps returned when findIntent is called as recommended by the FDC3 documentation.
 - Extended endpoint so that we now have a requestStream option for those implementing endpoints that want to return a stream of data instead of a simply requestResponse.
 - Included an example of the the requestStream endpoint by implementing an example source of notification data in the [client/src/modules/endpoint/example-notification-source](./client/src/modules/endpoint/example-notification-source/endpoint.ts)

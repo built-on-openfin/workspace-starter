@@ -6,11 +6,6 @@ window.addEventListener('DOMContentLoaded', initializeDOM);
  * Initialize the DOM.
  */
 async function initializeDOM() {
-	const contextPicker = document.querySelector('#context-group-picker');
-	if (window.fin) {
-		contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
-	}
-
 	if (window.fdc3 !== undefined) {
 		setupListeners();
 	} else {
@@ -25,10 +20,15 @@ async function initializeDOM() {
  */
 async function setupListeners() {
 	try {
+		const contextPicker = document.querySelector('#context-group-picker');
+		if (window.fin && contextPicker !== null) {
+			contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
+		}
 		await usersModule.initialize();
 
 		window.fdc3.addContextListener(contextHandler);
 		window.fdc3.addIntentListener('ViewContact', contextHandler);
+		window.fdc3.addIntentListener('ViewProfile', contextHandler);
 	} catch (error) {
 		console.error('There was an error while setting up all of the fdc3 listeners', error);
 	}
