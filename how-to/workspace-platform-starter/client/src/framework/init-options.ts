@@ -203,7 +203,7 @@ export function removeActionListener(id: string): boolean {
  * @param initOptions The init param to extract from.
  * @returns The extract payload.
  */
-function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undefined {
+function extractPayloadFromParams<T>(initOptions?: OpenFin.UserAppConfigArgs): T | undefined {
 	try {
 		const base64Payload = initOptions?.payload;
 		if (isStringValue(base64Payload)) {
@@ -224,7 +224,7 @@ function extractPayloadFromParams<T>(initOptions?: UserAppConfigArgs): T | undef
  * @param context The context calling the action handler.
  */
 async function notifyActionListeners(
-	initOptions: UserAppConfigArgs,
+	initOptions: OpenFin.UserAppConfigArgs,
 	lifecycle: InitOptionsLifecycle,
 	context: ActionHandlerContext
 ): Promise<void> {
@@ -232,7 +232,7 @@ async function notifyActionListeners(
 	const payload = !isEmpty(initOptions[ACTION_PAYLOAD_PARAM_NAME])
 		? extractPayloadFromParams(initOptions)
 		: undefined;
-	const availableListeners = actionListeners[action];
+		const availableListeners = actionListeners[Array.isArray(action) ? action[0] : action];
 	if (!isEmpty(availableListeners)) {
 		const subscriberIds = Object.keys(availableListeners);
 
@@ -244,7 +244,7 @@ async function notifyActionListeners(
 				try {
 					const listen = availableListeners[subscriberId];
 					if (listen) {
-						await listen.actionHandler(action, payload, context);
+						await listen.actionHandler(Array.isArray(action) ? action[0] : action, payload, context);
 					}
 				} catch (error) {
 					logger.error(
@@ -262,7 +262,7 @@ async function notifyActionListeners(
  * @param initOptions The init options to extract from.
  * @param context The context calling the action handler.
  */
-async function notifyListeners(initOptions: UserAppConfigArgs, context: ActionHandlerContext): Promise<void> {
+async function notifyListeners(initOptions: OpenFin.UserAppConfigArgs, context: ActionHandlerContext): Promise<void> {
 	const customParamIds = Object.keys(listeners);
 	let listenerId: string | undefined;
 
@@ -310,7 +310,7 @@ async function notifyListeners(initOptions: UserAppConfigArgs, context: ActionHa
  * @param event The event container the new init options.
  * @param event.userAppConfigArgs The config args containing the init options.
  */
-async function queryWhileRunning(event: { userAppConfigArgs?: UserAppConfigArgs }): Promise<void> {
+async function queryWhileRunning(event: Extract<OpenFin.ApplicationEvent, { type: "run-requested" }>): Promise<void> {
 	if (!isEmpty(event?.userAppConfigArgs)) {
 		logger.info("Received while platform is running", event.userAppConfigArgs);
 		if (!isEmpty(event.userAppConfigArgs[ACTION_PARAM_NAME])) {
