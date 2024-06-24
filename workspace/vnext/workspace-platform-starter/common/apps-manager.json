@@ -61,7 +61,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-my-team.jpeg"
+			}
+		],
 		"tags": ["view", "manager", "fcd3"]
 	},
 	{
@@ -80,7 +84,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-annual-leave.jpeg"
+			}
+		],
 		"tags": ["view", "manager", "fcd3"]
 	},
 	{
@@ -99,7 +107,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-manager-paths.jpeg"
+			}
+		],
 		"tags": ["view", "manager", "fcd3"]
 	},
 	{
@@ -118,7 +130,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-company-comms.jpeg"
+			}
+		],
 		"tags": ["view", "manager", "fcd3"]
 	},
 	{
@@ -137,7 +153,11 @@
 		"supportEmail": "support@example.com",
 		"publisher": "OpenFin",
 		"intents": [],
-		"images": [],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-company-calendar.jpeg"
+			}
+		],
 		"tags": ["view", "manager", "fcd3"]
 	}
 ]

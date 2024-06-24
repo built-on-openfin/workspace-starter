@@ -125,6 +125,11 @@
 							"contexts": ["fdc3.contact"]
 						},
 						{
+							"name": "ViewProfile",
+							"displayName": "View Profile",
+							"contexts": ["fdc3.contact"]
+						},
+						{
 							"name": "ViewQuote",
 							"displayName": "View Quote",
 							"contexts": ["fdc3.instrument"]
