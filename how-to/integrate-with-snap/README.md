@@ -14,7 +14,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 
 > The **@openfin/snap-sdk** is currently in beta. The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
 
-- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv18.0.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
+- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fvnext%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -156,13 +156,13 @@ You can change this to the debug version by updating the preloadScript to the fo
 If you just want to test Snap within your own manifest by using a hosted preload script then you can add the following to the "startup_app" or "platform" definition in your manifest:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-snap/js/snap.preload.bundle.js" }],
 ```
 
 If you want the debug version with the debug window automatically showing then you can reference this preload script:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
 ```
 
 #### Permissions

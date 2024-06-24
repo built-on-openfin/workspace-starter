@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--support-context-and-intents",
-	"version": "18.0.0",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace Example Application -- Adding intent support to a workspace platform",
 	"main": "index.js",
 	"scripts": {
@@ -21,13 +21,13 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/cloud-interop": "0.36.12",
-		"@openfin/workspace": "18.0.10",
-		"@openfin/workspace-platform": "18.0.10"
+		"@openfin/cloud-interop": "0.38.55",
+		"@openfin/workspace": "19.1.4",
+		"@openfin/workspace-platform": "19.1.4"
 	},
 	"devDependencies": {
-		"@openfin/core": "36.80.11",
-		"@openfin/node-adapter": "36.80.11",
+		"@openfin/core": "38.82.55",
+		"@openfin/node-adapter": "38.82.55",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

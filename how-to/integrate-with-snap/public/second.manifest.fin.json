@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "36.122.80.11"
+		"version": "38.126.82.58"
 	},
 	"startup_app": {
 		"name": "Integrate With Snap - Classic App",
@@ -49,7 +49,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Snap Classic - v18.0.0",
+		"name": "Integrate With Snap Classic - vnext",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
