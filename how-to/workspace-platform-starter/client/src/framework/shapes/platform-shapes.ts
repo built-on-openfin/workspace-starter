@@ -2,9 +2,9 @@ import type { OpenFin } from "@openfin/core";
 import type { DockButton } from "@openfin/workspace";
 import type { Locale, Page, Workspace, WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { BrowserProviderOptions } from "./browser-shapes";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 import type { ModuleHelpers, ModuleImplementation } from "./module-shapes";
-import { BrowserProviderOptions } from "./browser-shapes";
 
 /**
  * Platform provider options.
@@ -270,7 +270,9 @@ export interface EndpointDockSetRequest {
 /**
  * Platform Override helpers provide environment methods and data.
  */
-export type PlatformOverrideHelpers = ModuleHelpers;
+export type PlatformOverrideHelpers = ModuleHelpers & {
+	getSnapClient?: () => Promise<
+};
 
 /**
  * Options to pass when initializing the platform override.

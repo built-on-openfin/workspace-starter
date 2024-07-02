@@ -29,7 +29,7 @@ import type {
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { AnalyticsClient, PlatformAnalyticsEvent } from "workspace-platform-starter/shapes/analytics-shapes";
-import type { UnsavedPagePromptStrategy} from "workspace-platform-starter/shapes/browser-shapes";
+import type { UnsavedPagePromptStrategy } from "workspace-platform-starter/shapes/browser-shapes";
 import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type {
 	LanguageChangedLifecyclePayload,
