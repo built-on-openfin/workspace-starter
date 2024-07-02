@@ -1,7 +1,10 @@
+import type { OpenFin } from "@openfin/core";
 import type { DockButton } from "@openfin/workspace";
-import type { Locale, Page, Workspace } from "@openfin/workspace-platform";
+import type { Locale, Page, Workspace, WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
+import type { ModuleHelpers, ModuleImplementation } from "./module-shapes";
+import { BrowserProviderOptions } from "./browser-shapes";
 
 /**
  * Platform provider options.
@@ -262,4 +265,37 @@ export interface EndpointDockSetRequest {
 	 * The config.
 	 */
 	config?: DockProviderConfigWithIdentity;
+}
+
+/**
+ * Platform Override helpers provide environment methods and data.
+ */
+export type PlatformOverrideHelpers = ModuleHelpers;
+
+/**
+ * Options to pass when initializing the platform override.
+ */
+export interface PlatformOverrideOptions {
+	/**
+	 * Options defined for the platform provider.
+	 */
+	platformProviderOptions: PlatformProviderOptions;
+	/**
+	 * Options defined for the browser provider.
+	 */
+	browserProviderOptions: BrowserProviderOptions;
+}
+
+/**
+ * Definition for platform module type.
+ */
+export interface PlatformOverride<O = unknown, H = PlatformOverrideHelpers> extends ModuleImplementation<O, H> {
+	/**
+	 * Get the override constructor for the platform override (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+	 * @param options The options for the platform override defined as part of the platform.
+	 * @returns The override constructor to be used in an array.
+	 */
+	getConstructorOverride(
+		options: PlatformOverrideOptions
+	): Promise<OpenFin.ConstructorOverride<WorkspacePlatformProvider>>;
 }

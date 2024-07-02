@@ -4,7 +4,7 @@ import {
 	type BrowserWindowModule,
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { handleAnalytics } from "./analytics";
+import { handleAnalytics, isEnabled as isAnalyticsEnabled } from "./analytics";
 import { getApp, getApps } from "./apps";
 import { checkCondition, conditionChanged } from "./conditions";
 import * as connectionProvider from "./connections";
@@ -26,7 +26,7 @@ import {
 } from "./shapes/analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./shapes/app-shapes";
 import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
-import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./shapes/connection-shapes";
+import type { ConnectionClient, ConnectionValidationOptions, ConnectionValidationResponse } from "./shapes/connection-shapes";
 import type { DialogClient } from "./shapes/dialog-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
@@ -52,7 +52,8 @@ import {
 	getCurrentThemeId,
 	themeUrl
 } from "./themes";
-import { isEmpty, objectClone } from "./utils";
+import * as util from "./utils";
+import * as utilPosition from "./utils-position";
 import { getVersionInfo } from "./version";
 import { getNotificationClient } from "./workspace/notifications";
 
@@ -290,7 +291,8 @@ export function getDefaultHelpers(): ModuleHelpers {
 		sessionId: passedSessionId,
 		bringAppToFront: bringToFront,
 		getPlatform: getCurrentSync,
-		getAnalyticsClient,
+		getAnalyticsClient: async (): Promise<AnalyticsClient | undefined> => (isAnalyticsEnabled()
+		? getAnalyticsClient() : undefined),
 		getApps: async (): Promise<PlatformApp[]> => {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
@@ -317,7 +319,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
 			let result: PlatformAppIdentifier[] | undefined;
-			if (isEmpty(app)) {
+			if (util.isEmpty(app)) {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);
@@ -341,7 +343,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			if (page) {
 				return launchPage(page, options, providedLogger);
 			}
-			if (!isEmpty(providedLogger)) {
+			if (!util.isEmpty(providedLogger)) {
 				providedLogger.error(`The passed pageId: ${pageId} does not exist`);
 			} else {
 				logger.error(`The passed pageId: ${pageId} does not exist`);
@@ -370,7 +372,16 @@ export function getDefaultHelpers(): ModuleHelpers {
 			return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
 		},
 		subscribeLifecycleEvent,
-		unsubscribeLifecycleEvent
+		unsubscribeLifecycleEvent,
+		getUtilClient: () => ({ general: util, position: utilPosition }),
+		getConnectionClient: async (): Promise<ConnectionClient> => ({
+				isConnectionValid: async <T>(
+					identity: OpenFin.Identity,
+					payload?: unknown,
+					options?: ConnectionValidationOptions<T>
+				): Promise<ConnectionValidationResponse> =>
+					connectionProvider.isConnectionValid<T>(identity, payload, options)
+			})
 	};
 }
 

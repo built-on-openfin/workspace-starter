@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { ManifestTypeId } from "./app-shapes";
+import type { ClientSnapshot, ManifestTypeId } from "./app-shapes";
 
 /**
  * Options for the connection provider.
@@ -186,4 +186,42 @@ export interface ConnectionPayloadVerificationResponse {
 	 * Is the connection valid.
 	 */
 	isValid: boolean;
+}
+
+/**
+ * Provides an interface for modules that need to use functions
+ * that take into account internal and possible external connections
+ * to the platform.
+ */
+export interface ConnectionClient {
+	/**
+	 * Check if a connection is valid.
+	 * @param identity The identity of the connection to check.
+	 * @param payload The payload to pass when checking the connection.
+	 * @param options The options for checking the connection.
+	 * @returns Response determining if the connection is valid.
+	 */
+	isConnectionValid<T>(
+		identity: OpenFin.Identity,
+		payload?: unknown,
+		options?: ConnectionValidationOptions<T>
+	): Promise<ConnectionValidationResponse>;
+
+	/**
+	 * Decorate a snapshot with the snapshot source information collected
+	 * from connections describe in the connectionsProvider configuration.
+	 * @param snapshot The snapshot to decorate.
+	 * @returns The decorated snapshot.
+	 */
+	decorateSnapshot?(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot>;
+
+	/**
+	 * Takes a snapshot that may include connected clients snapshots (through snapshot source)
+	 * and applies it.
+	 * @param snapshot The snapshot.
+	 * @returns A promise that resolves when the client snapshot has been applied.
+	 */
+ 	applyClientSnapshot?(
+	snapshot: OpenFin.Snapshot & { clientSnapshots?: ClientSnapshot[] }
+	): Promise<void>;
 }

@@ -146,35 +146,6 @@ export function clearAction(actionName: string): boolean {
 }
 
 /**
- * Get any connections that support apps.
- * @returns The list of connections supporting apps.
- */
-export async function getConnectedAppSourceClients(): Promise<
-	{
-		identity: OpenFin.Identity;
-		connectionData: AppSourceConnection;
-	}[]
-> {
-	const connectionsToReturn: {
-		identity: OpenFin.Identity;
-		connectionData: AppSourceConnection;
-	}[] = [];
-
-	const availableConnections = Object.values(connectedClients);
-	for (const connection of availableConnections) {
-		const matchedConnection = connection.connectionTypes.find(
-			(supportedConnectionType) => supportedConnectionType.type === APP_SOURCE_TYPE_ID
-		);
-
-		if (matchedConnection?.type === APP_SOURCE_TYPE_ID) {
-			connectionsToReturn.push({ identity: connection.identity, connectionData: matchedConnection });
-		}
-	}
-
-	return connectionsToReturn;
-}
-
-/**
  * Get any connected apps.
  * @returns The list of connected apps.
  */
@@ -343,6 +314,35 @@ export async function isConnectionValid<T>(
 	logger.info("Returning: ", responseToReturn);
 
 	return responseToReturn;
+}
+
+/**
+ * Get any connections that support apps.
+ * @returns The list of connections supporting apps.
+ */
+async function getConnectedAppSourceClients(): Promise<
+	{
+		identity: OpenFin.Identity;
+		connectionData: AppSourceConnection;
+	}[]
+> {
+	const connectionsToReturn: {
+		identity: OpenFin.Identity;
+		connectionData: AppSourceConnection;
+	}[] = [];
+
+	const availableConnections = Object.values(connectedClients);
+	for (const connection of availableConnections) {
+		const matchedConnection = connection.connectionTypes.find(
+			(supportedConnectionType) => supportedConnectionType.type === APP_SOURCE_TYPE_ID
+		);
+
+		if (matchedConnection?.type === APP_SOURCE_TYPE_ID) {
+			connectionsToReturn.push({ identity: connection.identity, connectionData: matchedConnection });
+		}
+	}
+
+	return connectionsToReturn;
 }
 
 /**

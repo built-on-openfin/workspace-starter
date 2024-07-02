@@ -231,8 +231,9 @@ export class ExampleNotificationHandlerProvider
 			const notificationChannel = await fin.InterApplicationBus.Channel.create(notificationChannelName);
 			notificationChannel.onConnection(async (identity, payload) => {
 				this._logger?.info(`Channel connection request from: ${identity.uuid}`, payload);
-				if (this._helpers?.isConnectionValid) {
-					const isValid = await this._helpers.isConnectionValid(identity, payload);
+				if (this._helpers?.getConnectionClient) {
+					const connectionClient = await this._helpers.getConnectionClient();
+					const isValid = await connectionClient.isConnectionValid(identity, payload);
 					if (isValid) {
 						this._logger?.info(`Channel connection request from: ${identity.uuid} is valid.`);
 					} else {

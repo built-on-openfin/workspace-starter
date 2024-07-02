@@ -3,7 +3,7 @@ import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/work
 import type { AnalyticsClient } from "./analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
-import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
+import type { ConnectionClient, ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
 import type { DialogClient } from "./dialog-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
@@ -13,6 +13,7 @@ import type { MenuClient } from "./menu-shapes";
 import type { NotificationClient } from "./notification-shapes";
 import type { ShareClient } from "./share-shapes";
 import type { ThemeClient } from "./theme-shapes";
+import type { UtilClient } from "./util-shapes";
 import type { VersionInfo } from "./version-shapes";
 
 /**
@@ -270,6 +271,21 @@ export interface ModuleHelpers {
 	 * @param lifecycleEvent The event to subscribe to.
 	 */
 	unsubscribeLifecycleEvent?(subscriptionId: string, lifecycleEvent: LifecycleEvents): void;
+
+	/**
+	 * Get a collection of utility methods that can be used by modules.
+	 * @returns The utility client.
+	 */
+	getUtilClient(): UtilClient;
+
+	/**
+	 * Returns a connection client that lets you check to see if a connection
+	 * is valid as defined by the connectionsProvider as well as some additional
+	 * functions that may be available if they are supported by the type of module
+	 * using this client.
+	 * @returns The connection client api.
+	 */
+	getConnectionClient?(): Promise<ConnectionClient>;
 }
 
 /**
@@ -308,7 +324,8 @@ export type ModuleTypes =
 	| "menus"
 	| "contentCreation"
 	| "share"
-	| "interopOverride";
+	| "interopOverride"
+	| "platformOverride";
 
 /**
  * The definition of a module with typed entry points.
