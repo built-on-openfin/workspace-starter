@@ -51,7 +51,7 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/node-adapter": "36.80.11",
+		"@openfin/node-adapter": "38.82.58",
 		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",

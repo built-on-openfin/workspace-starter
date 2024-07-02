@@ -10,7 +10,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What version does this branch cover?
 
-This branch covers version **v19.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=18.0.10)
+This branch covers version **v19.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=19.0.1)
 
 ## Before you get started
 
