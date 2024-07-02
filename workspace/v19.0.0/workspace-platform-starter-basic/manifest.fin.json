@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--v=1 --inspect",
-		"version": "36.122.80.11"
+		"version": "38.126.82.58"
 	},
 	"platform": {
 		"uuid": "workspace-platform-start-basic",
@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter-basic/favicon.ico",
-		"name": "Workspace Platform Starter Basic - v18.0.0",
+		"name": "Workspace Platform Starter Basic - v19.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
