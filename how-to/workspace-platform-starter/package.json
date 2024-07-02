@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter",
-	"version": "18.0.0",
+	"version": "19.0.0",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-selenium",
-	"version": "18.0.0",
+	"version": "19.0.0",
 	"description": "OpenFin Workspace Starter Selenium Example",
 	"scripts": {
 		"build": "echo Nothing to build",
