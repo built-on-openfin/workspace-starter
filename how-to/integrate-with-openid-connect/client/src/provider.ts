@@ -260,7 +260,7 @@ async function launchAppManifest(customSettings: CustomSettings): Promise<void> 
 	if (!appManifest && customSettings.appManifestUrl) {
 		appManifest = await fin.Application.startFromManifest(customSettings.appManifestUrl, {
 			userAppConfigArgs: {
-				idToken: authResult?.idToken
+				idToken: authResult?.idToken ?? []
 			}
 		});
 

@@ -28,6 +28,7 @@ import {
 	type Locale
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { AddDefaultPagePayload } from "@openfin/workspace/common/src/api/pages/shapes";
 import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
 import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import * as analyticsProvider from "../analytics";
@@ -132,6 +133,15 @@ export function overrideCallback(
 	 * Create a class which overrides the platform provider.
 	 */
 	class Override extends WorkspacePlatformProvider {
+		/**
+		 * Implementation for adding custom default page.
+		 * @param payload {@link AddDefaultPagePayload}
+		 */
+		public async addDefaultPage(payload: AddDefaultPagePayload): Promise<void> {
+			logger.debug("addDefaultPage called", payload);
+			await super.addDefaultPage(payload);
+		}
+
 		/**
 		 * Supports launching a manifest into a platform.
 		 * @param payload The manifest to load into the platform
