@@ -3,25 +3,29 @@
 > **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
 > OpenFin Workspace is currently **only supported on Windows**.
 
+## Migrate from a previous version - From v18 to v19.0
+
+- [Please see the v19.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#19.0.2)
+
 ## Migrate from a previous version - From v17.2 to v18.0
 
-- [Please see the v18.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=19.0.1)
+- [Please see the v18.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#18.0.10)
 
 ## Migrate from a previous version - From v17.0 to v17.2
 
-- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.2.14)
+- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#17.2.14)
 
 ## Migrate from a previous version - From v16.1 to v17.0
 
-- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=17.0.15)
+- [Please see the v17.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#17.0.15)
 
 ## Migrate from a previous version - From v16.0 to v16.1
 
-- [Please see the v16.1 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=16.1.6)
+- [Please see the v16.1 Release Notes](https://developer.openfin.co/versions/?product=Workspace#16.1.7)
 
 ## Migrate from a previous version - From v15.0 to v16
 
-- [Please see the v16 Release Notes](https://developer.openfin.co/versions/#/?product=Workspace&sub-product=Workspace&version=16.0.9)
+- [Please see the v16 Release Notes](https://developer.openfin.co/versions/?product=Workspace#16.0.9)
 
 ## Migrate from a previous version - From v14.0 to v15
 

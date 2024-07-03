@@ -10,7 +10,7 @@ The OpenFin Workspace is a full-featured work environment designed to improve th
 
 ## What version does this branch cover?
 
-This branch covers version **v19.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace&sub-product=Workspace&version=19.0.1)
+This branch covers version **v19.0.0** of OpenFin Workspace (there are versioned branches for other releases). [Click here to visit the release notes.](https://developer.openfin.co/versions/?product=Workspace#19.0.2)
 
 ## Before you get started
 
@@ -21,7 +21,7 @@ OpenFin Workspace is currently **only supported on Windows** but this repo can b
 We recommend:
 
 - Using [Node.Js 18+](https://nodejs.org/en/about/previous-releases)
-- Using [RVM 7+](https://developer.openfin.co/versions/#/?product=RVM) on Windows (RVM on the Mac will be version 12+) - The RVM should auto update so this applies to environments where a specific RVM version is used.
+- Using [RVM 7+](https://developer.openfin.co/versions/?product=RVM) on Windows (RVM on the Mac will be version 12+) - The RVM should auto update so this applies to environments where a specific RVM version is used.
 - Running [OpenFin Health Check](https://cdn.openfin.co/health/deployment/index.html) - Load this page to see if you will be able to install/run OpenFin without issue.
 - Installing [OpenFin Process Manager](https://start.openfin.co/pm) - Install the OpenFin process manager application (this will let you debug any issues you might have with running this repo or your changes)
 - Cloning this repo using: **git clone https://github.com/built-on-openfin/workspace-starter.git --depth=1** - We have a lot of history and versioned branches but you only need the main branch to get started (it will always reflect the latest stable release).
