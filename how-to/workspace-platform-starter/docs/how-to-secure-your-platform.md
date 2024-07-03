@@ -38,7 +38,7 @@ There are arguments you can specify that will isolate your application while sti
 
 ```json
 "runtime": {
-  "arguments": "--v=1 --inspect --enable-mesh --security-realm=second-workspace-starter-how-to-workspace-platform-starter",
+  "arguments": "--enable-mesh --security-realm=second-workspace-starter-how-to-workspace-platform-starter",
   ...
  },
 ```

@@ -104,10 +104,13 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 			if (salesforceIntegration) {
 				if (salesforceIntegration?.getSearchResultsProgress) {
-					const searching = await salesforceIntegration.getSearchResultsProgress(request.query,
-						lastResponse, {
-						queryMinLength: 3
-					});
+					const searching = await salesforceIntegration.getSearchResultsProgress(
+						request.query,
+						lastResponse,
+						{
+							queryMinLength: 3
+						}
+					);
 					results.push(...searching);
 				}
 				// Get any home results from the salesforce integration
