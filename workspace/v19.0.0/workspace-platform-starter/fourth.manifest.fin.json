@@ -3,18 +3,20 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=fourth-workspace-starter-how-to-workspace-platform-starter",
-		"version": "38.126.82.58"
-	},
-	"startup_app": {
-		"name": "fourth-workspace-starter-how-to-workspace-platform-starter"
+		"version": "38.126.82.61"
 	},
 	"platform": {
 		"uuid": "fourth-workspace-starter-how-to-workspace-platform-starter",
-		"name": "fourth-workspace-starter-how-to-workspace-platform-starter",
+		"name": "Fourth Workspace Platform Starter",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/shell/shell.html",
 		"preventQuitOnLastWindowClosed": true,
+		"appLogsTimezone": "utc",
+		"enableAppLogging": false,
+		"logManagement": {
+			"enabled": false
+		},
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
