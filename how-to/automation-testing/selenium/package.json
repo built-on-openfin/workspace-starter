@@ -13,7 +13,7 @@
 	"devDependencies": {
 		"@openfin/automation-helpers": "^1.2.0",
 		"chai": "4.3.10",
-		"chromedriver": "122.0.6",
+		"chromedriver": "126.0.4",
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"mocha": "10.3.0",

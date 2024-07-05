@@ -3,18 +3,20 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=workspace-platform-starter-for-fdc3",
-		"version": "38.126.82.58"
-	},
-	"startup_app": {
-		"name": "workspace-platform-starter-for-fdc3"
+		"version": "38.126.82.61"
 	},
 	"platform": {
-		"name": "workspace-platform-starter-for-fdc3",
+		"name": "Workspace Platform Starter FDC3",
 		"uuid": "workspace-platform-starter-for-fdc3",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
+		"appLogsTimezone": "utc",
+		"enableAppLogging": false,
+		"logManagement": {
+			"enabled": false
+		},
 		"permissions": {
 			"System": {
 				"openUrlWithBrowser": {

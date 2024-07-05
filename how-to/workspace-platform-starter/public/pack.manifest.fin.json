@@ -3,10 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "38.126.82.58"
-	},
-	"startup_app": {
-		"name": "default-workspace-platform"
+		"version": "38.126.82.61"
 	},
 	"platform": {
 		"name": "default-workspace-platform",
@@ -15,6 +12,11 @@
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
+		"appLogsTimezone": "utc",
+		"enableAppLogging": false,
+		"logManagement": {
+			"enabled": false
+		},
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,

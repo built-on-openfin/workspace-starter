@@ -2,6 +2,13 @@
 
 ## v19.0.0
 
+- Updated manifests to remove verbose logging --v=1 --inspect from the runtime.arguments setting: <https://developers.openfin.co/of-docs/docs/debugging#verbose-logging>
+- Updated manifests to disable app logging (where console log entries are written to disk). You can still see console log messages in dev tools or you can turn it back on by setting enableAppLogging to true.
+- Added new v38 runtime setting appLogsTimezone and set it to utc for when you do capture logs to disk.
+- Removed startup_app from manifests as the name setting in platform is sufficient for naming the app folder name when app logging is enabled.
+
+## v18.0.0
+
 - Added [apps-connector.json](./public/common/apps-connector.json) which includes an example salesforce app that can be added as the appId in the salesforce integration in the main [manifest.fin.json](./public/manifest.fin.json). The [apps-connector.json](./public/common/apps-connector.json) directory would also need to be added to the appProvider for it to be loaded. See [how to use our integrations](./docs/how-to-setup-example-home-integrations.md)
 - Updated WPS Interop Broker implementation so that it includes fdc3 app instances if they exist in the array of apps returned when findIntent is called as recommended by the FDC3 documentation.
 - Extended endpoint so that we now have a requestStream option for those implementing endpoints that want to return a stream of data instead of a simply requestResponse.
