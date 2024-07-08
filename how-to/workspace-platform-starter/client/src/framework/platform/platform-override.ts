@@ -233,7 +233,7 @@ export function overrideCallback(
 		 * @param id The id of the workspace to get.
 		 * @returns The workspace.
 		 */
-		public async getSavedWorkspace(id: string): Promise<Workspace> {
+		public async getSavedWorkspace(id: string): Promise<Workspace | undefined> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_GET}`);
@@ -253,7 +253,11 @@ export function overrideCallback(
 			}
 			logger.info(`Requesting saved workspace from default storage for workspace id: ${id}`);
 			const savedWorkspace = await super.getSavedWorkspace(id);
-			logger.info(`Returning saved workspace from default storage for workspace id: ${id}`);
+			if(savedWorkspace) {
+				logger.info(`Returning saved workspace from default storage for workspace id: ${id}`);
+			} else {
+				logger.warn(`No saved workspace found in default storage for workspace id: ${id}`);
+			}
 			return savedWorkspace;
 		}
 
@@ -466,7 +470,7 @@ export function overrideCallback(
 		 * @param id The id of the page to get.
 		 * @returns The page.
 		 */
-		public async getSavedPage(id: string): Promise<Page> {
+		public async getSavedPage(id: string): Promise<Page | undefined> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
@@ -490,7 +494,12 @@ export function overrideCallback(
 			}
 			logger.info(`Getting saved page with id ${id} from default storage`);
 			const pageResponse = await super.getSavedPage(id);
-			logger.info(`Returning saved page with id ${id} from default storage`);
+			if(pageResponse) {
+				logger.info(`Returning saved page with id ${id} from default storage`);
+			} else {
+				logger.warn(`No saved page found in default storage for page id: ${id}`);
+			}
+
 			return pageResponse;
 		}
 

@@ -56,6 +56,7 @@ import * as util from "./utils";
 import * as utilPosition from "./utils-position";
 import { getVersionInfo } from "./version";
 import { getNotificationClient } from "./workspace/notifications";
+import { objectClone } from "./utils";
 
 const logger = createLogger("Modules");
 let passedSessionId: string;

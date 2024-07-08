@@ -278,7 +278,7 @@ function overrideCallback(
 		 * @param id The id of the workspace to get.
 		 * @returns The workspace.
 		 */
-		public async getSavedWorkspace(id: string): Promise<Workspace> {
+		public async getSavedWorkspace(id: string): Promise<Workspace | undefined> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			return super.getSavedWorkspace(id);
@@ -333,7 +333,7 @@ function overrideCallback(
 		 * @param id The id of the saved page to get.
 		 * @returns The saved page.
 		 */
-		public async getSavedPage(id: string): Promise<Page> {
+		public async getSavedPage(id: string): Promise<Page | undefined> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			return super.getSavedPage(id);

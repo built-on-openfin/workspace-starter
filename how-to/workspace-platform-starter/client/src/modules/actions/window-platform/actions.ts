@@ -142,19 +142,23 @@ export class WindowPlatformActionsProvider implements Actions {
 	private async getViewWindowIdentity(view: OpenFin.View): Promise<OpenFin.Identity> {
 		const currentWindow = await view.getCurrentWindow();
 
-		// If the view does is not yet attached to a window, wait for the
-		// target-changed even which means it has been attached
-		if (isEmpty(currentWindow.identity.name) || currentWindow.identity.name === fin.me.identity.uuid) {
-			return new Promise<OpenFin.Identity>((resolve, reject) => {
-				view
-					.once("target-changed", async () => {
-						const hostWindow = await view.getCurrentWindow();
-						resolve(hostWindow.identity);
-					})
-					.catch(() => {});
-			});
+		// If the view is not yet attached to a window, wait for the
+		// target-changed event which means it has been attached
+		if (isEmpty(currentWindow.identity.name) || currentWindow.identity.name === currentWindow.identity.uuid) {
+		 return new Promise<OpenFin.Identity>((resolve, reject) => {
+		  // eslint-disable-next-line jsdoc/require-jsdoc
+		  async function hostWindowChanged(): Promise<void> {
+				 const hostWindow = await view.getCurrentWindow();
+				 if (hostWindow.identity.name !== hostWindow.identity.uuid) {
+					 await view.removeListener("target-changed", hostWindowChanged);
+					 resolve(hostWindow.identity);
+				 }
+		  }
+		  view
+		   .on("target-changed", hostWindowChanged)
+		   .catch(() => {});
+		 });
 		}
-
 		return currentWindow.identity;
 	}
 }
