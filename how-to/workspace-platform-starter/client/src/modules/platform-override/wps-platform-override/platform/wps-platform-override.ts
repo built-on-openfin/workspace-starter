@@ -37,7 +37,7 @@ import type {
 	WorkspaceChangedLifecyclePayload
 } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
-import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
+import type { PlatformMenuClient, PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
 import type { EndpointPageGetRequest,
 	EndpointPageGetResponse,
 	EndpointPageListRequest,
@@ -73,6 +73,7 @@ import {
 	mapPlatformWorkspaceToStorage,
 	mapStorageToPlatformWorkspace
 } from "./platform-mapper";
+import { buildDefaultOptions, duplicateLayout } from "./util";
 
 const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
@@ -123,7 +124,7 @@ export async function getConstructorOverride(
 	}
 
 	let analyticsClient: AnalyticsClient | undefined;
-	 
+
 	if(helpers.getAnalyticsClient) {
 	   analyticsClient = await helpers.getAnalyticsClient();
 	}
@@ -132,16 +133,18 @@ export async function getConstructorOverride(
 		!helpers.getThemeClient ||
 		!helpers.getVersionInfo ||
 		!helpers.getPlatform ||
-		!helpers.getMenuClient) {
+		!helpers.getMenuClient ||
+	    !helpers.fireLifecycleEvent) {
 	 	throw new Error(
 	 		"Platform Override Constructor is missing required helpers. The platform override will not function correctly so this error is to flag the issue."
 	 	);
 	 }
 	 const versionInfo = await helpers.getVersionInfo();
 	 const getCurrentSync = helpers.getPlatform;
-	 const menuClient = await helpers.getMenuClient();
+	 const menuClient = await helpers.getMenuClient() as PlatformMenuClient;
 	 const utilClient = helpers.getUtilClient();
 	 const isEmpty = utilClient.general.isEmpty;
+	 const fireLifecycleEvent = helpers.fireLifecycleEvent;
 
 	return (Base: OpenFin.Constructor<WorkspacePlatformProvider>) =>
 	/**
@@ -396,6 +399,9 @@ export async function getConstructorOverride(
 		 * @returns True if the workspace was applied.
 		 */
 		public async applyWorkspace(payload: ApplyWorkspacePayload): Promise<boolean> {
+			if(!payload) {
+				return false;
+			}
 			const platform = getCurrentSync();
 			if (!workspaceApplied) {
 				let skipPrompt;
@@ -406,7 +412,8 @@ export async function getConstructorOverride(
 						payload.options = {
 							skipPrompt
 						};
-					} else if (isEmpty(payload.options.skipPrompt)) {
+					} else if (!utilClient.general.isEmpty(payload.options) &&
+					utilClient.general.isEmpty(payload.options.skipPrompt)) {
 						payload.options.skipPrompt = skipPrompt;
 					}
 				}
@@ -472,7 +479,7 @@ export async function getConstructorOverride(
 		 * @param id The id of the page to get.
 		 * @returns The page.
 		 */
-		public async getSavedPage(id: string): Promise<Page> {
+		public async getSavedPage(id: string): Promise<Page | undefined> {
 			// you can add your own custom implementation here if you are storing your pages
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
@@ -649,7 +656,7 @@ export async function getConstructorOverride(
 			req: OpenGlobalContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
-			const template = await getGlobalMenu(req.template, { windowIdentity: req.identity });
+			const template = await menuClient.getGlobalMenu(req.template, { windowIdentity: req.identity });
 
 			const popupMenuStyle = globalMenuStyle ?? menuClient.getPopupMenuStyle();
 
@@ -686,7 +693,7 @@ export async function getConstructorOverride(
 			req: OpenViewTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
-			const template = await getViewMenu(req.template, {
+			const template = await menuClient.getViewMenu(req.template, {
 				windowIdentity: req.identity,
 				views: req.selectedViews
 			});
@@ -726,7 +733,8 @@ export async function getConstructorOverride(
 			req: OpenPageTabContextMenuPayload,
 			callerIdentity: OpenFin.Identity
 		): Promise<void> {
-			const template = await getPageMenu(req.template, { windowIdentity: req.identity, pageId: req.pageId });
+			const template = await menuClient.getPageMenu(req.template,
+				{ windowIdentity: req.identity, pageId: req.pageId });
 
 			const popupMenuStyle = pageMenuStyle ?? menuClient.getPopupMenuStyle();
 
