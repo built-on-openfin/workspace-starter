@@ -32,7 +32,8 @@ import type {
 	IntentTargetMetaData,
 	ProcessedContext,
 	PlatformInteropOverrideOptions,
-	PlatformInteropBrokerHelpers
+	PlatformInteropBrokerHelpers,
+	ContextOptions
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
 import {
@@ -94,6 +95,8 @@ export async function getConstructorOverride(
 
 			private readonly _appIdHelper: AppIdHelper;
 
+			private readonly _contextOptions?: ContextOptions;
+
 			/**
 			 * Create a new instance of InteropBroker.
 			 */
@@ -112,6 +115,8 @@ export async function getConstructorOverride(
 
 				this._openOptions = options?.openOptions;
 				this._unregisteredApp = options?.unregisteredApp;
+				this._contextOptions = options?.contextOptions;
+
 				if (!isEmpty(this._unregisteredApp)) {
 					this._unregisteredApp.manifestType = MANIFEST_TYPES.UnregisteredApp.id;
 				}
@@ -185,9 +190,15 @@ export async function getConstructorOverride(
 				context: OpenFin.Context
 			): Promise<void> {
 				const passedContext: { [key: string]: unknown } = { ...context };
-				const contextMetadata = passedContext[this._metadataKey];
+				const contextMetadata = passedContext[this._metadataKey] as ContextMetadata;
 				if (!isEmpty(contextMetadata)) {
 					delete passedContext[this._metadataKey];
+				}
+				if (
+					this._contextOptions?.includeOriginator === false &&
+					contextMetadata?.source.instanceId === clientIdentity.endpointId
+				) {
+					return;
 				}
 				return super.invokeContextHandler(clientIdentity, handlerId, {
 					...passedContext,

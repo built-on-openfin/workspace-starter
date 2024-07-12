@@ -48,6 +48,10 @@ export interface PlatformInteropBrokerOptions extends ModuleList {
 	 */
 	openOptions?: OpenOptions;
 	/**
+	 * Options for when fdc3.broadcast or fin.me.interop.setContext is called.
+	 */
+	contextOptions?: ContextOptions;
+	/**
 	 * If an unregistered app is included here then it indicates you wish to support selecting views/windows that are
 	 * not linked to an app from an intent picker that supports instances. The intents and contexts in this app specify
 	 * which you support for unregistered instances. Do not specify a manifest or manifestType for this entry (we don't
@@ -138,6 +142,15 @@ export interface IntentOptions {
 	 * is 15000 (15 seconds)
 	 */
 	intentTimeout?: number;
+}
+/**
+ * Option for the Context Handling.
+ */
+export interface ContextOptions {
+	/**
+	 * Should the broker send context messages back to the sender? Default is true.
+	 */
+	includeOriginator?: boolean;
 }
 /**
  * Intent resolver options.

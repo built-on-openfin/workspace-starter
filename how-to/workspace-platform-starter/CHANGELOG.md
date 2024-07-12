@@ -6,6 +6,7 @@
 - Updated manifests to disable app logging (where console log entries are written to disk). You can still see console log messages in dev tools or you can turn it back on by setting enableAppLogging to true.
 - Added new v38 runtime setting appLogsTimezone and set it to utc for when you do capture logs to disk.
 - Removed startup_app from manifests as the name setting in platform is sufficient for naming the app folder name when app logging is enabled.
+- Added support to the interop broker for preventing context from being sent back to the originator (default behavior). See the [how to add context support to your app](./docs/how-to-add-context-support-to-your-app.md) document and scroll down to the section titled: Should the context object be sent back to the sender?
 
 ## v18.0.0
 

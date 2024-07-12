@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { ModuleImplementation, ModuleList } from "./module-shapes";
 /**
  * InitOptions Provider Options. This is a list of modules that will be loaded and used to handle init params (similar
@@ -66,6 +67,6 @@ export type InitOptionsActionHandler<T = unknown> = (
  * The handler for an init options listener.
  */
 export type InitOptionsListener = (
-	initOptions: UserAppConfigArgs,
+	initOptions: OpenFin.UserAppConfigArgs,
 	context: ActionHandlerContext
 ) => Promise<void>;
