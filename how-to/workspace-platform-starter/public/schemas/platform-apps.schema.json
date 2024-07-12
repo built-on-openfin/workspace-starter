@@ -146,7 +146,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -177,7 +177,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -203,7 +203,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"ContentCreationOptions": {
 			"$ref": "#/definitions/__type_3"
@@ -236,7 +236,7 @@
 			"$ref": "#/definitions/__type_13"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_7"
@@ -289,10 +289,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"DownloadShelfOptions": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
 		},
 		"HostLaunchOptions": {
 			"additionalProperties": false,
@@ -365,7 +365,7 @@
 			"$ref": "#/definitions/__type_10"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
@@ -410,13 +410,13 @@
 			]
 		},
 		"LayoutSnapshot": {
-			"$ref": "#/definitions/__type_16"
+			"$ref": "#/definitions/__type_17"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -499,19 +499,19 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_36"
-		},
-		"Partial_12": {
 			"$ref": "#/definitions/__type_37"
 		},
-		"Partial_13": {
+		"Partial_12": {
 			"$ref": "#/definitions/__type_38"
 		},
-		"Partial_14": {
+		"Partial_13": {
 			"$ref": "#/definitions/__type_39"
+		},
+		"Partial_14": {
+			"$ref": "#/definitions/__type_40"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_8"
@@ -520,22 +520,22 @@
 			"$ref": "#/definitions/__type_12"
 		},
 		"Partial_4": {
-			"$ref": "#/definitions/__type_14"
+			"$ref": "#/definitions/__type_15"
 		},
 		"Partial_5": {
-			"$ref": "#/definitions/__type_18"
-		},
-		"Partial_6": {
 			"$ref": "#/definitions/__type_19"
 		},
-		"Partial_7": {
+		"Partial_6": {
 			"$ref": "#/definitions/__type_20"
 		},
+		"Partial_7": {
+			"$ref": "#/definitions/__type_21"
+		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -676,7 +676,7 @@
 			"description": "Application interop."
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -707,13 +707,16 @@
 			"$ref": "#/definitions/__type_5"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_17"
+			"$ref": "#/definitions/__type_18"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_9"
+		},
+		"RuleMatchOptions": {
+			"$ref": "#/definitions/__type_14"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -872,11 +875,16 @@
 			"required": ["name"],
 			"type": "object"
 		},
+		"ViewThrottling": {
+			"description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
+			"enum": ["enabled", "scheduler-disabled"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_22"
+			"$ref": "#/definitions/__type_23"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_21"
+			"$ref": "#/definitions/__type_22"
 		},
 		"WaitForWindowClassStrategy": {
 			"additionalProperties": false,
@@ -1051,6 +1059,11 @@
 			"enum": ["maximized", "minimized", "normal"],
 			"type": "string"
 		},
+		"WindowThrottling": {
+			"description": "Window throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: The background throttling is true, but scheduler throttling is disabled.\n* `disabled`: The background throttling is false. The throttling is fully disabled.",
+			"enum": ["disabled", "enabled", "scheduler-disabled"],
+			"type": "string"
+		},
 		"WorkspacePlatformOptions": {
 			"$ref": "#/definitions/__type_11"
 		},
@@ -1199,7 +1212,8 @@
 					"type": "string"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_5"
+					"$ref": "#/definitions/Partial_5",
+					"description": "API permissions for code running in the view."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1235,6 +1249,10 @@
 				"target": {
 					"$ref": "#/definitions/Identity_5",
 					"description": "The identity of the window this view should be attached to."
+				},
+				"throttling": {
+					"$ref": "#/definitions/ViewThrottling",
+					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"url": {
 					"type": "string"
@@ -1338,6 +1356,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -1348,6 +1370,17 @@
 			"type": "object"
 		},
 		"__type_14": {
+			"additionalProperties": false,
+			"description": "Controls the behavior of the navigation URI pattern matching algorithm.",
+			"properties": {
+				"matchAllSchemes": {
+					"description": "Matches all schemes rather than just http and https when a wild card is specified. For example, `'*://*.site.com'` will\nonly match urls which begin with `'http:'` or `'https:'` unless this setting is `true`.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_15": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -1370,6 +1403,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -1379,7 +1416,7 @@
 			},
 			"type": "object"
 		},
-		"__type_15": {
+		"__type_16": {
 			"additionalProperties": false,
 			"properties": {
 				"border": {
@@ -1405,7 +1442,7 @@
 			"required": ["enabled"],
 			"type": "object"
 		},
-		"__type_16": {
+		"__type_17": {
 			"additionalProperties": false,
 			"properties": {
 				"layouts": {
@@ -1415,11 +1452,11 @@
 			"required": ["layouts"],
 			"type": "object"
 		},
-		"__type_17": {
+		"__type_18": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_18": {
+		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -1453,18 +1490,6 @@
 			},
 			"type": "object"
 		},
-		"__type_19": {
-			"additionalProperties": false,
-			"properties": {
-				"getFileDownloadLocation": {
-					"type": "boolean"
-				},
-				"setFileDownloadLocation": {
-					"type": "boolean"
-				}
-			},
-			"type": "object"
-		},
 		"__type_2": {
 			"additionalProperties": false,
 			"description": "Unique identifier for a window, view or iframe.",
@@ -1482,6 +1507,18 @@
 			"type": "object"
 		},
 		"__type_20": {
+			"additionalProperties": false,
+			"properties": {
+				"getFileDownloadLocation": {
+					"type": "boolean"
+				},
+				"setFileDownloadLocation": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_21": {
 			"additionalProperties": false,
 			"properties": {
 				"getAllExternalWindows": {
@@ -1688,7 +1725,7 @@
 			},
 			"type": "object"
 		},
-		"__type_21": {
+		"__type_22": {
 			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
@@ -1707,7 +1744,7 @@
 			},
 			"type": "object"
 		},
-		"__type_22": {
+		"__type_23": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1717,7 +1754,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1735,7 +1772,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1754,7 +1791,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1776,7 +1813,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -1815,7 +1852,7 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -1906,7 +1943,7 @@
 			],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -1919,19 +1956,6 @@
 				}
 			},
 			"required": ["x", "y"],
-			"type": "object"
-		},
-		"__type_29": {
-			"additionalProperties": false,
-			"properties": {
-				"dipRect": {
-					"$ref": "#/definitions/RectangleByEdgePositions"
-				},
-				"scaledRect": {
-					"$ref": "#/definitions/RectangleByEdgePositions"
-				}
-			},
-			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
 		"__type_3": {
@@ -1952,6 +1976,19 @@
 		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
+				"dipRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				},
+				"scaledRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				}
+			},
+			"required": ["dipRect", "scaledRect"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
+			"properties": {
 				"bottom": {
 					"type": "number"
 				},
@@ -1968,7 +2005,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2020,7 +2057,7 @@
 			],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2049,7 +2086,7 @@
 			},
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2086,11 +2123,11 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -2111,7 +2148,7 @@
 			},
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2141,7 +2178,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2155,21 +2192,6 @@
 				},
 				"width": {
 					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_38": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"type": "string"
 				}
 			},
 			"type": "object"
@@ -2225,6 +2247,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -2395,7 +2420,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_5"
+					"$ref": "#/definitions/Partial_5",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -2457,6 +2483,10 @@
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
 				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -2485,6 +2515,21 @@
 				},
 				"y": {
 					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_40": {
+			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
 				}
 			},
 			"type": "object"
