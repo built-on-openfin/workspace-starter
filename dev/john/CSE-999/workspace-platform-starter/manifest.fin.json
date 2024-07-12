@@ -108,6 +108,7 @@
 				},
 				"intentOptions": {},
 				"openOptions": {},
+				"contextOptions": {},
 				"unregisteredApp": {
 					"appId": "unregistered",
 					"title": "Other",
