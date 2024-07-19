@@ -7,7 +7,6 @@ const {
 	WebDriver,
 	WebDriverKeys
 } = require('@openfin/automation-helpers');
-const { NativeDriver, NativeDriverKeys } = require('@openfin/automation-native');
 const { expect } = require('chai');
 const { By } = require('selenium-webdriver');
 
@@ -32,7 +31,7 @@ describe('Register with Home', () => {
 	it('The runtime version should be set', async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal('29.108.73.14');
+		expect(version).to.equal('29.108.73.19');
 	});
 
 	it('The identity should be set', async () => {

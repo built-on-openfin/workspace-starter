@@ -12,7 +12,6 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
 		"@openfin/automation-helpers": "^1.0.1",
-		"@openfin/automation-native": "^1.0.1",
 		"chai": "4.3.7",
 		"chromedriver": "108.0.0",
 		"fkill": "7.2.1",

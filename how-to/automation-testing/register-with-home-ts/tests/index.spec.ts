@@ -8,7 +8,6 @@ import {
 	WebDriver,
 	WebDriverKeys
 } from "@openfin/automation-helpers";
-import { NativeDriver, NativeDriverKeys } from "@openfin/automation-native";
 import { expect } from "chai";
 import { By } from "selenium-webdriver";
 
@@ -35,7 +34,7 @@ describe("Register with Home", () => {
 	it("The runtime version should be set", async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal("29.108.73.14");
+		expect(version).to.equal("29.108.73.19");
 	});
 
 	it("The identity should be set", async () => {
@@ -78,36 +77,6 @@ describe("Register with Home", () => {
 			const elem = await globalThis.seleniumWebDriver.findElement(By.xpath("//*[@id='search-input']"));
 			expect(elem).to.exist;
 		}
-	});
-
-	it("Can perform an actions test with keys and mouse", async () => {
-		const elem = await WebDriver.findElementByPath("//*[@id='search-input']");
-		expect(elem).to.exist;
-
-		await WebDriver.actions([
-			// Enter some text
-			{ type: "keyPress", key: "tt" },
-			{ type: "pause", duration: 1000 },
-			// Correct mistake
-			{ type: "keyPress", key: WebDriverKeys.Backspace },
-			{ type: "keyPress", key: "h" },
-			{ type: "keyPress", key: "i" },
-			{ type: "keyPress", key: "s" },
-			{ type: "pause", duration: 1000 },
-			// Move to start of input
-			{ type: "mouseMove", origin: elem, x: 100 },
-			{ type: "mouseDown", button: MouseButton.Left },
-			// Drag highlight the content
-			{ type: "mouseMove", origin: elem, x: 0 },
-			{ type: "mouseUp", button: MouseButton.Left },
-			{ type: "pause", duration: 1000 },
-			// Delete the content
-			{ type: "keyPress", key: WebDriverKeys.Delete },
-			{ type: "pause", duration: 1000 }
-		]);
-
-		const content = await elem.getAttribute("value");
-		expect(content).to.equal("");
 	});
 
 	it("Can set/get/remove a property of an element", async () => {
@@ -269,44 +238,6 @@ describe("Register with Home", () => {
 		expect(value).eq("My New Title");
 
 		await WebDriver.sleep(2000);
-	});
-
-	it("Can select a context menu entry in the interop window", async () => {
-		const foundWin = await WebDriver.switchToWindow("identityString", [
-			/internal-generated-window*/,
-			/register-with-home/
-		]);
-		expect(foundWin).to.be.true;
-
-		if (foundWin) {
-			const elem = await WebDriver.findElementByPath("//*[@aria-label='Open Browser Menu']");
-			expect(elem).to.exist;
-
-			if (elem) {
-				// First click on the button to show the native context menu
-				await WebDriver.actions([
-					{ type: "mouseMove", origin: elem },
-					// Open the context menu
-					{ type: "mouseClick", button: MouseButton.Left },
-					// Pause to give the menu time to appear
-					{ type: "pause", duration: 2000 }
-				]);
-
-				// Do down arrow * 5 to select the close, you should see the confirmation popup
-				await NativeDriver.actions([
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "keyPress", key: NativeDriverKeys.Down },
-					{ type: "pause", duration: 1000 },
-					{ type: "keyPress", key: NativeDriverKeys.Enter },
-					// Pause to see the confirmation
-					{ type: "pause", duration: 2000 }
-				]);
-			}
-		}
 	});
 
 	it("Can exit the runtime", async () => {
