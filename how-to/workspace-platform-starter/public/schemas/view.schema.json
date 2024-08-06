@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -108,7 +108,7 @@
 			"$ref": "#/definitions/__type_5"
 		},
 		"DownloadShelfOptions": {
-			"$ref": "#/definitions/__type_14"
+			"$ref": "#/definitions/__type_15"
 		},
 		"Identity_5": {
 			"$ref": "#/definitions/__type_1"
@@ -122,7 +122,7 @@
 			"$ref": "#/definitions/__type_9"
 		},
 		"LayoutSnapshot": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -153,22 +153,22 @@
 			"$ref": "#/definitions/__type_11"
 		},
 		"Partial_3": {
-			"$ref": "#/definitions/__type_13"
+			"$ref": "#/definitions/__type_14"
 		},
 		"Partial_4": {
-			"$ref": "#/definitions/__type_17"
-		},
-		"Partial_5": {
 			"$ref": "#/definitions/__type_18"
 		},
-		"Partial_6": {
+		"Partial_5": {
 			"$ref": "#/definitions/__type_19"
 		},
+		"Partial_6": {
+			"$ref": "#/definitions/__type_20"
+		},
 		"Partial_7": {
-			"$ref": "#/definitions/__type_22"
+			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -194,10 +194,13 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_16"
+			"$ref": "#/definitions/__type_17"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_8"
+		},
+		"RuleMatchOptions": {
+			"$ref": "#/definitions/__type_13"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -385,7 +388,8 @@
 					"type": "string"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the view."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -421,6 +425,10 @@
 				"target": {
 					"$ref": "#/definitions/Identity_5",
 					"description": "The identity of the window this view should be attached to."
+				},
+				"throttling": {
+					"$ref": "#/definitions/ViewThrottling",
+					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"url": {
 					"type": "string"
@@ -459,16 +467,22 @@
 				"preventDragOut",
 				"processAffinity",
 				"target",
+				"throttling",
 				"url",
 				"zoomLevel"
 			],
 			"type": "object"
 		},
+		"ViewThrottling": {
+			"description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
+			"enum": ["enabled", "scheduler-disabled"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_21"
+			"$ref": "#/definitions/__type_22"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_20"
+			"$ref": "#/definitions/__type_21"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -525,6 +539,11 @@
 		"WindowState": {
 			"description": "Visibility state of a window.",
 			"enum": ["maximized", "minimized", "normal"],
+			"type": "string"
+		},
+		"WindowThrottling": {
+			"description": "Window throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: The background throttling is true, but scheduler throttling is disabled.\n* `disabled`: The background throttling is false. The throttling is fully disabled.",
+			"enum": ["disabled", "enabled", "scheduler-disabled"],
 			"type": "string"
 		},
 		"WorkspacePlatformOptions": {
@@ -624,6 +643,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -634,6 +657,17 @@
 			"type": "object"
 		},
 		"__type_13": {
+			"additionalProperties": false,
+			"description": "Controls the behavior of the navigation URI pattern matching algorithm.",
+			"properties": {
+				"matchAllSchemes": {
+					"description": "Matches all schemes rather than just http and https when a wild card is specified. For example, `'*://*.site.com'` will\nonly match urls which begin with `'http:'` or `'https:'` unless this setting is `true`.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_14": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -656,6 +690,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -665,7 +703,7 @@
 			},
 			"type": "object"
 		},
-		"__type_14": {
+		"__type_15": {
 			"additionalProperties": false,
 			"properties": {
 				"border": {
@@ -691,7 +729,7 @@
 			"required": ["enabled"],
 			"type": "object"
 		},
-		"__type_15": {
+		"__type_16": {
 			"additionalProperties": false,
 			"properties": {
 				"layouts": {
@@ -701,11 +739,11 @@
 			"required": ["layouts"],
 			"type": "object"
 		},
-		"__type_16": {
+		"__type_17": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_17": {
+		"__type_18": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -739,7 +777,7 @@
 			},
 			"type": "object"
 		},
-		"__type_18": {
+		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
 				"getFileDownloadLocation": {
@@ -751,7 +789,22 @@
 			},
 			"type": "object"
 		},
-		"__type_19": {
+		"__type_2": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_20": {
 			"additionalProperties": false,
 			"properties": {
 				"getAllExternalWindows": {
@@ -958,22 +1011,7 @@
 			},
 			"type": "object"
 		},
-		"__type_2": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_20": {
+		"__type_21": {
 			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
@@ -992,7 +1030,7 @@
 			},
 			"type": "object"
 		},
-		"__type_21": {
+		"__type_22": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1002,7 +1040,7 @@
 			},
 			"type": "object"
 		},
-		"__type_22": {
+		"__type_23": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1020,7 +1058,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -1165,7 +1203,8 @@
 					"type": "string"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the view."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1202,6 +1241,10 @@
 					"$ref": "#/definitions/Identity_5",
 					"description": "The identity of the window this view should be attached to."
 				},
+				"throttling": {
+					"$ref": "#/definitions/ViewThrottling",
+					"description": "{@inheritDoc ViewThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -1211,7 +1254,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1230,7 +1273,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1288,6 +1331,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -1458,7 +1504,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1519,6 +1566,10 @@
 				"taskbarIconGroup": {
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
+				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
 				},
 				"url": {
 					"type": "string"

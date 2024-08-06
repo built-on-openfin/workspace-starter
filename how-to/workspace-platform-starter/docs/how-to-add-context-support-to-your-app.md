@@ -180,6 +180,57 @@ If you are a platform owner with a variable number of apps from different conten
 
 We have an example of what this could be like in workspace platform starter. You can define endpoints ([See how to define endpoints](./how-to-define-endpoints.md)) that support a requestResponse function where the context will be passed to the function, enriched and then returned. This could be a single JavaScript module for one or more context types or you might have teams that build and own their own JavaScript module for their specific context types. This will let your platform scale without requiring direct changes to your broker's setContext function.
 
+## Should the context object be sent back to the sender?
+
+By default if you have a user channel context listener (e.g. listening on green) and you also publish a context message via fdc3.broadcast or fin.me.interop.setContext then the listener will receive the message you sent.
+
+### Checking to see if you are the originator of the context message
+
+Workspace Platform Starter supports the fdc3 preference of including app metadata alongside the context. You can check to see if you are the sender through a snippet like this:
+
+```javascript
+// get the app Id and instance Id of the current webpage
+const info = await fdc3.getInfo();
+const appMetadata = info.appMetadata;
+console.log(
+  `I am associated with appId: ${appMetadata.appId} and this specific instance of this app has the following instanceId: ${appMetadata.instanceId}`
+);
+
+// ... other logic followed by your contextListener
+// --------------------------------
+// Listening code
+// --------------------------------
+const userChannelHandler = (ctx, metadata) => {
+  if (
+    metadata !== undefined &&
+    metadata.source.appId === appMetadata.appId &&
+    metadata.source.instanceId === appMetadata.instanceId
+  ) {
+    console.log('We are not going to do anything with this context object as it came from ourselves');
+  } else {
+    console.log('User Context Received: ', ctx);
+  }
+};
+
+const userChannelListener = fdc3.addContextListener(null, userChannelHandler);
+```
+
+### Configure your interop broker to not pass context messages to the originator
+
+From workspace platform starter v19.0 we have added a new configuration option to the interop section of the platformProvider settings called contextOptions. ContextOptions has a setting called **includeOriginator**. By default this is true but if you set it to false it won't pass context to the source of the sent context.
+
+```json
+"platformProvider": {
+   ...
+   "interop": {
+    ...
+    "contextOptions": {
+     "includeOriginator": false
+    }
+   }
+  }
+```
+
 ## Test Harnesses
 
 It is useful to be able to test your app against something. When you reference the common apps feed in your instance of workspace platform starter you get a number of useful utilities. We provide two entries related to context sharing in FDC3:
@@ -198,7 +249,7 @@ Yes, to make development easier you can define a view that uses our app. We foll
 
 ```javascript
 {
-    "url": "https://samples.openfin.co/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+    "url": "https://samples.openfin.co/dev-extensions/extensions/v19.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
     "fdc3InteropApi": "2.0",
     "customData": {
         "contextData": null,
@@ -211,7 +262,7 @@ Yes, to make development easier you can define a view that uses our app. We foll
 
 ```javascript
 {
-    "url": "https://samples.openfin.co/dev-extensions/extensions/v18.0.0/interop/fdc3/context/fdc3-broadcast-view.html",
+    "url": "https://samples.openfin.co/dev-extensions/extensions/v19.0.0/interop/fdc3/context/fdc3-broadcast-view.html",
     "fdc3InteropApi": "1.2",
     "customData": {
         "contextData": null,

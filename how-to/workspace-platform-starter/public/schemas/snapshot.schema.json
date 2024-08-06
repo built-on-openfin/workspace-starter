@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -102,7 +102,7 @@
 			"$ref": "#/definitions/__type_11"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_2"
@@ -124,13 +124,13 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"DownloadShelfOptions": {
-			"$ref": "#/definitions/__type_13"
+			"$ref": "#/definitions/__type_14"
 		},
 		"Identity_5": {
-			"$ref": "#/definitions/__type_16"
+			"$ref": "#/definitions/__type_17"
 		},
 		"InjectionType": {
 			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
@@ -141,13 +141,13 @@
 			"$ref": "#/definitions/__type_5"
 		},
 		"LayoutSnapshot": {
-			"$ref": "#/definitions/__type_14"
+			"$ref": "#/definitions/__type_15"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -178,25 +178,25 @@
 			"$ref": "#/definitions/__type_10"
 		},
 		"Partial_3": {
-			"$ref": "#/definitions/__type_12"
+			"$ref": "#/definitions/__type_13"
 		},
 		"Partial_4": {
-			"$ref": "#/definitions/__type_17"
-		},
-		"Partial_5": {
 			"$ref": "#/definitions/__type_18"
 		},
-		"Partial_6": {
+		"Partial_5": {
 			"$ref": "#/definitions/__type_19"
 		},
-		"Partial_7": {
-			"$ref": "#/definitions/__type_22"
+		"Partial_6": {
+			"$ref": "#/definitions/__type_20"
 		},
-		"Partial_8": {
+		"Partial_7": {
 			"$ref": "#/definitions/__type_23"
 		},
+		"Partial_8": {
+			"$ref": "#/definitions/__type_24"
+		},
 		"Point": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -222,13 +222,16 @@
 			"$ref": "#/definitions/__type"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_4"
+		},
+		"RuleMatchOptions": {
+			"$ref": "#/definitions/__type_12"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -285,11 +288,16 @@
 			"required": ["behavior", "match"],
 			"type": "object"
 		},
+		"ViewThrottling": {
+			"description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
+			"enum": ["enabled", "scheduler-disabled"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_21"
+			"$ref": "#/definitions/__type_22"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_20"
+			"$ref": "#/definitions/__type_21"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -380,6 +388,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -549,7 +560,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -611,6 +623,10 @@
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
 				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -647,6 +663,11 @@
 		"WindowState": {
 			"description": "Visibility state of a window.",
 			"enum": ["maximized", "minimized", "normal"],
+			"type": "string"
+		},
+		"WindowThrottling": {
+			"description": "Window throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: The background throttling is true, but scheduler throttling is disabled.\n* `disabled`: The background throttling is false. The throttling is fully disabled.",
+			"enum": ["disabled", "enabled", "scheduler-disabled"],
 			"type": "string"
 		},
 		"WorkspacePlatformOptions": {
@@ -723,6 +744,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -893,7 +917,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -955,6 +980,10 @@
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
 				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -1010,6 +1039,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -1020,6 +1053,17 @@
 			"type": "object"
 		},
 		"__type_12": {
+			"additionalProperties": false,
+			"description": "Controls the behavior of the navigation URI pattern matching algorithm.",
+			"properties": {
+				"matchAllSchemes": {
+					"description": "Matches all schemes rather than just http and https when a wild card is specified. For example, `'*://*.site.com'` will\nonly match urls which begin with `'http:'` or `'https:'` unless this setting is `true`.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_13": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -1042,6 +1086,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -1051,7 +1099,7 @@
 			},
 			"type": "object"
 		},
-		"__type_13": {
+		"__type_14": {
 			"additionalProperties": false,
 			"properties": {
 				"border": {
@@ -1077,7 +1125,7 @@
 			"required": ["enabled"],
 			"type": "object"
 		},
-		"__type_14": {
+		"__type_15": {
 			"additionalProperties": false,
 			"properties": {
 				"layouts": {
@@ -1087,11 +1135,11 @@
 			"required": ["layouts"],
 			"type": "object"
 		},
-		"__type_15": {
+		"__type_16": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_16": {
+		"__type_17": {
 			"additionalProperties": false,
 			"description": "Unique identifier for a window, view or iframe.",
 			"properties": {
@@ -1107,7 +1155,7 @@
 			"required": ["name", "uuid"],
 			"type": "object"
 		},
-		"__type_17": {
+		"__type_18": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -1141,7 +1189,7 @@
 			},
 			"type": "object"
 		},
-		"__type_18": {
+		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
 				"getFileDownloadLocation": {
@@ -1153,7 +1201,22 @@
 			},
 			"type": "object"
 		},
-		"__type_19": {
+		"__type_2": {
+			"additionalProperties": false,
+			"description": "Configure the context menu when right-clicking on a window.",
+			"properties": {
+				"enabled": {
+					"description": "Displays the context menu on right click.",
+					"type": "boolean"
+				},
+				"template": {
+					"$ref": "#/definitions/Array",
+					"description": "Context menu items to display on right-click."
+				}
+			},
+			"type": "object"
+		},
+		"__type_20": {
 			"additionalProperties": false,
 			"properties": {
 				"getAllExternalWindows": {
@@ -1360,22 +1423,7 @@
 			},
 			"type": "object"
 		},
-		"__type_2": {
-			"additionalProperties": false,
-			"description": "Configure the context menu when right-clicking on a window.",
-			"properties": {
-				"enabled": {
-					"description": "Displays the context menu on right click.",
-					"type": "boolean"
-				},
-				"template": {
-					"$ref": "#/definitions/Array",
-					"description": "Context menu items to display on right-click."
-				}
-			},
-			"type": "object"
-		},
-		"__type_20": {
+		"__type_21": {
 			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
@@ -1394,7 +1442,7 @@
 			},
 			"type": "object"
 		},
-		"__type_21": {
+		"__type_22": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1404,7 +1452,7 @@
 			},
 			"type": "object"
 		},
-		"__type_22": {
+		"__type_23": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1422,7 +1470,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -1567,7 +1615,8 @@
 					"type": "string"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the view."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1604,6 +1653,10 @@
 					"$ref": "#/definitions/Identity_5",
 					"description": "The identity of the window this view should be attached to."
 				},
+				"throttling": {
+					"$ref": "#/definitions/ViewThrottling",
+					"description": "{@inheritDoc ViewThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -1613,7 +1666,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1632,7 +1685,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1654,7 +1707,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -1745,7 +1798,7 @@
 			],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -1760,7 +1813,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -1773,7 +1826,19 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -1792,19 +1857,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -1856,7 +1909,7 @@
 			],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,

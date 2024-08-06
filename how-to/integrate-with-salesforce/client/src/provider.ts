@@ -103,6 +103,16 @@ async function initializeWorkspaceComponents(): Promise<void> {
 			lastResponse.open();
 
 			if (salesforceIntegration) {
+				if (salesforceIntegration?.getSearchResultsProgress) {
+					const searching = await salesforceIntegration.getSearchResultsProgress(
+						request.query,
+						lastResponse,
+						{
+							queryMinLength: 3
+						}
+					);
+					results.push(...searching);
+				}
 				// Get any home results from the salesforce integration
 				const salesforceResults = await salesforceIntegration.getSearchResults(
 					request.query,
@@ -181,7 +191,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
+							url: "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
 							fdc3InteropApi: "2.0",
 							interop: {
 								currentContextGroup: "green"

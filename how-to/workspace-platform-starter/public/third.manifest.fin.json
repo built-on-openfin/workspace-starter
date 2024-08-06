@@ -2,19 +2,21 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--v=1 --inspect --enable-mesh --security-realm=workspace-platform-starter-for-fdc3",
-		"version": "36.122.80.11"
-	},
-	"startup_app": {
-		"name": "workspace-platform-starter-for-fdc3"
+		"arguments": "--enable-mesh --security-realm=workspace-platform-starter-for-fdc3",
+		"version": "38.126.82.61"
 	},
 	"platform": {
-		"name": "workspace-platform-starter-for-fdc3",
+		"name": "Workspace Platform Starter FDC3",
 		"uuid": "workspace-platform-starter-for-fdc3",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
+		"appLogsTimezone": "utc",
+		"enableAppLogging": false,
+		"logManagement": {
+			"enabled": false
+		},
 		"permissions": {
 			"System": {
 				"openUrlWithBrowser": {
@@ -62,7 +64,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
-		"name": "Workspace Platform Starter - v18.0.0 - FDC3 Workspace",
+		"name": "Workspace Platform Starter - v19.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

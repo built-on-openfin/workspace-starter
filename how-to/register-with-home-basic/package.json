@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-home-basic",
-	"version": "18.0.0",
+	"version": "19.0.0",
 	"description": "OpenFin Workspace -- Register with Home - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -20,12 +20,12 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "18.0.10",
-		"@openfin/workspace-platform": "18.0.10"
+		"@openfin/workspace": "19.0.3",
+		"@openfin/workspace-platform": "19.0.3"
 	},
 	"devDependencies": {
-		"@openfin/core": "36.80.11",
-		"@openfin/node-adapter": "36.80.11",
+		"@openfin/core": "38.82.61",
+		"@openfin/node-adapter": "38.82.61",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
