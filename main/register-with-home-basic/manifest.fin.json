@@ -2,8 +2,8 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--v=1 --inspect",
-		"version": "36.122.80.11"
+		"arguments": "",
+		"version": "38.126.82.61"
 	},
 	"platform": {
 		"uuid": "register-with-home-basic",
@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-home-basic/favicon.ico",
-		"name": "Register With Home - Basic - v18.0.0",
+		"name": "Register With Home - Basic - v19.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

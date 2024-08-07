@@ -53,7 +53,7 @@
             "$ref": "#/definitions/__type_3"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_56"
+            "$ref": "#/definitions/__type_57"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -359,7 +359,7 @@
             "type": "object"
         },
         "AutoResizeOptions": {
-            "$ref": "#/definitions/__type_28"
+            "$ref": "#/definitions/__type_29"
         },
         "AutoplayPolicyOptions": {
             "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -441,7 +441,7 @@
             "type": "object"
         },
         "Bounds": {
-            "$ref": "#/definitions/__type_27"
+            "$ref": "#/definitions/__type_28"
         },
         "BrokerConnection": {
             "additionalProperties": false,
@@ -771,7 +771,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_49"
+            "$ref": "#/definitions/__type_50"
         },
         "ConditionsProviderOptions": {
             "$ref": "#/definitions/ModuleList_3",
@@ -889,13 +889,24 @@
             "$ref": "#/definitions/__type_15"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_46"
+            "$ref": "#/definitions/__type_47"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_9"
         },
         "ContextMenuSettings": {
             "$ref": "#/definitions/__type_8"
+        },
+        "ContextOptions": {
+            "additionalProperties": false,
+            "description": "Option for the Context Handling.",
+            "properties": {
+                "includeOriginator": {
+                    "description": "Should the broker send context messages back to the sender? Default is true.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
         },
         "CustomActionSpecifier": {
             "additionalProperties": false,
@@ -1223,7 +1234,7 @@
         },
         "Data": {},
         "DeepPartial": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_38"
         },
         "DelayStrategy": {
             "additionalProperties": false,
@@ -1280,7 +1291,7 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_43"
+            "$ref": "#/definitions/__type_44"
         },
         "DockButtonAction": {
             "additionalProperties": false,
@@ -1558,7 +1569,7 @@
             "type": "object"
         },
         "DownloadShelfOptions": {
-            "$ref": "#/definitions/__type_17"
+            "$ref": "#/definitions/__type_18"
         },
         "EndpointClientDefaultOptions": {
             "additionalProperties": false,
@@ -1971,7 +1982,7 @@
             "$ref": "#/definitions/__type_4"
         },
         "Identity_5_1": {
-            "$ref": "#/definitions/__type_38"
+            "$ref": "#/definitions/__type_39"
         },
         "Image": {
             "additionalProperties": false,
@@ -2149,7 +2160,7 @@
             "$ref": "#/definitions/__type_12"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_48"
+            "$ref": "#/definitions/__type_49"
         },
         "LaunchPreference": {
             "additionalProperties": false,
@@ -2244,14 +2255,14 @@
             "type": "object"
         },
         "LayoutSnapshot": {
-            "$ref": "#/definitions/__type_18"
+            "$ref": "#/definitions/__type_19"
         },
         "LifecycleProviderOptions": {
             "$ref": "#/definitions/ModuleList_4",
             "description": "List of modules."
         },
         "LockUnlockPageConfig": {
-            "$ref": "#/definitions/__type_31"
+            "$ref": "#/definitions/__type_32"
         },
         "LoggerProviderOptions": {
             "$ref": "#/definitions/ModuleList_1",
@@ -3183,10 +3194,10 @@
             "type": "object"
         },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_45"
+            "$ref": "#/definitions/__type_46"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_41"
+            "$ref": "#/definitions/__type_42"
         },
         "NativeLaunchOptions": {
             "additionalProperties": false,
@@ -3337,7 +3348,7 @@
             "type": "object"
         },
         "NotificationIndicatorColorsWithScheme": {
-            "$ref": "#/definitions/__type_55"
+            "$ref": "#/definitions/__type_56"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -3372,23 +3383,23 @@
             "type": "object"
         },
         "NotificationsCustomManifestOptions": {
-            "$ref": "#/definitions/__type_39"
+            "$ref": "#/definitions/__type_40"
         },
         "O": {},
         "Omit": {
-            "$ref": "#/definitions/__type_29"
+            "$ref": "#/definitions/__type_30"
         },
         "Omit_1": {
-            "$ref": "#/definitions/__type_33"
-        },
-        "Omit_2": {
             "$ref": "#/definitions/__type_34"
         },
-        "Omit_3": {
+        "Omit_2": {
             "$ref": "#/definitions/__type_35"
         },
-        "Omit_4": {
+        "Omit_3": {
             "$ref": "#/definitions/__type_36"
+        },
+        "Omit_4": {
+            "$ref": "#/definitions/__type_37"
         },
         "OpenExternalPermission": {
             "additionalProperties": false,
@@ -3557,6 +3568,9 @@
                         "preventDragOut": {
                             "type": "boolean"
                         },
+                        "preventSplitterResize": {
+                            "type": "boolean"
+                        },
                         "reorderEnabled": {
                             "type": "boolean"
                         },
@@ -3600,9 +3614,11 @@
                 "Rename",
                 "Save",
                 "Save As",
+                "Delete Page",
                 "SaveWorkspaceAs",
                 "Refresh",
                 "Close others",
+                "Delete",
                 "Custom"
             ],
             "type": "string"
@@ -3681,25 +3697,25 @@
             "$ref": "#/definitions/__type_2"
         },
         "Partial_10": {
-            "$ref": "#/definitions/__type_26"
+            "$ref": "#/definitions/__type_27"
         },
         "Partial_11": {
-            "$ref": "#/definitions/__type_40"
+            "$ref": "#/definitions/__type_41"
         },
         "Partial_12": {
-            "$ref": "#/definitions/__type_47"
+            "$ref": "#/definitions/__type_48"
         },
         "Partial_13": {
-            "$ref": "#/definitions/__type_50"
-        },
-        "Partial_14": {
             "$ref": "#/definitions/__type_51"
         },
-        "Partial_15": {
+        "Partial_14": {
             "$ref": "#/definitions/__type_52"
         },
-        "Partial_16": {
+        "Partial_15": {
             "$ref": "#/definitions/__type_53"
+        },
+        "Partial_16": {
+            "$ref": "#/definitions/__type_54"
         },
         "Partial_2": {
             "$ref": "#/definitions/__type_6"
@@ -3711,22 +3727,22 @@
             "$ref": "#/definitions/__type_14"
         },
         "Partial_5": {
-            "$ref": "#/definitions/__type_16"
+            "$ref": "#/definitions/__type_17"
         },
         "Partial_6": {
-            "$ref": "#/definitions/__type_20"
-        },
-        "Partial_7": {
             "$ref": "#/definitions/__type_21"
         },
-        "Partial_8": {
+        "Partial_7": {
             "$ref": "#/definitions/__type_22"
         },
+        "Partial_8": {
+            "$ref": "#/definitions/__type_23"
+        },
         "Partial_9": {
-            "$ref": "#/definitions/__type_25"
+            "$ref": "#/definitions/__type_26"
         },
         "Pick": {
-            "$ref": "#/definitions/__type_32"
+            "$ref": "#/definitions/__type_33"
         },
         "PlatformApp": {
             "additionalProperties": false,
@@ -3992,6 +4008,10 @@
             "additionalProperties": false,
             "description": "Options for the platform interop broker.",
             "properties": {
+                "contextOptions": {
+                    "$ref": "#/definitions/ContextOptions",
+                    "description": "Options for when fdc3.broadcast or fin.me.interop.setContext is called."
+                },
                 "intentOptions": {
                     "$ref": "#/definitions/IntentOptions",
                     "description": "Options related to the way this platform supports intents"
@@ -4062,7 +4082,7 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_42"
+            "$ref": "#/definitions/__type_43"
         },
         "PopupMenuStyles": {
             "description": "The styles that can be used to display the popup menus.",
@@ -4138,16 +4158,19 @@
             "$ref": "#/definitions/__type_7"
         },
         "Record": {
-            "$ref": "#/definitions/__type_19"
+            "$ref": "#/definitions/__type_20"
         },
         "Record_1": {
-            "$ref": "#/definitions/__type_54"
+            "$ref": "#/definitions/__type_55"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_44"
+            "$ref": "#/definitions/__type_45"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_11"
+        },
+        "RuleMatchOptions": {
+            "$ref": "#/definitions/__type_16"
         },
         "ScoreOrder": {
             "description": "The order to sort scored search results in.",
@@ -4197,7 +4220,7 @@
             "type": "object"
         },
         "ShowHideTabsConfig": {
-            "$ref": "#/definitions/__type_30"
+            "$ref": "#/definitions/__type_31"
         },
         "ShowViewOnWindowResizeOptions": {
             "additionalProperties": false,
@@ -4996,11 +5019,19 @@
             ],
             "type": "string"
         },
+        "ViewThrottling": {
+            "description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
+            "enum": [
+                "enabled",
+                "scheduler-disabled"
+            ],
+            "type": "string"
+        },
         "ViewVisibilityOption": {
-            "$ref": "#/definitions/__type_24"
+            "$ref": "#/definitions/__type_25"
         },
         "ViewVisibilityOptions": {
-            "$ref": "#/definitions/__type_23"
+            "$ref": "#/definitions/__type_24"
         },
         "WaitForWindowClassStrategy": {
             "additionalProperties": false,
@@ -5255,6 +5286,15 @@
             ],
             "type": "object"
         },
+        "WindowThrottling": {
+            "description": "Window throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: The background throttling is true, but scheduler throttling is disabled.\n* `disabled`: The background throttling is false. The throttling is fully disabled.",
+            "enum": [
+                "disabled",
+                "enabled",
+                "scheduler-disabled"
+            ],
+            "type": "string"
+        },
         "WindowType": {
             "enum": [
                 "browser",
@@ -5336,6 +5376,9 @@
                 "backgroundColor": {
                     "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
                     "type": "string"
+                },
+                "backgroundThrottling": {
+                    "type": "boolean"
                 },
                 "closeOnLastViewRemoved": {
                     "type": "boolean"
@@ -5511,7 +5554,8 @@
                     "type": "number"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "API permissions for code running in the window."
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -5583,6 +5627,10 @@
                 "taskbarIconGroup": {
                     "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
                     "type": "string"
+                },
+                "throttling": {
+                    "$ref": "#/definitions/WindowThrottling",
+                    "description": "{@inheritDoc WindowThrottling}"
                 },
                 "updateStateIfExists": {
                     "type": "boolean"
@@ -5791,6 +5839,10 @@
                     },
                     "type": "array"
                 },
+                "matchOptions": {
+                    "$ref": "#/definitions/RuleMatchOptions",
+                    "description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+                },
                 "whitelist": {
                     "items": {
                         "type": "string"
@@ -5801,6 +5853,17 @@
             "type": "object"
         },
         "__type_16": {
+            "additionalProperties": false,
+            "description": "Controls the behavior of the navigation URI pattern matching algorithm.",
+            "properties": {
+                "matchAllSchemes": {
+                    "description": "Matches all schemes rather than just http and https when a wild card is specified. For example, `'*://*.site.com'` will\nonly match urls which begin with `'http:'` or `'https:'` unless this setting is `true`.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_17": {
             "additionalProperties": false,
             "properties": {
                 "allowlist": {
@@ -5823,6 +5886,10 @@
                     },
                     "type": "array"
                 },
+                "matchOptions": {
+                    "$ref": "#/definitions/RuleMatchOptions",
+                    "description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+                },
                 "whitelist": {
                     "items": {
                         "type": "string"
@@ -5832,7 +5899,7 @@
             },
             "type": "object"
         },
-        "__type_17": {
+        "__type_18": {
             "additionalProperties": false,
             "properties": {
                 "border": {
@@ -5860,7 +5927,7 @@
             ],
             "type": "object"
         },
-        "__type_18": {
+        "__type_19": {
             "additionalProperties": false,
             "properties": {
                 "layouts": {
@@ -5870,10 +5937,6 @@
             "required": [
                 "layouts"
             ],
-            "type": "object"
-        },
-        "__type_19": {
-            "additionalProperties": false,
             "type": "object"
         },
         "__type_2": {
@@ -6032,7 +6095,8 @@
                     "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "API permissions for code running in the view."
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -6077,6 +6141,10 @@
                     "$ref": "#/definitions/Identity_5",
                     "description": "The identity of the window this view should be attached to."
                 },
+                "throttling": {
+                    "$ref": "#/definitions/ViewThrottling",
+                    "description": "{@inheritDoc ViewThrottling}"
+                },
                 "url": {
                     "type": "string"
                 },
@@ -6087,6 +6155,10 @@
             "type": "object"
         },
         "__type_20": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_21": {
             "additionalProperties": false,
             "properties": {
                 "Application": {
@@ -6129,7 +6201,7 @@
             },
             "type": "object"
         },
-        "__type_21": {
+        "__type_22": {
             "additionalProperties": false,
             "properties": {
                 "getFileDownloadLocation": {
@@ -6141,7 +6213,7 @@
             },
             "type": "object"
         },
-        "__type_22": {
+        "__type_23": {
             "additionalProperties": false,
             "properties": {
                 "getAllExternalWindows": {
@@ -6383,7 +6455,7 @@
             },
             "type": "object"
         },
-        "__type_23": {
+        "__type_24": {
             "additionalProperties": false,
             "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
             "properties": {
@@ -6402,7 +6474,7 @@
             },
             "type": "object"
         },
-        "__type_24": {
+        "__type_25": {
             "additionalProperties": false,
             "description": "Configuration for view visibility settings",
             "properties": {
@@ -6412,7 +6484,7 @@
             },
             "type": "object"
         },
-        "__type_25": {
+        "__type_26": {
             "additionalProperties": false,
             "properties": {
                 "customContext": {
@@ -6430,7 +6502,7 @@
             },
             "type": "object"
         },
-        "__type_26": {
+        "__type_27": {
             "additionalProperties": false,
             "properties": {
                 "_internalWorkspaceData": {},
@@ -6586,7 +6658,8 @@
                     "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "API permissions for code running in the view."
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -6631,6 +6704,10 @@
                     "$ref": "#/definitions/Identity_5",
                     "description": "The identity of the window this view should be attached to."
                 },
+                "throttling": {
+                    "$ref": "#/definitions/ViewThrottling",
+                    "description": "{@inheritDoc ViewThrottling}"
+                },
                 "url": {
                     "type": "string"
                 },
@@ -6640,7 +6717,7 @@
             },
             "type": "object"
         },
-        "__type_27": {
+        "__type_28": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -6664,7 +6741,7 @@
             ],
             "type": "object"
         },
-        "__type_28": {
+        "__type_29": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -6686,7 +6763,36 @@
             },
             "type": "object"
         },
-        "__type_29": {
+        "__type_3": {
+            "additionalProperties": false,
+            "description": "Configurations for API injection.",
+            "properties": {
+                "fin": {
+                    "$ref": "#/definitions/InjectionType",
+                    "description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
+                },
+                "iframe": {
+                    "additionalProperties": false,
+                    "description": "Configure conditional injection of OpenFin API into iframes",
+                    "properties": {
+                        "crossOriginInjection": {
+                            "description": "Inject OpenFin API into cross-origin iframes",
+                            "type": "boolean"
+                        },
+                        "enableDeprecatedSharedName": {
+                            "type": "boolean"
+                        },
+                        "sameOriginInjection": {
+                            "description": "Inject OpenFin API into same-origin iframes",
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "__type_30": {
             "additionalProperties": false,
             "properties": {
                 "_internalWorkspaceData": {},
@@ -6838,7 +6944,8 @@
                     "type": "string"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "API permissions for code running in the view."
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -6879,6 +6986,10 @@
                     "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
                     "type": "string"
                 },
+                "throttling": {
+                    "$ref": "#/definitions/ViewThrottling",
+                    "description": "{@inheritDoc ViewThrottling}"
+                },
                 "url": {
                     "type": "string"
                 },
@@ -6888,36 +6999,7 @@
             },
             "type": "object"
         },
-        "__type_3": {
-            "additionalProperties": false,
-            "description": "Configurations for API injection.",
-            "properties": {
-                "fin": {
-                    "$ref": "#/definitions/InjectionType",
-                    "description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
-                },
-                "iframe": {
-                    "additionalProperties": false,
-                    "description": "Configure conditional injection of OpenFin API into iframes",
-                    "properties": {
-                        "crossOriginInjection": {
-                            "description": "Inject OpenFin API into cross-origin iframes",
-                            "type": "boolean"
-                        },
-                        "enableDeprecatedSharedName": {
-                            "type": "boolean"
-                        },
-                        "sameOriginInjection": {
-                            "description": "Inject OpenFin API into same-origin iframes",
-                            "type": "boolean"
-                        }
-                    },
-                    "type": "object"
-                }
-            },
-            "type": "object"
-        },
-        "__type_30": {
+        "__type_31": {
             "additionalProperties": false,
             "description": "Configuration Object for the show/hide tabs button within the browser toolbar",
             "properties": {
@@ -6961,7 +7043,7 @@
             ],
             "type": "object"
         },
-        "__type_31": {
+        "__type_32": {
             "additionalProperties": false,
             "description": "Configuration Object for the page lock/unlock button within the browser toolbar",
             "properties": {
@@ -6983,7 +7065,7 @@
             ],
             "type": "object"
         },
-        "__type_32": {
+        "__type_33": {
             "additionalProperties": false,
             "properties": {
                 "closeButton": {
@@ -7017,7 +7099,7 @@
             },
             "type": "object"
         },
-        "__type_33": {
+        "__type_34": {
             "additionalProperties": false,
             "properties": {
                 "conditions": {
@@ -7064,7 +7146,7 @@
             ],
             "type": "object"
         },
-        "__type_34": {
+        "__type_35": {
             "additionalProperties": false,
             "properties": {
                 "appId": {
@@ -7096,7 +7178,7 @@
             ],
             "type": "object"
         },
-        "__type_35": {
+        "__type_36": {
             "additionalProperties": false,
             "properties": {
                 "action": {
@@ -7141,7 +7223,7 @@
             ],
             "type": "object"
         },
-        "__type_36": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "conditions": {
@@ -7193,7 +7275,7 @@
             ],
             "type": "object"
         },
-        "__type_37": {
+        "__type_38": {
             "additionalProperties": false,
             "properties": {
                 "clientAPIVersion": {
@@ -7251,7 +7333,7 @@
             },
             "type": "object"
         },
-        "__type_38": {
+        "__type_39": {
             "additionalProperties": false,
             "properties": {
                 "name": {
@@ -7263,25 +7345,6 @@
                     "type": "string"
                 }
             },
-            "type": "object"
-        },
-        "__type_39": {
-            "additionalProperties": false,
-            "description": "Options for using privately hosted notification service.",
-            "properties": {
-                "manifestUrl": {
-                    "description": "A custom manifest location to start the notification service from.\nThe UUID cannot be OpenFin hosted Notification Service UUID, 'notifications-service'.",
-                    "type": "string"
-                },
-                "manifestUuid": {
-                    "description": "The UUID of the provided custom notifications service manifest.\nThis value **MUST** match the UUID of the manifest provided in `manifestUrl`.",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "manifestUrl",
-                "manifestUuid"
-            ],
             "type": "object"
         },
         "__type_4": {
@@ -7304,6 +7367,25 @@
             "type": "object"
         },
         "__type_40": {
+            "additionalProperties": false,
+            "description": "Options for using privately hosted notification service.",
+            "properties": {
+                "manifestUrl": {
+                    "description": "A custom manifest location to start the notification service from.\nThe UUID cannot be OpenFin hosted Notification Service UUID, 'notifications-service'.",
+                    "type": "string"
+                },
+                "manifestUuid": {
+                    "description": "The UUID of the provided custom notifications service manifest.\nThis value **MUST** match the UUID of the manifest provided in `manifestUrl`.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "manifestUrl",
+                "manifestUuid"
+            ],
+            "type": "object"
+        },
+        "__type_41": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -7348,7 +7430,7 @@
             },
             "type": "object"
         },
-        "__type_41": {
+        "__type_42": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -7445,7 +7527,7 @@
             ],
             "type": "object"
         },
-        "__type_42": {
+        "__type_43": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -7463,7 +7545,7 @@
             ],
             "type": "object"
         },
-        "__type_43": {
+        "__type_44": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -7479,7 +7561,7 @@
             ],
             "type": "object"
         },
-        "__type_44": {
+        "__type_45": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -7503,7 +7585,7 @@
             ],
             "type": "object"
         },
-        "__type_45": {
+        "__type_46": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -7561,7 +7643,7 @@
             ],
             "type": "object"
         },
-        "__type_46": {
+        "__type_47": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -7592,7 +7674,7 @@
             },
             "type": "object"
         },
-        "__type_47": {
+        "__type_48": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -7629,29 +7711,8 @@
             },
             "type": "object"
         },
-        "__type_48": {
-            "additionalProperties": false,
-            "type": "object"
-        },
         "__type_49": {
             "additionalProperties": false,
-            "properties": {
-                "publickey": {
-                    "type": "string"
-                },
-                "serial": {
-                    "type": "string"
-                },
-                "subject": {
-                    "type": "string"
-                },
-                "thumbprint": {
-                    "type": "string"
-                },
-                "trusted": {
-                    "type": "boolean"
-                }
-            },
             "type": "object"
         },
         "__type_5": {
@@ -7672,6 +7733,27 @@
             "type": "object"
         },
         "__type_50": {
+            "additionalProperties": false,
+            "properties": {
+                "publickey": {
+                    "type": "string"
+                },
+                "serial": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "thumbprint": {
+                    "type": "string"
+                },
+                "trusted": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_51": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -7701,7 +7783,7 @@
             },
             "type": "object"
         },
-        "__type_51": {
+        "__type_52": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -7715,21 +7797,6 @@
                 },
                 "width": {
                     "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "__type_52": {
-            "additionalProperties": false,
-            "properties": {
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "url": {
-                    "type": "string"
                 }
             },
             "type": "object"
@@ -7751,6 +7818,17 @@
         },
         "__type_54": {
             "additionalProperties": false,
+            "properties": {
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "__type_55": {
@@ -7758,6 +7836,10 @@
             "type": "object"
         },
         "__type_56": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_57": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -7828,6 +7910,9 @@
                 "backgroundColor": {
                     "description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
                     "type": "string"
+                },
+                "backgroundThrottling": {
+                    "type": "boolean"
                 },
                 "closeOnLastViewRemoved": {
                     "type": "boolean"
@@ -8003,7 +8088,8 @@
                     "type": "number"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/Partial_6"
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "API permissions for code running in the window."
                 },
                 "preloadScripts": {
                     "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -8072,6 +8158,10 @@
                 "taskbarIconGroup": {
                     "description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
                     "type": "string"
+                },
+                "throttling": {
+                    "$ref": "#/definitions/WindowThrottling",
+                    "description": "{@inheritDoc WindowThrottling}"
                 },
                 "url": {
                     "type": "string"
