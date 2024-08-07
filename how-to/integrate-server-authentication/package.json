@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-server-authentication",
-	"version": "19.1.0",
+	"version": "19.1.20",
 	"description": "OpenFin Workspace -- Integrate with Server Authentication",
 	"main": "index.js",
 	"scripts": {
@@ -21,13 +21,13 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "19.1.9",
-		"@openfin/workspace-platform": "19.1.9",
+		"@openfin/workspace": "19.1.20",
+		"@openfin/workspace-platform": "19.1.20",
 		"cookie-parser": "^1.4.6"
 	},
 	"devDependencies": {
-		"@openfin/core": "38.82.58",
-		"@openfin/node-adapter": "38.82.58",
+		"@openfin/core": "38.82.64",
+		"@openfin/node-adapter": "38.82.64",
 		"@types/cookie-parser": "^1.4.7",
 		"@types/express": "^4.17.21",
 		"eslint": "8.57.0",
