@@ -1,65 +1,65 @@
 {
-	"name": "openfin-workspace-starter",
-	"version": "19.0.0",
-	"description": "OpenFin Workspace Starter",
-	"scripts": {
-		"build": "node ./scripts/workspaces.mjs build",
-		"package-how-tos": "node ./scripts/package.js --legacy",
-		"package": "node ./scripts/package.js",
-		"package-for-github": "node ./scripts/package.js --location github",
-		"package-for-aws": "node ./scripts/package.js --location aws",
-		"start": "echo You must be in a folder for a specific how-to to use npm run start e.g. ./how-to/register-with-home",
-		"prettier": "node ./scripts/workspaces.mjs prettier",
-		"prettier-check": "node ./scripts/workspaces.mjs prettier-check",
-		"eslint": "node ./scripts/workspaces.mjs eslint",
-		"markdownlint": "node ./scripts/workspaces.mjs markdownlint",
-		"validate": "node ./scripts/workspaces.mjs validate",
-		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,chai,fkill*,node-emoji,@openfin/core,@openfin/node-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
-		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
-		"common-update": "node ./scripts/common-update.mjs"
-	},
-	"workspaces": [
-		"how-to/*",
-		"how-to/automation-testing/*"
-	],
-	"packageExclude": [
-		"how-to/hints-and-tips",
-		"how-to/integrate-server-authentication",
-		"how-to/integrate-with-ms365-basic",
-		"how-to/integrate-with-ms365-low-code",
-		"how-to/integrate-with-ms365-low-code-basic",
-		"how-to/integrate-with-openid-connect",
-		"how-to/integrate-with-rss",
-		"how-to/integrate-with-salesforce-basic",
-		"how-to/integrate-with-snap-basic",
-		"how-to/migrate-from-a-previous-version",
-		"how-to/automation-testing",
-		"how-to/automation-testing/register-with-home-js",
-		"how-to/automation-testing/register-with-home-ts",
-		"how-to/automation-testing/register-with-store-js",
-		"how-to/automation-testing/selenium",
-		"how-to/automation-testing/wdio"
-	],
-	"packageCustomFolder": "",
-	"contributors": [
-		"adam.saland@openfin.co",
-		"ameet.jayawant@openfin.co",
-		"john.mandia@openfin.co",
-		"martyn.janes@openfin.co",
-		"richard.browne@openfin.co"
-	],
-	"license": "SEE LICENSE IN LICENSE.MD",
-	"devDependencies": {
-		"@openfin/node-adapter": "38.82.61",
-		"fast-glob": "3.3.2",
-		"fs-extra": "11.2.0",
-		"replace-in-file": "7.1.0",
-		"yargs": "17.7.2"
-	},
-	"overrides": {
-		"parse-bmfont-xml": {
-			"xml2js": "0.5.0"
-		}
-	}
+  "name": "openfin-workspace-starter",
+  "version": "19.1.0",
+  "description": "OpenFin Workspace Starter",
+  "scripts": {
+    "build": "node ./scripts/workspaces.mjs build",
+    "package-how-tos": "node ./scripts/package.js --legacy",
+    "package": "node ./scripts/package.js",
+    "package-for-github": "node ./scripts/package.js --location github",
+    "package-for-aws": "node ./scripts/package.js --location aws",
+    "start": "echo You must be in a folder for a specific how-to to use npm run start e.g. ./how-to/register-with-home",
+    "prettier": "node ./scripts/workspaces.mjs prettier",
+    "prettier-check": "node ./scripts/workspaces.mjs prettier-check",
+    "eslint": "node ./scripts/workspaces.mjs eslint",
+    "markdownlint": "node ./scripts/workspaces.mjs markdownlint",
+    "validate": "node ./scripts/workspaces.mjs validate",
+    "list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
+    "update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,chai,fkill*,node-emoji,@openfin/core,@openfin/node-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
+    "remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
+    "common-update": "node ./scripts/common-update.mjs"
+  },
+  "workspaces": [
+    "how-to/*",
+    "how-to/automation-testing/*"
+  ],
+  "packageExclude": [
+    "how-to/hints-and-tips",
+    "how-to/integrate-server-authentication",
+    "how-to/integrate-with-ms365-basic",
+    "how-to/integrate-with-ms365-low-code",
+    "how-to/integrate-with-ms365-low-code-basic",
+    "how-to/integrate-with-openid-connect",
+    "how-to/integrate-with-rss",
+    "how-to/integrate-with-salesforce-basic",
+    "how-to/integrate-with-snap-basic",
+    "how-to/migrate-from-a-previous-version",
+    "how-to/automation-testing",
+    "how-to/automation-testing/register-with-home-js",
+    "how-to/automation-testing/register-with-home-ts",
+    "how-to/automation-testing/register-with-store-js",
+    "how-to/automation-testing/selenium",
+    "how-to/automation-testing/wdio"
+  ],
+  "packageCustomFolder": "",
+  "contributors": [
+    "adam.saland@here.io",
+    "ameet.jayawant@here.io",
+    "john.mandia@here.io",
+    "richard.browne@here.io",
+    "joe.ransegnola@here.io"
+  ],
+  "license": "SEE LICENSE IN LICENSE.MD",
+  "devDependencies": {
+    "@openfin/node-adapter": "38.82.64",
+    "fast-glob": "3.3.2",
+    "fs-extra": "11.2.0",
+    "replace-in-file": "7.1.0",
+    "yargs": "17.7.2"
+  },
+  "overrides": {
+    "parse-bmfont-xml": {
+      "xml2js": "0.5.0"
+    }
+  }
 }

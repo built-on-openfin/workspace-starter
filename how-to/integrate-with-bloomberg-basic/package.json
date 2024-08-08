@@ -1,6 +1,6 @@
 {
 	"name": "integrate-with-bloomberg-basic",
-	"version": "19.0.0",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace - Example shows how to connect to a Bloomberg terminal and issue basic commands to drive it",
 	"main": "index.js",
 	"scripts": {
@@ -25,12 +25,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/bloomberg": "^2.0.0",
-		"@openfin/core": "38.82.61",
-		"@openfin/workspace": "19.0.3",
-		"@openfin/workspace-platform": "19.0.3"
+		"@openfin/core": "38.82.64",
+		"@openfin/workspace": "19.1.20",
+		"@openfin/workspace-platform": "19.1.20"
 	},
 	"devDependencies": {
-		"@openfin/node-adapter": "38.82.61",
+		"@openfin/node-adapter": "38.82.64",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
