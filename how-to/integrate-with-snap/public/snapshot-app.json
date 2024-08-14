@@ -1,0 +1,1864 @@
+{
+    "snapshotDetails": {
+        "timestamp": "2024-07-31T10:18:02.571Z",
+        "runtimeVersion": "36.122.80.11",
+        "monitorInfo": {
+            "deviceScaleFactor": 1,
+            "dpi": {
+                "x": 96,
+                "y": 96
+            },
+            "nonPrimaryMonitors": [
+                {
+                    "available": {
+                        "dipRect": {
+                            "top": 0,
+                            "bottom": 816,
+                            "left": -1383,
+                            "right": 0
+                        },
+                        "scaledRect": {
+                            "top": 0,
+                            "bottom": 2040,
+                            "left": -3456,
+                            "right": 2
+                        }
+                    },
+                    "availableRect": {
+                        "top": 0,
+                        "bottom": 816,
+                        "left": -1383,
+                        "right": 0
+                    },
+                    "deviceId": "\\\\?\\DISPLAY#SDC414D#4&11430a48&0&UID8388688#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}",
+                    "deviceScaleFactor": 2.5,
+                    "displayDeviceActive": true,
+                    "dpi": {
+                        "x": 240,
+                        "y": 240
+                    },
+                    "monitor": {
+                        "dipRect": {
+                            "top": 0,
+                            "bottom": 864,
+                            "left": -1383,
+                            "right": 0
+                        },
+                        "scaledRect": {
+                            "top": 0,
+                            "bottom": 2160,
+                            "left": -3456,
+                            "right": 2
+                        }
+                    },
+                    "monitorRect": {
+                        "top": 0,
+                        "bottom": 864,
+                        "left": -1383,
+                        "right": 0
+                    },
+                    "name": "\\\\.\\DISPLAY1"
+                },
+                {
+                    "available": {
+                        "dipRect": {
+                            "top": 0,
+                            "bottom": 1032,
+                            "left": 1920,
+                            "right": 3840
+                        },
+                        "scaledRect": {
+                            "top": 0,
+                            "bottom": 1032,
+                            "left": 1920,
+                            "right": 3840
+                        }
+                    },
+                    "availableRect": {
+                        "top": 0,
+                        "bottom": 1032,
+                        "left": 1920,
+                        "right": 3840
+                    },
+                    "deviceId": "\\\\?\\DISPLAY#DEL415D#8&2ff5bc6d&0&UID256#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}",
+                    "deviceScaleFactor": 1,
+                    "displayDeviceActive": true,
+                    "dpi": {
+                        "x": 96,
+                        "y": 96
+                    },
+                    "monitor": {
+                        "dipRect": {
+                            "top": 0,
+                            "bottom": 1080,
+                            "left": 1920,
+                            "right": 3840
+                        },
+                        "scaledRect": {
+                            "top": 0,
+                            "bottom": 1080,
+                            "left": 1920,
+                            "right": 3840
+                        }
+                    },
+                    "monitorRect": {
+                        "top": 0,
+                        "bottom": 1080,
+                        "left": 1920,
+                        "right": 3840
+                    },
+                    "name": "\\\\.\\DISPLAY17"
+                }
+            ],
+            "primaryMonitor": {
+                "available": {
+                    "dipRect": {
+                        "top": 0,
+                        "bottom": 1032,
+                        "left": 0,
+                        "right": 1920
+                    },
+                    "scaledRect": {
+                        "top": 0,
+                        "bottom": 1032,
+                        "left": 0,
+                        "right": 1920
+                    }
+                },
+                "availableRect": {
+                    "top": 0,
+                    "bottom": 1032,
+                    "left": 0,
+                    "right": 1920
+                },
+                "deviceId": "\\\\?\\DISPLAY#DEL4148#8&2ff5bc6d&0&UID257#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}",
+                "deviceScaleFactor": 1,
+                "displayDeviceActive": true,
+                "dpi": {
+                    "x": 96,
+                    "y": 96
+                },
+                "monitor": {
+                    "dipRect": {
+                        "top": 0,
+                        "bottom": 1080,
+                        "left": 0,
+                        "right": 1920
+                    },
+                    "scaledRect": {
+                        "top": 0,
+                        "bottom": 1080,
+                        "left": 0,
+                        "right": 1920
+                    }
+                },
+                "monitorRect": {
+                    "top": 0,
+                    "bottom": 1080,
+                    "left": 0,
+                    "right": 1920
+                },
+                "name": "\\\\.\\DISPLAY18"
+            },
+            "reason": "api-query",
+            "taskbar": {
+                "dipRect": {
+                    "top": 1032,
+                    "bottom": 1080,
+                    "left": 0,
+                    "right": 1920
+                },
+                "edge": "bottom",
+                "rect": {
+                    "top": 1032,
+                    "bottom": 1080,
+                    "left": 0,
+                    "right": 1920
+                },
+                "scaledRect": {
+                    "top": 1032,
+                    "bottom": 1080,
+                    "left": 0,
+                    "right": 1920
+                }
+            },
+            "virtualScreen": {
+                "top": 0,
+                "bottom": 1080,
+                "left": -1383,
+                "right": 3840,
+                "dipRect": {
+                    "top": 0,
+                    "bottom": 1080,
+                    "left": -1383,
+                    "right": 3840
+                },
+                "scaledRect": {
+                    "top": 0,
+                    "bottom": 2160,
+                    "left": -3456,
+                    "right": 3840
+                }
+            }
+        },
+        "machineId": "19430423-f793-4b09-a3b1-8a2bc524b5aa",
+        "machineName": "unknown"
+    },
+    "windows": [
+        {
+            "alwaysOnTop": false,
+            "frame": false,
+            "icon": "http://localhost:8080/favicon.ico",
+            "maxHeight": -1,
+            "maxWidth": -1,
+            "maximizable": true,
+            "minHeight": 200,
+            "minWidth": 200,
+            "minimizable": true,
+            "opacity": 1,
+            "resizeRegion": {
+                "bottomRightCorner": 20,
+                "size": 7,
+                "sides": {
+                    "top": true,
+                    "right": true,
+                    "bottom": true,
+                    "left": true
+                }
+            },
+            "transparent": false,
+            "uuid": "integrate-with-snap",
+            "accelerator": {
+                "devtools": false,
+                "zoom": false,
+                "reload": false,
+                "reloadIgnoringCache": false
+            },
+            "alphaMask": {
+                "blue": -1,
+                "green": -1,
+                "red": -1
+            },
+            "alwaysOnBottom": false,
+            "api": {
+                "iframe": {
+                    "crossOriginInjection": false,
+                    "sameOriginInjection": true,
+                    "enableDeprecatedSharedName": false
+                },
+                "fin": "global"
+            },
+            "applicationIcon": "",
+            "aspectRatio": 0,
+            "autoShow": false,
+            "backgroundThrottling": true,
+            "contentNavigation": {
+                "allowlist": [
+                    "<all_urls>"
+                ],
+                "denylist": [],
+                "whitelist": [
+                    "<all_urls>"
+                ],
+                "blacklist": []
+            },
+            "contentRedirect": {
+                "allowlist": [
+                    "<all_urls>"
+                ],
+                "denylist": [],
+                "whitelist": [
+                    "<all_urls>"
+                ],
+                "blacklist": []
+            },
+            "contextMenuSettings": {
+                "enable": true,
+                "devtools": true,
+                "reload": false
+            },
+            "cornerRounding": {
+                "height": 0,
+                "width": 0
+            },
+            "closeOnLastViewRemoved": false,
+            "viewsPreventingClose": "all",
+            "defaultHeight": 613,
+            "defaultLeft": 494,
+            "defaultTop": 237,
+            "defaultWidth": 598,
+            "draggable": false,
+            "downloadShelf": {
+                "enabled": false,
+                "border": {
+                    "size": 1,
+                    "color": "default"
+                }
+            },
+            "experimental": {
+                "api": {
+                    "batching": {
+                        "renderer": {
+                            "enabled": false,
+                            "maxSize": 1.7976931348623157e+308,
+                            "ttl": 0
+                        }
+                    },
+                    "breadcrumbs": false,
+                    "iframe": {
+                        "crossOriginInjection": false,
+                        "sameOriginInjection": true,
+                        "enableDeprecatedSharedName": false
+                    }
+                },
+                "v2Api": true,
+                "showFavicons": true,
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.10/icons/defaultFavicon.svg"
+            },
+            "includeInSnapshots": true,
+            "resizable": true,
+            "resize": true,
+            "saveWindowState": false,
+            "shadow": false,
+            "showTaskbarIcon": true,
+            "showBackgroundImages": false,
+            "smallWindow": false,
+            "spellCheck": false,
+            "state": "normal",
+            "taskbarIcon": "",
+            "taskbarIconGroup": "integrate-with-snap",
+            "url": "https://workspace.openfin.co/workspace/18.0.10/browser/",
+            "waitForPageLoad": false,
+            "backgroundColor": "#1E1F23",
+            "fdc3InteropApi": "",
+            "enableBeforeUnload": false,
+            "hotkeys": [
+                {
+                    "keys": "Ctrl+M"
+                },
+                {
+                    "command": "stack.nextTab",
+                    "keys": "Ctrl+Tab"
+                },
+                {
+                    "command": "stack.previousTab",
+                    "keys": "Ctrl+Shift+Tab"
+                },
+                {
+                    "command": "view.detach",
+                    "keys": "Ctrl+Shift+D"
+                },
+                {
+                    "command": "view.focusLeft",
+                    "keys": "Ctrl+Shift+Left"
+                },
+                {
+                    "command": "view.focusRight",
+                    "keys": "Ctrl+Shift+Right"
+                },
+                {
+                    "command": "view.focusUp",
+                    "keys": "Ctrl+Shift+Up"
+                },
+                {
+                    "command": "view.focusDown",
+                    "keys": "Ctrl+Shift+Down"
+                },
+                {
+                    "command": "stack.nth-tab-1",
+                    "keys": "Ctrl+1"
+                },
+                {
+                    "command": "stack.nth-tab-2",
+                    "keys": "Ctrl+2"
+                },
+                {
+                    "command": "stack.nth-tab-3",
+                    "keys": "Ctrl+3"
+                },
+                {
+                    "command": "stack.nth-tab-4",
+                    "keys": "Ctrl+4"
+                },
+                {
+                    "command": "stack.nth-tab-5",
+                    "keys": "Ctrl+5"
+                },
+                {
+                    "command": "stack.nth-tab-6",
+                    "keys": "Ctrl+6"
+                },
+                {
+                    "command": "stack.nth-tab-7",
+                    "keys": "Ctrl+7"
+                },
+                {
+                    "command": "stack.nth-tab-8",
+                    "keys": "Ctrl+8"
+                },
+                {
+                    "command": "stack.nth-tab-9",
+                    "keys": "Ctrl+9"
+                }
+            ],
+            "viewVisibility": {
+                "showViewsOnSplitterDrag": {
+                    "enabled": true
+                },
+                "showViewsOnWindowResize": {
+                    "enabled": true
+                }
+            },
+            "autoplayPolicy": "no-user-gesture-required",
+            "title": "workspace.openfin.co/workspace/18.0.10/browser/",
+            "height": 613,
+            "width": 598,
+            "center": false,
+            "x": 494,
+            "y": 237,
+            "customData": {
+                "snapClientId": "internal-generated-window-730e39b0-f31f-4dd1-9823-b20042a145d9"
+            },
+            "permissions": {
+                "System": {
+                    "openUrlWithBrowser": {
+                        "enabled": true,
+                        "protocols": [
+                            "mailto"
+                        ]
+                    }
+                }
+            },
+            "closeBehavior": "detach",
+            "layout": {
+                "settings": {
+                    "hasHeaders": true,
+                    "constrainDragToContainer": true,
+                    "reorderEnabled": true,
+                    "selectionEnabled": false,
+                    "popoutWholeStack": false,
+                    "blockedPopoutsThrowError": true,
+                    "closePopoutsOnUnload": true,
+                    "showPopoutIcon": false,
+                    "showMaximiseIcon": false,
+                    "showCloseIcon": false,
+                    "responsiveMode": "onload",
+                    "tabOverlapAllowance": 0,
+                    "reorderOnTabMenuClick": true,
+                    "tabControlOffset": 10,
+                    "constrainDragToHeaders": false,
+                    "preventDragOut": false,
+                    "preventDragIn": false
+                },
+                "dimensions": {
+                    "borderWidth": 3,
+                    "borderGrabWidth": 15,
+                    "minItemHeight": 10,
+                    "minItemWidth": 10,
+                    "headerHeight": 30,
+                    "dragProxyWidth": 300,
+                    "dragProxyHeight": 200
+                },
+                "labels": {
+                    "close": "close",
+                    "maximise": "maximise",
+                    "minimise": "minimise",
+                    "popout": "open in new window",
+                    "popin": "pop in",
+                    "tabDropdown": "additional tabs"
+                },
+                "content": [
+                    {
+                        "type": "stack",
+                        "isClosable": true,
+                        "reorderEnabled": true,
+                        "title": "",
+                        "activeItemIndex": 0,
+                        "content": [
+                            {
+                                "type": "component",
+                                "componentName": "view",
+                                "componentState": {
+                                    "bounds": {
+                                        "x": 1,
+                                        "y": 1,
+                                        "width": 0,
+                                        "height": 0
+                                    },
+                                    "contextMenu": true,
+                                    "detachOnClose": false,
+                                    "isClosable": true,
+                                    "preventDragOut": false,
+                                    "accelerator": {
+                                        "zoom": true
+                                    },
+                                    "zoomLevel": 0,
+                                    "url": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                    "contextMenuOptions": {
+                                        "enabled": true,
+                                        "template": [
+                                            "spellCheck",
+                                            "separator",
+                                            "print",
+                                            "separator",
+                                            "cut",
+                                            "copy",
+                                            "paste",
+                                            "undo",
+                                            "redo",
+                                            "selectAll",
+                                            "inspect",
+                                            "reload"
+                                        ]
+                                    },
+                                    "downloadShelf": {
+                                        "enabled": true
+                                    },
+                                    "manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+                                    "name": "internal-generated-view-5688602f-dcaa-4107-ba16-58436ef086cd",
+                                    "preloadScripts": [
+                                        {
+                                            "url": "http://localhost:8080/common/style/style-changed-preload.js"
+                                        }
+                                    ],
+                                    "hotkeys": [
+                                        {
+                                            "command": "stack.nextTab",
+                                            "keys": "Ctrl+Tab"
+                                        },
+                                        {
+                                            "command": "stack.previousTab",
+                                            "keys": "Ctrl+Shift+Tab"
+                                        },
+                                        {
+                                            "command": "view.detach",
+                                            "keys": "Ctrl+Shift+D"
+                                        },
+                                        {
+                                            "command": "view.focusLeft",
+                                            "keys": "Ctrl+Shift+Left"
+                                        },
+                                        {
+                                            "command": "view.focusRight",
+                                            "keys": "Ctrl+Shift+Right"
+                                        },
+                                        {
+                                            "command": "view.focusUp",
+                                            "keys": "Ctrl+Shift+Up"
+                                        },
+                                        {
+                                            "command": "view.focusDown",
+                                            "keys": "Ctrl+Shift+Down"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-1",
+                                            "keys": "Ctrl+1"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-2",
+                                            "keys": "Ctrl+2"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-3",
+                                            "keys": "Ctrl+3"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-4",
+                                            "keys": "Ctrl+4"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-5",
+                                            "keys": "Ctrl+5"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-6",
+                                            "keys": "Ctrl+6"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-7",
+                                            "keys": "Ctrl+7"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-8",
+                                            "keys": "Ctrl+8"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-9",
+                                            "keys": "Ctrl+9"
+                                        }
+                                    ],
+                                    "enableBeforeUnload": false,
+                                    "backgroundThrottling": true,
+                                    "autoResize": {
+                                        "width": false,
+                                        "height": false
+                                    },
+                                    "_internalWorkspaceData": {
+                                        "viewIdentifier": "9b87a9e7-43ea-4c9e-ac61-c3faee81b5c0"
+                                    },
+                                    "componentName": "view",
+                                    "uuid": "integrate-with-snap",
+                                    "initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                    "processAffinity": "integrate-with-snap"
+                                },
+                                "isClosable": true,
+                                "reorderEnabled": true,
+                                "title": "OpenFin Information"
+                            }
+                        ]
+                    }
+                ],
+                "isClosable": true,
+                "reorderEnabled": true,
+                "title": "",
+                "openPopouts": [],
+                "maximisedItemId": null
+            },
+            "layoutSnapshot": {
+                "layouts": {
+                    "baebb753-62bf-406f-bfc9-9e08689f9ce4": {
+                        "settings": {
+                            "hasHeaders": true,
+                            "constrainDragToContainer": true,
+                            "reorderEnabled": true,
+                            "selectionEnabled": false,
+                            "popoutWholeStack": false,
+                            "blockedPopoutsThrowError": true,
+                            "closePopoutsOnUnload": true,
+                            "showPopoutIcon": false,
+                            "showMaximiseIcon": false,
+                            "showCloseIcon": false,
+                            "responsiveMode": "onload",
+                            "tabOverlapAllowance": 0,
+                            "reorderOnTabMenuClick": true,
+                            "tabControlOffset": 10,
+                            "constrainDragToHeaders": false,
+                            "preventDragOut": false,
+                            "preventDragIn": false
+                        },
+                        "dimensions": {
+                            "borderWidth": 3,
+                            "borderGrabWidth": 15,
+                            "minItemHeight": 10,
+                            "minItemWidth": 10,
+                            "headerHeight": 30,
+                            "dragProxyWidth": 300,
+                            "dragProxyHeight": 200
+                        },
+                        "labels": {
+                            "close": "close",
+                            "maximise": "maximise",
+                            "minimise": "minimise",
+                            "popout": "open in new window",
+                            "popin": "pop in",
+                            "tabDropdown": "additional tabs"
+                        },
+                        "content": [
+                            {
+                                "type": "stack",
+                                "isClosable": true,
+                                "reorderEnabled": true,
+                                "title": "",
+                                "activeItemIndex": 0,
+                                "content": [
+                                    {
+                                        "type": "component",
+                                        "componentName": "view",
+                                        "componentState": {
+                                            "bounds": {
+                                                "x": 1,
+                                                "y": 1,
+                                                "width": 0,
+                                                "height": 0
+                                            },
+                                            "contextMenu": true,
+                                            "detachOnClose": false,
+                                            "isClosable": true,
+                                            "preventDragOut": false,
+                                            "accelerator": {
+                                                "zoom": true
+                                            },
+                                            "zoomLevel": 0,
+                                            "url": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                            "contextMenuOptions": {
+                                                "enabled": true,
+                                                "template": [
+                                                    "spellCheck",
+                                                    "separator",
+                                                    "print",
+                                                    "separator",
+                                                    "cut",
+                                                    "copy",
+                                                    "paste",
+                                                    "undo",
+                                                    "redo",
+                                                    "selectAll",
+                                                    "inspect",
+                                                    "reload"
+                                                ]
+                                            },
+                                            "downloadShelf": {
+                                                "enabled": true
+                                            },
+                                            "manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+                                            "name": "internal-generated-view-5688602f-dcaa-4107-ba16-58436ef086cd",
+                                            "preloadScripts": [
+                                                {
+                                                    "url": "http://localhost:8080/common/style/style-changed-preload.js"
+                                                }
+                                            ],
+                                            "hotkeys": [
+                                                {
+                                                    "command": "stack.nextTab",
+                                                    "keys": "Ctrl+Tab"
+                                                },
+                                                {
+                                                    "command": "stack.previousTab",
+                                                    "keys": "Ctrl+Shift+Tab"
+                                                },
+                                                {
+                                                    "command": "view.detach",
+                                                    "keys": "Ctrl+Shift+D"
+                                                },
+                                                {
+                                                    "command": "view.focusLeft",
+                                                    "keys": "Ctrl+Shift+Left"
+                                                },
+                                                {
+                                                    "command": "view.focusRight",
+                                                    "keys": "Ctrl+Shift+Right"
+                                                },
+                                                {
+                                                    "command": "view.focusUp",
+                                                    "keys": "Ctrl+Shift+Up"
+                                                },
+                                                {
+                                                    "command": "view.focusDown",
+                                                    "keys": "Ctrl+Shift+Down"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-1",
+                                                    "keys": "Ctrl+1"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-2",
+                                                    "keys": "Ctrl+2"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-3",
+                                                    "keys": "Ctrl+3"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-4",
+                                                    "keys": "Ctrl+4"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-5",
+                                                    "keys": "Ctrl+5"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-6",
+                                                    "keys": "Ctrl+6"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-7",
+                                                    "keys": "Ctrl+7"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-8",
+                                                    "keys": "Ctrl+8"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-9",
+                                                    "keys": "Ctrl+9"
+                                                }
+                                            ],
+                                            "enableBeforeUnload": false,
+                                            "backgroundThrottling": true,
+                                            "autoResize": {
+                                                "width": false,
+                                                "height": false
+                                            },
+                                            "_internalWorkspaceData": {
+                                                "viewIdentifier": "9b87a9e7-43ea-4c9e-ac61-c3faee81b5c0"
+                                            },
+                                            "componentName": "view",
+                                            "uuid": "integrate-with-snap",
+                                            "initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                            "processAffinity": "integrate-with-snap"
+                                        },
+                                        "isClosable": true,
+                                        "reorderEnabled": true,
+                                        "title": "OpenFin Information"
+                                    }
+                                ]
+                            }
+                        ],
+                        "isClosable": true,
+                        "reorderEnabled": true,
+                        "title": "",
+                        "openPopouts": [],
+                        "maximisedItemId": null
+                    }
+                }
+            },
+            "contextMenu": true,
+            "contextMenuOptions": {
+                "template": [],
+                "enabled": false
+            },
+            "workspacePlatform": {
+                "pages": [
+                    {
+                        "pageId": "9435ebcc-4ce4-4f65-8171-2adf1d6ccf56",
+                        "title": "Untitled Page",
+                        "layout": {
+                            "settings": {
+                                "hasHeaders": true,
+                                "constrainDragToContainer": true,
+                                "reorderEnabled": true,
+                                "selectionEnabled": false,
+                                "popoutWholeStack": false,
+                                "blockedPopoutsThrowError": true,
+                                "closePopoutsOnUnload": true,
+                                "showPopoutIcon": false,
+                                "showMaximiseIcon": false,
+                                "showCloseIcon": false,
+                                "responsiveMode": "onload",
+                                "tabOverlapAllowance": 0,
+                                "reorderOnTabMenuClick": true,
+                                "tabControlOffset": 10,
+                                "constrainDragToHeaders": false,
+                                "preventDragOut": false,
+                                "preventDragIn": false
+                            },
+                            "dimensions": {
+                                "borderWidth": 3,
+                                "borderGrabWidth": 15,
+                                "minItemHeight": 10,
+                                "minItemWidth": 10,
+                                "headerHeight": 30,
+                                "dragProxyWidth": 300,
+                                "dragProxyHeight": 200
+                            },
+                            "labels": {
+                                "close": "close",
+                                "maximise": "maximise",
+                                "minimise": "minimise",
+                                "popout": "open in new window",
+                                "popin": "pop in",
+                                "tabDropdown": "additional tabs"
+                            },
+                            "content": [
+                                {
+                                    "type": "stack",
+                                    "isClosable": true,
+                                    "reorderEnabled": true,
+                                    "title": "",
+                                    "activeItemIndex": 0,
+                                    "content": [
+                                        {
+                                            "type": "component",
+                                            "componentName": "view",
+                                            "componentState": {
+                                                "bounds": {
+                                                    "x": 1,
+                                                    "y": 1,
+                                                    "width": 0,
+                                                    "height": 0
+                                                },
+                                                "contextMenu": true,
+                                                "detachOnClose": false,
+                                                "isClosable": true,
+                                                "preventDragOut": false,
+                                                "accelerator": {
+                                                    "zoom": true
+                                                },
+                                                "zoomLevel": 0,
+                                                "url": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                                "contextMenuOptions": {
+                                                    "enabled": true,
+                                                    "template": [
+                                                        "spellCheck",
+                                                        "separator",
+                                                        "print",
+                                                        "separator",
+                                                        "cut",
+                                                        "copy",
+                                                        "paste",
+                                                        "undo",
+                                                        "redo",
+                                                        "selectAll",
+                                                        "inspect",
+                                                        "reload"
+                                                    ]
+                                                },
+                                                "downloadShelf": {
+                                                    "enabled": true
+                                                },
+                                                "manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+                                                "name": "internal-generated-view-5688602f-dcaa-4107-ba16-58436ef086cd",
+                                                "preloadScripts": [
+                                                    {
+                                                        "url": "http://localhost:8080/common/style/style-changed-preload.js"
+                                                    }
+                                                ],
+                                                "hotkeys": [
+                                                    {
+                                                        "command": "stack.nextTab",
+                                                        "keys": "Ctrl+Tab"
+                                                    },
+                                                    {
+                                                        "command": "stack.previousTab",
+                                                        "keys": "Ctrl+Shift+Tab"
+                                                    },
+                                                    {
+                                                        "command": "view.detach",
+                                                        "keys": "Ctrl+Shift+D"
+                                                    },
+                                                    {
+                                                        "command": "view.focusLeft",
+                                                        "keys": "Ctrl+Shift+Left"
+                                                    },
+                                                    {
+                                                        "command": "view.focusRight",
+                                                        "keys": "Ctrl+Shift+Right"
+                                                    },
+                                                    {
+                                                        "command": "view.focusUp",
+                                                        "keys": "Ctrl+Shift+Up"
+                                                    },
+                                                    {
+                                                        "command": "view.focusDown",
+                                                        "keys": "Ctrl+Shift+Down"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-1",
+                                                        "keys": "Ctrl+1"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-2",
+                                                        "keys": "Ctrl+2"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-3",
+                                                        "keys": "Ctrl+3"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-4",
+                                                        "keys": "Ctrl+4"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-5",
+                                                        "keys": "Ctrl+5"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-6",
+                                                        "keys": "Ctrl+6"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-7",
+                                                        "keys": "Ctrl+7"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-8",
+                                                        "keys": "Ctrl+8"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-9",
+                                                        "keys": "Ctrl+9"
+                                                    }
+                                                ],
+                                                "enableBeforeUnload": false,
+                                                "backgroundThrottling": true,
+                                                "autoResize": {
+                                                    "width": false,
+                                                    "height": false
+                                                },
+                                                "_internalWorkspaceData": {
+                                                    "viewIdentifier": "9b87a9e7-43ea-4c9e-ac61-c3faee81b5c0"
+                                                },
+                                                "componentName": "view",
+                                                "uuid": "integrate-with-snap",
+                                                "initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                                "processAffinity": "integrate-with-snap"
+                                            },
+                                            "isClosable": true,
+                                            "reorderEnabled": true,
+                                            "title": "OpenFin Information"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "isClosable": true,
+                            "reorderEnabled": true,
+                            "title": "",
+                            "openPopouts": [],
+                            "maximisedItemId": null
+                        },
+                        "isReadOnly": false,
+                        "isActive": true,
+                        "layoutContainerKey": "baebb753-62bf-406f-bfc9-9e08689f9ce4",
+                        "panels": []
+                    }
+                ],
+                "favicon": "http://localhost:8080/favicon.ico",
+                "_internalDeferShowOptions": {
+                    "setAsForeground": true,
+                    "deferShowEnabled": true,
+                    "autoShow": true
+                },
+                "windowType": "browser"
+            },
+            "ignoreSavedWindowState": true,
+            "preloadScripts": []
+        },
+        {
+            "alwaysOnTop": false,
+            "frame": false,
+            "icon": "http://localhost:8080/favicon.ico",
+            "maxHeight": -1,
+            "maxWidth": -1,
+            "maximizable": true,
+            "minHeight": 200,
+            "minWidth": 200,
+            "minimizable": true,
+            "opacity": 1,
+            "resizeRegion": {
+                "bottomRightCorner": 20,
+                "size": 7,
+                "sides": {
+                    "top": true,
+                    "right": true,
+                    "bottom": true,
+                    "left": true
+                }
+            },
+            "transparent": false,
+            "uuid": "integrate-with-snap",
+            "accelerator": {
+                "devtools": false,
+                "zoom": false,
+                "reload": false,
+                "reloadIgnoringCache": false
+            },
+            "alphaMask": {
+                "blue": -1,
+                "green": -1,
+                "red": -1
+            },
+            "alwaysOnBottom": false,
+            "api": {
+                "iframe": {
+                    "crossOriginInjection": false,
+                    "sameOriginInjection": true,
+                    "enableDeprecatedSharedName": false
+                },
+                "fin": "global"
+            },
+            "applicationIcon": "",
+            "aspectRatio": 0,
+            "autoShow": false,
+            "backgroundThrottling": true,
+            "contentNavigation": {
+                "allowlist": [
+                    "<all_urls>"
+                ],
+                "denylist": [],
+                "whitelist": [
+                    "<all_urls>"
+                ],
+                "blacklist": []
+            },
+            "contentRedirect": {
+                "allowlist": [
+                    "<all_urls>"
+                ],
+                "denylist": [],
+                "whitelist": [
+                    "<all_urls>"
+                ],
+                "blacklist": []
+            },
+            "contextMenuSettings": {
+                "enable": true,
+                "devtools": true,
+                "reload": false
+            },
+            "cornerRounding": {
+                "height": 0,
+                "width": 0
+            },
+            "closeOnLastViewRemoved": false,
+            "viewsPreventingClose": "all",
+            "defaultHeight": 613,
+            "defaultLeft": 1092,
+            "defaultTop": 237,
+            "defaultWidth": 437,
+            "draggable": false,
+            "downloadShelf": {
+                "enabled": false,
+                "border": {
+                    "size": 1,
+                    "color": "default"
+                }
+            },
+            "experimental": {
+                "api": {
+                    "batching": {
+                        "renderer": {
+                            "enabled": false,
+                            "maxSize": 1.7976931348623157e+308,
+                            "ttl": 0
+                        }
+                    },
+                    "breadcrumbs": false,
+                    "iframe": {
+                        "crossOriginInjection": false,
+                        "sameOriginInjection": true,
+                        "enableDeprecatedSharedName": false
+                    }
+                },
+                "v2Api": true,
+                "showFavicons": true,
+                "defaultFaviconUrl": "https://workspace.openfin.co/workspace/18.0.10/icons/defaultFavicon.svg"
+            },
+            "includeInSnapshots": true,
+            "resizable": true,
+            "resize": true,
+            "saveWindowState": false,
+            "shadow": false,
+            "showTaskbarIcon": true,
+            "showBackgroundImages": false,
+            "smallWindow": false,
+            "spellCheck": false,
+            "state": "normal",
+            "taskbarIcon": "",
+            "taskbarIconGroup": "integrate-with-snap",
+            "url": "https://workspace.openfin.co/workspace/18.0.10/browser/",
+            "waitForPageLoad": false,
+            "backgroundColor": "#1E1F23",
+            "fdc3InteropApi": "",
+            "enableBeforeUnload": false,
+            "hotkeys": [
+                {
+                    "keys": "Ctrl+M"
+                },
+                {
+                    "command": "stack.nextTab",
+                    "keys": "Ctrl+Tab"
+                },
+                {
+                    "command": "stack.previousTab",
+                    "keys": "Ctrl+Shift+Tab"
+                },
+                {
+                    "command": "view.detach",
+                    "keys": "Ctrl+Shift+D"
+                },
+                {
+                    "command": "view.focusLeft",
+                    "keys": "Ctrl+Shift+Left"
+                },
+                {
+                    "command": "view.focusRight",
+                    "keys": "Ctrl+Shift+Right"
+                },
+                {
+                    "command": "view.focusUp",
+                    "keys": "Ctrl+Shift+Up"
+                },
+                {
+                    "command": "view.focusDown",
+                    "keys": "Ctrl+Shift+Down"
+                },
+                {
+                    "command": "stack.nth-tab-1",
+                    "keys": "Ctrl+1"
+                },
+                {
+                    "command": "stack.nth-tab-2",
+                    "keys": "Ctrl+2"
+                },
+                {
+                    "command": "stack.nth-tab-3",
+                    "keys": "Ctrl+3"
+                },
+                {
+                    "command": "stack.nth-tab-4",
+                    "keys": "Ctrl+4"
+                },
+                {
+                    "command": "stack.nth-tab-5",
+                    "keys": "Ctrl+5"
+                },
+                {
+                    "command": "stack.nth-tab-6",
+                    "keys": "Ctrl+6"
+                },
+                {
+                    "command": "stack.nth-tab-7",
+                    "keys": "Ctrl+7"
+                },
+                {
+                    "command": "stack.nth-tab-8",
+                    "keys": "Ctrl+8"
+                },
+                {
+                    "command": "stack.nth-tab-9",
+                    "keys": "Ctrl+9"
+                }
+            ],
+            "viewVisibility": {
+                "showViewsOnSplitterDrag": {
+                    "enabled": true
+                },
+                "showViewsOnWindowResize": {
+                    "enabled": true
+                }
+            },
+            "autoplayPolicy": "no-user-gesture-required",
+            "title": "workspace.openfin.co/workspace/18.0.10/browser/",
+            "height": 613,
+            "width": 437,
+            "center": false,
+            "x": 1092,
+            "y": 237,
+            "customData": {
+                "snapClientId": "internal-generated-window-43f19aaa-12a1-4301-8721-213915b3c738"
+            },
+            "permissions": {
+                "System": {
+                    "openUrlWithBrowser": {
+                        "enabled": true,
+                        "protocols": [
+                            "mailto"
+                        ]
+                    }
+                }
+            },
+            "closeBehavior": "detach",
+            "layout": {
+                "settings": {
+                    "hasHeaders": true,
+                    "constrainDragToContainer": true,
+                    "reorderEnabled": true,
+                    "selectionEnabled": false,
+                    "popoutWholeStack": false,
+                    "blockedPopoutsThrowError": true,
+                    "closePopoutsOnUnload": true,
+                    "showPopoutIcon": false,
+                    "showMaximiseIcon": false,
+                    "showCloseIcon": false,
+                    "responsiveMode": "onload",
+                    "tabOverlapAllowance": 0,
+                    "reorderOnTabMenuClick": true,
+                    "tabControlOffset": 10,
+                    "constrainDragToHeaders": false,
+                    "preventDragOut": false,
+                    "preventDragIn": false
+                },
+                "dimensions": {
+                    "borderWidth": 3,
+                    "borderGrabWidth": 15,
+                    "minItemHeight": 10,
+                    "minItemWidth": 10,
+                    "headerHeight": 30,
+                    "dragProxyWidth": 300,
+                    "dragProxyHeight": 200
+                },
+                "labels": {
+                    "close": "close",
+                    "maximise": "maximise",
+                    "minimise": "minimise",
+                    "popout": "open in new window",
+                    "popin": "pop in",
+                    "tabDropdown": "additional tabs"
+                },
+                "content": [
+                    {
+                        "type": "stack",
+                        "isClosable": true,
+                        "reorderEnabled": true,
+                        "title": "",
+                        "activeItemIndex": 0,
+                        "content": [
+                            {
+                                "type": "component",
+                                "componentName": "view",
+                                "componentState": {
+                                    "bounds": {
+                                        "x": 1,
+                                        "y": 1,
+                                        "width": 0,
+                                        "height": 0
+                                    },
+                                    "contextMenu": true,
+                                    "detachOnClose": false,
+                                    "isClosable": true,
+                                    "preventDragOut": false,
+                                    "accelerator": {
+                                        "zoom": true
+                                    },
+                                    "zoomLevel": 0,
+                                    "url": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                    "contextMenuOptions": {
+                                        "enabled": true,
+                                        "template": [
+                                            "spellCheck",
+                                            "separator",
+                                            "print",
+                                            "separator",
+                                            "cut",
+                                            "copy",
+                                            "paste",
+                                            "undo",
+                                            "redo",
+                                            "selectAll",
+                                            "inspect",
+                                            "reload"
+                                        ]
+                                    },
+                                    "downloadShelf": {
+                                        "enabled": true
+                                    },
+                                    "manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+                                    "name": "internal-generated-view-3683d82a-25ba-4241-85c6-f381eb659943",
+                                    "preloadScripts": [
+                                        {
+                                            "url": "http://localhost:8080/common/style/style-changed-preload.js"
+                                        }
+                                    ],
+                                    "hotkeys": [
+                                        {
+                                            "command": "stack.nextTab",
+                                            "keys": "Ctrl+Tab"
+                                        },
+                                        {
+                                            "command": "stack.previousTab",
+                                            "keys": "Ctrl+Shift+Tab"
+                                        },
+                                        {
+                                            "command": "view.detach",
+                                            "keys": "Ctrl+Shift+D"
+                                        },
+                                        {
+                                            "command": "view.focusLeft",
+                                            "keys": "Ctrl+Shift+Left"
+                                        },
+                                        {
+                                            "command": "view.focusRight",
+                                            "keys": "Ctrl+Shift+Right"
+                                        },
+                                        {
+                                            "command": "view.focusUp",
+                                            "keys": "Ctrl+Shift+Up"
+                                        },
+                                        {
+                                            "command": "view.focusDown",
+                                            "keys": "Ctrl+Shift+Down"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-1",
+                                            "keys": "Ctrl+1"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-2",
+                                            "keys": "Ctrl+2"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-3",
+                                            "keys": "Ctrl+3"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-4",
+                                            "keys": "Ctrl+4"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-5",
+                                            "keys": "Ctrl+5"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-6",
+                                            "keys": "Ctrl+6"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-7",
+                                            "keys": "Ctrl+7"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-8",
+                                            "keys": "Ctrl+8"
+                                        },
+                                        {
+                                            "command": "stack.nth-tab-9",
+                                            "keys": "Ctrl+9"
+                                        }
+                                    ],
+                                    "enableBeforeUnload": false,
+                                    "backgroundThrottling": true,
+                                    "autoResize": {
+                                        "width": false,
+                                        "height": false
+                                    },
+                                    "_internalWorkspaceData": {
+                                        "viewIdentifier": "d6e03427-d3d5-475c-8423-21fbeed54756"
+                                    },
+                                    "componentName": "view",
+                                    "uuid": "integrate-with-snap",
+                                    "initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                    "processAffinity": "integrate-with-snap"
+                                },
+                                "isClosable": true,
+                                "reorderEnabled": true,
+                                "title": "OpenFin Information"
+                            }
+                        ]
+                    }
+                ],
+                "isClosable": true,
+                "reorderEnabled": true,
+                "title": "",
+                "openPopouts": [],
+                "maximisedItemId": null
+            },
+            "layoutSnapshot": {
+                "layouts": {
+                    "05adace9-697e-487e-b4bf-8e86e20b50c8": {
+                        "settings": {
+                            "hasHeaders": true,
+                            "constrainDragToContainer": true,
+                            "reorderEnabled": true,
+                            "selectionEnabled": false,
+                            "popoutWholeStack": false,
+                            "blockedPopoutsThrowError": true,
+                            "closePopoutsOnUnload": true,
+                            "showPopoutIcon": false,
+                            "showMaximiseIcon": false,
+                            "showCloseIcon": false,
+                            "responsiveMode": "onload",
+                            "tabOverlapAllowance": 0,
+                            "reorderOnTabMenuClick": true,
+                            "tabControlOffset": 10,
+                            "constrainDragToHeaders": false,
+                            "preventDragOut": false,
+                            "preventDragIn": false
+                        },
+                        "dimensions": {
+                            "borderWidth": 3,
+                            "borderGrabWidth": 15,
+                            "minItemHeight": 10,
+                            "minItemWidth": 10,
+                            "headerHeight": 30,
+                            "dragProxyWidth": 300,
+                            "dragProxyHeight": 200
+                        },
+                        "labels": {
+                            "close": "close",
+                            "maximise": "maximise",
+                            "minimise": "minimise",
+                            "popout": "open in new window",
+                            "popin": "pop in",
+                            "tabDropdown": "additional tabs"
+                        },
+                        "content": [
+                            {
+                                "type": "stack",
+                                "isClosable": true,
+                                "reorderEnabled": true,
+                                "title": "",
+                                "activeItemIndex": 0,
+                                "content": [
+                                    {
+                                        "type": "component",
+                                        "componentName": "view",
+                                        "componentState": {
+                                            "bounds": {
+                                                "x": 1,
+                                                "y": 1,
+                                                "width": 0,
+                                                "height": 0
+                                            },
+                                            "contextMenu": true,
+                                            "detachOnClose": false,
+                                            "isClosable": true,
+                                            "preventDragOut": false,
+                                            "accelerator": {
+                                                "zoom": true
+                                            },
+                                            "zoomLevel": 0,
+                                            "url": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                            "contextMenuOptions": {
+                                                "enabled": true,
+                                                "template": [
+                                                    "spellCheck",
+                                                    "separator",
+                                                    "print",
+                                                    "separator",
+                                                    "cut",
+                                                    "copy",
+                                                    "paste",
+                                                    "undo",
+                                                    "redo",
+                                                    "selectAll",
+                                                    "inspect",
+                                                    "reload"
+                                                ]
+                                            },
+                                            "downloadShelf": {
+                                                "enabled": true
+                                            },
+                                            "manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+                                            "name": "internal-generated-view-3683d82a-25ba-4241-85c6-f381eb659943",
+                                            "preloadScripts": [
+                                                {
+                                                    "url": "http://localhost:8080/common/style/style-changed-preload.js"
+                                                }
+                                            ],
+                                            "hotkeys": [
+                                                {
+                                                    "command": "stack.nextTab",
+                                                    "keys": "Ctrl+Tab"
+                                                },
+                                                {
+                                                    "command": "stack.previousTab",
+                                                    "keys": "Ctrl+Shift+Tab"
+                                                },
+                                                {
+                                                    "command": "view.detach",
+                                                    "keys": "Ctrl+Shift+D"
+                                                },
+                                                {
+                                                    "command": "view.focusLeft",
+                                                    "keys": "Ctrl+Shift+Left"
+                                                },
+                                                {
+                                                    "command": "view.focusRight",
+                                                    "keys": "Ctrl+Shift+Right"
+                                                },
+                                                {
+                                                    "command": "view.focusUp",
+                                                    "keys": "Ctrl+Shift+Up"
+                                                },
+                                                {
+                                                    "command": "view.focusDown",
+                                                    "keys": "Ctrl+Shift+Down"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-1",
+                                                    "keys": "Ctrl+1"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-2",
+                                                    "keys": "Ctrl+2"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-3",
+                                                    "keys": "Ctrl+3"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-4",
+                                                    "keys": "Ctrl+4"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-5",
+                                                    "keys": "Ctrl+5"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-6",
+                                                    "keys": "Ctrl+6"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-7",
+                                                    "keys": "Ctrl+7"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-8",
+                                                    "keys": "Ctrl+8"
+                                                },
+                                                {
+                                                    "command": "stack.nth-tab-9",
+                                                    "keys": "Ctrl+9"
+                                                }
+                                            ],
+                                            "enableBeforeUnload": false,
+                                            "backgroundThrottling": true,
+                                            "autoResize": {
+                                                "width": false,
+                                                "height": false
+                                            },
+                                            "_internalWorkspaceData": {
+                                                "viewIdentifier": "d6e03427-d3d5-475c-8423-21fbeed54756"
+                                            },
+                                            "componentName": "view",
+                                            "uuid": "integrate-with-snap",
+                                            "initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                            "processAffinity": "integrate-with-snap"
+                                        },
+                                        "isClosable": true,
+                                        "reorderEnabled": true,
+                                        "title": "OpenFin Information"
+                                    }
+                                ]
+                            }
+                        ],
+                        "isClosable": true,
+                        "reorderEnabled": true,
+                        "title": "",
+                        "openPopouts": [],
+                        "maximisedItemId": null
+                    }
+                }
+            },
+            "contextMenu": true,
+            "contextMenuOptions": {
+                "template": [],
+                "enabled": false
+            },
+            "workspacePlatform": {
+                "pages": [
+                    {
+                        "pageId": "ed2de672-5857-4b83-be7d-e012142b4363",
+                        "title": "Untitled Page (1)",
+                        "layout": {
+                            "settings": {
+                                "hasHeaders": true,
+                                "constrainDragToContainer": true,
+                                "reorderEnabled": true,
+                                "selectionEnabled": false,
+                                "popoutWholeStack": false,
+                                "blockedPopoutsThrowError": true,
+                                "closePopoutsOnUnload": true,
+                                "showPopoutIcon": false,
+                                "showMaximiseIcon": false,
+                                "showCloseIcon": false,
+                                "responsiveMode": "onload",
+                                "tabOverlapAllowance": 0,
+                                "reorderOnTabMenuClick": true,
+                                "tabControlOffset": 10,
+                                "constrainDragToHeaders": false,
+                                "preventDragOut": false,
+                                "preventDragIn": false
+                            },
+                            "dimensions": {
+                                "borderWidth": 3,
+                                "borderGrabWidth": 15,
+                                "minItemHeight": 10,
+                                "minItemWidth": 10,
+                                "headerHeight": 30,
+                                "dragProxyWidth": 300,
+                                "dragProxyHeight": 200
+                            },
+                            "labels": {
+                                "close": "close",
+                                "maximise": "maximise",
+                                "minimise": "minimise",
+                                "popout": "open in new window",
+                                "popin": "pop in",
+                                "tabDropdown": "additional tabs"
+                            },
+                            "content": [
+                                {
+                                    "type": "stack",
+                                    "isClosable": true,
+                                    "reorderEnabled": true,
+                                    "title": "",
+                                    "activeItemIndex": 0,
+                                    "content": [
+                                        {
+                                            "type": "component",
+                                            "componentName": "view",
+                                            "componentState": {
+                                                "bounds": {
+                                                    "x": 1,
+                                                    "y": 1,
+                                                    "width": 0,
+                                                    "height": 0
+                                                },
+                                                "contextMenu": true,
+                                                "detachOnClose": false,
+                                                "isClosable": true,
+                                                "preventDragOut": false,
+                                                "accelerator": {
+                                                    "zoom": true
+                                                },
+                                                "zoomLevel": 0,
+                                                "url": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                                "contextMenuOptions": {
+                                                    "enabled": true,
+                                                    "template": [
+                                                        "spellCheck",
+                                                        "separator",
+                                                        "print",
+                                                        "separator",
+                                                        "cut",
+                                                        "copy",
+                                                        "paste",
+                                                        "undo",
+                                                        "redo",
+                                                        "selectAll",
+                                                        "inspect",
+                                                        "reload"
+                                                    ]
+                                                },
+                                                "downloadShelf": {
+                                                    "enabled": true
+                                                },
+                                                "manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+                                                "name": "internal-generated-view-3683d82a-25ba-4241-85c6-f381eb659943",
+                                                "preloadScripts": [
+                                                    {
+                                                        "url": "http://localhost:8080/common/style/style-changed-preload.js"
+                                                    }
+                                                ],
+                                                "hotkeys": [
+                                                    {
+                                                        "command": "stack.nextTab",
+                                                        "keys": "Ctrl+Tab"
+                                                    },
+                                                    {
+                                                        "command": "stack.previousTab",
+                                                        "keys": "Ctrl+Shift+Tab"
+                                                    },
+                                                    {
+                                                        "command": "view.detach",
+                                                        "keys": "Ctrl+Shift+D"
+                                                    },
+                                                    {
+                                                        "command": "view.focusLeft",
+                                                        "keys": "Ctrl+Shift+Left"
+                                                    },
+                                                    {
+                                                        "command": "view.focusRight",
+                                                        "keys": "Ctrl+Shift+Right"
+                                                    },
+                                                    {
+                                                        "command": "view.focusUp",
+                                                        "keys": "Ctrl+Shift+Up"
+                                                    },
+                                                    {
+                                                        "command": "view.focusDown",
+                                                        "keys": "Ctrl+Shift+Down"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-1",
+                                                        "keys": "Ctrl+1"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-2",
+                                                        "keys": "Ctrl+2"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-3",
+                                                        "keys": "Ctrl+3"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-4",
+                                                        "keys": "Ctrl+4"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-5",
+                                                        "keys": "Ctrl+5"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-6",
+                                                        "keys": "Ctrl+6"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-7",
+                                                        "keys": "Ctrl+7"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-8",
+                                                        "keys": "Ctrl+8"
+                                                    },
+                                                    {
+                                                        "command": "stack.nth-tab-9",
+                                                        "keys": "Ctrl+9"
+                                                    }
+                                                ],
+                                                "enableBeforeUnload": false,
+                                                "backgroundThrottling": true,
+                                                "autoResize": {
+                                                    "width": false,
+                                                    "height": false
+                                                },
+                                                "_internalWorkspaceData": {
+                                                    "viewIdentifier": "d6e03427-d3d5-475c-8423-21fbeed54756"
+                                                },
+                                                "componentName": "view",
+                                                "uuid": "integrate-with-snap",
+                                                "initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
+                                                "processAffinity": "integrate-with-snap"
+                                            },
+                                            "isClosable": true,
+                                            "reorderEnabled": true,
+                                            "title": "OpenFin Information"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "isClosable": true,
+                            "reorderEnabled": true,
+                            "title": "",
+                            "openPopouts": [],
+                            "maximisedItemId": null
+                        },
+                        "isReadOnly": false,
+                        "isActive": true,
+                        "layoutContainerKey": "05adace9-697e-487e-b4bf-8e86e20b50c8",
+                        "panels": []
+                    }
+                ],
+                "favicon": "http://localhost:8080/favicon.ico",
+                "_internalDeferShowOptions": {
+                    "setAsForeground": true,
+                    "deferShowEnabled": true,
+                    "autoShow": true
+                },
+                "windowType": "browser"
+            },
+            "ignoreSavedWindowState": true,
+            "preloadScripts": []
+        }
+    ],
+    "interopSnapshotDetails": {
+        "contextGroupStates": {
+            "green": {},
+            "purple": {},
+            "orange": {},
+            "red": {},
+            "pink": {},
+            "yellow": {}
+        }
+    },
+    "snap": {
+        "clients": [
+            {
+                "height": 613,
+                "id": "internal-generated-window-730e39b0-f31f-4dd1-9823-b20042a145d9",
+                "state": "normal",
+                "width": 598,
+                "x": 494,
+                "y": 237
+            },
+            {
+                "height": 613,
+                "id": "internal-generated-window-43f19aaa-12a1-4301-8721-213915b3c738",
+                "state": "normal",
+                "width": 437,
+                "x": 1092,
+                "y": 237
+            }
+        ],
+        "connections": [
+            {
+                "attachedClientId": "internal-generated-window-730e39b0-f31f-4dd1-9823-b20042a145d9",
+                "offset": 0,
+                "targetClientId": "internal-generated-window-43f19aaa-12a1-4301-8721-213915b3c738",
+                "targetSide": "left"
+            }
+        ],
+        "version": "1.0"
+    }
+}

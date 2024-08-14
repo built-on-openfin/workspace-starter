@@ -81,7 +81,7 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 /**
  * Prepare to apply a decorated snapshot.
  */
-export async function prepareToApplyDecoratedSnapshot(): Promise<void> {
+export async function prepareToApplyDecoratedSnapshot(payload?: OpenFin.ApplySnapshotPayload): Promise<void> {
 	try {
 		if (server) {
 			await server.prepareToApplySnapshot();

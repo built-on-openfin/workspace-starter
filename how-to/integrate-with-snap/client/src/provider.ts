@@ -4,6 +4,7 @@ import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platfor
 import { getApps, launchApp } from "./apps";
 import type { CustomSettings } from "./shapes";
 import * as Snap from "./snap";
+import { SnapSnapshot } from "@openfin/snap-sdk";
 
 const PLATFORM_ID = "integrate-with-snap";
 const PLATFORM_TITLE = "Integrate With Snap";
@@ -83,7 +84,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 					title: app.title,
 					icon: app.icons[0]?.src,
 					data: app,
-					label: "View",
+					label: app.manifestType,
 					actions: [{ name: "Launch View", hotkey: "enter" }],
 					description: app.description,
 					shortDescription: app.description,
@@ -131,7 +132,7 @@ function overrideCallback(
 
 			return Snap.decorateSnapshot(snapshot);
 		}
-
+ 
 		/**
 		 * Override the applySnapshot so that we can include native window integrations.
 		 * @param payload The payload for the apply snapshot.
@@ -141,7 +142,7 @@ function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
-			await Snap.prepareToApplyDecoratedSnapshot();
+			await Snap.prepareToApplyDecoratedSnapshot(payload);
 
 			await super.applySnapshot(payload, identity);
 
