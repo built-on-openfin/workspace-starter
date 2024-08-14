@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Participant Summary</title>
+		<link rel="icon" type="image/x-icon" href="../../../../favicon.ico" />
+		<link rel="stylesheet" href="../../../style/app.css" />
+		<script src="https://built-on-openfin.github.io/web-starter/web/v19.0.0/web-client-api/js/shim.api.bundle.js"></script>
+		<script defer="defer" src="./index.js" type="module"></script>
+		<script type="module" src="../../../lib/wc-fin/wc-fin.esm.js"></script>
+		<style>
+			.profile-pic {
+				border-radius: 5px;
+			}
+		</style>
+	</head>
+
+	<body class="small col fill gap20">
+		<div class="row spread">
+			<h3>Participant Summary</h3>
+			<fin-context-group-picker
+				id="context-group-picker"
+				show-list-on-click="false"
+				class="border"
+				style="min-height: 26px"
+			></fin-context-group-picker>
+		</div>
+
+		<main class="form col gap10 scroll-vertical">
+			<h4 id="username" class="primary">Ashley James</h4>
+			<div class="form-group">
+				<div class="row spread">
+					<div class="col gap10">
+						<fieldset>
+							<label>Username</label>
+							<div id="email" class="primary">ashley.james@example.com</div>
+						</fieldset>
+						<fieldset>
+							<label>Password Status</label>
+							<div>Active</div>
+						</fieldset>
+					</div>
+					<div class="col">
+						<img
+							id="profile-pic"
+							src="../data/avatars/ashley.james.png"
+							alt="Profile"
+							width="64px"
+							height="64px"
+							class="border profile-pic"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<fieldset>
+					<label>SSN</label>
+					<div id="ssn">100-123-101</div>
+				</fieldset>
+				<fieldset>
+					<label>DOB</label>
+					<div id="dob">04/23/1987</div>
+				</fieldset>
+				<fieldset>
+					<label>Age</label>
+					<div id="age">35</div>
+				</fieldset>
+				<fieldset>
+					<label>Marital Status</label>
+					<div id="marital-status">Married</div>
+				</fieldset>
+				<fieldset>
+					<label>Gender Identity</label>
+					<div id="gender">Female</div>
+				</fieldset>
+			</div>
+			<div class="form-group">
+				<fieldset>
+					<label>Address</label>
+					<div>
+						1234 Main St.
+						<br />
+						Brooklyn NY 11214
+					</div>
+				</fieldset>
+				<fieldset>
+					<label>Email</label>
+					<div id="email" class="primary">ashley.james@example.com</div>
+				</fieldset>
+				<fieldset>
+					<label>Phone</label>
+					<div>999-311-111</div>
+				</fieldset>
+			</div>
+			<div class="form-group">
+				<fieldset>
+					<label>Employment</label>
+					<div>Active</div>
+				</fieldset>
+				<fieldset>
+					<label>Date of hire</label>
+					<div>12/12/2010</div>
+				</fieldset>
+				<fieldset>
+					<label>Employee number</label>
+					<div>999-311-111</div>
+				</fieldset>
+			</div>
+		</main>
+	</body>
+</html>
