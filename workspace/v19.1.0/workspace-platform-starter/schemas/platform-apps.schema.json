@@ -1547,6 +1547,9 @@
 						}
 					]
 				},
+				"getOSInfo": {
+					"type": "boolean"
+				},
 				"launchExternalProcess": {
 					"anyOf": [
 						{
