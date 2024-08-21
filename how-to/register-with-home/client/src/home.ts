@@ -99,9 +99,11 @@ export async function register(
 				} else {
 					const pageToLaunch = await platform.Storage.getPage(data.pageId);
 
+					const pages = pageToLaunch ? [pageToLaunch] : [];
+
 					await platform.Browser.createWindow({
 						workspacePlatform: {
-							pages: [pageToLaunch]
+							pages
 						}
 					});
 				}
