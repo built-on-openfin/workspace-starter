@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
@@ -49,7 +49,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint",
 		"test": "jest --config ./jest.config.js",
-		"e2e": "of-automation http://localhost:8080/manifest.fin.json ./e2e/**/*.spec.ts --workspace 19.1.9 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
+		"e2e": "of-automation http://localhost:8080/manifest.fin.json ./e2e/**/*.spec.ts --workspace 19.1.20 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [
@@ -59,7 +59,7 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "^2.0.3",
-		"@openfin/cloud-interop": "0.38.58",
+		"@openfin/cloud-interop": "0.38.64",
 		"@openfin/openid-connect": "^1.0.0",
 		"@openfin/snap-sdk": "0.3.0",
 		"@openfin/workspace": "19.1.20",

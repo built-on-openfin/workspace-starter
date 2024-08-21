@@ -1,6 +1,6 @@
 {
 	"name": "integrate-with-bloomberg-basic",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace - Example shows how to connect to a Bloomberg terminal and issue basic commands to drive it",
 	"main": "index.js",
 	"scripts": {

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--customize-home-templates",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Register with Home",
 	"main": "index.js",
 	"scripts": {

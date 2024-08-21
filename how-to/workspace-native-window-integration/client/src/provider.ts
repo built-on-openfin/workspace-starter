@@ -247,10 +247,10 @@ async function handleHomeSearchResult(result: HomeDispatchedSearchResult): Promi
 	if (result?.data?.workspaceId) {
 		const platform = getCurrentSync();
 		const workspace = await platform.Storage.getWorkspace(result.data.workspaceId as string);
-		if(workspace) {
-			await platform.applyWorkspace(workspace);
+		if (workspace === undefined) {
+			console.error(`Workspace not found: ${result.data.workspaceId}`);
 		} else {
-			console.error(`Workspace ${result.data.workspaceId} not found`);
+			await platform.applyWorkspace(workspace);
 		}
 	} else {
 		// Otherwise assume its an app to launch

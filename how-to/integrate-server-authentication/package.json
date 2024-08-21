@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-server-authentication",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Integrate with Server Authentication",
 	"main": "index.js",
 	"scripts": {

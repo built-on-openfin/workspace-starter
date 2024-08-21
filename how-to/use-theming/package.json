@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-theming",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Use Theming",
 	"main": "index.js",
 	"scripts": {

@@ -98,15 +98,14 @@ export async function register(
 					}
 				} else {
 					const pageToLaunch = await platform.Storage.getPage(data.pageId);
-					if(pageToLaunch !== undefined) {
-						await platform.Browser.createWindow({
-							workspacePlatform: {
-								pages: [pageToLaunch]
-							}
-						});
-					} else {
-						console.warn(`Unable to launch the page ${data.pageId} as it could not be found`);
-					}
+
+					const pages = pageToLaunch ? [pageToLaunch] : [];
+
+					await platform.Browser.createWindow({
+						workspacePlatform: {
+							pages
+						}
+					});
 				}
 			} else {
 				// No pageId so it must be an App

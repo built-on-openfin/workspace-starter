@@ -490,7 +490,7 @@ export function overrideCallback(
 				}
 
 				logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
-				return {} as Page;
+				return;
 			}
 			logger.info(`Getting saved page with id ${id} from default storage`);
 			const pageResponse = await super.getSavedPage(id);

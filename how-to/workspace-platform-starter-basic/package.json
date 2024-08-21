@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter-basic",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Workspace Platform Starter Basic",
 	"main": "index.js",
 	"scripts": {

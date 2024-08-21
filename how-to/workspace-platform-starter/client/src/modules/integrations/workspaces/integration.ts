@@ -452,10 +452,14 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 					} else if (result.action.name === WorkspacesProvider._ACTION_OPEN_WORKSPACE) {
 						const platform: WorkspacePlatformModule = this._integrationHelpers.getPlatform();
 						const workspace = await platform.Storage.getWorkspace(data.workspaceId);
-						await platform.applyWorkspace(workspace);
-						// We rebuild the results here as we will now have a new current workspace
-						// and we need to change the existing one back to a standard template
-						await this.rebuildResults(platform);
+						if (workspace) {
+							await platform.applyWorkspace(workspace);
+							// We rebuild the results here as we will now have a new current workspace
+							// and we need to change the existing one back to a standard template
+							await this.rebuildResults(platform);
+						} else {
+							this._logger?.warn(`Workspace not found: ${data.workspaceId}`);
+						}
 					} else if (result.action.name === WorkspacesProvider._ACTION_DELETE_WORKSPACE) {
 						const platform = this._integrationHelpers.getPlatform();
 						await platform.Storage.deleteWorkspace(data.workspaceId);

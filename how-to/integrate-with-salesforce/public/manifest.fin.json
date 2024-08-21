@@ -2,8 +2,8 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--v=1 --inspect",
-		"version": "38.126.82.58"
+		"arguments": "",
+		"version": "38.126.82.61"
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
@@ -24,7 +24,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do in relation to Salesforce.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Salesforce - vnext",
+		"name": "Integrate With Salesforce - v19.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-browser",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Register with browser",
 	"main": "index.js",
 	"scripts": {

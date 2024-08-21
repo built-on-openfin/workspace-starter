@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-servicenow-basic",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Integrate with ServiceNow - Basic",
 	"main": "index.js",
 	"scripts": {

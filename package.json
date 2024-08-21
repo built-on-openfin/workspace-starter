@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace-starter",
-  "version": "19.1.20",
+  "version": "19.1.0",
   "description": "OpenFin Workspace Starter",
   "scripts": {
     "build": "node ./scripts/workspaces.mjs build",
@@ -43,11 +43,11 @@
   ],
   "packageCustomFolder": "",
   "contributors": [
-    "adam.saland@openfin.co",
-    "ameet.jayawant@openfin.co",
-    "john.mandia@openfin.co",
-    "martyn.janes@openfin.co",
-    "richard.browne@openfin.co"
+    "adam.saland@here.io",
+    "ameet.jayawant@here.io",
+    "john.mandia@here.io",
+    "richard.browne@here.io",
+    "joe.ransegnola@here.io"
   ],
   "license": "SEE LICENSE IN LICENSE.MD",
   "devDependencies": {

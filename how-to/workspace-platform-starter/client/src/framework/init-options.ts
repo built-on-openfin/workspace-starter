@@ -232,7 +232,7 @@ async function notifyActionListeners(
 	const payload = !isEmpty(initOptions[ACTION_PAYLOAD_PARAM_NAME])
 		? extractPayloadFromParams(initOptions)
 		: undefined;
-		const availableListeners = actionListeners[Array.isArray(action) ? action[0] : action];
+	const availableListeners = actionListeners[Array.isArray(action) ? action[0] : action];
 	if (!isEmpty(availableListeners)) {
 		const subscriberIds = Object.keys(availableListeners);
 
@@ -262,7 +262,10 @@ async function notifyActionListeners(
  * @param initOptions The init options to extract from.
  * @param context The context calling the action handler.
  */
-async function notifyListeners(initOptions: OpenFin.UserAppConfigArgs, context: ActionHandlerContext): Promise<void> {
+async function notifyListeners(
+	initOptions: OpenFin.UserAppConfigArgs,
+	context: ActionHandlerContext
+): Promise<void> {
 	const customParamIds = Object.keys(listeners);
 	let listenerId: string | undefined;
 
@@ -310,7 +313,9 @@ async function notifyListeners(initOptions: OpenFin.UserAppConfigArgs, context: 
  * @param event The event container the new init options.
  * @param event.userAppConfigArgs The config args containing the init options.
  */
-async function queryWhileRunning(event: Extract<OpenFin.ApplicationEvent, { type: "run-requested" }>): Promise<void> {
+async function queryWhileRunning(
+	event: Extract<OpenFin.ApplicationEvent, { type: "run-requested" }>
+): Promise<void> {
 	if (!isEmpty(event?.userAppConfigArgs)) {
 		logger.info("Received while platform is running", event.userAppConfigArgs);
 		if (!isEmpty(event.userAppConfigArgs[ACTION_PARAM_NAME])) {

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-openid-connect",
-	"version": "19.1.20",
+	"version": "19.1.0",
 	"description": "OpenFin Workspace -- Integrate with OpenId Connect",
 	"main": "index.js",
 	"scripts": {
