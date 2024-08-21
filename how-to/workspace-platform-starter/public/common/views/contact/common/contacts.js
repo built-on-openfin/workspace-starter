@@ -101,25 +101,25 @@ async function getManifestCustomSettings() {
  * @returns The contacts provider url if found.
  */
 function getContactsProviderUrl() {
-    // Get the URL parameters
-	console.log("Attempting to get URL Params...");
-    const urlParams = new URLSearchParams(window.location.search);
-    const contactsProviderUrl = urlParams.get('contactsProviderUrl');
+	// Get the URL parameters
+	console.log('Attempting to get URL Params...');
+	const urlParams = new URLSearchParams(window.location.search);
+	const contactsProviderUrl = urlParams.get('contactsProviderUrl');
 
-    if (!contactsProviderUrl) {
-        return;
-    }
+	if (!contactsProviderUrl) {
+		return;
+	}
 
-    try {
-        const url = new URL(contactsProviderUrl);
-        const validDomains = ['openfin.github.io', 'built-on-openfin.github.io'];
+	try {
+		const url = new URL(contactsProviderUrl);
+		const validDomains = ['openfin.github.io', 'built-on-openfin.github.io'];
 
-        if (validDomains.includes(url.hostname)) {
-            console.log('Valid contactsProviderUrl override url provided:', contactsProviderUrl);
-            return url.href;
-        }
-        console.error('Invalid domain in contactsProviderUrl:', url.hostname);
-    } catch {
-        console.error('Invalid contactsProviderUrl URL:', contactsProviderUrl);
+		if (validDomains.includes(url.hostname)) {
+			console.log('Valid contactsProviderUrl override url provided:', contactsProviderUrl);
+			return url.href;
+		}
+		console.error('Invalid domain in contactsProviderUrl:', url.hostname);
+	} catch {
+		console.error('Invalid contactsProviderUrl URL:', contactsProviderUrl);
 	}
 }

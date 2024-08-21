@@ -23,7 +23,7 @@
 	"dependencies": {
 		"@openfin/workspace": "19.1.20",
 		"@openfin/workspace-platform": "19.1.20",
-		"fast-xml-parser": "4.3.6"
+		"fast-xml-parser": "4.4.1"
 	},
 	"devDependencies": {
 		"@openfin/core": "38.82.64",

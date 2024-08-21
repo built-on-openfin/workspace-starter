@@ -249,7 +249,7 @@ Yes, to make development easier you can define a view that uses our app. We foll
 
 ```javascript
 {
-    "url": "https://samples.openfin.co/dev-extensions/extensions/v19.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+    "url": "https://samples.openfin.co/dev-extensions/extensions/v19.1.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
     "fdc3InteropApi": "2.0",
     "customData": {
         "contextData": null,
@@ -262,7 +262,7 @@ Yes, to make development easier you can define a view that uses our app. We foll
 
 ```javascript
 {
-    "url": "https://samples.openfin.co/dev-extensions/extensions/v19.0.0/interop/fdc3/context/fdc3-broadcast-view.html",
+    "url": "https://samples.openfin.co/dev-extensions/extensions/v19.1.0/interop/fdc3/context/fdc3-broadcast-view.html",
     "fdc3InteropApi": "1.2",
     "customData": {
         "contextData": null,
