@@ -5,7 +5,7 @@
 
 ## Migrate from a previous version - From v18 to v19.0
 
-- [Please see the v19.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#19.0.3)
+- [Please see the v19.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#19.0.4)
 
 ## Migrate from a previous version - From v17.2 to v18.0
 
@@ -209,7 +209,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "38.82.61"
+                    "@openfin/core": "38.82.69"
                    }
 ```
 

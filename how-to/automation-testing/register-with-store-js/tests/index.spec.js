@@ -15,7 +15,7 @@ describe('Register with Store', () => {
 	it('The runtime version should be set', async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal('38.126.82.61');
+		expect(version).to.equal('38.126.82.69');
 	});
 
 	it('Can open the store window', async () => {
