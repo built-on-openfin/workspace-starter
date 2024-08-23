@@ -1,3 +1,4 @@
+import { DockProviderConfigWithIdentity } from "@openfin/workspace";
 import type { PopupMenuStyles } from "./menu-shapes";
 
 /**
@@ -149,3 +150,29 @@ export interface DockButtonDropdown extends DockButtonBase {
  * All of the button types for the dock.
  */
 export type DockButtonTypes = DockButtonAppsByTag | DockButtonApp | DockButtonAction | DockButtonDropdown;
+
+/**
+ * Exposes some dock api methods through helpers.
+ */
+export interface DockClient {
+/**
+ * Implementation for getting the dock provider from persistent storage.
+ * @param id The id of the dock provider to get.
+ * @param defaultStorage The default method for storage.
+ * @returns The loaded config.
+ */
+loadConfig(
+	id: string,
+	defaultStorage: (id: string) => Promise<DockProviderConfigWithIdentity | undefined>
+): Promise<DockProviderConfigWithIdentity | undefined>;
+/**
+ * Implementation for saving a dock provider config to persistent storage.
+ * @param config The new dock config to save to persistent storage.
+ * @param defaultStorage The default method for storage.
+ * @returns nothing
+ */
+saveConfig(
+	config: DockProviderConfigWithIdentity,
+	defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
+): Promise<void>;
+}

@@ -3,10 +3,13 @@ import type { DockButton } from "@openfin/workspace";
 import type { Locale, Page, Workspace, WorkspacePlatformModule, WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import type { BrowserProviderOptions } from "./browser-shapes";
+import type { ButtonClient } from "./button-shapes";
+import type { DockClient } from "./dock-shapes";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 import type { LifecycleEvents } from "./lifecycle-shapes";
+import type { PlatformMenuClient } from "./menu-shapes";
 import type { ModuleHelpers, ModuleImplementation } from "./module-shapes";
-import { PlatformMenuClient } from "./menu-shapes";
+import type { SnapProvider } from "./snap-shapes";
 
 /**
  * Platform provider options.
@@ -273,8 +276,8 @@ export interface EndpointDockSetRequest {
  * Platform Override helpers provide environment methods and data.
  */
 export type PlatformOverrideHelpers = ModuleHelpers & {
-	getSnapClient?: () => Promise<void>;
-	fireLifecycleEvent?: <T = unknown>(
+	getSnapClient: () => Promise<SnapProvider>;
+	fireLifecycleEvent: <T = unknown>(
 		platform: WorkspacePlatformModule,
 		lifecycleEvent: LifecycleEvents,
 		payload?: T
@@ -284,6 +287,17 @@ export type PlatformOverrideHelpers = ModuleHelpers & {
 	 * @returns The menu client.
 	 */
 	getMenuClient(): Promise<PlatformMenuClient>;
+	/**
+	 * Returns the button client for the platform override.
+	 * @returns The button client.
+	 */
+	getButtonClient(): Promise<ButtonClient>;
+
+	/**
+	 * Returns the dock client.
+	 * @returns The dock client.
+	 */
+	getDockClient(): Promise<DockClient>;
 };
 
 /**

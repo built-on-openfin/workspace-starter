@@ -1,5 +1,5 @@
 import type { OpenFin } from "@openfin/core";
-import type { BrowserCreateWindowRequest, Page } from "@openfin/workspace-platform";
+import type { BrowserCreateWindowRequest, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { BrowserProviderOptions } from "workspace-platform-starter/shapes/browser-shapes";
 import { deepMerge, isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 
@@ -61,4 +61,57 @@ export async function buildDefaultOptions(browserProvider?: BrowserProviderOptio
 		page: deepMerge({}, browserProvider?.defaultPageOptions),
 		view: deepMerge({}, manifest.platform?.defaultViewOptions, browserProvider?.defaultViewOptions)
 	};
+}
+
+/**
+ * Get the bounds of the specified page.
+ * @param platform The platform to get the page bounds for.
+ * @param pageId The if of the page to get the bounds for.
+ * @param fromStorage Get the bounds from storage instead of the actual page if available.
+ * @returns The bounds for the page.
+ */
+export async function getPageBoundsAndState(
+	platform: WorkspacePlatformModule,
+	pageId: string,
+	fromStorage = false
+): Promise<{ bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal" } | undefined> {
+	let boundsAndState: { bounds?: OpenFin.Bounds; state?: "maximized" | "minimized" | "normal" } | undefined;
+	if (fromStorage) {
+		const page = await platform.Storage.getPage(pageId);
+		if (!isEmpty(page?.customData?.windowBounds)) {
+			return { bounds: page?.customData?.windowBounds, state: page?.customData?.windowState };
+		}
+	}
+
+	const pages = await platform.Browser.getAllAttachedPages();
+	let windowId: OpenFin.Identity | undefined;
+
+	for (const page of pages) {
+		if (page.pageId === pageId) {
+			windowId = page.parentIdentity;
+			break;
+		}
+	}
+
+	if (isEmpty(windowId)) {
+		// check to see if we are talking about a saved page that isn't currently open
+		const savedPage = await platform.Storage.getPage(pageId);
+		if (!isEmpty(savedPage)) {
+			// the requested page is not currently open but is a saved page so try and fetch it from storage as a fallback
+			return { bounds: savedPage?.customData?.windowBounds, state: savedPage?.customData?.windowState };
+		}
+		// it is not an active page and it isn't saved so it is likely a new instance of an existing page (save as)
+		// use the current windowId
+		windowId = await platform.Browser.getLastFocusedWindow();
+	}
+
+	if (!isEmpty(windowId)) {
+		const hostWindow = platform.Browser.wrapSync(windowId);
+		boundsAndState = {
+			bounds: await hostWindow.openfinWindow.getBounds(),
+			state: await hostWindow.openfinWindow.getState()
+		};
+	}
+
+	return boundsAndState;
 }

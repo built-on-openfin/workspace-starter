@@ -161,6 +161,7 @@ export async function prepareToApplyDecoratedSnapshot(): Promise<Snap.LayoutClie
  * Apply a decorated snapshot.
  * @param snapshot The snapshot to apply.
  * @param existingApps A list of the existing apps registered with snap.
+ * @returns nothing.
  */
 export async function applyDecoratedSnapshot(
 	snapshot: OpenFin.Snapshot,

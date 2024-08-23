@@ -4,7 +4,6 @@ import type { LayoutClient } from "@openfin/snap-sdk";
 import type {
 	AnalyticsEvent,
 	ApplyWorkspacePayload,
-	BrowserCreateWindowRequest,
 	ColorSchemeOptionType,
 	CreateSavedPageRequest,
 	CreateSavedWorkspaceRequest,
@@ -52,28 +51,17 @@ import type { EndpointPageGetRequest,
 	EndpointWorkspaceSetRequest,
 	PlatformOverrideHelpers,
 	PlatformOverrideOptions } from "workspace-platform-starter/shapes/platform-shapes";
-import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
-import { getToolbarButtons, updateBrowserWindowButtonsColorScheme } from "../buttons";
-import * as snapProvider from "../snap";
-import { applyClientSnapshot, decorateSnapshot } from "../snapshot-source";
-import { setCurrentColorSchemeMode } from "../themes";
-import { deepMerge, isStringValue, randomUUID ,
-	formatError,
-	isString,
-	isStringValue,
-	randomUUID,
-	sanitizeString
-} from "workspace-platform-starter/utils";
-import { loadConfig, saveConfig } from "../workspace/dock";
-import { getPageBoundsAndState } from "./browser";
-import { closedown as closedownPlatform } from "./platform";
+
+import { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
+import { randomUUID,
+	isEmpty } from "workspace-platform-starter/utils";
 import {
 	mapPlatformPageFromStorage,
 	mapPlatformPageToStorage,
 	mapPlatformWorkspaceToStorage,
 	mapStorageToPlatformWorkspace
 } from "./platform-mapper";
-import { buildDefaultOptions, duplicateLayout } from "./util";
+import { buildDefaultOptions, duplicateLayout, getPageBoundsAndState } from "./util";
 
 const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
@@ -91,13 +79,6 @@ let globalMenuStyle: PopupMenuStyles | undefined;
 let pageMenuStyle: PopupMenuStyles | undefined;
 let viewMenuStyle: PopupMenuStyles | undefined;
 let workspaceApplied: boolean;
-let defaultOptions:
-	| {
-			window: Partial<BrowserCreateWindowRequest> | undefined;
-			page: Partial<Page> | undefined;
-			view: Partial<OpenFin.ViewOptions> | undefined;
-	  }
-	| undefined;
 
 /**
  * Get the override constructor for the platform override (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
@@ -116,7 +97,6 @@ export async function getConstructorOverride(
 	pageMenuStyle = overrideOptions?.browserProviderOptions?.menuOptions?.styles?.pageMenu;
 	viewMenuStyle = overrideOptions?.browserProviderOptions?.menuOptions?.styles?.viewMenu;
 	unsavedPagePromptStrategy = overrideOptions?.browserProviderOptions?.unsavedPagePromptStrategy ?? "default";
-
 	workspaceApplied = false;
 	let endpointProvider: EndpointClient | undefined;
 	if(helpers?.getEndpointClient) {
@@ -134,7 +114,9 @@ export async function getConstructorOverride(
 		!helpers.getVersionInfo ||
 		!helpers.getPlatform ||
 		!helpers.getMenuClient ||
-	    !helpers.fireLifecycleEvent) {
+	    !helpers.fireLifecycleEvent ||
+		!helpers.getSnapClient ||
+		!helpers.getConnectionClient) {
 	 	throw new Error(
 	 		"Platform Override Constructor is missing required helpers. The platform override will not function correctly so this error is to flag the issue."
 	 	);
@@ -142,10 +124,27 @@ export async function getConstructorOverride(
 	 const versionInfo = await helpers.getVersionInfo();
 	 const getCurrentSync = helpers.getPlatform;
 	 const menuClient = await helpers.getMenuClient() as PlatformMenuClient;
-	 const utilClient = helpers.getUtilClient();
-	 const isEmpty = utilClient.general.isEmpty;
 	 const fireLifecycleEvent = helpers.fireLifecycleEvent;
-
+	 const utilClient = helpers.getUtilClient();
+	 const snapClient = await helpers.getSnapClient();
+	 const windowPositioningOptions = await utilClient.position
+	 .getWindowPositionOptions(overrideOptions?.browserProviderOptions);
+	 const themeClient = await helpers.getThemeClient();
+	 const connectionClient = await helpers.getConnectionClient();
+	 const buttonClient = await helpers.getButtonClient();
+	 const dockClient = await helpers.getDockClient();
+	 // eslint-disable-next-line func-style, @typescript-eslint/explicit-function-return-type
+	 const notifyLanguageChange = async (locale: Locale) => {
+		const platform = getCurrentSync();
+		await fireLifecycleEvent<LanguageChangedLifecyclePayload>(platform, "language-changed", {
+			locale
+		});
+		const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
+		await appSessionContextGroup.setContext({
+			type: "platform.language",
+			locale
+		} as OpenFin.Context);
+	};
 	return (Base: OpenFin.Constructor<WorkspacePlatformProvider>) =>
 	/**
 	 * Create a class which overrides the platform provider.
@@ -172,12 +171,15 @@ export async function getConstructorOverride(
 		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
 			let snapshot = await super.getSnapshot(payload, identity);
 
-			if (snapProvider.isEnabled()) {
-				snapshot = await snapProvider.decorateSnapshot(snapshot);
+			if (snapClient.isEnabled()) {
+				snapshot = await snapClient.decorateSnapshot(snapshot);
 			}
 
+			if(isEmpty(connectionClient?.decorateSnapshot)) {
+				return snapshot;
+			}
 			// Decorate the default snapshot with additional information for connection clients.
-			return decorateSnapshot(snapshot);
+			return connectionClient.decorateSnapshot(snapshot);
 		}
 
 		/**
@@ -191,18 +193,20 @@ export async function getConstructorOverride(
 			identity?: OpenFin.Identity
 		): Promise<void> {
 			let existingApps: LayoutClient[] | undefined;
-			if (snapProvider.isEnabled()) {
-				existingApps = await snapProvider.prepareToApplyDecoratedSnapshot();
+			if (snapClient.isEnabled()) {
+				existingApps = await snapClient.prepareToApplyDecoratedSnapshot();
 			}
 
 			await super.applySnapshot(payload, identity);
 
-			if (snapProvider.isEnabled()) {
-				await snapProvider.applyDecoratedSnapshot(payload.snapshot, existingApps ?? []);
+			if (snapClient.isEnabled()) {
+				await snapClient.applyDecoratedSnapshot(payload.snapshot, existingApps ?? []);
 			}
 
-			// Use the decorated snapshot to open any connected clients
-			await applyClientSnapshot(payload.snapshot);
+			if(!isEmpty(connectionClient?.applyClientSnapshot)) {
+				// Use the decorated snapshot to open any connected clients
+				await connectionClient.applyClientSnapshot(payload.snapshot);
+			}
 		}
 
 		/**
@@ -242,7 +246,7 @@ export async function getConstructorOverride(
 		 * @param id The id of the workspace to get.
 		 * @returns The workspace.
 		 */
-		public async getSavedWorkspace(id: string): Promise<Workspace> {
+		public async getSavedWorkspace(id: string): Promise<Workspace | undefined> {
 			// you can add your own custom implementation here if you are storing your workspaces
 			// in non-default location (e.g. on the server instead of locally)
 			logger.info(`Checking for custom workspace storage with endpoint id: ${WORKSPACE_ENDPOINT_ID_GET}`);
@@ -258,7 +262,7 @@ export async function getConstructorOverride(
 					return mapStorageToPlatformWorkspace(workspaceResponse.payload, defaultOpts);
 				}
 				logger.warn(`No response getting saved workspace from custom storage for workspace id: ${id}`);
-				return {} as Workspace;
+				return undefined;
 			}
 			logger.info(`Requesting saved workspace from default storage for workspace id: ${id}`);
 			const savedWorkspace = await super.getSavedWorkspace(id);
@@ -412,8 +416,8 @@ export async function getConstructorOverride(
 						payload.options = {
 							skipPrompt
 						};
-					} else if (!utilClient.general.isEmpty(payload.options) &&
-					utilClient.general.isEmpty(payload.options.skipPrompt)) {
+					} else if (!isEmpty(payload.options) &&
+					isEmpty(payload.options.skipPrompt)) {
 						payload.options.skipPrompt = skipPrompt;
 					}
 				}
@@ -513,7 +517,7 @@ export async function getConstructorOverride(
 		 */
 		public async createSavedPage(req: CreateSavedPageRequest): Promise<void> {
 			const platform = getCurrentSync();
-			const windowBoundsAndState = await getPageBoundsAndState(req.page.pageId);
+			const windowBoundsAndState = await getPageBoundsAndState(platform, req.page.pageId);
 			if (!isEmpty(windowBoundsAndState)) {
 				if (isEmpty(req.page.customData)) {
 					req.page.customData = {};
@@ -569,7 +573,8 @@ export async function getConstructorOverride(
 		 * @param req the update saved page request.
 		 */
 		public async updateSavedPage(req: UpdateSavedPageRequest): Promise<void> {
-			const windowBoundsAndState = await getPageBoundsAndState(req.page.pageId);
+			const platform = getCurrentSync();
+			const windowBoundsAndState = await getPageBoundsAndState(platform, req.page.pageId);
 			if (!isEmpty(windowBoundsAndState)) {
 				if (isEmpty(req.page.customData)) {
 					req.page.customData = {};
@@ -606,7 +611,6 @@ export async function getConstructorOverride(
 				logger.info(`Updated page with id: ${req.page.pageId} against default storage`);
 			}
 
-			const platform = getCurrentSync();
 			await fireLifecycleEvent<PageChangedLifecyclePayload>(platform, "page-changed", {
 				action: "update",
 				id: req.page.pageId,
@@ -770,8 +774,6 @@ export async function getConstructorOverride(
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "before-quit");
 
-			await closedownPlatform();
-
 			return super.quit(payload, callerIdentity);
 		}
 
@@ -800,7 +802,7 @@ export async function getConstructorOverride(
 				const hasTop = !isEmpty(options?.defaultTop);
 
 				if (!hasLeft || !hasTop) {
-					const position = await getWindowPositionUsingStrategy(windowPositioningOptions);
+					const position = await utilClient.position.getWindowPositionUsingStrategy(windowPositioningOptions);
 
 					if (!hasLeft && !isEmpty(position?.left)) {
 						options.defaultLeft = position.left;
@@ -822,7 +824,7 @@ export async function getConstructorOverride(
 				// buttons which are theme and condition aware
 				options.workspacePlatform = options.workspacePlatform ?? {};
 				options.workspacePlatform.toolbarOptions = options.workspacePlatform.toolbarOptions ?? {};
-				const buttons = await getToolbarButtons(options);
+				const buttons = await buttonClient.getToolbarButtons(options);
 				if (!isEmpty(buttons)) {
 					options.workspacePlatform.toolbarOptions.buttons = buttons;
 				}
@@ -844,7 +846,7 @@ export async function getConstructorOverride(
 				try {
 					const platform = getCurrentSync();
 					const browserWindow = platform.Browser.wrapSync(window.identity);
-					await updateBrowserWindowButtonsColorScheme(browserWindow);
+					await buttonClient.updateBrowserWindowButtonsColorScheme(browserWindow);
 				} catch {
 					// Probably not a browser window
 				}
@@ -860,7 +862,27 @@ export async function getConstructorOverride(
 		 */
 		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
 			// The color scheme has been updated, so update the theme
-			await Promise.all([setCurrentColorSchemeMode(schemeType), super.setSelectedScheme(schemeType)]);
+			if(isEmpty(themeClient.setCurrentColorSchemeMode)) {
+				logger.warn("setCurrentColorSchemeMode is not implemented in the theme client.");
+				await super.setSelectedScheme(schemeType);
+			} else {
+				let colorSchemeMode: ColorSchemeMode | undefined;
+				switch (schemeType) {
+					case "dark":
+						colorSchemeMode = ColorSchemeMode.Dark;
+						break;
+					case "light":
+						colorSchemeMode = ColorSchemeMode.Light;
+						break;
+					default:
+						colorSchemeMode = undefined;
+						break;
+				}
+				await Promise.all([
+					themeClient.setCurrentColorSchemeMode(colorSchemeMode),
+					super.setSelectedScheme(schemeType)
+				]);
+			}
 		}
 
 		/**
@@ -896,7 +918,7 @@ export async function getConstructorOverride(
 		 * @returns The loaded dock provider config.
 		 */
 		public async getDockProviderConfig(id: string): Promise<DockProviderConfigWithIdentity | undefined> {
-			return loadConfig(id, async (providerId: string) => super.getDockProviderConfig(providerId));
+			return dockClient.loadConfig(id, async (providerId: string) => super.getDockProviderConfig(providerId));
 		}
 
 		/**
@@ -905,7 +927,7 @@ export async function getConstructorOverride(
 		 * @returns Nothing.
 		 */
 		public async saveDockProviderConfig(config: DockProviderConfigWithIdentity): Promise<void> {
-			return saveConfig(config,
+			return dockClient.saveConfig(config,
 				async (providerConfig: DockProviderConfigWithIdentity) => super.saveDockProviderConfig(providerConfig));
 		}
 

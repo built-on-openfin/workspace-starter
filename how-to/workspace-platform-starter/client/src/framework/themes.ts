@@ -105,15 +105,12 @@ export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
  * Set the color scheme mode and notify anybody listening to the change.
  * @param colorScheme The color scheme to set.
  */
-export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionType): Promise<void> {
-	if (colorScheme === ColorSchemeOptionType.System) {
+export async function setCurrentColorSchemeMode(colorScheme?: ColorSchemeMode): Promise<void> {
+	if (isEmpty(colorScheme)) {
 		colorSchemeMode = getSystemPreferredColorScheme();
-	} else if (colorScheme === ColorSchemeOptionType.Light) {
-		colorSchemeMode = ColorSchemeMode.Light;
 	} else {
-		colorSchemeMode = ColorSchemeMode.Dark;
+		colorSchemeMode = colorScheme;
 	}
-
 	await notifyColorScheme();
 }
 

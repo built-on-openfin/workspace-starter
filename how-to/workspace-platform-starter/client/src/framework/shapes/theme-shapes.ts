@@ -114,4 +114,11 @@ export interface ThemeClient {
 	 * @returns The themed url.
 	 */
 	themeUrl(url: string | undefined): Promise<string | undefined>;
+	/**
+	 * Set the color scheme mode and notify anybody listening to the change.
+	 * This is used by platform overrides to let the platform know of the change.
+	 * @param colorScheme The color scheme to set.
+	 * @returns returns nothing.
+	 */
+	setCurrentColorSchemeMode?(colorScheme?: ColorSchemeMode): Promise<void>;
 }

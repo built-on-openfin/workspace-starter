@@ -199,6 +199,9 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		logger.info("Platform API Ready");
 		fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
 		await notifyColorScheme();
+		lifecycleProvider.subscribeLifecycleEvent("before-quit", async () => {
+			await shareProvider.closedown();
+		});
 	});
 
 	await workspacePlatformInit({
@@ -222,11 +225,4 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		analytics: customSettings?.analyticsProvider?.sendToOpenFin ? { sendToOpenFin: true } : undefined
 	});
 	return true;
-}
-
-/**
- * Closedown the platform.
- */
-export async function closedown(): Promise<void> {
-	await shareProvider.closedown();
 }

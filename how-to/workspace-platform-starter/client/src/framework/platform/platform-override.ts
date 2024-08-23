@@ -71,13 +71,13 @@ import { setCurrentColorSchemeMode } from "../themes";
 import { deepMerge, isEmpty, isStringValue, randomUUID } from "../utils";
 import { loadConfig, saveConfig } from "../workspace/dock";
 import { getPageBoundsAndState } from "./browser";
-import { closedown as closedownPlatform } from "./platform";
 import {
 	mapPlatformPageFromStorage,
 	mapPlatformPageToStorage,
 	mapPlatformWorkspaceToStorage,
 	mapStorageToPlatformWorkspace
 } from "./platform-mapper";
+import { ColorSchemeMode } from "workspace-platform-starter/shapes/theme-shapes";
 
 const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
@@ -765,8 +765,6 @@ export function overrideCallback(
 			const platform = getCurrentSync();
 			await fireLifecycleEvent(platform, "before-quit");
 
-			await closedownPlatform();
-
 			return super.quit(payload, callerIdentity);
 		}
 
@@ -855,7 +853,16 @@ export function overrideCallback(
 		 */
 		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
 			// The color scheme has been updated, so update the theme
-			await Promise.all([setCurrentColorSchemeMode(schemeType), super.setSelectedScheme(schemeType)]);
+			let colorSchemeMode: ColorSchemeMode | undefined;
+			switch (schemeType) {
+				case "dark":
+					colorSchemeMode = ColorSchemeMode.Dark;
+					break;
+				case "light":
+					colorSchemeMode = ColorSchemeMode.Light;
+					break;
+			}
+			await Promise.all([setCurrentColorSchemeMode(colorSchemeMode), super.setSelectedScheme(schemeType)]);
 		}
 
 		/**
