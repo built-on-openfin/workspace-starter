@@ -161,7 +161,7 @@
 				},
 				"modules": [
 					{
-						"id": "wps-interop-override",
+						"id": "default-wps-interop",
 						"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/vnext/workspace-platform-starter/favicon.ico",
 						"title": "Workspace Platform Starter Interop Broker",
 						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
