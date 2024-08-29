@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -98,11 +98,16 @@
 		"ContentNavigation": {
 			"$ref": "#/definitions/__type_12"
 		},
+		"ContentPermission": {
+			"description": "Whether a content url is allowed or blocked for navigation or redirection.\n\n* 'allow': The content url is allowed.\n* 'block': The content url is blocked.",
+			"enum": ["allow", "block"],
+			"type": "string"
+		},
 		"ContentRedirect": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_3"
@@ -111,7 +116,7 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_38"
 		},
 		"DipRect": {
 			"additionalProperties": false,
@@ -127,19 +132,19 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
-		"DisplayMetadata_3": {
-			"$ref": "#/definitions/__type_35"
+		"DisplayMetadata": {
+			"$ref": "#/definitions/__type_36"
 		},
 		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_41"
 		},
 		"DomainSettings": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_38"
 		},
 		"DownloadShelfOptions": {
-			"$ref": "#/definitions/__type_14"
+			"$ref": "#/definitions/__type_15"
 		},
 		"FileDownloadBehavior": {
 			"description": "Whether file downloads raise a user prompt.",
@@ -147,10 +152,10 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_40"
 		},
 		"Identity_5": {
-			"$ref": "#/definitions/__type_17"
+			"$ref": "#/definitions/__type_18"
 		},
 		"InjectionType": {
 			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
@@ -158,22 +163,22 @@
 			"type": "string"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_6"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"LayoutSnapshot": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -379,25 +384,31 @@
 			"$ref": "#/definitions/__type_11"
 		},
 		"Partial_3": {
-			"$ref": "#/definitions/__type_13"
+			"$ref": "#/definitions/__type_14"
 		},
 		"Partial_4": {
-			"$ref": "#/definitions/__type_18"
-		},
-		"Partial_5": {
 			"$ref": "#/definitions/__type_19"
 		},
-		"Partial_6": {
+		"Partial_5": {
 			"$ref": "#/definitions/__type_20"
 		},
-		"Partial_7": {
-			"$ref": "#/definitions/__type_23"
+		"Partial_6": {
+			"$ref": "#/definitions/__type_21"
 		},
-		"Partial_8": {
+		"Partial_7": {
 			"$ref": "#/definitions/__type_24"
 		},
+		"Partial_8": {
+			"$ref": "#/definitions/__type_25"
+		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
+		},
+		"PerDomainSettings": {
+			"$ref": "#/definitions/__type_39"
+		},
+		"Permissions_2": {
+			"$ref": "#/definitions/__type_42"
 		},
 		"PlatformOptions": {
 			"additionalProperties": false,
@@ -420,6 +431,10 @@
 				},
 				"apiDiagnostics": {
 					"type": "boolean"
+				},
+				"appLogsTimezone": {
+					"$ref": "#/definitions/TimeZones",
+					"description": "Set the timezone for the app logs. When setting this value the timestamp will be in ISO 8601 format. By default, if no value is set, it will show the local time in this format: 'y-MM-dd HH:mm:ss.SSS'"
 				},
 				"aspectRatio": {
 					"type": "number"
@@ -680,7 +695,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -711,13 +726,16 @@
 			"$ref": "#/definitions/__type_1"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_16"
+			"$ref": "#/definitions/__type_17"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_5"
+		},
+		"RuleMatchOptions": {
+			"$ref": "#/definitions/__type_13"
 		},
 		"ShortcutOverride": {
 			"additionalProperties": false,
@@ -767,6 +785,10 @@
 			"required": ["edge", "rect"],
 			"type": "object"
 		},
+		"TimeZones": {
+			"enum": ["local", "utc"],
+			"type": "string"
+		},
 		"ViewContentCreationRule": {
 			"additionalProperties": false,
 			"description": "A rule prescribing content creation in a {@link OpenFin.View}.",
@@ -794,11 +816,16 @@
 			"required": ["behavior", "match"],
 			"type": "object"
 		},
+		"ViewThrottling": {
+			"description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
+			"enum": ["enabled", "scheduler-disabled"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_22"
+			"$ref": "#/definitions/__type_23"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_21"
+			"$ref": "#/definitions/__type_22"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -889,6 +916,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -1058,7 +1088,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1119,6 +1150,10 @@
 				"taskbarIconGroup": {
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
+				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
 				},
 				"url": {
 					"type": "string"
@@ -1189,6 +1224,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -1359,7 +1397,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1421,6 +1460,10 @@
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
 				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -1462,6 +1505,7 @@
 				"autoShow",
 				"autoplayPolicy",
 				"backgroundColor",
+				"backgroundThrottling",
 				"closeOnLastViewRemoved",
 				"contentCreation",
 				"contentNavigation",
@@ -1511,6 +1555,7 @@
 				"state",
 				"taskbarIcon",
 				"taskbarIconGroup",
+				"throttling",
 				"url",
 				"uuid",
 				"viewsPreventingClose",
@@ -1525,6 +1570,11 @@
 		"WindowState": {
 			"description": "Visibility state of a window.",
 			"enum": ["maximized", "minimized", "normal"],
+			"type": "string"
+		},
+		"WindowThrottling": {
+			"description": "Window throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: The background throttling is true, but scheduler throttling is disabled.\n* `disabled`: The background throttling is false. The throttling is fully disabled.",
+			"enum": ["disabled", "enabled", "scheduler-disabled"],
 			"type": "string"
 		},
 		"WorkspacePlatformOptions": {
@@ -1638,6 +1688,9 @@
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
 				},
+				"backgroundThrottling": {
+					"type": "boolean"
+				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
 				},
@@ -1807,7 +1860,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -1869,6 +1923,10 @@
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
 				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -1924,6 +1982,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -1934,6 +1996,17 @@
 			"type": "object"
 		},
 		"__type_13": {
+			"additionalProperties": false,
+			"description": "Controls the behavior of the navigation URI pattern matching algorithm.",
+			"properties": {
+				"matchAllSchemes": {
+					"description": "Matches all schemes rather than just http and https when a wild card is specified. For example, `'*://*.site.com'` will\nonly match urls which begin with `'http:'` or `'https:'` unless this setting is `true`.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_14": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -1956,6 +2029,10 @@
 					},
 					"type": "array"
 				},
+				"matchOptions": {
+					"$ref": "#/definitions/RuleMatchOptions",
+					"description": "Options to use when comparing URIs to the `allowlist` and `denylist` patterns."
+				},
 				"whitelist": {
 					"items": {
 						"type": "string"
@@ -1965,7 +2042,7 @@
 			},
 			"type": "object"
 		},
-		"__type_14": {
+		"__type_15": {
 			"additionalProperties": false,
 			"properties": {
 				"border": {
@@ -1991,7 +2068,7 @@
 			"required": ["enabled"],
 			"type": "object"
 		},
-		"__type_15": {
+		"__type_16": {
 			"additionalProperties": false,
 			"properties": {
 				"layouts": {
@@ -2001,11 +2078,11 @@
 			"required": ["layouts"],
 			"type": "object"
 		},
-		"__type_16": {
+		"__type_17": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_17": {
+		"__type_18": {
 			"additionalProperties": false,
 			"description": "Unique identifier for a window, view or iframe.",
 			"properties": {
@@ -2021,7 +2098,7 @@
 			"required": ["name", "uuid"],
 			"type": "object"
 		},
-		"__type_18": {
+		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -2055,18 +2132,6 @@
 			},
 			"type": "object"
 		},
-		"__type_19": {
-			"additionalProperties": false,
-			"properties": {
-				"getFileDownloadLocation": {
-					"type": "boolean"
-				},
-				"setFileDownloadLocation": {
-					"type": "boolean"
-				}
-			},
-			"type": "object"
-		},
 		"__type_2": {
 			"additionalProperties": false,
 			"properties": {
@@ -2087,6 +2152,18 @@
 			"type": "object"
 		},
 		"__type_20": {
+			"additionalProperties": false,
+			"properties": {
+				"getFileDownloadLocation": {
+					"type": "boolean"
+				},
+				"setFileDownloadLocation": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_21": {
 			"additionalProperties": false,
 			"properties": {
 				"getAllExternalWindows": {
@@ -2114,6 +2191,9 @@
 							"type": "boolean"
 						}
 					]
+				},
+				"getOSInfo": {
+					"type": "boolean"
 				},
 				"launchExternalProcess": {
 					"anyOf": [
@@ -2293,7 +2373,7 @@
 			},
 			"type": "object"
 		},
-		"__type_21": {
+		"__type_22": {
 			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
@@ -2312,7 +2392,7 @@
 			},
 			"type": "object"
 		},
-		"__type_22": {
+		"__type_23": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -2322,7 +2402,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -2340,7 +2420,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -2485,7 +2565,8 @@
 					"type": "string"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the view."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -2522,6 +2603,10 @@
 					"$ref": "#/definitions/Identity_5",
 					"description": "The identity of the window this view should be attached to."
 				},
+				"throttling": {
+					"$ref": "#/definitions/ViewThrottling",
+					"description": "{@inheritDoc ViewThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -2531,7 +2616,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2550,7 +2635,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2572,7 +2657,7 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2663,7 +2748,7 @@
 			],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2676,19 +2761,6 @@
 				}
 			},
 			"required": ["x", "y"],
-			"type": "object"
-		},
-		"__type_29": {
-			"additionalProperties": false,
-			"properties": {
-				"dipRect": {
-					"$ref": "#/definitions/RectangleByEdgePositions"
-				},
-				"scaledRect": {
-					"$ref": "#/definitions/RectangleByEdgePositions"
-				}
-			},
-			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
 		"__type_3": {
@@ -2709,6 +2781,19 @@
 		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
+				"dipRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				},
+				"scaledRect": {
+					"$ref": "#/definitions/RectangleByEdgePositions"
+				}
+			},
+			"required": ["dipRect", "scaledRect"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
+			"properties": {
 				"bottom": {
 					"type": "number"
 				},
@@ -2725,7 +2810,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2777,7 +2862,7 @@
 			],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2806,7 +2891,7 @@
 			},
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -2842,6 +2927,9 @@
 				"backgroundColor": {
 					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -3012,7 +3100,8 @@
 					"type": "number"
 				},
 				"permissions": {
-					"$ref": "#/definitions/Partial_4"
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the window."
 				},
 				"preloadScripts": {
 					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
@@ -3078,6 +3167,10 @@
 					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
 					"type": "string"
 				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -3110,7 +3203,7 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -3119,7 +3212,7 @@
 						"description": "Information for a Context Group. Contains metadata for displaying the group properly.",
 						"properties": {
 							"displayMetadata": {
-								"$ref": "#/definitions/DisplayMetadata_3",
+								"$ref": "#/definitions/DisplayMetadata",
 								"description": "Metadata for the Context Group. Contains the group's human-readable name, color, and an image, as defined by the Interop Broker."
 							},
 							"id": {
@@ -3138,7 +3231,7 @@
 			},
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -3157,7 +3250,7 @@
 			},
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -3186,9 +3279,13 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
+				"default": {
+					"$ref": "#/definitions/PerDomainSettings",
+					"description": "Default values for settings in {@link DomainSettingsRule}."
+				},
 				"rules": {
 					"description": "{@inheritDoc DomainSettingsRule}",
 					"items": {
@@ -3201,23 +3298,16 @@
 								},
 								"type": "array"
 							},
+							"matchOptions": {
+								"$ref": "#/definitions/RuleMatchOptions",
+								"description": "Options to use when comparing URIs to the `match` patterns."
+							},
 							"options": {
-								"additionalProperties": false,
-								"description": "Settings applied when a webcontents has been navigated to a matched domain.",
-								"properties": {
-									"api": {
-										"$ref": "#/definitions/DomainApiSettings",
-										"description": "{@inheritDoc ApiInjection}"
-									},
-									"downloadSettings": {
-										"$ref": "#/definitions/FileDownloadSettings",
-										"description": "{@inheritDoc FileDownloadSettings}"
-									}
-								},
-								"type": "object"
+								"$ref": "#/definitions/PerDomainSettings",
+								"description": "Settings applied when a webcontents has been navigated to a matched domain."
 							}
 						},
-						"required": ["match", "options"],
+						"required": ["options"],
 						"type": "object"
 					},
 					"type": "array"
@@ -3226,7 +3316,37 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
+			"additionalProperties": false,
+			"properties": {
+				"api": {
+					"$ref": "#/definitions/DomainApiSettings",
+					"description": "{@inheritDoc ApiInjection}"
+				},
+				"content": {
+					"$ref": "#/definitions/ContentPermission",
+					"description": "Whether DOM content can be loaded (by navigation or redirect)."
+				},
+				"downloadSettings": {
+					"$ref": "#/definitions/FileDownloadSettings",
+					"description": "{@inheritDoc FileDownloadSettings}"
+				}
+			},
+			"type": "object"
+		},
+		"__type_4": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -3256,25 +3376,50 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"fin": {
 					"$ref": "#/definitions/InjectionType",
 					"description": "Injection setting for the `fin` API for contexts on a matched domain.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available."
+				},
+				"permissions": {
+					"$ref": "#/definitions/Permissions_2",
+					"description": "API permissions for domains matched to the current {@link DomainSettingsRule}."
 				}
 			},
-			"required": ["fin"],
 			"type": "object"
 		},
-		"__type_4": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
-				"height": {
-					"type": "number"
+				"Application": {
+					"$ref": "#/definitions/Partial_5"
 				},
-				"width": {
-					"type": "number"
+				"System": {
+					"$ref": "#/definitions/Partial_6"
+				},
+				"devices": {
+					"items": {
+						"additionalProperties": false,
+						"properties": {
+							"productId": {
+								"type": ["string", "number"]
+							},
+							"vendorId": {
+								"type": ["string", "number"]
+							}
+						},
+						"required": ["productId", "vendorId"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"webAPIs": {
+					"items": {
+						"$ref": "#/definitions/WebPermission"
+					},
+					"type": "array"
 				}
 			},
 			"type": "object"
