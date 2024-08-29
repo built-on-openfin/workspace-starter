@@ -114,6 +114,12 @@ export interface ThemeClient {
 	 * @returns The themed url.
 	 */
 	themeUrl(url: string | undefined): Promise<string | undefined>;
+}
+
+/**
+ * An extended client with additional functions for platform modules
+ */
+export interface PlatformThemeClient extends ThemeClient {
 	/**
 	 * Set the color scheme mode and notify anybody listening to the change.
 	 * This is used by platform overrides to let the platform know of the change.

@@ -1,6 +1,5 @@
 import type { OpenFin } from "@openfin/core";
 import type { BrowserProviderOptions, WindowPositioningOptions } from "./browser-shapes";
-
 /**
  * A utility object that provides common utility functions.
  */
@@ -99,7 +98,6 @@ interface Utils {
 	 */
 	getCommandLineArgs(commandLine: string): string[];
 }
-
 /**
  * Utility functions for working with positioning of windows.
  */
@@ -114,8 +112,17 @@ interface UtilsPosition {
 	 */
 	centerContentInIdentity(
 		clientIdentity: OpenFin.Identity,
-		dimensions: { width: number; height: number }
-	): Promise<{ x: number; y: number } | undefined>;
+		dimensions: {
+			width: number;
+			height: number;
+		}
+	): Promise<
+		| {
+				x: number;
+				y: number;
+		  }
+		| undefined
+	>;
 	/**
 	 * Provides x and y co-ordinates to position content of a given size in relation to a rect.
 	 * @param availableRect The available rect to position the content in.
@@ -129,9 +136,20 @@ interface UtilsPosition {
 	 * @returns The x, y co-ordinates to position the content
 	 */
 	centerContentInRect(
-		availableRect: { left: number; top: number; right: number; bottom: number },
-		contentDimensions: { width: number; height: number }
-	): { x: number; y: number };
+		availableRect: {
+			left: number;
+			top: number;
+			right: number;
+			bottom: number;
+		},
+		contentDimensions: {
+			width: number;
+			height: number;
+		}
+	): {
+		x: number;
+		y: number;
+	};
 	/**
 	 * Returns the monitor details for the monitor a view/window is placed on.
 	 * @param clientIdentity The identity of the view/window to check against.
@@ -159,8 +177,16 @@ interface UtilsPosition {
 	 * @returns True if the point is in the rect.
 	 */
 	pointInRect(
-		point: { x: number; y: number },
-		rect: { top: number; left: number; bottom: number; right: number }
+		point: {
+			x: number;
+			y: number;
+		},
+		rect: {
+			top: number;
+			left: number;
+			bottom: number;
+			right: number;
+		}
 	): boolean;
 	/**
 	 * Get the center for a bounding rectangle.
@@ -171,7 +197,10 @@ interface UtilsPosition {
 	 * @param bounds.height The rect height
 	 * @returns the x and y of the bounds center or an object not containing x or y.
 	 */
-	getBoundsCenter(bounds?: OpenFin.Bounds): { x?: number; y?: number };
+	getBoundsCenter(bounds?: OpenFin.Bounds): {
+		x?: number;
+		y?: number;
+	};
 	/**
 	 * Given browser settings what window positioning options should be used?
 	 * @param settings The browser settings that have been provided.
@@ -190,10 +219,21 @@ interface UtilsPosition {
 	 */
 	getWindowPositionUsingStrategy(
 		windowPositioningOptions?: WindowPositioningOptions,
-		relatedTo?: OpenFin.MonitorDetails | OpenFin.Identity | { x: number; y: number }
-	): Promise<{ left: number; top: number } | undefined>;
+		relatedTo?:
+			| OpenFin.MonitorDetails
+			| OpenFin.Identity
+			| {
+					x: number;
+					y: number;
+			  }
+	): Promise<
+		| {
+				left: number;
+				top: number;
+		  }
+		| undefined
+	>;
 }
-
 /**
  * Gets a collection of utility functions.
  */
@@ -202,9 +242,9 @@ export interface UtilClient {
 	 * General utility functions.
 	 */
 	general: Utils;
-
 	/**
 	 * Utility functions for working with positioning of windows.
 	 */
 	position: UtilsPosition;
 }
+export {};

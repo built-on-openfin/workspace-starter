@@ -1,9 +1,12 @@
 import { createLogger } from "./logger-provider";
 import { closedownModules, initializeModules, loadModules } from "./modules";
-import type {
-	AnalyticsModule,
-	AnalyticsProviderOptions,
-	PlatformAnalyticsEvent
+import {
+	MODULE_ANALYTICS_SOURCE,
+	type AnalyticsClient,
+	type AnalyticsModule,
+	type AnalyticsProviderOptions,
+	type ModuleAnalyticsEvent,
+	type PlatformAnalyticsEvent
 } from "./shapes/analytics-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 
@@ -59,4 +62,41 @@ export async function handleAnalytics(events: PlatformAnalyticsEvent[]): Promise
 	for (const analyticsModule of modules) {
 		await analyticsModule.implementation.handleAnalytics(events);
 	}
+}
+
+/**
+ * Get analytics client.
+ * @returns The analytics client.
+ */
+export async function getAnalyticsModuleClient(): Promise<AnalyticsClient | undefined> {
+	if (!isEnabled()) {
+		return;
+	}
+	return {
+		handleAnalytics: async (events: ModuleAnalyticsEvent[]): Promise<void> => {
+			if (Array.isArray(events)) {
+				const platformAnalyticEvents: PlatformAnalyticsEvent[] = events.map<PlatformAnalyticsEvent>(
+					(entry) => ({ ...entry, source: MODULE_ANALYTICS_SOURCE })
+				);
+				return handleAnalytics(platformAnalyticEvents);
+			}
+		}
+	};
+}
+
+/**
+ * Get analytics client for platform override use.
+ * @returns The analytics client.
+ */
+export async function getAnalyticsPlatformClient(): Promise<AnalyticsClient | undefined> {
+	if (!isEnabled()) {
+		return;
+	}
+	return {
+		handleAnalytics: async (events: PlatformAnalyticsEvent[]): Promise<void> => {
+			if (Array.isArray(events)) {
+				return handleAnalytics(events);
+			}
+		}
+	};
 }

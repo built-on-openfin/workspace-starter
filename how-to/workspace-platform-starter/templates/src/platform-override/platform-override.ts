@@ -8,18 +8,17 @@ import type {
 	PlatformOverrideHelpers,
 	PlatformOverrideOptions
 } from "workspace-platform-starter/shapes/platform-shapes";
-import { getConstructorOverride as wpsConstructorOverride } from "./platform/wps-platform-override";
-import type { WpsPlatformOverrideOptions } from "./shapes";
+import type { ExamplePlatformOverrideOptions } from "./shapes";
 
 /**
- * Implementation for the wps platform override.
+ * Implementation for the example platform override.
  */
-export class WpsPlatformOverride implements PlatformOverride<WpsPlatformOverrideOptions> {
+export class ExamplePlatformOverride implements PlatformOverride<ExamplePlatformOverrideOptions> {
 	/**
 	 * The module definition including settings.
 	 * @internal
 	 */
-	private _definition: ModuleDefinition<WpsPlatformOverrideOptions> | undefined;
+	private _definition: ModuleDefinition<ExamplePlatformOverrideOptions> | undefined;
 
 	/**
 	 * The logger for displaying information from the module.
@@ -41,16 +40,18 @@ export class WpsPlatformOverride implements PlatformOverride<WpsPlatformOverride
 	 * @returns Nothing.
 	 */
 	public async initialize(
-		definition: ModuleDefinition<WpsPlatformOverrideOptions>,
+		definition: ModuleDefinition<ExamplePlatformOverrideOptions>,
 		loggerCreator: LoggerCreator,
 		helpers: PlatformOverrideHelpers
 	): Promise<void> {
 		this._definition = definition;
-		const loggerName = definition.data?.loggerName ?? "WpsPlatformOverride";
-		this._logger = loggerCreator(loggerName);
+		this._logger = loggerCreator("ExamplePlatformOverride");
 		this._helpers = helpers;
 
 		this._logger.info("Initializing");
+
+		// TODO: Add code here to allocate any module resources
+		// You can access the configured options e.g. definition.data?.exampleProp
 	}
 
 	/**
@@ -59,6 +60,8 @@ export class WpsPlatformOverride implements PlatformOverride<WpsPlatformOverride
 	 */
 	public async closedown(): Promise<void> {
 		this._logger?.info("Closedown");
+
+		// TODO: Add code here to free up any module resources
 	}
 
 	/**
@@ -69,9 +72,27 @@ export class WpsPlatformOverride implements PlatformOverride<WpsPlatformOverride
 	public async getConstructorOverride(
 		options: PlatformOverrideOptions
 	): Promise<OpenFin.ConstructorOverride<WorkspacePlatformProvider>> {
-		if (!this._helpers || !this._logger) {
-			throw new Error("Module not initialized");
-		}
-		return wpsConstructorOverride(options, this._logger, this._helpers);
+		return (Base: OpenFin.Constructor<WorkspacePlatformProvider>) => {
+			// use settings passed through the module definition in your override or the default options passed with the function call
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const moduleData = this._definition?.data ?? {};
+			const logger = this._logger;
+			const helpers = this._helpers;
+			/**
+			 * Extend the Platform Override.
+			 */
+			return class CustomPlatformOverride extends Base {
+				/**
+				 * Constructor for the interop override.
+				 */
+				constructor() {
+					super();
+					// this is just an example to show a reference to the options, module data and local reference to the passed helpers.
+					logger?.info(
+						`Options passed: ${JSON.stringify(options)} and module data: ${JSON.stringify(moduleData)} with session id: ${helpers?.sessionId}`
+					);
+				}
+			};
+		};
 	}
 }

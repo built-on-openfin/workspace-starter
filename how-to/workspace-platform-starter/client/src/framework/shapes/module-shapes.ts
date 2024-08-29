@@ -3,7 +3,7 @@ import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/work
 import type { AnalyticsClient } from "./analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./app-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
-import type { ConnectionClient, ConnectionValidationOptions, ConnectionValidationResponse } from "./connection-shapes";
+import type { ConnectionClient } from "./connection-shapes";
 import type { DialogClient } from "./dialog-shapes";
 import type { EndpointClient } from "./endpoint-shapes";
 import type { FavoriteClient } from "./favorite-shapes";
@@ -182,19 +182,6 @@ export interface ModuleHelpers {
 	 * @returns dialog client.
 	 */
 	getDialogClient?(): Promise<DialogClient | undefined>;
-
-	/**
-	 * If the platform has been configured to list supported connections then this API can provide a way of validating the connection.
-	 * @param identity The identity of the connection.
-	 * @param payload The payload to validate if provided.
-	 * @param options The options for the validation (provides additional information such as the type of connection that is trying to be made).
-	 * @returns The response from the validation.
-	 */
-	isConnectionValid?<T>(
-		identity: OpenFin.Identity,
-		payload?: unknown,
-		options?: ConnectionValidationOptions<T>
-	): Promise<ConnectionValidationResponse>;
 
 	/**
 	 * If available, this function lets you request the launch of an application that is available to this platform and

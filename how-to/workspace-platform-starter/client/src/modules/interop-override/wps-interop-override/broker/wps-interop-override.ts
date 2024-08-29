@@ -78,7 +78,7 @@ export async function getConstructorOverride(
 
 	let connectionsClient: ConnectionClient | undefined;
 
-	if(helpers?.getConnectionClient) {
+	if (helpers?.getConnectionClient) {
 		connectionsClient = await helpers.getConnectionClient();
 	}
 

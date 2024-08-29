@@ -738,6 +738,28 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/platform-override/wps-platform-override/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [loaderRule]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'wps-platform-override.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'platform-override')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

@@ -4,12 +4,15 @@ import {
 	init as workspacePlatformInit,
 	type BrowserInitConfig
 } from "@openfin/workspace-platform";
+import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
 import { getWindowPositionOptions } from "workspace-platform-starter/utils-position";
+import { saveConfig, loadConfig } from "workspace-platform-starter/workspace/dock";
 import * as actionsProvider from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";
 import * as auth from "../auth";
 import * as authFlow from "../auth-flow";
+import * as buttons from "../buttons";
 import * as conditionsProvider from "../conditions";
 import * as connectionProvider from "../connections";
 import * as contentCreationProvider from "../content-creation";
@@ -26,14 +29,13 @@ import type { ModuleHelpers } from "../shapes/module-shapes";
 import type { CustomSettings } from "../shapes/setting-shapes";
 import * as shareProvider from "../share";
 import * as snapProvider from "../snap";
-import { getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
+import { getPlatformThemeClient, getThemes, notifyColorScheme, supportsColorSchemes } from "../themes";
 import { isEmpty, isStringValue, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
 import { getDefaultWindowOptions } from "./browser";
 import * as interopProvider from "./interop";
-import { getInteropConstructorOverrides } from "./interop";
-import { overrideCallback } from "./platform-override";
+import * as platformOverride from "./platform-override";
 import * as platformSplashProvider from "./platform-splash";
 import { PLATFORM_VERSION } from "./platform-version";
 
@@ -204,6 +206,31 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		});
 	});
 
+	await platformOverride.init(customSettings?.platformProvider, customSettings?.browserProvider ?? {}, {
+		...helpers,
+		getApps: async (): Promise<PlatformApp[]> => {
+			logger.info("getApps: getting public apps for module.");
+			return appProvider.getApps();
+		},
+		getAnalyticsClient: async () => analyticsProvider.getAnalyticsPlatformClient(),
+		getSnapClient: async () => snapProvider,
+		fireLifecycleEvent: lifecycleProvider.fireLifecycleEvent,
+		getMenuClient: async () => ({
+			getPopupMenuStyle: menusProvider.getPopupMenuStyle,
+			showPopupMenu: menusProvider.showPopupMenu,
+			getGlobalMenu: menusProvider.getGlobalMenu,
+			getPageMenu: menusProvider.getPageMenu,
+			getViewMenu: menusProvider.getViewMenu
+		}),
+		getButtonClient: async () => buttons,
+		getDockClient: async () => ({ loadConfig, saveConfig }),
+		getThemeClient: getPlatformThemeClient,
+		getConnectionClient: async () => connectionProvider.getPlatformConnectionClient()
+	});
+
+	const interopOverride = interopProvider.getInteropConstructorOverrides();
+	const overrideCallback = platformOverride.getPlatformConstructorOverrides();
+
 	await workspacePlatformInit({
 		browser,
 		language: isStringValue(customSettings?.platformProvider?.language?.initialLanguage)
@@ -212,15 +239,8 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		theme,
 		notifications: customSettings?.notificationProvider?.notificationsCustomManifest,
 		customActions,
-		interopOverride: getInteropConstructorOverrides(),
-		overrideCallback: async (platformConstructor) =>
-			overrideCallback(
-				platformConstructor,
-				customSettings?.platformProvider,
-				customSettings?.browserProvider,
-				await getWindowPositionOptions(customSettings?.browserProvider),
-				await versionProvider.getVersionInfo()
-			),
+		interopOverride,
+		overrideCallback,
 		integrations,
 		analytics: customSettings?.analyticsProvider?.sendToOpenFin ? { sendToOpenFin: true } : undefined
 	});

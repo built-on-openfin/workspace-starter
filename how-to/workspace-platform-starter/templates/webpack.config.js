@@ -340,6 +340,62 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './templates/src/interop-override/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'interop-override.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/platform-override/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'platform-override.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

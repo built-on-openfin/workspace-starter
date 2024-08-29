@@ -206,7 +206,14 @@ export interface ConnectionClient {
 		payload?: unknown,
 		options?: ConnectionValidationOptions<T>
 	): Promise<ConnectionValidationResponse>;
+}
 
+/**
+ * Provides an interface for modules that need to use functions
+ * that take into account internal and possible external connections
+ * to the platform.
+ */
+export interface PlatformConnectionClient extends ConnectionClient {
 	/**
 	 * Decorate a snapshot with the snapshot source information collected
 	 * from connections describe in the connectionsProvider configuration.
@@ -221,7 +228,5 @@ export interface ConnectionClient {
 	 * @param snapshot The snapshot.
 	 * @returns A promise that resolves when the client snapshot has been applied.
 	 */
- 	applyClientSnapshot?(
-	snapshot: OpenFin.Snapshot & { clientSnapshots?: ClientSnapshot[] }
-	): Promise<void>;
+	applyClientSnapshot?(snapshot: OpenFin.Snapshot & { clientSnapshots?: ClientSnapshot[] }): Promise<void>;
 }
