@@ -31,7 +31,7 @@ These are platform modules that provide custom platform logic. If there are more
   ...
    "modules": [
     {
-      "id": "wps-platform-override",
+      "id": "default-wps-platform",
       "icon": "http://localhost:8080/favicon.ico",
       "title": "Workspace Platform Starter Platform Override",
       "description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
@@ -60,7 +60,7 @@ In order for the wps platform override module to be able to use endpoints (just 
     "clientOptions": [
      {
       "enabled": true,
-      "id": "wps-platform-override",
+      "id": "default-wps-platform",
       "endpointIds": [
        "*"
       ]

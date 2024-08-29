@@ -101,7 +101,7 @@
 			},
 			"modules": [
 				{
-					"id": "wps-platform-override",
+					"id": "default-wps-platform",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Workspace Platform Starter Platform Override",
 					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
@@ -188,7 +188,7 @@
 				},
 				"modules": [
 					{
-						"id": "wps-interop-override",
+						"id": "default-wps-interop",
 						"icon": "http://localhost:8080/favicon.ico",
 						"title": "Workspace Platform Starter Interop Broker",
 						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
@@ -421,12 +421,12 @@
 					},
 					{
 						"enabled": true,
-						"id": "wps-interop-override",
+						"id": "default-wps-interop",
 						"endpointIds": ["*"]
 					},
 					{
 						"enabled": true,
-						"id": "wps-platform-override",
+						"id": "default-wps-platform",
 						"endpointIds": ["*"]
 					},
 					{

@@ -32,7 +32,7 @@ These are interop modules that provide custom interop broker logic. If there are
   "interop": {
    "modules": [
     {
-      "id": "wps-interop-override",
+      "id": "default-wps-interop",
       "icon": "http://localhost:8080/favicon.ico",
       "title": "Workspace Platform Starter Interop Broker",
       "description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
@@ -62,7 +62,7 @@ In order for the wps interop override module to be able to use endpoints (just l
     "clientOptions": [
      {
       "enabled": true,
-      "id": "wps-interop-override",
+      "id": "default-wps-interop",
       "endpointIds": [
        "*"
       ]
