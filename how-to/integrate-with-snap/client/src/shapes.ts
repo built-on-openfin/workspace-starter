@@ -60,4 +60,24 @@ export interface SnapProviderOptions {
 	 * Show the Snap SDK debug window.
 	 */
 	showDebugWindow?: boolean;
+
+	/**
+	 *  Disable the ability to unsnap a window by holding down the shift key.
+	 */
+	disableShiftToUnsnap?: boolean;
+
+	/**
+	 * Disable auto-snap when dragging a window. Only enable snap when the Ctrl key is pressed.
+	 */
+	enableCtrlToSnap?: boolean;
+
+	/**
+	 * Disable the GPU acceleration for dragging a window.
+	 */
+	disableGPUDragging?: boolean;
+
+	/**
+	 * Disable the blur drop preview when dragging a window.
+	 */
+	disableBlurDropPreview?: boolean;
 }

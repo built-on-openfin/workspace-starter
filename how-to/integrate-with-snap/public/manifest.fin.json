@@ -45,14 +45,20 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://cdn.openfin.co/release/snap/0.3.0/snap.zip",
+			"src": "https://cdn.openfin.co/release/snap/0.4.1/snap.zip",
 			"alias": "openfin-snap",
-			"version": "0.3.0",
+			"version": "0.4.1",
 			"target": "OpenFinSnap.exe",
 			"mandatory": true
 		}
 	],
-	"snapProvider": {
-		"showDebugWindow": false
+	"customSettings": {
+		"snapProvider": {
+			"showDebugWindow": false,
+			"disableShiftToUnsnap": false,
+			"enableCtrlToSnap": false,
+			"disableGPUDragging": false,
+			"disableBlurDropPreview": false
+		}
 	}
 }

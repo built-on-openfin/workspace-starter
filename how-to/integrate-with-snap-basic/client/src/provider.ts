@@ -4,6 +4,11 @@ const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
 
 // The DOM elements
 let chkShowDebugWindow: HTMLInputElement | null;
+let chkDisableShiftToUnsnap: HTMLInputElement | null;
+let chkCtrlToSnap: HTMLInputElement | null;
+let chkDisableGPUDragging: HTMLInputElement | null;
+let chkDisableBlurDrop: HTMLInputElement | null;
+
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
 let btnNativeTestApp: HTMLButtonElement | null;
@@ -32,6 +37,10 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeDOM(): Promise<void> {
 	chkShowDebugWindow = document.querySelector<HTMLInputElement>("#chkShowDebugWindow");
+ 	chkDisableShiftToUnsnap = document.querySelector<HTMLInputElement>("#chkDisableShiftToUnsnap");
+	chkCtrlToSnap = document.querySelector<HTMLInputElement>("#chkCtrlToSnap");
+	chkDisableGPUDragging = document.querySelector<HTMLInputElement>("#chkDisableGPUDragging");
+	chkDisableBlurDrop = document.querySelector<HTMLInputElement>("#chkDisableBlurDrop");
 	btnStart = document.querySelector<HTMLButtonElement>("#btnStart");
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
 	serverStatus = document.querySelector<HTMLParagraphElement>("#serverStatus");
@@ -46,6 +55,10 @@ async function initializeDOM(): Promise<void> {
 
 	if (
 		chkShowDebugWindow &&
+		chkDisableShiftToUnsnap &&
+		chkCtrlToSnap &&
+		chkDisableGPUDragging &&
+		chkDisableBlurDrop &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
@@ -65,6 +78,10 @@ async function initializeDOM(): Promise<void> {
 			);
 			updateServerStatus();
 			chkShowDebugWindow.disabled = true;
+			chkCtrlToSnap.disabled = true;
+			chkDisableShiftToUnsnap.disabled = true;
+			chkDisableGPUDragging.disabled = true;
+			chkDisableBlurDrop.disabled = true;
 			btnStart.disabled = true;
 		} else {
 			btnStart.addEventListener("click", async () => {
@@ -74,7 +91,11 @@ async function initializeDOM(): Promise<void> {
 
 					logInformation(`Starting Snap Server with Id ${fin.me.identity.uuid}`);
 					server = new Snap.SnapServer(fin.me.identity.uuid);
-					await server.start({ showDebug: chkShowDebugWindow?.checked });
+					await server.start({ showDebug: chkShowDebugWindow?.checked,
+						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
+						keyToStick: chkCtrlToSnap?.checked,
+						disableGPUAcceleratedDragging: chkDisableGPUDragging?.checked,
+						disableBlurDropPreview: chkDisableBlurDrop?.checked });
 
 					server.addEventListener("client-registered", (event: Snap.ClientRegisteredEvent) => {
 						logInformation(`Client Registered: ${JSON.stringify(event)}`);
@@ -236,6 +257,10 @@ function formatError(err: unknown): string {
 function updateServerStatus(): void {
 	if (
 		chkShowDebugWindow &&
+		chkCtrlToSnap &&
+		chkDisableShiftToUnsnap &&
+		chkDisableGPUDragging &&
+		chkDisableBlurDrop &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
@@ -248,6 +273,10 @@ function updateServerStatus(): void {
 	) {
 		if (serverState === "starting" || serverState === "stopping") {
 			chkShowDebugWindow.disabled = true;
+			chkCtrlToSnap.disabled = true;
+			chkDisableShiftToUnsnap.disabled = true;
+			chkDisableGPUDragging.disabled = true;
+			chkDisableBlurDrop.disabled = true;
 			btnStart.disabled = true;
 			btnStop.disabled = true;
 			btnGetLayout.disabled = true;
@@ -255,6 +284,10 @@ function updateServerStatus(): void {
 			serverStatus.textContent = `Snap Server is ${serverState}`;
 		} else if (serverState === "started") {
 			chkShowDebugWindow.disabled = true;
+			chkCtrlToSnap.disabled = true;
+			chkDisableShiftToUnsnap.disabled = true;
+			chkDisableGPUDragging.disabled = true;
+			chkDisableBlurDrop.disabled = true;
 			btnStart.disabled = true;
 			btnStop.disabled = false;
 			btnGetLayout.disabled = false;
@@ -262,6 +295,10 @@ function updateServerStatus(): void {
 			serverStatus.textContent = "Snap Server is started";
 		} else {
 			chkShowDebugWindow.disabled = false;
+			chkCtrlToSnap.disabled = false;
+			chkDisableShiftToUnsnap.disabled = false;
+			chkDisableGPUDragging.disabled = false;
+			chkDisableBlurDrop.disabled = false;
 			btnStart.disabled = false;
 			btnStop.disabled = true;
 			btnGetLayout.disabled = true;

@@ -24,13 +24,32 @@
 		<main class="col fill gap10 scroll-vertical">
 			<p>Clicking the start button will connect and start the Snap server.</p>
 			<div class="row gap10 middle">
+				<button id="btnStart">Start the Snap Server</button>
+				<button id="btnStop">Stop the Snap Server</button>
+				<p id="serverStatus"></p>
+			</div>
+			<hr />
+			<div class="row gap10 middle">
 				<fieldset class="row">
 					<label for="chkShowDebugWindow">Show Debug Window</label>
 					<input type="checkbox" id="chkShowDebugWindow" />
 				</fieldset>
-				<button id="btnStart">Start the Snap Server</button>
-				<button id="btnStop">Stop the Snap Server</button>
-				<p id="serverStatus"></p>
+				<fieldset class="row">
+					<label for="chkDisableShiftToUnsnap">Disable Shift To Unsnap</label>
+					<input type="checkbox" id="chkDisableShiftToUnsnap" />
+				</fieldset>
+				<fieldset class="row">
+					<label for="chkCtrlToSnap">Enable Ctrl to Snap</label>
+					<input type="checkbox" id="chkCtrlToSnap" />
+				</fieldset>
+				<fieldset class="row">
+					<label for="chkDisableGPUDragging">Disable GPU Dragging</label>
+					<input type="checkbox" id="chkDisableGPUDragging" />
+				</fieldset>
+				<fieldset class="row">
+					<label for="chkDisableBlurDrop">Disable Blur Drop Preview</label>
+					<input type="checkbox" id="chkDisableBlurDrop" />
+				</fieldset>
 			</div>
 			<hr />
 			<div class="row gap10">

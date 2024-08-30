@@ -4,6 +4,9 @@
 
 - Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider settings and made the workspace platform starter platform override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your platform override](./docs/how-to-customize-your-platform-override.md). If you want the default platform override to check endpoints to for saving/fetching workspaces and pages then you need to add the default-wps-platform module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
 - Updated module ids for default interop override to reflect new naming of modules for platform override: default-wps-interop instead of wps-interop-override.
+- Updated Snap to 0.4.1
+- Updated SnapProvider configuration so that it can support all snap server options and not just the show debug window setting. The showDebugWindow setting has been removed but there is backwards compatibility if it is specified in JSON. Please see [how to configure snap](./docs/how-to-configure-snap.md) for the latest configuration.
+- You can now specify a path to a snap exe instead of relying on the path of an app asset if you do have it in a specific installed in a specific location.
 
 ## v19.0.0
 

@@ -4,6 +4,7 @@ import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platfor
 import { getApps, launchApp } from "./apps";
 import type { CustomSettings } from "./shapes";
 import * as Snap from "./snap";
+import { getSettings } from "./settings";
 
 const PLATFORM_ID = "integrate-with-snap";
 const PLATFORM_TITLE = "Integrate With Snap";
@@ -17,21 +18,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 	// Initialize dummy workspace components.
 	await initializeWorkspaceComponents();
 
-	const app = await fin.Application.getCurrent();
-	const manifest = await app.getManifest();
-	if (manifest.appAssets?.[0].src === "SNAP_ASSET_URL") {
-		console.error(
-			"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
-		);
-	}
-
-	const customSettings = await getManifestCustomSettings(manifest);
-
-	customSettings.snapProvider ??= {};
-	customSettings.snapProvider.platformId ??= PLATFORM_ID;
+	const settings = await getSettings();
+	settings.platformId ??= PLATFORM_ID;
 
 	// Initialize the snap components
-	await Snap.initialize(customSettings.snapProvider);
+	await Snap.initialize(settings);
 });
 
 /**
