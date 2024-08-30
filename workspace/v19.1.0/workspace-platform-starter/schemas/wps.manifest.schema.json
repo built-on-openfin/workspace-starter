@@ -4098,6 +4098,13 @@
 					"required": ["initialLanguage"],
 					"type": "object"
 				},
+				"modules": {
+					"description": "The list of modules.",
+					"items": {
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
+					},
+					"type": "array"
+				},
 				"rootUrl": {
 					"description": "What is the root url of you platform e.g. https://mydomain.com",
 					"type": "string"
