@@ -1,12 +1,28 @@
+import type { OpenFin } from "@openfin/core";
 import type { DockButton } from "@openfin/workspace";
-import type { Locale, Page, Workspace } from "@openfin/workspace-platform";
+import type {
+	Locale,
+	Page,
+	Workspace,
+	WorkspacePlatformModule,
+	WorkspacePlatformProvider
+} from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { BrowserProviderOptions } from "./browser-shapes";
+import type { ButtonClient } from "./button-shapes";
+import type { PlatformConnectionClient } from "./connection-shapes";
+import type { DockClient } from "./dock-shapes";
 import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
+import type { LifecycleEvents } from "./lifecycle-shapes";
+import type { PlatformMenuClient } from "./menu-shapes";
+import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
+import type { SnapProvider } from "./snap-shapes";
+import type { PlatformThemeClient } from "./theme-shapes";
 
 /**
  * Platform provider options.
  */
-export interface PlatformProviderOptions {
+export interface PlatformProviderOptions extends ModuleList {
 	/**
 	 * What is the root url of you platform e.g. https://mydomain.com
 	 */
@@ -262,4 +278,73 @@ export interface EndpointDockSetRequest {
 	 * The config.
 	 */
 	config?: DockProviderConfigWithIdentity;
+}
+
+/**
+ * Platform Override helpers provide environment methods and data.
+ */
+export type PlatformOverrideHelpers = ModuleHelpers & {
+	getSnapClient: () => Promise<SnapProvider>;
+	fireLifecycleEvent: <T = unknown>(
+		platform: WorkspacePlatformModule,
+		lifecycleEvent: LifecycleEvents,
+		payload?: T
+	) => Promise<void>;
+	/**
+	 * Returns the menu client for the platform override.
+	 * @returns The menu client.
+	 */
+	getMenuClient(): Promise<PlatformMenuClient>;
+	/**
+	 * Returns the button client for the platform override.
+	 * @returns The button client.
+	 */
+	getButtonClient(): Promise<ButtonClient>;
+
+	/**
+	 * Returns the dock client.
+	 * @returns The dock client.
+	 */
+	getDockClient(): Promise<DockClient>;
+
+	/**
+	 * Returns a theme client for platform overrides.
+	 * @returns The theme client.
+	 */
+	getThemeClient(): Promise<PlatformThemeClient>;
+
+	/**
+	 * Returns the platform connection client.
+	 * @returns The platform connection client.
+	 */
+	getConnectionClient(): Promise<PlatformConnectionClient>;
+};
+
+/**
+ * Options to pass when initializing the platform override.
+ */
+export interface PlatformOverrideOptions {
+	/**
+	 * Options defined for the platform provider.
+	 */
+	platformProviderOptions: PlatformProviderOptions;
+	/**
+	 * Options defined for the browser provider.
+	 */
+	browserProviderOptions: BrowserProviderOptions;
+}
+
+/**
+ * Definition for platform module type.
+ */
+export interface PlatformOverride<O = unknown, H = PlatformOverrideHelpers>
+	extends ModuleImplementation<O, H> {
+	/**
+	 * Get the override constructor for the platform override (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+	 * @param options The options for the platform override defined as part of the platform.
+	 * @returns The override constructor to be used in an array.
+	 */
+	getConstructorOverride(
+		options: PlatformOverrideOptions
+	): Promise<OpenFin.ConstructorOverride<WorkspacePlatformProvider>>;
 }

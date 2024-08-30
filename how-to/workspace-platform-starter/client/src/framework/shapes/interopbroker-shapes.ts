@@ -6,7 +6,7 @@ import type { Endpoint, EndpointDefinition } from "./endpoint-shapes";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
 
 /**
- * Definition for conditions module type.
+ * Definition for platform interop module type.
  */
 export interface PlatformInteropOverride<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
 	/**

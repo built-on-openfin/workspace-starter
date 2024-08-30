@@ -23,6 +23,7 @@ const MODULE_TYPES = [
 	'lifecycle',
 	'log',
 	'menus',
+	'platformOverride',
 	'share'
 ];
 const MANIFEST_TYPE_MAPPING = {
@@ -38,6 +39,7 @@ const MANIFEST_TYPE_MAPPING = {
 	lifecycle: 'lifecycleProvider',
 	log: 'loggerProvider',
 	menus: 'menusProvider',
+	platformOverride: 'platformProvider',
 	share: 'shareProvider'
 };
 

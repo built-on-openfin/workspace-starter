@@ -256,3 +256,32 @@ export interface MenuClient {
 		}
 	): Promise<T | undefined>;
 }
+
+/**
+ *
+ */
+export interface PlatformMenuClient extends MenuClient {
+	/**
+	 * Gets the global menu.
+	 */
+	getGlobalMenu: (
+		defaultGlobalContextMenu?: GlobalContextMenuItemTemplate[],
+		relatedMenuId?: RelatedMenuId
+	) => Promise<GlobalContextMenuItemTemplate[]>;
+
+	/**
+	 * Gets the page menu.
+	 */
+	getPageMenu: (
+		defaultPageContextMenu: PageTabContextMenuItemTemplate[],
+		relatedMenuId?: RelatedMenuId
+	) => Promise<PageTabContextMenuItemTemplate[]>;
+
+	/**
+	 * Gets the view menu.
+	 */
+	getViewMenu: (
+		defaultViewContextMenu: ViewTabContextMenuTemplate[],
+		relatedMenuId?: RelatedMenuId
+	) => Promise<ViewTabContextMenuTemplate[]>;
+}

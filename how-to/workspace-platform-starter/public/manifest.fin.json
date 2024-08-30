@@ -99,6 +99,19 @@
 			"language": {
 				"initialLanguage": "en-US"
 			},
+			"modules": [
+				{
+					"id": "default-wps-platform",
+					"icon": "http://localhost:8080/favicon.ico",
+					"title": "Workspace Platform Starter Platform Override",
+					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+					"enabled": true,
+					"url": "http://localhost:8080/js/modules/platform-override/wps-platform-override.bundle.js",
+					"data": {
+						"loggerName": "WpsPlatformOverride"
+					}
+				}
+			],
 			"interop": {
 				"intentResolver": {
 					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
@@ -175,7 +188,7 @@
 				},
 				"modules": [
 					{
-						"id": "wps-interop-override",
+						"id": "default-wps-interop",
 						"icon": "http://localhost:8080/favicon.ico",
 						"title": "Workspace Platform Starter Interop Broker",
 						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
@@ -408,7 +421,12 @@
 					},
 					{
 						"enabled": true,
-						"id": "wps-interop-override",
+						"id": "default-wps-interop",
+						"endpointIds": ["*"]
+					},
+					{
+						"enabled": true,
+						"id": "default-wps-platform",
 						"endpointIds": ["*"]
 					},
 					{

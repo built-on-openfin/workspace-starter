@@ -4,7 +4,7 @@ import {
 	type BrowserWindowModule,
 	type WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { handleAnalytics } from "./analytics";
+import * as analyticsProvider from "./analytics";
 import { getApp, getApps } from "./apps";
 import { checkCondition, conditionChanged } from "./conditions";
 import * as connectionProvider from "./connections";
@@ -18,15 +18,8 @@ import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import * as Menu from "./menu";
 import { launchPage, launchView } from "./platform/browser";
-import {
-	MODULE_ANALYTICS_SOURCE,
-	type AnalyticsClient,
-	type ModuleAnalyticsEvent,
-	type PlatformAnalyticsEvent
-} from "./shapes/analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./shapes/app-shapes";
 import type { ConditionContextTypes, ConditionsClient } from "./shapes/conditions-shapes";
-import type { ConnectionValidationOptions, ConnectionValidationResponse } from "./shapes/connection-shapes";
 import type { DialogClient } from "./shapes/dialog-shapes";
 import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
@@ -43,16 +36,11 @@ import type {
 } from "./shapes/module-shapes";
 import type { NotificationClient } from "./shapes/notification-shapes";
 import type { ShareClient } from "./shapes/share-shapes";
-import type { ThemeClient } from "./shapes/theme-shapes";
 import * as Share from "./share";
-import {
-	getCurrentColorSchemeMode,
-	getCurrentIconFolder,
-	getCurrentPalette,
-	getCurrentThemeId,
-	themeUrl
-} from "./themes";
-import { isEmpty, objectClone } from "./utils";
+import { getThemeClient } from "./themes";
+import * as util from "./utils";
+import { objectClone } from "./utils";
+import * as utilPosition from "./utils-position";
 import { getVersionInfo } from "./version";
 import { getNotificationClient } from "./workspace/notifications";
 
@@ -290,7 +278,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 		sessionId: passedSessionId,
 		bringAppToFront: bringToFront,
 		getPlatform: getCurrentSync,
-		getAnalyticsClient,
+		getAnalyticsClient: async () => analyticsProvider.getAnalyticsModuleClient(),
 		getApps: async (): Promise<PlatformApp[]> => {
 			logger.info("getApps: getting public apps for module.");
 			return getApps({ private: false });
@@ -304,12 +292,6 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getConditionsClient,
 		getShareClient,
 		getDialogClient,
-		isConnectionValid: async <T>(
-			identity: OpenFin.Identity,
-			payload?: unknown,
-			options?: ConnectionValidationOptions<T>
-		): Promise<ConnectionValidationResponse> =>
-			connectionProvider.isConnectionValid<T>(identity, payload, options),
 		launchApp: async (
 			appId: string,
 			launchPreference?: UpdatableLaunchPreference
@@ -317,7 +299,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
 			let result: PlatformAppIdentifier[] | undefined;
-			if (isEmpty(app)) {
+			if (util.isEmpty(app)) {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);
@@ -341,7 +323,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 			if (page) {
 				return launchPage(page, options, providedLogger);
 			}
-			if (!isEmpty(providedLogger)) {
+			if (!util.isEmpty(providedLogger)) {
 				providedLogger.error(`The passed pageId: ${pageId} does not exist`);
 			} else {
 				logger.error(`The passed pageId: ${pageId} does not exist`);
@@ -370,7 +352,9 @@ export function getDefaultHelpers(): ModuleHelpers {
 			return identities ? identities.map((identity) => ({ uuid: identity.uuid, name: identity.name })) : [];
 		},
 		subscribeLifecycleEvent,
-		unsubscribeLifecycleEvent
+		unsubscribeLifecycleEvent,
+		getUtilClient: () => ({ general: util, position: utilPosition }),
+		getConnectionClient: async () => connectionProvider.getConnectionClient()
 	};
 }
 
@@ -425,24 +409,6 @@ function getEndpointClientProxy(definition: ModuleDefinition): () => Promise<End
 }
 
 /**
- * Get the theme client to use with the modules.
- * @returns The theme client.
- */
-async function getThemeClient(): Promise<ThemeClient> {
-	return {
-		getThemeId: getCurrentThemeId,
-		getIconFolder: getCurrentIconFolder,
-		getPalette: getCurrentPalette,
-		getColorSchemeMode: getCurrentColorSchemeMode,
-		themeUrl: async (url): Promise<string | undefined> => {
-			const iconFolder = await getCurrentIconFolder();
-			const colorScheme = await getCurrentColorSchemeMode();
-			return themeUrl(url, iconFolder, colorScheme);
-		}
-	};
-}
-
-/**
  * Get the menu client to use with the modules.
  * @returns The menu client.
  */
@@ -450,23 +416,6 @@ async function getMenuClient(): Promise<MenuClient> {
 	return {
 		getPopupMenuStyle: Menu.getPopupMenuStyle,
 		showPopupMenu: Menu.showPopupMenu
-	};
-}
-
-/**
- * Get analytics client.
- * @returns The analytics client.
- */
-async function getAnalyticsClient(): Promise<AnalyticsClient | undefined> {
-	return {
-		handleAnalytics: async (events: ModuleAnalyticsEvent[]): Promise<void> => {
-			if (Array.isArray(events)) {
-				const platformAnalyticEvents: PlatformAnalyticsEvent[] = events.map<PlatformAnalyticsEvent>(
-					(entry) => ({ ...entry, source: MODULE_ANALYTICS_SOURCE })
-				);
-				return handleAnalytics(platformAnalyticEvents);
-			}
-		}
 	};
 }
 

@@ -2,6 +2,11 @@
 
 ## v19.1.0
 
+- Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider settings and made the workspace platform starter platform override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your platform override](./docs/how-to-customize-your-platform-override.md). If you want the default platform override to check endpoints to for saving/fetching workspaces and pages then you need to add the default-wps-platform module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
+- Updated module ids for default interop override to reflect new naming of modules for platform override: default-wps-interop instead of wps-interop-override.
+
+## v19.0.0
+
 - Updated manifests to remove verbose logging --v=1 --inspect from the runtime.arguments setting: <https://developers.openfin.co/of-docs/docs/debugging#verbose-logging>
 - Updated manifests to disable app logging (where console log entries are written to disk). You can still see console log messages in dev tools or you can turn it back on by setting enableAppLogging to true.
 - Added new v38 runtime setting appLogsTimezone and set it to utc for when you do capture logs to disk.
@@ -28,7 +33,7 @@
 - Updated: modules/composite/default-workspace/lifecycle logic to listen out for the new `apply` action.
 - Improved performance of switching schemes
 - Improved performance of computing dock configuration, especially on theme changes.
-- Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider.interop settings and made the workspace platform starter interop override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your interop broker](./docs/how-to-customize-your-interop-broker.md). If you want the default interop broker to check endpoints to see if a context type should be enriched through an endpoint then you need to add the wps-interop-override module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
+- Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider.interop settings and made the workspace platform starter interop override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your interop broker](./docs/how-to-customize-your-interop-broker.md). If you want the default interop broker to check endpoints to see if a context type should be enriched through an endpoint then you need to add the default-wps-interop module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
 - Added support for a title to be specified in the browserProvider that will be used as the platform name in the browser Quit menu option and the confirmation dialog.
 
 ## v17.2.0

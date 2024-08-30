@@ -14,7 +14,7 @@ import {
 	RESOLVE_ERROR as ResolveError
 } from "workspace-platform-starter/fdc3/errors";
 import { MANIFEST_TYPES } from "workspace-platform-starter/manifest-types";
-import type { EndpointClient } from "workspace-platform-starter/shapes";
+import type { ConnectionClient, EndpointClient } from "workspace-platform-starter/shapes";
 import type {
 	AppsForIntent,
 	LaunchPreference,
@@ -75,6 +75,12 @@ export async function getConstructorOverride(
 		endpointClient = await helpers?.getEndpointClient();
 	}
 	const launch = helpers.launchApp;
+
+	let connectionsClient: ConnectionClient | undefined;
+
+	if (helpers?.getConnectionClient) {
+		connectionsClient = await helpers.getConnectionClient();
+	}
 
 	return (Base: OpenFin.Constructor<OpenFin.InteropBroker>) =>
 		/**
@@ -139,8 +145,8 @@ export async function getConstructorOverride(
 					id
 				);
 				const apiPayload: CaptureApiPayload = payload as CaptureApiPayload;
-				if (!isEmpty(helpers.isConnectionValid)) {
-					const response = await helpers.isConnectionValid(id, payload, { type: "broker" });
+				if (!isEmpty(connectionsClient)) {
+					const response = await connectionsClient.isConnectionValid(id, payload, { type: "broker" });
 					if (response.isValid) {
 						logger.info("Connection validation request was validated and is valid.");
 						await this._clientRegistrationHelper.clientConnectionRegistered(id, apiPayload);

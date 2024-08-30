@@ -6,7 +6,13 @@ import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { getSettings } from "./settings";
 import type { ThemeChangedLifecyclePayload } from "./shapes/lifecycle-shapes";
-import { ColorSchemeMode, type PlatformCustomTheme, type PlatformCustomThemes } from "./shapes/theme-shapes";
+import {
+	ColorSchemeMode,
+	type PlatformThemeClient,
+	type ThemeClient,
+	type PlatformCustomTheme,
+	type PlatformCustomThemes
+} from "./shapes/theme-shapes";
 import { isEmpty, isStringValue } from "./utils";
 
 const logger = createLogger("Themes");
@@ -105,15 +111,12 @@ export async function getCurrentColorSchemeMode(): Promise<ColorSchemeMode> {
  * Set the color scheme mode and notify anybody listening to the change.
  * @param colorScheme The color scheme to set.
  */
-export async function setCurrentColorSchemeMode(colorScheme: ColorSchemeOptionType): Promise<void> {
-	if (colorScheme === ColorSchemeOptionType.System) {
+export async function setCurrentColorSchemeMode(colorScheme?: ColorSchemeMode): Promise<void> {
+	if (isEmpty(colorScheme)) {
 		colorSchemeMode = getSystemPreferredColorScheme();
-	} else if (colorScheme === ColorSchemeOptionType.Light) {
-		colorSchemeMode = ColorSchemeMode.Light;
 	} else {
-		colorSchemeMode = ColorSchemeMode.Dark;
+		colorSchemeMode = colorScheme;
 	}
-
 	await notifyColorScheme();
 }
 
@@ -271,6 +274,36 @@ export async function toggleScheme(): Promise<void> {
 	} else {
 		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Light);
 	}
+}
+
+/**
+ * Get the theme client to use with the modules.
+ * @returns The theme client.
+ */
+export async function getThemeClient(): Promise<ThemeClient> {
+	return {
+		getThemeId: getCurrentThemeId,
+		getIconFolder: getCurrentIconFolder,
+		getPalette: getCurrentPalette,
+		getColorSchemeMode: getCurrentColorSchemeMode,
+		themeUrl: async (url): Promise<string | undefined> => {
+			const iconFolder = await getCurrentIconFolder();
+			const colorScheme = await getCurrentColorSchemeMode();
+			return themeUrl(url, iconFolder, colorScheme);
+		}
+	};
+}
+
+/**
+ * Get the theme client to use with the modules.
+ * @returns The theme client.
+ */
+export async function getPlatformThemeClient(): Promise<PlatformThemeClient> {
+	const themeClient = await getThemeClient();
+	return {
+		...themeClient,
+		setCurrentColorSchemeMode
+	};
 }
 
 /**
