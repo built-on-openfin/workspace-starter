@@ -1,5 +1,6 @@
 import type OpenFin from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
+import { getSettings } from "../settings";
 import type { SnapProviderOptions } from "../shapes";
 
 /**
@@ -7,12 +8,18 @@ import type { SnapProviderOptions } from "../shapes";
  * @param options The options for initializing the snap provider.
  */
 export async function initialize(options: SnapProviderOptions): Promise<void> {
+	const settings = await getSettings();
+	const finalOptions = { ...settings, ...options };
 	try {
-		if (options.platformId) {
-			console.log("Registering Snap with platformId", options.platformId);
-			const server = new Snap.SnapServer(options.platformId);
-			console.log("Enabling debug window:", options.showDebugWindow ?? false);
-			await server.start({ showDebug: options.showDebugWindow ?? false });
+		if (finalOptions.platformId) {
+			console.log("Registering Snap with platformId", finalOptions.platformId);
+			const server = new Snap.SnapServer(finalOptions.platformId);
+			console.log("Enabling debug window:", finalOptions.showDebugWindow ?? false);
+			await server.start({ showDebug: finalOptions.showDebugWindow ?? false,
+				disableUserUnstick: finalOptions.disableShiftToUnsnap ?? false,
+				keyToStick: finalOptions.enableCtrlToSnap ?? false,
+				disableGPUAcceleratedDragging: finalOptions.disableGPUDragging ?? false,
+				disableBlurDropPreview: finalOptions.disableBlurDropPreview ?? false });
 			const app = fin.Application.getCurrentSync();
 			await app.on("window-created", async (e) => {
 				const win = fin.Window.wrapSync(e);

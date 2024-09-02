@@ -24,7 +24,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 18.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 19.1.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -210,12 +210,28 @@ Your manifest will need to include the following app asset information:
 ```json
 "appAssets": [
   {
-   "src": "https://cdn.openfin.co/release/snap/0.3.0/snap.zip",
+   "src": "https://cdn.openfin.co/release/snap/0.4.1/snap.zip",
    "alias": "openfin-snap",
-   "version": "0.3.0",
+   "version": "0.4.1",
    "target": "OpenFinSnap.exe"
   }
  ]
+```
+
+#### Customizing Snap Settings through a manifest
+
+The main example and the preload scripts check the currently running manifest to see if there are settings that should be applied to the snap server (the debug preload will always show the snap debug window regardless of manifest settings)
+
+```json
+"customSettings": {
+  "snapProvider": {
+   "showDebugWindow": false,
+   "disableShiftToUnsnap": false,
+   "enableCtrlToSnap": false,
+   "disableGPUDragging": false,
+   "disableBlurDropPreview": false
+  }
+ }
 ```
 
 #### Running an example

@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { LayoutClient } from "@openfin/snap-sdk";
+import type { LayoutClient, ServerOptions } from "@openfin/snap-sdk";
 /**
  * The options for the snap provider.
  */
@@ -17,9 +17,9 @@ export interface SnapProviderOptions {
 	 */
 	serverAssetInfo?: OpenFin.AppAssetInfo;
 	/**
-	 * Show the snap debug window.
+	 * Options supported by the snap server.
 	 */
-	showDebugWindow?: boolean;
+	serverOptions?: ServerOptions;
 }
 /**
  * Represents the snap provider of a platform to be used as part of a platform override if needed.

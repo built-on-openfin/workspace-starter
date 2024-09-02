@@ -6,7 +6,7 @@ import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import * as platformSplashProvider from "./platform/platform-splash";
 import type { SnapProviderOptions } from "./shapes";
-import { formatError, isEmpty } from "./utils";
+import { formatError, isEmpty, isStringValue } from "./utils";
 import { getCanDownloadAppAssets, getCanLaunchExternalProcess } from "./utils-capability";
 
 const logger = createLogger("Snap");
@@ -25,75 +25,97 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 			logger.error("Cannot initialize Snap without the SnapProvider.id");
 			return;
 		}
-
-		const serverAssetInfo = options?.serverAssetInfo;
-
-		if (isEmpty(serverAssetInfo)) {
-			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo");
-			return;
+		if (isEmpty(options.serverOptions)) {
+			options.serverOptions = {};
 		}
 
-		const src = serverAssetInfo.src;
-		if (isEmpty(src)) {
-			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.src");
-			return;
-		}
+		await platformSplashProvider.updateProgress("Snap");
 
-		const alias = serverAssetInfo.alias;
-		if (isEmpty(alias)) {
-			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.alias");
-			return;
-		}
+		if (!isStringValue(options.serverOptions.executablePath)) {
+			const serverAssetInfo = options?.serverAssetInfo;
 
-		const target = serverAssetInfo.target;
-		if (isEmpty(target)) {
-			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.target");
-			return;
-		}
+			if (isEmpty(serverAssetInfo)) {
+				logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo");
+				return;
+			}
 
-		const version = serverAssetInfo.version;
-		if (isEmpty(version)) {
-			logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.version");
-			return;
-		}
+			const src = serverAssetInfo.src;
+			if (isEmpty(src)) {
+				logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.src");
+				return;
+			}
 
-		if (serverAssetInfo.src === "SNAP_ASSET_URL") {
-			logger.error(
-				"Please request the SNAP_ASSET_URL from OpenFin and update SnapProvider.serverAssetInfo.src before running the platform"
-			);
-			return;
+			const alias = serverAssetInfo.alias;
+			if (isEmpty(alias)) {
+				logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.alias");
+				return;
+			}
+
+			const target = serverAssetInfo.target;
+			if (isEmpty(target)) {
+				logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.target");
+				return;
+			}
+
+			const version = serverAssetInfo.version;
+			if (isEmpty(version)) {
+				logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo.version");
+				return;
+			}
+
+			if (serverAssetInfo.src === "SNAP_ASSET_URL") {
+				logger.error(
+					"Please request the SNAP_ASSET_URL from OpenFin and update SnapProvider.serverAssetInfo.src before running the platform"
+				);
+				return;
+			}
+
+			const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
+
+			if (!hasDownloadAppAssets) {
+				logger.warn(
+					"Snap is enabled but the platform does not have the capability or permission to download app assets."
+				);
+				return;
+			}
+
+			try {
+				await fin.System.downloadAsset(serverAssetInfo, (progress) => {
+					const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
+					logger.info(`Downloaded ${downloadedPercent}% of Snap Server asset`);
+				});
+
+				options.serverOptions.executablePath = await getAppAssetExecutablePath({
+					alias,
+					target,
+					version
+				});
+			} catch (err) {
+				logger.error(
+					"Unable to start Snap Server while trying to fetch and determine path of app asset",
+					formatError(err)
+				);
+			}
 		}
 
 		const hasLaunchExternalProcess = await getCanLaunchExternalProcess(logger);
-		const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
 
-		if (!hasLaunchExternalProcess || !hasDownloadAppAssets) {
+		if (!hasLaunchExternalProcess) {
 			logger.warn(
-				"Snap is enabled but the platform does not have the capability or permission to download app assets or launch external processes."
+				"Snap is enabled but the platform does not have the capability or permission to launch external processes."
 			);
 			return;
 		}
 
 		try {
-			await platformSplashProvider.updateProgress("Snap");
-
-			await fin.System.downloadAsset(serverAssetInfo, (progress) => {
-				const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
-				logger.info(`Downloaded ${downloadedPercent}% of Snap Server asset`);
-			});
-
-			const serverAssetExecutablePath = await getAppAssetExecutablePath({
-				alias,
-				target,
-				version
-			});
-
 			server = new Snap.SnapServer(options.id);
+			const legacyDebugSetting = (options as { showDebugWindow: boolean }).showDebugWindow;
 
-			await server.start({
-				showDebug: options?.showDebugWindow ?? false,
-				executablePath: serverAssetExecutablePath
-			});
+			if (!isEmpty(legacyDebugSetting) && isEmpty(options?.serverOptions?.showDebug)) {
+				options.serverOptions.showDebug = legacyDebugSetting;
+			}
+
+			await server.start(options.serverOptions);
 
 			await server.enableAutoWindowRegistration();
 
@@ -120,7 +142,6 @@ export function isEnabled(): boolean {
 export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
 	try {
 		if (server) {
-			// @ts-expect-error - TODO correct this when OpenFin.Core becomes a peerDependency in Snap SDK
 			snapshot = await server.decorateSnapshot(snapshot);
 		}
 	} catch (error) {

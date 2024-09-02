@@ -109,7 +109,7 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 	 * @returns The readable stream of notifications.
 	 */
 	private createReadableStream(): ReadableStream<NotificationOptions> {
-		let intervalId: number | NodeJS.Timeout | undefined;
+		let intervalId: number | undefined;
 		const intervalTimeInSeconds = this._definition?.data?.intervalInSeconds ?? 1;
 		const intervalTime = (intervalTimeInSeconds < 1 ? 1 : intervalTimeInSeconds) * 1000;
 		/**
@@ -133,7 +133,7 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 					for (const notification of queue) {
 						controller.enqueue(notification);
 					}
-				}, intervalTime);
+				}, intervalTime) as unknown as number;
 			},
 			/**
 			 * When the stream is cancelled this function is called.
