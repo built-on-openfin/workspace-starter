@@ -27,6 +27,19 @@
 	},
 	"platformProvider": {
 		"rootUrl": "https://built-on-openfin.github.io/workspace-starter/dev/ray/update-stencil-components/workspace-platform-starter",
+		"modules": [
+			{
+				"id": "default-wps-platform",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/dev/ray/update-stencil-components/workspace-platform-starter/favicon.ico",
+				"title": "Workspace Platform Starter Platform Override",
+				"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+				"enabled": true,
+				"url": "https://built-on-openfin.github.io/workspace-starter/dev/ray/update-stencil-components/workspace-platform-starter/js/modules/platform-override/wps-platform-override.bundle.js",
+				"data": {
+					"loggerName": "WpsPlatformOverride"
+				}
+			}
+		],
 		"interop": {
 			"intentResolver": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/dev/ray/update-stencil-components/workspace-platform-starter/common/windows/intents/instance-picker.html",
@@ -102,7 +115,7 @@
 			},
 			"modules": [
 				{
-					"id": "wps-interop-override",
+					"id": "default-wps-interop",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/ray/update-stencil-components/workspace-platform-starter/favicon.ico",
 					"title": "Workspace Platform Starter Interop Broker",
 					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
@@ -329,7 +342,12 @@
 				},
 				{
 					"enabled": true,
-					"id": "wps-interop-override",
+					"id": "default-wps-interop",
+					"endpointIds": ["*"]
+				},
+				{
+					"enabled": true,
+					"id": "default-wps-platform",
 					"endpointIds": ["*"]
 				}
 			]
@@ -984,20 +1002,20 @@
 			},
 			{
 				"id": "salesforce",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/favicon.ico",
+				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/favicon.ico",
 				"title": "Salesforce",
 				"enabled": false,
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/js/modules/integrations/salesforce.bundle.js",
 				"data": {
 					"consumerKey": "",
 					"orgUrl": "",
-					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/js/preload.js",
+					"preload": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/js/preload.js",
 					"iconMap": {
-						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/images/contact.svg",
-						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/images/account.svg",
-						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/images/chatter.svg",
-						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/images/note.svg",
-						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/images/task.svg"
+						"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/images/contact.svg",
+						"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/images/account.svg",
+						"chatter": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/images/chatter.svg",
+						"note": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/images/note.svg",
+						"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-salesforce/images/task.svg"
 					}
 				}
 			},
