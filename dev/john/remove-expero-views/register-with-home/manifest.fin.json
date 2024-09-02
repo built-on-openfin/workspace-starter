@@ -49,7 +49,6 @@
 		"appProvider": {
 			"appSourceUrls": [
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/remove-expero-views/register-with-home/common/apps-contact.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/remove-expero-views/register-with-home/common/apps-expero.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/remove-expero-views/register-with-home/common/apps-interop.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/remove-expero-views/register-with-home/common/apps-native.json",
 				"https://built-on-openfin.github.io/workspace-starter/dev/john/remove-expero-views/register-with-home/common/apps-tools.json"
@@ -63,9 +62,6 @@
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/remove-expero-views/register-with-home/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
-		},
-		"keys": {
-			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }
