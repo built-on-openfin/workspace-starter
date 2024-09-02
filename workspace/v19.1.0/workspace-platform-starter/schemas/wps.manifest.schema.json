@@ -4208,6 +4208,41 @@
 			"enum": ["ascending", "descending"],
 			"type": "string"
 		},
+		"ServerOptions": {
+			"additionalProperties": false,
+			"description": "Options for starting the Snap Server",
+			"properties": {
+				"blurEffectPerformanceThreshold": {
+					"description": "This is respected only if the disableBlurDropPreview option is not set. This threshold (in milliseconds) relates to the time taken to render a blur effect.\nSnap will do a check at start up to measure this performance and automatically disable the blur effect if this threshold time is exceeded.\nIf not provided, the performance check will use a default threshold.",
+					"type": "number"
+				},
+				"disableBlurDropPreview": {
+					"description": "If true, the drop preview will not be blurred.\nThis can be useful if performance issues are encountered when displaying a drop target and preview.  This can occur on lower spec machines.",
+					"type": "boolean"
+				},
+				"disableGPUAcceleratedDragging": {
+					"description": "If true, reverts to a slower method of dragging groups of windows",
+					"type": "boolean"
+				},
+				"disableUserUnstick": {
+					"description": "If true, prevents the user from unsticking windows (e.g. using SHIFT key)",
+					"type": "boolean"
+				},
+				"executablePath": {
+					"description": "The path to the Snap executable to launch if not using a manifest asset",
+					"type": "string"
+				},
+				"keyToStick": {
+					"description": "If true, windows will only stick if CTRL key is held while dragging",
+					"type": "boolean"
+				},
+				"showDebug": {
+					"description": "True if the Snap debug console should be shown",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
 		"ShareConfirmationType": {
 			"description": "Type of share confirmation.",
 			"enum": ["modal", "none", "notification"],
@@ -4295,9 +4330,9 @@
 					"$ref": "#/definitions/AppAssetInfo",
 					"description": "The asset for the Snap server."
 				},
-				"showDebugWindow": {
-					"description": "Show the snap debug window.",
-					"type": "boolean"
+				"serverOptions": {
+					"$ref": "#/definitions/ServerOptions",
+					"description": "Options supported by the snap server."
 				}
 			},
 			"type": "object"
