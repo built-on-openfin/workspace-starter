@@ -62,7 +62,7 @@ export interface SnapProviderOptions {
 	showDebugWindow?: boolean;
 
 	/**
-	 *  Disable the ability to unsnap a window by holding down the shift key.
+	 * Disable the ability to unsnap a window by holding down the shift key.
 	 */
 	disableShiftToUnsnap?: boolean;
 

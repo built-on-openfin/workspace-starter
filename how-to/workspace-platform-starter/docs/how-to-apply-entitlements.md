@@ -55,7 +55,7 @@ If you need to return different settings by user then you can have a cut down ma
       "userSessionId": "example-auth-data",
       "roleMapping": {
        "developer": {
-        "excludeAppsWithTag": ["expero", "contact", "manager", "irs"],
+        "excludeAppsWithTag": ["contact", "manager", "irs"],
         "preferredScheme": "dark"
        },
        "sales": {

@@ -7,7 +7,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * @returns List of app definitions.
  */
 export function getApps(): App[] {
-	return [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
+	return [OPENFIN_INFORMATION_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
 }
 
 /**
@@ -34,31 +34,6 @@ const OPENFIN_INFORMATION_APP: App = {
 		}
 	],
 	tags: ["view", "openfin", "versions"]
-};
-
-/**
- * App definition for the Expero labs news gateway.
- */
-const EXPERO_APP: App = {
-	appId: "expero-company-news",
-	title: "Gateway - Company News",
-	manifest: "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
-	manifestType: "view",
-	icons: [
-		{
-			src: "https://openfin-iex.experolabs.com/favicon.ico"
-		}
-	],
-	contactEmail: "contact@example.com",
-	supportEmail: "support@example.com",
-	publisher: "Expero",
-	intents: [],
-	images: [
-		{
-			src: "http://localhost:8080/common/images/previews/expero-news-view.png"
-		}
-	],
-	tags: ["expero", "view", "interop"]
 };
 
 /**

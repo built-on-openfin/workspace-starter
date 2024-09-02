@@ -31,15 +31,6 @@ The approach that we have taken is that you define your landing page properties 
      "title": "Custom Top Row Content",
      "items": [
       {
-       "title": "Expero",
-       "description": "A collection of example views from Expero showing the power of interop and context sharing.",
-       "image": {
-        "src": "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
-       },
-       "tags": ["expero"],
-      "buttonTitle": "View"
-      },
-      {
        "title": "Dev Tools",
        "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
        "image": {

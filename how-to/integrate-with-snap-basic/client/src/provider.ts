@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeDOM(): Promise<void> {
 	chkShowDebugWindow = document.querySelector<HTMLInputElement>("#chkShowDebugWindow");
- 	chkDisableShiftToUnsnap = document.querySelector<HTMLInputElement>("#chkDisableShiftToUnsnap");
+	chkDisableShiftToUnsnap = document.querySelector<HTMLInputElement>("#chkDisableShiftToUnsnap");
 	chkCtrlToSnap = document.querySelector<HTMLInputElement>("#chkCtrlToSnap");
 	chkDisableGPUDragging = document.querySelector<HTMLInputElement>("#chkDisableGPUDragging");
 	chkDisableBlurDrop = document.querySelector<HTMLInputElement>("#chkDisableBlurDrop");
@@ -91,11 +91,13 @@ async function initializeDOM(): Promise<void> {
 
 					logInformation(`Starting Snap Server with Id ${fin.me.identity.uuid}`);
 					server = new Snap.SnapServer(fin.me.identity.uuid);
-					await server.start({ showDebug: chkShowDebugWindow?.checked,
+					await server.start({
+						showDebug: chkShowDebugWindow?.checked,
 						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
 						keyToStick: chkCtrlToSnap?.checked,
 						disableGPUAcceleratedDragging: chkDisableGPUDragging?.checked,
-						disableBlurDropPreview: chkDisableBlurDrop?.checked });
+						disableBlurDropPreview: chkDisableBlurDrop?.checked
+					});
 
 					server.addEventListener("client-registered", (event: Snap.ClientRegisteredEvent) => {
 						logInformation(`Client Registered: ${JSON.stringify(event)}`);

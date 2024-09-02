@@ -2,9 +2,8 @@ import type OpenFin from "@openfin/core";
 import { CLITemplate, Home, type App } from "@openfin/workspace";
 import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import { getApps, launchApp } from "./apps";
-import type { CustomSettings } from "./shapes";
-import * as Snap from "./snap";
 import { getSettings } from "./settings";
+import * as Snap from "./snap";
 
 const PLATFORM_ID = "integrate-with-snap";
 const PLATFORM_TITLE = "Integrate With Snap";
@@ -141,13 +140,4 @@ function overrideCallback(
 	}
 
 	return new Override();
-}
-
-/**
- * Read the custom settings from the manifest.fin.json.
- * @param manifest The manifest to load the custom settings from.
- * @returns The custom settings from the manifest.
- */
-async function getManifestCustomSettings(manifest: OpenFin.Manifest): Promise<CustomSettings> {
-	return (manifest as OpenFin.Manifest & { customSettings?: CustomSettings }).customSettings ?? {};
 }
