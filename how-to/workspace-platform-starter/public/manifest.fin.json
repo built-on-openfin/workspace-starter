@@ -224,7 +224,6 @@
 				"http://localhost:8080/apps-fdc3-2-0.json",
 				"http://localhost:8080/common/apps-contact.json",
 				"http://localhost:8080/common/apps.json",
-				"http://localhost:8080/common/apps-expero.json",
 				"http://localhost:8080/common/apps-interop.json",
 				"http://localhost:8080/common/apps-manager.json",
 				"http://localhost:8080/common/apps-native.json",
@@ -858,15 +857,6 @@
 				"topRow": {
 					"title": "Custom Top Row Content",
 					"items": [
-						{
-							"title": "Expero",
-							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
-							"image": {
-								"src": "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
-							},
-							"tags": ["expero"],
-							"buttonTitle": "View"
-						},
 						{
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
@@ -1910,9 +1900,6 @@
 		},
 		"dialogProvider": {
 			"dialogHtml": "http://localhost:8080/common/popups/dialog/index.html"
-		},
-		"keys": {
-			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }

@@ -29,31 +29,6 @@ export const OPENFIN_INFORMATION_APP: App = {
 };
 
 /**
- * App definition for the Expero labs news gateway.
- */
-export const EXPERO_APP: App = {
-	appId: "expero-company-news",
-	title: "Gateway - Company News",
-	manifest: "https://openfin-iex.experolabs.com/openfin/manifests/company-news.json",
-	manifestType: "view",
-	icons: [
-		{
-			src: "https://openfin-iex.experolabs.com/favicon.ico"
-		}
-	],
-	contactEmail: "contact@example.com",
-	supportEmail: "support@example.com",
-	publisher: "Expero",
-	intents: [],
-	images: [
-		{
-			src: "http://localhost:8080/common/images/previews/expero/expero-news-view.png"
-		}
-	],
-	tags: ["expero", "view", "interop"]
-};
-
-/**
  * App definition for the OpenFin Notification Process Manager development tool.
  */
 export const PROCESS_MANAGER: App = {

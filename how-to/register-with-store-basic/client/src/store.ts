@@ -4,7 +4,7 @@ import {
 	type CustomActionPayload,
 	type CustomActionsMap
 } from "@openfin/workspace-platform";
-import { DEVELOPER_CONTENT, EXPERO_APP, OPENFIN_INFORMATION_APP, PROCESS_MANAGER, launchApp } from "./apps";
+import { DEVELOPER_CONTENT, OPENFIN_INFORMATION_APP, PROCESS_MANAGER, launchApp } from "./apps";
 
 /**
  * Register with the store component.
@@ -34,7 +34,7 @@ export async function register(
 							title: "Views",
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [OPENFIN_INFORMATION_APP, EXPERO_APP]
+								apps: [OPENFIN_INFORMATION_APP]
 							}
 						},
 						{
@@ -77,20 +77,6 @@ export async function register(
 					items: [
 						{
 							id: "top-row-item-1",
-							title: "Expero",
-							description:
-								"A collection of example views from Expero showing the power of interop and context sharing.",
-							image: {
-								src: "http://localhost:8080/common/images/store/coding-1-unsplash.jpg"
-							},
-							templateId: StorefrontTemplate.AppGrid,
-							templateData: {
-								apps: [EXPERO_APP]
-							},
-							buttonTitle: "Expero Apps"
-						},
-						{
-							id: "top-row-item-2",
 							title: "Dev Tools",
 							description:
 								"A collection of developer tools that can aid with building and debugging OpenFin applications.",
@@ -106,8 +92,8 @@ export async function register(
 					]
 				},
 				middleRow: {
-					title: "A collection of simple views that show how to share context using the Interop API.",
-					apps: [EXPERO_APP]
+					title: "A collection of tools providing information about OpenFin.",
+					apps: [OPENFIN_INFORMATION_APP]
 				},
 				bottomRow: {
 					title: "Quick Access",
@@ -121,7 +107,7 @@ export async function register(
 							},
 							templateId: StorefrontTemplate.AppGrid,
 							templateData: {
-								apps: [OPENFIN_INFORMATION_APP, EXPERO_APP]
+								apps: [OPENFIN_INFORMATION_APP]
 							},
 							buttonTitle: "See Views"
 						},
@@ -155,7 +141,7 @@ export async function register(
 					}
 				]
 			}),
-			getApps: async () => [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER],
+			getApps: async () => [OPENFIN_INFORMATION_APP, PROCESS_MANAGER],
 			launchApp: async (app) => {
 				await launchApp(app);
 			}
@@ -181,7 +167,7 @@ export function storeGetCustomActions(): CustomActionsMap {
 		},
 		"launch-app": async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.StoreCustomButton) {
-				const apps = [OPENFIN_INFORMATION_APP, EXPERO_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
+				const apps = [OPENFIN_INFORMATION_APP, PROCESS_MANAGER, DEVELOPER_CONTENT];
 				const app = apps.find((a) => a.appId === payload.appId);
 				if (app) {
 					await launchApp(app);
