@@ -14,12 +14,12 @@ export async function getSettings(showDebugWindow?: boolean): Promise<SnapProvid
 			"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
 		);
 	}
-    const settings = await getManifestCustomSettings(manifest);
-    settings.snapProvider ??= {};
-    if(settings.snapProvider.showDebugWindow === undefined) {
-        settings.snapProvider.showDebugWindow = showDebugWindow;
-    }
-    return settings.snapProvider;
+	const settings = await getManifestCustomSettings(manifest);
+	settings.snapProvider ??= {};
+	if (settings.snapProvider.showDebugWindow === undefined) {
+		settings.snapProvider.showDebugWindow = showDebugWindow;
+	}
+	return settings.snapProvider;
 }
 
 /**

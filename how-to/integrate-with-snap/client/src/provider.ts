@@ -1,10 +1,9 @@
 import type OpenFin from "@openfin/core";
 import { CLITemplate, Home, type App } from "@openfin/workspace";
 import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
-import { getApps, launchApp } from "./apps";
-import type { CustomSettings } from "./shapes";
-import * as Snap from "./snap";
+import { getAppLabel, getApps, launchApp } from "./apps";
 import { getSettings } from "./settings";
+import * as Snap from "./snap";
 
 const PLATFORM_ID = "integrate-with-snap";
 const PLATFORM_TITLE = "Integrate With Snap";
@@ -74,7 +73,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 					title: app.title,
 					icon: app.icons[0]?.src,
 					data: app,
-					label: "View",
+					label: getAppLabel(app.manifestType),
 					actions: [{ name: "Launch View", hotkey: "enter" }],
 					description: app.description,
 					shortDescription: app.description,
@@ -120,7 +119,8 @@ function overrideCallback(
 		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
 			const snapshot = await super.getSnapshot(payload, identity);
 
-			return Snap.decorateSnapshot(snapshot);
+			const updatedSnapshot = await Snap.decorateSnapshot(snapshot);
+			return updatedSnapshot;
 		}
 
 		/**
@@ -132,7 +132,7 @@ function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
-			await Snap.prepareToApplyDecoratedSnapshot();
+			await Snap.prepareToApplyDecoratedSnapshot(payload);
 
 			await super.applySnapshot(payload, identity);
 
@@ -141,13 +141,4 @@ function overrideCallback(
 	}
 
 	return new Override();
-}
-
-/**
- * Read the custom settings from the manifest.fin.json.
- * @param manifest The manifest to load the custom settings from.
- * @returns The custom settings from the manifest.
- */
-async function getManifestCustomSettings(manifest: OpenFin.Manifest): Promise<CustomSettings> {
-	return (manifest as OpenFin.Manifest & { customSettings?: CustomSettings }).customSettings ?? {};
 }

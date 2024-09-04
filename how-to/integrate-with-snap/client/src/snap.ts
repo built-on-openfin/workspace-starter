@@ -14,11 +14,13 @@ export async function initialize(options: SnapProviderOptions): Promise<void> {
 	try {
 		if (options.platformId) {
 			server = new Snap.SnapServer(options.platformId);
-			await server.start({ showDebug: options.showDebugWindow ?? false,
+			await server.start({
+				showDebug: options.showDebugWindow ?? false,
 				disableUserUnstick: options.disableShiftToUnsnap ?? false,
 				keyToStick: options.enableCtrlToSnap ?? false,
 				disableGPUAcceleratedDragging: options.disableGPUDragging ?? false,
-				disableBlurDropPreview: options.disableBlurDropPreview ?? false });
+				disableBlurDropPreview: options.disableBlurDropPreview ?? false
+			});
 
 			await server.enableAutoWindowRegistration();
 		}
@@ -86,7 +88,9 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
  * Prepare to apply a decorated snapshot.
  * @param snapshotPayload The payload for the snapshot.
  */
-export async function prepareToApplyDecoratedSnapshot(snapshotPayload?: OpenFin.ApplySnapshotPayload): Promise<void> {
+export async function prepareToApplyDecoratedSnapshot(
+	snapshotPayload?: OpenFin.ApplySnapshotPayload
+): Promise<void> {
 	try {
 		if (server) {
 			await server.prepareToApplySnapshot(snapshotPayload);

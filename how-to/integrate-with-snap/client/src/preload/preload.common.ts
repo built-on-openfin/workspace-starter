@@ -15,11 +15,13 @@ export async function initialize(options: SnapProviderOptions): Promise<void> {
 			console.log("Registering Snap with platformId", finalOptions.platformId);
 			const server = new Snap.SnapServer(finalOptions.platformId);
 			console.log("Enabling debug window:", finalOptions.showDebugWindow ?? false);
-			await server.start({ showDebug: finalOptions.showDebugWindow ?? false,
+			await server.start({
+				showDebug: finalOptions.showDebugWindow ?? false,
 				disableUserUnstick: finalOptions.disableShiftToUnsnap ?? false,
 				keyToStick: finalOptions.enableCtrlToSnap ?? false,
 				disableGPUAcceleratedDragging: finalOptions.disableGPUDragging ?? false,
-				disableBlurDropPreview: finalOptions.disableBlurDropPreview ?? false });
+				disableBlurDropPreview: finalOptions.disableBlurDropPreview ?? false
+			});
 			const app = fin.Application.getCurrentSync();
 			await app.on("window-created", async (e) => {
 				const win = fin.Window.wrapSync(e);
