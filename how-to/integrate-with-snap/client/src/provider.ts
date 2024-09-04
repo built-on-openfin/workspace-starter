@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import { CLITemplate, Home, type App } from "@openfin/workspace";
 import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
-import { getApps, launchApp } from "./apps";
+import { getAppLabel, getApps, launchApp } from "./apps";
 import { getSettings } from "./settings";
 import * as Snap from "./snap";
 
@@ -73,7 +73,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 					title: app.title,
 					icon: app.icons[0]?.src,
 					data: app,
-					label: "View",
+					label: getAppLabel(app.manifestType),
 					actions: [{ name: "Launch View", hotkey: "enter" }],
 					description: app.description,
 					shortDescription: app.description,
@@ -119,7 +119,8 @@ function overrideCallback(
 		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
 			const snapshot = await super.getSnapshot(payload, identity);
 
-			return Snap.decorateSnapshot(snapshot);
+			const updatedSnapshot = await Snap.decorateSnapshot(snapshot);
+			return updatedSnapshot;
 		}
 
 		/**
@@ -131,7 +132,7 @@ function overrideCallback(
 			payload: OpenFin.ApplySnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
-			await Snap.prepareToApplyDecoratedSnapshot();
+			await Snap.prepareToApplyDecoratedSnapshot(payload);
 
 			await super.applySnapshot(payload, identity);
 

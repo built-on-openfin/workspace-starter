@@ -9,7 +9,12 @@ import { randomUUID } from "./utils";
  * @returns List of app definitions.
  */
 export async function getApps(): Promise<PlatformApp[]> {
-	return [OPENFIN_INFORMATION_APP, SNAP_NATIVE_TEST_APP, OPENFIN_WINDOW_APP];
+	return [
+		OPENFIN_INFORMATION_APP,
+		OPENFIN_INFORMATION_APP_SNAPSHOT,
+		SNAP_NATIVE_TEST_APP,
+		OPENFIN_WINDOW_APP
+	];
 }
 
 /**
@@ -20,6 +25,28 @@ export async function getApps(): Promise<PlatformApp[]> {
 export async function getApp(appId: string): Promise<PlatformApp | undefined> {
 	const apps = await getApps();
 	return apps.find((a) => a.appId === appId);
+}
+
+/**
+ * Returns the label for the app based on its manifest type.
+ * @param manifestType The manifest type of the app.
+ * @returns The label for the app.
+ */
+export function getAppLabel(manifestType?: string): string {
+	switch (manifestType) {
+		case "snapshot": {
+			return "Snapshot";
+		}
+		case "inline-appasset": {
+			return "Native";
+		}
+		case "view": {
+			return "View";
+		}
+		default: {
+			return "Unknown";
+		}
+	}
 }
 
 /**
@@ -46,6 +73,32 @@ const OPENFIN_INFORMATION_APP: PlatformApp = {
 		}
 	],
 	tags: ["view", "openfin", "versions"]
+};
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP_SNAPSHOT: PlatformApp = {
+	appId: "openfin-information-snapshot",
+	title: "OpenFin Information Snapshot",
+	description: "Display information about the OpenFin environment as a snapped collection of two windows.",
+	manifest: "http://localhost:8080/common/views/platform/of-info.snapshot.fin.json",
+	manifestType: "snapshot",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["snapshot", "openfin", "versions"]
 };
 
 /**
