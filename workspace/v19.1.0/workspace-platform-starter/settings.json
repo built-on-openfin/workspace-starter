@@ -151,7 +151,6 @@
 			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/apps-fdc3-2-0.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/apps-contact.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/apps.json",
-			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/apps-expero.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/apps-interop.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/apps-manager.json",
 			"https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/apps-native.json",
@@ -717,15 +716,6 @@
 			"topRow": {
 				"title": "Custom Top Row Content",
 				"items": [
-					{
-						"title": "Expero",
-						"description": "A collection of example views from Expero showing the power of interop and context sharing.",
-						"image": {
-							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/images/store/coding-1-unsplash.jpg"
-						},
-						"tags": ["expero"],
-						"buttonTitle": "View"
-					},
 					{
 						"title": "Dev Tools",
 						"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",

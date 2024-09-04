@@ -101,7 +101,7 @@
 					"data": {
 						"roleMapping": {
 							"developer": {
-								"excludeAppsWithTag": ["expero", "contact", "manager", "irs"],
+								"excludeAppsWithTag": ["contact", "manager", "irs"],
 								"preferredScheme": "dark"
 							},
 							"sales": {
@@ -124,9 +124,6 @@
 					}
 				}
 			]
-		},
-		"keys": {
-			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }
