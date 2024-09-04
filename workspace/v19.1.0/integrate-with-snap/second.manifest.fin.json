@@ -19,29 +19,13 @@
 		"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/integrate-with-snap/js/snap.preload.bundle.js" }],
 		"permissions": {
 			"System": {
-				"launchExternalProcess": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
 					"enabled": true,
-					"assets": {
-						"enabled": true,
-						"srcRules": [
-							{
-								"match": ["https://cdn.openfin.co/release/snap/*"],
-								"behavior": "allow"
-							},
-							{
-								"match": ["<all_urls>"],
-								"behavior": "block"
-							}
-						]
-					},
-					"downloads": {
-						"enabled": false
-					},
-					"executables": {
-						"enabled": false
-					}
-				},
-				"downloadAsset": true
+					"protocols": ["mailto", "msteams", "tel"]
+				}
 			}
 		}
 	},
