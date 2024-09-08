@@ -85,5 +85,6 @@ This now opens up the capability to add your own logic to the platform (you want
 ## Source Reference
 
 - [Default Workspace Starter Platform Override Module](../client/src/modules/platform-override/wps-platform-override/)
+- [Example Workspace Platform Override That Validates App Urls and Access](../client/src/modules/platform-override/application-url-and-access-validator/)
 
 [<- Back to Table Of Contents](../README.md)

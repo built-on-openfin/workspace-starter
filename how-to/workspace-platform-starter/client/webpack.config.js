@@ -58,6 +58,28 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/platform-override/application-url-and-access-validator/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [loaderRule]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'application-url-and-access-validator.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'platform-override')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

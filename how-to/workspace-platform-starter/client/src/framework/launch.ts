@@ -11,13 +11,7 @@ import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
-import {
-	bringViewToFront,
-	bringWindowToFront,
-	doesViewExist,
-	doesWindowExist,
-	findViewNames
-} from "./platform/browser";
+import { bringViewToFront, bringWindowToFront, doesViewExist, doesWindowExist } from "./platform/browser";
 import type {
 	NativeLaunchOptions,
 	PlatformApp,
@@ -794,33 +788,20 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 		const viewIds: PlatformAppIdentifier[] = [];
 
 		for (const currentWindow of windows) {
-			let getViewIdsForLayout = findViewNames(currentWindow.layout);
 			if (Array.isArray(currentWindow.workspacePlatform?.pages)) {
-				for (const page of currentWindow.workspacePlatform.pages) {
-					getViewIdsForLayout = getViewIdsForLayout.concat(findViewNames(page.layout));
+				for (let i = 0; i < currentWindow.workspacePlatform.pages.length; i++) {
+					let page = currentWindow.workspacePlatform.pages[i];
+					page = updateInstanceIds(page.layout);
+					currentWindow.workspacePlatform.pages[i] = page;
 				}
-			}
-			getViewIdsForLayout = [...new Set(getViewIdsForLayout)];
-
-			if (getViewIdsForLayout.length === 0) {
-				const uuid = randomUUID();
-				const name = `${snapshotApp.appId}/${uuid}`;
-				currentWindow.name = name;
-				windowsToCreate.push(currentWindow);
-				windowsToGather.push(name);
 			} else {
-				// we have views. Grab the first one to validate existence.
-				const viewId = getViewIdsForLayout[0];
-
-				for (const entry of getViewIdsForLayout) {
-					viewIds.push({ name: entry, uuid: fin.me.identity.uuid, appId: snapshotApp.appId });
-				}
-
-				// these views should be readonly and cannot be pulled out of the page or closed
-				if (!(await doesViewExist({ name: viewId, uuid: fin.me.identity.uuid }))) {
-					windowsToCreate.push(currentWindow);
-				}
+				currentWindow.layout = updateInstanceIds(currentWindow.layout);
 			}
+			const uuid = randomUUID();
+			const name = currentWindow.name ?? `${snapshotApp.appId}/${uuid}`;
+			currentWindow.name = name;
+			windowsToCreate.push(currentWindow);
+			windowsToGather.push(name);
 		}
 
 		manifest.windows = windowsToCreate;
@@ -1138,4 +1119,29 @@ export function isValidUrl(
 		return validatedSourceUrl.origin === validatedSuggestedUrl.origin;
 	}
 	return true;
+}
+
+/**
+ * Takes a layout and walks through all the nodes and applies logic to nodes that have
+ * a url and a name that matches a pattern. Updates the name to make it unique (if applicable)
+ * while retaining information related to an application's identity if present.
+ * @param layout The layout to duplicate
+ * @returns The duplicated layout.
+ */
+function updateInstanceIds<T>(layout: T): T {
+	return JSON.parse(
+		JSON.stringify(layout, (_, nestedValue) => {
+			// check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
+			if (isStringValue(nestedValue?.name) && !isEmpty(nestedValue.url)) {
+				if (/\/[\d,a-z-]{36}$/.test(nestedValue.name)) {
+					nestedValue.name = nestedValue.name.replace(/([\d,a-z-]{36}$)/, randomUUID());
+				}
+				// case: internal-generated-view-<uuid>
+				if (/-[\d,a-z-]{36}$/.test(nestedValue.name)) {
+					nestedValue.name = nestedValue.name.replace(/(-[\d,a-z-]{36}$)/, randomUUID());
+				}
+			}
+			return nestedValue as unknown;
+		})
+	);
 }
