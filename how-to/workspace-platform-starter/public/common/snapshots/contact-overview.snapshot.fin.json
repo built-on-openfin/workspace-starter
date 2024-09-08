@@ -198,7 +198,6 @@
 															"detachOnClose": false,
 															"isClosable": true,
 															"preventDragOut": false,
-															"name": "participant-summary-view/7031d572-3b45-429c-b507-233b50c2543a",
 															"url": "http://localhost:8080/common/views/contact/participant-summary/index.html",
 															"componentName": "view",
 															"fdc3InteropApi": "1.2",
