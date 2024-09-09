@@ -495,6 +495,7 @@ export async function getConstructorOverride(
 				// you can add your own custom implementation here if you are storing your pages
 				// in non-default location (e.g. on the server instead of locally)
 				logger.info(`Checking for custom page storage with endpoint id: ${PAGE_ENDPOINT_ID_GET}`);
+				let pageToReturn: Page | undefined;
 				if (endpointProvider.hasEndpoint(PAGE_ENDPOINT_ID_GET)) {
 					logger.info(`Getting saved page from custom storage for page id: ${id}`);
 					const pageResponse = await endpointProvider.requestResponse<
@@ -507,16 +508,26 @@ export async function getConstructorOverride(
 					if (pageResponse) {
 						logger.info(`Returning saved page from custom storage for page id: ${id}`);
 						const defaultOpts = await buildDefaultOptions();
-						return mapPlatformPageFromStorage(pageResponse.payload, defaultOpts);
+						pageToReturn = mapPlatformPageFromStorage(pageResponse.payload, defaultOpts);
+					} else {
+						logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
+						return;
 					}
-
-					logger.warn(`No response getting saved page from custom storage for page id: ${id}`);
-					return {} as Page;
+				} else {
+					logger.info(`Getting saved page with id ${id} from default storage`);
+					pageToReturn = await super.getSavedPage(id);
+					if (pageToReturn) {
+						logger.info(`Returning saved page with id ${id} from default storage`);
+					} else {
+						logger.warn(`No response getting saved page from default storage for page id: ${id}`);
+						return;
+					}
 				}
-				logger.info(`Getting saved page with id ${id} from default storage`);
-				const pageResponse = await super.getSavedPage(id);
-				logger.info(`Returning saved page with id ${id} from default storage`);
-				return pageResponse;
+				pageToReturn.layout = duplicateLayout(pageToReturn?.layout);
+				if (Array.isArray(pageToReturn.panels) && pageToReturn.panels.length > 0) {
+					pageToReturn.panels = duplicateLayout(pageToReturn.panels);
+				}
+				return pageToReturn;
 			}
 
 			/**

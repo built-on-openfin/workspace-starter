@@ -7,6 +7,11 @@
 - Updated Snap to 0.4.1
 - Updated SnapProvider configuration so that it can support all snap server options and not just the show debug window setting. The showDebugWindow setting has been removed but there is backwards compatibility if it is specified in JSON. Please see [how to configure snap](./docs/how-to-configure-snap.md) for the latest configuration.
 - You can now specify a path to a snap exe instead of relying on the path of an app asset if you do have it in a specific installed in a specific location.
+- Updated apply snapshot logic so that it always returns all the view ids that were created.
+- Fixed bug where you could have a page with apps that is saved, the apps are moved and the page is closed without saving. Launching the page would move the apps from the other windows as the ids were not unique. The name of views that represent apps now behave like platform views where the guid (if it exists) is updated. This behavior now reflects the behavior of duplicate page.
+- Snapshots that contain apps can now list the name as appId/guid (similar to how they are launched in a layout). If a guid is detected the snapshot entries are updated when applied (to avoid clashes if you launch multiple instances).
+- Fixed an issue where an empty object was being returned (instead of undefined) when getPage was called and it didn't exist.
+- Added an example of a platform override module that validates app urls and whether the app is still supported in workspaces, snapshots and pages. This is just an example (server side is a better place) to show how the behavior could work. [application-url-and-access-validator](./client/src/modules/platform-override/application-url-and-access-validator/)
 
 ## v19.0.0
 
