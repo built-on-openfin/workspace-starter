@@ -212,7 +212,7 @@ export class ApplicationUrlAndAccessValidator
 										appEntry = { url: (app.manifest as { url: string }).url, exists: true };
 									} else if (app?.manifestType === "view" || app?.manifestType === "window") {
 										const token = `[[${app.appId}]]`;
-										if (!isEmpty(manifestTokens[token])) {
+										if (isEmpty(manifestTokens[token])) {
 											const t = { manifest: app.manifest, originalUrl: nestedValue.url };
 											manifestTokens[token] = t;
 										}
