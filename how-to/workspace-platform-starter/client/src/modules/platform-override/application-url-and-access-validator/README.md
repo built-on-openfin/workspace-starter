@@ -67,10 +67,9 @@ For this example we want to intercept the getPage request **before** the default
 ### App Url Changed
 
 - Switch back to the 'no call wks' so that you have a layout that doesn't have any apps that have had changes.
-- Go back to the call app entry in [public/common/apps-contact.json](../../../../../public/common/apps-contact.json) and rename the appId so that it goes back to call-app.
-- Update the manifest path for the call app from <http://localhost:8080/common/views/contact/call-app.view.fin.json> to <http://localhost:8080/common/views/contact/call-app-v2.view.fin.json>.
-- Navigate to the folder containing the call-app.view.fin.json file ([public/common/views/contact](../../../../../public/common/views/contact/)) and duplicate the file calling it call-app-v2.view.fin.json
-- Update the url inside the new manifest call-app-v2.view.fin.json from <http://localhost:8080/common/views/contact/call-app/index.html> to <https://www.google.com> (just to make it easy to see the change).
+- Go back to the call app entry in [public/common/apps-contact.json](../../../../../public/common/apps-contact.json) to see where the view manifest is located.
+- Navigate to the folder containing the call-app.view.fin.json file ([public/common/views/contact](../../../../../public/common/views/contact/)) and open call-app.view.fin.json
+- Update the url inside the manifest to <https://www.google.com> (just to make it easy to see the change).
 - Now launch the page 'page with call' -> You should see the page launch with the google site shown
 - Switch workspaces to load 'call wks' -> You should see the workspace load and the google page should show where you had saved the call app in the workspace.
 

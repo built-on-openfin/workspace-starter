@@ -87,7 +87,6 @@ export class ApplicationUrlAndAccessValidator
 			const logger = this._logger;
 			const helpers = this._helpers;
 			const utilClient = helpers.getUtilClient();
-			const cachedManifestTokens: { [key: string]: { manifest: string; url: string } } = {};
 			// caching the functions as it is called multiple times in the applySnapshot override.
 			const isStringValue = utilClient.general.isStringValue;
 			const isEmpty = utilClient.general.isEmpty;
@@ -238,25 +237,14 @@ export class ApplicationUrlAndAccessValidator
 
 					const tokens = Object.keys(manifestTokens);
 					if (tokens.length > 0) {
-						// we only want to fetch the url for the manifest once regardless of how many app entries there are in the snapshot.
-						// we are caching in this example assuming that manifest urls are also versioned like app urls will be. In a real implementation
-						// this would be done on the server to remove the load from the client or inline views/windows would be used or a caching mechanism
-						// that could be cleared when the app data changes.
+						// we are not caching the fetching of the url from the manifest as this is an example
+						// if you are going to be calling this multiple times you should cache the results and ensure that
+						// the cache is cleared when the app is updated.
 						for (const token of tokens) {
-							const cachedManifestToken = cachedManifestTokens[token];
-							let url = manifestTokens[token].originalUrl;
-							if (
-								!isEmpty(cachedManifestToken) &&
-								cachedManifestToken.manifest === manifestTokens[token].manifest
-							) {
-								url = cachedManifestToken.url;
-							} else {
-								url = await this.getUrlFromManifest(
-									manifestTokens[token].manifest,
-									manifestTokens[token].originalUrl
-								);
-								cachedManifestTokens[token] = { manifest: manifestTokens[token].manifest, url };
-							}
+							const url = await this.getUrlFromManifest(
+								manifestTokens[token].manifest,
+								manifestTokens[token].originalUrl
+							);
 							processedPayload = processedPayload.replaceAll(token, url);
 						}
 					}
