@@ -105,7 +105,7 @@
 					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/favicon.ico",
 					"title": "Application Url and Access Validator",
 					"description": "This is an example platform override module that shows how you could validate a saved page, workspace or an application snapshot (if it combines apps) to ensure that it is using the latest url for the applications used and that the user still has access to that app.",
-					"enabled": true,
+					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/js/modules/platform-override/application-url-and-access-validator.bundle.js",
 					"data": {
 						"deniedAccessUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.1.0/workspace-platform-starter/common/views/platform/no-access/no-access.html"
