@@ -12,6 +12,8 @@
 - Snapshots that contain apps can now list the name as appId/guid (similar to how they are launched in a layout). If a guid is detected the snapshot entries are updated when applied (to avoid clashes if you launch multiple instances).
 - Fixed an issue where an empty object was being returned (instead of undefined) when getPage was called and it didn't exist.
 - Added an example of a platform override module that validates app urls and whether the app is still supported in workspaces, snapshots and pages. This is just an example (server side is a better place) to show how the behavior could work. [application-url-and-access-validator](./client/src/modules/platform-override/application-url-and-access-validator/)
+- BugFix - The endpoint provider checks to see if modules should be given access to endpoints (through endpointClient configuration). When specifying only a settings url (from which customSettings should be fetched) the endpoint provider would validate the endpoint configuration and set allowEndpointClientCreation to false (as this type of configuration shouldn't be in the manifest if you are fetching settings from a service or settings.json). The logic has been updated to re-evaluate this when the new endpoint provider configuration comes from the service request.
+- Updated the example e2e tests to show more use cases. Also introduced a new manifest test.manifest.fin.json which does not define a security realm (when automating multiple openfin apps they need to be on the same runtime and not be isolated via security realms).
 
 ## v19.0.0
 

@@ -21,22 +21,40 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	// The DOM is ready so initialize the platform
 	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(settings.platformSettings);
+	await initializeWorkspacePlatform(settings.platformSettings, settings.customSettings ?? {});
 });
 
 /**
  * Initialize the workspace platform.
  * @param platformSettings The platform settings from the manifest.
+ * @param browserSettings The custom settings from the manifest.
+ * @param browserSettings.newPageUrl A new page url to load when the browser is opened.
+ * @param browserSettings.newTabUrl A new view url to load when the browser is opened.
  */
-async function initializeWorkspacePlatform(platformSettings: PlatformSettings): Promise<void> {
+async function initializeWorkspacePlatform(
+	platformSettings: PlatformSettings,
+	browserSettings: { newPageUrl?: string; newTabUrl?: string }
+): Promise<void> {
 	console.log("Initializing workspace platform");
+	let newPageUrl: string | undefined;
+	let newTabUrl: string | undefined;
+
+	if (browserSettings?.newPageUrl !== undefined && browserSettings?.newPageUrl !== "") {
+		newPageUrl = browserSettings.newPageUrl;
+	}
+	if (browserSettings?.newTabUrl !== undefined && browserSettings?.newTabUrl !== "") {
+		newTabUrl = browserSettings.newTabUrl;
+	}
+
 	await init({
 		browser: {
 			defaultWindowOptions: {
 				icon: platformSettings.icon,
 				workspacePlatform: {
 					pages: [],
-					favicon: platformSettings.icon
+					favicon: platformSettings.icon,
+					newPageUrl,
+					newTabUrl
 				}
 			}
 		},

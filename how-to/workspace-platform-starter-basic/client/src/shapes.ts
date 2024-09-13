@@ -13,6 +13,16 @@ export interface CustomSettings {
 	 * The applications to populate in the platform.
 	 */
 	apps?: App[];
+
+	/**
+	 * Should the browser show the plus sign and load a url.
+	 */
+	newPageUrl?: string;
+
+	/**
+	 * Should the browser show the plus sign and load a url.
+	 */
+	newTabUrl?: string;
 }
 
 /**

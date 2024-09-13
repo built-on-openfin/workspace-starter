@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "38.126.82.61"
+		"version": "38.126.82.64"
 	},
 	"platform": {
 		"uuid": "workspace-platform-start-basic",
@@ -26,6 +26,8 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
+		"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+		"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
 		"appsUrl": "http://localhost:8080/apps.json",
 		"apps": [
 			{

@@ -52,6 +52,8 @@ export async function init(
 		};
 		if (restrictEndpointClientCreationToListed && endpointClientOptions.length === 0) {
 			allowEndpointClientCreation = false;
+		} else {
+			allowEndpointClientCreation = true;
 		}
 		endpointProvider = {
 			hasEndpoint,

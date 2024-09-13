@@ -42,7 +42,7 @@ describe("Register with Home", () => {
 	it("The runtime version should be set", async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).to.equal("38.126.82.61");
+		expect(version).to.equal("38.126.82.64");
 	});
 
 	it("The identity should be set", async () => {
@@ -66,7 +66,7 @@ describe("Register with Home", () => {
 	});
 
 	it("Can open the home window", async () => {
-		const isShown = await OpenFinHome.show(30000);
+		const isShown = await OpenFinHome.show(60000);
 		expect(isShown).to.equal(true);
 
 		await WebDriver.saveScreenshot();

@@ -4,7 +4,7 @@
 
 # [Launch Into Platform](https://developers.openfin.co/of-docs/docs/platform-getting-started#deep-linking-fin--fins-link)
 
-> :information_source: **INFO:** Launch Into Platform is disabled by default in Workspace v19 onwards and [runtime v38.126.82.61+](https://developer.openfin.co/versions/?product=Runtime#38.126.82.61). As it is off by default you do not need to do an override unless you turn it on.
+> :information_source: **INFO:** Launch Into Platform is disabled by default in Workspace v19 onwards and [runtime v38.126.82.64+](https://developer.openfin.co/versions/?product=Runtime#38.126.82.64). As it is off by default you do not need to do an override unless you turn it on.
 
 OpenFin Platforms allow additional snapshots and layouts to be loaded into a platform through a deep link. This might be useful if you want to dynamically load content through a url, however, our recommendation would be that a platform developer should be more explicit about what gets loaded into their platform and how.
 
