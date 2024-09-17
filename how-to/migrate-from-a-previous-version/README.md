@@ -9,7 +9,7 @@
 
 ## Migrate from a previous version - From v18 to v19.0
 
-- [Please see the v19.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#19.0.3)
+- [Please see the v19.0 Release Notes](https://developer.openfin.co/versions/?product=Workspace#19.1.20)
 
 ## Migrate from a previous version - From v17.2 to v18.0
 

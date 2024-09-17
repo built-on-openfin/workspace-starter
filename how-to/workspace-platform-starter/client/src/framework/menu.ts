@@ -247,7 +247,7 @@ function updateMenuEntries<T extends MenuTemplateType, U extends MenuOptionType<
 		if (entryIndex !== -1 && positionOperation) {
 			switch (positionOperation) {
 				case "delete": {
-					menuEntries.splice(entryIndex);
+					menuEntries.splice(entryIndex, 1);
 					break;
 				}
 				case "replaceLabel": {

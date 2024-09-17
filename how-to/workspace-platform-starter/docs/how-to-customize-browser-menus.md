@@ -78,7 +78,7 @@ Or you can specify `Custom` as the `data.type`, in this case the `data` will als
 
 When the custom menu entry is clicked the `id` is used to look up one of the platform actions, and the `customData` is passed to it. For more information on actions see [How To Add Custom Actions For Menus and Buttons](./how-to-add-custom-actions-for-menus-and-buttons.md).
 
-The `position` properties determine where in the menu the item is located. The following operations are possible.
+The `position` properties determine where in the menu the item is located. The following operations are possible. They can be used to identify the menu entry to apply the change to.
 
 - `start` - Positions as the first menu entry
 - `end` - Positions as the last menu entry
@@ -112,6 +112,48 @@ The following example create a menu entry to display the Notification Center wit
         },
     ]
 }
+```
+
+### Example of removing a one or more menu entries
+
+In the example below we are specifying in the browserProvider that we do not want the Save Workspace As or Refresh option to be listed on the Page Context Menu:
+
+```json
+"pageMenu": [
+    {
+     "include": true,
+     "label": "Save Workspace As",
+     "position": {
+      "type": "SaveWorkspaceAs",
+      "operation": "delete"
+     }
+    },
+    {
+     "include": true,
+     "label": "Refresh",
+     "position": {
+      "type": "Refresh",
+      "operation": "delete"
+     }
+    }
+   ],
+```
+
+### Example of renaming a menu option
+
+In this example we want to rename Save Workspace As to say Save CompanyX Workspace As:
+
+```json
+"globalMenu": [
+    {
+        "include": true,
+        "label": "Save CompanyX Workspace As",
+        "position": {
+            "type": "SaveWorkspaceAs",
+            "operation": "replaceLabel"
+        }
+    }
+   ],
 ```
 
 ## Including or Excluding Default Menu Entries

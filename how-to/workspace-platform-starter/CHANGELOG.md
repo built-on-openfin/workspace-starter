@@ -14,6 +14,7 @@
 - Added an example of a platform override module that validates app urls and whether the app is still supported in workspaces, snapshots and pages. This is just an example (server side is a better place) to show how the behavior could work. [application-url-and-access-validator](./client/src/modules/platform-override/application-url-and-access-validator/)
 - BugFix - The endpoint provider checks to see if modules should be given access to endpoints (through endpointClient configuration). When specifying only a settings url (from which customSettings should be fetched) the endpoint provider would validate the endpoint configuration and set allowEndpointClientCreation to false (as this type of configuration shouldn't be in the manifest if you are fetching settings from a service or settings.json). The logic has been updated to re-evaluate this when the new endpoint provider configuration comes from the service request.
 - Updated the example e2e tests to show more use cases. Also introduced a new manifest test.manifest.fin.json which does not define a security realm (when automating multiple openfin apps they need to be on the same runtime and not be isolated via security realms).
+- Added bugfix to menu.ts for when you requested a menu entry should be deleted. The splice did not have a limit and so it would remove the menu entry plus everything behind it. Updated [How to customize browser menus](./docs/how-to-customize-browser-menus.md) to show examples of renaming and removing default menu options.
 
 ## v19.0.0
 
