@@ -1200,7 +1200,7 @@
 	"versionProvider": {
 		"appVersion": "1.0.0",
 		"minVersion": {
-			"workspace": "16.0.0"
+			"workspace": "19.0.0"
 		},
 		"versionWindow": {
 			"name": "versioning",
