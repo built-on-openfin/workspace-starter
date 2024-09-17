@@ -114,7 +114,7 @@ The following example create a menu entry to display the Notification Center wit
 }
 ```
 
-### Example of removing a one or more menu entries
+### Example of removing one or more default menu entries
 
 In the example below we are specifying in the browserProvider that we do not want the Save Workspace As or Refresh option to be listed on the Page Context Menu:
 
@@ -139,7 +139,7 @@ In the example below we are specifying in the browserProvider that we do not wan
    ],
 ```
 
-### Example of renaming a menu option
+### Example of renaming a default menu entry
 
 In this example we want to rename Save Workspace As to say Save CompanyX Workspace As:
 
