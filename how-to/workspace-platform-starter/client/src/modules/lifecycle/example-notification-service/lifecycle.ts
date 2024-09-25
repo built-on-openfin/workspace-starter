@@ -1,28 +1,27 @@
+import type { AppIdentifier } from "@finos/fdc3";
+import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type {
 	NotificationActionEvent,
 	NotificationClosedEvent,
-	NotificationCreatedEvent,
 	NotificationFormSubmittedEvent,
-	NotificationReminderCreatedEvent,
-	NotificationReminderRemovedEvent,
-	NotificationToastDismissedEvent,
-	NotificationsCountChanged,
-	NotificationOptions
+	NotificationOptions,
+	UpdatableNotificationOptions
 } from "@openfin/workspace/notifications";
-import type {
-	Lifecycle,
-	LifecycleEventMap,
-	LifecycleEvents
-} from "workspace-platform-starter/shapes/lifecycle-shapes";
+import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
+import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import type {
 	NotificationClient,
-	NotificationsEventMap
+	NotificationsEventMap,
+	NotificationSourceClearEvent,
+	NotificationSourceCloseEvent,
+	NotificationSourceCreateEvent,
+	NotificationSourceUpdateEvent
 } from "workspace-platform-starter/shapes/notification-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
-import type { ExampleNotificationServiceProviderOptions } from "./shapes";
+import type { ExampleNotificationServiceProviderOptions, NotificationCustomData } from "./shapes";
 
 /**
  * Implementation for the example notification service lifecycle provider.
@@ -52,12 +51,6 @@ export class ExampleNotificationServiceProvider
 	 * An object containing current subscriptions.
 	 * @internal
 	 */
-	private _lifeCycleSubscriptions: { [key: string]: LifecycleEvents } | undefined;
-
-	/**
-	 * An object containing current subscriptions.
-	 * @internal
-	 */
 	private _notificationSubscriptions:
 		| { [key in keyof NotificationsEventMap]?: (event: NotificationsEventMap[key]) => void }
 		| undefined;
@@ -67,6 +60,18 @@ export class ExampleNotificationServiceProvider
 	 * @internal
 	 */
 	private _notificationClient: NotificationClient | undefined;
+
+	/**
+	 * A endpoint client if available.
+	 * @internal
+	 */
+	private _endpointClient: EndpointClient | undefined;
+
+	/**
+	 * A endpoint client if available.
+	 * @internal
+	 */
+	private _interopClient: OpenFin.InteropClient | undefined;
 
 	/**
 	 * Initialize the module.
@@ -81,9 +86,9 @@ export class ExampleNotificationServiceProvider
 		helpers: ModuleHelpers
 	): Promise<void> {
 		this._definition = definition;
-		this._logger = loggerCreator(`ExampleNotificationService(${this._definition?.id}):`);
+		this._logger = loggerCreator("ExampleNotificationServiceProvider");
 		this._helpers = helpers;
-		this._lifeCycleSubscriptions = {};
+
 		this._logger.info("Initializing");
 	}
 
@@ -118,141 +123,238 @@ export class ExampleNotificationServiceProvider
 	 * Starts the notification service.
 	 */
 	private async startNotificationService(): Promise<void> {
-		const serverUrl = this._definition?.data?.exampleServerUrl;
-		this._logger?.info(
-			`Starting notification service and connecting to ${
-				serverUrl ?? "https://examplenotificationserver"
-			} (Not Really...this is an example.)`
-		);
+		const notificationSourceRootEndpointId =
+			this._definition?.data?.notificationSourceRootEndpointId ?? "notification-source";
+		const createEndpointId = `${notificationSourceRootEndpointId}-create`;
+		const updateEndpointId = `${notificationSourceRootEndpointId}-update`;
+		const clearEndpointId = `${notificationSourceRootEndpointId}-clear`;
+		const closeEndpointId = `${notificationSourceRootEndpointId}-close`;
+		const streamEndpointId = `${notificationSourceRootEndpointId}-stream`;
 
-		if (this._helpers?.subscribeLifecycleEvent) {
-			// we have been passed the ability to subscribe to lifecycle events.
-			if (!this._lifeCycleSubscriptions) {
-				this._lifeCycleSubscriptions = {};
+		const createNotificationContextType = "openfin.notificationoptions";
+		const updateNotificationContextType = "openfin.updatablenotificationoptions";
+		const clearNotificationContextType = "openfin.notification";
+
+		if (!isEmpty(this._helpers?.getEndpointClient)) {
+			const endpointClient = await this._helpers.getEndpointClient();
+			if (
+				!isEmpty(endpointClient) &&
+				endpointClient.hasEndpoint(createEndpointId) &&
+				endpointClient.hasEndpoint(updateEndpointId) &&
+				endpointClient.hasEndpoint(clearEndpointId) &&
+				endpointClient.hasEndpoint(closeEndpointId) &&
+				endpointClient.hasEndpoint(streamEndpointId)
+			) {
+				this._endpointClient = endpointClient;
 			}
+		}
+
+		if (!isEmpty(this._helpers?.getInteropClient)) {
+			const interopClient = await this._helpers.getInteropClient();
+
+			if (
+				interopClient &&
+				!isEmpty(this._endpointClient) &&
+				this._definition?.data?.intentHandler?.enabled !== false
+			) {
+				this._interopClient = interopClient;
+				this._logger?.info("Registering intent service.");
+				await this._interopClient?.registerIntentHandler(async (intentRequest) => {
+					if (intentRequest.context.type === createNotificationContextType) {
+						const notification = (intentRequest.context as unknown as { notification: NotificationOptions })
+							.notification;
+						// eslint-disable-next-line max-len
+						const sent = await this._endpointClient?.action<NotificationSourceCreateEvent>(createEndpointId, {
+							eventId: "create",
+							payload: notification
+						});
+						this._logger?.info(`Intent handler called and notification sent: ${sent}.`, intentRequest);
+					} else {
+						this._logger?.warn(
+							`A create notification intent was raised but it wasn't passed and ${createNotificationContextType} context. Type: ${intentRequest.context.type}.`
+						);
+					}
+				}, this._definition?.data?.intentHandler?.name?.create ?? "CreateNotification");
+
+				await this._interopClient?.registerIntentHandler(async (intentRequest) => {
+					if (intentRequest.context.type === updateNotificationContextType) {
+						const notification = (
+							intentRequest.context as unknown as { notification: UpdatableNotificationOptions }
+						).notification;
+						// eslint-disable-next-line max-len
+						const sent = await this._endpointClient?.action<NotificationSourceUpdateEvent>(updateEndpointId, {
+							eventId: "update",
+							payload: notification
+						});
+						this._logger?.info(`Intent handler called and notification sent: ${sent}.`, intentRequest);
+					} else {
+						this._logger?.warn(
+							`A update notification intent was raised but it wasn't passed an ${updateNotificationContextType} context. Type: ${intentRequest.context.type}.`
+						);
+					}
+				}, this._definition?.data?.intentHandler?.name?.update ?? "UpdateNotification");
+
+				await this._interopClient?.registerIntentHandler(async (intentRequest) => {
+					if (intentRequest.context.type === clearNotificationContextType) {
+						const notification = (intentRequest.context as unknown as { notification: { id: string } })
+							.notification;
+						const notificationId = notification?.id;
+						if (!isEmpty(notificationId)) {
+							// eslint-disable-next-line max-len
+							const sent = await this._endpointClient?.action<NotificationSourceClearEvent>(clearEndpointId, {
+								eventId: "clear",
+								payload: { id: notificationId }
+							});
+							this._logger?.info(
+								`Intent handler called and notification clear request sent: ${sent}.`,
+								intentRequest
+							);
+						} else {
+							this._logger?.warn(
+								"A clear notification intent was raised but it wasn't passed a notification id."
+							);
+						}
+					} else {
+						this._logger?.warn(
+							`A clear notification intent was raised but it wasn't passed and ${clearNotificationContextType} context. Type: ${intentRequest.context.type}.`
+						);
+					}
+				}, this._definition?.data?.intentHandler?.name?.clear ?? "ClearNotification");
+			}
+		}
+
+		if (!isEmpty(this._definition?.data?.channelHandler?.enabled !== false)) {
+			const notificationChannelName = `${fin.me.identity.uuid}/${this._definition?.data?.channelHandler?.name ?? "notification-service"}`;
+			const notificationChannel = await fin.InterApplicationBus.Channel.create(notificationChannelName);
+			notificationChannel.onConnection(async (identity, payload) => {
+				this._logger?.info(`Channel connection request from: ${identity.uuid}`, payload);
+				if (this._helpers?.getConnectionClient) {
+					const connectionClient = await this._helpers.getConnectionClient();
+					const isValid = await connectionClient.isConnectionValid(identity, payload);
+					if (isValid) {
+						this._logger?.info(`Channel connection request from: ${identity.uuid} is valid.`);
+					} else {
+						this._logger?.warn(
+							`Channel connection request from: ${identity.uuid} to ${notificationChannelName} is not valid.`
+						);
+						throw new Error(`Connection to ${notificationChannelName} is not valid.`);
+					}
+				}
+			});
+			notificationChannel.register("create", async (payload) => {
+				const request = payload as { type: string; notification: NotificationOptions };
+				if (request.type === createNotificationContextType) {
+					const notification = request.notification;
+					const sent = await this._endpointClient?.action<NotificationSourceCreateEvent>(createEndpointId, {
+						eventId: "create",
+						payload: notification
+					});
+					this._logger?.info(
+						`${notificationChannelName} channel create function called and notification sent: ${sent}.`,
+						payload
+					);
+				} else {
+					this._logger?.warn(
+						`${notificationChannelName} channel create function called but it wasn't passed an ${createNotificationContextType} context. Type: ${request.type}.`
+					);
+				}
+			});
+
+			notificationChannel.register("update", async (payload) => {
+				const request = payload as { type: string; notification: UpdatableNotificationOptions };
+				if (request.type === updateNotificationContextType) {
+					const notification = request.notification;
+					const sent = await this._endpointClient?.action<NotificationSourceUpdateEvent>(updateEndpointId, {
+						eventId: "update",
+						payload: notification
+					});
+					this._logger?.info(
+						`${notificationChannelName} channel update function called and event sent: ${sent}.`,
+						payload
+					);
+				} else {
+					this._logger?.warn(
+						`${notificationChannelName} channel update function called but it wasn't passed an ${updateNotificationContextType} context. Type: ${request.type}.`
+					);
+				}
+			});
+
+			notificationChannel.register("clear", async (payload) => {
+				const request = payload as { type: string; notification: { id: string } };
+				if (request.type === clearNotificationContextType) {
+					const notificationId = request.notification.id;
+					if (!isEmpty(notificationId)) {
+						const sent = await this._endpointClient?.action<NotificationSourceClearEvent>(clearEndpointId, {
+							eventId: "clear",
+							payload: { id: notificationId }
+						});
+						this._logger?.info(
+							`${notificationChannelName} channel clear function called and event sent: ${sent}.`,
+							payload
+						);
+					} else {
+						this._logger?.warn(
+							`${notificationChannelName} channel clear function called but it wasn't passed a notification id.`
+						);
+					}
+				} else {
+					this._logger?.warn(
+						`${notificationChannelName} channel clear function called but it wasn't passed an ${clearNotificationContextType} context. Type: ${request.type}.`
+					);
+				}
+			});
+		}
+
+		if (this._helpers?.getNotificationClient) {
 			if (!this._notificationSubscriptions) {
 				this._notificationSubscriptions = {};
 			}
-
-			if (this._helpers?.getNotificationClient) {
-				this._notificationClient = await this._helpers.getNotificationClient();
-			}
+			this._notificationClient = await this._helpers.getNotificationClient();
 
 			if (this._notificationClient) {
-				await this.setupNotificationEventListeners();
-
-				if (this._definition?.data?.notifyOn?.appsChanged !== false) {
-					const appsChangedSubscription = this._helpers?.subscribeLifecycleEvent("apps-changed", async () => {
-						const notification: NotificationOptions = {
-							title: "Apps Changed Notification",
-							body: `The list of apps on this platform has changed.This was generated by the example notification service (moduleId: ${this._definition?.id}).`,
-							toast: "transient",
-							category: "default",
-							template: "markdown"
-						};
-						await this._notificationClient?.create(notification);
-					});
-					this._lifeCycleSubscriptions[appsChangedSubscription] = "apps-changed";
-				}
-
-				if (this._definition?.data?.notifyOn?.favoriteChanged !== false) {
-					const favoriteChangedSubscription = this._helpers?.subscribeLifecycleEvent(
-						"favorite-changed",
-						async () => {
-							const notification: NotificationOptions = {
-								title: "Favorite Changed Notification",
-								body: `You have changed a favorite on this platform.This was generated by the example notification service (moduleId: ${this._definition?.id}).`,
-								toast: "transient",
-								category: "default",
-								template: "markdown"
-							};
-							await this._notificationClient?.create(notification);
-						}
-					);
-					this._lifeCycleSubscriptions[favoriteChangedSubscription] = "favorite-changed";
-				}
-
-				if (this._definition?.data?.notifyOn?.pageChanged !== false) {
-					const pageChangedSubscription = this._helpers?.subscribeLifecycleEvent("page-changed", async () => {
-						const notification: NotificationOptions = {
-							title: "Page Changed Notification",
-							body: `You have changed the page on this platform.This was generated by the example notification service (moduleId: ${this._definition?.id}).`,
-							toast: "transient",
-							category: "default",
-							template: "markdown"
-						};
-						await this._notificationClient?.create(notification);
-					});
-					this._lifeCycleSubscriptions[pageChangedSubscription] = "page-changed";
-				}
-
-				if (this._definition?.data?.notifyOn?.themeChanged !== false) {
-					const themeChangedSubscription = this._helpers?.subscribeLifecycleEvent(
-						"theme-changed",
-						async () => {
-							const notification: NotificationOptions = {
-								title: "Theme Changed",
-								body: `You have changed the theme for this platform. This was generated by the example notification service (moduleId: ${this._definition?.id}).`,
-								toast: "transient",
-								category: "default",
-								template: "markdown",
-								form: [
-									{
-										type: "boolean",
-										key: "intended theme change",
-										label: "Did you intend to change the theme?",
-										widget: {
-											type: "Toggle"
-										}
-									}
-								],
-								buttons: [
-									{
-										title: "Acknowledged",
-										type: "button",
-										cta: true,
-										submit: true
-									}
-								]
-							};
-							await this._notificationClient?.create(notification);
-						}
-					);
-					this._lifeCycleSubscriptions[themeChangedSubscription] = "theme-changed";
-				}
-
-				if (this._definition?.data?.notifyOn?.workspaceChanged !== false) {
-					const workspaceChangedSubscription = this._helpers?.subscribeLifecycleEvent(
-						"workspace-changed",
-						async () => {
-							const notification: NotificationOptions = {
-								title: "Workspace Changed",
-								body: `You have changed your workspace. This was generated by the example notification service (moduleId: ${this._definition?.id}).`,
-								toast: "transient",
-								category: "default",
-								template: "markdown",
-								buttons: [
-									{
-										title: "Acknowledged",
-										type: "button",
-										cta: true,
-										onClick: {
-											task: "acknowledge-task",
-											customData: {
-												message: "This is the response data"
-											}
-										}
-									},
-									{
-										title: "Cancel",
-										type: "button"
-									}
-								]
-							};
-							await this._notificationClient?.create(notification);
-						}
-					);
-					this._lifeCycleSubscriptions[workspaceChangedSubscription] = "workspace-changed";
+				await this.setupNotificationEventListeners(closeEndpointId);
+				if (this._endpointClient) {
+					const stream = await this._endpointClient.requestStream<
+						unknown,
+						| NotificationSourceCreateEvent
+						| NotificationSourceUpdateEvent
+						| NotificationSourceClearEvent
+						| NotificationSourceCloseEvent
+					>(streamEndpointId);
+					if (!isEmpty(stream)) {
+						const reader = stream.getReader();
+						this._logger?.info("Reading from stream");
+						const logger = this._logger;
+						const notificationClient = this._notificationClient;
+						reader
+							.read()
+							.then(function pump({ done, value }): unknown {
+								if (done) {
+									logger?.info("Stream ended");
+									return;
+								}
+								if (value.eventId === "create") {
+									notificationClient?.create(value.payload);
+								} else if (value.eventId === "update") {
+									notificationClient?.update(value.payload);
+								} else if (value.eventId === "clear") {
+									notificationClient?.clear(value.payload.id);
+								} else if (value.eventId === "close") {
+									// in a real system the source would know that the close event
+									// was sent from this user/machine and app and would not send it back
+									// to trigger a clear that would never clear it as it has already been
+									// closed. This is just an example.
+									notificationClient?.clear(value.payload.id);
+								} else {
+									logger?.warn("Unknown event type: received", value);
+								}
+								// eslint-disable-next-line promise/no-nesting
+								return reader.read().then(pump);
+							})
+							.catch((error) => {
+								this._logger?.error(`Error reading stream: ${error}`);
+							});
+					}
 				}
 			}
 		}
@@ -262,43 +364,55 @@ export class ExampleNotificationServiceProvider
 	 * Stops the notification service.
 	 */
 	private async stopNotificationService(): Promise<void> {
-		this._logger?.info("Stopping notification service (Not Really...this is an example.)");
-		if (this._helpers?.unsubscribeLifecycleEvent && this._lifeCycleSubscriptions) {
-			for (const [key, value] of Object.entries(this._lifeCycleSubscriptions)) {
-				this._helpers.unsubscribeLifecycleEvent(key, value);
-			}
-		}
+		this._logger?.info("Stopping notification service (This is an example.)");
 		await this.removeNotificationEventListeners();
 	}
 
 	/**
 	 * Setup listeners using the notification client fetched via a helper.
+	 * @param closeEndpointId The endpoint id to indicate a notification has been closed.
 	 */
-	private async setupNotificationEventListeners(): Promise<void> {
+	private async setupNotificationEventListeners(closeEndpointId: string): Promise<void> {
 		if (!isEmpty(this._notificationClient) && !isEmpty(this._notificationSubscriptions)) {
-			const actionEventHandler = (event: NotificationActionEvent): void => {
+			const actionEventHandler = async (event: NotificationActionEvent): Promise<void> => {
+				if (isEmpty(event?.result)) {
+					this._logger?.warn(
+						"Event for notification action received but it was empty or didn't have a result."
+					);
+					return;
+				}
 				this._logger?.info("Event for notification action received.", event);
+				const action = event.result.task;
+				const customData = event.result.customData as NotificationCustomData;
+				await this.handleNotificationResponse(event.notification.id, action, customData);
 			};
 
 			await this._notificationClient.addEventListener("notification-action", actionEventHandler);
 			this._notificationSubscriptions["notification-action"] = actionEventHandler;
 
-			const closedEventHandler = (event: NotificationClosedEvent): void => {
-				this._logger?.info("Event for notification closed received.", event);
-			};
-
-			await this._notificationClient.addEventListener("notification-closed", closedEventHandler);
-			this._notificationSubscriptions["notification-closed"] = closedEventHandler;
-
-			const createdEventHandler = (event: NotificationCreatedEvent): void => {
-				this._logger?.info("Event for notification created received.", event);
-			};
-
-			await this._notificationClient.addEventListener("notification-created", createdEventHandler);
-			this._notificationSubscriptions["notification-created"] = createdEventHandler;
-
-			const formSubmittedEventHandler = (event: NotificationFormSubmittedEvent): void => {
+			const formSubmittedEventHandler = async (event: NotificationFormSubmittedEvent): Promise<void> => {
+				if (isEmpty(event?.form)) {
+					this._logger?.warn(
+						"Event for notification form received but it was empty or didn't have a form result."
+					);
+					return;
+				}
+				if (isEmpty(event?.button?.onClick?.task) || isEmpty(event?.button?.onClick?.customData)) {
+					this._logger?.warn(
+						"Event for notification form received but it was empty or didn't have a onclick customData result or task."
+					);
+					return;
+				}
 				this._logger?.info("Event for notification form submitted received.", event);
+				const notificationCustomData: NotificationCustomData = event.button.onClick.customData;
+				const task = event.button?.onClick?.task;
+				if (!notificationCustomData.context) {
+					notificationCustomData.context = {
+						type: "openfin.notification.form"
+					};
+				}
+				notificationCustomData.context.form = event.form;
+				await this.handleNotificationResponse(event.notification.id, task, notificationCustomData);
 			};
 
 			await this._notificationClient.addEventListener(
@@ -307,45 +421,172 @@ export class ExampleNotificationServiceProvider
 			);
 			this._notificationSubscriptions["notification-form-submitted"] = formSubmittedEventHandler;
 
-			const reminderCreatedEventHandler = (event: NotificationReminderCreatedEvent): void => {
-				this._logger?.info("Event for notification reminder created received.", event);
+			const closedEventHandler = (event: NotificationClosedEvent): void => {
+				this._logger?.info("Event for notification closed received.", event);
+				const notificationId = event.notification.id;
+				if (!isEmpty(notificationId)) {
+					this._endpointClient
+						?.action<NotificationSourceCloseEvent>(closeEndpointId, {
+							eventId: "close",
+							payload: { id: notificationId }
+						})
+						.then((sent) => {
+							this._logger?.info(
+								`Notification was closed, sending clear request for other machines. Notification Id: ${notificationId}. Sent: ${sent}`
+							);
+							return true;
+						})
+						.catch((error) => {
+							this._logger?.error("A close event passed to the endpoint but had the following error.", error);
+						});
+				} else {
+					this._logger?.warn("A notification was closed but it didn't have a notification id.");
+				}
 			};
 
-			await this._notificationClient.addEventListener(
-				"notification-reminder-created",
-				reminderCreatedEventHandler
-			);
-			this._notificationSubscriptions["notification-reminder-created"] = reminderCreatedEventHandler;
+			await this._notificationClient.addEventListener("notification-closed", closedEventHandler);
+			this._notificationSubscriptions["notification-closed"] = closedEventHandler;
+		}
+	}
 
-			const reminderRemovedEventHandler = (event: NotificationReminderRemovedEvent): void => {
-				this._logger?.info("Event for notification reminder removed received.", event);
-			};
-
-			await this._notificationClient.addEventListener(
-				"notification-reminder-removed",
-				reminderRemovedEventHandler
-			);
-			this._notificationSubscriptions["notification-reminder-removed"] = reminderRemovedEventHandler;
-
-			const toastDismissedEventHandler = (event: NotificationToastDismissedEvent): void => {
-				this._logger?.info("Event for notification toast dismissed received.", event);
-			};
-
-			await this._notificationClient.addEventListener(
-				"notification-toast-dismissed",
-				toastDismissedEventHandler
-			);
-			this._notificationSubscriptions["notification-toast-dismissed"] = toastDismissedEventHandler;
-
-			const notificationsCountChangedEventHandler = (event: NotificationsCountChanged): void => {
-				this._logger?.info("Event for notification count changed received.", event);
-			};
-
-			await this._notificationClient.addEventListener(
-				"notifications-count-changed",
-				notificationsCountChangedEventHandler
-			);
-			this._notificationSubscriptions["notifications-count-changed"] = notificationsCountChangedEventHandler;
+	/**
+	 * Handles a response from a notification.
+	 * @param notificationId The id of the notification.
+	 * @param action The action to take.
+	 * @param customData The custom data to use.
+	 * @returns Nothing.
+	 */
+	private async handleNotificationResponse(
+		notificationId: string,
+		action: "raise-intent" | "broadcast" | "launch-app" | "endpoint" | "launch-content",
+		customData: NotificationCustomData
+	): Promise<void> {
+		switch (action) {
+			case "raise-intent": {
+				const intent = {
+					name: customData.id,
+					context: customData.context ?? { type: "fdc3.nothing" },
+					metadata: {
+						target: customData?.target
+					}
+				};
+				try {
+					await this._interopClient?.fireIntent(intent);
+				} catch (error) {
+					this._logger?.error("Error firing intent in response to a notification click.", error);
+					if ((error as { message: string })?.message === "TargetInstanceUnavailable") {
+						this._logger?.error(
+							`Error firing intent in response to a notification click as the target instance ${customData?.target?.instanceId} is unavailable. Launch the app without a specific instance as it may have been closed.`
+						);
+						try {
+							if (intent.metadata.target) {
+								intent.metadata.target.instanceId = undefined;
+								if (this._definition?.data?.intentLauncher?.instanceIdFallback !== "new") {
+									// eslint-disable-next-line max-len
+									const result = await this._interopClient?.getInfoForIntent<{ apps: AppIdentifier[] }>(
+										intent
+									);
+									if (result?.apps) {
+										const targetInstance = result.apps.find(
+											// eslint-disable-next-line max-len
+											(entry) => entry.appId === intent.metadata.target?.appId && !isEmpty(entry.instanceId)
+										);
+										if (targetInstance) {
+											intent.metadata.target.instanceId = targetInstance.instanceId;
+										}
+									}
+								}
+								await this._interopClient?.fireIntent(intent);
+							}
+						} catch (secondError) {
+							this._logger?.error(
+								"Error firing intent in response to a notification click after removing the instance id and just targeting the app.",
+								secondError
+							);
+						}
+					}
+				}
+				break;
+			}
+			case "launch-app": {
+				try {
+					if (this._helpers?.launchApp && customData.id) {
+						await this._helpers?.launchApp(customData.id);
+					} else {
+						this._logger?.error(
+							`Error launching app ${customData?.id} in response to a notification click as the launchApp function is not available or the appId is not provided.`
+						);
+					}
+				} catch (error) {
+					this._logger?.error(
+						`Error launching app ${customData?.id} in response to a notification click.`,
+						error
+					);
+				}
+				break;
+			}
+			case "launch-content": {
+				try {
+					if (this._helpers?.launchPage && customData.id) {
+						await this._helpers?.launchPage(customData.id);
+					} else {
+						this._logger?.error(
+							`Error launching content ${customData?.id} in response to a notification click as the launchPage function is not available or the pageId is not provided.`
+						);
+					}
+				} catch (error) {
+					this._logger?.error(
+						`Error launching page ${customData?.id} in response to a notification click.`,
+						error
+					);
+				}
+				break;
+			}
+			case "broadcast": {
+				try {
+					if (this._helpers?.getInteropClient && customData?.context && customData?.id) {
+						const broadcastClient = await this._helpers.getInteropClient();
+						if (broadcastClient && customData.broadcastOptions?.isUserChannel) {
+							await broadcastClient.joinContextGroup(customData.id);
+							broadcastClient.setContext(customData.context);
+						} else if (broadcastClient) {
+							const sessionContextGroup = await broadcastClient.joinSessionContextGroup(customData.id);
+							await sessionContextGroup.setContext(customData.context);
+						}
+					} else {
+						this._logger?.error(
+							"Error broadcasting context from a notification is not available as either an interop client is not available or no userChannel or appChannel was specified or context was not passed."
+						);
+					}
+				} catch (error) {
+					this._logger?.error("Error broadcasting context.", error);
+				}
+				break;
+			}
+			case "endpoint": {
+				try {
+					if (this._endpointClient && customData?.id) {
+						if (this._endpointClient.hasEndpoint(customData.id)) {
+							this._logger?.info(
+								`Sending request to endpoint ${customData.id} as a result of an interaction with notification: ${notificationId}`
+							);
+							const request = customData.endpointOptions?.request ?? customData.context;
+							await this._endpointClient.action(customData.id, request);
+						} else {
+							this._logger?.warn(
+								`Not sending request to endpoint ${customData.id} as a result of an interaction with notification: ${notificationId} because either the endpoint id doesn't exist or this module does not have permission to access it.`
+							);
+						}
+					} else {
+						this._logger?.error(
+							"Error performing endpoint action on this notification as either an endpoint id was not specified or we do not have access to an endpoint client."
+						);
+					}
+				} catch (error) {
+					this._logger?.error(`Error calling an action on endpoint with id ${customData.id}.`, error);
+				}
+				break;
+			}
 		}
 	}
 

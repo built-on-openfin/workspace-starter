@@ -15,7 +15,9 @@ import type {
 	NotificationClosedEvent,
 	NotificationReminderCreatedEvent,
 	NotificationReminderRemovedEvent,
-	NotificationsCountChanged
+	NotificationsCountChanged,
+	UpdatableNotificationOptions,
+	NotificationOptions
 } from "@openfin/workspace/notifications";
 
 /**
@@ -212,3 +214,80 @@ export interface NotificationClient {
 		listener: (event: NotificationsEventMap[K]) => void
 	): Promise<void>;
 }
+
+/**
+ * A notification event that is raised by the notification source.
+ */
+export interface NotificationSourceEvent {
+	/**
+	 * The different types of events
+	 */
+	eventId: "create" | "update" | "clear" | "close";
+}
+/**
+ * A notification event for creating a notification.
+ */
+export interface NotificationSourceCreateEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "create";
+	/**
+	 * The notification options to create.
+	 */
+	payload: NotificationOptions;
+}
+/**
+ * A notification event for updating a notification.
+ */
+export interface NotificationSourceUpdateEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "update";
+	/**
+	 * The notification options to update.
+	 */
+	payload: UpdatableNotificationOptions;
+}
+
+/**
+ * A notification event for clearing a notification.
+ */
+export interface NotificationSourceClearEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "clear";
+	/**
+	 * The notification to clear.
+	 */
+	payload: {
+		id: string;
+	};
+}
+
+/**
+ * A notification event for when a notification is closed (removed from the Notification Center).
+ */
+export interface NotificationSourceCloseEvent extends NotificationSourceEvent {
+	/**
+	 * The type of event
+	 */
+	eventId: "close";
+	/**
+	 * The notification to clear.
+	 */
+	payload: {
+		id: string;
+	};
+}
+
+/**
+ * A list of events that can be raised by a notification source.
+ */
+export type NotificationSourceEvents =
+	| NotificationSourceCreateEvent
+	| NotificationSourceUpdateEvent
+	| NotificationSourceClearEvent
+	| NotificationSourceCloseEvent;

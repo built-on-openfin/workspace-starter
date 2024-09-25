@@ -34,13 +34,13 @@ In this scenario you might have:
 
 ##### Point 1
 
-We are not going to specify any particular server technology or approach. The idea is that a server acts as a source of notifications and these notifications are fetched via some TypeScript/JavaScript code.
+We are not going to specify any particular server technology or approach. The idea is that a server acts as a source of notifications and these notifications are fetched via some TypeScript/JavaScript code. We have an example of a basic node server that exposes a form, a rest endpoint (for posting notifications) and a websocket for listening for notification related messages. See [node-starter/how-to/setup-an-example-websocket-server](https://github.com/built-on-openfin/node-starter/tree/main/how-to/setup-an-example-websocket-server).
 
 ##### Point 2
 
 A [lifecycle module](./how-to-use-lifecycle-events.md) is instantiated when the platform is bootstrapped.
 
-In the initialize function of your lifecycle module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [example-notification-service README.md](../client/src/modules/lifecycle/example-notification-service/README.md) that uses the notification client and simulates a trigger for notifications by subscribing to lifecycle events. We also have a second example lifecycle module that supports creating, updating and clearing notifications through a Channel API or FDC3/Interop Intents: [example-notification-handler README.md](../client/src/modules/lifecycle/example-notification-handler/README.md).
+In the initialize function of your lifecycle module you will be passed a helpers object that will contain an optional function called **getNotificationClient**. We have an example lifecycle module called [example-notification-service README.md](../client/src/modules/lifecycle/example-notification-service/README.md) that supports listening for server based notification messages and requests from views/windows to create notifications through a Channel API or an intent. This example module is enabled by default in the main manifest and uses an endpoint as the notification data source: [example-notification-source README.md](../client/src/modules/endpoint/example-notification-source/README.md).
 
 ##### Point 3
 
@@ -49,13 +49,13 @@ The lifecycle module can use the notification client to add an event listener to
 Remote notifications (notifications coming from the server to the client and being pushed to the notification center):
 
 - For informational notifications your module might just publish it using the notification client (although you may want to allow the backend to specify that a notification should be revoked)
-- For Call To Action notifications your module might have a contract where actions are mapped to intents (e.g. on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification). Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app or user channel. The [example-notification-handler](../client/src/modules/lifecycle/example-notification-handler/README.md) has an example of this.
-- For form based notifications you might pass the captured data to the backend.
+- For Call To Action notifications your module might have a contract where actions are mapped to intents (e.g. on selection of an action the interopClient is used to raise an intent and pass the context object stored in the customData of a notification). Alternatively you might have an action that indicates that a context object (stored in the customData of a notification) should be broadcast on an app or user channel. The [example-notification-service](../client/src/modules/lifecycle/example-notification-service/README.md) has an example of this.
+- For form based notifications you might pass the captured data to the backend or send the form data to an app channel.
 
 Local notifications (notifications submitted by apps running on the desktop):
 
-- Allow Views/Windows/Popups to connect to the notification service (in the lifecycle module) through a custom Channel API service that exposes a createNotification function. Responses to the notification will be handled by the lifecycle module.
-- Expose a backend http service that will be called by Views/Windows/Popups for the publication of notifications. The message will be captured and audited by the server and then pushed down to all relevant clients (such as the notification service lifecycle module).
+- Allow Views/Windows/Popups to connect to the notification service (in the lifecycle module) through a custom Channel API service that exposes a createNotification function or through an Intent. Responses to the notification will be handled by the lifecycle module.
+- Expose a backend http service that will be called by Views/Windows/Popups for the publication of notifications. The message will be captured and audited by the server and then pushed down to all relevant clients (such as the notification service lifecycle module). Alternatively you can have the first approach where Views/Windows/Popups raise the request through a ChannelAPI/Intent and the lifecycle module submits that request to the server so that it can be passed to other devices as well as being rendered locally.
 
 Why not add notification event listeners directly to a View/Popup/Window?
 
@@ -64,7 +64,7 @@ Why not add notification event listeners directly to a View/Popup/Window?
 
 #### 1 Platform and multiple sources of notifications
 
-If you have more than one team or division under your platform then they may want to control their own logic for notifications. The pattern shown above could be applied by multiple teams. Each team could own their own notification service module and follow the rules above. The notification client returned by the helper will isolate the notifications so each module would only get events related to notifications they published (unless you wish to link them).
+If you have more than one team or division under your platform then they may want to control their own logic for notifications. The pattern shown above could be applied by multiple teams. Each team could own their own notification service module and follow the rules above (although if they are using ChannelAPIs or Intents they may want to make those unique). The notification client returned by the helper will isolate the notifications so each module would only get events related to notifications they published (unless you wish to link them).
 
 ## Configuring the Notifications Provider
 

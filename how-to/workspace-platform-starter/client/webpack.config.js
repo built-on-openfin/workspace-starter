@@ -14,74 +14,7 @@ const loaderRule = {
 	exclude: /node_modules/
 };
 
-const configs = [
-	{
-		entry: './client/src/modules/endpoint/example-notification-source/index.ts',
-		devtool: 'source-map',
-		module: {
-			rules: [loaderRule]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js'],
-			alias
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'example-notification-source.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'endpoint')
-		},
-		experiments: {
-			outputModule: true
-		}
-	},
-	{
-		entry: './client/src/modules/lifecycle/example-notification-handler/index.ts',
-		devtool: 'source-map',
-		module: {
-			rules: [loaderRule]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js'],
-			alias
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'example-notification-handler.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'lifecycle')
-		},
-		experiments: {
-			outputModule: true
-		}
-	},
-	{
-		entry: './client/src/modules/platform-override/application-url-and-access-validator/index.ts',
-		devtool: 'source-map',
-		module: {
-			rules: [loaderRule]
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js'],
-			alias
-		},
-		externals: { fin: 'fin' },
-		output: {
-			filename: 'application-url-and-access-validator.bundle.js',
-			library: {
-				type: 'module'
-			},
-			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'platform-override')
-		},
-		experiments: {
-			outputModule: true
-		}
-	}
-];
+const configs = [];
 
 module.exports =
 	process.env.WEBPACK_CONFIG_INDEX !== undefined ? configs[process.env.WEBPACK_CONFIG_INDEX] : configs;
