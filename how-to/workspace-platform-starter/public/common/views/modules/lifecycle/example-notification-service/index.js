@@ -1,247 +1,22 @@
 // notification messages
-const sampleMessages = {};
+let messages = [];
 
-// launch app notification
-sampleMessages['notificationLaunchApp'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Example Launches App',
-		body: 'Click the button to launch an app.',
-		buttons: [
-			{
-				onClick: {
-					task: 'launch-app',
-					customData: {
-						id: 'call-app'
-					}
-				},
-				cta: true,
-				title: 'Open Call App',
-				type: 'button'
-			}
-		]
-	}
-};
+/**
+ * Fetch messages from messages.json.
+ */
+async function fetchMessages() {
+	try {
+		const response = await fetch('./messages.json');
+		if (!response.ok) {
+			throw new Error('Network response was not ok when trying to get messages.json');
+		}
+		messages = await response.json();
 
-// launch content notification
-sampleMessages['notificationLaunchContent'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Example Launches Page',
-		body: 'Click the button to launch or focus on a specific page.',
-		buttons: [
-			{
-				onClick: {
-					task: 'launch-content',
-					customData: {
-						id: 'page-id'
-					}
-				},
-				cta: true,
-				title: 'Open Call App',
-				type: 'button'
-			}
-		]
+		console.log('messages populated:', messages);
+	} catch (error) {
+		console.error('Failed to fetch messages:', error);
 	}
-};
-
-// raise intent notification
-sampleMessages['notificationRaiseIntent'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Example Raise Intent Notification',
-		body: 'Click the button to raise an intent',
-		buttons: [
-			{
-				onClick: {
-					task: 'raise-intent',
-					customData: {
-						id: 'HandleNotification',
-						context: {
-							type: 'fdc3.contact',
-							name: 'John Example',
-							id: {
-								email: 'john@example.com',
-								phone: 'Number goes here'
-							}
-						},
-						target: {
-							appId: 'example-notification-service-app',
-							instanceId: 'instanceId if available'
-						}
-					}
-				},
-				cta: true,
-				title: 'Respond to Raising App',
-				type: 'button'
-			}
-		]
-	}
-};
-
-// broadcast user notification
-sampleMessages['notificationBroadcastUser'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Broadcast on User Channel',
-		body: 'Click the button to broadcast on a user channel.',
-		buttons: [
-			{
-				onClick: {
-					task: 'broadcast',
-					customData: {
-						id: 'green',
-						context: {
-							type: 'fdc3.contact',
-							name: 'John Example',
-							id: {
-								email: 'john@example.com',
-								phone: 'Number goes here'
-							}
-						},
-						broadcastOptions: {
-							isUserChannel: true
-						}
-					}
-				},
-				cta: true,
-				title: 'Broadcast On User Channel',
-				type: 'button'
-			}
-		]
-	}
-};
-
-// broadcast form user notification
-sampleMessages['notificationBroadcastFormUser'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Broadcast Form on User Channel',
-		body: 'Click the button to broadcast on a user channel.',
-		form: [
-			{
-				type: 'boolean',
-				key: 'intendedThemeChange',
-				label: 'Did you intend to change the theme?',
-				widget: {
-					type: 'Toggle'
-				}
-			}
-		],
-		buttons: [
-			{
-				onClick: {
-					task: 'broadcast',
-					customData: {
-						id: 'green',
-						context: {
-							type: 'custom.context',
-							name: 'Form Submitted'
-						},
-						broadcastOptions: {
-							isUserChannel: true
-						}
-					}
-				},
-				cta: true,
-				submit: true,
-				title: 'Broadcast On Green',
-				type: 'button'
-			}
-		]
-	}
-};
-
-// broadcast app notification
-sampleMessages['notificationBroadcastAppChannel'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Broadcast on App Channel',
-		body: 'Click the button to broadcast on an app channel.',
-		buttons: [
-			{
-				onClick: {
-					task: 'broadcast',
-					customData: {
-						id: 'custom-app-channel',
-						context: {
-							type: 'fdc3.contact',
-							name: 'John Example',
-							id: {
-								email: 'john@example.com',
-								phone: 'Number goes here'
-							}
-						}
-					}
-				},
-				cta: true,
-				title: 'Broadcast On App Channel',
-				type: 'button'
-			}
-		]
-	}
-};
-
-// endpoint notification
-sampleMessages['notificationActionEndpoint'] = {
-	type: 'openfin.notificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		title: 'Trigger a post to a backend through a CTA',
-		body: 'Click the button to call an action on the specified endpoint.',
-		buttons: [
-			{
-				onClick: {
-					task: 'endpoint',
-					customData: {
-						id: 'endpointId you wish to call. The notification service module must be permitted to access this endpoint through endpointClients',
-						context: {
-							type: 'fdc3.contact',
-							name: 'John Example',
-							id: {
-								email: 'john@example.com',
-								phone: 'Number goes here'
-							}
-						},
-						endpointOptions: {
-							request: {
-								description:
-									'If request is specified then context will be ignored and this object will be sent to the endpoint as the request'
-							}
-						}
-					}
-				},
-				cta: true,
-				title: 'Send to Endpoint',
-				type: 'button'
-			}
-		]
-	}
-};
-
-// update notification
-sampleMessages['notificationUpdate'] = {
-	type: 'openfin.updatablenotificationoptions',
-	notification: {
-		id: 'guid-goes-here',
-		body: 'notification has been updated and buttons have been removed.',
-		template: 'markdown'
-	}
-};
-
-// notification to clear
-sampleMessages['notificationClear'] = {
-	type: 'openfin.notification',
-	notification: {
-		id: 'guid-goes-here'
-	}
-};
+}
 
 /**
  * Add some logging.
@@ -251,12 +26,12 @@ sampleMessages['notificationClear'] = {
 function setMessageContent(selectionElement, messageElement) {
 	const selectedExample = selectionElement.value;
 	if (selectedExample) {
-		const sampleMessage = sampleMessages[selectedExample];
-		if (sampleMessage) {
-			if (sampleMessage.eventId === 'create') {
-				sampleMessage.payload.id = `${Date.now().toString()}-${Math.floor(Math.random() * 1000)}`;
+		const entry = messages.find((messageEntry) => messageEntry.messageId === selectedExample);
+		if (entry) {
+			if (entry.message.eventId === 'create') {
+				entry.message.payload.id = `${Date.now().toString()}-${Math.floor(Math.random() * 1000)}`;
 			}
-			messageElement.value = JSON.stringify(sampleMessage, null, 2);
+			messageElement.value = JSON.stringify(entry.message, null, 2);
 		}
 	}
 }
@@ -320,6 +95,18 @@ async function init() {
 		btnRaiseIntent !== null &&
 		btnClear !== null
 	) {
+		await fetchMessages();
+		for (const entry of messages) {
+			// Create a new option element
+			const option = document.createElement('option');
+			option.value = entry.messageId;
+			option.id = entry.messageId;
+			option.textContent = entry.title;
+
+			// Append the option to the select element
+			notificationTypeExamples.append(option);
+		}
+
 		notificationTypeExamples.addEventListener('change', () => {
 			setMessageContent(notificationTypeExamples, message);
 		});
@@ -342,10 +129,15 @@ async function init() {
 		try {
 			const implementationMetadata = await fdc3.getInfo();
 			const { appId, instanceId } = implementationMetadata.appMetadata;
-			sampleMessages['notificationRaiseIntent'].notification.buttons[0].onClick.customData.target.appId =
-				appId;
-			sampleMessages['notificationRaiseIntent'].notification.buttons[0].onClick.customData.target.instanceId =
-				instanceId;
+
+			const messageEntry = messages.find(
+				(intentEntry) => intentEntry.messageId === 'notificationRaiseIntent'
+			);
+
+			if (messageEntry !== undefined) {
+				messageEntry.message.notification.buttons[0].onClick.customData.target.appId = appId;
+				messageEntry.message.notification.buttons[0].onClick.customData.target.instanceId = instanceId;
+			}
 
 			fdc3.addIntentListener('HandleNotification', async (context) => {
 				log(logPreview, 'Context Received through HandleNotification Intent Handler.', context);
