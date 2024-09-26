@@ -235,7 +235,7 @@ export async function getConstructorOverride(
 						EndpointWorkspaceListResponse
 					>(WORKSPACE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
 
-					if (workspacesResponse) {
+					if (!isEmpty(workspacesResponse) && Object.keys(workspacesResponse).length > 0) {
 						logger.info("Returning saved workspaces from custom storage");
 						return Object.values(workspacesResponse).map((response) => response.payload);
 					}
@@ -263,7 +263,7 @@ export async function getConstructorOverride(
 						EndpointWorkspaceGetRequest,
 						EndpointWorkspaceGetResponse
 					>(WORKSPACE_ENDPOINT_ID_GET, { platform: fin.me.identity.uuid, id });
-					if (workspaceResponse) {
+					if (!isEmpty(workspaceResponse?.payload)) {
 						logger.info(`Returning saved workspace from custom storage for workspace id: ${id}`);
 						const defaultOpts = await buildDefaultOptions();
 						return mapStorageToPlatformWorkspace(workspaceResponse.payload, defaultOpts);
@@ -473,7 +473,7 @@ export async function getConstructorOverride(
 						EndpointPageListRequest,
 						EndpointPageListResponse
 					>(PAGE_ENDPOINT_ID_LIST, { platform: fin.me.identity.uuid, query });
-					if (pagesResponse) {
+					if (!isEmpty(pagesResponse) && Object.keys(pagesResponse).length > 0) {
 						logger.info("Returning saved pages from custom storage");
 						return Object.values(pagesResponse).map((ws) => ws.payload);
 					}
@@ -505,7 +505,7 @@ export async function getConstructorOverride(
 						platform: fin.me.identity.uuid,
 						id
 					});
-					if (pageResponse) {
+					if (!isEmpty(pageResponse?.payload)) {
 						logger.info(`Returning saved page from custom storage for page id: ${id}`);
 						const defaultOpts = await buildDefaultOptions();
 						pageToReturn = mapPlatformPageFromStorage(pageResponse.payload, defaultOpts);
@@ -516,7 +516,7 @@ export async function getConstructorOverride(
 				} else {
 					logger.info(`Getting saved page with id ${id} from default storage`);
 					pageToReturn = await super.getSavedPage(id);
-					if (pageToReturn) {
+					if (!isEmpty(pageToReturn)) {
 						logger.info(`Returning saved page with id ${id} from default storage`);
 					} else {
 						logger.warn(`No response getting saved page from default storage for page id: ${id}`);

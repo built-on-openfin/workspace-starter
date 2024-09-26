@@ -117,7 +117,7 @@ export class ApplicationUrlAndAccessValidator
 					logger?.info(`Requesting saved page with id: ${id}`);
 					const page = await super.getSavedPage(id);
 					// process page layout to ensure that any apps are using the correct urls and access should still be allowed.
-					if (page) {
+					if (page && page.layout) {
 						logger?.info(`Processing page layout for page with id: ${id}`);
 						const processedLayout: string = await this.validateAppUrlAndAccess(page.layout);
 						page.layout = JSON.parse(processedLayout);
