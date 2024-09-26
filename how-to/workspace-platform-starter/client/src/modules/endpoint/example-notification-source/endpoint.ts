@@ -2,7 +2,9 @@ import type { NotificationOptions } from "@openfin/workspace/notifications";
 import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import type { NotificationSourceEvents } from "workspace-platform-starter/shapes/notification-shapes";
+import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+import { NotificationLifecycleEventSource } from "./lifecycle-event-source";
 import type { ExampleNotificationSourceProviderOptions } from "./shapes";
 
 /**
@@ -27,9 +29,13 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 	 */
 	private _helpers: ModuleHelpers | undefined;
 
-	private _queuedNotifications: NotificationOptions[] | undefined;
+	private _queuedNotifications: NotificationSourceEvents[] | undefined;
 
-	private _readableStream: ReadableStream<NotificationOptions> | undefined;
+	private _readableStream: ReadableStream<NotificationSourceEvents> | undefined;
+
+	private _notificationLifecycleEventSource: NotificationLifecycleEventSource | undefined;
+
+	private _cleanupWS: (() => Promise<void>) | undefined;
 
 	/**
 	 * Initialize the module.
@@ -51,6 +57,46 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 
 		// initialize the queue
 		this._queuedNotifications = [];
+
+		this._notificationLifecycleEventSource = new NotificationLifecycleEventSource();
+		await this._notificationLifecycleEventSource.initialize(
+			definition,
+			loggerCreator,
+			helpers,
+			async (notificationOptions: NotificationOptions) => {
+				this._queuedNotifications?.push({ eventId: "create", payload: notificationOptions });
+			}
+		);
+		if (
+			isStringValue(this._definition?.data?.websocketUrl) &&
+			(this._definition.data.websocketUrl.startsWith("ws://") ||
+				this._definition.data.websocketUrl.startsWith("wss://")) &&
+			helpers?.subscribeLifecycleEvent
+		) {
+			const wsUrl = this._definition.data.websocketUrl;
+			let ws: WebSocket;
+			const afterBootstrap = helpers.subscribeLifecycleEvent("after-bootstrap", async () => {
+				ws = new WebSocket(wsUrl);
+				ws.addEventListener("open", () => {
+					this._logger?.info("Websocket connection opened.");
+				});
+				ws.addEventListener("message", (event) => {
+					this._logger?.info("Websocket message received:", event.data);
+					this._queuedNotifications?.push(JSON.parse(event.data));
+				});
+			});
+
+			// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+			this._cleanupWS = async () => {
+				if (ws) {
+					this._logger?.info("Closing websocket connection.");
+					ws.close();
+				}
+				if (this._helpers?.unsubscribeLifecycleEvent) {
+					this._helpers.unsubscribeLifecycleEvent(afterBootstrap, "after-bootstrap");
+				}
+			};
+		}
 	}
 
 	/**
@@ -63,6 +109,12 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 		if (!isEmpty(this._readableStream)) {
 			await this._readableStream.cancel();
 		}
+		if (!isEmpty(this._notificationLifecycleEventSource)) {
+			await this._notificationLifecycleEventSource.closedown();
+		}
+		if (!isEmpty(this._cleanupWS)) {
+			await this._cleanupWS();
+		}
 	}
 
 	/**
@@ -73,7 +125,7 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 	 */
 	public async action(
 		endpointDefinition: EndpointDefinition,
-		request?: NotificationOptions
+		request?: NotificationSourceEvents
 	): Promise<boolean> {
 		// this could post to a backend service so that the notification is picked up server side and then distributed to all connected clients (e.g. browser, OpenFin etc)
 		// for now we are simulating it by putting anything posted into a queue so that it will be picked up by the stream
@@ -108,7 +160,7 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 	 * This function is called when the stream is requested.
 	 * @returns The readable stream of notifications.
 	 */
-	private createReadableStream(): ReadableStream<NotificationOptions> {
+	private createReadableStream(): ReadableStream<NotificationSourceEvents> {
 		let intervalId: number | undefined;
 		const intervalTimeInSeconds = this._definition?.data?.intervalInSeconds ?? 1;
 		const intervalTime = (intervalTimeInSeconds < 1 ? 1 : intervalTimeInSeconds) * 1000;
@@ -116,12 +168,12 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 		 * Get the pending notification from the queue.
 		 * @returns The pending notification.
 		 */
-		const getPendingNotification = (): NotificationOptions[] => {
+		const getPendingNotification = (): NotificationSourceEvents[] => {
 			const queuedNotifications = [...(this._queuedNotifications ?? [])];
 			this._queuedNotifications = [];
 			return queuedNotifications;
 		};
-		const stream = new ReadableStream<NotificationOptions>({
+		const stream = new ReadableStream<NotificationSourceEvents>({
 			/**
 			 * Starts the stream and sends a message every second.
 			 * @param controller The controller to push values to the stream.
