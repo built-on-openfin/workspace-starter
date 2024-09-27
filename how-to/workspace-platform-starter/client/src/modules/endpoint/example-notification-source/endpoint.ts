@@ -37,6 +37,8 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 
 	private _cleanupWS: (() => Promise<void>) | undefined;
 
+	private _cleanupLP: (() => Promise<void>) | undefined;
+
 	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
@@ -68,22 +70,26 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 			}
 		);
 		if (
-			isStringValue(this._definition?.data?.websocketUrl) &&
-			(this._definition.data.websocketUrl.startsWith("ws://") ||
-				this._definition.data.websocketUrl.startsWith("wss://")) &&
+			isStringValue(this._definition?.data?.websocket?.url) &&
+			(this._definition.data.websocket?.url.startsWith("ws://") ||
+				this._definition.data.websocket?.url.startsWith("wss://")) &&
 			helpers?.subscribeLifecycleEvent
 		) {
-			const wsUrl = this._definition.data.websocketUrl;
+			const wsUrl = this._definition.data.websocket.url;
 			let ws: WebSocket;
 			const afterBootstrap = helpers.subscribeLifecycleEvent("after-bootstrap", async () => {
-				ws = new WebSocket(wsUrl);
-				ws.addEventListener("open", () => {
-					this._logger?.info("Websocket connection opened.");
-				});
-				ws.addEventListener("message", (event) => {
-					this._logger?.info("Websocket message received:", event.data);
-					this._queuedNotifications?.push(JSON.parse(event.data));
-				});
+				try {
+					ws = new WebSocket(wsUrl);
+					ws.addEventListener("open", () => {
+						this._logger?.info("Websocket connection opened.");
+					});
+					ws.addEventListener("message", (event) => {
+						this._logger?.info("Websocket message received:", event.data);
+						this._queuedNotifications?.push(JSON.parse(event.data));
+					});
+				} catch (wsError) {
+					this._logger?.error(`Error creating websocket connection to url ${wsUrl}.`, wsError);
+				}
 			});
 
 			// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -94,6 +100,52 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 				}
 				if (this._helpers?.unsubscribeLifecycleEvent) {
 					this._helpers.unsubscribeLifecycleEvent(afterBootstrap, "after-bootstrap");
+				}
+			};
+		}
+
+		if (
+			isStringValue(this._definition?.data?.longpoll?.url) &&
+			(this._definition.data.longpoll.url.startsWith("http://") ||
+				this._definition.data.longpoll.url.startsWith("https://")) &&
+			helpers?.subscribeLifecycleEvent
+		) {
+			const longpollUrl = this._definition.data.longpoll.url;
+			let longPollScheduler: number;
+			const afterBootstrapLP = helpers.subscribeLifecycleEvent("after-bootstrap", async () => {
+				try {
+					// try url before scheduling
+					const initialResponse = await fetch(longpollUrl);
+					const initialData = await initialResponse.json();
+					if (Array.isArray(initialData) && initialData.length > 0) {
+						this._logger?.info(`Longpoll data received: ${initialData.length} messages`);
+						this._queuedNotifications?.push(...initialData);
+					}
+					const longPollInSeconds = this._definition?.data?.longpoll?.intervalInSeconds ?? 5;
+					longPollScheduler = setInterval(async () => {
+						const response = await fetch(longpollUrl);
+						const data = await response.json();
+						if (Array.isArray(data) && data.length > 0) {
+							this._logger?.info(`Longpoll data received: ${data.length} messages`);
+							this._queuedNotifications?.push(...data);
+						}
+					}, longPollInSeconds * 1000) as unknown as number;
+				} catch (error) {
+					this._logger?.error(
+						`Error fetching long polling data for url ${longpollUrl}. Polling will not continue.`,
+						error
+					);
+				}
+			});
+
+			// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+			this._cleanupLP = async () => {
+				if (longPollScheduler) {
+					this._logger?.info("Stopping Long Polling.");
+					clearInterval(longPollScheduler);
+				}
+				if (this._helpers?.unsubscribeLifecycleEvent) {
+					this._helpers.unsubscribeLifecycleEvent(afterBootstrapLP, "after-bootstrap");
 				}
 			};
 		}
@@ -114,6 +166,9 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 		}
 		if (!isEmpty(this._cleanupWS)) {
 			await this._cleanupWS();
+		}
+		if (!isEmpty(this._cleanupLP)) {
+			await this._cleanupLP();
 		}
 	}
 

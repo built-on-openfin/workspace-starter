@@ -8,6 +8,8 @@ You can add this to the endpointProvider modules list.
 
 This module uses a number of endpoints that are provided by a single example endpoint module. This can be swapped out for another endpoint as long as it supports the action and requestStream methods and supports the same types.
 
+**This is just an example and would need additional logic/defensive coding if you were going to build a real implementation**.
+
 A stripped down endpoint provider that just shows the information related to this notification source is shown below:
 
 ```json
@@ -137,7 +139,11 @@ The example module has a few settings to allow for experimentation and to show h
 ## Module Settings
 
 - intervalInSeconds - How long should the service wait before it processes the queue of notifications (default is 1 second)
-- webSocketUrl - An example websocket that this example endpoint should try and connect to and it expects NotificationSourceEvent messages.
+- websocket - An example websocket that this example endpoint should try and connect to and it expects NotificationSourceEvent messages.
+  - url - the websocket url to connect to
+- longpoll - If you don't use websockets but you can use long polling then you can point to a url here to act as a feed for messages (must support CORs)
+  - url - the url to poll
+  - intervalInSeconds - the number of seconds before it checks the rest endpoint again
 - notifyOn - What lifecycle events should trigger a notification?
   - pageChanged - if a page is changed (such as deleted)
   - workspaceChanged - if a workspace is switched out
