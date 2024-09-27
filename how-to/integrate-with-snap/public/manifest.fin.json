@@ -13,19 +13,13 @@
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
-				"launchExternalProcess": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
 					"enabled": true,
-					"assets": {
-						"enabled": true
-					},
-					"downloads": {
-						"enabled": false
-					},
-					"executables": {
-						"enabled": true
-					}
-				},
-				"downloadAsset": true
+					"protocols": ["mailto", "msteams", "tel"]
+				}
 			}
 		},
 		"defaultWindowOptions": {}
