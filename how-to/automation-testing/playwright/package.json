@@ -1,0 +1,14 @@
+{
+  "name": "automation-testing-playwright",
+  "version": "19.0.0",
+  "license": "SEE LICENSE IN LICENSE.MD",
+  "scripts": {
+    "test": "playwright test",
+    "kill": "node ./scripts/kill.mjs",
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.46.0",
+    "@types/node": "^22.2.0"
+  }
+}
