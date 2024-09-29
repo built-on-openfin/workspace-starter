@@ -680,57 +680,55 @@ export async function getConstructorOverride(
 
 						if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
 							appId = platformIdentities[0].appId;
-							const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
-							// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-							instanceId = await this._clientRegistrationHelper.onConnectionClientReady(
-								platformIdentities[0],
-								openTimeout
-							);
-							if (platformIdentities.length > 1) {
-								logger.warn(
-									"Open can only return one app and instance id and multiple instances were launched as a result. Returning the first instance. Returned instances: ",
-									platformIdentities
+							let multiInstance = true;
+							if (platformIdentities.length === 1) {
+								multiInstance = false;
+								// if there is only one instance then we can wait for it to be ready and return
+								// an instance id. Otherwise there will be multiple instances and just returning the
+								// first in the list may not be correct.
+								const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
+								// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
+								instanceId = await this._clientRegistrationHelper.onConnectionClientReady(
+									platformIdentities[0],
+									openTimeout
+								);
+							} else {
+								logger.info(
+									`Multiple instances of the app ${appId} have been launched. We are assuming this is a composite app/snapshot. We are not returning an instance id as you can only return one and a composite app will be made up of many.`
 								);
 							}
+
 							if (!isEmpty(fdc3OpenOptions?.context)) {
-								const contextTimeout: number | undefined = options?.intentOptions?.intentTimeout;
-								const contextTypeName = fdc3OpenOptions.context.type;
-								// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-								const clientReadyInstanceId = await this._clientRegistrationHelper.onContextClientReady(
-									platformIdentities[0],
-									contextTypeName,
-									contextTimeout
+								const contextTimeout = options?.openOptions?.connectionTimeout;
+								const contextToPass = await this.processContext(fdc3OpenOptions.context);
+								const contextMetadata = await this.getContextMetadata(clientIdentity);
+								const updatedContext: OpenFin.Context = {
+									...contextToPass,
+									[this._metadataKey]: contextMetadata
+								};
+								const contextSharing = platformIdentities.map(async (platformIdentity) =>
+									// eslint-disable-next-line max-len
+									this.processOpenContext(platformIdentity, updatedContext, contextTimeout, multiInstance)
 								);
+								// Initiate all promises concurrently without waiting for them to resolve
+								Promise.allSettled(contextSharing)
+									.then((results) => {
+										const anyFulfilled = results.some((result) => result.status === "fulfilled");
 
-								let trackedHandler = this._clientRegistrationHelper.getRegisteredContextHandler(
-									contextTypeName,
-									clientReadyInstanceId
-								);
-
-								if (isEmpty(trackedHandler)) {
-									trackedHandler = this._clientRegistrationHelper.getRegisteredContextHandler(
-										"*",
-										clientReadyInstanceId
-									);
-								}
-
-								if (!isEmpty(trackedHandler)) {
-									const contextToPass = await this.processContext(fdc3OpenOptions.context);
-									const contextMetadata = await this.getContextMetadata(clientIdentity);
-									const updatedContext: OpenFin.Context = {
-										...contextToPass,
-										[this._metadataKey]: contextMetadata
-									};
-									await this.invokeContextHandler(
-										trackedHandler.clientIdentity,
-										trackedHandler.handlerId,
-										updatedContext
-									);
-								} else {
-									logger.warn(
-										`Unable to send context of type ${contextTypeName} opened app ${appId} with instanceId of ${clientReadyInstanceId} as we cannot find a tracked context handler.`
-									);
-								}
+										if (anyFulfilled) {
+											logger.info(
+												"Multi Instance open context sharing has been initiated and at least one entry supported receiving a context."
+											);
+										} else {
+											logger.error(
+												"Multi Instance open context sharing was done but there were no context listeners registered."
+											);
+										}
+										return anyFulfilled;
+									})
+									.catch((error) => {
+										logger.error(`Context sharing for fdc3 open of ${appId} failed`, error);
+									});
 							}
 						}
 					}
@@ -966,28 +964,38 @@ export async function getConstructorOverride(
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
 					existingInstance = false;
-					if (platformIdentities.length === 1) {
-						const intentTimeout: number | undefined = options?.intentOptions?.intentTimeout;
-						// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-						try {
-							instanceId = await this._clientRegistrationHelper.onIntentClientReady(
-								platformIdentities[0],
-								intent.name,
-								intentTimeout
-							);
-						} catch (intentReadyError) {
-							logger.warn(
-								"An error occurred while getting a instance to target an intent at.",
-								intentReadyError
-							);
-							throw new Error(ResolveError.IntentDeliveryFailed);
-						}
-					}
+				}
+				const intentTimeout: number | undefined = options?.intentOptions?.intentTimeout;
+				// how many instances do we have?
+				if (platformIdentities.length === 1) {
+					instanceId = await this.processSetIntentTarget(platformIdentities[0], intent, intentTimeout, false);
+				} else {
+					const intentSharing = platformIdentities.map(async (platformIdentity) =>
+						this.processSetIntentTarget(platformIdentity, intent, intentTimeout, true)
+					);
+					// Initiate all promises concurrently without waiting for them to resolve
+					Promise.allSettled(intentSharing)
+						.then((results) => {
+							const anyFulfilled = results.some((result) => result.status === "fulfilled");
+
+							if (anyFulfilled) {
+								logger.info(
+									"Multi Instance intents target sharing has been initiated and at least one entry supported intents."
+								);
+							} else {
+								logger.error(
+									"All intent sharing promises were rejected so not even one identity supported intents in time."
+								);
+							}
+							return anyFulfilled;
+						})
+						.catch((error) => {
+							logger.error(`Intent raising of multiple identities for app: ${app.appId} failed`, error);
+						});
 				}
 
-				for (const target of platformIdentities) {
-					await super.setIntentTarget(intent, target);
-					if (existingInstance) {
+				if (existingInstance) {
+					for (const target of platformIdentities) {
 						try {
 							if (helpers.bringAppToFront) {
 								await helpers.bringAppToFront(app, [target]);
@@ -1202,6 +1210,90 @@ export async function getConstructorOverride(
 				}
 
 				return this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
+			}
+
+			/**
+			 * Waits for a context handler to be registered for an app that was opened with a context.
+			 * @param platformIdentity The platform identity of the app that was opened.
+			 * @param context The context that was opened with the app.
+			 * @param contextTimeout The timeout for the context.
+			 * @param multiInstance Is this being called as part of targeting multiple identities.
+			 */
+			private async processOpenContext(
+				platformIdentity: PlatformAppIdentifier,
+				context: OpenFin.Context,
+				contextTimeout: number | undefined,
+				multiInstance: boolean
+			): Promise<void> {
+				const contextTypeName = context.type;
+				const appId = platformIdentity.appId;
+				const clientReadyInstanceId = await this._clientRegistrationHelper.onContextClientReady(
+					platformIdentity,
+					contextTypeName,
+					contextTimeout
+				);
+
+				let trackedHandler = this._clientRegistrationHelper.getRegisteredContextHandler(
+					contextTypeName,
+					clientReadyInstanceId
+				);
+
+				if (isEmpty(trackedHandler)) {
+					trackedHandler = this._clientRegistrationHelper.getRegisteredContextHandler(
+						"*",
+						clientReadyInstanceId
+					);
+				}
+
+				if (!isEmpty(trackedHandler)) {
+					await this.invokeContextHandler(trackedHandler.clientIdentity, trackedHandler.handlerId, context);
+				} else if (multiInstance) {
+					logger.info(
+						`Unable to send context of type ${contextTypeName} opened app ${appId} with instanceId of ${clientReadyInstanceId} as we cannot find a tracked context handler. This is likely a composite app and this app might not register a context handler.`
+					);
+				} else {
+					logger.warn(
+						`Unable to send context of type ${contextTypeName} opened app ${appId} with instanceId of ${clientReadyInstanceId} as we cannot find a tracked context handler.`
+					);
+				}
+			}
+
+			/**
+			 * Waits for a intent handler to be registered for an app and fires the intent at it.
+			 * @param platformIdentity The platform identity of the app that was shown.
+			 * @param intent The intent that was specified.
+			 * @param intentTimeout The timeout for the intent.
+			 * @param multiInstance Is this being called as part of targeting multiple identities.
+			 * @returns The instance id of the identity that was targeted.
+			 */
+			private async processSetIntentTarget(
+				platformIdentity: PlatformAppIdentifier,
+				intent: OpenFin.Intent,
+				intentTimeout: number | undefined,
+				multiInstance: boolean
+			): Promise<string> {
+				try {
+					const instanceId = await this._clientRegistrationHelper.onIntentClientReady(
+						platformIdentity,
+						intent.name,
+						intentTimeout
+					);
+					await super.setIntentTarget(intent, platformIdentity);
+					return instanceId;
+				} catch (intentReadyError) {
+					if (multiInstance) {
+						logger.info(
+							`An error occurred while getting a instance to target an intent at. If multiple views were launched as part of a composite and some of them do not register intent handlers then this may explain it.that may explain this warning. AppId: ${platformIdentity.appId}, Name: ${platformIdentity.name}`,
+							intentReadyError
+						);
+					} else {
+						logger.warn(
+							`An error occurred while getting a instance to target an intent at. AppId: ${platformIdentity.appId}, Name: ${platformIdentity.name}`,
+							intentReadyError
+						);
+					}
+					throw new Error(ResolveError.IntentDeliveryFailed);
+				}
 			}
 
 			/**

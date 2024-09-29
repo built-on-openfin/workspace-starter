@@ -19,6 +19,13 @@
 - Moved some of the modules that were in webpack.config.js into the right webpack file starter-modules.webpack.config.js so it doesn't slow down your npm builds when you run build-client-modules (which only builds modules you have generated).
 - Added an example notification service app with actions to send messages to the example notification service.
 - Added extra checks to the platform overrides related to fetching pages and workspace from custom storage (an endpoint). They now perform additional checks in case the server doesn't return any values but does return an empty object.
+- Updated samples to use fdc3 2.0 instead of 1.2 to support richer getInfo calls.
+- Updated WPS docs to promote 2.0 instead of 1.2 in the examples.
+- Updated WPS Interop Override:
+  - FDC3 open now supports passing context to all views it opens in a snapshot and not just the first one. We also check to see if it registers before firing based on a specified timeout. We don't await this so as not to slow down the response to the raiser.
+  - FDC3 Intent Firing when targeting a snapshot now waits to fire the intent until each view registers an intent handler or times out. We don't await this so as not to slow down the response to the raiser.
+- Example notification service launch-app action now supports passing the appId and instanceId (id in the root of customData still needs to be specified) in the target field of customData. Context can also be passed now. This will use fdc3.open. If you specify an instanceId and a timeout error is thrown (if the instance is no longer running) then it falls back to launching a new instance of the app and passing it the context if specified. Updated documentation.
+- Updated example-notification-service-app to show raising a notification that has a call to action that passes data back to itself (or a new instance if it is closed) though a context listener.
 
 ## v19.0.0
 

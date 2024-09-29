@@ -11,7 +11,7 @@ The first thing your app should do is to highlight that it supports the FDC3 sta
 ```json
 {
     "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
-    "fdc3InteropApi": "1.2"
+    "fdc3InteropApi": "2.0"
 },
 ```
 
@@ -20,7 +20,7 @@ A workspace platform can define a set of contextual groups (system channels). Yo
 ```json
 {
     "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
-    "fdc3InteropApi": "1.2",
+    "fdc3InteropApi": "2.0",
     "interop": {
         "currentContextGroup": "green"
     }
@@ -263,7 +263,7 @@ Yes, to make development easier you can define a view that uses our app. We foll
 ```javascript
 {
     "url": "https://samples.openfin.co/dev-extensions/extensions/v19.1.0/interop/fdc3/context/fdc3-broadcast-view.html",
-    "fdc3InteropApi": "1.2",
+    "fdc3InteropApi": "2.0",
     "customData": {
         "contextData": null,
         "customChannel": ""

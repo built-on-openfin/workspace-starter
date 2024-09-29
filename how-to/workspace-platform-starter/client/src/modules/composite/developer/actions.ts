@@ -85,7 +85,7 @@ export class DeveloperActions implements Actions {
 						const options = await view.getOptions();
 						const info = await view.getInfo();
 						const name = options.name;
-						const fdc3InteropApi = isStringValue(options.fdc3InteropApi) ? options.fdc3InteropApi : "1.2";
+						const fdc3InteropApi = isStringValue(options.fdc3InteropApi) ? options.fdc3InteropApi : "2.0";
 						const preloads =
 							Array.isArray(options.preloadScripts) && options.preloadScripts.length > 0
 								? options.preloadScripts
