@@ -66,7 +66,7 @@
 																	"componentState": {
 																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-and-richer-open/workspace-platform-starter/common/views/contact/participant-summary/index.html",
 																		"componentName": "view",
-																		"fdc3InteropApi": "1.2",
+																		"fdc3InteropApi": "2.0",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
@@ -82,7 +82,7 @@
 																	"componentState": {
 																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-and-richer-open/workspace-platform-starter/common/views/contact/investments-and-models/index.html",
 																		"componentName": "view",
-																		"fdc3InteropApi": "1.2",
+																		"fdc3InteropApi": "2.0",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
@@ -108,7 +108,7 @@
 																	"componentState": {
 																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-and-richer-open/workspace-platform-starter/common/views/contact/participant-history/index.html",
 																		"componentName": "view",
-																		"fdc3InteropApi": "1.2",
+																		"fdc3InteropApi": "2.0",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{
@@ -124,7 +124,7 @@
 																	"componentState": {
 																		"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-and-richer-open/workspace-platform-starter/common/views/contact/participant-selection/index.html",
 																		"componentName": "view",
-																		"fdc3InteropApi": "1.2",
+																		"fdc3InteropApi": "2.0",
 																		"interop": { "currentContextGroup": "{CONTEXT_GROUP}" },
 																		"preloadScripts": [
 																			{

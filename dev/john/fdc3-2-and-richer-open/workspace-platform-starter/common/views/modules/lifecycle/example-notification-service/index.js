@@ -131,7 +131,9 @@ async function init() {
 			const { appId, instanceId } = implementationMetadata.appMetadata;
 
 			const messageEntry = messages.find(
-				(intentEntry) => intentEntry.messageId === 'notificationRaiseIntent'
+				(entry) =>
+					entry.messageId === 'notificationRaiseIntent' ||
+					entry.messageId === 'notificationLaunchAppWithContext'
 			);
 
 			if (messageEntry !== undefined) {

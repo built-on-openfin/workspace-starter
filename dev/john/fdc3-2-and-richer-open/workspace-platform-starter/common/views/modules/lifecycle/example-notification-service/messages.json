@@ -25,6 +25,43 @@
 		}
 	},
 	{
+		"messageId": "notificationLaunchAppWithContext",
+		"title": "Launch App With Context",
+		"message": {
+			"type": "openfin.notificationoptions",
+			"notification": {
+				"id": "guid-goes-here",
+				"title": "Example Launches App With Context",
+				"body": "Click the button to launch an app.",
+				"buttons": [
+					{
+						"onClick": {
+							"task": "launch-app",
+							"customData": {
+								"id": "example-notification-service-app",
+								"context": {
+									"type": "fdc3.contact",
+									"name": "John Example",
+									"id": {
+										"email": "john@example.com",
+										"phone": "Number goes here"
+									}
+								},
+								"target": {
+									"appId": "example-notification-service-app",
+									"instanceId": "instanceId if available"
+								}
+							}
+						},
+						"cta": true,
+						"title": "Open Call App",
+						"type": "button"
+					}
+				]
+			}
+		}
+	},
+	{
 		"messageId": "notificationLaunchContent",
 		"title": "Launch Content",
 		"message": {
