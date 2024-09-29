@@ -1,0 +1,63 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "38.126.82.64"
+	},
+	"startup_app": {
+		"name": "Integrate With Snap - Classic App",
+		"url": "http://built-on-openfin.github.io/container-starter/v34/use-window-options/html/app.html",
+		"uuid": "integrate-with-snap-classic",
+		"autoShow": true,
+		"frame": true,
+		"minWidth": 850,
+		"minHeight": 700,
+		"defaultWidth": 850,
+		"defaultHeight": 700,
+		"saveWindowState": false,
+		"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-and-richer-open/integrate-with-snap/js/snap.preload.bundle.js" }],
+		"permissions": {
+			"System": {
+				"launchExternalProcess": true,
+				"terminateExternalProcess": true,
+				"downloadAsset": true,
+				"openUrlWithBrowser": {
+					"enabled": true,
+					"protocols": ["mailto", "msteams", "tel"]
+				}
+			}
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/fdc3-2-and-richer-open/integrate-with-snap/favicon.ico",
+		"name": "Integrate With Snap Classic - v19.1.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Integrate With Snap - Classic Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"appAssets": [
+		{
+			"src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
+			"alias": "openfin-snap",
+			"version": "0.5.0",
+			"target": "OpenFinSnap.exe",
+			"mandatory": true
+		}
+	],
+	"customSettings": {
+		"snapProvider": {
+			"showDebugWindow": false,
+			"disableShiftToUnsnap": false,
+			"enableCtrlToUnsnap": false,
+			"disableGPUDragging": false,
+			"disableBlurDropPreview": false
+		}
+	}
+}
