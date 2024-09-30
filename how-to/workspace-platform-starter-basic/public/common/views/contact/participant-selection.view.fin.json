@@ -1,6 +1,6 @@
 {
 	"url": "http://localhost:8080/common/views/contact/participant-selection/index.html",
-	"fdc3InteropApi": "1.2",
+	"fdc3InteropApi": "2.0",
 	"interop": {
 		"currentContextGroup": "green"
 	},

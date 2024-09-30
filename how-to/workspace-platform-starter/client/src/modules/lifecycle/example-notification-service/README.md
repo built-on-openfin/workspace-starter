@@ -255,6 +255,44 @@ let launchAppNotification = {
 };
 ```
 
+How to specify a notification that launches an app, targets a specific instance (e.g. itself) and passes context to the apps context handler (so you don't need an intent to be registered to get some data back):
+
+```js
+let launchAppNotification = {
+  type: 'openfin.notificationoptions',
+  notification: {
+    id: 'guid-goes-here',
+    title: 'Example Launches App',
+    body: 'Click the button to launch an app.',
+    buttons: [
+      {
+        onClick: {
+          task: 'launch-app',
+          customData: {
+            id: 'call-app',
+            context: {
+              type: 'fdc3.contact',
+              name: 'John Example',
+              id: {
+                email: 'john@example.com',
+                phone: 'Number goes here'
+              }
+            },
+            target: {
+              appId: 'call-app',
+              instanceId: 'instanceId if available'
+            }
+          }
+        },
+        cta: true,
+        title: 'Open Call App',
+        type: 'button'
+      }
+    ]
+  }
+};
+```
+
 How to specify a notification that launches saved content i.e. a page:
 
 ```js

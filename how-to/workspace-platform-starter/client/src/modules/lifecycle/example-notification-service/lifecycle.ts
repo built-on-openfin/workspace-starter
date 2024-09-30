@@ -8,6 +8,7 @@ import type {
 	NotificationOptions,
 	UpdatableNotificationOptions
 } from "@openfin/workspace/notifications";
+import { OPEN_ERROR } from "workspace-platform-starter/fdc3/errors";
 import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
 import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
@@ -68,10 +69,12 @@ export class ExampleNotificationServiceProvider
 	private _endpointClient: EndpointClient | undefined;
 
 	/**
-	 * A endpoint client if available.
+	 * A interop client if available.
 	 * @internal
 	 */
 	private _interopClient: OpenFin.InteropClient | undefined;
+
+	private _fdc3Client: OpenFin.FDC3.v2_0.DesktopAgent | undefined;
 
 	/**
 	 * Initialize the module.
@@ -152,6 +155,9 @@ export class ExampleNotificationServiceProvider
 		if (!isEmpty(this._helpers?.getInteropClient)) {
 			const interopClient = await this._helpers.getInteropClient();
 
+			if (interopClient) {
+				this._fdc3Client = await interopClient.getFDC3("2.0");
+			}
 			if (
 				interopClient &&
 				!isEmpty(this._endpointClient) &&
@@ -510,16 +516,30 @@ export class ExampleNotificationServiceProvider
 			}
 			case "launch-app": {
 				try {
-					if (this._helpers?.launchApp && customData.id) {
-						await this._helpers?.launchApp(customData.id);
+					if (this._fdc3Client && customData.id) {
+						const target = customData.target ?? { appId: customData.id };
+						try {
+							await this._fdc3Client.open(target, customData.context);
+						} catch (openError) {
+							const message = (openError as Error)?.message;
+							if (!isEmpty(target.instanceId) && message === OPEN_ERROR.AppTimeout) {
+								// the instance id was provided, try again without it
+								await this._fdc3Client.open({ appId: customData.id }, customData.context);
+							} else {
+								this._logger?.error(
+									`Error showing app ${customData?.id} in response to a notification click using fdc3.open.`,
+									openError
+								);
+							}
+						}
 					} else {
 						this._logger?.error(
-							`Error launching app ${customData?.id} in response to a notification click as the launchApp function is not available or the appId is not provided.`
+							`Error showing app ${customData?.id} in response to a notification click as the fdc3 api (through getInteropClient) is not available or the appId is not provided.`
 						);
 					}
 				} catch (error) {
 					this._logger?.error(
-						`Error launching app ${customData?.id} in response to a notification click.`,
+						`Error showing app ${customData?.id} in response to a notification click.`,
 						error
 					);
 				}

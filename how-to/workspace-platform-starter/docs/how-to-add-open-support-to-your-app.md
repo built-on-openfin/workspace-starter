@@ -11,7 +11,7 @@ The first thing your app should do is to highlight that it supports the FDC3 sta
 ```json
 {
     "url": "https://fdc3.finos.org/toolbox/fdc3-workbench/",
-    "fdc3InteropApi": "1.2"
+    "fdc3InteropApi": "2.0"
 },
 ```
 
