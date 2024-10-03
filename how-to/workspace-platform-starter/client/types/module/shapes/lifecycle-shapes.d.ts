@@ -6,19 +6,7 @@ import type { ColorSchemeMode } from "./theme-shapes";
 /**
  * Events that can be triggered through the lifecycle.
  */
-export type LifecycleEvents =
-	| "auth-logged-in"
-	| "auth-session-expired"
-	| "auth-before-logged-out"
-	| "after-bootstrap"
-	| "before-quit"
-	| "theme-changed"
-	| "workspace-changed"
-	| "page-changed"
-	| "apps-changed"
-	| "favorite-changed"
-	| "condition-changed"
-	| "language-changed";
+export type LifecycleEvents = "auth-logged-in" | "auth-session-expired" | "auth-before-logged-out" | "after-bootstrap" | "before-quit" | "theme-changed" | "workspace-changed" | "page-changed" | "apps-changed" | "favorite-changed" | "condition-changed" | "language-changed";
 /**
  * The type for a lifecycle event handler.
  */
@@ -27,17 +15,17 @@ export type LifecycleHandler<T = unknown> = (platform: WorkspacePlatformModule, 
  * Map of the lifecycle event handlers.
  */
 export type LifecycleEventMap = {
-	[key in LifecycleEvents]?: LifecycleHandler;
+    [key in LifecycleEvents]?: LifecycleHandler;
 };
 /**
  * Definition for lifecycle event module.
  */
 export interface Lifecycle<O = unknown, H = ModuleHelpers> extends ModuleImplementation<O, H> {
-	/**
-	 * Get the lifecycle events.
-	 * @returns The map of lifecycle events.
-	 */
-	get(): Promise<LifecycleEventMap>;
+    /**
+     * Get the lifecycle events.
+     * @returns The map of lifecycle events.
+     */
+    get(): Promise<LifecycleEventMap>;
 }
 /**
  * This is a list of modules that allow you to hook into the lifecycle events exposed by the platform. A good example
@@ -48,86 +36,86 @@ export type LifecycleProviderOptions = ModuleList;
  * Event payload for the workspace changed lifecycle event.
  */
 export interface WorkspaceChangedLifecyclePayload {
-	/**
-	 * The action that happened to the workspace.
-	 */
-	action: "create" | "apply" | "update" | "delete";
-	/**
-	 * The id of the workspace.
-	 */
-	id: string;
-	/**
-	 * The workspace data.
-	 */
-	workspace?: Workspace;
+    /**
+     * The action that happened to the workspace.
+     */
+    action: "create" | "apply" | "update" | "delete";
+    /**
+     * The id of the workspace.
+     */
+    id: string;
+    /**
+     * The workspace data.
+     */
+    workspace?: Workspace;
 }
 /**
  * Event payload for the page changed lifecycle event.
  */
 export interface PageChangedLifecyclePayload {
-	/**
-	 * The action that happened to the page.
-	 */
-	action: "create" | "update" | "delete" | "focus";
-	/**
-	 * The id of the page.
-	 */
-	id: string;
-	/**
-	 * The page data.
-	 */
-	page?: Page;
+    /**
+     * The action that happened to the page.
+     */
+    action: "create" | "update" | "delete" | "focus";
+    /**
+     * The id of the page.
+     */
+    id: string;
+    /**
+     * The page data.
+     */
+    page?: Page;
 }
 /**
  * Event payload for the favorite changed lifecycle event.
  */
 export interface FavoriteChangedLifecyclePayload {
-	/**
-	 * The action that happened to the favorite.
-	 */
-	action: "set" | "delete";
-	/**
-	 * The favorite entry.
-	 */
-	favorite: FavoriteEntry;
+    /**
+     * The action that happened to the favorite.
+     */
+    action: "set" | "delete";
+    /**
+     * The favorite entry.
+     */
+    favorite: FavoriteEntry;
 }
 /**
  * Logged in event payload.
  */
 export interface LoggedInLifecyclePayload {
-	/**
-	 * The user details.
-	 */
-	user?: unknown;
+    /**
+     * The user details.
+     */
+    user?: unknown;
 }
 /**
  * Theme changed event payload.
  */
 export interface ThemeChangedLifecyclePayload {
-	/**
-	 * The theme mode.
-	 */
-	schemeType?: ColorSchemeMode;
-	/**
-	 * The palette.
-	 */
-	palette?: CustomPaletteSet;
+    /**
+     * The theme mode.
+     */
+    schemeType?: ColorSchemeMode;
+    /**
+     * The palette.
+     */
+    palette?: CustomPaletteSet;
 }
 /**
  * Condition changed event payload.
  */
 export interface ConditionChangedLifecyclePayload {
-	/**
-	 * The condition that changed, or empty to determine many might have changed.
-	 */
-	conditionId?: string;
+    /**
+     * The condition that changed, or empty to determine many might have changed.
+     */
+    conditionId?: string;
 }
 /**
  * Language changed event payload.
  */
 export interface LanguageChangedLifecyclePayload {
-	/**
-	 * The Locale.
-	 */
-	locale?: Locale;
+    /**
+     * The Locale.
+     */
+    locale?: Locale;
 }
