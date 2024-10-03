@@ -305,7 +305,11 @@ export async function getConstructorOverride(
 					if (success) {
 						logger.info(`Saved workspace with id: ${req.workspace.workspaceId} to custom storage`);
 					} else {
-						logger.info(`Unable to save workspace with id: ${req.workspace.workspaceId} to custom storage`);
+						const saveError = `Unable to save workspace with id: ${req.workspace.workspaceId} to custom storage`;
+						logger.error(saveError);
+						// if we have been unable to save the workspace to custom storage, we should throw an error so that the workspace code
+						// can react accordingly but showing the failure indicator.
+						throw new Error(saveError);
 					}
 				} else {
 					logger.info(`Saving workspace to default storage for workspace id: ${req.workspace.workspaceId}`);
@@ -350,9 +354,10 @@ export async function getConstructorOverride(
 					if (success) {
 						logger.info(`Updated workspace with id: ${req.workspace.workspaceId} against custom storage`);
 					} else {
-						logger.info(
-							`Unable to update workspace with id: ${req.workspace.workspaceId} against custom storage`
-						);
+						const errorMessage = `Unable to update workspace with id: ${req.workspace.workspaceId} against custom storage`;
+						logger.error(errorMessage);
+						// if we have been unable to update the workspace to custom storage, we should throw an error so that the workspace code can react accordingly
+						throw new Error(errorMessage);
 					}
 				} else {
 					logger.info(
@@ -391,7 +396,10 @@ export async function getConstructorOverride(
 					if (success) {
 						logger.info(`Removed workspace with id: ${id} from custom storage`);
 					} else {
-						logger.info(`Unable to remove workspace with id: ${id} from custom storage`);
+						const errorMessage = `Unable to remove workspace with id: ${id} from custom storage`;
+						logger.error(errorMessage);
+						// if we have been unable to remove the workspace from custom storage, we should throw an error so that the workspace code can react accordingly
+						throw new Error(errorMessage);
 					}
 				} else {
 					logger.info(`Deleting workspace from default storage for workspace id: ${id}`);
@@ -572,7 +580,10 @@ export async function getConstructorOverride(
 					if (success) {
 						logger.info(`Saved page with id: ${req.page.pageId} to custom storage`);
 					} else {
-						logger.info(`Unable to save page with id: ${req.page.pageId} to custom storage`);
+						const errorMessage = `Unable to save page with id: ${req.page.pageId} to custom storage`;
+						logger.error(errorMessage);
+						// if we have been unable to save the page to custom storage, we should throw an error so that the workspace code can react accordingly
+						throw new Error(errorMessage);
 					}
 				} else {
 					logger.info(`creating saved page and saving to default storage. PageId: ${req.page.pageId}`);
@@ -622,7 +633,10 @@ export async function getConstructorOverride(
 					if (success) {
 						logger.info(`Updated page with id: ${req.page.pageId} against custom storage`);
 					} else {
-						logger.info(`Unable to save page with id: ${req.page.pageId} against custom storage`);
+						const errorMessage = `Unable to save page with id: ${req.page.pageId} against custom storage`;
+						logger.error(errorMessage);
+						// if we have been unable to save the page to custom storage, we should throw an error so that the workspace code can react accordingly
+						throw new Error(errorMessage);
 					}
 				} else {
 					logger.info(`updating saved page and saving to default storage with page id: ${req.page.pageId}`);
@@ -654,7 +668,10 @@ export async function getConstructorOverride(
 					if (success) {
 						logger.info(`Removed page with id: ${id} from custom storage`);
 					} else {
-						logger.info(`Unable to remove page with id: ${id} from custom storage`);
+						const errorMessage = `Unable to remove page with id: ${id} from custom storage`;
+						logger.error(errorMessage);
+						// if we have been unable to remove the page from custom storage, we should throw an error so that the workspace code can react accordingly
+						throw new Error(errorMessage);
 					}
 				} else {
 					logger.info(`deleting saved page from default storage. PageId: ${id}`);

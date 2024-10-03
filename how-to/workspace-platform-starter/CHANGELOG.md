@@ -26,6 +26,7 @@
   - FDC3 Intent Firing when targeting a snapshot now waits to fire the intent until each view registers an intent handler or times out. We don't await this so as not to slow down the response to the raiser.
 - Example notification service launch-app action now supports passing the appId and instanceId (id in the root of customData still needs to be specified) in the target field of customData. Context can also be passed now. This will use fdc3.open. If you specify an instanceId and a timeout error is thrown (if the instance is no longer running) then it falls back to launching a new instance of the app and passing it the context if specified. Updated documentation.
 - Updated example-notification-service-app to show raising a notification that has a call to action that passes data back to itself (or a new instance if it is closed) though a context listener.
+- Updated the WPS Platform Override Module so that our workspace platform override will log an error and then throw an exception if saving, updating or deleting a page or a workspace fails. The exception is required so that the default workspace platform code knows that the indicator should show failure instead of success.
 
 ## v19.0.0
 
