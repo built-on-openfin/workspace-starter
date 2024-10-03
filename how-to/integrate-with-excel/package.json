@@ -21,12 +21,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/excel": "^1.5.0",
-		"@openfin/workspace": "19.0.4",
-		"@openfin/workspace-platform": "19.0.4"
+		"@openfin/workspace": "19.0.5",
+		"@openfin/workspace-platform": "19.0.5"
 	},
 	"devDependencies": {
-		"@openfin/core": "38.82.69",
-		"@openfin/node-adapter": "38.82.69",
+		"@openfin/core": "38.83.79",
+		"@openfin/node-adapter": "38.83.79",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
