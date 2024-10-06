@@ -27,6 +27,9 @@
 - Example notification service launch-app action now supports passing the appId and instanceId (id in the root of customData still needs to be specified) in the target field of customData. Context can also be passed now. This will use fdc3.open. If you specify an instanceId and a timeout error is thrown (if the instance is no longer running) then it falls back to launching a new instance of the app and passing it the context if specified. Updated documentation.
 - Updated example-notification-service-app to show raising a notification that has a call to action that passes data back to itself (or a new instance if it is closed) though a context listener.
 - Updated the WPS Platform Override Module so that our workspace platform override will log an error and then throw an exception if saving, updating or deleting a page or a workspace fails. The exception is required so that the default workspace platform code knows that the indicator should show failure instead of success.
+- Updated integration template that is used when you use npm run generate-module integrations "Your Integration" so that it includes example results and examples of handling result clicks so that you have an easier starting point.
+- Updated example-notification-source so that you can specify a url to post notifications to (it will wrap the request in a message property and send it to the server you specify via post: { url: "" } settings. Our example node-starter supports messages being posted to <http://localhost:6060/api/messages>.
+- Updated the notification service example app so that if you select the endpoint example action it will post a notification to the notification source create endpoint.
 
 ## v19.0.0
 

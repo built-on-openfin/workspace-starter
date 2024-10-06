@@ -16,6 +16,11 @@ export interface ExampleNotificationSourceProviderOptions {
 	 * What should this sample notification service publish an example notification on? Default is true for all options.
 	 */
 	notifyOn?: NotificationEventSource;
+	/**
+	 * If the notification source supports notification messages being posted to it then specify the url here
+	 * We have an example on our node-starter that runs on localhost:6060.
+	 */
+	post: PostSettings;
 }
 
 /**
@@ -49,5 +54,13 @@ interface LongPollSettings {
  */
 interface WebSocketSettings {
 	/** The websocket url */
+	url: string;
+}
+
+/**
+ * Post settings }
+ */
+interface PostSettings {
+	/** The url to post to*/
 	url: string;
 }

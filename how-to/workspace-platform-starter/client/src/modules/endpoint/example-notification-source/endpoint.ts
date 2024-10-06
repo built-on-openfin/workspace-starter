@@ -183,11 +183,32 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 		request?: NotificationSourceEvents
 	): Promise<boolean> {
 		// this could post to a backend service so that the notification is picked up server side and then distributed to all connected clients (e.g. browser, OpenFin etc)
-		// for now we are simulating it by putting anything posted into a queue so that it will be picked up by the stream
+		// for now we are simulating it by putting anything posted into a queue so that it will be picked up by the stream unless you specify an address to post to
+		// e.g. http://localhost:6060/api/messages
 		if (!isEmpty(request)) {
 			this._logger?.info(`Received notification: ${JSON.stringify(request)}`);
-			this._queuedNotifications?.push(request);
-			return true;
+			let success = false;
+			if (
+				this._definition?.data?.post?.url &&
+				(this._definition.data.post.url.startsWith("http://") ||
+					this._definition.data.post.url.startsWith("https://"))
+			) {
+				// wrap the request in an envelope and express the request as a message
+				const envelope = {
+					message: request
+				};
+				const response = await fetch(this._definition.data.post.url, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(envelope)
+				});
+				success = response.ok;
+			} else {
+				this._queuedNotifications?.push(request);
+			}
+			return success;
 		}
 		this._logger?.warn("Action called with an empty notification.");
 		return false;

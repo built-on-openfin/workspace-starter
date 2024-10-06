@@ -300,6 +300,9 @@
 					"data": {
 						"websocket": { "url": "" },
 						"longpoll": { "url": "", "intervalInSeconds": 5 },
+						"post": {
+							"url": ""
+						},
 						"notifyOn": {
 							"pageChanged": false,
 							"workspaceChanged": false,
