@@ -249,18 +249,16 @@
 						"onClick": {
 							"task": "endpoint",
 							"customData": {
-								"id": "endpointId you wish to call. The notification service module must be permitted to access this endpoint through endpointClients",
-								"context": {
-									"type": "fdc3.contact",
-									"name": "John Example",
-									"id": {
-										"email": "john@example.com",
-										"phone": "Number goes here"
-									}
-								},
+								"id": "notification-source-create",
 								"endpointOptions": {
 									"request": {
-										"description": "If request is specified then context will be ignored and this object will be sent to the endpoint as the request"
+										"eventId": "create",
+										"payload": {
+											"id": "unique-id-goes-here",
+											"title": "Notification Endpoint Click Result",
+											"body": "This notification was the result of an endpoint action button click that called an endpoint to create a notification.",
+											"buttons": []
+										}
 									}
 								}
 							}
