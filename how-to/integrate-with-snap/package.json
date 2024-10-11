@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-snap",
-	"version": "19.1.0",
+	"version": "19.2.0",
 	"description": "OpenFin Workspace -- Integrate with Snap",
 	"main": "index.js",
 	"scripts": {
@@ -22,8 +22,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/snap-sdk": "0.5.0",
-		"@openfin/workspace": "19.1.23",
-		"@openfin/workspace-platform": "19.1.23"
+		"@openfin/workspace": "19.2.10",
+		"@openfin/workspace-platform": "19.2.10"
 	},
 	"devDependencies": {
 		"@openfin/core": "38.83.79",
