@@ -19,13 +19,19 @@
 		"preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.bundle.js" }],
 		"permissions": {
 			"System": {
-				"launchExternalProcess": true,
-				"terminateExternalProcess": true,
-				"downloadAsset": true,
-				"openUrlWithBrowser": {
+				"launchExternalProcess": {
 					"enabled": true,
-					"protocols": ["mailto", "msteams", "tel"]
-				}
+					"assets": {
+						"enabled": true
+					},
+					"downloads": {
+						"enabled": false
+					},
+					"executables": {
+						"enabled": true
+					}
+				},
+				"downloadAsset": true
 			}
 		}
 	},

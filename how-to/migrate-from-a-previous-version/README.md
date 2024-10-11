@@ -204,8 +204,8 @@ You will need the following dependencies
 
 ```javascript
 "dependencies": {
-                    "@openfin/workspace": "^12.1.5",
-                    "@openfin/workspace-platform": "^12.1.5"
+                      "@openfin/workspace": "^12.6.0",
+                    "@openfin/workspace-platform": "^12.6.0"
                 }
 ```
 
@@ -213,7 +213,7 @@ You should update your dev dependencies
 
 ```javascript
 "devDependencies": {
-                    "@openfin/core": "38.83.79"
+                    "@openfin/core": "30.74.16"
                    }
 ```
 
