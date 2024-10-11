@@ -1,6 +1,6 @@
 {
   "name": "automation-testing-register-with-home-js",
-  "version": "19.1.0",
+  "version": "19.2.0",
   "description": "OpenFin Workspace Starter Automation Tests",
   "scripts": {
     "build": "echo Nothing to build",
