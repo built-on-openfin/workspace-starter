@@ -6,11 +6,6 @@ window.addEventListener('DOMContentLoaded', initializeDOM);
  * Initialize the DOM.
  */
 async function initializeDOM() {
-	const contextPicker = document.querySelector('#context-group-picker');
-	if (window.fin) {
-		contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
-	}
-
 	if (window.fdc3 !== undefined) {
 		setupListeners();
 	} else {
@@ -25,6 +20,10 @@ async function initializeDOM() {
  */
 async function setupListeners() {
 	try {
+		const contextPicker = document.querySelector('#context-group-picker');
+		if (window.fin && contextPicker !== null) {
+			contextPicker.style.display = fin.me.isWindow ? 'block' : 'none';
+		}
 		await usersModule.initialize();
 
 		window.fdc3.addContextListener(contextHandler);

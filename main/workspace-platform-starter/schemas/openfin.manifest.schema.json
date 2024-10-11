@@ -3,10 +3,10 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
 		"Api": {
-			"$ref": "#/definitions/__type_9"
+			"$ref": "#/definitions/__type_10"
 		},
 		"ApiSettings": {
-			"$ref": "#/definitions/__type_9"
+			"$ref": "#/definitions/__type_10"
 		},
 		"Array": {
 			"items": {
@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_29"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_28"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -71,8 +71,11 @@
 			"required": ["behavior", "match"],
 			"type": "object"
 		},
+		"ChromiumPolicies": {
+			"$ref": "#/definitions/__type_8"
+		},
 		"ContentCreationOptions": {
-			"$ref": "#/definitions/__type_10"
+			"$ref": "#/definitions/__type_11"
 		},
 		"ContentCreationRule<ContentCreationBehavior>": {
 			"anyOf": [
@@ -96,7 +99,7 @@
 			"description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
 		},
 		"ContentNavigation": {
-			"$ref": "#/definitions/__type_12"
+			"$ref": "#/definitions/__type_13"
 		},
 		"ContentPermission": {
 			"description": "Whether a content url is allowed or blocked for navigation or redirection.\n\n* 'allow': The content url is allowed.\n* 'block': The content url is blocked.",
@@ -104,10 +107,10 @@
 			"type": "string"
 		},
 		"ContentRedirect": {
-			"$ref": "#/definitions/__type_12"
+			"$ref": "#/definitions/__type_13"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_35"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_3"
@@ -116,7 +119,7 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_40"
 		},
 		"DipRect": {
 			"additionalProperties": false,
@@ -132,19 +135,22 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_32"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_36"
-		},
-		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_41"
-		},
-		"DomainSettings": {
 			"$ref": "#/definitions/__type_38"
 		},
+		"DomainApiSettings": {
+			"$ref": "#/definitions/__type_43"
+		},
+		"DomainSettings": {
+			"$ref": "#/definitions/__type_40"
+		},
 		"DownloadShelfOptions": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
+		},
+		"ExcludeOptions": {
+			"$ref": "#/definitions/__type_26"
 		},
 		"FileDownloadBehavior": {
 			"description": "Whether file downloads raise a user prompt.",
@@ -152,10 +158,10 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_42"
 		},
-		"Identity_5": {
-			"$ref": "#/definitions/__type_18"
+		"Identity_4": {
+			"$ref": "#/definitions/__type_19"
 		},
 		"InjectionType": {
 			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
@@ -163,22 +169,22 @@
 			"type": "string"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_37"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_6"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_39"
 		},
 		"LayoutSnapshot": {
-			"$ref": "#/definitions/__type_16"
+			"$ref": "#/definitions/__type_17"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_34"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_30"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -378,37 +384,37 @@
 			"type": "object"
 		},
 		"Partial_1": {
-			"$ref": "#/definitions/__type_8"
+			"$ref": "#/definitions/__type_9"
 		},
 		"Partial_2": {
-			"$ref": "#/definitions/__type_11"
+			"$ref": "#/definitions/__type_12"
 		},
 		"Partial_3": {
-			"$ref": "#/definitions/__type_14"
+			"$ref": "#/definitions/__type_15"
 		},
 		"Partial_4": {
-			"$ref": "#/definitions/__type_19"
-		},
-		"Partial_5": {
 			"$ref": "#/definitions/__type_20"
 		},
-		"Partial_6": {
+		"Partial_5": {
 			"$ref": "#/definitions/__type_21"
 		},
-		"Partial_7": {
-			"$ref": "#/definitions/__type_24"
+		"Partial_6": {
+			"$ref": "#/definitions/__type_22"
 		},
-		"Partial_8": {
+		"Partial_7": {
 			"$ref": "#/definitions/__type_25"
 		},
+		"Partial_8": {
+			"$ref": "#/definitions/__type_27"
+		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_36"
 		},
 		"PerDomainSettings": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_41"
 		},
 		"Permissions_2": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_44"
 		},
 		"PlatformOptions": {
 			"additionalProperties": false,
@@ -695,7 +701,12 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_31"
+		},
+		"PolicyOptions": {
+			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
+			"enum": ["defer-to-group-policy", "disable"],
+			"type": "string"
 		},
 		"PrebuiltContextMenuItem": {
 			"description": "Context menu item with an implementation provided by OpenFin.",
@@ -726,16 +737,16 @@
 			"$ref": "#/definitions/__type_1"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_17"
+			"$ref": "#/definitions/__type_18"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_33"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_5"
 		},
 		"RuleMatchOptions": {
-			"$ref": "#/definitions/__type_13"
+			"$ref": "#/definitions/__type_14"
 		},
 		"ShortcutOverride": {
 			"additionalProperties": false,
@@ -822,10 +833,10 @@
 			"type": "string"
 		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_22"
+			"$ref": "#/definitions/__type_23"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -920,6 +931,10 @@
 				"backgroundThrottling": {
 					"type": "boolean"
 				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
+				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
 				},
@@ -1005,6 +1020,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -1078,7 +1097,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -1116,7 +1135,7 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"resizable": {
@@ -1228,6 +1247,10 @@
 				"backgroundThrottling": {
 					"type": "boolean"
 				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
+				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
 				},
@@ -1313,6 +1336,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -1386,7 +1413,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -1425,7 +1452,7 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"resizable": {
@@ -1506,6 +1533,7 @@
 				"autoplayPolicy",
 				"backgroundColor",
 				"backgroundThrottling",
+				"chromiumPolicies",
 				"closeOnLastViewRemoved",
 				"contentCreation",
 				"contentNavigation",
@@ -1523,6 +1551,7 @@
 				"defaultTop",
 				"defaultWidth",
 				"downloadShelf",
+				"excludeOptions",
 				"frame",
 				"height",
 				"hideOnClose",
@@ -1638,6 +1667,35 @@
 		},
 		"__type_10": {
 			"additionalProperties": false,
+			"description": "Configurations for API injection.",
+			"properties": {
+				"fin": {
+					"$ref": "#/definitions/InjectionType",
+					"description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
+				},
+				"iframe": {
+					"additionalProperties": false,
+					"description": "Configure conditional injection of OpenFin API into iframes",
+					"properties": {
+						"crossOriginInjection": {
+							"description": "Inject OpenFin API into cross-origin iframes",
+							"type": "boolean"
+						},
+						"enableDeprecatedSharedName": {
+							"type": "boolean"
+						},
+						"sameOriginInjection": {
+							"description": "Inject OpenFin API into same-origin iframes",
+							"type": "boolean"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"__type_11": {
+			"additionalProperties": false,
 			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
 			"properties": {
 				"rules": {
@@ -1651,7 +1709,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_11": {
+		"__type_12": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -1690,6 +1748,10 @@
 				},
 				"backgroundThrottling": {
 					"type": "boolean"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -1776,6 +1838,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -1849,7 +1915,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -1888,7 +1954,7 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"resizable": {
@@ -1959,7 +2025,7 @@
 			},
 			"type": "object"
 		},
-		"__type_12": {
+		"__type_13": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -1995,7 +2061,7 @@
 			},
 			"type": "object"
 		},
-		"__type_13": {
+		"__type_14": {
 			"additionalProperties": false,
 			"description": "Controls the behavior of the navigation URI pattern matching algorithm.",
 			"properties": {
@@ -2006,7 +2072,7 @@
 			},
 			"type": "object"
 		},
-		"__type_14": {
+		"__type_15": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -2042,7 +2108,7 @@
 			},
 			"type": "object"
 		},
-		"__type_15": {
+		"__type_16": {
 			"additionalProperties": false,
 			"properties": {
 				"border": {
@@ -2068,7 +2134,7 @@
 			"required": ["enabled"],
 			"type": "object"
 		},
-		"__type_16": {
+		"__type_17": {
 			"additionalProperties": false,
 			"properties": {
 				"layouts": {
@@ -2078,11 +2144,11 @@
 			"required": ["layouts"],
 			"type": "object"
 		},
-		"__type_17": {
+		"__type_18": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_18": {
+		"__type_19": {
 			"additionalProperties": false,
 			"description": "Unique identifier for a window, view or iframe.",
 			"properties": {
@@ -2098,7 +2164,26 @@
 			"required": ["name", "uuid"],
 			"type": "object"
 		},
-		"__type_19": {
+		"__type_2": {
+			"additionalProperties": false,
+			"properties": {
+				"devtools": {
+					"description": "Should the context menu contain a button for opening devtools.",
+					"type": "boolean"
+				},
+				"enable": {
+					"description": "Should the context menu display on right click.",
+					"type": "boolean"
+				},
+				"reload": {
+					"description": "Should the context menu contain a button for reloading the page.",
+					"type": "boolean"
+				}
+			},
+			"required": ["enable"],
+			"type": "object"
+		},
+		"__type_20": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -2132,26 +2217,7 @@
 			},
 			"type": "object"
 		},
-		"__type_2": {
-			"additionalProperties": false,
-			"properties": {
-				"devtools": {
-					"description": "Should the context menu contain a button for opening devtools.",
-					"type": "boolean"
-				},
-				"enable": {
-					"description": "Should the context menu display on right click.",
-					"type": "boolean"
-				},
-				"reload": {
-					"description": "Should the context menu contain a button for reloading the page.",
-					"type": "boolean"
-				}
-			},
-			"required": ["enable"],
-			"type": "object"
-		},
-		"__type_20": {
+		"__type_21": {
 			"additionalProperties": false,
 			"properties": {
 				"getFileDownloadLocation": {
@@ -2163,7 +2229,7 @@
 			},
 			"type": "object"
 		},
-		"__type_21": {
+		"__type_22": {
 			"additionalProperties": false,
 			"properties": {
 				"getAllExternalWindows": {
@@ -2191,6 +2257,9 @@
 							"type": "boolean"
 						}
 					]
+				},
+				"getOSInfo": {
+					"type": "boolean"
 				},
 				"launchExternalProcess": {
 					"anyOf": [
@@ -2370,7 +2439,7 @@
 			},
 			"type": "object"
 		},
-		"__type_22": {
+		"__type_23": {
 			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
@@ -2389,7 +2458,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -2399,7 +2468,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -2417,7 +2486,17 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
+			"additionalProperties": false,
+			"properties": {
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"required": ["preloadScripts"],
+			"type": "object"
+		},
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -2443,6 +2522,10 @@
 				"bounds": {
 					"$ref": "#/definitions/Bounds",
 					"description": "Initial bounds given relative to the window."
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeBehavior": {
 					"description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
@@ -2524,6 +2607,10 @@
 				"enableBeforeUnload": {
 					"type": "boolean"
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform View."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -2597,7 +2684,7 @@
 					"type": "string"
 				},
 				"target": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "The identity of the window this view should be attached to."
 				},
 				"throttling": {
@@ -2613,7 +2700,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2632,7 +2719,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2654,7 +2741,22 @@
 			},
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configure the context menu when right-clicking on a window.",
+			"properties": {
+				"enabled": {
+					"description": "Displays the context menu on right click.",
+					"type": "boolean"
+				},
+				"template": {
+					"$ref": "#/definitions/Array",
+					"description": "Context menu items to display on right-click."
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2745,7 +2847,7 @@
 			],
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2760,22 +2862,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configure the context menu when right-clicking on a window.",
-			"properties": {
-				"enabled": {
-					"description": "Displays the context menu on right click.",
-					"type": "boolean"
-				},
-				"template": {
-					"$ref": "#/definitions/Array",
-					"description": "Context menu items to display on right-click."
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -2788,7 +2875,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -2807,7 +2894,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2859,7 +2946,7 @@
 			],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_35": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2888,7 +2975,7 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -2927,6 +3014,10 @@
 				},
 				"backgroundThrottling": {
 					"type": "boolean"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -3013,6 +3104,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -3086,7 +3181,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -3125,7 +3220,7 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"resizable": {
@@ -3200,7 +3295,7 @@
 			},
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -3228,7 +3323,7 @@
 			},
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_38": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -3247,7 +3342,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -3276,7 +3371,19 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_4": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
 				"default": {
@@ -3313,12 +3420,16 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"api": {
 					"$ref": "#/definitions/DomainApiSettings",
 					"description": "{@inheritDoc ApiInjection}"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritdoc ChromiumPolicies}"
 				},
 				"content": {
 					"$ref": "#/definitions/ContentPermission",
@@ -3331,19 +3442,7 @@
 			},
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_42": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -3373,7 +3472,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"fin": {
@@ -3387,7 +3486,7 @@
 			},
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -3474,6 +3573,17 @@
 		},
 		"__type_8": {
 			"additionalProperties": false,
+			"description": "Control behavior for Chromium policies",
+			"properties": {
+				"AutofillAddressEnabled": {
+					"$ref": "#/definitions/PolicyOptions",
+					"description": "Disable AutofillAddressEnabled policy for a Window or View."
+				}
+			},
+			"type": "object"
+		},
+		"__type_9": {
+			"additionalProperties": false,
 			"properties": {
 				"devtools": {
 					"description": "If `true`, enables the devtools keyboard shortcut:<br>\n`Ctrl` + `Shift` + `I` _(Toggles Devtools)_",
@@ -3490,35 +3600,6 @@
 				"zoom": {
 					"description": "NOTE: It is not recommended to set this value to true for Windows in Platforms as that may lead to unexpected visual shifts in layout.\nIf `true`, enables the zoom keyboard shortcuts:<br>\n`Ctrl` + `+` _(Zoom In)_<br>\n`Ctrl` + `Shift` + `+` _(Zoom In)_<br>\n`Ctrl` + `NumPad+` _(Zoom In)_<br>\n`Ctrl` + `-` _(Zoom Out)_<br>\n`Ctrl` + `Shift` + `-` _(Zoom Out)_<br>\n`Ctrl` + `NumPad-` _(Zoom Out)_<br>\n`Ctrl` + `Scroll` _(Zoom In & Out)_<br>\n`Ctrl` + `0` _(Restore to 100%)_",
 					"type": "boolean"
-				}
-			},
-			"type": "object"
-		},
-		"__type_9": {
-			"additionalProperties": false,
-			"description": "Configurations for API injection.",
-			"properties": {
-				"fin": {
-					"$ref": "#/definitions/InjectionType",
-					"description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
-				},
-				"iframe": {
-					"additionalProperties": false,
-					"description": "Configure conditional injection of OpenFin API into iframes",
-					"properties": {
-						"crossOriginInjection": {
-							"description": "Inject OpenFin API into cross-origin iframes",
-							"type": "boolean"
-						},
-						"enableDeprecatedSharedName": {
-							"type": "boolean"
-						},
-						"sameOriginInjection": {
-							"description": "Inject OpenFin API into same-origin iframes",
-							"type": "boolean"
-						}
-					},
-					"type": "object"
 				}
 			},
 			"type": "object"

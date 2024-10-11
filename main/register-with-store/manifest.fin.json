@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/favicon.ico",
-		"name": "Register With Store - v19.0.0",
+		"name": "Register With Store - v19.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -49,7 +49,6 @@
 		"appProvider": {
 			"appSourceUrls": [
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-store/common/apps-contact.json",
-				"https://built-on-openfin.github.io/workspace-starter/main/register-with-store/common/apps-expero.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-store/common/apps-interop.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-store/common/apps-native.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-store/common/apps-tools.json"
@@ -76,14 +75,6 @@
 				"topRow": {
 					"title": "Custom Top Row Content",
 					"items": [
-						{
-							"title": "Expero",
-							"description": "A collection of example views from Expero showing the power of interop and context sharing.",
-							"image": {
-								"src": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/common/images/store/coding-1-unsplash.jpg"
-							},
-							"tags": ["expero"]
-						},
 						{
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
@@ -184,9 +175,6 @@
 					}
 				]
 			}
-		},
-		"keys": {
-			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }

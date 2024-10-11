@@ -19,13 +19,19 @@
 		"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-snap/js/snap.preload.bundle.js" }],
 		"permissions": {
 			"System": {
-				"launchExternalProcess": true,
-				"terminateExternalProcess": true,
-				"downloadAsset": true,
-				"openUrlWithBrowser": {
+				"launchExternalProcess": {
 					"enabled": true,
-					"protocols": ["mailto", "msteams", "tel"]
-				}
+					"assets": {
+						"enabled": true
+					},
+					"downloads": {
+						"enabled": false
+					},
+					"executables": {
+						"enabled": true
+					}
+				},
+				"downloadAsset": true
 			}
 		}
 	},
@@ -33,7 +39,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-snap/favicon.ico",
-		"name": "Integrate With Snap Classic - v19.0.0",
+		"name": "Integrate With Snap Classic - v19.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -44,11 +50,20 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://cdn.openfin.co/release/snap/0.3.0/snap.zip",
+			"src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
 			"alias": "openfin-snap",
-			"version": "0.3.0",
+			"version": "0.5.0",
 			"target": "OpenFinSnap.exe",
 			"mandatory": true
 		}
-	]
+	],
+	"customSettings": {
+		"snapProvider": {
+			"showDebugWindow": false,
+			"disableShiftToUnsnap": false,
+			"enableCtrlToUnsnap": false,
+			"disableGPUDragging": false,
+			"disableBlurDropPreview": false
+		}
+	}
 }

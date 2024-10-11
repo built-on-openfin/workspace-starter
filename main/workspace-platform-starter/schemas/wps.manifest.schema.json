@@ -51,7 +51,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_57"
+			"$ref": "#/definitions/__type_60"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -338,7 +338,7 @@
 			"type": "object"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_31"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -408,7 +408,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_30"
 		},
 		"BrokerConnection": {
 			"additionalProperties": false,
@@ -577,6 +577,17 @@
 					"description": "The favicon to display on the top left of the created browser window.",
 					"type": "string"
 				},
+				"icon": {
+					"anyOf": [
+						{
+							"$ref": "#/definitions/TaskbarIcon"
+						},
+						{
+							"type": "string"
+						}
+					],
+					"description": "Taskbar Icon for the Browser Window. If light and dark icon are defined, then the taskbar icon will change when the scheme changes."
+				},
 				"isLocked": {
 					"description": "When true, disables the ability to close pages, drag pages within the window,\nand drag pages into/out of the window. False by default.",
 					"type": "boolean"
@@ -720,7 +731,10 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_50"
+			"$ref": "#/definitions/__type_53"
+		},
+		"ChromiumPolicies": {
+			"$ref": "#/definitions/__type_14"
 		},
 		"ConditionsProviderOptions": {
 			"$ref": "#/definitions/ModuleList_3",
@@ -738,7 +752,7 @@
 					"type": "array"
 				},
 				"identity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "The identity uuid of the incoming connection or * as a wildcard. We currently do not restrict down to the name\nlevel so it can be blank or omitted."
 				},
 				"validatePayload": {
@@ -825,7 +839,7 @@
 			"description": "A rule for creating content in OpenFin; maps a content type to the way in which\nnewly-opened content of that type will be handled."
 		},
 		"ContentNavigation": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
 		},
 		"ContentPermission": {
 			"description": "Whether a content url is allowed or blocked for navigation or redirection.\n\n* 'allow': The content url is allowed.\n* 'block': The content url is blocked.",
@@ -833,10 +847,10 @@
 			"type": "string"
 		},
 		"ContentRedirect": {
-			"$ref": "#/definitions/__type_15"
+			"$ref": "#/definitions/__type_16"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_50"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_9"
@@ -1169,10 +1183,10 @@
 		},
 		"Data": {},
 		"DeepPartial": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_41"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_63"
+			"$ref": "#/definitions/__type_66"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1223,10 +1237,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_47"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_61"
+			"$ref": "#/definitions/__type_64"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1483,13 +1497,13 @@
 			"type": "object"
 		},
 		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_66"
+			"$ref": "#/definitions/__type_69"
 		},
 		"DomainSettings": {
-			"$ref": "#/definitions/__type_63"
+			"$ref": "#/definitions/__type_66"
 		},
 		"DownloadShelfOptions": {
-			"$ref": "#/definitions/__type_18"
+			"$ref": "#/definitions/__type_19"
 		},
 		"EndpointClientDefaultOptions": {
 			"additionalProperties": false,
@@ -1591,6 +1605,9 @@
 		"Exclude": {
 			"enum": ["Close", "ColorLinking", "Maximise", "Minimise", "PresetLayouts", "SaveMenu", "SavePage"],
 			"type": "string"
+		},
+		"ExcludeOptions": {
+			"$ref": "#/definitions/__type_28"
 		},
 		"FavoriteProviderOptions": {
 			"additionalProperties": false,
@@ -1716,7 +1733,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_65"
+			"$ref": "#/definitions/__type_68"
 		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
@@ -1856,11 +1873,11 @@
 			},
 			"type": "object"
 		},
-		"Identity_5": {
+		"Identity_4": {
 			"$ref": "#/definitions/__type_4"
 		},
-		"Identity_5_1": {
-			"$ref": "#/definitions/__type_39"
+		"Identity_4_1": {
+			"$ref": "#/definitions/__type_42"
 		},
 		"Image": {
 			"additionalProperties": false,
@@ -2024,16 +2041,16 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_60"
+			"$ref": "#/definitions/__type_63"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_62"
+			"$ref": "#/definitions/__type_65"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_49"
+			"$ref": "#/definitions/__type_52"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
@@ -2122,14 +2139,14 @@
 			"type": "object"
 		},
 		"LayoutSnapshot": {
-			"$ref": "#/definitions/__type_19"
+			"$ref": "#/definitions/__type_20"
 		},
 		"LifecycleProviderOptions": {
 			"$ref": "#/definitions/ModuleList_4",
 			"description": "List of modules."
 		},
 		"LockUnlockPageConfig": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_34"
 		},
 		"LoggerProviderOptions": {
 			"$ref": "#/definitions/ModuleList_1",
@@ -2984,10 +3001,10 @@
 			"type": "object"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_49"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_45"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -3130,7 +3147,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_56"
+			"$ref": "#/definitions/__type_59"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3161,23 +3178,23 @@
 			"type": "object"
 		},
 		"NotificationsCustomManifestOptions": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_43"
 		},
 		"O": {},
 		"Omit": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_32"
 		},
 		"Omit_1": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_37"
 		},
 		"Omit_2": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_38"
 		},
 		"Omit_3": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_39"
 		},
 		"Omit_4": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_40"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -3379,6 +3396,7 @@
 				"Rename",
 				"Save",
 				"Save As",
+				"New Page",
 				"Delete Page",
 				"SaveWorkspaceAs",
 				"Refresh",
@@ -3448,28 +3466,28 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_29"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_44"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_48"
-		},
-		"Partial_13": {
 			"$ref": "#/definitions/__type_51"
 		},
-		"Partial_14": {
-			"$ref": "#/definitions/__type_52"
-		},
-		"Partial_15": {
-			"$ref": "#/definitions/__type_53"
-		},
-		"Partial_16": {
+		"Partial_13": {
 			"$ref": "#/definitions/__type_54"
 		},
+		"Partial_14": {
+			"$ref": "#/definitions/__type_55"
+		},
+		"Partial_15": {
+			"$ref": "#/definitions/__type_56"
+		},
+		"Partial_16": {
+			"$ref": "#/definitions/__type_57"
+		},
 		"Partial_17": {
-			"$ref": "#/definitions/__type_59"
+			"$ref": "#/definitions/__type_62"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -3478,31 +3496,31 @@
 			"$ref": "#/definitions/__type_10"
 		},
 		"Partial_4": {
-			"$ref": "#/definitions/__type_14"
+			"$ref": "#/definitions/__type_15"
 		},
 		"Partial_5": {
-			"$ref": "#/definitions/__type_17"
+			"$ref": "#/definitions/__type_18"
 		},
 		"Partial_6": {
-			"$ref": "#/definitions/__type_21"
-		},
-		"Partial_7": {
 			"$ref": "#/definitions/__type_22"
 		},
-		"Partial_8": {
+		"Partial_7": {
 			"$ref": "#/definitions/__type_23"
 		},
+		"Partial_8": {
+			"$ref": "#/definitions/__type_24"
+		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"PerDomainSettings": {
-			"$ref": "#/definitions/__type_64"
-		},
-		"Permissions_2": {
 			"$ref": "#/definitions/__type_67"
 		},
+		"Permissions_2": {
+			"$ref": "#/definitions/__type_70"
+		},
 		"Pick": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_36"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -4086,6 +4104,13 @@
 					"required": ["initialLanguage"],
 					"type": "object"
 				},
+				"modules": {
+					"description": "The list of modules.",
+					"items": {
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
+					},
+					"type": "array"
+				},
 				"rootUrl": {
 					"description": "What is the root url of you platform e.g. https://mydomain.com",
 					"type": "string"
@@ -4095,7 +4120,12 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_46"
+		},
+		"PolicyOptions": {
+			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
+			"enum": ["defer-to-group-policy", "disable"],
+			"type": "string"
 		},
 		"PopupMenuStyles": {
 			"description": "The styles that can be used to display the popup menus.",
@@ -4165,19 +4195,19 @@
 			"$ref": "#/definitions/__type_7"
 		},
 		"Record": {
-			"$ref": "#/definitions/__type_20"
+			"$ref": "#/definitions/__type_21"
 		},
 		"Record_1": {
-			"$ref": "#/definitions/__type_55"
+			"$ref": "#/definitions/__type_58"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_48"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_11"
 		},
 		"RuleMatchOptions": {
-			"$ref": "#/definitions/__type_16"
+			"$ref": "#/definitions/__type_17"
 		},
 		"ScoreOrder": {
 			"description": "The order to sort scored search results in.",
@@ -4188,6 +4218,41 @@
 			"description": "The order to sort scored search results in.",
 			"enum": ["ascending", "descending"],
 			"type": "string"
+		},
+		"ServerOptions": {
+			"additionalProperties": false,
+			"description": "Options for starting the Snap Server",
+			"properties": {
+				"blurEffectPerformanceThreshold": {
+					"description": "This is respected only if the disableBlurDropPreview option is not set. This threshold (in milliseconds) relates to the time taken to render a blur effect.\nSnap will do a check at start up to measure this performance and automatically disable the blur effect if this threshold time is exceeded.\nIf not provided, the performance check will use a default threshold.",
+					"type": "number"
+				},
+				"disableBlurDropPreview": {
+					"description": "If true, the drop preview will not be blurred.\nThis can be useful if performance issues are encountered when displaying a drop target and preview.  This can occur on lower spec machines.",
+					"type": "boolean"
+				},
+				"disableGPUAcceleratedDragging": {
+					"description": "If true, reverts to a slower method of dragging groups of windows",
+					"type": "boolean"
+				},
+				"disableUserUnstick": {
+					"description": "If true, prevents the user from unsticking windows (e.g. using SHIFT key)",
+					"type": "boolean"
+				},
+				"executablePath": {
+					"description": "The path to the Snap executable to launch if not using a manifest asset",
+					"type": "string"
+				},
+				"keyToStick": {
+					"description": "If true, windows will only stick if CTRL key is held while dragging",
+					"type": "boolean"
+				},
+				"showDebug": {
+					"description": "True if the Snap debug console should be shown",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
 		},
 		"ShareConfirmationType": {
 			"description": "Type of share confirmation.",
@@ -4234,7 +4299,7 @@
 			"type": "object"
 		},
 		"ShowHideTabsConfig": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_33"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -4276,15 +4341,15 @@
 					"$ref": "#/definitions/AppAssetInfo",
 					"description": "The asset for the Snap server."
 				},
-				"showDebugWindow": {
-					"description": "Show the snap debug window.",
-					"type": "boolean"
+				"serverOptions": {
+					"$ref": "#/definitions/ServerOptions",
+					"description": "Options supported by the snap server."
 				}
 			},
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_58"
+			"$ref": "#/definitions/__type_61"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -4631,6 +4696,9 @@
 			"required": ["edge", "rect"],
 			"type": "object"
 		},
+		"TaskbarIcon": {
+			"$ref": "#/definitions/__type_35"
+		},
 		"ThemeProviderOptions": {
 			"additionalProperties": false,
 			"description": "Platform theme configuration",
@@ -4964,10 +5032,10 @@
 			"type": "string"
 		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"WPSManifest": {
 			"additionalProperties": false,
@@ -5338,6 +5406,10 @@
 				"backgroundThrottling": {
 					"type": "boolean"
 				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
+				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
 				},
@@ -5423,6 +5495,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -5496,7 +5572,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -5535,7 +5611,7 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"resizable": {
@@ -5616,6 +5692,7 @@
 				"autoplayPolicy",
 				"backgroundColor",
 				"backgroundThrottling",
+				"chromiumPolicies",
 				"closeOnLastViewRemoved",
 				"contentCreation",
 				"contentNavigation",
@@ -5633,6 +5710,7 @@
 				"defaultTop",
 				"defaultWidth",
 				"downloadShelf",
+				"excludeOptions",
 				"frame",
 				"height",
 				"hideOnClose",
@@ -5830,6 +5908,10 @@
 				"backgroundThrottling": {
 					"type": "boolean"
 				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
+				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
 				},
@@ -5915,6 +5997,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -5948,7 +6034,7 @@
 					"type": "array"
 				},
 				"icon": {
-					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+					"description": "The icon to display on the taskbar.",
 					"type": "string"
 				},
 				"ignoreSavedWindowState": {
@@ -5988,7 +6074,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -6027,7 +6113,7 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"reason": {
@@ -6226,6 +6312,17 @@
 		},
 		"__type_14": {
 			"additionalProperties": false,
+			"description": "Control behavior for Chromium policies",
+			"properties": {
+				"AutofillAddressEnabled": {
+					"$ref": "#/definitions/PolicyOptions",
+					"description": "Disable AutofillAddressEnabled policy for a Window or View."
+				}
+			},
+			"type": "object"
+		},
+		"__type_15": {
+			"additionalProperties": false,
 			"properties": {
 				"devtools": {
 					"description": "If `true`, enables the devtools keyboard shortcut:<br>\n`Ctrl` + `Shift` + `I` _(Toggles Devtools)_",
@@ -6246,7 +6343,7 @@
 			},
 			"type": "object"
 		},
-		"__type_15": {
+		"__type_16": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -6282,7 +6379,7 @@
 			},
 			"type": "object"
 		},
-		"__type_16": {
+		"__type_17": {
 			"additionalProperties": false,
 			"description": "Controls the behavior of the navigation URI pattern matching algorithm.",
 			"properties": {
@@ -6293,7 +6390,7 @@
 			},
 			"type": "object"
 		},
-		"__type_17": {
+		"__type_18": {
 			"additionalProperties": false,
 			"properties": {
 				"allowlist": {
@@ -6329,7 +6426,7 @@
 			},
 			"type": "object"
 		},
-		"__type_18": {
+		"__type_19": {
 			"additionalProperties": false,
 			"properties": {
 				"border": {
@@ -6353,16 +6450,6 @@
 				}
 			},
 			"required": ["enabled"],
-			"type": "object"
-		},
-		"__type_19": {
-			"additionalProperties": false,
-			"properties": {
-				"layouts": {
-					"$ref": "#/definitions/Record"
-				}
-			},
-			"required": ["layouts"],
 			"type": "object"
 		},
 		"__type_2": {
@@ -6391,6 +6478,10 @@
 				"bounds": {
 					"$ref": "#/definitions/Bounds",
 					"description": "Initial bounds given relative to the window."
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeBehavior": {
 					"description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
@@ -6472,6 +6563,10 @@
 				"enableBeforeUnload": {
 					"type": "boolean"
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform View."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -6545,7 +6640,7 @@
 					"type": "string"
 				},
 				"target": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "The identity of the window this view should be attached to."
 				},
 				"throttling": {
@@ -6563,9 +6658,19 @@
 		},
 		"__type_20": {
 			"additionalProperties": false,
+			"properties": {
+				"layouts": {
+					"$ref": "#/definitions/Record"
+				}
+			},
+			"required": ["layouts"],
 			"type": "object"
 		},
 		"__type_21": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_22": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -6599,7 +6704,7 @@
 			},
 			"type": "object"
 		},
-		"__type_22": {
+		"__type_23": {
 			"additionalProperties": false,
 			"properties": {
 				"getFileDownloadLocation": {
@@ -6611,7 +6716,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"properties": {
 				"getAllExternalWindows": {
@@ -6639,6 +6744,9 @@
 							"type": "boolean"
 						}
 					]
+				},
+				"getOSInfo": {
+					"type": "boolean"
 				},
 				"launchExternalProcess": {
 					"anyOf": [
@@ -6818,7 +6926,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
@@ -6837,7 +6945,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -6847,7 +6955,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -6865,7 +6973,17 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
+			"additionalProperties": false,
+			"properties": {
+				"preloadScripts": {
+					"type": "boolean"
+				}
+			},
+			"required": ["preloadScripts"],
+			"type": "object"
+		},
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -6891,6 +7009,10 @@
 				"bounds": {
 					"$ref": "#/definitions/Bounds",
 					"description": "Initial bounds given relative to the window."
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeBehavior": {
 					"description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
@@ -6971,6 +7093,10 @@
 				},
 				"enableBeforeUnload": {
 					"type": "boolean"
+				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform View."
 				},
 				"experimental": {},
 				"fdc3InteropApi": {
@@ -7045,7 +7171,7 @@
 					"type": "string"
 				},
 				"target": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "The identity of the window this view should be attached to."
 				},
 				"throttling": {
@@ -7057,47 +7183,6 @@
 				},
 				"zoomLevel": {
 					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_28": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"left": {
-					"type": "number"
-				},
-				"top": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"required": ["height", "left", "top", "width"],
-			"type": "object"
-		},
-		"__type_29": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
-					"type": "boolean"
-				},
-				"horizontal": {
-					"description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
-					"type": "boolean"
-				},
-				"vertical": {
-					"description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
-					"type": "boolean"
-				},
-				"width": {
-					"description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
-					"type": "boolean"
 				}
 			},
 			"type": "object"
@@ -7134,6 +7219,47 @@
 		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"required": ["height", "left", "top", "width"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
+					"type": "boolean"
+				},
+				"horizontal": {
+					"description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
+					"type": "boolean"
+				},
+				"vertical": {
+					"description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
+					"type": "boolean"
+				},
+				"width": {
+					"description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_32": {
+			"additionalProperties": false,
+			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
 					"$ref": "#/definitions/Partial_4",
@@ -7153,6 +7279,10 @@
 				"backgroundColor": {
 					"description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
 					"type": "string"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeBehavior": {
 					"description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
@@ -7233,6 +7363,10 @@
 				},
 				"enableBeforeUnload": {
 					"type": "boolean"
+				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform View."
 				},
 				"experimental": {},
 				"fdc3InteropApi": {
@@ -7319,7 +7453,7 @@
 			},
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_33": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the show/hide tabs button within the browser toolbar",
 			"properties": {
@@ -7361,7 +7495,7 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_34": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the page lock/unlock button within the browser toolbar",
 			"properties": {
@@ -7381,7 +7515,20 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_35": {
+			"additionalProperties": false,
+			"properties": {
+				"dark": {
+					"type": "string"
+				},
+				"light": {
+					"type": "string"
+				}
+			},
+			"required": ["dark", "light"],
+			"type": "object"
+		},
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"closeButton": {
@@ -7415,7 +7562,7 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7457,7 +7604,7 @@
 			"required": ["display"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"appId": {
@@ -7487,7 +7634,7 @@
 			"required": ["appId"],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"action": {
@@ -7528,7 +7675,23 @@
 			"required": ["action"],
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_4": {
+			"additionalProperties": false,
+			"description": "Unique identifier for a window, view or iframe.",
+			"properties": {
+				"name": {
+					"description": "The name of the component.  Must be unique within the owning application.",
+					"type": "string"
+				},
+				"uuid": {
+					"description": "Universally unique identifier of the application that owns the component.",
+					"type": "string"
+				}
+			},
+			"required": ["name", "uuid"],
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7578,7 +7741,7 @@
 			"required": ["options"],
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"clientAPIVersion": {
@@ -7610,7 +7773,7 @@
 					"type": "string"
 				},
 				"identity": {
-					"$ref": "#/definitions/Identity_5_1",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "The OpenFin identity that registered this search provider."
 				},
 				"inputPlaceholder": {
@@ -7636,7 +7799,7 @@
 			},
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"name": {
@@ -7650,23 +7813,7 @@
 			},
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"description": "Unique identifier for a window, view or iframe.",
-			"properties": {
-				"name": {
-					"description": "The name of the component.  Must be unique within the owning application.",
-					"type": "string"
-				},
-				"uuid": {
-					"description": "Universally unique identifier of the application that owns the component.",
-					"type": "string"
-				}
-			},
-			"required": ["name", "uuid"],
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_43": {
 			"additionalProperties": false,
 			"description": "Options for using privately hosted notification service.",
 			"properties": {
@@ -7682,7 +7829,7 @@
 			"required": ["manifestUrl", "manifestUuid"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -7721,7 +7868,7 @@
 			},
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -7812,7 +7959,7 @@
 			],
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_46": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -7827,7 +7974,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_47": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -7840,7 +7987,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_48": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -7859,7 +8006,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -7911,7 +8058,22 @@
 			],
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_5": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_50": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -7940,7 +8102,7 @@
 			},
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_51": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -7977,26 +8139,11 @@
 			},
 			"type": "object"
 		},
-		"__type_49": {
+		"__type_52": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_5": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_50": {
+		"__type_53": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -8017,7 +8164,7 @@
 			},
 			"type": "object"
 		},
-		"__type_51": {
+		"__type_54": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -8047,7 +8194,7 @@
 			},
 			"type": "object"
 		},
-		"__type_52": {
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -8065,116 +8212,45 @@
 			},
 			"type": "object"
 		},
-		"__type_53": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"__type_54": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"__type_55": {
-			"additionalProperties": false,
-			"type": "object"
-		},
 		"__type_56": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_57": {
 			"additionalProperties": false,
 			"properties": {
-				"alias": {
-					"description": "The name of the asset",
-					"type": "string"
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
 				},
-				"args": {
-					"description": "The default command line arguments for the aforementioned target.",
-					"type": "string"
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
 				},
-				"mandatory": {
-					"description": "When set to true, the app will fail to load if the asset cannot be downloaded.\nWhen set to false, the app will continue to load if the asset cannot be downloaded. (Default: true)",
-					"type": "boolean"
-				},
-				"src": {
-					"description": "The URL to a zip file containing the package files (executables, dlls, etc…)",
-					"type": "string"
-				},
-				"target": {
-					"description": "Specify default executable to launch. This option can be overridden in launchExternalProcess",
-					"type": "string"
-				},
-				"version": {
-					"description": "The version of the package",
+				"url": {
 					"type": "string"
 				}
 			},
-			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
 		"__type_58": {
 			"additionalProperties": false,
-			"properties": {
-				"interopSnapshotDetails": {
-					"additionalProperties": false,
-					"properties": {
-						"contextGroupStates": {
-							"$ref": "#/definitions/ContextGroupStates"
-						}
-					},
-					"required": ["contextGroupStates"],
-					"type": "object"
-				},
-				"snapshotDetails": {
-					"additionalProperties": false,
-					"properties": {
-						"monitorInfo": {
-							"$ref": "#/definitions/MonitorInfo"
-						},
-						"runtimeVersion": {
-							"type": "string"
-						},
-						"timestamp": {
-							"type": "string"
-						}
-					},
-					"required": ["monitorInfo", "runtimeVersion", "timestamp"],
-					"type": "object"
-				},
-				"windows": {
-					"description": "The array of window options objects",
-					"items": {
-						"$ref": "#/definitions/WindowCreationOptions"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["windows"],
 			"type": "object"
 		},
 		"__type_59": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_6": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -8213,6 +8289,10 @@
 				},
 				"backgroundThrottling": {
 					"type": "boolean"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
 					"type": "boolean"
@@ -8299,6 +8379,10 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
 				"experimental": {},
 				"fdc3InteropApi": {
 					"type": "string"
@@ -8372,7 +8456,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
+					"$ref": "#/definitions/Identity_4",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -8411,7 +8495,394 @@
 					"type": "array"
 				},
 				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
+					"type": "string"
+				},
+				"resizable": {
+					"type": "boolean"
+				},
+				"resizeRegion": {
+					"$ref": "#/definitions/ResizeRegion",
+					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
+				},
+				"saveWindowState": {
+					"type": "boolean"
+				},
+				"shadow": {
+					"type": "boolean"
+				},
+				"showBackgroundImages": {
+					"type": "boolean"
+				},
+				"showTaskbarIcon": {
+					"type": "boolean"
+				},
+				"smallWindow": {
+					"type": "boolean"
+				},
+				"state": {
+					"$ref": "#/definitions/WindowState"
+				},
+				"taskbarIcon": {
+					"type": "string"
+				},
+				"taskbarIconGroup": {
+					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"type": "string"
+				},
+				"throttling": {
+					"$ref": "#/definitions/WindowThrottling",
+					"description": "{@inheritDoc WindowThrottling}"
+				},
+				"url": {
+					"type": "string"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"viewVisibility": {
+					"$ref": "#/definitions/ViewVisibilityOptions",
+					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
+				},
+				"viewsPreventingClose": {
+					"enum": ["all", "layout"],
+					"type": "string"
+				},
+				"waitForPageLoad": {
+					"type": "boolean"
+				},
+				"width": {
+					"type": "number"
+				},
+				"workspacePlatform": {
+					"$ref": "#/definitions/WorkspacePlatformOptions"
+				},
+				"x": {
+					"type": "number"
+				},
+				"y": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_60": {
+			"additionalProperties": false,
+			"properties": {
+				"alias": {
+					"description": "The name of the asset",
+					"type": "string"
+				},
+				"args": {
+					"description": "The default command line arguments for the aforementioned target.",
+					"type": "string"
+				},
+				"mandatory": {
+					"description": "When set to true, the app will fail to load if the asset cannot be downloaded.\nWhen set to false, the app will continue to load if the asset cannot be downloaded. (Default: true)",
+					"type": "boolean"
+				},
+				"src": {
+					"description": "The URL to a zip file containing the package files (executables, dlls, etc…)",
+					"type": "string"
+				},
+				"target": {
+					"description": "Specify default executable to launch. This option can be overridden in launchExternalProcess",
+					"type": "string"
+				},
+				"version": {
+					"description": "The version of the package",
+					"type": "string"
+				}
+			},
+			"required": ["alias", "src", "version"],
+			"type": "object"
+		},
+		"__type_61": {
+			"additionalProperties": false,
+			"properties": {
+				"interopSnapshotDetails": {
+					"additionalProperties": false,
+					"properties": {
+						"contextGroupStates": {
+							"$ref": "#/definitions/ContextGroupStates"
+						}
+					},
+					"required": ["contextGroupStates"],
+					"type": "object"
+				},
+				"snapshotDetails": {
+					"additionalProperties": false,
+					"properties": {
+						"monitorInfo": {
+							"$ref": "#/definitions/MonitorInfo"
+						},
+						"runtimeVersion": {
+							"type": "string"
+						},
+						"timestamp": {
+							"type": "string"
+						}
+					},
+					"required": ["monitorInfo", "runtimeVersion", "timestamp"],
+					"type": "object"
+				},
+				"windows": {
+					"description": "The array of window options objects",
+					"items": {
+						"$ref": "#/definitions/WindowCreationOptions"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["windows"],
+			"type": "object"
+		},
+		"__type_62": {
+			"additionalProperties": false,
+			"properties": {
+				"_internalWorkspaceData": {},
+				"accelerator": {
+					"$ref": "#/definitions/Partial_4",
+					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				},
+				"alphaMask": {
+					"$ref": "#/definitions/RGB",
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+				},
+				"alwaysOnTop": {
+					"type": "boolean"
+				},
+				"api": {
+					"$ref": "#/definitions/Api",
+					"description": "Configurations for API injection."
+				},
+				"applicationIcon": {
+					"type": "string"
+				},
+				"aspectRatio": {
+					"type": "number"
+				},
+				"autoShow": {
+					"description": "Automatically show the window when it is created.",
+					"type": "boolean"
+				},
+				"autoplayPolicy": {
+					"$ref": "#/definitions/AutoplayPolicyOptions",
+					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+				},
+				"backgroundColor": {
+					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+					"type": "string"
+				},
+				"backgroundThrottling": {
+					"type": "boolean"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
+				},
+				"closeOnLastViewRemoved": {
+					"type": "boolean"
+				},
+				"contentCreation": {
+					"$ref": "#/definitions/ContentCreationOptions",
+					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+				},
+				"contentNavigation": {
+					"$ref": "#/definitions/ContentNavigation",
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
+				},
+				"contentRedirect": {
+					"$ref": "#/definitions/Partial_5",
+					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"contextMenuOptions": {
+					"$ref": "#/definitions/ContextMenuOptions",
+					"description": "Configure the context menu when right-clicking on a window."
+				},
+				"contextMenuSettings": {
+					"$ref": "#/definitions/ContextMenuSettings"
+				},
+				"cornerRounding": {
+					"$ref": "#/definitions/Partial_3",
+					"description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
+				},
+				"customContext": {
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts."
+				},
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"customRequestHeaders": {
+					"description": "Custom headers for requests sent by the window.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Custom headers for requests sent by the window.",
+						"properties": {
+							"headers": {
+								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+								"items": {
+									"additionalProperties": {
+										"type": "string"
+									},
+									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"urlPatterns": {
+								"description": "The URL patterns for which the headers will be applied.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": ["headers", "urlPatterns"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"defaultCentered": {
+					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value.\n\n**NOTE:** On macOS _defaultCenter_ is somewhat above center vertically.",
+					"type": "boolean"
+				},
+				"defaultHeight": {
+					"type": "number"
+				},
+				"defaultLeft": {
+					"type": "number"
+				},
+				"defaultTop": {
+					"type": "number"
+				},
+				"defaultWidth": {
+					"type": "number"
+				},
+				"downloadShelf": {
+					"$ref": "#/definitions/DownloadShelfOptions",
+					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform Window."
+				},
+				"experimental": {},
+				"fdc3InteropApi": {
+					"type": "string"
+				},
+				"frame": {
+					"type": "boolean"
+				},
+				"height": {
+					"type": "number"
+				},
+				"hideOnClose": {
+					"type": "boolean"
+				},
+				"hotkeys": {
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A hotkey binding.",
+						"properties": {
+							"keys": {
+								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+								"type": "string"
+							},
+							"preventDefault": {
+								"type": "boolean"
+							}
+						},
+						"required": ["keys"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"icon": {
+					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
+					"type": "string"
+				},
+				"ignoreSavedWindowState": {
+					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
+					"type": "boolean"
+				},
+				"includeInSnapshots": {
+					"type": "boolean"
+				},
+				"inheritance": {
+					"$ref": "#/definitions/Partial_9",
+					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"layout": {},
+				"layoutSnapshot": {
+					"$ref": "#/definitions/LayoutSnapshot"
+				},
+				"maxHeight": {
+					"type": "number"
+				},
+				"maxWidth": {
+					"type": "number"
+				},
+				"maximizable": {
+					"type": "boolean"
+				},
+				"minHeight": {
+					"type": "number"
+				},
+				"minWidth": {
+					"type": "number"
+				},
+				"minimizable": {
+					"type": "boolean"
+				},
+				"modalParentIdentity": {
+					"$ref": "#/definitions/Identity_4",
+					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
+				},
+				"name": {
+					"description": "The name of the window.",
+					"type": "string"
+				},
+				"opacity": {
+					"type": "number"
+				},
+				"permissions": {
+					"$ref": "#/definitions/Partial_6",
+					"description": "API permissions for code running in the window."
+				},
+				"preloadScripts": {
+					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A script that is run before page load.",
+						"properties": {
+							"mandatory": {
+								"type": "boolean"
+							},
+							"state": {
+								"description": "Preload script execution state.",
+								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
+								"type": "string"
+							},
+							"url": {
+								"description": "The URL from which the script was loaded.",
+								"type": "string"
+							}
+						},
+						"required": ["url"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"processAffinity": {
+					"description": "String tag that attempts to group like-tagged renderers together.\nHowever, there is no guarantee that a different affinity value will create a different process, under the hood Chromium can enforce its own process management under certain circumstances.",
 					"type": "string"
 				},
 				"resizable": {
@@ -8486,315 +8957,7 @@
 			},
 			"type": "object"
 		},
-		"__type_6": {
-			"additionalProperties": false,
-			"properties": {
-				"_internalWorkspaceData": {},
-				"accelerator": {
-					"$ref": "#/definitions/Partial_4",
-					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
-				},
-				"alphaMask": {
-					"$ref": "#/definitions/RGB",
-					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
-				},
-				"alwaysOnTop": {
-					"type": "boolean"
-				},
-				"api": {
-					"$ref": "#/definitions/Api",
-					"description": "Configurations for API injection."
-				},
-				"applicationIcon": {
-					"type": "string"
-				},
-				"aspectRatio": {
-					"type": "number"
-				},
-				"autoShow": {
-					"description": "Automatically show the window when it is created.",
-					"type": "boolean"
-				},
-				"autoplayPolicy": {
-					"$ref": "#/definitions/AutoplayPolicyOptions",
-					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
-				},
-				"backgroundColor": {
-					"description": "The window’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a window’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a window. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
-					"type": "string"
-				},
-				"backgroundThrottling": {
-					"type": "boolean"
-				},
-				"closeOnLastViewRemoved": {
-					"type": "boolean"
-				},
-				"contentCreation": {
-					"$ref": "#/definitions/ContentCreationOptions",
-					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
-				},
-				"contentNavigation": {
-					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
-				},
-				"contentRedirect": {
-					"$ref": "#/definitions/Partial_5",
-					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
-				},
-				"contextMenu": {
-					"type": "boolean"
-				},
-				"contextMenuOptions": {
-					"$ref": "#/definitions/ContextMenuOptions",
-					"description": "Configure the context menu when right-clicking on a window."
-				},
-				"contextMenuSettings": {
-					"$ref": "#/definitions/ContextMenuSettings"
-				},
-				"cornerRounding": {
-					"$ref": "#/definitions/Partial_3",
-					"description": "Defines and applies rounded corners for a frameless window. **NOTE:** On macOS corner is not ellipse but circle rounded by the\n average of _height_ and _width_."
-				},
-				"customContext": {
-					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts."
-				},
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"customRequestHeaders": {
-					"description": "Custom headers for requests sent by the window.",
-					"items": {
-						"additionalProperties": false,
-						"description": "Custom headers for requests sent by the window.",
-						"properties": {
-							"headers": {
-								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
-								"items": {
-									"additionalProperties": {
-										"type": "string"
-									},
-									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
-									"type": "object"
-								},
-								"type": "array"
-							},
-							"urlPatterns": {
-								"description": "The URL patterns for which the headers will be applied.",
-								"items": {
-									"type": "string"
-								},
-								"type": "array"
-							}
-						},
-						"required": ["headers", "urlPatterns"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"defaultCentered": {
-					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value.\n\n**NOTE:** On macOS _defaultCenter_ is somewhat above center vertically.",
-					"type": "boolean"
-				},
-				"defaultHeight": {
-					"type": "number"
-				},
-				"defaultLeft": {
-					"type": "number"
-				},
-				"defaultTop": {
-					"type": "number"
-				},
-				"defaultWidth": {
-					"type": "number"
-				},
-				"downloadShelf": {
-					"$ref": "#/definitions/DownloadShelfOptions",
-					"description": "Controls the styling and behavior of the window download shelf."
-				},
-				"experimental": {},
-				"fdc3InteropApi": {
-					"type": "string"
-				},
-				"frame": {
-					"type": "boolean"
-				},
-				"height": {
-					"type": "number"
-				},
-				"hideOnClose": {
-					"type": "boolean"
-				},
-				"hotkeys": {
-					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the window.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
-					"items": {
-						"additionalProperties": false,
-						"description": "A hotkey binding.",
-						"properties": {
-							"keys": {
-								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
-								"type": "string"
-							},
-							"preventDefault": {
-								"type": "boolean"
-							}
-						},
-						"required": ["keys"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"icon": {
-					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
-					"type": "string"
-				},
-				"ignoreSavedWindowState": {
-					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
-					"type": "boolean"
-				},
-				"includeInSnapshots": {
-					"type": "boolean"
-				},
-				"inheritance": {
-					"$ref": "#/definitions/Partial_9",
-					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"layout": {},
-				"layoutSnapshot": {
-					"$ref": "#/definitions/LayoutSnapshot"
-				},
-				"maxHeight": {
-					"type": "number"
-				},
-				"maxWidth": {
-					"type": "number"
-				},
-				"maximizable": {
-					"type": "boolean"
-				},
-				"minHeight": {
-					"type": "number"
-				},
-				"minWidth": {
-					"type": "number"
-				},
-				"minimizable": {
-					"type": "boolean"
-				},
-				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_5",
-					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
-				},
-				"name": {
-					"description": "The name of the window.",
-					"type": "string"
-				},
-				"opacity": {
-					"type": "number"
-				},
-				"permissions": {
-					"$ref": "#/definitions/Partial_6",
-					"description": "API permissions for code running in the window."
-				},
-				"preloadScripts": {
-					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
-					"items": {
-						"additionalProperties": false,
-						"description": "A script that is run before page load.",
-						"properties": {
-							"mandatory": {
-								"type": "boolean"
-							},
-							"state": {
-								"description": "Preload script execution state.",
-								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
-								"type": "string"
-							},
-							"url": {
-								"description": "The URL from which the script was loaded.",
-								"type": "string"
-							}
-						},
-						"required": ["url"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
-					"type": "string"
-				},
-				"resizable": {
-					"type": "boolean"
-				},
-				"resizeRegion": {
-					"$ref": "#/definitions/ResizeRegion",
-					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
-				},
-				"saveWindowState": {
-					"type": "boolean"
-				},
-				"shadow": {
-					"type": "boolean"
-				},
-				"showBackgroundImages": {
-					"type": "boolean"
-				},
-				"showTaskbarIcon": {
-					"type": "boolean"
-				},
-				"smallWindow": {
-					"type": "boolean"
-				},
-				"state": {
-					"$ref": "#/definitions/WindowState"
-				},
-				"taskbarIcon": {
-					"type": "string"
-				},
-				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
-					"type": "string"
-				},
-				"throttling": {
-					"$ref": "#/definitions/WindowThrottling",
-					"description": "{@inheritDoc WindowThrottling}"
-				},
-				"url": {
-					"type": "string"
-				},
-				"uuid": {
-					"type": "string"
-				},
-				"viewVisibility": {
-					"$ref": "#/definitions/ViewVisibilityOptions",
-					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
-				},
-				"viewsPreventingClose": {
-					"enum": ["all", "layout"],
-					"type": "string"
-				},
-				"waitForPageLoad": {
-					"type": "boolean"
-				},
-				"width": {
-					"type": "number"
-				},
-				"workspacePlatform": {
-					"$ref": "#/definitions/WorkspacePlatformOptions"
-				},
-				"x": {
-					"type": "number"
-				},
-				"y": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_60": {
+		"__type_63": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -8822,7 +8985,7 @@
 			},
 			"type": "object"
 		},
-		"__type_61": {
+		"__type_64": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -8841,7 +9004,7 @@
 			},
 			"type": "object"
 		},
-		"__type_62": {
+		"__type_65": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -8870,7 +9033,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_63": {
+		"__type_66": {
 			"additionalProperties": false,
 			"properties": {
 				"default": {
@@ -8907,12 +9070,16 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_64": {
+		"__type_67": {
 			"additionalProperties": false,
 			"properties": {
 				"api": {
 					"$ref": "#/definitions/DomainApiSettings",
 					"description": "{@inheritDoc ApiInjection}"
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritdoc ChromiumPolicies}"
 				},
 				"content": {
 					"$ref": "#/definitions/ContentPermission",
@@ -8925,7 +9092,7 @@
 			},
 			"type": "object"
 		},
-		"__type_65": {
+		"__type_68": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -8955,7 +9122,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_66": {
+		"__type_69": {
 			"additionalProperties": false,
 			"properties": {
 				"fin": {
@@ -8969,7 +9136,23 @@
 			},
 			"type": "object"
 		},
-		"__type_67": {
+		"__type_7": {
+			"additionalProperties": false,
+			"properties": {
+				"blue": {
+					"type": "number"
+				},
+				"green": {
+					"type": "number"
+				},
+				"red": {
+					"type": "number"
+				}
+			},
+			"required": ["blue", "green", "red"],
+			"type": "object"
+		},
+		"__type_70": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -9001,22 +9184,6 @@
 					"type": "array"
 				}
 			},
-			"type": "object"
-		},
-		"__type_7": {
-			"additionalProperties": false,
-			"properties": {
-				"blue": {
-					"type": "number"
-				},
-				"green": {
-					"type": "number"
-				},
-				"red": {
-					"type": "number"
-				}
-			},
-			"required": ["blue", "green", "red"],
 			"type": "object"
 		},
 		"__type_8": {

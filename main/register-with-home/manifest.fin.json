@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-home/favicon.ico",
-		"name": "Register With Home - v19.0.0",
+		"name": "Register With Home - v19.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -49,7 +49,6 @@
 		"appProvider": {
 			"appSourceUrls": [
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-home/common/apps-contact.json",
-				"https://built-on-openfin.github.io/workspace-starter/main/register-with-home/common/apps-expero.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-home/common/apps-interop.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-home/common/apps-native.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/register-with-home/common/apps-tools.json"
@@ -63,9 +62,6 @@
 			"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-home/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
-		},
-		"keys": {
-			"expero": "pk_aa9aeeae6d1949269e73cf6cf477eb53"
 		}
 	}
 }
