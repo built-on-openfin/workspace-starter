@@ -9,6 +9,10 @@ let chkCtrlToSnap: HTMLInputElement | null;
 let chkDisableGPUDragging: HTMLInputElement | null;
 let chkDisableBlurDrop: HTMLInputElement | null;
 
+let chkHideTaskBarEntry: HTMLInputElement | null;
+let chkCustomTaskBarIcon: HTMLInputElement | null;
+let chkGroupWithPlatformTaskbarGroup: HTMLInputElement | null;
+
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
 let btnNativeTestApp: HTMLButtonElement | null;
@@ -41,6 +45,12 @@ async function initializeDOM(): Promise<void> {
 	chkCtrlToSnap = document.querySelector<HTMLInputElement>("#chkCtrlToSnap");
 	chkDisableGPUDragging = document.querySelector<HTMLInputElement>("#chkDisableGPUDragging");
 	chkDisableBlurDrop = document.querySelector<HTMLInputElement>("#chkDisableBlurDrop");
+	chkHideTaskBarEntry = document.querySelector<HTMLInputElement>("#chkHideTaskBarEntry");
+	chkCustomTaskBarIcon = document.querySelector<HTMLInputElement>("#chkCustomTaskBarIcon");
+	chkGroupWithPlatformTaskbarGroup = document.querySelector<HTMLInputElement>(
+		"#chkGroupWithPlatformTaskbarGroup"
+	);
+
 	btnStart = document.querySelector<HTMLButtonElement>("#btnStart");
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
 	serverStatus = document.querySelector<HTMLParagraphElement>("#serverStatus");
@@ -59,6 +69,9 @@ async function initializeDOM(): Promise<void> {
 		chkCtrlToSnap &&
 		chkDisableGPUDragging &&
 		chkDisableBlurDrop &&
+		chkHideTaskBarEntry &&
+		chkCustomTaskBarIcon &&
+		chkGroupWithPlatformTaskbarGroup &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
@@ -91,13 +104,19 @@ async function initializeDOM(): Promise<void> {
 
 					logInformation(`Starting Snap Server with Id ${fin.me.identity.uuid}`);
 					server = new Snap.SnapServer(fin.me.identity.uuid);
-					await server.start({
+					const options = {
 						showDebug: chkShowDebugWindow?.checked,
 						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
 						keyToStick: chkCtrlToSnap?.checked,
 						disableGPUAcceleratedDragging: chkDisableGPUDragging?.checked,
-						disableBlurDropPreview: chkDisableBlurDrop?.checked
-					});
+						disableBlurDropPreview: chkDisableBlurDrop?.checked,
+						hideTaskbarEntry: chkHideTaskBarEntry?.checked,
+						taskbarIcon: chkCustomTaskBarIcon?.checked ? "https://openfin.co/favicon.ico" : undefined,
+						taskbarIconGroup: chkGroupWithPlatformTaskbarGroup?.checked
+							? `openfin_apps_group.${fin.me.identity.uuid}`
+							: undefined
+					};
+					await server.start(options);
 
 					server.addEventListener("client-registered", (event: Snap.ClientRegisteredEvent) => {
 						logInformation(`Client Registered: ${JSON.stringify(event)}`);
