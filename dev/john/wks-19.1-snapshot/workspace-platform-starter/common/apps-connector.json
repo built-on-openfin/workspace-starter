@@ -1,0 +1,49 @@
+[
+	{
+		"appId": "salesforce-app",
+		"name": "salesforce-app",
+		"title": "Salesforce",
+		"description": "If you are using the OpenFin Salesforce App on the app exchange then you can make it an intent target and add an app entry for it.",
+		"manifest": {
+			"url": "",
+			"fdc3InteropApi": "2.0",
+			"preloadScripts": [
+				{
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/integrate-with-salesforce/js/preload.js"
+				}
+			]
+		},
+		"manifestType": "inline-view",
+		"icons": [],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			},
+			{
+				"name": "ViewProfile",
+				"displayName": "View Profile",
+				"contexts": ["fdc3.contact", "fdc3.organization"]
+			}
+		],
+		"private": true,
+		"images": [],
+		"tags": ["fdc3", "interop", "contact", "salesforce"],
+		"launchPreference": {
+			"options": {
+				"type": "view",
+				"updatable": [
+					{
+						"name": "url",
+						"constraint": "url-domain"
+					},
+					{ "name": "interop" }
+				]
+			}
+		}
+	}
+]
