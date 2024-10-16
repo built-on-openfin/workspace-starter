@@ -30,6 +30,7 @@
 - Updated integration template that is used when you use npm run generate-module integrations "Your Integration" so that it includes example results and examples of handling result clicks so that you have an easier starting point.
 - Updated example-notification-source so that you can specify a url to post notifications to (it will wrap the request in a message property and send it to the server you specify via post: { url: "" } settings. Our example node-starter supports messages being posted to <http://localhost:6060/api/messages>.
 - Updated the notification service example app so that if you select the endpoint example action it will post a notification to the notification source create endpoint.
+- BUGFIX - Updated Snapshot launching logic as there was a bug when updating a page's layout (to ensure view names are regenerated when using app naming conventions) in a multi page window which resulted in the page layout being assigned at the wrong level.
 
 ## v19.0.0
 
