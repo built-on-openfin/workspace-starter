@@ -790,8 +790,10 @@ async function launchSnapshot(snapshotApp: PlatformApp): Promise<PlatformAppIden
 		for (const currentWindow of windows) {
 			if (Array.isArray(currentWindow.workspacePlatform?.pages)) {
 				for (let i = 0; i < currentWindow.workspacePlatform.pages.length; i++) {
-					let page = currentWindow.workspacePlatform.pages[i];
-					page = updateInstanceIds(page.layout);
+					const page = currentWindow.workspacePlatform.pages[i];
+					if (!isEmpty(page.layout)) {
+						page.layout = updateInstanceIds(page.layout);
+					}
 					currentWindow.workspacePlatform.pages[i] = page;
 				}
 			} else {
