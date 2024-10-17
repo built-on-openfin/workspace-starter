@@ -69,6 +69,11 @@ export interface ModuleDefinition<O = unknown> {
 	 * Custom data for the module.
 	 */
 	data?: O;
+
+	/**
+	 * This is specified by the provider while loading the modules.
+	 */
+	moduleType?: ModuleTypes;
 }
 
 /**
