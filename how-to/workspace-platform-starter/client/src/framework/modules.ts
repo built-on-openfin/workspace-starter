@@ -90,6 +90,7 @@ export async function loadModules<
 	const modules = moduleList?.modules;
 	if (Array.isArray(modules)) {
 		for (const moduleDefinition of modules) {
+			moduleDefinition.moduleType = moduleType;
 			const module = await loadModule<M, H, O, D>(moduleDefinition, moduleType);
 			if (module) {
 				loaded.push(module);
@@ -210,13 +211,22 @@ export async function initializeModule<
 	if (!moduleEntry.isInitialized) {
 		if (moduleEntry.implementation?.initialize) {
 			try {
-				logger.info(`Initializing module '${moduleEntry.definition.id}'`);
+				logger.info(
+					`Initializing module '${moduleEntry.definition.id}' of type '${moduleEntry.definition.moduleType}'`
+				);
+				const moduleCreateLogger =
+					moduleEntry.definition.moduleType === "log" ? createLocalLogger : createLogger;
+
 				const moduleHelpers = {
 					...helpers,
 					getNotificationClient: getNotificationClientProxy(moduleEntry.definition),
 					getEndpointClient: getEndpointClientProxy(moduleEntry.definition)
 				};
-				await moduleEntry.implementation.initialize(moduleEntry.definition, createLogger, moduleHelpers);
+				await moduleEntry.implementation.initialize(
+					moduleEntry.definition,
+					moduleCreateLogger,
+					moduleHelpers
+				);
 				moduleEntry.isInitialized = true;
 			} catch (err) {
 				logger.error(`Error initializing module ${moduleEntry.definition.id}`, err);
@@ -454,5 +464,28 @@ async function getShareClient(): Promise<ShareClient | undefined> {
 async function getDialogClient(): Promise<DialogClient> {
 	return {
 		showConfirmation: Dialog.showConfirmation
+	};
+}
+
+/**
+ * Create local logger.
+ * @param group The group to encapsulate the loge entries with.
+ * @returns The local logger that uses the console and doesn't send messages to the log modules.
+ */
+export function createLocalLogger(group: string): Logger {
+	console.info(
+		`${group}: Creating local logger for a log module. Log modules will not be able to use the logger to send messages to log modules as it would be sending messages to itself as well as other log sinks. This will be logged to the console of the provider.`
+	);
+	return {
+		info: (message: unknown, ...optionalParams: unknown[]) =>
+			console.log(`${group}: ${message}`, ...optionalParams),
+		warn: (message: unknown, ...optionalParams: unknown[]) =>
+			console.warn(`${group}: ${message}`, ...optionalParams),
+		error: (message: unknown, ...optionalParams: unknown[]) =>
+			console.error(`${group}: ${message}`, ...optionalParams),
+		trace: (message: unknown, ...optionalParams: unknown[]) =>
+			console.debug(`${group}: ${message}`, ...optionalParams),
+		debug: (message: unknown, ...optionalParams: unknown[]) =>
+			console.debug(`${group}: ${message}`, ...optionalParams)
 	};
 }
