@@ -101,17 +101,6 @@
 			},
 			"modules": [
 				{
-					"id": "application-url-and-access-validator",
-					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Application Url and Access Validator",
-					"description": "This is an example platform override module that shows how you could validate a saved page, workspace or an application snapshot (if it combines apps) to ensure that it is using the latest url for the applications used and that the user still has access to that app.",
-					"enabled": false,
-					"url": "http://localhost:8080/js/modules/platform-override/application-url-and-access-validator.bundle.js",
-					"data": {
-						"deniedAccessUrl": "http://localhost:8080/common/views/platform/no-access/no-access.html"
-					}
-				},
-				{
 					"id": "default-wps-platform",
 					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Workspace Platform Starter Platform Override",
@@ -298,8 +287,13 @@
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/endpoint/example-notification-source.bundle.js",
 					"data": {
-						"websocket": { "url": "" },
-						"longpoll": { "url": "", "intervalInSeconds": 5 },
+						"websocket": {
+							"url": ""
+						},
+						"longpoll": {
+							"url": "",
+							"intervalInSeconds": 5
+						},
 						"post": {
 							"url": ""
 						},
@@ -1811,6 +1805,7 @@
 		"snapProvider": {
 			"enabled": false,
 			"id": "workspace-platform-starter",
+			"enableAutoWindowRegistration": true,
 			"serverAssetInfo": {
 				"src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
 				"alias": "openfin-snap",
