@@ -32,6 +32,7 @@
 - Updated the notification service example app so that if you select the endpoint example action it will post a notification to the notification source create endpoint.
 - BUGFIX - Updated Snapshot launching logic as there was a bug when updating a page's layout (to ensure view names are regenerated when using app naming conventions) in a multi page window which resulted in the page layout being assigned at the wrong level.
 - Enhancement - Previously if you were generating a log module you needed to avoid using the injected createLogger function as you would end up calling yourself and ending up in a loop. The module logic has been updated to pass an alternative createLogger function to log modules that only logs to the console (so that it can still be used for debugging) but doesn't call itself or other log sinks (log modules).
+- Enhancement - You may want to enable snap but not have auto window registration. This may be because you only want snap for your native windows or you might want to have your own rules (via a custom platform provider module) on which windows should be tracked (outside of the default rules snap has such as includeInSnapshots false meaning don't track).
 
 ## v19.0.0
 
