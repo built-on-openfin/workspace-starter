@@ -2,8 +2,7 @@ import { init as initExcel, launchExcel } from "./excel";
 import type { ExcelSettings } from "./shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	const url = new URL(window.location.href);
-	const root = url.host;
+	const root = "http://localhost:8080";
 	const excelSettings: ExcelSettings = {
 		appAsset: {
 			alias: "excel-interop-example.xlsx",
