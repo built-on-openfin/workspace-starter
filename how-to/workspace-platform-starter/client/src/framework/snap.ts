@@ -117,7 +117,9 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 
 			await server.start(options.serverOptions);
 
-			await server.enableAutoWindowRegistration();
+			if (options.enableAutoWindowRegistration ?? true) {
+				await server.enableAutoWindowRegistration();
+			}
 
 			isSnapEnabled = true;
 		} catch (err) {
@@ -355,4 +357,12 @@ export async function getAppAssetExecutablePath(appAssetInfo: {
 		localAppUrl = localAppUrl.slice(0, -1);
 	}
 	return [localAppUrl, "assets", appAssetInfo.alias, appAssetInfo.version, appAssetInfo.target].join(sep);
+}
+
+/**
+ * Provides access to the snap server if required.
+ * @returns The snap server.
+ */
+export async function getSnapServer(): Promise<Snap.SnapServer | undefined> {
+	return server;
 }
