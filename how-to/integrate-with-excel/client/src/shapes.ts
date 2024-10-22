@@ -1,3 +1,5 @@
+import type { OpenFin } from "@openfin/core";
+
 /**
  * Custom settings for the application.
  */
@@ -18,9 +20,14 @@ export interface ExcelSettings {
 	icon: string;
 
 	/**
-	 * The list of assets for the home integration.
+	 * The asset for the excel integration.
 	 */
-	assets: ExcelAssetSettings[];
+	asset: ExcelAssetSettings;
+
+	/**
+	 * The app asset information.
+	 */
+	appAsset: OpenFin.AppAssetInfo;
 }
 
 /**
