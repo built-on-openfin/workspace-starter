@@ -169,13 +169,7 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		browser.defaultViewOptions = customSettings?.browserProvider?.defaultViewOptions;
 	}
 
-	logger.info("Specifying following browser options", browser);
-	const windowPositioningOptions = await getWindowPositionOptions(customSettings?.browserProvider);
-	const customActions = await actionsProvider.init(
-		customSettings?.actionsProvider,
-		helpers,
-		windowPositioningOptions
-	);
+	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
 	const theme = await getThemes();
 
 	await lowCodeIntegrationProvider.init(customSettings?.lowCodeIntegrationProvider);
@@ -193,7 +187,7 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		browser.defaultWindowOptions = browser.defaultWindowOptions ?? {};
 		await contentCreationProvider.populateRules(browser.defaultWindowOptions);
 	}
-
+	const windowPositioningOptions = await getWindowPositionOptions(customSettings?.browserProvider);
 	await interopProvider.init(customSettings?.platformProvider, windowPositioningOptions, helpers);
 
 	const platform = getCurrentSync();

@@ -185,7 +185,7 @@ export function mapPlatformWorkspaceToStorage(
 			}
 		}
 		// Skip to make platform dependent and remove below
-		// { propName: "snapshotDetails", defaultValue: "" },
+		// { propName: "snapshotDetails", defaultValue: "" }
 	];
 
 	for (const workspaceSnapshotDefault of workspaceSnapshotDefaults) {
@@ -195,9 +195,6 @@ export function mapPlatformWorkspaceToStorage(
 			workspaceSnapshotDefault.defaultValue
 		);
 	}
-
-	// remove platform dependent props
-	removeProp<unknown, WorkspaceSnapshotKeys>(clone.snapshot, "snapshotDetails");
 
 	return clone;
 }

@@ -85,7 +85,7 @@ export class ViewPositionContentCreationProvider
 
 			// You can of course locate the view elsewhere as shown using the view-position
 			// feature flag which could be passed to the window.open call
-			const viewPosition = event.parsedFeatures["view-position"];
+			const viewPosition = event.parsedFeatures["view-position"] ?? this._settings?.defaultViewPosition;
 			if (isStringValue(viewPosition) && !isEmpty(event.viewIdentity)) {
 				if (
 					viewPosition === "right" ||
