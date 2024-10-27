@@ -1826,9 +1826,10 @@
 					"id": "view-position-content-creation",
 					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/workspace-app-placement/workspace-platform-starter/favicon.ico",
 					"title": "View Position Content Creation",
-					"enabled": false,
+					"enabled": true,
 					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/workspace-app-placement/workspace-platform-starter/js/modules/content-creation/view-position.bundle.js",
 					"data": {
+						"defaultViewPosition": "stack-right",
 						"rules": [
 							{
 								"behavior": "window",
@@ -1839,16 +1840,16 @@
 								}
 							},
 							{
-								"behavior": "view",
-								"match": ["https://www.scientificamerican.com/*"]
-							},
-							{
 								"behavior": "browser",
 								"match": ["https://www.livescience.com/*"]
 							},
 							{
 								"behavior": "block",
 								"match": ["https://www.sciencenews.org/*"]
+							},
+							{
+								"behavior": "view",
+								"match": ["https://*", "http://*"]
 							}
 						]
 					}
