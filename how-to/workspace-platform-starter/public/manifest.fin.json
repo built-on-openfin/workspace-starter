@@ -1849,7 +1849,7 @@
 							},
 							{
 								"behavior": "view",
-								"match": ["https://*"]
+								"match": ["https://*", "http://*"]
 							}
 						]
 					}
