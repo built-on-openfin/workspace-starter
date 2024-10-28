@@ -45,9 +45,9 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
+			"src": "https://cdn.openfin.co/release/snap/1.0.0/snap.zip",
 			"alias": "openfin-snap",
-			"version": "0.5.0",
+			"version": "1.0.0",
 			"target": "OpenFinSnap.exe",
 			"mandatory": true
 		}
