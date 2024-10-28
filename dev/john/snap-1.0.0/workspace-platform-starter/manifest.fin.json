@@ -1812,9 +1812,9 @@
 			"enabled": false,
 			"id": "workspace-platform-starter",
 			"serverAssetInfo": {
-				"src": "https://cdn.openfin.co/release/snap/1.0.0-beta.5/snap.zip",
+				"src": "https://cdn.openfin.co/release/snap/1.0.0/snap.zip",
 				"alias": "openfin-snap",
-				"version": "1.0.0-beta.5",
+				"version": "1.0.0",
 				"target": "OpenFinSnap.exe"
 			},
 			"serverOptions": {
