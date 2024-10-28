@@ -2075,6 +2075,10 @@
                     "description": "Url to more information.",
                     "type": "string"
                 },
+                "moduleType": {
+                    "$ref": "#/definitions/ModuleTypes",
+                    "description": "This is specified by the provider while loading the modules."
+                },
                 "moduleUrl": {
                     "description": "This is the old property, it will be remapped to url.",
                     "type": "string"
@@ -2312,6 +2316,10 @@
                 "info": {
                     "description": "Url to more information.",
                     "type": "string"
+                },
+                "moduleType": {
+                    "$ref": "#/definitions/ModuleTypes",
+                    "description": "This is specified by the provider while loading the modules."
                 },
                 "title": {
                     "description": "The title of the module.",
@@ -3081,6 +3089,10 @@
                     "description": "Url to more information.",
                     "type": "string"
                 },
+                "moduleType": {
+                    "$ref": "#/definitions/ModuleTypes",
+                    "description": "This is specified by the provider while loading the modules."
+                },
                 "title": {
                     "description": "The title of the module.",
                     "type": "string"
@@ -3209,6 +3221,26 @@
                 }
             },
             "type": "object"
+        },
+        "ModuleTypes": {
+            "description": "The possible module types.",
+            "enum": [
+                "actions",
+                "analytics",
+                "auth",
+                "conditions",
+                "contentCreation",
+                "endpoint",
+                "initOptions",
+                "integrations",
+                "interopOverride",
+                "lifecycle",
+                "log",
+                "menus",
+                "platformOverride",
+                "share"
+            ],
+            "type": "string"
         },
         "MonitorDetails": {
             "$ref": "#/definitions/__type_49"
@@ -4318,6 +4350,10 @@
             "additionalProperties": false,
             "description": "The options for the snap provider.",
             "properties": {
+                "enableAutoWindowRegistration": {
+                    "description": "Should the snap server auto-register created windows (using the default snap rules). Defaults to true.",
+                    "type": "boolean"
+                },
                 "enabled": {
                     "description": "Is snap enabled, defaults to false.",
                     "type": "boolean"

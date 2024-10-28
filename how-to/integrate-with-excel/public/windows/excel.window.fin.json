@@ -1,0 +1,11 @@
+{
+	"url": "http://localhost:8080/windows/excel.html",
+	"name": "excel",
+	"permissions": {
+		"System": {
+			"launchExternalProcess": true,
+			"downloadAsset": true
+		}
+	},
+	"autoShow": false
+}

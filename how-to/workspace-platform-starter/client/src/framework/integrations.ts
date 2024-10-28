@@ -31,6 +31,7 @@ import * as templateHelpers from "./templates";
 import { createButton, createContainer, createHelp, createImage, createText, createTitle } from "./templates";
 import { isEmpty, isStringValue } from "./utils";
 import { getVersionInfo } from "./version";
+import { getHomeIdentity } from "./workspace/identity";
 
 const logger = createLogger("Integrations");
 
@@ -340,6 +341,14 @@ export async function itemSelection(
 
 		const foundIntegration = integrationModules.find((hi) => hi.definition.id === result.data?.providerId);
 		if (foundIntegration?.implementation?.itemSelection) {
+			if (result.dispatcherIdentity.uuid === result.dispatcherIdentity.name) {
+				// If the dispatcher is the same as the name, then it would be the provider
+				// and the provider is routing the message from Home
+				// we provide the home name to the dispatcherIdentity.name
+				// to allow the integration to determine the monitor Home is on.
+				const homeIdentity = getHomeIdentity();
+				result.dispatcherIdentity.name = homeIdentity.name;
+			}
 			return foundIntegration.implementation.itemSelection(result, lastResponse);
 		}
 	}

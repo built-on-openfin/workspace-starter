@@ -60,6 +60,10 @@ export interface ModuleDefinition<O = unknown> {
 	 * Custom data for the module.
 	 */
 	data?: O;
+	/**
+	 * This is specified by the provider while loading the modules.
+	 */
+	moduleType?: ModuleTypes;
 }
 /**
  * Helper methods and data to pass to the modules during initialization.
@@ -162,11 +166,13 @@ export interface ModuleHelpers {
 	 * the current user.
 	 * @param appId The id of the application that is registered against the currently running platform
 	 * @param launchPreference If the app supports launch preferences then these can be passed.
+	 * @param callerIdentity The identity of the caller to consider when determining x/y of new window.
 	 * @returns An array of the platform identities that related from the launch or nothing if nothing was launched.
 	 */
 	launchApp?(
 		appId: string,
-		launchPreference?: UpdatableLaunchPreference
+		launchPreference?: UpdatableLaunchPreference,
+		callerIdentity?: OpenFin.Identity
 	): Promise<PlatformAppIdentifier[] | undefined>;
 	/**
 	 * Launch a page in the workspace.

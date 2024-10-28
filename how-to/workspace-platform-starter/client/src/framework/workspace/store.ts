@@ -25,6 +25,7 @@ import type {
 	StorefrontSettingsNavigationItem
 } from "../shapes/store-shapes";
 import { isEmpty, isStringValue, randomUUID } from "../utils";
+import { getStoreIdentity } from "./identity";
 
 const TOP_ROW_LIMIT = 4;
 const MIDDLE_ROW_LIMIT = 6;
@@ -59,7 +60,8 @@ export async function register(
 					getFooter: async () => getFooter(),
 					getApps: async () => addButtons(await getApps({ private: false })),
 					launchApp: async (app) => {
-						await launch(app as PlatformApp);
+						// this request has come from the store.
+						await launch(app as PlatformApp, undefined, getStoreIdentity());
 					}
 				});
 

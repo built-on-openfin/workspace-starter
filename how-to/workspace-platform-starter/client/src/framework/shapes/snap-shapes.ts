@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { LayoutClient, ServerOptions } from "@openfin/snap-sdk";
+import type { LayoutClient, ServerOptions, SnapServer } from "@openfin/snap-sdk";
 /**
  * The options for the snap provider.
  */
@@ -13,6 +13,11 @@ export interface SnapProviderOptions {
 	 * The id to use for launching the server.
 	 */
 	id?: string;
+
+	/**
+	 * Should the snap server auto-register created windows (using the default snap rules). Defaults to true.
+	 */
+	enableAutoWindowRegistration?: boolean;
 
 	/**
 	 * The asset for the Snap server.
@@ -53,4 +58,10 @@ export interface SnapProvider {
 	 * @returns List of existing app ids with their windows.
 	 */
 	prepareToApplyDecoratedSnapshot(): Promise<LayoutClient[]>;
+
+	/**
+	 * Get the snap server if needed for custom behaviors.
+	 * @returns The snap server if available.
+	 */
+	getSnapServer(): Promise<SnapServer | undefined>;
 }
