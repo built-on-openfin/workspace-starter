@@ -12,19 +12,21 @@
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
-			"launchExternalProcess": {
-				"enabled": true,
-				"assets": {
-					"enabled": true
+			"System": {
+				"launchExternalProcess": {
+					"enabled": true,
+					"assets": {
+						"enabled": true
+					},
+					"downloads": {
+						"enabled": false
+					},
+					"executables": {
+						"enabled": true
+					}
 				},
-				"downloads": {
-					"enabled": false
-				},
-				"executables": {
-					"enabled": true
-				}
-			},
-			"downloadAsset": true
+				"downloadAsset": true
+			}
 		},
 		"defaultWindowOptions": {}
 	},
