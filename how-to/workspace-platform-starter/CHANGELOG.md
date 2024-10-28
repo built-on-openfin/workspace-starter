@@ -37,6 +37,7 @@
 - Enhancement - Apps now launch on the monitor that Stock, Dock and Home are on in a multi monitor setup. Added support for specifying a calling identity when launching an app. This is now used by the apps integration module for launching apps, called by the launch app action used by the dock, called by the launch app function triggered by Store.
 - Updated the example content creation rule to support specifying a default view placement position when window.open is called from inside a view. Defaulted it to "stack-right" so that it has the same behavior as Chrome/Edge when window.open is called without a target (opens a new tab to the right hand side of the tab). It is now turned on by default in the main manifest (search for view-position-content-creation)Turned it on by default (the example app content Content Creation Examples will now work). See [How to Customize Content Creation Rules](./docs/how-to-customize-content-creation-rules.md).
 - Change - Updated the platform mapper (configurable option to make snapshots smaller when sending to custom endpoints) so that it no longer strips out snapshotDetails as we received feedback that it resulted in monitor placement not working as it should.
+- Enhancement - Added support for SNAP SDK 1.0.0
 
 ## v19.0.0
 
