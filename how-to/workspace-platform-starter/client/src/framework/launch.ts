@@ -12,6 +12,7 @@ import * as endpointProvider from "./endpoint";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import { bringViewToFront, bringWindowToFront, doesViewExist, doesWindowExist } from "./platform/browser";
+import { getSettings } from "./settings";
 import type {
 	NativeLaunchOptions,
 	PlatformApp,
@@ -22,20 +23,25 @@ import type {
 	PreferenceConstraintUrl,
 	HostLaunchOptions
 } from "./shapes/app-shapes";
+import type { WindowPositioningOptions } from "./shapes/browser-shapes";
 import * as snapProvider from "./snap";
 import { formatError, getCommandLineArgs, isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
+import { getWindowPositionOptions, getWindowPositionUsingStrategy } from "./utils-position";
 
 const logger = createLogger("Launch");
+let windowPositioningOptions: WindowPositioningOptions | undefined;
 
 /**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch.
  * @param launchPreference launchPreferences if updatable for your the application.
+ * @param callerIdentity optionally pass information related to the caller to consider when launching.
  * @returns Identifiers specific to the type of application launched.
  */
 export async function launch(
 	platformApp: PlatformApp,
-	launchPreference?: UpdatableLaunchPreference
+	launchPreference?: UpdatableLaunchPreference,
+	callerIdentity?: OpenFin.Identity
 ): Promise<PlatformAppIdentifier[] | undefined> {
 	try {
 		logger.info("Application launch requested", platformApp);
@@ -66,7 +72,7 @@ export async function launch(
 			}
 			case MANIFEST_TYPES.InlineView.id:
 			case MANIFEST_TYPES.View.id: {
-				const platformIdentity = await launchView(app, launchPreference);
+				const platformIdentity = await launchView(app, launchPreference, callerIdentity);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -74,7 +80,7 @@ export async function launch(
 			}
 			case MANIFEST_TYPES.Window.id:
 			case MANIFEST_TYPES.InlineWindow.id: {
-				const platformIdentity = await launchWindow(app, launchPreference);
+				const platformIdentity = await launchWindow(app, launchPreference, callerIdentity);
 				if (platformIdentity) {
 					platformAppIdentities.push(platformIdentity);
 				}
@@ -106,10 +112,14 @@ export async function launch(
 			}
 			case MANIFEST_TYPES.Endpoint.id: {
 				if (endpointProvider.hasEndpoint(app.manifest)) {
-					const identity = await endpointProvider.requestResponse<{ payload: PlatformApp }, OpenFin.Identity>(
-						app.manifest,
-						{ payload: app }
-					);
+					const identity = await endpointProvider.requestResponse<
+						{
+							payload: PlatformApp;
+							launchPreference?: UpdatableLaunchPreference;
+							callerIdentity?: OpenFin.Identity;
+						},
+						OpenFin.Identity
+					>(app.manifest, { payload: app, launchPreference, callerIdentity });
 					if (isEmpty(identity)) {
 						logger.warn(
 							`App with id: ${app.appId} encountered when launched using endpoint: ${app.manifest}.`
@@ -316,11 +326,13 @@ function getManifestEndpointId(appId?: string): string {
  * Launch a window for the platform app.
  * @param windowApp The app to launch the window for.
  * @param launchPreference Optional custom launch preferences
+ * @param callerIdentity optionally pass information related to the caller to consider when launching.
  * @returns The identity of the window launched.
  */
 async function launchWindow(
 	windowApp: PlatformApp,
-	launchPreference?: UpdatableLaunchPreference
+	launchPreference?: UpdatableLaunchPreference,
+	callerIdentity?: OpenFin.Identity
 ): Promise<PlatformAppIdentifier | undefined> {
 	if (isEmpty(windowApp)) {
 		logger.warn("No app was passed to launchWindow");
@@ -391,7 +403,12 @@ async function launchWindow(
 			const canUpdateUrl = isAppPreferenceUpdatable(windowApp, "url");
 
 			if (!isEmpty(canUpdateBounds) && !isEmpty(launchPreference?.bounds)) {
-				appLaunchPreference.bounds = { ...appLaunchPreference.bounds, ...launchPreference?.bounds };
+				const callerIdentityBasedLocation = await getCallerIdentityBasedPosition(callerIdentity);
+				appLaunchPreference.bounds = {
+					...appLaunchPreference.bounds,
+					...callerIdentityBasedLocation,
+					...launchPreference?.bounds
+				};
 			}
 
 			if (!isEmpty(canUpdateCentered) && !isEmpty(launchPreference?.defaultCentered)) {
@@ -481,11 +498,13 @@ async function launchWindow(
  * Launch a view for the platform app.
  * @param viewApp The app to launch the view for.
  * @param launchPreference The preferences (if supported) that you would like to apply
+ * @param callerIdentity optionally pass information related to the caller to consider when launching.
  * @returns The identity of the view launched.
  */
 async function launchView(
 	viewApp: PlatformApp,
-	launchPreference?: UpdatableLaunchPreference
+	launchPreference?: UpdatableLaunchPreference,
+	callerIdentity?: OpenFin.Identity
 ): Promise<PlatformAppIdentifier | undefined> {
 	if (isEmpty(viewApp)) {
 		logger.warn("No app was passed to launchView");
@@ -560,8 +579,13 @@ async function launchView(
 			const canUpdateInterop = isAppPreferenceUpdatable(viewApp, "interop");
 			const canUpdateUrl = isAppPreferenceUpdatable(viewApp, "url");
 
-			if (!isEmpty(canUpdateBounds) && !isEmpty(launchPreference?.bounds)) {
-				appLaunchPreference.bounds = { ...appLaunchPreference.bounds, ...launchPreference?.bounds };
+			if (!isEmpty(canUpdateBounds) && (!isEmpty(launchPreference?.bounds) || !isEmpty(callerIdentity))) {
+				const callerIdentityBasedLocation = await getCallerIdentityBasedPosition(callerIdentity);
+				appLaunchPreference.bounds = {
+					...appLaunchPreference.bounds,
+					...callerIdentityBasedLocation,
+					...launchPreference?.bounds
+				};
 			}
 
 			if (!isEmpty(canUpdateCentered) && !isEmpty(launchPreference?.defaultCentered)) {
@@ -1146,4 +1170,23 @@ function updateInstanceIds<T>(layout: T): T {
 			return nestedValue as unknown;
 		})
 	);
+}
+
+/**
+ * Returns undefined or left/top positioning based on the position of the next window given the monitor of the caller.
+ * @param callerIdentity The identity of the caller to consider when determining x/y of new window
+ * @returns Left/Top co-ordinates to consider when launching a new window
+ */
+async function getCallerIdentityBasedPosition(
+	callerIdentity?: OpenFin.Identity
+): Promise<{ left: number; top: number } | undefined> {
+	if (isEmpty(callerIdentity)) {
+		return;
+	}
+	if (isEmpty(windowPositioningOptions)) {
+		const settings = await getSettings();
+		windowPositioningOptions = await getWindowPositionOptions(settings?.browserProvider);
+	}
+	const bounds = await getWindowPositionUsingStrategy(windowPositioningOptions, callerIdentity);
+	return bounds;
 }

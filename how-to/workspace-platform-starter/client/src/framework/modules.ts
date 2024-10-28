@@ -304,7 +304,8 @@ export function getDefaultHelpers(): ModuleHelpers {
 		getDialogClient,
 		launchApp: async (
 			appId: string,
-			launchPreference?: UpdatableLaunchPreference
+			launchPreference?: UpdatableLaunchPreference,
+			callerIdentity?: OpenFin.Identity
 		): Promise<PlatformAppIdentifier[] | undefined> => {
 			logger.info(`launchApp: Looking up appId: ${appId}`);
 			const app = await getApp(appId);
@@ -313,7 +314,7 @@ export function getDefaultHelpers(): ModuleHelpers {
 				logger.warn(`launchApp: The specified appId: ${appId} is not listed in this platform.`);
 			} else {
 				logger.info(`launchApp: Launching app with appId: ${appId}`);
-				result = await launch(app, launchPreference);
+				result = await launch(app, launchPreference, callerIdentity);
 				logger.info(`launchApp: App with appId: ${appId} launched.`);
 			}
 			return result;

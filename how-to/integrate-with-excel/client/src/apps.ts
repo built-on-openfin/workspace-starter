@@ -7,7 +7,7 @@ import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
  * @returns List of app definitions.
  */
 export function getApps(): App[] {
-	return [OPENFIN_INFORMATION_APP, FDC3_BROADCAST, INTEROP_BROADCAST];
+	return [OPENFIN_INFORMATION_APP, FDC3_BROADCAST, INTEROP_BROADCAST, EXCEL_WINDOW];
 }
 
 /**
@@ -93,19 +93,50 @@ const INTEROP_BROADCAST: App = {
 };
 
 /**
+ * App definition for the FDC3 Interop Broadcast View.
+ */
+const EXCEL_WINDOW: App = {
+	appId: "excel-window",
+	title: "Excel Window",
+	description:
+		"A window that launches Excel and listens for changes. This is an alternative to the Excel Home integration.",
+	manifest: "http://localhost:8080/windows/excel.window.fin.json",
+	manifestType: "window",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [],
+	tags: ["window", "excel", "tools"]
+};
+
+/**
  * Launch the passed app using its manifest type to determine how to launch it.
  * @param app The app to launch.
  * @returns The value returned by the launch.
  */
 export async function launchApp(
 	app: App
-): Promise<OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined> {
+): Promise<
+	OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | OpenFin.Window | undefined
+> {
 	if (!app.manifest) {
 		console.error(`No manifest was provided for type ${app.manifestType}`);
 		return;
 	}
 
-	let ret: OpenFin.Platform | OpenFin.Identity | OpenFin.View | OpenFin.Application | undefined;
+	let ret:
+		| OpenFin.Platform
+		| OpenFin.Identity
+		| OpenFin.View
+		| OpenFin.Application
+		| OpenFin.Window
+		| undefined;
 
 	console.log("Application launch requested:", app);
 
@@ -124,6 +155,14 @@ export async function launchApp(
 
 		case AppManifestType.External: {
 			ret = await fin.System.launchExternalProcess({ path: app.manifest, uuid: app.appId });
+			break;
+		}
+
+		case "window": {
+			const manifest: OpenFin.WindowCreationOptions = await fetch(app.manifest).then(async (response) =>
+				response.json()
+			);
+			ret = await fin.Window.create(manifest);
 			break;
 		}
 

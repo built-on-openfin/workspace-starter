@@ -249,7 +249,7 @@ export class AppProvider implements IntegrationModule<AppSettings> {
 
 				if (data?.app?.appId) {
 					handled = true;
-					await this._integrationHelpers.launchApp(data.app.appId);
+					await this._integrationHelpers.launchApp(data.app.appId, undefined, result.dispatcherIdentity);
 				}
 			}
 		}

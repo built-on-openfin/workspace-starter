@@ -14,13 +14,11 @@ import { createLogger } from "./logger-provider";
 import * as menuProvider from "./menu";
 import { closedownModules, initializeModules, loadModules } from "./modules";
 import type { ActionHelpers, Actions, ActionsProviderOptions } from "./shapes/actions-shapes";
-import type { LaunchPreference, PlatformApp } from "./shapes/app-shapes";
-import type { WindowPositioningOptions } from "./shapes/browser-shapes";
+import type { PlatformApp } from "./shapes/app-shapes";
 import type { ModuleEntry, ModuleHelpers } from "./shapes/module-shapes";
 import * as shareProvider from "./share";
 import * as themeProvider from "./themes";
 import { isEmpty, isStringValue } from "./utils";
-import { getWindowPositionUsingStrategy } from "./utils-position";
 import * as homeComponent from "./workspace/home";
 import * as notificationsComponent from "./workspace/notifications";
 
@@ -30,7 +28,6 @@ let modules: ModuleEntry<Actions>[] | undefined;
 const customActionMap: CustomActionsMap = {};
 let platformActionMap: CustomActionsMap | undefined;
 let isInitialized: boolean = false;
-let windowPositioningOptions: WindowPositioningOptions | undefined;
 
 /**
  * These Ids are for actions built in to the platform.
@@ -48,13 +45,11 @@ export const PLATFORM_ACTION_IDS = {
  * Initialize the actions provider.
  * @param options Options for the actions provider.
  * @param helpers Module helpers to pass to any loaded modules.
- * @param windowPositioning Options for positioning windows.
  * @returns The platform action map.
  */
 export async function init(
 	options: ActionsProviderOptions | undefined,
-	helpers: ModuleHelpers,
-	windowPositioning: WindowPositioningOptions
+	helpers: ModuleHelpers
 ): Promise<CustomActionsMap | undefined> {
 	if (isInitialized) {
 		logger.error("The actions can only be used once when configuring the platform");
@@ -72,10 +67,6 @@ export async function init(
 			...helpers,
 			updateToolbarButtons
 		});
-	}
-	if (!isEmpty(windowPositioning)) {
-		logger.info("Initializing with window positioning options", windowPositioning);
-		windowPositioningOptions = windowPositioning;
 	}
 
 	await buildActions();
@@ -256,12 +247,7 @@ async function getPlatformActions(): Promise<CustomActionsMap> {
  */
 async function launchAppAction(app: PlatformApp, clientIdentity: OpenFin.Identity): Promise<void> {
 	if (!isEmpty(app)) {
-		let launchPreference: LaunchPreference | undefined;
-		const bounds = await getWindowPositionUsingStrategy(windowPositioningOptions, clientIdentity);
-		if (!isEmpty(bounds)) {
-			launchPreference = { bounds };
-		}
-		await launch(app, launchPreference);
+		await launch(app, undefined, clientIdentity);
 	} else {
 		logger.error("Unable to do launch app action as an app object was not passed");
 	}
