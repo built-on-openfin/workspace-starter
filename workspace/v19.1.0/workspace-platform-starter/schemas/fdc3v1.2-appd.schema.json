@@ -138,6 +138,38 @@
 			"required": ["contexts", "displayName", "name"],
 			"type": "object"
 		},
+		"CombinedStrategy": {
+			"additionalProperties": false,
+			"description": "A combined strategy combining different mechanisms for detecting windows belonging to the application.\nSupports multi-process, multi-window applications.",
+			"properties": {
+				"expectedWindowCount": {
+					"description": "An optional number of windows to look for. If provided, the search will be abandoned once this number is surpassed.\nIf not provided, there will be no limit to the number of windows found, in which case the search will continue until\neither the timeout is reached (if provided), or for the lifetime of the application.",
+					"type": "number"
+				},
+				"matchClassRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window class against. If not provided, any window class will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"matchNameRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window caption against. If not provided, any window caption will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"multiProcess": {
+					"description": "Whether to include windows that belong to processes descending from the parent. If false, only windows belonging\nto the launched process will be included.",
+					"type": "boolean"
+				},
+				"timeoutMs": {
+					"description": "Optional timeout period in milliseconds. If provided, the search will be abandoned after this timeout.\nIf not provided, the search will continue until either the `expectedWindowCount` is achieved (if provided),\nor for the lifetime of the application.",
+					"type": "number"
+				},
+				"type": {
+					"const": "combined",
+					"type": "string"
+				}
+			},
+			"required": ["type"],
+			"type": "object"
+		},
 		"CustomConfig": {
 			"additionalProperties": {},
 			"description": "Custom config definition.",
@@ -298,6 +330,9 @@
 				},
 				{
 					"$ref": "#/definitions/WaitForWindowClassStrategy"
+				},
+				{
+					"$ref": "#/definitions/CombinedStrategy"
 				}
 			]
 		},
@@ -455,7 +490,7 @@
 			"description": "A window launch discovery strategy that looks for a window whose underlying OS class type matches the given regular expression.\nIt will timeout after the given time period if no window is found.",
 			"properties": {
 				"matchRegex": {
-					"description": "A regular expression string to match the window class against",
+					"description": "A (Rust-evaluated) regular expression string to match the window class against",
 					"type": "string"
 				},
 				"timeoutMs": {
@@ -475,7 +510,7 @@
 			"description": "A window launch discovery strategy that looks for a window whose caption matches the given regular expression.\nIt will timeout after the given time period if no window is found.",
 			"properties": {
 				"matchRegex": {
-					"description": "A regular expression string to match the window caption against",
+					"description": "A (Rust-evaluated) regular expression string to match the window caption against",
 					"type": "string"
 				},
 				"timeoutMs": {
