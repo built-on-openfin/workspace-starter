@@ -17,7 +17,6 @@ import { MANIFEST_TYPES } from "workspace-platform-starter/manifest-types";
 import type { ConnectionClient, EndpointClient } from "workspace-platform-starter/shapes";
 import type {
 	AppsForIntent,
-	LaunchPreference,
 	PlatformApp,
 	PlatformAppIdentifier
 } from "workspace-platform-starter/shapes/app-shapes";
@@ -44,7 +43,6 @@ import {
 	randomUUID,
 	sanitizeString
 } from "workspace-platform-starter/utils";
-import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
 import { AppIdHelper } from "./app-id-helper";
 import { AppIntentHelper } from "./app-intent-helper";
 import { getAppsMetaData } from "./app-meta-data-helper";
@@ -665,15 +663,7 @@ export async function getConstructorOverride(
 						}
 					} else {
 						if (isEmpty(platformIdentities)) {
-							let launchPreference: LaunchPreference | undefined;
-							const bounds = await getWindowPositionUsingStrategy(
-								options.windowPositionOptions,
-								clientIdentity
-							);
-							if (!isEmpty(bounds)) {
-								launchPreference = { bounds };
-							}
-							platformIdentities = await launch(requestedApp?.appId, launchPreference);
+							platformIdentities = await launch(requestedApp?.appId, undefined, clientIdentity);
 						} else {
 							focusApp = true;
 						}
@@ -954,12 +944,7 @@ export async function getConstructorOverride(
 				}
 
 				if (platformIdentities.length === 0) {
-					let launchPreference: LaunchPreference | undefined;
-					const bounds = await getWindowPositionUsingStrategy(options.windowPositionOptions, clientIdentity);
-					if (!isEmpty(bounds)) {
-						launchPreference = { bounds };
-					}
-					platformIdentities = await launch(app.appId, launchPreference);
+					platformIdentities = await launch(app.appId, undefined, clientIdentity);
 					if (!platformIdentities?.length) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
