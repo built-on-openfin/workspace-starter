@@ -297,6 +297,21 @@ export async function launchApp(
 ): Promise<string | undefined> {
 	try {
 		if (server) {
+			if (path.endsWith(".jar") && !path.includes("java.exe") && !path.includes("javaw.exe")) {
+				logger.info("Launching a jar file, checking JAVA_HOME environment variable");
+				const javaHome = await fin.System.getEnvironmentVariable("JAVA_HOME");
+				if (!isEmpty(javaHome)) {
+					const javawExe = `${javaHome}\\bin\\javaw.exe`;
+					args?.unshift(path);
+					args?.unshift("-jar");
+					path = javawExe;
+					logger.info(`Using ${javawExe} to launch the jar file and moved the original path to the args`);
+				} else {
+					logger.warn(
+						"JAVA_HOME environment variable is not set, unable to update the path. Passing as is to snap to try to resolve."
+					);
+				}
+			}
 			const clientId = `${NATIVE_APP_PREFIX}/${appId}/${instanceId}`;
 			let launch = true;
 
