@@ -72,47 +72,11 @@ This is a headless application. If you wish to debug it then you can update the 
 npm run client
 ```
 
-1. The client command will launch a window with the options object `customSettings.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/provider.ts`.
+1. The client command will launch a window with the options object `customSettings.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/provider.ts`. The provider also configures the platform and registers a lot of the actions used by the browser windows.
 
-![Initial window launch](./assets/Launch-App.gif)
+![Register With Browser](./assets/register-with-browser.gif)
 
-2. In `client/src/launchbar.ts` the `createBrowserWindow` function is invoked on click of the "Launch Browser Window" button.
-
-![Initial browser window](./assets/Launch-Browser-Window.gif)
-
-3. In `client/src/launchbar.ts` the `createBrowserWindowWithoutRequiringSave` function is invoked on click of the "Launch Browser Window (No Save Required)" button.
-
-![Initial browser window no save](./assets/Launch-Browser-Window-No-Save.gif)
-
-4. In `client/src/launchbar.ts` the `createBrowserWindowMaximized` function is invoked on click of the "Launch Browser Window Maximized" button.
-
-![Initial browser window maximized](./assets/Launch-Browser-Window-Maximized.gif)
-
-5. In `client/src/launchbar.ts` the `createCustomToolbarWindow` function is invoked on click of the "Launch Browser With Custom Toolbar" button. The open developer tools reflect the payload defined on the custom button action option in the `createCustomToolbarWindow`, and logged in the registered by the custom action id: `'custom-save-page` in `WorkspaceInitPlatformConfig` options of `client/src/platform.ts`.
-
-![Initial browser with custom toolbar](./assets/Custom-Toolbar.gif)
-
-6. In `client/src/launchbar.ts` the `createSinglePageNoTabWindow` function is invoked on click of the "Launch Browser With No Tab" button. This example in addition to hiding the page tabs uses the `showFavicons` property to hide the view icons.
-
-![Initial browser with no tab](./assets/Launch-Browser-No-Tab.gif)
-
-7. In `client/src/launchbar.ts` the `createMultiPageWindow` function is invoked on click of the "Launch Multiple Pages" button.
-
-![Launch multiple pages in browser window](./assets/Multiple-Pages.gif)
-
-8. In `client/src/launchbar.ts` the `createWindowWithLockedPage` click listener function is invoked on click of the "Launch Single Locked Page" button. The function uses the `isLocked` page property to programmatically lock a single page.
-
-![Launch locked page](./assets/Launch-Locked-Page.gif)
-
-9. In `client/src/launchbar.ts` the `createWindowWithFixedViews` click listener function is invoked on click of the "Launch Browser With Fixed Views" button. The function uses fixed panels, the first page has panels top, left, right and bottom, the second page has only the top panel which it shares with the first page by re-using the `viewOptions.name`.
-
-![Fixed views](./assets/Fixed-Views.gif)
-
-10. In `client/src/launchbar.ts` the `getBrowserPagesBtn` click listener function is invoked on click of the "Get All Pages" button. The listener logs: all pages, all unsaved pages, and the last focused page in the context of the launchbar window.
-
-![Browser window page info](./assets/Page-Info.gif)
-
-11. The quit button simply quits the workspace platform with will quit both the app and all browser windows.
+The main menu in the browser and the custom buttons window shows some of the custom behaviors you can add to your browser through the use of our SDK.
 
 ### Note About This Example
 

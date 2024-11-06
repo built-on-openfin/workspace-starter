@@ -118,7 +118,7 @@ function getCustomActions(): CustomActionsMap {
 			}
 		},
 		"open-page": async (payload: CustomActionPayload): Promise<void> => {
-			if (payload.callerType === CustomActionCallerType.CustomButton) {
+			if (payload.callerType === CustomActionCallerType.GlobalContextMenu) {
 				const pageId: string = payload?.customData?.pageId;
 				const targetWindowIdentity: OpenFin.Identity = payload?.customData?.windowIdentity;
 				if (pageId !== undefined && targetWindowIdentity !== undefined) {
@@ -146,6 +146,30 @@ function getCustomActions(): CustomActionsMap {
 				if (activePage) {
 					activePage.isLocked = !activePage.isLocked;
 					await browserWindow.updatePage({
+						pageId: activePage.pageId,
+						page: activePage
+					});
+				}
+			}
+		},
+		"rename-current-page": async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.CustomButton) {
+				const platform: WorkspacePlatformModule = getCurrentSync();
+
+				const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+				const browserWindow = platform.Browser.wrapSync({ uuid, name });
+
+				// Get the active page and toggle its locked state
+				const allPages = await browserWindow.getPages();
+				const activePage = allPages.find((pg) => pg.isActive);
+				if (activePage) {
+					activePage.title = `Renamed Page ${Math.floor(Math.random() * 1000)}`;
+					await browserWindow.updatePage({
+						pageId: activePage.pageId,
+						page: activePage
+					});
+					// optionally save the page.
+					await platform.Storage.updatePage({
 						pageId: activePage.pageId,
 						page: activePage
 					});
@@ -184,6 +208,12 @@ function getCustomActions(): CustomActionsMap {
 			if (payload.callerType === CustomActionCallerType.GlobalContextMenu) {
 				console.info("Set Language called with payload:", payload);
 				await getCurrentSync().setLanguage(payload.customData);
+			}
+		},
+		"debug-platform": async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.GlobalContextMenu) {
+				console.info("Debug Platform Called.");
+				await fin.System.showDeveloperTools(fin.me.identity);
 			}
 		}
 	};
@@ -226,9 +256,7 @@ async function showPopup(
 	const result = await browserWindow.showPopupWindow({
 		name: randomUUID(),
 		initialOptions: {
-			modalParentIdentity: parentIdentity
-		},
-		additionalOptions: {
+			modalParentIdentity: parentIdentity,
 			customData: {
 				title,
 				instructions,
@@ -463,6 +491,16 @@ function overrideCallback(
 				]
 			};
 			template.unshift(languageMenu);
+			const debugPlatform: GlobalContextMenuItemTemplate = {
+				label: "Debug Platform",
+				data: {
+					type: GlobalContextMenuOptionType.Custom,
+					action: {
+						id: "debug-platform"
+					}
+				}
+			};
+			template.unshift(debugPlatform);
 			const allOpenPages = await platform.Browser.getAllAttachedPages();
 			if (pages.length > 0) {
 				for (const page of pages) {
