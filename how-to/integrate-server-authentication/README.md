@@ -46,16 +46,17 @@ The preload script needs to be in an area that does not require authentication (
 The [preload script](./public/preload/auth-preload-check.js) is an example and should not be treated as production code:
 
 ```javascript
-console.log('auth-preload-check.js loaded. Performing logic checks.');
-// wrap in an async iife to not pollute the global scope and allow the use of await
-(async () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('auth-preload-check.js loaded. Performing logic checks.');
   // preload scripts can be loaded into an iframe so only check the top level window
   if (window === window.top && window.fin !== undefined) {
+    // TODO: ADD YOUR OWN LOGIC HERE
     console.log('auth-preload-check.js logic starting.');
     // Create a new URL object from the current window location
     const url = new URL(window.location.href);
 
-    // determine behavior based on the current URL
+    // TODO: ADD YOUR OWN PATH LOGIC HERE
+    // determine behavior based on the current URL (we have example paths)
     if (url.pathname === '/app/login') {
       console.log('Detected we are on the login page.');
       // If we are on the login page ensure the page is visible
@@ -66,6 +67,8 @@ console.log('auth-preload-check.js loaded. Performing logic checks.');
       await fin.me.hide();
     }
 
+    // TODO: WHEN STUCK OR UNHAPPY PATH DETERMINE WHAT TO DO NEXT
+    // We provide an example of launching a new window to show a friendly error message
     if (url.pathname === '/app/stuck') {
       console.log(
         'Detected we are authenticated but a redirect has encountered an error and is stuck so the main provider.html page will not be loaded. Showing a friendly error message.'
@@ -73,7 +76,7 @@ console.log('auth-preload-check.js loaded. Performing logic checks.');
       window.open('/app/friendly-error', '_blank');
     }
   }
-})();
+});
 ```
 
 ## Login Accounts
@@ -82,6 +85,12 @@ There are two login accounts that simulate a successful scenario and a stuck sce
 
 - Success account: `test@example.com / pass1234`
 - Stuck account: `stuck@example.com / pass1234`
+
+## Things to note
+
+You may have different paths depending on environment. You might decide to have environment based preload scripts that are assigned to the environment specific manifest file.
+
+Consider the unhappy path. What would be helpful to your users and your support team if a user could not login to your platform. In our example we show a pop up window but your business/product owner should be involved in the conversation.
 
 ## Running the Sample
 
@@ -131,7 +140,13 @@ npm run secondclient
 npm run build
 ```
 
+## Scenario 1 - manifest.fin.json - Visible Provider Window
+
 ![Server Authentication](openfin-integrate-server-authentication.gif)
+
+## Scenario 2 - second.manifest.fin.json - Invisible Provider Window
+
+![Server Authentication Hidden Provider](openfin-integrate-server-authentication-hidden.gif)
 
 ---
 
