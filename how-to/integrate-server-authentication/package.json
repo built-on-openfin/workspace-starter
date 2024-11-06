@@ -7,6 +7,7 @@
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
 		"kill": "node ./scripts/kill.mjs",
 		"client": "node ./scripts/launch.mjs",
+		"secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build-server": "tsc --project ./server",
 		"build": "npm run build-server && npm run build-client",

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Stuck Redirect</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Stuck Redirect</h1>
+				<h1 class="tag">An example of a window that the platform doesn't control.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col fill gap10">
+			<p>
+				An example assuming you have logged in and are authenticated or you were already authenticated but
+				something went wrong before you were redirected to the main provider page.
+			</p>
+			<p>If you logout and exit you will be presented with the login screen again.</p>
+			<p>If you just exit you will be presented with this screen again.</p>
+		</main>
+		<footer class="row right gap20">
+			<button id="btnLogout">Logout and Exit</button>
+			<button id="btnExit">Exit</button>
+		</footer>
+		<script>
+			const btnLogout = document.querySelector('#btnLogout');
+			btnLogout.addEventListener('click', () => {
+				// On logout the session cookies are cleared and close the app
+				fetch('http://localhost:8080/app/logout', {
+					method: 'post'
+				}).then(async (response) => {
+					await fin.Application.getCurrentSync().quit();
+				});
+			});
+			const btnExit = document.querySelector('#btnExit');
+			btnExit.addEventListener('click', async () => {
+				await fin.Application.getCurrentSync().quit();
+			});
+		</script>
+	</body>
+</html>
