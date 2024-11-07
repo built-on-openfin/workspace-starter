@@ -317,5 +317,29 @@
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
+	},
+	{
+		"appId": "openfin-warn-before-closing",
+		"name": "openfin-warn-before-closing",
+		"title": "Example Warn Before Closing App",
+		"description": "An example app from our container starter: https://github.com/built-on-openfin/container-starter/tree/main/how-to/use-platform/warn-before-closing-dialog that makes the platform aware if there are unsaved changes (platform needs enableBeforeUnload to be set to true in the manifest and needs to override getUserDecisionForBeforeUnload.",
+		"manifest": {
+			"url": "https://built-on-openfin.github.io/container-starter/main/use-platform-warn-before-closing-dialog/html/view.html",
+			"customData": {},
+			"api": {},
+			"fdc3InteropApi": "2.0"
+		},
+		"manifestType": "inline-view",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.2.0/workspace-platform-starter/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["developer", "view"]
 	}
 ]
