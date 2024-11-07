@@ -826,6 +826,28 @@ const configs = [
 		experiments: {
 			outputModule: true
 		}
+	},
+	{
+		entry: './client/src/modules/platform-override/get-user-decision-for-beforeunload/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [loaderRule]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'get-user-decision-for-beforeunload.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'platform-override')
+		},
+		experiments: {
+			outputModule: true
+		}
 	}
 ];
 

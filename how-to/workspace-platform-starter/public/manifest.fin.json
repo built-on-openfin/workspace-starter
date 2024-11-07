@@ -14,6 +14,7 @@
 		"preventQuitOnLastWindowClosed": true,
 		"appLogsTimezone": "utc",
 		"enableAppLogging": false,
+		"enableBeforeUnload": true,
 		"logManagement": {
 			"enabled": false
 		},

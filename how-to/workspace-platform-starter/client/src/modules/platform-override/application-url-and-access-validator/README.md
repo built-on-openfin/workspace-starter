@@ -3,7 +3,7 @@
 ## What is this?
 
 This is an example and this type of logic is best placed on the server (to reduce load on the client) but we are giving a client example to show you a simple example and to demonstrate how platform overrides can be used for very specific use cases.
-This module is off by default but you can turn it on to see quick examples.
+This module is off by default and the configuration is not in the manifest but you can turn it on to see quick examples by using the configuration below.
 
 This example is related to the following scenario:
 
