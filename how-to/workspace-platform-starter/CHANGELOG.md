@@ -2,6 +2,10 @@
 
 ## v19.2.0
 
+- Added an example workspace platform override (see [Get User Decision For Before Unload](./client/src/modules/platform-override/get-user-decision-for-beforeunload/README.md)) that supports **get user decision for before unload**. If a platform has the setting "enableBeforeUnload": true in the platform section of their manifest then OpenFin will call a platform's getUserDecisionForBeforeUnload override if any view (app) adds an event listener `beforeunload` (e.g. `window.addEventListener("beforeunload", beforeUnloadListener);`) and calls e.preventDefault(); when the event is fired. The platform override gets a list of all the views that have prevented the default close behavior and it can make a decision on what to do. Our module is an example of how you can plug in your own custom logic. We show a dialog to get confirmation on whether or not the view/page/window should close.
+
+## v19.1.0
+
 - Breaking Change (if you do not update your manifest): Added modules as an option for platformProvider settings and made the workspace platform starter platform override a module (so you can decide to load it, chain it with other overrides or exclude it). Please see the new document [how to customize your platform override](./docs/how-to-customize-your-platform-override.md). If you want the default platform override to check endpoints to for saving/fetching workspaces and pages then you need to add the default-wps-platform module id to the endpoint clients array in the endpointProvider (see the manifest.fin.json as an example).
 - Updated module ids for default interop override to reflect new naming of modules for platform override: default-wps-interop instead of wps-interop-override.
 - Updated Snap to 0.5.0

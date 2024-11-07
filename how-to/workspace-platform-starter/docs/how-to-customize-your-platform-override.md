@@ -87,5 +87,6 @@ This now opens up the capability to add your own logic to the platform (you want
 - [Default Workspace Starter Platform Override Module](../client/src/modules/platform-override/wps-platform-override/)
 - [Example Workspace Platform Override That Validates App Urls and Access](../client/src/modules/platform-override/application-url-and-access-validator/)
 - [Example Workspace Platform Override That Has Custom Snap SDK Logic To Determine Which Windows Can Snap](../client/src/modules/platform-override/snap-window-selection-override/)
+- [Example Workspace Platform Override That supports notifying users about Apps having unsaved changes when closing a window/page/view](../client/src/modules/platform-override/get-user-decision-for-beforeunload/README.md)
 
 [<- Back to Table Of Contents](../README.md)
