@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "38.126.83.79"
+		"version": "38.126.83.80"
 	},
 	"platform": {
 		"uuid": "register-with-store",
@@ -36,7 +36,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-store/favicon.ico",
-		"name": "Register With Store - v19.1.0",
+		"name": "Register With Store - v19.2.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
