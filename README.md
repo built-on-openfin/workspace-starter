@@ -20,7 +20,7 @@ OpenFin Workspace is currently **only supported on Windows** but this repo can b
 
 We recommend:
 
-- Using [Node.Js 18+](https://nodejs.org/en/about/previous-releases)
+- Using [Node.Js 20+](https://nodejs.org/en/about/previous-releases)
 - Using [RVM 7+](https://developer.openfin.co/versions/?product=RVM) on Windows (RVM on the Mac will be version 12+) - The RVM should auto update so this applies to environments where a specific RVM version is used.
 - Running [OpenFin Health Check](https://cdn.openfin.co/health/deployment/index.html) - Load this page to see if you will be able to install/run OpenFin without issue.
 - Installing [OpenFin Process Manager](https://start.openfin.co/pm) - Install the OpenFin process manager application (this will let you debug any issues you might have with running this repo or your changes)

@@ -345,6 +345,13 @@
 			"enum": ["document-user-activation-required", "no-user-gesture-required", "user-gesture-required"],
 			"type": "string"
 		},
+		"BaseContentBehavior": {
+			"enum": ["allow", "block"],
+			"type": "string"
+		},
+		"BaseStructuredContentBehavior": {
+			"$ref": "#/definitions/__type_71"
+		},
 		"BlockedContentCreationRule": {
 			"additionalProperties": false,
 			"description": "A rule prescribing content creation that should be blocked.",
@@ -434,6 +441,9 @@
 		"BrowserButtonType.ShowHideTabs": {
 			"const": "ShowHideTabs",
 			"type": "string"
+		},
+		"BrowserContentBehavior": {
+			"$ref": "#/definitions/__type_72"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -874,9 +884,23 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"ContentPermission": {
-			"description": "Whether a content url is allowed or blocked for navigation or redirection.\n\n* 'allow': The content url is allowed.\n* 'block': The content url is blocked.",
-			"enum": ["allow", "block"],
-			"type": "string"
+			"anyOf": [
+				{
+					"$ref": "#/definitions/BaseStructuredContentBehavior"
+				},
+				{
+					"$ref": "#/definitions/BrowserContentBehavior"
+				},
+				{
+					"$ref": "#/definitions/StructuredContentPermissions",
+					"description": "Specify rules for specific actions."
+				},
+				{
+					"enum": ["allow", "block", "browser"],
+					"type": "string"
+				}
+			],
+			"description": "Controls whether a content url is allowed or blocked for navigation in Windows and Views or redirection for Windows, Views and iframes."
 		},
 		"ContentRedirect": {
 			"$ref": "#/definitions/__type_16"
@@ -2155,9 +2179,38 @@
 				"componentState": {
 					"$ref": "#/definitions/Partial_1",
 					"description": "Only a component type will have this property and it represents the view options of a given component."
+				},
+				"height": {
+					"type": "number"
+				},
+				"id": {
+					"anyOf": [
+						{
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						},
+						{
+							"type": "string"
+						}
+					]
+				},
+				"isClosable": {
+					"type": "boolean"
+				},
+				"title": {
+					"type": "string"
+				},
+				"type": {
+					"const": "component",
+					"type": "string"
+				},
+				"width": {
+					"type": "number"
 				}
 			},
-			"required": ["componentName"],
+			"required": ["componentName", "type"],
 			"type": "object"
 		},
 		"LayoutContent": {
@@ -2186,6 +2239,12 @@
 		},
 		"LockUnlockPageConfig": {
 			"$ref": "#/definitions/__type_34"
+		},
+		"LogUploadOptions": {
+			"$ref": "#/definitions/__type_74"
+		},
+		"LogUploaderUIOptions": {
+			"$ref": "#/definitions/__type_75"
 		},
 		"LoggerProviderOptions": {
 			"$ref": "#/definitions/ModuleList_1",
@@ -4764,6 +4823,9 @@
 			"required": ["description", "image", "tags", "title"],
 			"type": "object"
 		},
+		"StructuredContentPermissions": {
+			"$ref": "#/definitions/__type_73"
+		},
 		"TaskBar": {
 			"additionalProperties": false,
 			"properties": {
@@ -5185,6 +5247,9 @@
 				},
 				"licenseKey": {
 					"type": "string"
+				},
+				"logUpload": {
+					"$ref": "#/definitions/LogUploadOptions"
 				},
 				"offlineAccess": {
 					"type": "boolean"
@@ -6730,6 +6795,10 @@
 					"$ref": "#/definitions/ViewThrottling",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
+				"title": {
+					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"type": "string"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -7261,6 +7330,10 @@
 					"$ref": "#/definitions/ViewThrottling",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
+				"title": {
+					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"type": "string"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -7526,6 +7599,10 @@
 				"throttling": {
 					"$ref": "#/definitions/ViewThrottling",
 					"description": "{@inheritDoc ViewThrottling}"
+				},
+				"title": {
+					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"type": "string"
 				},
 				"url": {
 					"type": "string"
@@ -9265,6 +9342,124 @@
 						"$ref": "#/definitions/WebPermission"
 					},
 					"type": "array"
+				}
+			},
+			"type": "object"
+		},
+		"__type_71": {
+			"additionalProperties": false,
+			"properties": {
+				"behavior": {
+					"$ref": "#/definitions/BaseContentBehavior"
+				}
+			},
+			"required": ["behavior"],
+			"type": "object"
+		},
+		"__type_72": {
+			"additionalProperties": false,
+			"properties": {
+				"behavior": {
+					"const": "browser",
+					"type": "string"
+				},
+				"closeExisting": {
+					"description": "Additional property that can be specified when setting the behavior to browser.\nWhen set to true will close the Window or View that tried to navigate or redirect to the blocked URL.",
+					"type": "boolean"
+				}
+			},
+			"required": ["behavior"],
+			"type": "object"
+		},
+		"__type_73": {
+			"additionalProperties": false,
+			"description": "Specify rules for specific actions.",
+			"properties": {
+				"iframe": {
+					"$ref": "#/definitions/BaseContentBehavior",
+					"description": "Controls the behavior for when iframes try to redirect"
+				},
+				"navigate": {
+					"anyOf": [
+						{
+							"$ref": "#/definitions/BaseStructuredContentBehavior"
+						},
+						{
+							"$ref": "#/definitions/BrowserContentBehavior"
+						},
+						{
+							"enum": ["allow", "block", "browser"],
+							"type": "string"
+						}
+					],
+					"description": "Controls the behavior for navigations"
+				},
+				"redirect": {
+					"anyOf": [
+						{
+							"$ref": "#/definitions/BaseStructuredContentBehavior"
+						},
+						{
+							"$ref": "#/definitions/BrowserContentBehavior"
+						},
+						{
+							"enum": ["allow", "block", "browser"],
+							"type": "string"
+						}
+					],
+					"description": "Controls the behavior for redirects"
+				}
+			},
+			"type": "object"
+		},
+		"__type_74": {
+			"additionalProperties": false,
+			"properties": {
+				"endpoint": {
+					"type": "string"
+				},
+				"logs": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"manifests": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"ui": {
+					"$ref": "#/definitions/LogUploaderUIOptions"
+				}
+			},
+			"required": ["endpoint"],
+			"type": "object"
+		},
+		"__type_75": {
+			"additionalProperties": false,
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"header": {
+					"type": "string"
+				},
+				"icon": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				},
+				"website": {
+					"type": "string"
+				},
+				"websiteDescription": {
+					"type": "string"
 				}
 			},
 			"type": "object"

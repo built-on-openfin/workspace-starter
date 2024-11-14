@@ -107,11 +107,7 @@ type PageLayoutSettingsKeys =
 /**
  * All the component types.
  */
-type ComponentType =
-	| OpenFin.LayoutItemConfig
-	| OpenFin.LayoutRow
-	| OpenFin.LayoutColumn
-	| OpenFin.LayoutComponent;
+type ComponentType = OpenFin.LayoutItemConfig | OpenFin.LayoutRow | OpenFin.LayoutColumn;
 
 /**
  * All the component keys
@@ -656,7 +652,7 @@ function platformLayoutComponentToStorage(
 	}
 
 	if ("componentState" in component) {
-		const componentState: Partial<OpenFin.ViewCreationOptions> | undefined = component.componentState;
+		const componentState = component.componentState;
 
 		if (componentState) {
 			const componentStateDefaults: { propName: ComponentStateKeys; defaultValue: unknown }[] = [

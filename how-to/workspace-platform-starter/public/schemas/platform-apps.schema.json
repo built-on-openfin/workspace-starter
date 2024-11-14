@@ -1308,6 +1308,10 @@
 					"$ref": "#/definitions/ViewThrottling",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
+				"title": {
+					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"type": "string"
+				},
 				"url": {
 					"type": "string"
 				},

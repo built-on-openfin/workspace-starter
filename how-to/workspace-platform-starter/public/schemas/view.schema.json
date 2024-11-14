@@ -449,6 +449,10 @@
 					"$ref": "#/definitions/ViewThrottling",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
+				"title": {
+					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"type": "string"
+				},
 				"url": {
 					"type": "string"
 				},
@@ -489,6 +493,7 @@
 				"processAffinity",
 				"target",
 				"throttling",
+				"title",
 				"url",
 				"zoomLevel"
 			],
@@ -1297,6 +1302,10 @@
 				"throttling": {
 					"$ref": "#/definitions/ViewThrottling",
 					"description": "{@inheritDoc ViewThrottling}"
+				},
+				"title": {
+					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"type": "string"
 				},
 				"url": {
 					"type": "string"

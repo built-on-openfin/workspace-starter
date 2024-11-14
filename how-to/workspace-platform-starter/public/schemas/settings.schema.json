@@ -2286,10 +2286,40 @@
                 "componentState": {
                     "$ref": "#/definitions/Partial_1",
                     "description": "Only a component type will have this property and it represents the view options of a given component."
+                },
+                "height": {
+                    "type": "number"
+                },
+                "id": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "isClosable": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "const": "component",
+                    "type": "string"
+                },
+                "width": {
+                    "type": "number"
                 }
             },
             "required": [
-                "componentName"
+                "componentName",
+                "type"
             ],
             "type": "object"
         },
@@ -6316,6 +6346,10 @@
                     "$ref": "#/definitions/ViewThrottling",
                     "description": "{@inheritDoc ViewThrottling}"
                 },
+                "title": {
+                    "description": "Defaults to `name`.\nIgnored in container, but used in",
+                    "type": "string"
+                },
                 "url": {
                     "type": "string"
                 },
@@ -6914,6 +6948,10 @@
                     "$ref": "#/definitions/ViewThrottling",
                     "description": "{@inheritDoc ViewThrottling}"
                 },
+                "title": {
+                    "description": "Defaults to `name`.\nIgnored in container, but used in",
+                    "type": "string"
+                },
                 "url": {
                     "type": "string"
                 },
@@ -7203,6 +7241,10 @@
                 "throttling": {
                     "$ref": "#/definitions/ViewThrottling",
                     "description": "{@inheritDoc ViewThrottling}"
+                },
+                "title": {
+                    "description": "Defaults to `name`.\nIgnored in container, but used in",
+                    "type": "string"
                 },
                 "url": {
                     "type": "string"
