@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "38.126.83.80"
+		"version": "40.130.100.7"
 	},
 	"platform": {
 		"uuid": "register-with-home-basic",
@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Register With Home - Basic - v19.2.0",
+		"name": "Register With Home - Basic - v20.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

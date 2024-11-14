@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-browser",
-	"version": "19.2.0",
+	"version": "20.0.0",
 	"description": "OpenFin Workspace -- Register with browser",
 	"main": "index.js",
 	"scripts": {
@@ -20,12 +20,12 @@
 	"author": "adam.saland@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "19.2.12",
-		"@openfin/workspace-platform": "19.2.12"
+		"@openfin/workspace": "20.0.5",
+		"@openfin/workspace-platform": "20.0.5"
 	},
 	"devDependencies": {
-		"@openfin/core": "38.83.80",
-		"@openfin/node-adapter": "38.83.80",
+		"@openfin/core": "40.100.7",
+		"@openfin/node-adapter": "40.100.7",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

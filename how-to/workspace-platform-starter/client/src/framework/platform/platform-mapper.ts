@@ -110,8 +110,7 @@ type PageLayoutSettingsKeys =
 type ComponentType =
 	| OpenFin.LayoutItemConfig
 	| OpenFin.LayoutRow
-	| OpenFin.LayoutColumn
-	| OpenFin.LayoutComponent;
+	| OpenFin.LayoutColumn;
 
 /**
  * All the component keys
