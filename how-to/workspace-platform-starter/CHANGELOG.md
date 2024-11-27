@@ -1,8 +1,15 @@
 # Changelog
 
-## v20.0.0
+## v20.1.0
+
+- Removed the old platformProvider.intentPicker setting. The setting has been exposed through platformProvider.interop.intentResolver for a number of releases and is now the only way of setting the intent resolver.
+- Added support for self hosting the Workspace Browser UI (html, js, css) and related settings through the new workspaceAsar setting introduced in 20.1.
 
 ## v20.0.0
+
+- Updating npm package dependencies and runtime versions to match v20
+
+## v19.2.0
 
 - Added an example workspace platform override (see [Get User Decision For Before Unload](./client/src/modules/platform-override/get-user-decision-for-beforeunload/README.md)) that supports **get user decision for before unload**. If a platform has the setting "enableBeforeUnload": true in the platform section of their manifest then OpenFin will call a platform's getUserDecisionForBeforeUnload override if any view (app) adds an event listener `beforeunload` (e.g. `window.addEventListener("beforeunload", beforeUnloadListener);`) and calls e.preventDefault(); when the event is fired. The platform override gets a list of all the views that have prevented the default close behavior and it can make a decision on what to do. Our module is an example of how you can plug in your own custom logic. We show a dialog to get confirmation on whether or not the view/page/window should close.
 
@@ -79,7 +86,7 @@
 - Included an example of the the requestStream endpoint by implementing an example source of notification data in the [client/src/modules/endpoint/example-notification-source](./client/src/modules/endpoint/example-notification-source/endpoint.ts)
 - Added an example of a lifecycle module that handles notifications coming from the notification source as well as notifications that have been sent to it. This shows how you can standardize some types of notification actions: raise-intent, launch-app, broadcast (option to broadcast on an app channel or user channel). This is just an example showing how you could expose an API to your content using an SDK approach using the Channel API or intents. This is a basic example and there are many more things to consider but it is intended as an example for a discussion around options. Documentation for this module has been provided here: [client/src/modules/lifecycle/example-notification-handler/README.md](./client/src/modules/lifecycle/example-notification-handler/README.md)
 - Update the interop broker override module pattern so that it is now passed a PlatformInteropBrokerHelpers object instead of the standard ModuleHelpers object. There are no additional functions at the moment but getApps returns all apps (even private ones) for the interop broker as it needs access to everything in order to perform intent resolution.
-- Added example of supporting workspace and desktop browser (through openfin/core-web as part of OpenFin anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an OpenFin Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v20.0.0>).
+- Added example of supporting workspace and desktop browser (through openfin/core-web as part of OpenFin anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an OpenFin Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v20.1.0>).
 - More efficient validation of appIds associated with views/windows for faster interop based actions. The appId validation in our wps module (modules directory) has extracted into its own file and tests to ensure it continues to behave as expected across future updates have been added to the test directory.
 - Module Helpers now provide a getAnalyticsClient (it is marked as optional and the result could be undefined so it leaves the option for it to be denied to a module or removed). This client supports a ModuleAnalytic event which will have a source of Module assigned to it (you can still specify type and use the data property to provide additional module specific information). This data will be passed to the analyticProviders that receive the Workspace Analytic events. See [How to Configure Analytics](./docs/how-to-configure-analytics.md).
 - Added a cloud interop override module so that you can easily test out OpenFin's cloud interop offering. See [How To Add Cloud Interop To Your Interop Broker](./docs/how-to-add-cloud-interop-to-your-interop-broker.md).

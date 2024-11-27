@@ -12,7 +12,7 @@ import type { BrowserProviderOptions } from "./browser-shapes";
 import type { ButtonClient } from "./button-shapes";
 import type { PlatformConnectionClient } from "./connection-shapes";
 import type { DockClient } from "./dock-shapes";
-import type { IntentResolverOptions, PlatformInteropBrokerOptions } from "./interopbroker-shapes";
+import type { PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 import type { LifecycleEvents } from "./lifecycle-shapes";
 import type { PlatformMenuClient } from "./menu-shapes";
 import type { ModuleHelpers, ModuleImplementation, ModuleList } from "./module-shapes";
@@ -46,14 +46,22 @@ export interface PlatformProviderOptions extends ModuleList {
 	 */
 	interop?: PlatformInteropBrokerOptions;
 	/**
-	 * Intent Picker is being removed in a future version. Please use interop.intentResolver for the resolver/picker
-	 * settings
-	 */
-	intentPicker?: IntentResolverOptions;
-	/**
 	 * When storing page/workspace data using endpoints disable the mapping which reduces the payload size.
 	 */
 	disableStorageMapping?: boolean;
+	/**
+	 * Are you self hosting the workspace platform UI and related assets (workspace 20.1+).
+	 */
+	workspaceAsar?: {
+		/**
+		 * The alias that you have used when defining the app asset in your manifest that has the workspace platform zip that is provided in the @openfin/workspace-platform package from version 20.1+.
+		 */
+		alias: string;
+		/**
+		 * This is a Workspace Platform Starter specific setting. Default is true if an alias is specified.
+		 */
+		enabled?: boolean;
+	};
 }
 /**
  * The metadata sent with platform storage endpoint requests.
