@@ -15,10 +15,10 @@ jobs:
       RELEASE_BRANCH_PREFIX: 'workspace/'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org
@@ -26,7 +26,7 @@ jobs:
 
       - name: Restore root node_modules from cache
         id: node-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
@@ -53,7 +53,7 @@ jobs:
           PKG_HOWTOS_PATH: ${{ github.ref_name }}
 
       - name: Upload artifacts (GitHub Pages)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: workflow-howtos-github
@@ -62,7 +62,7 @@ jobs:
 
       - name: Upload artifacts (AWS s3 CDN)
         if: ${{ startsWith(github.ref_name, env.RELEASE_BRANCH_PREFIX) }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: workflow-howtos-aws
@@ -75,10 +75,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: workflow-howtos-github
           path: public-github/
@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: workflow-howtos-aws
           path: public-aws/
