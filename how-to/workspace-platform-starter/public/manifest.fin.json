@@ -225,7 +225,7 @@
 				]
 			},
 			"workspaceAsar": {
-				"enabled": true,
+				"enabled": false,
 				"alias": "self-hosted-workspace-platform"
 			}
 		},
