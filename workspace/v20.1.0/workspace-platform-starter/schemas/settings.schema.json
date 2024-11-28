@@ -4167,10 +4167,6 @@
                     "description": "This is optional and only needed if you are using shell mode where you wish to load a small module with just auth\nlogic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate\nthe provider bundle and provide an example in our docs.",
                     "type": "string"
                 },
-                "intentPicker": {
-                    "$ref": "#/definitions/IntentResolverOptions",
-                    "description": "Intent Picker is being removed in a future version. Please use interop.intentResolver for the resolver/picker\nsettings"
-                },
                 "interop": {
                     "$ref": "#/definitions/PlatformInteropBrokerOptions",
                     "description": "interop settings related to this platform"
@@ -4198,6 +4194,24 @@
                 "rootUrl": {
                     "description": "What is the root url of you platform e.g. https://mydomain.com",
                     "type": "string"
+                },
+                "workspaceAsar": {
+                    "additionalProperties": false,
+                    "description": "Are you self hosting the workspace platform UI and related assets (workspace 20.1+).",
+                    "properties": {
+                        "alias": {
+                            "description": "The alias that you have used when defining the app asset in your manifest that has the workspace platform zip that is provided in the",
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "description": "This is a Workspace Platform Starter specific setting. Default is true if an alias is specified.",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "alias"
+                    ],
+                    "type": "object"
                 }
             },
             "required": [

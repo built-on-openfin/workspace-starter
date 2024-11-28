@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.100.7"
+		"version": "40.130.101.1"
 	},
 	"platform": {
 		"name": "default-workspace-platform",
@@ -74,7 +74,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/workspace-platform-starter/favicon.ico",
-		"name": "Default Workspace Platform - v20.0.0",
+		"name": "Default Workspace Platform - v20.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
