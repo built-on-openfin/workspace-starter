@@ -6,7 +6,7 @@
 		"version": "40.130.101.1"
 	},
 	"platform": {
-		"name": "Workspace Platform Starter",
+		"name": "workspace-platform-starter",
 		"uuid": "workspace-platform-starter",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
@@ -89,7 +89,7 @@
 	},
 	"appAssets": [
 		{
-			"src": "http://localhost:8080/common/assets/workspace-platform.zip",
+			"src": "http://localhost:8080/common/assets/workspace_platform.zip",
 			"alias": "self-hosted-workspace-platform",
 			"version": "20.1.0"
 		}
