@@ -2,7 +2,7 @@
 
 ## v20.0.0
 
-## v20.0.0
+## v19.2.0
 
 - Added an example workspace platform override (see [Get User Decision For Before Unload](./client/src/modules/platform-override/get-user-decision-for-beforeunload/README.md)) that supports **get user decision for before unload**. If a platform has the setting "enableBeforeUnload": true in the platform section of their manifest then OpenFin will call a platform's getUserDecisionForBeforeUnload override if any view (app) adds an event listener `beforeunload` (e.g. `window.addEventListener("beforeunload", beforeUnloadListener);`) and calls e.preventDefault(); when the event is fired. The platform override gets a list of all the views that have prevented the default close behavior and it can make a decision on what to do. Our module is an example of how you can plug in your own custom logic. We show a dialog to get confirmation on whether or not the view/page/window should close.
 
