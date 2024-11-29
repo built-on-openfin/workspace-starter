@@ -132,6 +132,10 @@
 				"intentOptions": {},
 				"openOptions": {},
 				"contextOptions": {},
+				"getInfoOptions": {
+					"includeAppInteropInfo": true,
+					"includeAllAppMetadataInfo": false
+				},
 				"unregisteredApp": {
 					"appId": "unregistered",
 					"title": "Other",
