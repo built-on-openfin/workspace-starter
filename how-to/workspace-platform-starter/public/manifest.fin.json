@@ -23,6 +23,7 @@
 				"launchExternalProcess": true,
 				"terminateExternalProcess": true,
 				"downloadAsset": true,
+				"serveAsset": true,
 				"openUrlWithBrowser": {
 					"enabled": true,
 					"protocols": ["mailto", "msteams", "tel"]
@@ -91,7 +92,8 @@
 		{
 			"src": "http://localhost:8080/common/assets/workspace_platform.zip",
 			"alias": "self-hosted-workspace-platform",
-			"version": "20.1.0"
+			"version": "20.1.0",
+			"target": "workspace.asar"
 		}
 	],
 	"customSettings": {

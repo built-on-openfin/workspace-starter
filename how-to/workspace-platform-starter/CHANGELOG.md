@@ -3,7 +3,7 @@
 ## v20.1.0
 
 - Removed the old platformProvider.intentPicker setting. The setting has been exposed through platformProvider.interop.intentResolver for a number of releases and is now the only way of setting the intent resolver.
-- Added support for self hosting the Workspace Browser UI (html, js, css) and related settings through the new workspaceAsar setting introduced in 20.1.
+- Added support for self hosting the Workspace Browser UI (html, js, css) and related settings through the new workspaceAsar setting introduced in 20.1 and added documentation around [self hosting workspace components](./docs/how-to-self-host-workspace.md)
 
 ## v20.0.0
 
