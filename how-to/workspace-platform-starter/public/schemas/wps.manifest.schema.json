@@ -1791,6 +1791,21 @@
 		"FileDownloadSettings": {
 			"$ref": "#/definitions/__type_68"
 		},
+		"GetInfoOptions": {
+			"additionalProperties": false,
+			"description": "Get Info Options.",
+			"properties": {
+				"includeAllAppMetadataInfo": {
+					"description": "Should the broker include the full app meta data or just appId and instanceId (and interopInfo if enabled). Default is false.",
+					"type": "boolean"
+				},
+				"includeAppInteropInfo": {
+					"description": "Should the broker include the interop capabilities as specified in the app directory within the appMetadata so that the app can take into account what the platform has specified should be supported (and whether there is a misconfiguration where the platform's app definition doesn't reflect the capabilities of the app).\nDefault is false as this is not part of the fdc3 standard. It is placed within appMetadata.instanceMetadata.interop rather than appending it to the root of appMetadata as it is not part of the fdc3 standard.",
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
 		"GlobalContextMenuOptionType": {
 			"description": "Types of global context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
 			"enum": [
@@ -3888,6 +3903,10 @@
 				"contextOptions": {
 					"$ref": "#/definitions/ContextOptions",
 					"description": "Options for when fdc3.broadcast or fin.me.interop.setContext is called."
+				},
+				"getInfoOptions": {
+					"$ref": "#/definitions/GetInfoOptions",
+					"description": "When fdc3.getInfo is used what settings should be taken into account?"
 				},
 				"intentOptions": {
 					"$ref": "#/definitions/IntentOptions",

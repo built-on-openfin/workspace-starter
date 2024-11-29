@@ -59,6 +59,11 @@ export interface PlatformInteropBrokerOptions extends ModuleList {
 	contextOptions?: ContextOptions;
 
 	/**
+	 * When fdc3.getInfo is used what settings should be taken into account?
+	 */
+	getInfoOptions?: GetInfoOptions;
+
+	/**
 	 * If an unregistered app is included here then it indicates you wish to support selecting views/windows that are
 	 * not linked to an app from an intent picker that supports instances. The intents and contexts in this app specify
 	 * which you support for unregistered instances. Do not specify a manifest or manifestType for this entry (we don't
@@ -167,6 +172,22 @@ export interface ContextOptions {
 	 * Should the broker send context messages back to the sender? Default is true.
 	 */
 	includeOriginator?: boolean;
+}
+
+/**
+ * Get Info Options.
+ */
+export interface GetInfoOptions {
+	/**
+	 * Should the broker include the interop capabilities as specified in the app directory within the appMetadata so that the app can take into account what the platform has specified should be supported (and whether there is a misconfiguration where the platform's app definition doesn't reflect the capabilities of the app).
+	 * Default is false as this is not part of the fdc3 standard. It is placed within appMetadata.instanceMetadata.interop rather than appending it to the root of appMetadata as it is not part of the fdc3 standard.
+	 */
+	includeAppInteropInfo?: boolean;
+
+	/**
+	 * Should the broker include the full app meta data or just appId and instanceId (and interopInfo if enabled). Default is false.
+	 */
+	includeAllAppMetadataInfo?: boolean;
 }
 
 /**
