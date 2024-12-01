@@ -48,6 +48,31 @@ export interface AuthProvider<O = unknown, H = ModuleHelpers> extends ModuleImpl
 	getUserInfo(): Promise<unknown>;
 }
 /**
+ * Auth client that is provided to modules should they be allowed and if the auth provider is set.
+ */
+export interface AuthClient {
+	/**
+	 * Does the auth provider require authentication.
+	 * @returns True if authentication is required.
+	 */
+	isAuthenticationRequired(): Promise<boolean>;
+	/**
+	 * Perform the login operation on the auth provider.
+	 * @returns True if the login was successful.
+	 */
+	login(): Promise<boolean>;
+	/**
+	 * Perform the logout operation on the auth provider.
+	 * @returns True if the logout was successful.
+	 */
+	logout(): Promise<boolean>;
+	/**
+	 * Get user information from the auth provider.
+	 * @returns The user information, the type is unknown as it is dependent on the auth provider.
+	 */
+	getUserInfo(): Promise<unknown>;
+}
+/**
  * The types of events that an auth provider can emit.
  */
 export type AuthEventTypes = "logged-in" | "before-logged-out" | "logged-out" | "session-expired";

@@ -5,6 +5,7 @@
 - Removed the old platformProvider.intentPicker setting. The setting has been exposed through platformProvider.interop.intentResolver for a number of releases and is now the only way of setting the intent resolver.
 - Added support for self hosting the Workspace Browser UI (html, js, css) and related settings through the new workspaceAsar setting introduced in 20.1 and added documentation around [self hosting workspace components](./docs/how-to-self-host-workspace.md)
 - Feature: Added new getInfoOptions setting to platformProvider.interop that lets you specify two things: includeAllAppMetadataInfo (will use the appId if valid to get the AppMetadata to return to the app) & includeAppInteropInfo (will return the app's interop config as a part of the instanceMetadata of the appMetadata property). Both options default to false. Configured includeAppInteropInfo to true in the [public/manifest.fin.json](./public/manifest.fin.json) as it can be useful for an app to be able to confirm what the platform believes the application supports.
+- Added an [AuthClient](./client/src/framework/shapes/auth-shapes.ts) that is optionally passed to modules (it will be passed but is passed as an optional in case you ever want to restrict it) through a getAuthClient function. If the getAuthClient function is available then an authClient will be returned if configured (otherwise a warning and undefined is returned). This can be used if you want to create your own log out buttons or if you want to retrieve the current user info without using the lifecycle event.
 
 ## v20.0.0
 
