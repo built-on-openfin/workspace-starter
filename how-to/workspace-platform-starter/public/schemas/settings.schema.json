@@ -443,6 +443,15 @@
         "Bounds": {
             "$ref": "#/definitions/__type_30"
         },
+        "BringToFrontStrategy": {
+            "description": "The strategy for bringing a window to the front.",
+            "enum": [
+                "bringToFront",
+                "bringToFrontAndFocus",
+                "setAsForeground"
+            ],
+            "type": "string"
+        },
         "BrokerConnection": {
             "additionalProperties": false,
             "description": "Specific type for a broker connection.",
@@ -500,6 +509,10 @@
             "additionalProperties": false,
             "description": "Browser Provider Options includes the default window/page and view options.",
             "properties": {
+                "bringToFrontStrategy": {
+                    "$ref": "#/definitions/BringToFrontStrategy",
+                    "description": "The strategy for bringing a window to the front."
+                },
                 "defaultPageOptions": {
                     "$ref": "#/definitions/Pick",
                     "description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl`, `panels` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."

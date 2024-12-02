@@ -8,9 +8,19 @@ import {
 	type PageLayout
 } from "@openfin/workspace-platform";
 import { getToolbarButtons } from "../buttons";
-import type { BrowserProviderOptions } from "../shapes/browser-shapes";
+import type { BringToFrontStrategy, BrowserProviderOptions } from "../shapes/browser-shapes";
 import type { Logger } from "../shapes/logger-shapes";
 import { isEmpty, isString, isStringValue } from "../utils";
+
+let bringToFrontStrategy: BringToFrontStrategy = "setAsForeground";
+
+/**
+ * Set the default bring to front strategy.
+ * @param strategy The strategy to use. Default is to use setAsForeground.
+ */
+export function setDefaultBringToFrontStrategy(strategy: BringToFrontStrategy): void {
+	bringToFrontStrategy = strategy;
+}
 
 /**
  * Get the default window options for the browser.
@@ -196,11 +206,15 @@ export async function doesWindowExist(
  * @param target The target window.
  * @param target.identity The identity of the window.
  * @param target.window The window object.
+ * @param strategy The strategy to use to bring the window to the front.
  */
-export async function bringWindowToFront(target: {
-	identity?: OpenFin.Identity;
-	window?: OpenFin.Window;
-}): Promise<void> {
+export async function bringWindowToFront(
+	target: {
+		identity?: OpenFin.Identity;
+		window?: OpenFin.Window;
+	},
+	strategy?: BringToFrontStrategy
+): Promise<void> {
 	let targetWindow: OpenFin.Window | undefined;
 
 	if (!isEmpty(target.identity)) {
@@ -209,13 +223,23 @@ export async function bringWindowToFront(target: {
 		targetWindow = target.window;
 	}
 
+	// use the default strategy if none is provided
+	const strategyToUse = strategy ?? bringToFrontStrategy;
+
 	if (targetWindow) {
 		const windowState = await targetWindow.getState();
 		if (windowState === "minimized") {
 			await targetWindow.restore();
 		}
 		if (await targetWindow.isShowing()) {
-			await targetWindow.setAsForeground();
+			if (strategyToUse === "bringToFront") {
+				await targetWindow.bringToFront();
+			} else if (strategyToUse === "bringToFrontAndFocus") {
+				await targetWindow.bringToFront();
+				await targetWindow.focus();
+			} else {
+				await targetWindow.setAsForeground();
+			}
 		}
 	}
 }

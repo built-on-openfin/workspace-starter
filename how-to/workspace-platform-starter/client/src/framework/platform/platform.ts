@@ -34,7 +34,7 @@ import { getPlatformThemeClient, getThemes, notifyColorScheme, supportsColorSche
 import { isEmpty, isStringValue, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
-import { getDefaultWindowOptions } from "./browser";
+import { getDefaultWindowOptions, setDefaultBringToFrontStrategy } from "./browser";
 import * as interopProvider from "./interop";
 import * as platformOverride from "./platform-override";
 import * as platformSplashProvider from "./platform-splash";
@@ -168,6 +168,9 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	}
 	if (!isEmpty(customSettings?.browserProvider?.defaultViewOptions)) {
 		browser.defaultViewOptions = customSettings?.browserProvider?.defaultViewOptions;
+	}
+	if (!isEmpty(customSettings?.browserProvider?.bringToFrontStrategy)) {
+		setDefaultBringToFrontStrategy(customSettings.browserProvider.bringToFrontStrategy);
 	}
 
 	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
