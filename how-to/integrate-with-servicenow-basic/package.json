@@ -21,8 +21,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/servicenow": "^1.0.1",
-		"@openfin/workspace": "20.1.3",
-		"@openfin/workspace-platform": "20.1.3"
+		"@openfin/workspace": "20.1.5",
+		"@openfin/workspace-platform": "20.1.5"
 	},
 	"devDependencies": {
 		"@openfin/core": "40.101.1",
