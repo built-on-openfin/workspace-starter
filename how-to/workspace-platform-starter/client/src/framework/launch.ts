@@ -257,7 +257,7 @@ async function getViewIdentities(
 	const win = fin.Window.wrapSync(identity);
 	const views = await win.getCurrentViews();
 	const viewIdentities = views.map((view) => ({ ...view.identity, appId }));
-	await win.setAsForeground();
+	await bringWindowToFront({ window: win });
 	return viewIdentities;
 }
 
