@@ -65,7 +65,7 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -78,7 +78,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.0.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -88,11 +88,11 @@
 		"name": "fdc3-context-view-2-0",
 		"title": "Context using FDC3 (2.0)",
 		"description": "his view allows you to experiment with the broadcasting and listening of contexts using the fdc3 api.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/common/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.0.0/common/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -101,7 +101,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/images/previews/view-context-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "tools"]

@@ -66,7 +66,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://cdn.openfin.co/workspace/5.5.0/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://cdn.openfin.co/workspace/20.0.5/icons/defaultFavicon.svg"
 			},
 			"frame": false,
 			"icon": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/favicon.ico",
