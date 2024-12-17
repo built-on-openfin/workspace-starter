@@ -1144,7 +1144,7 @@
 					"enabled": false,
 					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v16.0.0/integrate-with-ms365/js/integrations/ms365.bundle.js",
 					"data": {
-						"clientId": "",
+						"clientId": "<your id>",
 						"tenantId": "",
 						"redirectUri": "http://localhost:8080/oauth_redirect.html",
 						"permissions": [
