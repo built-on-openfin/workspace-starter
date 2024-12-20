@@ -167,7 +167,7 @@ If you want the debug version with the debug window automatically showing then y
 
 #### Permissions
 
-These permissions need to be added at the platform or startup_app level depending on the type of application you are building. We are using the restrictive permission model so we are only allowing launch external process for an app asset that comes from a particular url.
+These permissions need to be added at the platform or startup_app level depending on the type of application you are building. The example below is using the restrictive permission model so it only allows launch external process for an app asset that comes from a particular url.
 
 ```json
   "permissions": {
@@ -205,16 +205,23 @@ These permissions need to be added at the platform or startup_app level dependin
 
 #### App Asset
 
-Your manifest will need to include the following app asset information:
+If you are using a version of Snap earlier than 1.1.0 or you wish to self host the Snap app asset then your manifest will need to include the following app asset information:
 
 ```json
 "appAssets": [
   {
-   "src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
+   "src": "https://cdn.openfin.co/release/snap/1.1.0/snap.zip",
    "alias": "openfin-snap",
-   "version": "0.5.0",
+   "version": "1.1.0",
    "target": "OpenFinSnap.exe"
   }
+ ]
+```
+
+If you are on 1.1.0 or above then you don't need to specify the Snap app asset. Snap will fetch the app asset for you from our CDN.
+
+```json
+"appAssets": [
  ]
 ```
 

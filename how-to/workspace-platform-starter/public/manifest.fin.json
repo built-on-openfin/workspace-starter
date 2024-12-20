@@ -1824,12 +1824,6 @@
 			"enabled": false,
 			"id": "workspace-platform-starter",
 			"enableAutoWindowRegistration": true,
-			"serverAssetInfo": {
-				"src": "https://cdn.openfin.co/release/snap/1.0.0/snap.zip",
-				"alias": "openfin-snap",
-				"version": "1.0.0",
-				"target": "OpenFinSnap.exe"
-			},
 			"serverOptions": {
 				"showDebug": false,
 				"keyToStick": true,
