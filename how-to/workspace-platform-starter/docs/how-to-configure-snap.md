@@ -9,6 +9,30 @@ For more detailed information see [OpenFin Snap SDK](https://developers.openfin.
 
 To enable snap support in your platform you can add the following in your manifest.fin.json.
 
+From Snap 1.1.0 onwards snap will automatically fetch the Snap app asset if you have not specified it in the app assets array and you haven't specified it as a serverAssetInfo. The reason for specifying this would be if you want to self-host the snap app asset.
+
+```json
+{
+   "customSettings": {
+      ...
+      "snapProvider": {
+         "enabled": true,
+         "id": "workspace-platform-starter",
+         "enableAutoWindowRegistration": true,
+         "serverOptions": {
+            "showDebug": false,
+            "keyToStick": true,
+            "disableBlurDropPreview": false,
+            "disableGPUAcceleratedDragging": false,
+            "disableUserUnstick": false
+         }
+      }
+   }
+}
+```
+
+If you want to self host the snap app asset then you can specify the serverAssetInfo as below:
+
 ```json
 {
    "customSettings": {
@@ -18,9 +42,9 @@ To enable snap support in your platform you can add the following in your manife
          "id": "workspace-platform-starter",
          "enableAutoWindowRegistration": true,
          "serverAssetInfo": {
-            "src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
+            "src": "https://cdn.openfin.co/release/snap/1.1.0/snap.zip",
             "alias": "openfin-snap",
-            "version": "0.5.0",
+            "version": "1.1.0",
             "target": "OpenFinSnap.exe"
          },
          "serverOptions": {

@@ -31,13 +31,8 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 
 		await platformSplashProvider.updateProgress("Snap");
 
-		if (!isStringValue(options.serverOptions.executablePath)) {
-			const serverAssetInfo = options?.serverAssetInfo;
-
-			if (isEmpty(serverAssetInfo)) {
-				logger.error("Cannot initialize Snap without the SnapProvider.serverAssetInfo");
-				return;
-			}
+		if (!isStringValue(options.serverOptions.executablePath) && !isEmpty(options?.serverAssetInfo)) {
+			const serverAssetInfo = options.serverAssetInfo;
 
 			const src = serverAssetInfo.src;
 			if (isEmpty(src)) {
