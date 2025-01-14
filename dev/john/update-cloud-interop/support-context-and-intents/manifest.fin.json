@@ -74,8 +74,11 @@
 			"enabled": false,
 			"connectParams": {
 				"url": "",
-				"userId": "<DO NOT COMMIT CREDENTIALS>",
-				"password": "<DO NOT COMMIT CREDENTIALS>",
+				"authenticationType": "basic",
+				"basicAuthenticationParameters": {
+					"username": "<DO NOT COMMIT CREDENTIALS>",
+					"password": "<DO NOT COMMIT CREDENTIALS>"
+				},
 				"platformId": "",
 				"sourceId": "",
 				"sourceDisplayName": "",
