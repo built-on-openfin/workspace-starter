@@ -10,7 +10,7 @@
 - Upgraded to Snap 1.1.0 and removed the serverAssetInfo from the manifest as Snap now fetches the app asset if it isn't specified. See [how to configure snap](./docs/how-to-configure-snap.md).
 - Upgraded Cloud Interop to 0.40.33 and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
 
-## v20.0.0
+## v19.2.0
 
 - Updating npm package dependencies and runtime versions to match v20
 
