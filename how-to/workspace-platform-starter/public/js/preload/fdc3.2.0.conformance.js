@@ -30,6 +30,7 @@ window.addEventListener('load', (event) => {
 						// fdc3 2.1 adds "or void" to the spec https://fdc3.finos.org/docs/api/ref/Errors#resulterror
 						// The 2.0 test seems to expect that void shouldn't return the error NoResultsReturned so for now
 						// this is here until the reasoning behind the test is clarified.
+						// discussion and resolution https://github.com/finos/FDC3/issues/1107
 					}
 				};
 				return result;
