@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.100.7"
+		"version": "40.130.101.1"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap",
@@ -13,18 +13,7 @@
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
-				"launchExternalProcess": {
-					"enabled": true,
-					"assets": {
-						"enabled": true
-					},
-					"downloads": {
-						"enabled": false
-					},
-					"executables": {
-						"enabled": true
-					}
-				},
+				"launchExternalProcess": true,
 				"downloadAsset": true
 			}
 		},
@@ -34,7 +23,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-snap/favicon.ico",
-		"name": "Integrate With Snap - v20.0.0",
+		"name": "Integrate With Snap - v20.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -43,15 +32,7 @@
 		"email": "support@openfin.co",
 		"forwardErrorReports": true
 	},
-	"appAssets": [
-		{
-			"src": "https://cdn.openfin.co/release/snap/1.0.0/snap.zip",
-			"alias": "openfin-snap",
-			"version": "1.0.0",
-			"target": "OpenFinSnap.exe",
-			"mandatory": true
-		}
-	],
+	"appAssets": [],
 	"customSettings": {
 		"snapProvider": {
 			"showDebugWindow": false,

@@ -443,6 +443,15 @@
         "Bounds": {
             "$ref": "#/definitions/__type_30"
         },
+        "BringToFrontStrategy": {
+            "description": "The strategy for bringing a window to the front.",
+            "enum": [
+                "bringToFront",
+                "bringToFrontAndFocus",
+                "setAsForeground"
+            ],
+            "type": "string"
+        },
         "BrokerConnection": {
             "additionalProperties": false,
             "description": "Specific type for a broker connection.",
@@ -500,6 +509,10 @@
             "additionalProperties": false,
             "description": "Browser Provider Options includes the default window/page and view options.",
             "properties": {
+                "bringToFrontStrategy": {
+                    "$ref": "#/definitions/BringToFrontStrategy",
+                    "description": "The strategy for bringing a window to the front."
+                },
                 "defaultPageOptions": {
                     "$ref": "#/definitions/Pick",
                     "description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl`, `panels` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."
@@ -1883,6 +1896,21 @@
                 "url": {
                     "description": "The url to fetch from.",
                     "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GetInfoOptions": {
+            "additionalProperties": false,
+            "description": "Get Info Options.",
+            "properties": {
+                "includeAllAppMetadataInfo": {
+                    "description": "Should the broker include the full app meta data or just appId and instanceId (and interopInfo if enabled). Default is false.",
+                    "type": "boolean"
+                },
+                "includeAppInteropInfo": {
+                    "description": "Should the broker include the interop capabilities as specified in the app directory within the appMetadata so that the app can take into account what the platform has specified should be supported (and whether there is a misconfiguration where the platform's app definition doesn't reflect the capabilities of the app).\nDefault is false as this is not part of the fdc3 standard. It is placed within appMetadata.instanceMetadata.interop rather than appending it to the root of appMetadata as it is not part of the fdc3 standard.",
+                    "type": "boolean"
                 }
             },
             "type": "object"
@@ -4129,6 +4157,10 @@
                     "$ref": "#/definitions/ContextOptions",
                     "description": "Options for when fdc3.broadcast or fin.me.interop.setContext is called."
                 },
+                "getInfoOptions": {
+                    "$ref": "#/definitions/GetInfoOptions",
+                    "description": "When fdc3.getInfo is used what settings should be taken into account?"
+                },
                 "intentOptions": {
                     "$ref": "#/definitions/IntentOptions",
                     "description": "Options related to the way this platform supports intents"
@@ -4167,10 +4199,6 @@
                     "description": "This is optional and only needed if you are using shell mode where you wish to load a small module with just auth\nlogic first followed by a module with the rest of the platform core. Specify the entry point here. We do generate\nthe provider bundle and provide an example in our docs.",
                     "type": "string"
                 },
-                "intentPicker": {
-                    "$ref": "#/definitions/IntentResolverOptions",
-                    "description": "Intent Picker is being removed in a future version. Please use interop.intentResolver for the resolver/picker\nsettings"
-                },
                 "interop": {
                     "$ref": "#/definitions/PlatformInteropBrokerOptions",
                     "description": "interop settings related to this platform"
@@ -4198,6 +4226,24 @@
                 "rootUrl": {
                     "description": "What is the root url of you platform e.g. https://mydomain.com",
                     "type": "string"
+                },
+                "workspaceAsar": {
+                    "additionalProperties": false,
+                    "description": "Are you self hosting the workspace platform UI and related assets (workspace 20.1+).",
+                    "properties": {
+                        "alias": {
+                            "description": "The alias that you have used when defining the app asset in your manifest that has the workspace platform zip that is provided in the",
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "description": "This is a Workspace Platform Starter specific setting. Default is true if an alias is specified.",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "alias"
+                    ],
+                    "type": "object"
                 }
             },
             "required": [

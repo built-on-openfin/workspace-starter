@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.100.7"
+		"version": "40.130.101.1"
 	},
 	"platform": {
 		"uuid": "test-workspace-platform-starter",
