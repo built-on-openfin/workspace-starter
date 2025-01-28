@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-excel",
-	"version": "20.0.0",
+	"version": "20.1.0",
 	"description": "OpenFin Workspace -- Integrate with Excel",
 	"main": "index.js",
 	"scripts": {
@@ -21,12 +21,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/excel": "^1.5.0",
-		"@openfin/workspace": "20.0.5",
-		"@openfin/workspace-platform": "20.0.5"
+		"@openfin/workspace": "20.1.5",
+		"@openfin/workspace-platform": "20.1.5"
 	},
 	"devDependencies": {
-		"@openfin/core": "40.100.7",
-		"@openfin/node-adapter": "40.100.7",
+		"@openfin/core": "40.101.1",
+		"@openfin/node-adapter": "40.101.1",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

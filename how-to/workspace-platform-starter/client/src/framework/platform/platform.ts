@@ -5,6 +5,7 @@ import {
 	type BrowserInitConfig
 } from "@openfin/workspace-platform";
 import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import { getCanDownloadAppAssets } from "workspace-platform-starter/utils-capability";
 import { getWindowPositionOptions } from "workspace-platform-starter/utils-position";
 import { saveConfig, loadConfig } from "workspace-platform-starter/workspace/dock";
 import * as actionsProvider from "../actions";
@@ -33,7 +34,7 @@ import { getPlatformThemeClient, getThemes, notifyColorScheme, supportsColorSche
 import { isEmpty, isStringValue, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
-import { getDefaultWindowOptions } from "./browser";
+import { getDefaultWindowOptions, setDefaultBringToFrontStrategy } from "./browser";
 import * as interopProvider from "./interop";
 import * as platformOverride from "./platform-override";
 import * as platformSplashProvider from "./platform-splash";
@@ -168,6 +169,9 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	if (!isEmpty(customSettings?.browserProvider?.defaultViewOptions)) {
 		browser.defaultViewOptions = customSettings?.browserProvider?.defaultViewOptions;
 	}
+	if (!isEmpty(customSettings?.browserProvider?.bringToFrontStrategy)) {
+		setDefaultBringToFrontStrategy(customSettings.browserProvider.bringToFrontStrategy);
+	}
 
 	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
 	const theme = await getThemes();
@@ -225,6 +229,15 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	const interopOverride = interopProvider.getInteropConstructorOverrides();
 	const overrideCallback = platformOverride.getPlatformConstructorOverrides();
 
+	// If the workspaceAsar is enabled, we need to pass the workspaceAsar settings to the platform
+	// you need to ensure you have an app asset in the manifest with a matching alias.
+	const workspaceAsar =
+		isStringValue(customSettings?.platformProvider?.workspaceAsar?.alias) &&
+		customSettings?.platformProvider?.workspaceAsar?.enabled !== false &&
+		(await getCanDownloadAppAssets())
+			? customSettings?.platformProvider?.workspaceAsar
+			: undefined;
+
 	await workspacePlatformInit({
 		browser,
 		language: isStringValue(customSettings?.platformProvider?.language?.initialLanguage)
@@ -236,6 +249,7 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		interopOverride,
 		overrideCallback,
 		integrations,
+		workspaceAsar,
 		analytics: customSettings?.analyticsProvider?.sendToOpenFin ? { sendToOpenFin: true } : undefined
 	});
 	return true;

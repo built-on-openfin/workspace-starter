@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=msft-low-code",
-		"version": "40.130.100.7"
+		"version": "40.130.101.1"
 	},
 	"platform": {
 		"uuid": "integrate-with-ms365-low-code",
@@ -24,7 +24,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate With Microsoft 365 Low Code Integration - v20.0.0",
+		"name": "Integrate With Microsoft 365 Low Code Integration - v20.1.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

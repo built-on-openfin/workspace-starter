@@ -14,7 +14,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 
 > The **@openfin/snap-sdk** is currently in beta. The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
 
-- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv20.0.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
+- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv20.1.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 20.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of OpenFin Workspace to version 20.1.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -156,18 +156,18 @@ You can change this to the debug version by updating the preloadScript to the fo
 If you just want to test Snap within your own manifest by using a hosted preload script then you can add the following to the "startup_app" or "platform" definition in your manifest:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.0.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/integrate-with-snap/js/snap.preload.bundle.js" }],
 ```
 
 If you want the debug version with the debug window automatically showing then you can reference this preload script:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.0.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
 ```
 
 #### Permissions
 
-These permissions need to be added at the platform or startup_app level depending on the type of application you are building. We are using the restrictive permission model so we are only allowing launch external process for an app asset that comes from a particular url.
+These permissions need to be added at the platform or startup_app level depending on the type of application you are building. The example below is using the restrictive permission model so it only allows launch external process for an app asset that comes from a particular url.
 
 ```json
   "permissions": {
@@ -205,16 +205,23 @@ These permissions need to be added at the platform or startup_app level dependin
 
 #### App Asset
 
-Your manifest will need to include the following app asset information:
+If you are using a version of Snap earlier than 1.1.0 or you wish to self host the Snap app asset then your manifest will need to include the following app asset information:
 
 ```json
 "appAssets": [
   {
-   "src": "https://cdn.openfin.co/release/snap/0.5.0/snap.zip",
+   "src": "https://cdn.openfin.co/release/snap/1.1.0/snap.zip",
    "alias": "openfin-snap",
-   "version": "0.5.0",
+   "version": "1.1.0",
    "target": "OpenFinSnap.exe"
   }
+ ]
+```
+
+If you are on 1.1.0 or above then you don't need to specify the Snap app asset. Snap will fetch the app asset for you from our CDN.
+
+```json
+"appAssets": [
  ]
 ```
 

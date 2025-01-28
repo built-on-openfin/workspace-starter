@@ -32,7 +32,8 @@ import type {
 	ProcessedContext,
 	PlatformInteropOverrideOptions,
 	PlatformInteropBrokerHelpers,
-	ContextOptions
+	ContextOptions,
+	GetInfoOptions
 } from "workspace-platform-starter/shapes/interopbroker-shapes";
 import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
 import {
@@ -101,6 +102,8 @@ export async function getConstructorOverride(
 
 			private readonly _contextOptions?: ContextOptions;
 
+			private readonly _getInfoOptions?: GetInfoOptions;
+
 			/**
 			 * Create a new instance of InteropBroker.
 			 */
@@ -120,6 +123,7 @@ export async function getConstructorOverride(
 				this._openOptions = options?.openOptions;
 				this._unregisteredApp = options?.unregisteredApp;
 				this._contextOptions = options?.contextOptions;
+				this._getInfoOptions = options?.getInfoOptions;
 
 				if (!isEmpty(this._unregisteredApp)) {
 					this._unregisteredApp.manifestType = MANIFEST_TYPES.UnregisteredApp.id;
@@ -855,14 +859,36 @@ export async function getConstructorOverride(
 						clientIdentity
 					)) as ImplementationMetadata;
 					const appId = await this._appIdHelper.lookupAppId(clientIdentity);
-					if (!isEmpty(appId)) {
-						const updatedResponse = {
-							...response,
-							appMetadata: { appId, instanceId: clientIdentity.endpointId }
-						};
-						return updatedResponse;
+					let appMetadata: AppMetadata | undefined;
+					const includeAllAppMetadataInfo = this._getInfoOptions?.includeAllAppMetadataInfo === true;
+					const includeAppInteropInfo = this._getInfoOptions?.includeAppInteropInfo === true;
+					if (!isEmpty(appId) && (includeAllAppMetadataInfo || includeAppInteropInfo)) {
+						const app = await getApp(appId);
+						appMetadata = { appId, instanceId: clientIdentity.endpointId };
+						if (!isEmpty(app)) {
+							if (includeAllAppMetadataInfo) {
+								appMetadata = {
+									...appMetadata,
+									...mapTo20AppMetaData(app)
+								};
+							}
+							if (includeAppInteropInfo && !isEmpty(app.interop)) {
+								appMetadata = {
+									...appMetadata,
+									instanceMetadata: { interop: app.interop }
+								};
+							}
+						}
 					}
-					return response;
+					const updatedResponse = {
+						...response,
+						optionalFeatures: {
+							...response.optionalFeatures,
+							OriginatingAppMetadata: true
+						},
+						appMetadata
+					};
+					return updatedResponse;
 				}
 				return super.fdc3HandleGetInfo(payload, clientIdentity);
 			}

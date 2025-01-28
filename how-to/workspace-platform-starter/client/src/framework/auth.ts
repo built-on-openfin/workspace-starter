@@ -1,6 +1,6 @@
 import { createLogger } from "./logger-provider";
 import { initializeModule, loadModules } from "./modules";
-import type { AuthProvider, AuthProviderOptions } from "./shapes/auth-shapes";
+import type { AuthClient, AuthProvider, AuthProviderOptions } from "./shapes/auth-shapes";
 import type { ModuleHelpers } from "./shapes/module-shapes";
 import { isEmpty } from "./utils";
 
@@ -33,7 +33,6 @@ export async function init(options: AuthProviderOptions | undefined, helpers: Mo
 			if (authModules.length > 1) {
 				logger.warn("You have more than one auth module enabled, only the first will be used");
 			}
-
 			await initializeModule<AuthProvider>(authModules[0], helpers);
 			authProvider = authModules[0].implementation;
 			authEnabled = true;
@@ -156,4 +155,24 @@ export async function getUserInfo(): Promise<unknown> {
 	}
 	logger.info("getUserInfo requested");
 	return authProvider.getUserInfo();
+}
+
+/**
+ * Returns a getAuthClient function that can be used to get the auth client if the auth provider is set.
+ * @returns The auth client if the auth provider is set.
+ */
+export async function getAuthClient(): Promise<AuthClient | undefined> {
+	if (isEmpty(authProvider)) {
+		logger.warn(
+			"Please initialize auth before trying to use getAuthClient or auth may not be required for this app"
+		);
+		return;
+	}
+
+	return {
+		isAuthenticationRequired,
+		login,
+		logout,
+		getUserInfo
+	};
 }

@@ -95,6 +95,11 @@ export type BrowserProviderOptions = Pick<
 	 * Some options for whether or not a closing page will prompt the user to save unsaved changes.
 	 */
 	unsavedPagePromptStrategy?: UnsavedPagePromptStrategy;
+
+	/**
+	 * The strategy for bringing a window to the front.
+	 */
+	bringToFrontStrategy?: BringToFrontStrategy;
 };
 
 /**
@@ -175,3 +180,8 @@ export interface WorkspacePlatformToolbarButton {
  * - never: Never show the modal.
  */
 export type UnsavedPagePromptStrategy = "default" | "skip-untitled" | "never";
+
+/**
+ * The strategy for bringing a window to the front.
+ */
+export type BringToFrontStrategy = "setAsForeground" | "bringToFront" | "bringToFrontAndFocus";

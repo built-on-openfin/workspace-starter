@@ -6,6 +6,7 @@ import {
 } from "@openfin/workspace-platform";
 import * as analyticsProvider from "./analytics";
 import { getApp, getApps } from "./apps";
+import { getAuthClient } from "./auth";
 import { checkCondition, conditionChanged } from "./conditions";
 import * as connectionProvider from "./connections";
 import * as Dialog from "./dialog";
@@ -217,8 +218,12 @@ export async function initializeModule<
 				const moduleCreateLogger =
 					moduleEntry.definition.moduleType === "log" ? createLocalLogger : createLogger;
 
+				// If the module is an auth module then we don't want to pass the auth client
+				const moduleGetAuthClient = moduleEntry.definition.moduleType === "auth" ? undefined : getAuthClient;
+
 				const moduleHelpers = {
 					...helpers,
+					getAuthClient: moduleGetAuthClient,
 					getNotificationClient: getNotificationClientProxy(moduleEntry.definition),
 					getEndpointClient: getEndpointClientProxy(moduleEntry.definition)
 				};
@@ -365,7 +370,8 @@ export function getDefaultHelpers(): ModuleHelpers {
 		subscribeLifecycleEvent,
 		unsubscribeLifecycleEvent,
 		getUtilClient: () => ({ general: util, position: utilPosition }),
-		getConnectionClient: async () => connectionProvider.getConnectionClient()
+		getConnectionClient: async () => connectionProvider.getConnectionClient(),
+		getAuthClient
 	};
 }
 

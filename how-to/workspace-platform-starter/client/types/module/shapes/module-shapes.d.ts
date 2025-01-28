@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { BrowserWindowModule, WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { AnalyticsClient } from "./analytics-shapes";
 import type { PlatformApp, PlatformAppIdentifier, UpdatableLaunchPreference } from "./app-shapes";
+import type { AuthClient } from "./auth-shapes";
 import type { ConditionsClient } from "./conditions-shapes";
 import type { ConnectionClient } from "./connection-shapes";
 import type { DialogClient } from "./dialog-shapes";
@@ -245,6 +246,11 @@ export interface ModuleHelpers {
 	 * @returns The connection client api.
 	 */
 	getConnectionClient?(): Promise<ConnectionClient>;
+	/**
+	 * Get the auth client if available.
+	 * @returns The auth client.
+	 */
+	getAuthClient?(): Promise<AuthClient | undefined>;
 }
 /**
  * The implementation of the module with generic options and helpers.

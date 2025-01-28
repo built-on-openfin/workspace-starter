@@ -134,4 +134,8 @@ Start the OpenFin app:
 start fin://localhost:8181/manifest.fin.json
 ```
 
+## Self Hosted Workspace Components
+
+If you are self hosting workspace components remember to include them in your deployments across environments. Please see [How To Self Host Workspace Components](./how-to-self-host-workspace.md) for more information.
+
 [<- Back to Table Of Contents](../README.md)
