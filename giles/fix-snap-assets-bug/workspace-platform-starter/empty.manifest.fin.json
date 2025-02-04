@@ -1,0 +1,37 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "40.130.101.1"
+	},
+	"platform": {
+		"name": "Empty Workspace Starter",
+		"uuid": "empty-workspace-platform-starter",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/giles/fix-snap-assets-bug/workspace-platform-starter/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/giles/fix-snap-assets-bug/workspace-platform-starter/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"appLogsTimezone": "utc",
+		"enableAppLogging": false,
+		"logManagement": {
+			"enabled": false
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/giles/fix-snap-assets-bug/workspace-platform-starter/favicon.ico",
+		"name": "Workspace Platform Starter - v20.1.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Workspace Platform Starter - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"snapshot": {
+		"windows": []
+	}
+}
