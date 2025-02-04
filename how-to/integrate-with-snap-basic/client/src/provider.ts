@@ -85,7 +85,7 @@ async function initializeDOM(): Promise<void> {
 		const app = await fin.Application.getCurrent();
 		const manifest = await app.getManifest();
 
-		if (manifest.appAssets?.[0].src === "SNAP_ASSET_URL") {
+		if (manifest.appAssets?.[0]?.src === "SNAP_ASSET_URL") {
 			logError(
 				"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
 			);

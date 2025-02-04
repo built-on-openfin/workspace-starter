@@ -9,7 +9,7 @@ import type { CustomSettings, SnapProviderOptions } from "./shapes";
 export async function getSettings(showDebugWindow?: boolean): Promise<SnapProviderOptions> {
 	const app = await fin.Application.getCurrent();
 	const manifest = await app.getManifest();
-	if (manifest.appAssets?.[0].src === "SNAP_ASSET_URL") {
+	if (manifest.appAssets?.[0]?.src === "SNAP_ASSET_URL") {
 		console.error(
 			"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
 		);
