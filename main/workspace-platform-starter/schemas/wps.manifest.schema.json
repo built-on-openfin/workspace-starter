@@ -4389,6 +4389,10 @@
 			"additionalProperties": false,
 			"description": "Options for starting the Snap Server",
 			"properties": {
+				"autoHideClientTaskbarIcons": {
+					"description": "If true, Snap will try to hide the taskbar icons of windows that are snapped together, and re-show the icons when windows are unsnapped.",
+					"type": "boolean"
+				},
 				"blurEffectPerformanceThreshold": {
 					"description": "This is respected only if the disableBlurDropPreview option is not set. This threshold (in milliseconds) relates to the time taken to render a blur effect.\nSnap will do a check at start up to measure this performance and automatically disable the blur effect if this threshold time is exceeded.\nIf not provided, the performance check will use a default threshold.",
 					"type": "number"
@@ -4399,6 +4403,10 @@
 				},
 				"disableGPUAcceleratedDragging": {
 					"description": "If true, reverts to a slower method of dragging groups of windows",
+					"type": "boolean"
+				},
+				"disableRuntimeHeartbeating": {
+					"description": "If true, the Snap server will not send runtime heartbeats to the OpenFin runtime.\nOrdinarily heartbeating is useful to ensure that the runtime cleans up resources quickly\nafter a client disconnects.",
 					"type": "boolean"
 				},
 				"disableUserUnstick": {
