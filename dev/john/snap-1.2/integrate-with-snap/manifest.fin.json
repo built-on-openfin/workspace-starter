@@ -39,7 +39,8 @@
 			"disableShiftToUnsnap": false,
 			"enableCtrlToSnap": false,
 			"disableGPUDragging": false,
-			"disableBlurDropPreview": false
+			"disableBlurDropPreview": false,
+			"autoHideClientTaskbarIcons": true
 		}
 	}
 }
