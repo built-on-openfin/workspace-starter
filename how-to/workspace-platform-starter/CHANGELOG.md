@@ -2,6 +2,7 @@
 
 ## v20.1.0
 
+- Updated snap to 1.2. Set default configuration to collapse client icons when snapped.
 - Removed the old platformProvider.intentPicker setting. The setting has been exposed through platformProvider.interop.intentResolver for a number of releases and is now the only way of setting the intent resolver.
 - Added support for self hosting the Workspace Browser UI (html, js, css) and related settings through the new workspaceAsar setting introduced in 20.1 and added documentation around [self hosting workspace components](./docs/how-to-self-host-workspace.md)
 - Feature: Added new getInfoOptions setting to platformProvider.interop that lets you specify two things: includeAllAppMetadataInfo (will use the appId if valid to get the AppMetadata to return to the app) & includeAppInteropInfo (will return the app's interop config as a part of the instanceMetadata of the appMetadata property). Both options default to false. Configured includeAppInteropInfo to true in the [public/manifest.fin.json](./public/manifest.fin.json) as it can be useful for an app to be able to confirm what the platform believes the application supports.

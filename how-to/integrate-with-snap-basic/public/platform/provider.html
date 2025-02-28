@@ -65,6 +65,16 @@
 					<input type="checkbox" id="chkGroupWithPlatformTaskbarGroup" />
 				</fieldset>
 			</div>
+			<div class="row gap10 middle">
+				<fieldset class="row">
+					<label for="chkAutoHideClientTaskbarIcons">Auto Hide Client Taskbar Icons</label>
+					<input type="checkbox" id="chkAutoHideClientTaskbarIcons" />
+				</fieldset>
+				<fieldset class="row">
+					<label for="chkDisableRuntimeHeartbeating">Disable Runtime Heartbeating</label>
+					<input type="checkbox" id="chkDisableRuntimeHeartbeating" />
+				</fieldset>
+			</div>
 			<hr />
 			<div class="row gap10">
 				<button id="btnNativeTestApp">Open Native Test App</button>
@@ -79,11 +89,14 @@
 				</fieldset>
 				<button id="btnAttachToWindow">Attach To Window</button>
 				<button id="btnDetachFromWindow">Detach From Window</button>
+				<button id="btnMinimizeGroup">Minimize Group</button>
 			</div>
 			<hr />
 			<div class="row gap10">
 				<button id="btnGetLayout">Get Layout</button>
 				<button id="btnGetAttached">Get Attached</button>
+				<button id="btnGetGroups">Get Groups</button>
+				<button id="btnGetGroupsForCurrentWindow">Get Group For Current Window</button>
 			</div>
 			<pre id="logging" class="fill scroll-vertical"></pre>
 			<div class="row right">

@@ -21,7 +21,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/snap-sdk": "1.1.0",
+		"@openfin/snap-sdk": "1.2.0",
 		"@openfin/workspace": "20.1.5",
 		"@openfin/workspace-platform": "20.1.5"
 	},

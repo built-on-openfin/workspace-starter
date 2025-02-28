@@ -19,7 +19,8 @@ export async function initialize(options: SnapProviderOptions): Promise<void> {
 				disableUserUnstick: options.disableShiftToUnsnap ?? false,
 				keyToStick: options.enableCtrlToSnap ?? false,
 				disableGPUAcceleratedDragging: options.disableGPUDragging ?? false,
-				disableBlurDropPreview: options.disableBlurDropPreview ?? false
+				disableBlurDropPreview: options.disableBlurDropPreview ?? false,
+				autoHideClientTaskbarIcons: options.autoHideClientTaskbarIcons ?? false
 			});
 
 			await server.enableAutoWindowRegistration();
