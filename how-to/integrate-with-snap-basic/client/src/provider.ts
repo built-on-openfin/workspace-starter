@@ -8,10 +8,12 @@ let chkDisableShiftToUnsnap: HTMLInputElement | null;
 let chkCtrlToSnap: HTMLInputElement | null;
 let chkDisableGPUDragging: HTMLInputElement | null;
 let chkDisableBlurDrop: HTMLInputElement | null;
+let chkAutoHideClientTaskbarIcons: HTMLInputElement | null;
 
 let chkHideTaskBarEntry: HTMLInputElement | null;
 let chkCustomTaskBarIcon: HTMLInputElement | null;
 let chkGroupWithPlatformTaskbarGroup: HTMLInputElement | null;
+let chkDisableRuntimeHeartbeating: HTMLInputElement | null;
 
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
@@ -19,8 +21,11 @@ let btnNativeTestApp: HTMLButtonElement | null;
 let selAttachPosition: HTMLSelectElement | null;
 let btnAttachToWindow: HTMLButtonElement | null;
 let btnDetachFromWindow: HTMLButtonElement | null;
+let btnMinimizeGroup: HTMLButtonElement | null;
 let btnGetLayout: HTMLButtonElement | null;
 let btnGetAttached: HTMLButtonElement | null;
+let btnGetGroups: HTMLButtonElement | null;
+let btnGetGroupsForCurrentWindow: HTMLButtonElement | null;
 let btnClearLog: HTMLButtonElement | null;
 let serverStatus: HTMLParagraphElement | null;
 let logging: HTMLPreElement | null;
@@ -51,6 +56,9 @@ async function initializeDOM(): Promise<void> {
 		"#chkGroupWithPlatformTaskbarGroup"
 	);
 
+	chkAutoHideClientTaskbarIcons = document.querySelector<HTMLInputElement>("#chkAutoHideClientTaskbarIcons");
+	chkDisableRuntimeHeartbeating = document.querySelector<HTMLInputElement>("#chkDisableRuntimeHeartbeating");
+
 	btnStart = document.querySelector<HTMLButtonElement>("#btnStart");
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
 	serverStatus = document.querySelector<HTMLParagraphElement>("#serverStatus");
@@ -58,8 +66,11 @@ async function initializeDOM(): Promise<void> {
 	selAttachPosition = document.querySelector<HTMLSelectElement>("#selAttachPosition");
 	btnAttachToWindow = document.querySelector<HTMLButtonElement>("#btnAttachToWindow");
 	btnDetachFromWindow = document.querySelector<HTMLButtonElement>("#btnDetachFromWindow");
+	btnMinimizeGroup = document.querySelector<HTMLButtonElement>("#btnMinimizeGroup");
 	btnGetLayout = document.querySelector<HTMLButtonElement>("#btnGetLayout");
 	btnGetAttached = document.querySelector<HTMLButtonElement>("#btnGetAttached");
+	btnGetGroups = document.querySelector<HTMLButtonElement>("#btnGetGroups");
+	btnGetGroupsForCurrentWindow = document.querySelector<HTMLButtonElement>("#btnGetGroupsForCurrentWindow");
 	logging = document.querySelector<HTMLPreElement>("#logging");
 	btnClearLog = document.querySelector<HTMLButtonElement>("#btnClearLog");
 
@@ -72,14 +83,19 @@ async function initializeDOM(): Promise<void> {
 		chkHideTaskBarEntry &&
 		chkCustomTaskBarIcon &&
 		chkGroupWithPlatformTaskbarGroup &&
+		chkAutoHideClientTaskbarIcons &&
+		chkDisableRuntimeHeartbeating &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
 		btnNativeTestApp &&
 		btnAttachToWindow &&
 		btnDetachFromWindow &&
+		btnMinimizeGroup &&
 		btnGetLayout &&
 		btnGetAttached &&
+		btnGetGroups &&
+		btnGetGroupsForCurrentWindow &&
 		btnClearLog
 	) {
 		const app = await fin.Application.getCurrent();
@@ -114,7 +130,9 @@ async function initializeDOM(): Promise<void> {
 						taskbarIcon: chkCustomTaskBarIcon?.checked ? "https://openfin.co/favicon.ico" : undefined,
 						taskbarIconGroup: chkGroupWithPlatformTaskbarGroup?.checked
 							? `openfin_apps_group.${fin.me.identity.uuid}`
-							: undefined
+							: undefined,
+						autoHideClientTaskbarIcons: chkAutoHideClientTaskbarIcons?.checked,
+						disableRuntimeHeartbeating: chkDisableRuntimeHeartbeating?.checked
 					};
 					await server.start(options);
 
@@ -234,6 +252,13 @@ async function initializeDOM(): Promise<void> {
 				}
 			});
 
+			btnMinimizeGroup.addEventListener("click", async () => {
+				if (server) {
+					const groupId = await server.getGroupIdForWindow(TEST_APP_WINDOW_ID);
+					await server.minimizeGroup(groupId);
+				}
+			});
+
 			btnClearLog.addEventListener("click", () => {
 				logClear();
 			});
@@ -251,6 +276,20 @@ async function initializeDOM(): Promise<void> {
 					const attached = await server.getAttached(fin.me.identity.uuid);
 					logInformation("Attached");
 					logInformation(JSON.stringify(attached, undefined, "  "));
+				}
+			});
+
+			btnGetGroups.addEventListener("click", async () => {
+				if (server) {
+					const groups = await server.getAllGroupIds();
+					logInformation("Group Ids");
+					logInformation(JSON.stringify(groups, undefined, "  "));
+				}
+			});
+			btnGetGroupsForCurrentWindow.addEventListener("click", async () => {
+				if (server) {
+					const groupId = await server.getGroupIdForWindow(fin.me.identity.name);
+					logInformation(`Group Id For Current Window: ${groupId}`);
 				}
 			});
 			updateServerStatus();
@@ -290,7 +329,9 @@ function updateServerStatus(): void {
 		btnDetachFromWindow &&
 		selAttachPosition &&
 		btnGetLayout &&
-		btnGetAttached
+		btnGetAttached &&
+		btnGetGroups &&
+		btnGetGroupsForCurrentWindow
 	) {
 		if (serverState === "starting" || serverState === "stopping") {
 			chkShowDebugWindow.disabled = true;
@@ -302,6 +343,8 @@ function updateServerStatus(): void {
 			btnStop.disabled = true;
 			btnGetLayout.disabled = true;
 			btnGetAttached.disabled = true;
+			btnGetGroups.disabled = true;
+			btnGetGroupsForCurrentWindow.disabled = true;
 			serverStatus.textContent = `Snap Server is ${serverState}`;
 		} else if (serverState === "started") {
 			chkShowDebugWindow.disabled = true;
@@ -313,6 +356,8 @@ function updateServerStatus(): void {
 			btnStop.disabled = false;
 			btnGetLayout.disabled = false;
 			btnGetAttached.disabled = false;
+			btnGetGroups.disabled = false;
+			btnGetGroupsForCurrentWindow.disabled = false;
 			serverStatus.textContent = "Snap Server is started";
 		} else {
 			chkShowDebugWindow.disabled = false;
@@ -324,6 +369,8 @@ function updateServerStatus(): void {
 			btnStop.disabled = true;
 			btnGetLayout.disabled = true;
 			btnGetAttached.disabled = true;
+			btnGetGroups.disabled = true;
+			btnGetGroupsForCurrentWindow.disabled = true;
 			serverStatus.textContent = "Snap Server is stopped";
 		}
 	}
@@ -334,22 +381,25 @@ function updateServerStatus(): void {
  * Update the UI based on the window state.
  */
 function updateWindowStatus(): void {
-	if (btnNativeTestApp && selAttachPosition && btnAttachToWindow && btnDetachFromWindow) {
+	if (btnNativeTestApp && selAttachPosition && btnAttachToWindow && btnDetachFromWindow && btnMinimizeGroup) {
 		if (serverState === "starting" || serverState === "stopping") {
 			btnNativeTestApp.disabled = true;
 			selAttachPosition.disabled = true;
 			btnAttachToWindow.disabled = true;
 			btnDetachFromWindow.disabled = true;
+			btnMinimizeGroup.disabled = true;
 		} else if (serverState === "started" && isWindowOpen) {
 			btnNativeTestApp.disabled = true;
 			selAttachPosition.disabled = isWindowAttached;
 			btnAttachToWindow.disabled = isWindowAttached;
 			btnDetachFromWindow.disabled = !isWindowAttached;
+			btnMinimizeGroup.disabled = !isWindowAttached;
 		} else {
 			btnNativeTestApp.disabled = serverState === "stopped";
 			selAttachPosition.disabled = true;
 			btnAttachToWindow.disabled = true;
 			btnDetachFromWindow.disabled = true;
+			btnMinimizeGroup.disabled = true;
 		}
 	}
 }

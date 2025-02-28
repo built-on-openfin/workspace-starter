@@ -80,4 +80,9 @@ export interface SnapProviderOptions {
 	 * Disable the blur drop preview when dragging a window.
 	 */
 	disableBlurDropPreview?: boolean;
+
+	/**
+	 * Auto hide the client taskbar icons.
+	 */
+	autoHideClientTaskbarIcons?: boolean;
 }
