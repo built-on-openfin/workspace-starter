@@ -1832,7 +1832,8 @@
 				"keyToStick": true,
 				"disableBlurDropPreview": false,
 				"disableGPUAcceleratedDragging": false,
-				"disableUserUnstick": false
+				"disableUserUnstick": false,
+				"autoHideClientTaskbarIcons": true
 			}
 		},
 		"contentCreationProvider": {
