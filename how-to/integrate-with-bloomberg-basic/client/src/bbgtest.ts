@@ -1,4 +1,12 @@
-import { connect, enableLogging, type BloombergConnection } from "@openfin/bloomberg";
+import * as fdc3 from "@finos/fdc3";
+import {
+	connect,
+	getSecurityFromInstrumentContext,
+	type BloombergGroupUpdate,
+	enableLogging,
+	type BloombergConnectionConfig,
+	type BloombergConnection
+} from "@openfin/bloomberg";
 import type OpenFin from "@openfin/core";
 
 let bbgConnection: BloombergConnection | undefined;
@@ -16,7 +24,38 @@ let intentTypeElement: HTMLSelectElement | null;
 let intentValueElement: HTMLSelectElement | null;
 let logOutput: HTMLPreElement | null;
 
-const API_KEY = "<Please insert your API key here>";
+const API_KEY = "73a728984ed7b3a762fd141200d4000a";
+
+const config: BloombergConnectionConfig = {
+	onContextChanged: ((context) => {
+		logInformation(`Received context: ${JSON.stringify(context)}`);
+	}),
+	onError: (error) => logInformation(error.message),
+	groups: ["Group-A"],
+	interopDisabled: false,
+	actions: {
+        contexts: [
+          [
+            fdc3.ContextTypes.Instrument,
+            (context) => {
+              // Use the getSecurityFromInstrumentContext utility function to extract the security string from the context
+              const security = getSecurityFromInstrumentContext(context);
+              if (!security) {
+                return;
+              }
+			logInformation(`Received Instrument Context: ${security}`);
+
+
+              // Return a BloombergGroupUpdate object that updates Launchpad group A with the security
+              return {
+                group: "Group-A",
+                security
+              } as BloombergGroupUpdate;
+            }
+          ]
+        ]
+      }
+  };
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// Enable logging in the BBG package
@@ -188,7 +227,7 @@ async function connectToBBGTerminal(): Promise<void> {
 	try {
 		logInformation("Checking Bloomberg Terminal Status");
 
-		bbgConnection = await connect(API_KEY);
+		bbgConnection = await connect(API_KEY, config);
 		logInformation("Connection successful");
 	} catch (error) {
 		bbgConnection = undefined;
