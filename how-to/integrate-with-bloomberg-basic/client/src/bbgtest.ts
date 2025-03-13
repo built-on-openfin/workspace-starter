@@ -24,7 +24,7 @@ let intentTypeElement: HTMLSelectElement | null;
 let intentValueElement: HTMLSelectElement | null;
 let logOutput: HTMLPreElement | null;
 
-const API_KEY = "73a728984ed7b3a762fd141200d4000a";
+const API_KEY = "";
 
 const config: BloombergConnectionConfig = {
 	onContextChanged: ((context) => {
