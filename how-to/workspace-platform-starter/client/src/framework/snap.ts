@@ -243,6 +243,8 @@ export async function applyDecoratedSnapshot(
 				snapSnapshot.snap.clients.push(existingApp);
 			}
 
+			const applicationTracker = new Map<string, boolean>();
+
 			// Now launch the remaining apps
 			for (const launchClient of launchClients) {
 				const parts = launchClient.id.split("/");
@@ -250,20 +252,29 @@ export async function applyDecoratedSnapshot(
 				const instanceId = parts[2];
 
 				const app = await getApp(appId);
-				if (app) {
-					if (
-						app.manifestType === MANIFEST_TYPES.External.id ||
-						app.manifestType === MANIFEST_TYPES.InlineExternal.id
-					) {
-						await launchExternal(app, instanceId);
-					} else if (
-						app.manifestType === MANIFEST_TYPES.Appasset.id ||
-						app.manifestType === MANIFEST_TYPES.InlineAppAsset.id
-					) {
-						await launchAppAsset(app, instanceId);
-					}
+				const combinedId = `${appId}/${instanceId}`;
+				if (applicationTracker.has(combinedId)) {
+					logger.info(
+						`App with id ${appId} and instanceId ${instanceId} is already being launched, skipping`
+					);
 				} else {
-					logger.error(`Unable to find app with id ${appId} to relaunch it`);
+					applicationTracker.set(combinedId, true);
+
+					if (app) {
+						if (
+							app.manifestType === MANIFEST_TYPES.External.id ||
+							app.manifestType === MANIFEST_TYPES.InlineExternal.id
+						) {
+							await launchExternal(app, instanceId);
+						} else if (
+							app.manifestType === MANIFEST_TYPES.Appasset.id ||
+							app.manifestType === MANIFEST_TYPES.InlineAppAsset.id
+						) {
+							await launchAppAsset(app, instanceId);
+						}
+					} else {
+						logger.error(`Unable to find app with id ${appId} to relaunch it`);
+					}
 				}
 			}
 
@@ -315,7 +326,7 @@ export async function launchApp(
 				// so check the current snap layout to see if the app is
 				// already launched so we don't launch it again
 				const layout = await server.getLayout();
-				const existingClientIndex = layout.clients.findIndex((c) => c.id === clientId);
+				const existingClientIndex = layout.clients.findIndex((c) => c.id.startsWith(clientId));
 				if (existingClientIndex >= 0) {
 					launch = false;
 
