@@ -165,6 +165,29 @@ If you want the debug version with the debug window automatically showing then y
   "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
 ```
 
+If you want the channel version with the a channel name of `${fin.me.identity.uuid}-snap-layout` as the name that has two functions getLayout and applyLayout (if you want to quickly validate including snap data in state without having to modify your project to reference the SnapSDK npm package) then you can reference this preload script:
+
+```json
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/integrate-with-snap/js/snap.preload.channel.bundle.js" }],
+```
+
+To reference the channel you can do the following in your main page or platform provider:
+
+```javascript
+const clientChannelName = `${fin.me.identity.uuid}-snap-layout`;
+const snapPreloadClient = await fin.InterApplicationBus.Channel.connect(clientChannelName);
+
+// fetch the current snap layout
+const layout = await snapPreloadClient.dispatch("getLayout") as Snap.SnapLayout;
+console.log("Got layout from Snap", layout);
+
+// apply the layout
+await snapPreloadClient.dispatch("applyLayout", layout);
+console.log("Applied layout to Snap");
+```
+
+This approach is just for quick, low touch evaluation. If you are looking to use Snap in production we recommend using the SnapSDK directly in your codebase to take advantage of all of it's capabilities.
+
 #### Permissions
 
 These permissions need to be added at the platform or startup_app level depending on the type of application you are building. The example below is using the restrictive permission model so it only allows launch external process for an app asset that comes from a particular url.
