@@ -16,8 +16,10 @@ export async function getSettings(showDebugWindow?: boolean): Promise<SnapProvid
 	}
 	const settings = await getManifestCustomSettings(manifest);
 	settings.snapProvider ??= {};
-	if (settings.snapProvider.showDebugWindow === undefined) {
-		settings.snapProvider.showDebugWindow = showDebugWindow;
+	if (settings.snapProvider.serverOptions === undefined) {
+		settings.snapProvider.serverOptions = {
+			showDebug: showDebugWindow
+		};
 	}
 	return settings.snapProvider;
 }

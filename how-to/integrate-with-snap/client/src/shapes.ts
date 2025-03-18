@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { LaunchStrategy } from "@openfin/snap-sdk";
+import type { LaunchStrategy, ServerOptions } from "@openfin/snap-sdk";
 import type { App } from "@openfin/workspace";
 
 /**
@@ -57,32 +57,7 @@ export interface SnapProviderOptions {
 	platformId?: string;
 
 	/**
-	 * Show the Snap SDK debug window.
+	 * The server options to pass to the snap server.
 	 */
-	showDebugWindow?: boolean;
-
-	/**
-	 * Disable the ability to unsnap a window by holding down the shift key.
-	 */
-	disableShiftToUnsnap?: boolean;
-
-	/**
-	 * Disable auto-snap when dragging a window. Only enable snap when the Ctrl key is pressed.
-	 */
-	enableCtrlToSnap?: boolean;
-
-	/**
-	 * Disable the GPU acceleration for dragging a window.
-	 */
-	disableGPUDragging?: boolean;
-
-	/**
-	 * Disable the blur drop preview when dragging a window.
-	 */
-	disableBlurDropPreview?: boolean;
-
-	/**
-	 * Auto hide the client taskbar icons.
-	 */
-	autoHideClientTaskbarIcons?: boolean;
+	serverOptions?: ServerOptions;
 }
