@@ -35,6 +35,13 @@ Workspace platform starter supports the following manifest types (for the list i
 
 The endpoint manifest type can accept custom endpoint ids if none of the supported manifest types cover the use case you are trying to evaluate.
 
+## Token Replacement
+
+When defining command line arguments for **inline-external** or **inline-appasset** applications we support two tokens which will be replaced before the command line arguments are passed.
+
+- {OF-PLAT-UUID} - will be replaced with the UUID of the platform that launched the native app (this is useful if you wish to connect to a channel exposed by the platform that uses it's uuid as part of the channel name or if you want to connect to the interop broker of the platform that launched you).
+- {OF-EXT-UUID} which will pass the UUID we launched your external application with. This will be the appId the platform has for the native app in it's directory. This will be used unless a uuid is specified in the app asset/launch external options. This uuid could then be used by native apps that use our adapter and create an OpenFin runtime instance.
+
 ## Source Reference
 
 - [manifest-types.ts](../client/src/framework/manifest-types.ts)

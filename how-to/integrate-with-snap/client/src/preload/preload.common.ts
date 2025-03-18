@@ -9,19 +9,16 @@ import type { SnapProviderOptions } from "../shapes";
  */
 export async function initialize(options: SnapProviderOptions): Promise<void> {
 	const settings = await getSettings();
-	const finalOptions = { ...settings, ...options };
+	const settingsServerOptions = settings?.serverOptions ?? {};
+	const passedOptions = options?.serverOptions ?? {};
+	const finalOptions = { ...settingsServerOptions, ...passedOptions };
+	const finalPlatformId = options?.platformId ?? settings?.platformId;
 	try {
-		if (finalOptions.platformId) {
-			console.log("Registering Snap with platformId", finalOptions.platformId);
-			const server = new Snap.SnapServer(finalOptions.platformId);
-			console.log("Enabling debug window:", finalOptions.showDebugWindow ?? false);
-			await server.start({
-				showDebug: finalOptions.showDebugWindow ?? false,
-				disableUserUnstick: finalOptions.disableShiftToUnsnap ?? false,
-				keyToStick: finalOptions.enableCtrlToSnap ?? false,
-				disableGPUAcceleratedDragging: finalOptions.disableGPUDragging ?? false,
-				disableBlurDropPreview: finalOptions.disableBlurDropPreview ?? false
-			});
+		if (finalPlatformId) {
+			console.log("Registering Snap with platformId", finalPlatformId);
+			const server = new Snap.SnapServer(finalPlatformId);
+			console.log("Enabling debug window:", finalOptions.showDebug ?? false);
+			await server.start(finalOptions);
 			const app = fin.Application.getCurrentSync();
 			await app.on("window-created", async (e) => {
 				const win = fin.Window.wrapSync(e);

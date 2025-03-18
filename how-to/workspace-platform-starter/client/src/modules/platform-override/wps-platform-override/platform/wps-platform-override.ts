@@ -206,13 +206,13 @@ export async function getConstructorOverride(
 
 				await super.applySnapshot(payload, identity);
 
-				if (snapClient.isEnabled()) {
-					await snapClient.applyDecoratedSnapshot(payload.snapshot, existingApps ?? []);
-				}
-
 				if (!isEmpty(connectionClient?.applyClientSnapshot)) {
 					// Use the decorated snapshot to open any connected clients
 					await connectionClient.applyClientSnapshot(payload.snapshot);
+				}
+
+				if (snapClient.isEnabled()) {
+					await snapClient.applyDecoratedSnapshot(payload.snapshot, existingApps ?? []);
 				}
 			}
 
