@@ -232,14 +232,19 @@ The main example and the preload scripts check the currently running manifest to
 ```json
 "customSettings": {
   "snapProvider": {
-   "showDebugWindow": false,
-   "disableShiftToUnsnap": false,
-   "enableCtrlToSnap": false,
-   "disableGPUDragging": false,
-   "disableBlurDropPreview": false
+   "serverOptions": {
+    "showDebug": false,
+    "disableUserUnstick": false,
+    "keyToStick": false,
+    "disableGPUAcceleratedDragging": false,
+    "disableBlurDropPreview": false,
+    "autoHideClientTaskbarIcons": true
+   }
   }
  }
 ```
+
+**serverOptions** now represents the settings that are passed directly to the snapServer. The settings can be found on the snap documentation here: <https://developer.openfin.co/docs/snap/latest/interfaces/ServerOptions.html>. If you update the manifest and relaunch the app the code will pick up the new settings.
 
 #### Running an example
 
