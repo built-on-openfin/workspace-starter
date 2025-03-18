@@ -40,11 +40,14 @@
 	"appAssets": [],
 	"customSettings": {
 		"snapProvider": {
-			"showDebugWindow": false,
-			"disableShiftToUnsnap": false,
-			"enableCtrlToUnsnap": false,
-			"disableGPUDragging": false,
-			"disableBlurDropPreview": false
+			"serverOptions": {
+				"showDebug": false,
+				"disableUserUnstick": false,
+				"keyToStick": false,
+				"disableGPUAcceleratedDragging": false,
+				"disableBlurDropPreview": false,
+				"autoHideClientTaskbarIcons": true
+			}
 		}
 	}
 }
