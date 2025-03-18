@@ -98,6 +98,55 @@
 		}
 	},
 	{
+		"appId": "java-interop-example",
+		"name": "Java Interop Example",
+		"title": "Java Interop Example",
+		"description": "A Java Application that shows the power of our interop api.",
+		"manifestType": "inline-appasset",
+		"instanceMode": "single",
+		"manifest": {
+			"alias": "java-interop-example",
+			"version": "2.2.0",
+			"args": "workspaceUUID={OF-PLAT-UUID} nativeUUID={OF-EXT-UUID} registerIntents",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/workspace-platform-starter/common/assets/openfin.starter.integrate.workspace.zip",
+			"target": "openfin.starter.integrate.workspace-0.0.1-SNAPSHOT.jar"
+		},
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/workspace-platform-starter/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [
+			{
+				"name": "ViewInstrument",
+				"displayName": "View Instrument",
+				"contexts": ["fdc3.instrument"]
+			}
+		],
+		"images": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v20.1.0/workspace-platform-starter/common/images/previews/native/openfin-java-interop.png"
+			}
+		],
+		"tags": ["native", "appasset", "developer"],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "combined",
+						"matchClassRegex": "^SunAwtFrame",
+						"matchNameRegex": "^Java ",
+						"multiProcess": true
+					}
+				}
+			}
+		}
+	},
+	{
 		"appId": "Notepad",
 		"name": "Notepad",
 		"title": "Notepad",
