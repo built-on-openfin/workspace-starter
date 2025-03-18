@@ -44,6 +44,12 @@ export async function initialize(
 					});
 					channel.onConnection(async (identity) => {
 						console.log("Channel Service: Connection request from:", identity);
+						// eslint-disable-next-line prefer-template
+						if (identity.uuid !== fin.me.identity.uuid) {
+							const message = `Channel Service: Rejecting connection request as it is not coming from within the application. Identity should be: ${fin.me.identity.uuid} and connection request is coming from: ${identity.uuid}`;
+							console.error(message);
+							throw new Error(message);
+						}
 					});
 					channel.onDisconnection(async (identity) => {
 						console.log("Channel Service: Disconnection request from:", identity);
@@ -67,7 +73,7 @@ export async function initialize(
 							await snapPreloadClient.dispatch("applyLayout", layout);
 							console.log("Channel Client: Applied layout to Snap");
 
-							console.log("Channel Client: Disconnecting from snap preload Channel Service");
+							console.log("Channel Client: Intentionally disconnecting from snap preload Channel Service");
 							await snapPreloadClient.disconnect();
 						} catch (clientError) {
 							console.error(
