@@ -82,7 +82,7 @@ export function isInteger(value: unknown): value is number {
  */
 export function objectClone<T>(obj: T): T {
 	// eslint-disable-next-line no-restricted-syntax
-	return obj === undefined ? undefined : JSON.parse(JSON.stringify(obj));
+	return obj === undefined ? (undefined as T) : JSON.parse(JSON.stringify(obj));
 }
 
 /**

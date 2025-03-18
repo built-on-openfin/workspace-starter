@@ -14,14 +14,7 @@ export async function initialize(options: SnapProviderOptions): Promise<void> {
 	try {
 		if (options.platformId) {
 			server = new Snap.SnapServer(options.platformId);
-			await server.start({
-				showDebug: options.showDebugWindow ?? false,
-				disableUserUnstick: options.disableShiftToUnsnap ?? false,
-				keyToStick: options.enableCtrlToSnap ?? false,
-				disableGPUAcceleratedDragging: options.disableGPUDragging ?? false,
-				disableBlurDropPreview: options.disableBlurDropPreview ?? false,
-				autoHideClientTaskbarIcons: options.autoHideClientTaskbarIcons ?? false
-			});
+			await server.start(options.serverOptions ?? {});
 
 			await server.enableAutoWindowRegistration();
 		}
