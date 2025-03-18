@@ -6,8 +6,7 @@ if (window === window.top) {
 
 	window.addEventListener("DOMContentLoaded", async () => {
 		const snapOptions: SnapProviderOptions = {
-			platformId: fin.me.identity.uuid,
-			serverOptions: { showDebug: true }
+			platformId: fin.me.identity.uuid
 		};
 		await initialize(snapOptions, true);
 	});
