@@ -20,7 +20,6 @@ async function takeSnapshot(): Promise<void> {
 }
 ```
 
-
 ### Options for Auto-Saving
 
 #### Option 1: Implement a timer on the Platform
@@ -29,9 +28,39 @@ Implementing a timer is the first choice for users, as it is easy to implement, 
 
 ```typescript
 async function saveAtInterval(interval: int): Promise<void> {
-    setInterval(takeSnapshot, interval); // Interval in milliseconds. 
+    setInterval(async () => {
+        await takeSnapshot();
+    }, interval); // Interval in milliseconds. 
 }
 ```
 
 #### Option 2: Listen to View, Window, and Close Events from your Platform
 
+The second option is creating listeners on your platform to decide when to save on demand.  Usually, this is done when a View, Window, or the entire Platform is closed, and you want to catch the state of the desktop before the User closes something. This can also be done from the Platform-level, and involves the [Platform.addListener](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Platform.html#addListener) method.  Here are some examples for each:
+
+##### Examples
+
+```typescript
+
+// For when a View is closed out.
+const platform = await fin.Platform.getCurrent();
+await platform.addListener("view-destroyed", async (e) => {
+    await takeSnapshot();
+});
+
+// For when a Window is closed.
+await platform.addListener("window-closed", async (e) => {
+    await takeSnapshot();
+});
+
+// For when a User closes the whole Platform.
+await platform.addListener("closed", async (e) => {
+    await takeSnapshot();
+});
+```
+
+It should be noted here that the Platform.addListener function has a long list of events that can also be added, such as "view-blurred", "view-url-changed", and "window-closing" to name a few. You should work with your business team to fit the functionality with your own unique requirements.
+
+#### Wrapping Up
+
+There are a few options with implementing Auto-Save for your Here Core Platform.  You might want to implement one or both of these options so that you're delivering a consistent experience for your users. It is important to consider how often and where you would like your snapshots to be saved for recollection later. If you have any questions, please contact [Here Support](mailto:support@here.io) or your assigned Solutions Engineer for a deeper dive into options and customizability.
