@@ -18,3 +18,4 @@ This section is where we will add small hints and tips that isn't specific to an
 | [Protocol Links](./docs/protocol-support.md)                                            | This document covers how you can configure protocol support for your OpenFin platform e.g. mailto:, msteams: etc.                          |
 | [App Assets & Launch External Process](./docs/appassets-and-launch-external-process.md) | This document covers app assets, launch external process, how they work together, when would you use it and a deep dive into each feature. |
 | [Platform Override - launchIntoPlatform](./docs/launch-into-platform.md) | Override launchIntoPlatform to control how content is loaded into your platform. |
+| [Implementing an Auto-Save Feature](./docs/implement-auto-save.md) | Options for implementing an Auto-Save for your Platform. |
