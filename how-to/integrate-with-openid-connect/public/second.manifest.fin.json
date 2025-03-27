@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=integrate-with-openid-connect-app",
-		"version": "40.130.101.1"
+		"version": "41.134.100.116"
 	},
 	"platform": {
 		"uuid": "integrate-with-openid-connect-app",

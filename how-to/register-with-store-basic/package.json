@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-store-basic",
-	"version": "20.1.0",
+	"version": "21.0.0",
 	"description": "OpenFin Workspace -- Register with store basic",
 	"main": "index.js",
 	"scripts": {
@@ -20,12 +20,12 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "20.1.5",
-		"@openfin/workspace-platform": "20.1.5"
+		"@openfin/workspace": "21.0.6",
+		"@openfin/workspace-platform": "21.0.6"
 	},
 	"devDependencies": {
-		"@openfin/core": "40.101.1",
-		"@openfin/node-adapter": "40.101.1",
+		"@openfin/core": "41.100.116",
+		"@openfin/node-adapter": "41.100.116",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

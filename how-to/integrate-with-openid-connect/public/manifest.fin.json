@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.101.1"
+		"version": "41.134.100.116"
 	},
 	"platform": {
 		"uuid": "integrate-with-openid-connect",
@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with OpenId Connect - v20.1.0",
+		"name": "Integrate with OpenId Connect - v21.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
