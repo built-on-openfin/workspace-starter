@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=workspace-platform-starter",
-		"version": "41.134.100.116"
+		"version": "41.134.100.115"
 	},
 	"platform": {
 		"name": "workspace-platform-starter",
