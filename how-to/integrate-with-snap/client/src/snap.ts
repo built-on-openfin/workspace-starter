@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
 import { getApp, getAppAssetExecutablePath } from "./apps";
-import type { AppAssetInfoWithLaunchStrategy, SnapProviderOptions } from "./shapes";
+import type { AppAssetInfoWithLaunchStrategy, ApplySnapSnapshotPayload, SnapProviderOptions } from "./shapes";
 import { formatError } from "./utils";
 
 let server: Snap.SnapServer | undefined;
@@ -81,9 +81,11 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 /**
  * Prepare to apply a decorated snapshot.
  * @param snapshotPayload The payload for the snapshot.
+ * @param snapshotPayload.snapshot The snapshot to apply.
+ * @param snapshotPayload.options The options for the snapshot.
  */
 export async function prepareToApplyDecoratedSnapshot(
-	snapshotPayload?: OpenFin.ApplySnapshotPayload
+	snapshotPayload?: ApplySnapSnapshotPayload
 ): Promise<void> {
 	try {
 		if (server) {
