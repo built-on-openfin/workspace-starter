@@ -67,11 +67,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 				const lastFocusedWindowIdentity = await platform.Browser.getLastFocusedWindow();
 				if (lastFocusedWindowIdentity) {
 					const { uuid, name } = lastFocusedWindowIdentity;
-				const wrappedBrowserWindow = platform.Browser.wrapSync({ uuid, name });
-				const lastBrowserWindowPages = await wrappedBrowserWindow.getPages();
-				const unsavedPages = lastBrowserWindowPages.filter((page) => page.hasUnsavedChanges);
-				console.dir({ message: "All PAGES", pages });
-				console.dir({ message: "UNSAVED PAGES", unsavedPages });
+					const wrappedBrowserWindow = platform.Browser.wrapSync({ uuid, name });
+					const lastBrowserWindowPages = await wrappedBrowserWindow.getPages();
+					const unsavedPages = lastBrowserWindowPages.filter((page) => page.hasUnsavedChanges);
+					console.dir({ message: "All PAGES", pages });
+					console.dir({ message: "UNSAVED PAGES", unsavedPages });
 					console.dir({ message: "LAST FOCUSED WINDOW", wrappedBrowserWindow });
 				}
 			}

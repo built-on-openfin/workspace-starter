@@ -2,6 +2,10 @@
 
 ## v21.0.0
 
+- Update to latest version of npm packages.
+
+## v20.1.0
+
 - Update [apps-native.json](./public/common/apps-native.json) to include the native app from our [java starter](https://github.com/built-on-openfin/java-starter/tree/main/how-to/integrate-with-workspace). This is an app asset in our assets directory and was built using the [Microsoft Packaged OpenJDK 21](https://learn.microsoft.com/en-us/java/openjdk/download?form=MG0AV3#openjdk-21). The example shows that Java can connect to an Interop Broker to fire an intent (ViewInstrument), be an Intent target (for ViewInstrument) and that it can share context. If snap is enabled in the manifest then it demonstrates snapping a Java Application and the new multi window snapping support in the Snap SDK. It also demonstrates connectionProvider app provision logic (feeding java child window apps into home and store) as well as snapshot source support. Known issue: The Java app does not support instanceMode: multi because of the way workspace platform starter specifies a multi instance runtime uuid for native apps (appId/instanceId). This is being looked into. Second known issue. If a workspace has a saved Java app but the java app is not launched then it will be launched but the snapping state will not be as expected. Third known issue: Java child window support is experimental. Saving a workspace which includes a Java app and child windows and having them snapped can result in unexpected results.
 - Updated snap to 1.2. Set default configuration to collapse client icons when snapped.
 - Removed the old platformProvider.intentPicker setting. The setting has been exposed through platformProvider.interop.intentResolver for a number of releases and is now the only way of setting the intent resolver.
@@ -10,7 +14,7 @@
 - Added an [AuthClient](./client/src/framework/shapes/auth-shapes.ts) that is optionally passed to modules (it will be passed but is passed as an optional in case you ever want to restrict it) through a getAuthClient function. If the getAuthClient function is available then an authClient will be returned if configured (otherwise a warning and undefined is returned). This can be used if you want to create your own log out buttons or if you want to retrieve the current user info without using the lifecycle event.
 - Added a new browserProvider option to have a different strategy when a window is requested to be brought to front. The default (existing approach) is that the window has [setAsForeground](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#setAsForeground) called against it. The alternative strategies are [bringToFront](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#bringToFront) and bringToFrontAndFocus which calls [bringToFront](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#bringToFront) followed by [focus](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#focus). The new setting is browserProvider.bringToFrontStrategy.
 - Upgraded to Snap 1.1.0 and removed the serverAssetInfo from the manifest as Snap now fetches the app asset if it isn't specified. See [how to configure snap](./docs/how-to-configure-snap.md).
-- Upgraded Cloud Interop to 0.41.117 and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
+- Upgraded Cloud Interop to 0.41.119 and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
 
 ## v20.0.0
 

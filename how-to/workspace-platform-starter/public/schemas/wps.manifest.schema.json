@@ -51,7 +51,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_60"
+			"$ref": "#/definitions/__type_61"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -338,7 +338,7 @@
 			"type": "object"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -348,9 +348,6 @@
 		"BaseContentBehavior": {
 			"enum": ["allow", "block"],
 			"type": "string"
-		},
-		"BaseStructuredContentBehavior": {
-			"$ref": "#/definitions/__type_71"
 		},
 		"BlockedContentCreationRule": {
 			"additionalProperties": false,
@@ -415,7 +412,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"BringToFrontStrategy": {
 			"description": "The strategy for bringing a window to the front.",
@@ -486,7 +483,7 @@
 					"description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl`, `panels` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."
 				},
 				"defaultViewOptions": {
-					"$ref": "#/definitions/Partial_10",
+					"$ref": "#/definitions/Partial_11",
 					"description": "The default options when creating a new browser window. Any option not included in WorkspacePlatform.getCurrentSync().Browser.createView(options) call will default to the value provided in this field."
 				},
 				"defaultWindowOptions": {
@@ -750,10 +747,13 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_54"
 		},
 		"ChromiumPolicies": {
 			"$ref": "#/definitions/__type_14"
+		},
+		"ClipboardPermissions": {
+			"$ref": "#/definitions/__type_75"
 		},
 		"CombinedStrategy": {
 			"additionalProperties": false,
@@ -895,14 +895,22 @@
 		"ContentPermission": {
 			"anyOf": [
 				{
-					"$ref": "#/definitions/BaseStructuredContentBehavior"
+					"$ref": "#/definitions/BrowserContentBehavior",
+					"description": "Opens matched URLs in the browser."
 				},
 				{
-					"$ref": "#/definitions/BrowserContentBehavior"
+					"additionalProperties": false,
+					"properties": {
+						"behavior": {
+							"$ref": "#/definitions/BaseContentBehavior"
+						}
+					},
+					"required": ["behavior"],
+					"type": "object"
 				},
 				{
 					"$ref": "#/definitions/StructuredContentPermissions",
-					"description": "Specify rules for specific actions."
+					"description": "Behavior when displaying content from matched URLs. Varies depending on type of navigation."
 				},
 				{
 					"enum": ["allow", "block", "browser"],
@@ -915,7 +923,7 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_50"
+			"$ref": "#/definitions/__type_51"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_9"
@@ -933,6 +941,9 @@
 				}
 			},
 			"type": "object"
+		},
+		"CopyPermissions": {
+			"$ref": "#/definitions/__type_76"
 		},
 		"CustomActionSpecifier": {
 			"additionalProperties": false,
@@ -1248,10 +1259,10 @@
 		},
 		"Data": {},
 		"DeepPartial": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_42"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_66"
+			"$ref": "#/definitions/__type_67"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1302,10 +1313,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_48"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_64"
+			"$ref": "#/definitions/__type_65"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1562,10 +1573,13 @@
 			"type": "object"
 		},
 		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_69"
+			"$ref": "#/definitions/__type_70"
 		},
 		"DomainSettings": {
-			"$ref": "#/definitions/__type_66"
+			"$ref": "#/definitions/__type_67"
+		},
+		"DomainSettingsPreloadScripts": {
+			"$ref": "#/definitions/__type_74"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_19"
@@ -1672,7 +1686,7 @@
 			"type": "string"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"FavoriteProviderOptions": {
 			"additionalProperties": false,
@@ -1798,7 +1812,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_68"
+			"$ref": "#/definitions/__type_69"
 		},
 		"GetInfoOptions": {
 			"additionalProperties": false,
@@ -1957,7 +1971,7 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Identity_4_1": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_43"
 		},
 		"Image": {
 			"additionalProperties": false,
@@ -1984,8 +1998,8 @@
 			"description": "List of modules."
 		},
 		"InjectionType": {
-			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
-			"enum": ["global", "none"],
+			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'preloads': The `fin` API will be available in a synchronous context in the preload script only.\n* 'global': The entire `fin` API will be available.",
+			"enum": ["global", "none", "preloads"],
 			"type": "string"
 		},
 		"IntegrationModuleDefinition<unknown>": {
@@ -2125,23 +2139,23 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_63"
+			"$ref": "#/definitions/__type_64"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_65"
+			"$ref": "#/definitions/__type_66"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_53"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"$ref": "#/definitions/Partial_14",
+					"$ref": "#/definitions/Partial_15",
 					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
@@ -2262,13 +2276,13 @@
 			"description": "List of modules."
 		},
 		"LockUnlockPageConfig": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"LogUploadOptions": {
-			"$ref": "#/definitions/__type_74"
+			"$ref": "#/definitions/__type_78"
 		},
 		"LogUploaderUIOptions": {
-			"$ref": "#/definitions/__type_75"
+			"$ref": "#/definitions/__type_79"
 		},
 		"LoggerProviderOptions": {
 			"$ref": "#/definitions/ModuleList_1",
@@ -3151,10 +3165,15 @@
 			"type": "string"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_49"
+			"$ref": "#/definitions/__type_50"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_46"
+		},
+		"MultipleDomainMatchBehavior": {
+			"description": "Behavior for handling multiple {@link DomainSettingsRule} matches.",
+			"enum": ["deep-merge", "pick-first"],
+			"type": "string"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -3297,7 +3316,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_59"
+			"$ref": "#/definitions/__type_60"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3328,23 +3347,23 @@
 			"type": "object"
 		},
 		"NotificationsCustomManifestOptions": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_44"
 		},
 		"O": {},
 		"Omit": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"Omit_1": {
-			"$ref": "#/definitions/__type_37"
-		},
-		"Omit_2": {
 			"$ref": "#/definitions/__type_38"
 		},
-		"Omit_3": {
+		"Omit_2": {
 			"$ref": "#/definitions/__type_39"
 		},
-		"Omit_4": {
+		"Omit_3": {
 			"$ref": "#/definitions/__type_40"
+		},
+		"Omit_4": {
+			"$ref": "#/definitions/__type_41"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -3552,6 +3571,9 @@
 				"Refresh",
 				"Close others",
 				"Delete",
+				"Print",
+				"PrintAll",
+				"PrintScreen",
 				"Custom"
 			],
 			"type": "string"
@@ -3616,16 +3638,16 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_28"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_30"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_51"
+			"$ref": "#/definitions/__type_45"
 		},
 		"Partial_13": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_52"
 		},
 		"Partial_14": {
 			"$ref": "#/definitions/__type_55"
@@ -3637,7 +3659,10 @@
 			"$ref": "#/definitions/__type_57"
 		},
 		"Partial_17": {
-			"$ref": "#/definitions/__type_62"
+			"$ref": "#/definitions/__type_58"
+		},
+		"Partial_18": {
+			"$ref": "#/definitions/__type_63"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -3661,16 +3686,19 @@
 			"$ref": "#/definitions/__type_24"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_25"
+		},
+		"PastePermissions": {
+			"$ref": "#/definitions/__type_77"
 		},
 		"PerDomainSettings": {
-			"$ref": "#/definitions/__type_67"
+			"$ref": "#/definitions/__type_68"
 		},
 		"Permissions_2": {
-			"$ref": "#/definitions/__type_70"
+			"$ref": "#/definitions/__type_71"
 		},
 		"Pick": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -3732,19 +3760,19 @@
 				"manifest": {
 					"anyOf": [
 						{
-							"$ref": "#/definitions/Partial_10"
+							"$ref": "#/definitions/Partial_11"
 						},
 						{
 							"$ref": "#/definitions/Partial_2"
-						},
-						{
-							"$ref": "#/definitions/Partial_11"
 						},
 						{
 							"$ref": "#/definitions/Partial_12"
 						},
 						{
 							"$ref": "#/definitions/Partial_13"
+						},
+						{
+							"$ref": "#/definitions/Partial_14"
 						},
 						{
 							"type": "string"
@@ -4052,14 +4080,14 @@
 					"type": "number"
 				},
 				"defaultViewOptions": {
-					"$ref": "#/definitions/Partial_10",
+					"$ref": "#/definitions/Partial_11",
 					"description": "**Platforms Only.** Default view options apply to all platform views."
 				},
 				"defaultWidth": {
 					"type": "number"
 				},
 				"defaultWindowOptions": {
-					"$ref": "#/definitions/Partial_17",
+					"$ref": "#/definitions/Partial_18",
 					"description": "**Platforms Only.** Default window options apply to all platform windows."
 				},
 				"disableDefaultCommands": {
@@ -4204,7 +4232,7 @@
 					"$ref": "#/definitions/WindowState"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"url": {
@@ -4286,7 +4314,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_47"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -4364,10 +4392,10 @@
 			"$ref": "#/definitions/__type_21"
 		},
 		"Record_1": {
-			"$ref": "#/definitions/__type_58"
+			"$ref": "#/definitions/__type_59"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_49"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_11"
@@ -4383,6 +4411,11 @@
 		"ScoreOrder_1": {
 			"description": "The order to sort scored search results in.",
 			"enum": ["ascending", "descending"],
+			"type": "string"
+		},
+		"ScreenCaptureBehavior": {
+			"description": "Controls whether this content should be allowed or blocked when capturing the screen.",
+			"enum": ["allow", "block"],
 			"type": "string"
 		},
 		"ServerOptions": {
@@ -4485,7 +4518,7 @@
 			"type": "object"
 		},
 		"ShowHideTabsConfig": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -4539,7 +4572,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_61"
+			"$ref": "#/definitions/__type_62"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -4890,7 +4923,7 @@
 			"type": "object"
 		},
 		"TaskbarIcon": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"ThemeProviderOptions": {
 			"additionalProperties": false,
@@ -5112,7 +5145,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_10",
+					"$ref": "#/definitions/Partial_11",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -5147,7 +5180,7 @@
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_15",
+					"$ref": "#/definitions/Partial_16",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -5224,11 +5257,16 @@
 			"enum": ["enabled", "scheduler-disabled"],
 			"type": "string"
 		},
+		"ViewTitlePriority": {
+			"description": "Precedence for view tab title",
+			"enum": ["document", "options"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"WPSManifest": {
 			"additionalProperties": false,
@@ -5555,7 +5593,7 @@
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_16",
+					"$ref": "#/definitions/Partial_17",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -5739,7 +5777,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -5839,7 +5877,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -6241,7 +6279,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -6344,7 +6382,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -6844,8 +6882,12 @@
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
-					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"description": "Defaults to `name`.",
 					"type": "string"
+				},
+				"titlePriority": {
+					"$ref": "#/definitions/ViewTitlePriority",
+					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
 					"type": "string"
@@ -6875,6 +6917,9 @@
 			"properties": {
 				"Application": {
 					"$ref": "#/definitions/Partial_7"
+				},
+				"Clipboard": {
+					"$ref": "#/definitions/Partial_9"
 				},
 				"System": {
 					"$ref": "#/definitions/Partial_8"
@@ -6922,6 +6967,9 @@
 				"getAllExternalWindows": {
 					"type": "boolean"
 				},
+				"getCurrentDomainSettings": {
+					"type": "boolean"
+				},
 				"getCustomProtocolState": {
 					"anyOf": [
 						{
@@ -6944,6 +6992,9 @@
 							"type": "boolean"
 						}
 					]
+				},
+				"getDomainSettings": {
+					"type": "boolean"
 				},
 				"getOSInfo": {
 					"type": "boolean"
@@ -7097,6 +7148,12 @@
 						}
 					]
 				},
+				"resolveDomainSettings": {
+					"type": "boolean"
+				},
+				"setDomainSettings": {
+					"type": "boolean"
+				},
 				"terminateExternalProcess": {
 					"type": "boolean"
 				},
@@ -7128,6 +7185,39 @@
 		},
 		"__type_25": {
 			"additionalProperties": false,
+			"properties": {
+				"readHtml": {
+					"type": "boolean"
+				},
+				"readImage": {
+					"type": "boolean"
+				},
+				"readRtf": {
+					"type": "boolean"
+				},
+				"readText": {
+					"type": "boolean"
+				},
+				"write": {
+					"type": "boolean"
+				},
+				"writeHtml": {
+					"type": "boolean"
+				},
+				"writeImage": {
+					"type": "boolean"
+				},
+				"writeRtf": {
+					"type": "boolean"
+				},
+				"writeText": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_26": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -7145,7 +7235,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -7155,7 +7245,7 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -7173,7 +7263,7 @@
 			},
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -7183,7 +7273,36 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configurations for API injection.",
+			"properties": {
+				"fin": {
+					"$ref": "#/definitions/InjectionType",
+					"description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
+				},
+				"iframe": {
+					"additionalProperties": false,
+					"description": "Configure conditional injection of OpenFin API into iframes",
+					"properties": {
+						"crossOriginInjection": {
+							"description": "Inject OpenFin API into cross-origin iframes",
+							"type": "boolean"
+						},
+						"enableDeprecatedSharedName": {
+							"type": "boolean"
+						},
+						"sameOriginInjection": {
+							"description": "Inject OpenFin API into same-origin iframes",
+							"type": "boolean"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -7379,8 +7498,12 @@
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
-					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"description": "Defaults to `name`.",
 					"type": "string"
+				},
+				"titlePriority": {
+					"$ref": "#/definitions/ViewTitlePriority",
+					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
 					"type": "string"
@@ -7391,36 +7514,7 @@
 			},
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configurations for API injection.",
-			"properties": {
-				"fin": {
-					"$ref": "#/definitions/InjectionType",
-					"description": "Configure injection of the `fin` API in this context.\n\n* 'none': The `fin` API will be not available in this context.\n* 'global': The entire `fin` API will be available in this context."
-				},
-				"iframe": {
-					"additionalProperties": false,
-					"description": "Configure conditional injection of OpenFin API into iframes",
-					"properties": {
-						"crossOriginInjection": {
-							"description": "Inject OpenFin API into cross-origin iframes",
-							"type": "boolean"
-						},
-						"enableDeprecatedSharedName": {
-							"type": "boolean"
-						},
-						"sameOriginInjection": {
-							"description": "Inject OpenFin API into same-origin iframes",
-							"type": "boolean"
-						}
-					},
-					"type": "object"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -7439,7 +7533,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -7461,7 +7555,7 @@
 			},
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -7649,8 +7743,12 @@
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
-					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"description": "Defaults to `name`.",
 					"type": "string"
+				},
+				"titlePriority": {
+					"$ref": "#/definitions/ViewTitlePriority",
+					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
 					"type": "string"
@@ -7661,7 +7759,7 @@
 			},
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the show/hide tabs button within the browser toolbar",
 			"properties": {
@@ -7703,7 +7801,7 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the page lock/unlock button within the browser toolbar",
 			"properties": {
@@ -7723,7 +7821,7 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"dark": {
@@ -7736,7 +7834,7 @@
 			"required": ["dark", "light"],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"closeButton": {
@@ -7770,7 +7868,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7812,7 +7910,7 @@
 			"required": ["display"],
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"appId": {
@@ -7842,7 +7940,23 @@
 			"required": ["appId"],
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_4": {
+			"additionalProperties": false,
+			"description": "Unique identifier for a window, view or iframe.",
+			"properties": {
+				"name": {
+					"description": "The name of the component.  Must be unique within the owning application.",
+					"type": "string"
+				},
+				"uuid": {
+					"description": "Universally unique identifier of the application that owns the component.",
+					"type": "string"
+				}
+			},
+			"required": ["name", "uuid"],
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
 				"action": {
@@ -7883,23 +7997,7 @@
 			"required": ["action"],
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"description": "Unique identifier for a window, view or iframe.",
-			"properties": {
-				"name": {
-					"description": "The name of the component.  Must be unique within the owning application.",
-					"type": "string"
-				},
-				"uuid": {
-					"description": "Universally unique identifier of the application that owns the component.",
-					"type": "string"
-				}
-			},
-			"required": ["name", "uuid"],
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -7949,7 +8047,7 @@
 			"required": ["options"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"clientAPIVersion": {
@@ -8007,7 +8105,7 @@
 			},
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"name": {
@@ -8021,7 +8119,7 @@
 			},
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_44": {
 			"additionalProperties": false,
 			"description": "Options for using privately hosted notification service.",
 			"properties": {
@@ -8037,7 +8135,7 @@
 			"required": ["manifestUrl", "manifestUuid"],
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -8076,7 +8174,7 @@
 			},
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_46": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -8167,7 +8265,7 @@
 			],
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_47": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -8182,7 +8280,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_48": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -8195,7 +8293,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -8214,7 +8312,22 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_49": {
+		"__type_5": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_50": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -8266,22 +8379,7 @@
 			],
 			"type": "object"
 		},
-		"__type_5": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_50": {
+		"__type_51": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -8310,7 +8408,7 @@
 			},
 			"type": "object"
 		},
-		"__type_51": {
+		"__type_52": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -8347,11 +8445,11 @@
 			},
 			"type": "object"
 		},
-		"__type_52": {
+		"__type_53": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_53": {
+		"__type_54": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -8372,7 +8470,7 @@
 			},
 			"type": "object"
 		},
-		"__type_54": {
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -8402,7 +8500,7 @@
 			},
 			"type": "object"
 		},
-		"__type_55": {
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -8416,21 +8514,6 @@
 				},
 				"width": {
 					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_56": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"type": "string"
 				}
 			},
 			"type": "object"
@@ -8452,6 +8535,17 @@
 		},
 		"__type_58": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_59": {
@@ -8635,7 +8729,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -8735,7 +8829,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -8776,6 +8870,10 @@
 		},
 		"__type_60": {
 			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_61": {
+			"additionalProperties": false,
 			"properties": {
 				"alias": {
 					"description": "The name of the asset",
@@ -8805,7 +8903,7 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_61": {
+		"__type_62": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -8845,7 +8943,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_62": {
+		"__type_63": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -9022,7 +9120,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -9126,7 +9224,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -9165,7 +9263,7 @@
 			},
 			"type": "object"
 		},
-		"__type_63": {
+		"__type_64": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -9193,7 +9291,7 @@
 			},
 			"type": "object"
 		},
-		"__type_64": {
+		"__type_65": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -9212,7 +9310,7 @@
 			},
 			"type": "object"
 		},
-		"__type_65": {
+		"__type_66": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -9241,17 +9339,22 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_66": {
+		"__type_67": {
 			"additionalProperties": false,
 			"properties": {
 				"default": {
 					"$ref": "#/definitions/PerDomainSettings",
 					"description": "Default values for settings in {@link DomainSettingsRule}."
 				},
+				"multipleMatchBehavior": {
+					"$ref": "#/definitions/MultipleDomainMatchBehavior",
+					"description": "{@inheritDoc MultipleDomainMatchBehavior}"
+				},
 				"rules": {
 					"description": "{@inheritDoc DomainSettingsRule}",
 					"items": {
 						"additionalProperties": false,
+						"description": "Defines domain-conditional settings for an OpenFin application.",
 						"properties": {
 							"match": {
 								"description": "Array of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) specifying\nthe domain(s) for which the rule applies.",
@@ -9269,7 +9372,7 @@
 								"description": "Settings applied when a webcontents has been navigated to a matched domain."
 							}
 						},
-						"required": ["options"],
+						"required": ["match", "options"],
 						"type": "object"
 					},
 					"type": "array"
@@ -9278,7 +9381,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_67": {
+		"__type_68": {
 			"additionalProperties": false,
 			"properties": {
 				"api": {
@@ -9293,14 +9396,42 @@
 					"$ref": "#/definitions/ContentPermission",
 					"description": "Whether DOM content can be loaded (by navigation or redirect)."
 				},
+				"contentProtection": {
+					"additionalProperties": false,
+					"properties": {
+						"clipboard": {
+							"$ref": "#/definitions/ClipboardPermissions",
+							"description": "{@inheritdoc ClipboardPermissions}"
+						},
+						"drag": {
+							"description": "* Controls whether HTML5 dragging for this content is allowed or blocked.",
+							"enum": ["allow", "block"],
+							"type": "string"
+						},
+						"print": {
+							"description": "Whether the content can be printed.\nDefaults to 'allow'.\nDisables the `print` option in the context menu, and prevents printing via both OpenFin and browser APIs.",
+							"enum": ["allow", "block"],
+							"type": "string"
+						},
+						"screenCapture": {
+							"$ref": "#/definitions/ScreenCaptureBehavior",
+							"description": "{@inheritdoc ScreenCaptureBehavior}"
+						}
+					},
+					"type": "object"
+				},
 				"downloadSettings": {
 					"$ref": "#/definitions/FileDownloadSettings",
 					"description": "{@inheritDoc FileDownloadSettings}"
+				},
+				"preloadScripts": {
+					"$ref": "#/definitions/DomainSettingsPreloadScripts",
+					"description": "{@inheritdoc DomainSettingsPreloadScripts}"
 				}
 			},
 			"type": "object"
 		},
-		"__type_68": {
+		"__type_69": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -9330,20 +9461,6 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_69": {
-			"additionalProperties": false,
-			"properties": {
-				"fin": {
-					"$ref": "#/definitions/InjectionType",
-					"description": "Injection setting for the `fin` API for contexts on a matched domain.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available."
-				},
-				"permissions": {
-					"$ref": "#/definitions/Permissions_2",
-					"description": "API permissions for domains matched to the current {@link DomainSettingsRule}."
-				}
-			},
-			"type": "object"
-		},
 		"__type_7": {
 			"additionalProperties": false,
 			"properties": {
@@ -9363,8 +9480,25 @@
 		"__type_70": {
 			"additionalProperties": false,
 			"properties": {
+				"fin": {
+					"$ref": "#/definitions/InjectionType",
+					"description": "Injection setting for the `fin` API for contexts on a matched domain.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available."
+				},
+				"permissions": {
+					"$ref": "#/definitions/Permissions_2",
+					"description": "API permissions for domains matched to the current {@link DomainSettingsRule}."
+				}
+			},
+			"type": "object"
+		},
+		"__type_71": {
+			"additionalProperties": false,
+			"properties": {
 				"Application": {
 					"$ref": "#/definitions/Partial_7"
+				},
+				"Clipboard": {
+					"$ref": "#/definitions/Partial_9"
 				},
 				"System": {
 					"$ref": "#/definitions/Partial_8"
@@ -9394,25 +9528,16 @@
 			},
 			"type": "object"
 		},
-		"__type_71": {
-			"additionalProperties": false,
-			"properties": {
-				"behavior": {
-					"$ref": "#/definitions/BaseContentBehavior"
-				}
-			},
-			"required": ["behavior"],
-			"type": "object"
-		},
 		"__type_72": {
 			"additionalProperties": false,
+			"description": "Opens matched URLs in the browser.",
 			"properties": {
 				"behavior": {
 					"const": "browser",
 					"type": "string"
 				},
 				"closeExisting": {
-					"description": "Additional property that can be specified when setting the behavior to browser.\nWhen set to true will close the Window or View that tried to navigate or redirect to the blocked URL.",
+					"description": "When true, closes the window or view that initiated the navigation.",
 					"type": "boolean"
 				}
 			},
@@ -9421,7 +9546,7 @@
 		},
 		"__type_73": {
 			"additionalProperties": false,
-			"description": "Specify rules for specific actions.",
+			"description": "Behavior when displaying content from matched URLs. Varies depending on type of navigation.",
 			"properties": {
 				"iframe": {
 					"$ref": "#/definitions/BaseContentBehavior",
@@ -9430,10 +9555,18 @@
 				"navigate": {
 					"anyOf": [
 						{
-							"$ref": "#/definitions/BaseStructuredContentBehavior"
+							"$ref": "#/definitions/BrowserContentBehavior",
+							"description": "Opens matched URLs in the browser."
 						},
 						{
-							"$ref": "#/definitions/BrowserContentBehavior"
+							"additionalProperties": false,
+							"properties": {
+								"behavior": {
+									"$ref": "#/definitions/BaseContentBehavior"
+								}
+							},
+							"required": ["behavior"],
+							"type": "object"
 						},
 						{
 							"enum": ["allow", "block", "browser"],
@@ -9445,10 +9578,18 @@
 				"redirect": {
 					"anyOf": [
 						{
-							"$ref": "#/definitions/BaseStructuredContentBehavior"
+							"$ref": "#/definitions/BrowserContentBehavior",
+							"description": "Opens matched URLs in the browser."
 						},
 						{
-							"$ref": "#/definitions/BrowserContentBehavior"
+							"additionalProperties": false,
+							"properties": {
+								"behavior": {
+									"$ref": "#/definitions/BaseContentBehavior"
+								}
+							},
+							"required": ["behavior"],
+							"type": "object"
 						},
 						{
 							"enum": ["allow", "block", "browser"],
@@ -9461,6 +9602,59 @@
 			"type": "object"
 		},
 		"__type_74": {
+			"additionalProperties": false,
+			"description": "Map of preload scripts that can enable new scripts or disable options defined preloadScripts.",
+			"type": "object"
+		},
+		"__type_75": {
+			"additionalProperties": false,
+			"description": "Clipboard Permissions",
+			"properties": {
+				"copy": {
+					"$ref": "#/definitions/CopyPermissions"
+				},
+				"paste": {
+					"$ref": "#/definitions/PastePermissions"
+				}
+			},
+			"type": "object"
+		},
+		"__type_76": {
+			"additionalProperties": false,
+			"description": "Control copy operations for a matched URL.",
+			"properties": {
+				"behavior": {
+					"enum": ["allow", "block", "protect"],
+					"type": "string"
+				},
+				"options": {
+					"additionalProperties": false,
+					"description": "Additional copy operation options",
+					"properties": {
+						"replacementText": {
+							"type": "string"
+						}
+					},
+					"required": ["replacementText"],
+					"type": "object"
+				}
+			},
+			"required": ["behavior"],
+			"type": "object"
+		},
+		"__type_77": {
+			"additionalProperties": false,
+			"description": "Control copy operations for a matched URL.",
+			"properties": {
+				"behavior": {
+					"enum": ["all-content", "non-protected-content"],
+					"type": "string"
+				}
+			},
+			"required": ["behavior"],
+			"type": "object"
+		},
+		"__type_78": {
 			"additionalProperties": false,
 			"properties": {
 				"endpoint": {
@@ -9485,7 +9679,7 @@
 			"required": ["endpoint"],
 			"type": "object"
 		},
-		"__type_75": {
+		"__type_79": {
 			"additionalProperties": false,
 			"properties": {
 				"description": {
