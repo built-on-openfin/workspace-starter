@@ -137,7 +137,11 @@ function getCustomActions(): CustomActionsMap {
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
 				const platform: WorkspacePlatformModule = getCurrentSync();
 
-				const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+				const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
+				if (!lastFocusedWindow) {
+					throw new Error("No last focused window found.");
+				}
+				const { uuid, name } = lastFocusedWindow;
 				const browserWindow = platform.Browser.wrapSync({ uuid, name });
 
 				// Get the active page and toggle its locked state
@@ -156,7 +160,11 @@ function getCustomActions(): CustomActionsMap {
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
 				const platform: WorkspacePlatformModule = getCurrentSync();
 
-				const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+				const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
+				if (!lastFocusedWindow) {
+					throw new Error("No last focused window found.");
+				}
+				const { uuid, name } = lastFocusedWindow;
 				const browserWindow = platform.Browser.wrapSync({ uuid, name });
 
 				// Get the active page and toggle its locked state
@@ -592,7 +600,11 @@ function overrideCallback(
  */
 async function showPrintMenu(position: { x: number; y: number }): Promise<void> {
 	const platform = getCurrentSync();
-	const { uuid, name } = await platform.Browser.getLastFocusedWindow();
+	const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
+	if (!lastFocusedWindow) {
+		throw new Error("No last focused window found.");
+	}
+	const { uuid, name } = lastFocusedWindow;
 	const browserWindow = platform.Browser.wrapSync({ uuid, name });
 
 	const template: OpenFin.MenuItemTemplate<{ type: string }>[] = [
