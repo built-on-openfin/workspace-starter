@@ -136,7 +136,7 @@ export function isEnabled(): boolean {
  * @param snapshot The snapshot to decorate.
  * @returns The decorated snapshot.
  */
-export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
+export async function decorateSnapshot(snapshot: Snap.SnapSnapshot): Promise<Snap.SnapSnapshot> {
 	try {
 		if (server) {
 			snapshot = await server.decorateSnapshot(snapshot);
