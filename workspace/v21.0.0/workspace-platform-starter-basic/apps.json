@@ -61,6 +61,44 @@
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
+		"appId": "snapshot-example-ten-window",
+		"name": "snapshot-example-ten-window",
+		"title": "Windows - 10 Example.com Windows",
+		"manifestType": "snapshot",
+		"description": "Shows ten example.com windows",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v21.0.0/workspace-platform-starter-basic/common/snapshots/ten-windows.example.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v21.0.0/workspace-platform-starter-basic/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "snapshot-example-twenty-window",
+		"name": "snapshot-example0-twenty-window",
+		"title": "Windows - 20 Example.Com Windows",
+		"manifestType": "snapshot",
+		"description": "Shows twenty Example.com windows",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v21.0.0/workspace-platform-starter-basic/common/snapshots/twenty-windows.example.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v21.0.0/workspace-platform-starter-basic/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+	},
+	{
 		"appId": "interop-broadcast-view",
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
