@@ -11,7 +11,7 @@ const DOS = {
 		securedAPIDefaultPermission: 'allow',
 		systemApps: {
 			workspace: {
-				version: '21.0.8'
+				version: '21.0.9'
 			}
 		}
 	}

@@ -21,8 +21,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/excel": "^1.5.0",
-		"@openfin/workspace": "21.0.8",
-		"@openfin/workspace-platform": "21.0.8"
+		"@openfin/workspace": "21.0.9",
+		"@openfin/workspace-platform": "21.0.9"
 	},
 	"devDependencies": {
 		"@openfin/core": "41.100.117",
