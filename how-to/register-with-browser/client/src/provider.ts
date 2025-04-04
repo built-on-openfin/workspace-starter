@@ -53,6 +53,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 	console.log("Initializing workspace platform");
 	await init({
 		browser: {
+			browserIconSize: customSettings.browserIconSize,
 			defaultWindowOptions: {
 				icon: customSettings.launchBarWindowSettings?.icon,
 				workspacePlatform: {
