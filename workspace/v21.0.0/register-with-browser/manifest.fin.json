@@ -26,6 +26,7 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
+		"browserIconSize": "default",
 		"launchBarWindowSettings": {
 			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v21.0.0/register-with-browser/html/launch-bar.html",
 			"name": "launch-bar",
