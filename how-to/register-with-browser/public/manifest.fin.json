@@ -26,6 +26,7 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
+		"browserIconSize": "default",
 		"launchBarWindowSettings": {
 			"url": "http://localhost:8080/html/launch-bar.html",
 			"name": "launch-bar",
