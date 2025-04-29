@@ -12,6 +12,8 @@ export async function getApps(): Promise<PlatformApp[]> {
 	return [
 		OPENFIN_INFORMATION_APP,
 		OPENFIN_INFORMATION_APP_SNAPSHOT,
+		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT,
+		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID,
 		SNAP_NATIVE_TEST_APP,
 		OPENFIN_WINDOW_APP
 	];
@@ -35,6 +37,9 @@ export async function getApp(appId: string): Promise<PlatformApp | undefined> {
 export function getAppLabel(manifestType?: string): string {
 	switch (manifestType) {
 		case "snapshot": {
+			return "Snapshot";
+		}
+		case "classic-snapshot": {
 			return "Snapshot";
 		}
 		case "inline-appasset": {
@@ -100,6 +105,60 @@ const OPENFIN_INFORMATION_APP_SNAPSHOT: PlatformApp = {
 	],
 	tags: ["snapshot", "openfin", "versions"]
 };
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID: PlatformApp = {
+	appId: "openfin-information-snapshot-classic-snapid",
+	title: "OpenFin Information Classic Snapshot With Snap Id",
+	description: "Display information about the OpenFin environment as a snapped collection of classic windows using the snapId to link them.",
+	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot-snapclientid.fin.json",
+	manifestType: "snapshot",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["snapshot", "openfin", "versions"]
+};
+
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
+	appId: "openfin-information-classic-snapshot",
+	title: "OpenFin Information Classic Snapshot",
+	description: "Display information about the OpenFin environment as a snapped collection of classic windows.",
+	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
+	manifestType: "classic-snapshot",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["snapshot", "openfin", "versions"]
+};
+
 
 /**
  * App definition to use for demonstration which show OpenFin environment information.
@@ -192,6 +251,25 @@ export async function launchApp(
 
 		case "inline-appasset": {
 			await Snap.launchApp(app.appId, randomUUID());
+			break;
+		}
+
+		case "classic-snapshot": {
+			const snapshot = await fetch(app.manifest);
+			if (!snapshot.ok) {
+				throw new Error(`Failed to fetch snapshot: ${snapshot.statusText}`);
+			}
+			const snapshotJson = await snapshot.json();
+			const windows = snapshotJson.windows;
+			const names = windows.map((w: { name: string }) => w.name);
+			let jsonString = JSON.stringify(snapshotJson);
+			for (const name of names) {
+				const newName = `internal-generated-window-${randomUUID()}`;
+				const regex = new RegExp(name, "g");
+				jsonString = jsonString.replace(regex, newName);
+			}
+			const platform = getCurrentSync();
+			ret = await platform.applySnapshot(JSON.parse(jsonString));
 			break;
 		}
 
