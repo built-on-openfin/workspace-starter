@@ -112,7 +112,8 @@ const OPENFIN_INFORMATION_APP_SNAPSHOT: PlatformApp = {
 const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID: PlatformApp = {
 	appId: "openfin-information-snapshot-classic-snapid",
 	title: "OpenFin Information Classic Snapshot With Snap Id",
-	description: "Display information about the OpenFin environment as a snapped collection of classic windows using the snapId to link them.",
+	description:
+		"Display information about the OpenFin environment as a snapped collection of classic windows using the snapId to link them.",
 	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot-snapclientid.fin.json",
 	manifestType: "snapshot",
 	icons: [
@@ -132,14 +133,14 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID: PlatformApp = {
 	tags: ["snapshot", "openfin", "versions"]
 };
 
-
 /**
  * App definition to use for demonstration which show OpenFin environment information.
  */
 const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
 	appId: "openfin-information-classic-snapshot",
 	title: "OpenFin Information Classic Snapshot",
-	description: "Display information about the OpenFin environment as a snapped collection of classic windows.",
+	description:
+		"Display information about the OpenFin environment as a snapped collection of classic windows.",
 	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
 	manifestType: "classic-snapshot",
 	icons: [
@@ -158,7 +159,6 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
 	],
 	tags: ["snapshot", "openfin", "versions"]
 };
-
 
 /**
  * App definition to use for demonstration which show OpenFin environment information.
