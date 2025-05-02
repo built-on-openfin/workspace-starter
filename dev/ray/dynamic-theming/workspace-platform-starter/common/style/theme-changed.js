@@ -1,5 +1,5 @@
 /**
- * This preload script can be included by any view that wants to keep track
+ * This script can be included by any view that wants to keep track
  * of the currently selected, it listens for a channel message of platform.theme
  * which contains the scheme "dark" or "light" and the current palette.
  * By default this will create add a CSS class to the body of "theme-dark" or "theme-light"
@@ -35,9 +35,9 @@
  */
 document.addEventListener('DOMContentLoaded', async () => {
 	try {
-		console.log('Style Change Preload activated');
+		console.log('Style Change script activated');
 
-		alert('hello world');
+		checkThemeQueryParam();
 
 		if (
 			window.fin !== undefined &&
@@ -61,6 +61,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 		console.error('Error encountered while listening for platform events via interop.', err);
 	}
 });
+
+/**
+ * Checks URL parameters for a pre-defined theme on the url and applies the corresponding styles.
+ */
+function checkThemeQueryParam() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const theme = urlParams.get('theme');
+	if (theme) {
+		const darkScheme = theme === 'dark' ? 'theme-dark' : 'theme-light';
+		const lightScheme = theme === 'light' ? 'theme-light' : 'theme-dark';
+		setColorScheme(theme, darkScheme, lightScheme);
+	}
+}
 
 /**
  * Set the color scheme class on the document body.
