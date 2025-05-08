@@ -12,7 +12,11 @@ This example demonstrates connecting to and using layouts with Snap.
 
 The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.com/package/@openfin/snap-sdk).
 
-> The **@openfin/snap-sdk** is currently in beta. The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
+> The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
+
+- [Live Launch Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv21.0.0%2Fintegrate-with-snap-basic%2Fmanifest.fin.json)
+
+- [Live Launch Second Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv21.0.0%2Fintegrate-with-snap-basic%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -48,6 +52,14 @@ npm run client
 
 ```shell
 npm run build
+```
+
+We include a second example [second.manifest.fin.json](./public/second.manifest.fin.json) which launches the same example but shows granular permissions (so it can only launch listed app assets and download those app assets) as well as our trustedAppConfigs to demonstrate that an application is trusted by Here with those specific permissions (so a security prompt is not shown which generally requires pre-approval through Desktop Owner Settings).
+
+You can run the second client using the following command:
+
+```shell
+npm run secondclient
 ```
 
 ---
