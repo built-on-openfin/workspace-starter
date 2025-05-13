@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "41.134.100.117"
+		"version": "41.134.101.2"
 	},
 	"startup_app": {
 		"name": "workspace-native-window-integration"
