@@ -23,13 +23,13 @@
 		"@finos/fdc3": "^2.0.3",
 		"@microsoft/microsoft-graph-types": "^2.40.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "21.0.10",
-		"@openfin/workspace-platform": "21.0.10",
+		"@openfin/workspace": "21.0.11",
+		"@openfin/workspace-platform": "21.0.11",
 		"csstype": "^3.1.3"
 	},
 	"devDependencies": {
-		"@openfin/core": "41.100.117",
-		"@openfin/node-adapter": "41.100.117",
+		"@openfin/core": "41.101.2",
+		"@openfin/node-adapter": "41.101.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

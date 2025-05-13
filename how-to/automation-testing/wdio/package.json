@@ -9,15 +9,18 @@
 	},
 	"devDependencies": {
 		"@openfin/automation-helpers": "^1.2.0",
-		"@wdio/cli": "8.40.3",
-		"@wdio/local-runner": "8.40.3",
-		"@wdio/mocha-framework": "8.40.3",
-		"@wdio/shared-store-service": "8.40.3",
+		"@wdio/cli": "^9.13.0",
+		"@wdio/local-runner": "^9.13.0",
+		"@wdio/mocha-framework": "^9.13.0",
+		"@wdio/shared-store-service": "^9.13.0",
 		"@wdio/spec-reporter": "8.40.3",
 		"chai": "4.3.10",
 		"chromedriver": "126.0.4",
 		"fkill": "7.2.1",
 		"fkill-cli": "7.1.0",
 		"wdio-chromedriver-service": "8.1.1"
+	},
+	"dependencies": {
+		"mocha": "10.8.2"
 	}
 }
