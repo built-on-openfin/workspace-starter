@@ -18,7 +18,12 @@ let chkDisableRuntimeHeartbeating: HTMLInputElement | null;
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
 let btnNativeTestApp: HTMLButtonElement | null;
+let btnWindowTestApp: HTMLButtonElement | null;
 let selAttachPosition: HTMLSelectElement | null;
+let selSnapKey: HTMLSelectElement | null;
+let selUnsnapKey: HTMLSelectElement | null;
+let selResize: HTMLSelectElement | null;
+let selTheme: HTMLSelectElement | null;
 let btnAttachToWindow: HTMLButtonElement | null;
 let btnDetachFromWindow: HTMLButtonElement | null;
 let btnMinimizeGroup: HTMLButtonElement | null;
@@ -63,7 +68,12 @@ async function initializeDOM(): Promise<void> {
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
 	serverStatus = document.querySelector<HTMLParagraphElement>("#serverStatus");
 	btnNativeTestApp = document.querySelector<HTMLButtonElement>("#btnNativeTestApp");
+	btnWindowTestApp = document.querySelector<HTMLButtonElement>("#btnWindowTestApp");
 	selAttachPosition = document.querySelector<HTMLSelectElement>("#selAttachPosition");
+	selSnapKey = document.querySelector<HTMLSelectElement>("#selKeyToSnap");
+	selUnsnapKey = document.querySelector<HTMLSelectElement>("#selKeyToUnsnap");
+	selResize = document.querySelector<HTMLSelectElement>("#selResizeBehaviour");
+	selTheme = document.querySelector<HTMLSelectElement>("#selTheme");
 	btnAttachToWindow = document.querySelector<HTMLButtonElement>("#btnAttachToWindow");
 	btnDetachFromWindow = document.querySelector<HTMLButtonElement>("#btnDetachFromWindow");
 	btnMinimizeGroup = document.querySelector<HTMLButtonElement>("#btnMinimizeGroup");
@@ -120,10 +130,32 @@ async function initializeDOM(): Promise<void> {
 
 					logInformation(`Starting Snap Server with Id ${fin.me.identity.uuid}`);
 					server = new Snap.SnapServer(fin.me.identity.uuid);
+					let keyToSnap: undefined | "ctrl" | "shift" | boolean;
+					let keyToUnsnap: undefined | "ctrl" | "shift";
+
+					if (chkCtrlToSnap?.checked) {
+						const snapKeyValue = selSnapKey?.value;
+						if (snapKeyValue === "ctrl") {
+							keyToSnap = "ctrl";
+						} else if (snapKeyValue === "shift") {
+							keyToSnap = "shift";
+						}
+					}
+
+					if (!chkDisableShiftToUnsnap?.checked) {
+						const keyToUnsnapValue = selUnsnapKey?.value;
+						if (keyToUnsnapValue === "ctrl") {
+							keyToUnsnap = "ctrl";
+						} else if (keyToUnsnapValue === "shift") {
+							keyToUnsnap = "shift";
+						}
+					}
+
 					const options = {
 						showDebug: chkShowDebugWindow?.checked,
 						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
-						keyToStick: chkCtrlToSnap?.checked,
+						keyToStick: keyToSnap,
+						keyToUnstick: keyToUnsnap,
 						disableGPUAcceleratedDragging: chkDisableGPUDragging?.checked,
 						disableBlurDropPreview: chkDisableBlurDrop?.checked,
 						hideTaskbarEntry: chkHideTaskBarEntry?.checked,
@@ -132,9 +164,13 @@ async function initializeDOM(): Promise<void> {
 							? `openfin_apps_group.${fin.me.identity.uuid}`
 							: undefined,
 						autoHideClientTaskbarIcons: chkAutoHideClientTaskbarIcons?.checked,
-						disableRuntimeHeartbeating: chkDisableRuntimeHeartbeating?.checked
+						disableRuntimeHeartbeating: chkDisableRuntimeHeartbeating?.checked,
+						defaultResizingBehaviour: selResize?.value as Snap.ResizingBehaviour,
+						theme: selTheme?.value as "snap-original" | "snap-light1" | "snap-dark1"
 					};
 					await server.start(options);
+
+					await server.enableAutoWindowRegistration();
 
 					server.addEventListener("client-registered", (event: Snap.ClientRegisteredEvent) => {
 						logInformation(`Client Registered: ${JSON.stringify(event)}`);
@@ -232,6 +268,11 @@ async function initializeDOM(): Promise<void> {
 				);
 				isWindowOpen = true;
 				isWindowAttached = false;
+				updateWindowStatus();
+			});
+
+			btnWindowTestApp?.addEventListener("click", async () => {
+				await launchWindowOptionsApp();
 				updateWindowStatus();
 			});
 
@@ -381,9 +422,17 @@ function updateServerStatus(): void {
  * Update the UI based on the window state.
  */
 function updateWindowStatus(): void {
-	if (btnNativeTestApp && selAttachPosition && btnAttachToWindow && btnDetachFromWindow && btnMinimizeGroup) {
+	if (
+		btnNativeTestApp &&
+		selAttachPosition &&
+		btnAttachToWindow &&
+		btnDetachFromWindow &&
+		btnMinimizeGroup &&
+		btnWindowTestApp
+	) {
 		if (serverState === "starting" || serverState === "stopping") {
 			btnNativeTestApp.disabled = true;
+			btnWindowTestApp.disabled = true;
 			selAttachPosition.disabled = true;
 			btnAttachToWindow.disabled = true;
 			btnDetachFromWindow.disabled = true;
@@ -396,6 +445,7 @@ function updateWindowStatus(): void {
 			btnMinimizeGroup.disabled = !isWindowAttached;
 		} else {
 			btnNativeTestApp.disabled = serverState === "stopped";
+			btnWindowTestApp.disabled = serverState === "stopped";
 			selAttachPosition.disabled = true;
 			btnAttachToWindow.disabled = true;
 			btnDetachFromWindow.disabled = true;
@@ -467,5 +517,28 @@ async function launchApp(
 		}
 	} catch (err) {
 		logError(formatError(err));
+	}
+}
+
+/**
+ * Launches a window that can be used to create child windows.
+ */
+async function launchWindowOptionsApp(): Promise<void> {
+	if (serverState !== "started") {
+		logError("Snap server is not started");
+		return;
+	}
+	const windowOptionsName = "window-options-app";
+	const optionsWindow = fin.Window.wrapSync({ uuid: fin.me.identity.uuid, name: windowOptionsName });
+
+	try {
+		await optionsWindow.getInfo();
+		await optionsWindow.bringToFront();
+	} catch {
+		// window does not exist, so create it
+		await fin.Window.create({
+			name: windowOptionsName,
+			url: "https://built-on-openfin.github.io/container-starter/v34/use-window-options/html/app.html"
+		});
 	}
 }
