@@ -158,6 +158,9 @@
 					"description": "Whether to include windows that belong to processes descending from the parent. If false, only windows belonging\nto the launched process will be included.",
 					"type": "boolean"
 				},
+				"resizingBehaviour": {
+					"$ref": "#/definitions/ResizingBehaviour"
+				},
 				"timeoutMs": {
 					"description": "Optional timeout period in milliseconds. If provided, the search will be abandoned after this timeout.\nIf not provided, the search will continue until either the `expectedWindowCount` is achieved (if provided),\nor for the lifetime of the application.",
 					"type": "number"
@@ -201,6 +204,9 @@
 				"delayMs": {
 					"description": "How to wait in milliseconds after process launch before looking for a window",
 					"type": "number"
+				},
+				"resizingBehaviour": {
+					"$ref": "#/definitions/ResizingBehaviour"
 				},
 				"type": {
 					"const": "delay",
@@ -405,6 +411,10 @@
 			"enum": ["url-any", "url-domain", "url-none", "url-page"],
 			"type": "string"
 		},
+		"ResizingBehaviour": {
+			"enum": ["default", "none", "sizeToFit"],
+			"type": "string"
+		},
 		"SnapLaunchOptions": {
 			"additionalProperties": false,
 			"description": "Additional options that apply to the app when used in a snap context",
@@ -493,6 +503,9 @@
 					"description": "A (Rust-evaluated) regular expression string to match the window class against",
 					"type": "string"
 				},
+				"resizingBehaviour": {
+					"$ref": "#/definitions/ResizingBehaviour"
+				},
 				"timeoutMs": {
 					"description": "The timeout period milliseconds after which the window search will be abandoned",
 					"type": "number"
@@ -512,6 +525,9 @@
 				"matchRegex": {
 					"description": "A (Rust-evaluated) regular expression string to match the window caption against",
 					"type": "string"
+				},
+				"resizingBehaviour": {
+					"$ref": "#/definitions/ResizingBehaviour"
 				},
 				"timeoutMs": {
 					"description": "The timeout period milliseconds after which the window search will be abandoned",
