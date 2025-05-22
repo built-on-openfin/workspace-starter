@@ -62,6 +62,34 @@ You can run the second client using the following command:
 npm run secondclient
 ```
 
+## Custom App/Window Behavior
+
+If you have autoRegistration enabled (we do this in the basic example) it will automatically register browser, platform and classic windows and track them (native apps are launched using the snap server so are tracked explicitly):
+
+```javascript
+await snapServer.enableAutoWindowRegistration();
+```
+
+If you are registering Browser/Platform/Classic Windows directly then you can specify sizing behavior when you register them (you can also specify sizing behavior on a native app by native app basis if you want a specific app to have a behavior different to what was specified when starting the snap server).
+
+```javascript
+// Register a window with snap with 'none' for resizing behavior, meaning this window will not be resized by snap
+snapServer.registerWindow(snapClientId, nativeId, 'none')
+
+// Launch a native app with resizing behavior disabled:
+const path = 'path-to-my-app/app.exe';
+const args = 'my-args';
+const launchResult = await snapServer.launch({
+   path,
+   args,
+   {
+      type: 'combined',
+      matchNameRegex: '^WpfMultiProcess.*',
+      resizingBehavior: 'none',
+   },
+});
+```
+
 ---
 
 ### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

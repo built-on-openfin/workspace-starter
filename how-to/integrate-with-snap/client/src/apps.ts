@@ -39,9 +39,6 @@ export function getAppLabel(manifestType?: string): string {
 		case "snapshot": {
 			return "Snapshot";
 		}
-		case "classic-snapshot": {
-			return "Snapshot";
-		}
 		case "inline-appasset": {
 			return "Native";
 		}
@@ -142,7 +139,7 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
 	description:
 		"Display information about the OpenFin environment as a snapped collection of classic windows.",
 	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
-	manifestType: "classic-snapshot",
+	manifestType: "snapshot",
 	icons: [
 		{
 			src: "http://localhost:8080/common/images/icon-blue.png"
@@ -253,26 +250,6 @@ export async function launchApp(
 			await Snap.launchApp(app.appId, randomUUID());
 			break;
 		}
-
-		case "classic-snapshot": {
-			const snapshot = await fetch(app.manifest);
-			if (!snapshot.ok) {
-				throw new Error(`Failed to fetch snapshot: ${snapshot.statusText}`);
-			}
-			const snapshotJson = await snapshot.json();
-			const windows = snapshotJson.windows;
-			const names = windows.map((w: { name: string }) => w.name);
-			let jsonString = JSON.stringify(snapshotJson);
-			for (const name of names) {
-				const newName = `internal-generated-window-${randomUUID()}`;
-				const regex = new RegExp(name, "g");
-				jsonString = jsonString.replace(regex, newName);
-			}
-			const platform = getCurrentSync();
-			ret = await platform.applySnapshot(JSON.parse(jsonString));
-			break;
-		}
-
 		default: {
 			console.error(`Unsupported manifestType ${app.manifestType}`);
 			break;

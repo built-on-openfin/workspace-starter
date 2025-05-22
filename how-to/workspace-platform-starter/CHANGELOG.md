@@ -3,6 +3,7 @@
 ## v21.0.0
 
 - Update to latest version of npm packages.
+- Update to the latest version of snap 1.3.0
 
 ## v20.1.0
 
