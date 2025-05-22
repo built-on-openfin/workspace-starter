@@ -165,7 +165,7 @@ async function initializeDOM(): Promise<void> {
 							: undefined,
 						autoHideClientTaskbarIcons: chkAutoHideClientTaskbarIcons?.checked,
 						disableRuntimeHeartbeating: chkDisableRuntimeHeartbeating?.checked,
-						defaultResizingBehaviour: selResize?.value as Snap.ResizingBehaviour,
+						defaultResizingBehavior: selResize?.value as Snap.ResizingBehavior,
 						theme: selTheme?.value as "snap-original" | "snap-light1" | "snap-dark1"
 					};
 					await server.start(options);

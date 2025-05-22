@@ -820,8 +820,8 @@
                     "description": "Whether to include windows that belong to processes descending from the parent. If false, only windows belonging\nto the launched process will be included.",
                     "type": "boolean"
                 },
-                "resizingBehaviour": {
-                    "$ref": "#/definitions/ResizingBehaviour"
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
                 },
                 "timeoutMs": {
                     "description": "Optional timeout period in milliseconds. If provided, the search will be abandoned after this timeout.\nIf not provided, the search will continue until either the `expectedWindowCount` is achieved (if provided),\nor for the lifetime of the application.",
@@ -1308,8 +1308,8 @@
                     "description": "How to wait in milliseconds after process launch before looking for a window",
                     "type": "number"
                 },
-                "resizingBehaviour": {
-                    "$ref": "#/definitions/ResizingBehaviour"
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
                 },
                 "type": {
                     "const": "delay",
@@ -4360,7 +4360,7 @@
         "ResizeRegion": {
             "$ref": "#/definitions/__type_11"
         },
-        "ResizingBehaviour": {
+        "ResizingBehavior": {
             "enum": [
                 "default",
                 "none",
@@ -4403,9 +4403,9 @@
                     "description": "Used only if the 'openfin-snap' asset is not specified in the app's manifest, in which case this specifies the URL to be used for downloading the Snap asset.\nIf not provided, the default Snap asset URL will be used.",
                     "type": "string"
                 },
-                "defaultResizingBehaviour": {
-                    "$ref": "#/definitions/ResizingBehaviour",
-                    "description": "The default resizing behaviour to apply to snapped windows.\nIf no value is provided, the default behaviour is 'sizeToFit', i.e. to resize windows to fit the snap group.\nThis value can also be overridden per window when registering each window, and in the strategy parameters when launching a new process."
+                "defaultResizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior",
+                    "description": "The default resizing behavior to apply to snapped windows.\nIf no value is provided, the default behavior is 'sizeToFit', i.e. to resize windows to fit the snap group.\nThis value can also be overridden per window when registering each window, and in the strategy parameters when launching a new process."
                 },
                 "disableBlurDropPreview": {
                     "description": "If true, the drop preview will not be blurred.\nThis can be useful if performance issues are encountered when displaying a drop target and preview.  This can occur on lower spec machines.",
@@ -5340,8 +5340,8 @@
                     "description": "A (Rust-evaluated) regular expression string to match the window class against",
                     "type": "string"
                 },
-                "resizingBehaviour": {
-                    "$ref": "#/definitions/ResizingBehaviour"
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
                 },
                 "timeoutMs": {
                     "description": "The timeout period milliseconds after which the window search will be abandoned",
@@ -5367,8 +5367,8 @@
                     "description": "A (Rust-evaluated) regular expression string to match the window caption against",
                     "type": "string"
                 },
-                "resizingBehaviour": {
-                    "$ref": "#/definitions/ResizingBehaviour"
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
                 },
                 "timeoutMs": {
                     "description": "The timeout period milliseconds after which the window search will be abandoned",
