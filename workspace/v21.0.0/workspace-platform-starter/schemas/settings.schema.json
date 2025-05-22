@@ -820,6 +820,9 @@
                     "description": "Whether to include windows that belong to processes descending from the parent. If false, only windows belonging\nto the launched process will be included.",
                     "type": "boolean"
                 },
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
+                },
                 "timeoutMs": {
                     "description": "Optional timeout period in milliseconds. If provided, the search will be abandoned after this timeout.\nIf not provided, the search will continue until either the `expectedWindowCount` is achieved (if provided),\nor for the lifetime of the application.",
                     "type": "number"
@@ -1304,6 +1307,9 @@
                 "delayMs": {
                     "description": "How to wait in milliseconds after process launch before looking for a window",
                     "type": "number"
+                },
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
                 },
                 "type": {
                     "const": "delay",
@@ -4354,6 +4360,14 @@
         "ResizeRegion": {
             "$ref": "#/definitions/__type_11"
         },
+        "ResizingBehavior": {
+            "enum": [
+                "default",
+                "none",
+                "sizeToFit"
+            ],
+            "type": "string"
+        },
         "RuleMatchOptions": {
             "$ref": "#/definitions/__type_17"
         },
@@ -4385,6 +4399,14 @@
                     "description": "This is respected only if the disableBlurDropPreview option is not set. This threshold (in milliseconds) relates to the time taken to render a blur effect.\nSnap will do a check at start up to measure this performance and automatically disable the blur effect if this threshold time is exceeded.\nIf not provided, the performance check will use a default threshold.",
                     "type": "number"
                 },
+                "customSnapAssetSource": {
+                    "description": "Used only if the 'openfin-snap' asset is not specified in the app's manifest, in which case this specifies the URL to be used for downloading the Snap asset.\nIf not provided, the default Snap asset URL will be used.",
+                    "type": "string"
+                },
+                "defaultResizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior",
+                    "description": "The default resizing behavior to apply to snapped windows.\nIf no value is provided, the default behavior is 'sizeToFit', i.e. to resize windows to fit the snap group.\nThis value can also be overridden per window when registering each window, and in the strategy parameters when launching a new process."
+                },
                 "disableBlurDropPreview": {
                     "description": "If true, the drop preview will not be blurred.\nThis can be useful if performance issues are encountered when displaying a drop target and preview.  This can occur on lower spec machines.",
                     "type": "boolean"
@@ -4410,8 +4432,21 @@
                     "type": "boolean"
                 },
                 "keyToStick": {
-                    "description": "If true, windows will only stick if CTRL key is held while dragging",
-                    "type": "boolean"
+                    "description": "If provided, this specifies that a key must be held to stick windows together.\nThe value can be a boolean or a string. If true, the default keyToStick key will be used (CTRL).\nIf no value, or false, is provided, then snapping will be allowed without any key being held.",
+                    "enum": [
+                        "ctrl",
+                        false,
+                        "shift",
+                        true
+                    ]
+                },
+                "keyToUnstick": {
+                    "description": "If provided, this specifies which key must be held to unstick windows.\nIf no value is provided, then the default key will be used (SHIFT).",
+                    "enum": [
+                        "ctrl",
+                        "shift"
+                    ],
+                    "type": "string"
                 },
                 "showDebug": {
                     "description": "True if the Snap debug console should be shown",
@@ -4423,6 +4458,15 @@
                 },
                 "taskbarIconGroup": {
                     "description": "An ID used by Windows for grouping taskbar entries. If set, all snapped window groups will be shown under the same taskbar entry.\nIf you want to show the snapped window groups under the same taskbar entry as your OpenFin application, you must set this value\ncarefully, as follows: it must start with a prefix of `openfin_apps_group.` and follow with the value of the following field in the app:\nhttps://developer.openfin.co/docs/javascript/stable/interfaces/OpenFin.ApplicationCreationOptions.html#taskbarIconGroup",
+                    "type": "string"
+                },
+                "theme": {
+                    "description": "The theme to use for Snap visuals.",
+                    "enum": [
+                        "snap-dark1",
+                        "snap-light1",
+                        "snap-original"
+                    ],
                     "type": "string"
                 }
             },
@@ -5296,6 +5340,9 @@
                     "description": "A (Rust-evaluated) regular expression string to match the window class against",
                     "type": "string"
                 },
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
+                },
                 "timeoutMs": {
                     "description": "The timeout period milliseconds after which the window search will be abandoned",
                     "type": "number"
@@ -5319,6 +5366,9 @@
                 "matchRegex": {
                     "description": "A (Rust-evaluated) regular expression string to match the window caption against",
                     "type": "string"
+                },
+                "resizingBehavior": {
+                    "$ref": "#/definitions/ResizingBehavior"
                 },
                 "timeoutMs": {
                     "description": "The timeout period milliseconds after which the window search will be abandoned",

@@ -39,8 +39,32 @@
 					<input type="checkbox" id="chkDisableShiftToUnsnap" />
 				</fieldset>
 				<fieldset class="row">
-					<label for="chkCtrlToSnap">Enable Ctrl to Snap</label>
+					<label for="selKeyToUnsnap">Key to Unsnap</label>
+					<select id="selKeyToUnsnap" style="min-width: 70px; width: auto">
+						<option value="shift" selected>Shift</option>
+						<option value="ctrl">Ctrl</option>
+					</select>
+				</fieldset>
+				<fieldset class="row">
+					<label for="chkCtrlToSnap">Enable Key to Snap</label>
 					<input type="checkbox" id="chkCtrlToSnap" />
+				</fieldset>
+				<fieldset class="row">
+					<label for="selKeyToSnap">Key to Snap</label>
+					<select id="selKeyToSnap" style="min-width: 70px; width: auto">
+						<option value="ctrl" selected>Ctrl</option>
+						<option value="shift">Shift</option>
+					</select>
+				</fieldset>
+			</div>
+			<div class="row gap10 middle">
+				<fieldset class="row">
+					<label for="selResizeBehaviour">Resize</label>
+					<select id="selResizeBehaviour" style="min-width: 110px; width: auto">
+						<option value="default" selected>Default</option>
+						<option value="sizeToFit">Size To Fit</option>
+						<option value="none">None</option>
+					</select>
 				</fieldset>
 				<fieldset class="row">
 					<label for="chkDisableGPUDragging">Disable GPU Dragging</label>
@@ -49,6 +73,14 @@
 				<fieldset class="row">
 					<label for="chkDisableBlurDrop">Disable Blur Drop Preview</label>
 					<input type="checkbox" id="chkDisableBlurDrop" />
+				</fieldset>
+				<fieldset class="row">
+					<label for="selTheme">Theme</label>
+					<select id="selTheme" style="min-width: 110px; width: auto">
+						<option value="snap-original" selected>Default</option>
+						<option value="snap-light1">Light</option>
+						<option value="snap-dark1">Dark</option>
+					</select>
 				</fieldset>
 			</div>
 			<div class="row gap10 middle">
@@ -90,6 +122,10 @@
 				<button id="btnAttachToWindow">Attach To Window</button>
 				<button id="btnDetachFromWindow">Detach From Window</button>
 				<button id="btnMinimizeGroup">Minimize Group</button>
+			</div>
+			<hr />
+			<div class="row gap10">
+				<button id="btnWindowTestApp">Open Window Test App</button>
 			</div>
 			<hr />
 			<div class="row gap10">
