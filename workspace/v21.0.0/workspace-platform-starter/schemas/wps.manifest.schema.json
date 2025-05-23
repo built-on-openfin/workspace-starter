@@ -3518,6 +3518,10 @@
 						"hasHeaders": {
 							"type": "boolean"
 						},
+						"newTabButtonUrl": {
+							"description": "The button will create a new tab with the URL specified in `newTabButtonUrl`.",
+							"type": "string"
+						},
 						"popoutWholeStack": {
 							"type": "boolean"
 						},
