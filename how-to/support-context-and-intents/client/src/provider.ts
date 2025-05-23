@@ -6,7 +6,7 @@ import { getApps, launchApp } from "./apps";
 import { createInteropOverride } from "./interopbroker";
 import type { CustomSettings } from "./shapes";
 
-const PLATFORM_ID = "support-context-and-intents";
+const PLATFORM_ID = fin.me.identity.uuid;
 const PLATFORM_TITLE = "Support Context and Intents";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 

@@ -13,8 +13,6 @@
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
-				"launchExternalProcess": true,
-				"downloadAsset": true,
 				"openUrlWithBrowser": {
 					"enabled": true,
 					"protocols": ["mailto"]
@@ -51,7 +49,8 @@
 				"url": "http://localhost:8080/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
-			}
+			},
+			"allowExternalLocalConnections": false
 		},
 		"appProvider": {
 			"appSourceUrls": [
@@ -60,15 +59,7 @@
 				"http://localhost:8080/common/apps-preload.json"
 			],
 			"cacheDurationInMinutes": 1,
-			"manifestTypes": [
-				"view",
-				"snapshot",
-				"manifest",
-				"external",
-				"inline-view",
-				"window",
-				"inline-appasset"
-			]
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view", "window"]
 		},
 		"cloudInteropProvider": {
 			"enabled": false,
