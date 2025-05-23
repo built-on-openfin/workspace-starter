@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=integrate-with-snap-basic",
-		"version": "41.134.101.2"
+		"version": "41.134.102.1"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",

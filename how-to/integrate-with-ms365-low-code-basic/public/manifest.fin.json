@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=msft-low-code-basic",
-		"version": "41.134.101.2"
+		"version": "41.134.102.1"
 	},
 	"platform": {
 		"uuid": "integrate-with-ms365-low-code-basic",

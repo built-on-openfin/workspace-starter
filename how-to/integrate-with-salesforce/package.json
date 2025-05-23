@@ -25,12 +25,12 @@
 	"dependencies": {
 		"@openfin/salesforce": "2.3.0",
 		"@openfin/salesforce-lwc": "1.1.1",
-		"@openfin/workspace": "21.0.11",
-		"@openfin/workspace-platform": "21.0.11"
+		"@openfin/workspace": "21.0.12",
+		"@openfin/workspace-platform": "21.0.12"
 	},
 	"devDependencies": {
-		"@openfin/core": "41.101.2",
-		"@openfin/node-adapter": "41.101.2",
+		"@openfin/core": "41.102.1",
+		"@openfin/node-adapter": "41.102.1",
 		"copy-webpack-plugin": "^12.0.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",

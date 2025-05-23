@@ -22,7 +22,7 @@ describe("Platform", () => {
 	it("The runtime version should be set", async () => {
 		const fin = await OpenFinProxy.fin();
 		const version = await fin.System.getVersion();
-		expect(version).toEqual("41.134.101.2");
+		expect(version).toEqual("41.134.102.1");
 	});
 
 	it("Can open the home window", async () => {
