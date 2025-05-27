@@ -20,8 +20,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "21.0.12",
-		"@openfin/workspace-platform": "21.0.12"
+		"@openfin/workspace": "21.0.13",
+		"@openfin/workspace-platform": "21.0.13"
 	},
 	"devDependencies": {
 		"@openfin/core": "41.102.1",
