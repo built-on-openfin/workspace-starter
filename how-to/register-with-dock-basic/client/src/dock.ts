@@ -62,6 +62,9 @@ export async function register(
 					iconUrl: "https://www.google.com/favicon.ico",
 					action: {
 						id: "launch-google"
+					},
+					contextMenu: {
+						removeOption: true
 					}
 				},
 				{
@@ -69,6 +72,9 @@ export async function register(
 					iconUrl: "https://www.bing.com/favicon.ico",
 					action: {
 						id: "launch-bing"
+					},
+					contextMenu: {
+						removeOption: true
 					}
 				},
 				{
@@ -77,12 +83,18 @@ export async function register(
 					action: {
 						id: "launch-custom",
 						customData: options.customOpenUrl
+					},
+					contextMenu: {
+						removeOption: true
 					}
 				},
 				{
 					type: DockButtonNames.DropdownButton,
 					tooltip: "Social",
 					iconUrl: "http://localhost:8080/assets/spanner.svg",
+					contextMenu: {
+						removeOption: true
+					},
 					options: [
 						{
 							tooltip: "Twitter",
@@ -159,6 +171,9 @@ function buildDockConfiguration(isEnabled: boolean): DockProviderConfig {
 			action: {
 				id: "launch-google"
 			},
+			contextMenu: {
+				removeOption: true
+			},
 			disabled: !isEnabled
 		},
 		{
@@ -166,6 +181,9 @@ function buildDockConfiguration(isEnabled: boolean): DockProviderConfig {
 			iconUrl: "https://www.bing.com/favicon.ico",
 			action: {
 				id: "launch-bing"
+			},
+			contextMenu: {
+				removeOption: true
 			},
 			disabled: !isEnabled
 		},
@@ -176,12 +194,18 @@ function buildDockConfiguration(isEnabled: boolean): DockProviderConfig {
 				id: "launch-custom",
 				customData: customOpenUrl
 			},
+			contextMenu: {
+				removeOption: true
+			},
 			disabled: !isEnabled
 		},
 		{
 			type: DockButtonNames.DropdownButton,
 			tooltip: "Social",
 			iconUrl: "http://localhost:8080/assets/spanner.svg",
+			contextMenu: {
+				removeOption: true
+			},
 			options: [
 				{
 					tooltip: "Twitter",

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-native-window-integration",
-	"version": "20.1.0",
+	"version": "21.0.0",
 	"description": "OpenFin Workspace Example Application -- An example of an application that takes advantage of our native window integration.",
 	"main": "index.js",
 	"scripts": {
@@ -21,14 +21,14 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/native-window-integration-client": "0.0.17",
-		"@openfin/workspace": "20.1.5",
-		"@openfin/workspace-platform": "20.1.5",
+		"@openfin/workspace": "21.0.13",
+		"@openfin/workspace-platform": "21.0.13",
 		"file-loader": "^6.2.0"
 	},
 	"devDependencies": {
-		"@openfin/core": "40.101.1",
-		"@openfin/node-adapter": "40.101.1",
-		"eslint": "8.57.0",
+		"@openfin/core": "41.102.1",
+		"@openfin/node-adapter": "41.102.1",
+		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
 		"eslint-config-prettier": "9.1.0",

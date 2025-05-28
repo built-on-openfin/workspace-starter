@@ -12,6 +12,8 @@ export async function getApps(): Promise<PlatformApp[]> {
 	return [
 		OPENFIN_INFORMATION_APP,
 		OPENFIN_INFORMATION_APP_SNAPSHOT,
+		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT,
+		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID,
 		SNAP_NATIVE_TEST_APP,
 		OPENFIN_WINDOW_APP
 	];
@@ -83,6 +85,60 @@ const OPENFIN_INFORMATION_APP_SNAPSHOT: PlatformApp = {
 	title: "OpenFin Information Snapshot",
 	description: "Display information about the OpenFin environment as a snapped collection of two windows.",
 	manifest: "http://localhost:8080/common/views/platform/of-info.snapshot.fin.json",
+	manifestType: "snapshot",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["snapshot", "openfin", "versions"]
+};
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID: PlatformApp = {
+	appId: "openfin-information-snapshot-classic-snapid",
+	title: "OpenFin Information Classic Snapshot With Snap Id",
+	description:
+		"Display information about the OpenFin environment as a snapped collection of classic windows using the snapId to link them.",
+	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot-snapclientid.fin.json",
+	manifestType: "snapshot",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["snapshot", "openfin", "versions"]
+};
+
+/**
+ * App definition to use for demonstration which show OpenFin environment information.
+ */
+const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
+	appId: "openfin-information-classic-snapshot",
+	title: "OpenFin Information Classic Snapshot",
+	description:
+		"Display information about the OpenFin environment as a snapped collection of classic windows.",
+	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
 	manifestType: "snapshot",
 	icons: [
 		{
@@ -194,7 +250,6 @@ export async function launchApp(
 			await Snap.launchApp(app.appId, randomUUID());
 			break;
 		}
-
 		default: {
 			console.error(`Unsupported manifestType ${app.manifestType}`);
 			break;

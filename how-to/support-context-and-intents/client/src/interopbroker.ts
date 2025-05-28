@@ -192,7 +192,16 @@ export function createInteropOverride(
 					identity,
 					payload
 				);
-				// perform connection validation checks here if required and return false if it shouldn't be allowed.
+				if (customSettings?.platformProvider?.allowExternalLocalConnections === true) {
+					// perform connection validation checks here if required and return false if it shouldn't be allowed.
+					return true;
+				}
+				if (identity.uuid !== fin.me.identity.uuid) {
+					console.warn(
+						`The connection is not from the same uuid as the current platform and this platform's interop broker is configured to disallow external connections. Rejected UUID: ${identity.uuid}`
+					);
+					return false;
+				}
 				return true;
 			}
 

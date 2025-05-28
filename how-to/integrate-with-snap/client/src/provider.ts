@@ -3,6 +3,7 @@ import { CLITemplate, Home, type App } from "@openfin/workspace";
 import { init, type WorkspacePlatformProvider } from "@openfin/workspace-platform";
 import { getAppLabel, getApps, launchApp } from "./apps";
 import { getSettings } from "./settings";
+import type { ApplySnapSnapshotPayload } from "./shapes";
 import * as Snap from "./snap";
 
 const PLATFORM_ID = "integrate-with-snap";
@@ -129,7 +130,7 @@ function overrideCallback(
 		 * @param identity The identity of the entity that called applySnapshot.
 		 */
 		public async applySnapshot(
-			payload: OpenFin.ApplySnapshotPayload,
+			payload: ApplySnapSnapshotPayload,
 			identity?: OpenFin.Identity
 		): Promise<void> {
 			await Snap.prepareToApplyDecoratedSnapshot(payload);

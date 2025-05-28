@@ -1,12 +1,13 @@
 {
 	"name": "openfin-workspace--integrate-with-snap-basic",
-	"version": "20.1.0",
+	"version": "21.0.0",
 	"description": "OpenFin Workspace -- Integrate with Snap - Basic",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
 		"kill": "node ./scripts/kill.mjs",
 		"client": "node ./scripts/launch.mjs",
+		"secondclient": "node ./scripts/launch.mjs http://localhost:8080/second.manifest.fin.json",
 		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 8080 -c-1",
@@ -20,14 +21,14 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/snap-sdk": "1.2.0",
-		"@openfin/workspace": "20.1.5",
-		"@openfin/workspace-platform": "20.1.5"
+		"@openfin/snap-sdk": "1.3.0",
+		"@openfin/workspace": "21.0.13",
+		"@openfin/workspace-platform": "21.0.13"
 	},
 	"devDependencies": {
-		"@openfin/core": "40.101.1",
-		"@openfin/node-adapter": "40.101.1",
-		"eslint": "8.57.0",
+		"@openfin/core": "41.102.1",
+		"@openfin/node-adapter": "41.102.1",
+		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
 		"eslint-config-prettier": "9.1.0",

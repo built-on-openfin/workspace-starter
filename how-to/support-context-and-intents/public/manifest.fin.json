@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.101.1"
+		"version": "41.134.102.1"
 	},
 	"platform": {
 		"uuid": "support-context-and-intents",
@@ -13,8 +13,6 @@
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
-				"launchExternalProcess": true,
-				"downloadAsset": true,
 				"openUrlWithBrowser": {
 					"enabled": true,
 					"protocols": ["mailto"]
@@ -36,7 +34,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Support Intents & Context - v20.1.0",
+		"name": "Support Intents & Context - v21.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -51,7 +49,8 @@
 				"url": "http://localhost:8080/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
-			}
+			},
+			"allowExternalLocalConnections": false
 		},
 		"appProvider": {
 			"appSourceUrls": [
@@ -60,15 +59,7 @@
 				"http://localhost:8080/common/apps-preload.json"
 			],
 			"cacheDurationInMinutes": 1,
-			"manifestTypes": [
-				"view",
-				"snapshot",
-				"manifest",
-				"external",
-				"inline-view",
-				"window",
-				"inline-appasset"
-			]
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view", "window"]
 		},
 		"cloudInteropProvider": {
 			"enabled": false,

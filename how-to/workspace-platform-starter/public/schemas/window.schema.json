@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -114,14 +114,14 @@
 			"$ref": "#/definitions/__type_15"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"Identity_4": {
 			"$ref": "#/definitions/__type_18"
 		},
 		"InjectionType": {
-			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
-			"enum": ["global", "none"],
+			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'preloads': The `fin` API will be available in a synchronous context in the preload script only.\n* 'global': The entire `fin` API will be available.",
+			"enum": ["global", "none", "preloads"],
 			"type": "string"
 		},
 		"InteropConfig": {
@@ -171,10 +171,13 @@
 			"$ref": "#/definitions/__type_21"
 		},
 		"Partial_7": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_22"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_25"
+		},
+		"Partial_9": {
+			"$ref": "#/definitions/__type_27"
 		},
 		"PlatformWindowOptions": {
 			"additionalProperties": false,
@@ -354,7 +357,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_7",
+					"$ref": "#/definitions/Partial_8",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -457,7 +460,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -567,7 +570,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -579,11 +582,16 @@
 			"enum": ["enabled", "scheduler-disabled"],
 			"type": "string"
 		},
+		"ViewTitlePriority": {
+			"description": "Precedence for view tab title",
+			"enum": ["document", "options"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_22"
+			"$ref": "#/definitions/__type_23"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -877,7 +885,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_7",
+					"$ref": "#/definitions/Partial_8",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -977,7 +985,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -1161,6 +1169,9 @@
 				"Application": {
 					"$ref": "#/definitions/Partial_5"
 				},
+				"Clipboard": {
+					"$ref": "#/definitions/Partial_7"
+				},
 				"System": {
 					"$ref": "#/definitions/Partial_6"
 				},
@@ -1222,6 +1233,9 @@
 				"getAllExternalWindows": {
 					"type": "boolean"
 				},
+				"getCurrentDomainSettings": {
+					"type": "boolean"
+				},
 				"getCustomProtocolState": {
 					"anyOf": [
 						{
@@ -1244,6 +1258,9 @@
 							"type": "boolean"
 						}
 					]
+				},
+				"getDomainSettings": {
+					"type": "boolean"
 				},
 				"getOSInfo": {
 					"type": "boolean"
@@ -1397,6 +1414,12 @@
 						}
 					]
 				},
+				"resolveDomainSettings": {
+					"type": "boolean"
+				},
+				"setDomainSettings": {
+					"type": "boolean"
+				},
 				"terminateExternalProcess": {
 					"type": "boolean"
 				},
@@ -1428,6 +1451,39 @@
 		},
 		"__type_22": {
 			"additionalProperties": false,
+			"properties": {
+				"readHtml": {
+					"type": "boolean"
+				},
+				"readImage": {
+					"type": "boolean"
+				},
+				"readRtf": {
+					"type": "boolean"
+				},
+				"readText": {
+					"type": "boolean"
+				},
+				"write": {
+					"type": "boolean"
+				},
+				"writeHtml": {
+					"type": "boolean"
+				},
+				"writeImage": {
+					"type": "boolean"
+				},
+				"writeRtf": {
+					"type": "boolean"
+				},
+				"writeText": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_23": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -1445,7 +1501,7 @@
 			},
 			"type": "object"
 		},
-		"__type_23": {
+		"__type_24": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1455,7 +1511,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1473,7 +1529,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -1483,7 +1539,7 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -1679,8 +1735,12 @@
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
-					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"description": "Defaults to `name`.",
 					"type": "string"
+				},
+				"titlePriority": {
+					"$ref": "#/definitions/ViewTitlePriority",
+					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
 					"type": "string"
@@ -1691,7 +1751,7 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1710,7 +1770,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
