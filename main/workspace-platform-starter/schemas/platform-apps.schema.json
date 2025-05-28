@@ -146,7 +146,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -177,7 +177,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -203,7 +203,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_39"
 		},
 		"ChromiumPolicies": {
 			"$ref": "#/definitions/__type_12"
@@ -227,6 +227,9 @@
 				"multiProcess": {
 					"description": "Whether to include windows that belong to processes descending from the parent. If false, only windows belonging\nto the launched process will be included.",
 					"type": "boolean"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
 				},
 				"timeoutMs": {
 					"description": "Optional timeout period in milliseconds. If provided, the search will be abandoned after this timeout.\nIf not provided, the search will continue until either the `expectedWindowCount` is achieved (if provided),\nor for the lifetime of the application.",
@@ -271,7 +274,7 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_7"
@@ -302,6 +305,9 @@
 					"description": "How to wait in milliseconds after process launch before looking for a window",
 					"type": "number"
 				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
 				"type": {
 					"const": "delay",
 					"type": "string"
@@ -324,13 +330,13 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_17"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"HostLaunchOptions": {
 			"additionalProperties": false,
@@ -395,22 +401,22 @@
 			"type": "object"
 		},
 		"InjectionType": {
-			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available.",
-			"enum": ["global", "none"],
+			"description": "Injection setting for the `fin` API.\n\n* 'none': The `fin` API will be not available.\n* 'preloads': The `fin` API will be available in a synchronous context in the preload script only.\n* 'global': The entire `fin` API will be available.",
+			"enum": ["global", "none", "preloads"],
 			"type": "string"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_10"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_38"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"$ref": "#/definitions/Partial_12",
+					"$ref": "#/definitions/Partial_13",
 					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
@@ -454,10 +460,10 @@
 			"$ref": "#/definitions/__type_18"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -540,10 +546,10 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_30"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_37"
 		},
 		"Partial_12": {
 			"$ref": "#/definitions/__type_40"
@@ -553,6 +559,9 @@
 		},
 		"Partial_14": {
 			"$ref": "#/definitions/__type_42"
+		},
+		"Partial_15": {
+			"$ref": "#/definitions/__type_43"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_8"
@@ -573,10 +582,10 @@
 			"$ref": "#/definitions/__type_22"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_26"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -644,13 +653,13 @@
 							"$ref": "#/definitions/Partial_1"
 						},
 						{
-							"$ref": "#/definitions/Partial_9"
-						},
-						{
 							"$ref": "#/definitions/Partial_10"
 						},
 						{
 							"$ref": "#/definitions/Partial_11"
+						},
+						{
+							"$ref": "#/definitions/Partial_12"
 						},
 						{
 							"type": "string"
@@ -717,7 +726,7 @@
 			"description": "Application interop."
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -756,10 +765,14 @@
 			"$ref": "#/definitions/__type_19"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_9"
+		},
+		"ResizingBehavior": {
+			"enum": ["default", "none", "sizeToFit"],
+			"type": "string"
 		},
 		"RuleMatchOptions": {
 			"$ref": "#/definitions/__type_15"
@@ -880,7 +893,7 @@
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_13",
+					"$ref": "#/definitions/Partial_14",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -926,11 +939,16 @@
 			"enum": ["enabled", "scheduler-disabled"],
 			"type": "string"
 		},
+		"ViewTitlePriority": {
+			"description": "Precedence for view tab title",
+			"enum": ["document", "options"],
+			"type": "string"
+		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"WaitForWindowClassStrategy": {
 			"additionalProperties": false,
@@ -939,6 +957,9 @@
 				"matchRegex": {
 					"description": "A (Rust-evaluated) regular expression string to match the window class against",
 					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
 				},
 				"timeoutMs": {
 					"description": "The timeout period milliseconds after which the window search will be abandoned",
@@ -959,6 +980,9 @@
 				"matchRegex": {
 					"description": "A (Rust-evaluated) regular expression string to match the window caption against",
 					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
 				},
 				"timeoutMs": {
 					"description": "The timeout period milliseconds after which the window search will be abandoned",
@@ -1064,7 +1088,7 @@
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_14",
+					"$ref": "#/definitions/Partial_15",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -1309,8 +1333,12 @@
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
-					"description": "Defaults to `name`.\nIgnored in container, but used in",
+					"description": "Defaults to `name`.",
 					"type": "string"
+				},
+				"titlePriority": {
+					"$ref": "#/definitions/ViewTitlePriority",
+					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
 					"type": "string"
@@ -1547,6 +1575,9 @@
 				"Application": {
 					"$ref": "#/definitions/Partial_6"
 				},
+				"Clipboard": {
+					"$ref": "#/definitions/Partial_8"
+				},
 				"System": {
 					"$ref": "#/definitions/Partial_7"
 				},
@@ -1593,6 +1624,9 @@
 				"getAllExternalWindows": {
 					"type": "boolean"
 				},
+				"getCurrentDomainSettings": {
+					"type": "boolean"
+				},
 				"getCustomProtocolState": {
 					"anyOf": [
 						{
@@ -1615,6 +1649,9 @@
 							"type": "boolean"
 						}
 					]
+				},
+				"getDomainSettings": {
+					"type": "boolean"
 				},
 				"getOSInfo": {
 					"type": "boolean"
@@ -1768,6 +1805,12 @@
 						}
 					]
 				},
+				"resolveDomainSettings": {
+					"type": "boolean"
+				},
+				"setDomainSettings": {
+					"type": "boolean"
+				},
 				"terminateExternalProcess": {
 					"type": "boolean"
 				},
@@ -1799,6 +1842,39 @@
 		},
 		"__type_23": {
 			"additionalProperties": false,
+			"properties": {
+				"readHtml": {
+					"type": "boolean"
+				},
+				"readImage": {
+					"type": "boolean"
+				},
+				"readRtf": {
+					"type": "boolean"
+				},
+				"readText": {
+					"type": "boolean"
+				},
+				"write": {
+					"type": "boolean"
+				},
+				"writeHtml": {
+					"type": "boolean"
+				},
+				"writeImage": {
+					"type": "boolean"
+				},
+				"writeRtf": {
+					"type": "boolean"
+				},
+				"writeText": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_24": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -1816,7 +1892,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1826,7 +1902,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1844,7 +1920,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -1854,7 +1930,7 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1873,7 +1949,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1895,7 +1971,22 @@
 			},
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -1934,22 +2025,7 @@
 			},
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2040,7 +2116,7 @@
 			],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2055,7 +2131,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -2068,7 +2144,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -2087,7 +2163,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2139,7 +2215,7 @@
 			],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2168,7 +2244,7 @@
 			},
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2205,11 +2281,11 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -2226,36 +2302,6 @@
 				},
 				"trusted": {
 					"type": "boolean"
-				}
-			},
-			"type": "object"
-		},
-		"__type_39": {
-			"additionalProperties": false,
-			"properties": {
-				"alias": {
-					"description": "The name of the asset",
-					"type": "string"
-				},
-				"args": {
-					"description": "The default command line arguments for the aforementioned target.",
-					"type": "string"
-				},
-				"mandatory": {
-					"description": "When set to true, the app will fail to load if the asset cannot be downloaded.\nWhen set to false, the app will continue to load if the asset cannot be downloaded. (Default: true)",
-					"type": "boolean"
-				},
-				"src": {
-					"description": "The URL to a zip file containing the package files (executables, dlls, etc…)",
-					"type": "string"
-				},
-				"target": {
-					"description": "Specify default executable to launch. This option can be overridden in launchExternalProcess",
-					"type": "string"
-				},
-				"version": {
-					"description": "The version of the package",
-					"type": "string"
 				}
 			},
 			"type": "object"
@@ -2437,7 +2483,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -2537,7 +2583,7 @@
 					"type": "string"
 				},
 				"taskbarIconGroup": {
-					"description": "Specify a taskbar group for the window.\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._",
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"throttling": {
@@ -2579,6 +2625,36 @@
 		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
+				"alias": {
+					"description": "The name of the asset",
+					"type": "string"
+				},
+				"args": {
+					"description": "The default command line arguments for the aforementioned target.",
+					"type": "string"
+				},
+				"mandatory": {
+					"description": "When set to true, the app will fail to load if the asset cannot be downloaded.\nWhen set to false, the app will continue to load if the asset cannot be downloaded. (Default: true)",
+					"type": "boolean"
+				},
+				"src": {
+					"description": "The URL to a zip file containing the package files (executables, dlls, etc…)",
+					"type": "string"
+				},
+				"target": {
+					"description": "Specify default executable to launch. This option can be overridden in launchExternalProcess",
+					"type": "string"
+				},
+				"version": {
+					"description": "The version of the package",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_41": {
+			"additionalProperties": false,
+			"properties": {
 				"height": {
 					"type": "number"
 				},
@@ -2594,7 +2670,7 @@
 			},
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
@@ -2609,7 +2685,7 @@
 			},
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {

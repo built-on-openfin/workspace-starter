@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.101.1"
+		"version": "41.134.102.1"
 	},
 	"platform": {
 		"uuid": "register-with-dock-basic",
@@ -16,7 +16,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://www.openfin.co/favicon.ico",
-		"name": "Register With Dock Basic - v20.1.0",
+		"name": "Register With Dock Basic - v21.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=second-support-context-and-intents",
-		"version": "40.130.101.1"
+		"version": "41.134.102.1"
 	},
 	"platform": {
 		"uuid": "second-support-context-and-intents",
@@ -44,16 +44,18 @@
 				"url": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
-			}
+			},
+			"allowExternalLocalConnections": true
 		},
 		"appProvider": {
 			"appSourceUrls": [
 				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-contact.json",
 				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-interop.json",
-				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-preload.json"
+				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-preload.json",
+				"https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/apps-native.json"
 			],
 			"cacheDurationInMinutes": 1,
-			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view"]
+			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view", "inline-appasset"]
 		},
 		"cloudInteropProvider": {
 			"enabled": false,

@@ -61,11 +61,49 @@
 		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
 	},
 	{
+		"appId": "snapshot-example-ten-window",
+		"name": "snapshot-example-ten-window",
+		"title": "Windows - 10 Example.com Windows",
+		"manifestType": "snapshot",
+		"description": "Shows ten example.com windows",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter-basic/common/snapshots/ten-windows.example.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter-basic/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+	},
+	{
+		"appId": "snapshot-example-twenty-window",
+		"name": "snapshot-example0-twenty-window",
+		"title": "Windows - 20 Example.Com Windows",
+		"manifestType": "snapshot",
+		"description": "Shows twenty Example.com windows",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter-basic/common/snapshots/twenty-windows.example.snapshot.fin.json",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter-basic/common/images/icon-blue.png"
+			}
+		],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "OpenFin",
+		"intents": [],
+		"images": [],
+		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+	},
+	{
 		"appId": "interop-broadcast-view",
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
@@ -78,7 +116,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -88,11 +126,11 @@
 		"name": "fdc3-context-view-2-0",
 		"title": "Context using FDC3 (2.0)",
 		"description": "his view allows you to experiment with the broadcasting and listening of contexts using the fdc3 api.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/common/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/common/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -101,7 +139,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/images/previews/view-context-fdc3.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/interop/images/previews/view-context-fdc3.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "tools"]
