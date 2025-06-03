@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import type {
 	CustomActionPayload,
 	CustomActionsMap,
+	Page,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
 import {
@@ -11,7 +12,7 @@ import {
 } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isStringValue } from "workspace-platform-starter/utils";
+import { isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
 import { MANIFEST_TYPES } from "../../../framework/manifest-types";
 
 /**
@@ -71,6 +72,82 @@ export class DeveloperActions implements Actions {
 						: { uuid: payload.windowIdentity.uuid, name: payload.windowIdentity.uuid };
 				const targetWindow = fin.Window.wrapSync(targetIdentity);
 				await targetWindow.showDeveloperTools();
+			}
+		};
+
+		actionMap["developer-get-snapshot"] = async (payload: CustomActionPayload): Promise<void> => {
+			if (payload.callerType === CustomActionCallerType.PageTabContextMenu) {
+				const pageWindowIdentity: OpenFin.Identity = payload.windowIdentity;
+				const pageWindow = fin.Window.wrapSync(pageWindowIdentity);
+				const options = await pageWindow.getOptions();
+				// start off with the assumption there is a single page
+				let targetPage: Page | undefined = options.workspacePlatform.pages[0];
+				if (options.workspacePlatform.pages.length > 1) {
+					targetPage = options.workspacePlatform.pages.find((page: Page) => page.pageId === payload.pageId);
+				}
+				if (targetPage) {
+					const newPageId = randomUUID();
+					// we replace all pages with the target page
+					options.workspacePlatform.pages = [targetPage];
+					options.layout = targetPage.layout;
+					const layoutContainerId = (targetPage as unknown as { layoutContainerKey: string })
+						.layoutContainerKey;
+					options.layoutSnapshot.layouts[layoutContainerId] = targetPage.layout;
+					(options.layoutSnapshot as { pages?: Page[] }).pages = options.workspacePlatform.pages;
+					// we collect all the page id and layout container id
+					// and replace them with new ones so that the snapshot can be copied
+					let targetWindowString = JSON.stringify(options, replaceName, 2);
+					targetWindowString = targetWindowString.replaceAll(targetPage.pageId, newPageId);
+					targetWindowString = targetWindowString.replaceAll(layoutContainerId, randomUUID());
+					await fin.Clipboard.writeText({ data: targetWindowString });
+					this._logger?.info(
+						`Copied page snapshot for page ${targetPage.pageId} with new pageId ${newPageId} to clipboard`,
+						JSON.parse(targetWindowString)
+					);
+				} else {
+					this._logger?.warn(`No page found with id ${payload.pageId} in window ${pageWindow.identity.name}`);
+				}
+			} else if (payload.callerType === CustomActionCallerType.GlobalContextMenu) {
+				const targetIdentity: OpenFin.Identity = payload.windowIdentity;
+				const targetWindow = fin.Window.wrapSync(targetIdentity);
+				const options = await targetWindow.getOptions();
+				const pageIdTracker: { [key: string]: string } = {};
+				const layoutContainerIdTracker: { [key: string]: string } = {};
+
+				// we collect all the page ids and layout container ids
+				// and replace them with new ones so that the snapshot can be copied
+				// these are internal and not typed so may be subject to change.
+				// You don't necessarily need to do layoutContainerId replacement but
+				// we are trying to avoid any issues with the layoutContainerKey
+				for (let i = 0; i < options.workspacePlatform.pages.length; i++) {
+					const newPageId = randomUUID();
+					const newLayoutContainerId = randomUUID();
+					const layoutContainerId = (
+						options.workspacePlatform.pages[i] as unknown as { layoutContainerKey: string }
+					).layoutContainerKey;
+					pageIdTracker[options.workspacePlatform.pages[i].pageId] = newPageId;
+					layoutContainerIdTracker[layoutContainerId] = newLayoutContainerId;
+				}
+
+				let windowOptionsString = JSON.stringify(options, replaceName, 2);
+
+				const pageIds = Object.keys(pageIdTracker);
+				for (let i = 0; i < pageIds.length; i++) {
+					windowOptionsString = windowOptionsString.replaceAll(pageIds[i], pageIdTracker[pageIds[i]]);
+				}
+				const layoutContainerIds = Object.keys(layoutContainerIdTracker);
+				for (let i = 0; i < layoutContainerIds.length; i++) {
+					windowOptionsString = windowOptionsString.replaceAll(
+						layoutContainerIds[i],
+						layoutContainerIdTracker[layoutContainerIds[i]]
+					);
+				}
+
+				await fin.Clipboard.writeText({ data: windowOptionsString });
+				this._logger?.info(
+					`Copied page snapshot for window ${targetWindow.identity.name} to clipboard`,
+					JSON.parse(windowOptionsString)
+				);
 			}
 		};
 
@@ -162,4 +239,29 @@ export class DeveloperActions implements Actions {
 
 		return actionMap;
 	}
+}
+
+/**
+ * Used when stringifying a window to ensure that all names are unique
+ * and not the same as the original name.
+ * This is used to ensure that the name is unique when creating a new view
+ * or window from a snapshot.
+ * @param _ The first parameter is not used, but is required for the function signature.
+ * @param nestedValue The nested value that contains the name and url.
+ * @param nestedValue.name the name to check and potentially modify.
+ * @param nestedValue.url ensure it has a url field to check against.
+ * @returns The modified nested value with a unique name if applicable.
+ */
+export function replaceName(_: unknown, nestedValue: { name?: string; url?: string }): unknown {
+	// check to ensure that we have a name field and that we also have a url field in this object (in case name was added to a random part of the layout)
+	if (isStringValue(nestedValue?.name) && !isEmpty(nestedValue.url)) {
+		if (/\/[\d,a-z-]{36}$/.test(nestedValue.name)) {
+			nestedValue.name = nestedValue.name.replace(/([\d,a-z-]{36}$)/, randomUUID());
+		}
+		// case: internal-generated-view-<uuid>
+		if (/-[\d,a-z-]{36}$/.test(nestedValue.name)) {
+			nestedValue.name = nestedValue.name.replace(/(-[\d,a-z-]{36}$)/, randomUUID());
+		}
+	}
+	return nestedValue as unknown;
 }
