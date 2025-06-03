@@ -28,7 +28,8 @@
 					"enabled": true,
 					"protocols": ["mailto", "msteams", "tel"]
 				}
-			}
+			},
+			"webAPIs": ["clipboard-sanitized-write"]
 		},
 		"defaultWindowOptions": {
 			"permissions": {
