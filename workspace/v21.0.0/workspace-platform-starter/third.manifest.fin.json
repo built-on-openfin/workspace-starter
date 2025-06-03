@@ -23,7 +23,8 @@
 					"enabled": true,
 					"protocols": ["mailto"]
 				}
-			}
+			},
+			"webAPIs": ["clipboard-sanitized-write"]
 		},
 		"defaultWindowOptions": {
 			"permissions": {
