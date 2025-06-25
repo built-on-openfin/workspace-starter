@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "41.134.102.1"
+		"version": "41.134.102.4"
 	},
 	"platform": {
 		"uuid": "integrate-with-ms365-basic",
