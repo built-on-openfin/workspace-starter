@@ -21,13 +21,13 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/native-window-integration-client": "0.0.17",
-		"@openfin/workspace": "21.0.13",
-		"@openfin/workspace-platform": "21.0.13",
+		"@openfin/workspace": "21.0.16",
+		"@openfin/workspace-platform": "21.0.16",
 		"file-loader": "^6.2.0"
 	},
 	"devDependencies": {
-		"@openfin/core": "41.102.1",
-		"@openfin/node-adapter": "41.102.1",
+		"@openfin/core": "41.102.4",
+		"@openfin/node-adapter": "41.102.4",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
