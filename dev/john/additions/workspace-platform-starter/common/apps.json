@@ -341,5 +341,34 @@
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
+	},
+	{
+		"appId": "openfin-search-navigate",
+		"name": "openfin-search-navigate",
+		"title": "Navigate",
+		"manifestType": "inline-view",
+		"intents": [],
+		"publisher": "OpenFin",
+		"description": "Search Google or Navigate to a url. This view demonstrates the new navigation controls available in Workspace v17+",
+		"manifest": {
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/additions/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
+			"fdc3InteropApi": "2.0",
+			"workspacePlatform": {
+				"browserNavigationButtons": {
+					"back": true,
+					"forward": true,
+					"reload": true
+				}
+			}
+		},
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/additions/workspace-platform-starter/common/images/icon-blue.png"
+			}
+		],
+		"tags": ["openfin", "navigate", "view"],
+		"images": []
 	}
 ]
