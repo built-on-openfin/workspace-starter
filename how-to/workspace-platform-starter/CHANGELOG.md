@@ -5,6 +5,11 @@
 - Update to latest version of npm packages.
 - Update to the latest version of snap 1.3.1
 
+## v21.0.0
+
+- Update to latest version of npm packages.
+- Update to the latest version of snap 1.3.0
+
 ## v20.1.0
 
 - Update [apps-native.json](./public/common/apps-native.json) to include the native app from our [java starter](https://github.com/built-on-openfin/java-starter/tree/main/how-to/integrate-with-workspace). This is an app asset in our assets directory and was built using the [Microsoft Packaged OpenJDK 21](https://learn.microsoft.com/en-us/java/openjdk/download?form=MG0AV3#openjdk-21). The example shows that Java can connect to an Interop Broker to fire an intent (ViewInstrument), be an Intent target (for ViewInstrument) and that it can share context. If snap is enabled in the manifest then it demonstrates snapping a Java Application and the new multi window snapping support in the Snap SDK. It also demonstrates connectionProvider app provision logic (feeding java child window apps into home and store) as well as snapshot source support. Known issue: The Java app does not support instanceMode: multi because of the way workspace platform starter specifies a multi instance runtime uuid for native apps (appId/instanceId). This is being looked into. Second known issue. If a workspace has a saved Java app but the java app is not launched then it will be launched but the snapping state will not be as expected. Third known issue: Java child window support is experimental. Saving a workspace which includes a Java app and child windows and having them snapped can result in unexpected results.
