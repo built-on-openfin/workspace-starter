@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -105,7 +105,7 @@
 			"$ref": "#/definitions/__type_12"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_2"
@@ -127,13 +127,13 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_15"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"Identity_4": {
 			"$ref": "#/definitions/__type_18"
@@ -150,10 +150,10 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -180,6 +180,9 @@
 		"Partial_1": {
 			"$ref": "#/definitions/__type_8"
 		},
+		"Partial_10": {
+			"$ref": "#/definitions/__type_28"
+		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_11"
 		},
@@ -199,13 +202,13 @@
 			"$ref": "#/definitions/__type_22"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_26"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -239,7 +242,7 @@
 			"$ref": "#/definitions/__type_17"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_4"
@@ -295,7 +298,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -313,10 +316,10 @@
 			"type": "string"
 		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -548,7 +551,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -927,7 +930,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -1214,6 +1217,9 @@
 				"Clipboard": {
 					"$ref": "#/definitions/Partial_7"
 				},
+				"NotificationManager": {
+					"$ref": "#/definitions/Partial_8"
+				},
 				"System": {
 					"$ref": "#/definitions/Partial_6"
 				},
@@ -1272,7 +1278,10 @@
 		"__type_21": {
 			"additionalProperties": false,
 			"properties": {
-				"getAllExternalWindows": {
+				"downloadAsset": {
+					"type": "boolean"
+				},
+				"enableNativeWindowIntegrationProvider": {
 					"type": "boolean"
 				},
 				"getCurrentDomainSettings": {
@@ -1302,6 +1311,9 @@
 					]
 				},
 				"getDomainSettings": {
+					"type": "boolean"
+				},
+				"getInstalledApps": {
 					"type": "boolean"
 				},
 				"getOSInfo": {
@@ -1459,6 +1471,9 @@
 				"resolveDomainSettings": {
 					"type": "boolean"
 				},
+				"serveAsset": {
+					"type": "boolean"
+				},
 				"setDomainSettings": {
 					"type": "boolean"
 				},
@@ -1506,6 +1521,9 @@
 				"readText": {
 					"type": "boolean"
 				},
+				"setClipboard": {
+					"type": "boolean"
+				},
 				"write": {
 					"type": "boolean"
 				},
@@ -1526,6 +1544,15 @@
 		},
 		"__type_23": {
 			"additionalProperties": false,
+			"properties": {
+				"init": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_24": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -1543,7 +1570,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1553,7 +1580,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1571,7 +1598,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -1581,7 +1608,7 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -1793,7 +1820,7 @@
 			},
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1812,7 +1839,19 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1834,19 +1873,7 @@
 			},
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -1937,7 +1964,7 @@
 			],
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -1952,7 +1979,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -1965,7 +1992,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -1984,7 +2011,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2036,7 +2063,7 @@
 			],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,

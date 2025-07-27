@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +46,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -114,7 +114,7 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_27"
 		},
 		"Identity_4": {
 			"$ref": "#/definitions/__type_1"
@@ -155,6 +155,9 @@
 		"Partial_1": {
 			"$ref": "#/definitions/__type_7"
 		},
+		"Partial_10": {
+			"$ref": "#/definitions/__type_28"
+		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_12"
 		},
@@ -174,10 +177,10 @@
 			"$ref": "#/definitions/__type_22"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_26"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -249,7 +252,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -517,10 +520,10 @@
 			"type": "string"
 		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_23"
+			"$ref": "#/definitions/__type_24"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -801,6 +804,9 @@
 				"Clipboard": {
 					"$ref": "#/definitions/Partial_7"
 				},
+				"NotificationManager": {
+					"$ref": "#/definitions/Partial_8"
+				},
 				"System": {
 					"$ref": "#/definitions/Partial_6"
 				},
@@ -859,7 +865,10 @@
 		"__type_21": {
 			"additionalProperties": false,
 			"properties": {
-				"getAllExternalWindows": {
+				"downloadAsset": {
+					"type": "boolean"
+				},
+				"enableNativeWindowIntegrationProvider": {
 					"type": "boolean"
 				},
 				"getCurrentDomainSettings": {
@@ -889,6 +898,9 @@
 					]
 				},
 				"getDomainSettings": {
+					"type": "boolean"
+				},
+				"getInstalledApps": {
 					"type": "boolean"
 				},
 				"getOSInfo": {
@@ -1046,6 +1058,9 @@
 				"resolveDomainSettings": {
 					"type": "boolean"
 				},
+				"serveAsset": {
+					"type": "boolean"
+				},
 				"setDomainSettings": {
 					"type": "boolean"
 				},
@@ -1093,6 +1108,9 @@
 				"readText": {
 					"type": "boolean"
 				},
+				"setClipboard": {
+					"type": "boolean"
+				},
 				"write": {
 					"type": "boolean"
 				},
@@ -1113,6 +1131,15 @@
 		},
 		"__type_23": {
 			"additionalProperties": false,
+			"properties": {
+				"init": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_24": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -1130,7 +1157,7 @@
 			},
 			"type": "object"
 		},
-		"__type_24": {
+		"__type_25": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1140,7 +1167,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1158,7 +1185,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -1168,7 +1195,7 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -1380,7 +1407,7 @@
 			},
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1397,28 +1424,6 @@
 				}
 			},
 			"required": ["height", "left", "top", "width"],
-			"type": "object"
-		},
-		"__type_29": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
-					"type": "boolean"
-				},
-				"horizontal": {
-					"description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
-					"type": "boolean"
-				},
-				"vertical": {
-					"description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
-					"type": "boolean"
-				},
-				"width": {
-					"description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
-					"type": "boolean"
-				}
-			},
 			"type": "object"
 		},
 		"__type_3": {
@@ -1598,7 +1603,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -1733,6 +1738,28 @@
 				},
 				"y": {
 					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"description": "If true, the view's height will grow and shrink together with the window. false\nby default.",
+					"type": "boolean"
+				},
+				"horizontal": {
+					"description": "If true, the view's x position and width will grow and shrink proportionally with\nthe window. false by default.",
+					"type": "boolean"
+				},
+				"vertical": {
+					"description": "If true, the view's y position and height will grow and shrink proportionally with\nthe window. false by default.",
+					"type": "boolean"
+				},
+				"width": {
+					"description": "If true, the view's width will grow and shrink together with the window. false\nby default.",
+					"type": "boolean"
 				}
 			},
 			"type": "object"

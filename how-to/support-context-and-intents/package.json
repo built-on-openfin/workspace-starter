@@ -21,13 +21,13 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/cloud-interop": "0.41.135",
-		"@openfin/workspace": "21.0.16",
-		"@openfin/workspace-platform": "21.0.16"
+		"@openfin/cloud-interop": "0.42.93",
+		"@openfin/workspace": "22.3.4",
+		"@openfin/workspace-platform": "22.3.4"
 	},
 	"devDependencies": {
-		"@openfin/core": "41.102.4",
-		"@openfin/node-adapter": "41.102.4",
+		"@openfin/core": "42.100.97",
+		"@openfin/node-adapter": "42.100.97",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
