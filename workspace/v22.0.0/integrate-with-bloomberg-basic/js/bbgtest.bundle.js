@@ -2811,10 +2811,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @finos/fdc3-standard */ "../../node_modules/@finos/fdc3-standard/dist/src/index.js");
 /* harmony import */ var _messaging_message_port__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../messaging/message-port */ "../../node_modules/@finos/fdc3-get-agent/dist/src/messaging/message-port.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _HelloHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HelloHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/HelloHandler.js");
-/* harmony import */ var _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IdentityValidationHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/IdentityValidationHandler.js");
-/* harmony import */ var _util_Logger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/Logger */ "../../node_modules/@finos/fdc3-get-agent/dist/src/util/Logger.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _HelloHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HelloHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/HelloHandler.js");
+/* harmony import */ var _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./IdentityValidationHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/IdentityValidationHandler.js");
+/* harmony import */ var _util_Logger__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/Logger */ "../../node_modules/@finos/fdc3-get-agent/dist/src/util/Logger.js");
 
 
 
@@ -2832,8 +2832,8 @@ function isWindow(da) {
 class FailoverHandler {
     constructor(options) {
         this.options = options;
-        this.connectionAttemptUuid = (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(); // we use a different connectionAttemptUuid to differnetiate from any (failed) messaging to a parent window
-        this.helloHandler = new _HelloHandler__WEBPACK_IMPORTED_MODULE_2__.HelloHandler(this.options, this.connectionAttemptUuid, _finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__.WebDesktopAgentType.Failover);
+        this.connectionAttemptUuid = (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(); // we use a different connectionAttemptUuid to differnetiate from any (failed) messaging to a parent window
+        this.helloHandler = new _HelloHandler__WEBPACK_IMPORTED_MODULE_3__.HelloHandler(this.options, this.connectionAttemptUuid, _finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__.WebDesktopAgentType.Failover);
     }
     /** Parameters passed to getAgent */
     options;
@@ -2862,12 +2862,12 @@ class FailoverHandler {
                     return await this.failoverResultIsProxyWindow(failoverResult, handshakePromise);
                 }
                 else {
-                    _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.error('Failover function returned an invalid result: ', failoverResult);
+                    _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.error('Failover function returned an invalid result: ', failoverResult);
                     throw _finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__.AgentError.InvalidFailover;
                 }
             }
             else {
-                _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.error('Failover was not a function, actual type: ', typeof this.options.failover);
+                _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.error('Failover was not a function, actual type: ', typeof this.options.failover);
                 throw _finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__.AgentError.InvalidFailover;
             }
         }
@@ -2881,7 +2881,7 @@ class FailoverHandler {
         //if we received a WindowProxy from failover, and it sent us a handshake, try to validate its identity
         const connectionDetails = await handshakePromise;
         try {
-            this.identityValidationHandler = new _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_3__.IdentityValidationHandler(connectionDetails.messagePort, this.options, this.connectionAttemptUuid);
+            this.identityValidationHandler = new _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_4__.IdentityValidationHandler(connectionDetails.messagePort, this.options, this.connectionAttemptUuid);
             const idValidationPromise = this.identityValidationHandler.listenForIDValidationResponses();
             //start the message port so that we can receive responses
             connectionDetails.messagePort.start();
@@ -2909,7 +2909,7 @@ class FailoverHandler {
         }
         catch (e) {
             //identity validation may have failed
-            _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.error('Error during identity validation of Failover', e);
+            _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.error('Error during identity validation of Failover', e);
             throw e;
         }
     }
@@ -3229,11 +3229,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @finos/fdc3-standard */ "../../node_modules/@finos/fdc3-standard/dist/src/index.js");
 /* harmony import */ var _messaging_message_port__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../messaging/message-port */ "../../node_modules/@finos/fdc3-get-agent/dist/src/messaging/message-port.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _HelloHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HelloHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/HelloHandler.js");
-/* harmony import */ var _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IdentityValidationHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/IdentityValidationHandler.js");
-/* harmony import */ var _util_Logger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/Logger */ "../../node_modules/@finos/fdc3-get-agent/dist/src/util/Logger.js");
-/* harmony import */ var _Timeouts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Timeouts */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/Timeouts.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _HelloHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HelloHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/HelloHandler.js");
+/* harmony import */ var _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./IdentityValidationHandler */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/IdentityValidationHandler.js");
+/* harmony import */ var _util_Logger__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/Logger */ "../../node_modules/@finos/fdc3-get-agent/dist/src/util/Logger.js");
+/* harmony import */ var _Timeouts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Timeouts */ "../../node_modules/@finos/fdc3-get-agent/dist/src/strategies/Timeouts.js");
 
 
 
@@ -3249,7 +3249,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 function collectPossibleTargets(startWindow, found) {
     _recursePossibleTargets(startWindow, startWindow, found);
-    _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.debug(`Possible parent windows/frames found: ${found.length}`);
+    _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.debug(`Possible parent windows/frames found: ${found.length}`);
 }
 function _recursePossibleTargets(startWindow, w, found) {
     if (w) {
@@ -3279,7 +3279,7 @@ class PostMessageLoader {
         this.previousUrl = previousUrl ?? null;
     }
     previousUrl;
-    connectionAttemptUuid = (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])();
+    connectionAttemptUuid = (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])();
     helloHandler;
     identityValidationHandler;
     /** Initial timeout (released once a MessagePort is received - additional steps are outside timeout) */
@@ -3287,22 +3287,22 @@ class PostMessageLoader {
     /** Reference to the get fn's Promise's reject call - used when cancelling. */
     rejectFn = null;
     get(options) {
-        _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.debug(`PostMessageLoader.get(): Initiating search for Desktop Agent Proxy`);
+        _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.debug(`PostMessageLoader.get(): Initiating search for Desktop Agent Proxy`);
         return new Promise((resolve, reject) => {
             //save reject fn in case we get cancelled
             this.rejectFn = reject;
             //setup a timeout so we can reject if it runs out
-            const timeoutMs = options.timeoutMs ?? _Timeouts__WEBPACK_IMPORTED_MODULE_5__.DEFAULT_GETAGENT_TIMEOUT_MS;
+            const timeoutMs = options.timeoutMs ?? _Timeouts__WEBPACK_IMPORTED_MODULE_6__.DEFAULT_GETAGENT_TIMEOUT_MS;
             this.timeout = setTimeout(() => {
-                _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.debug(`PostMessageLoader.get(): timeout (${timeoutMs} ms) at ${new Date().toISOString()}`);
+                _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.debug(`PostMessageLoader.get(): timeout (${timeoutMs} ms) at ${new Date().toISOString()}`);
                 this.cancel();
                 reject(_finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__.AgentError.AgentNotFound);
             }, timeoutMs);
-            this.helloHandler = new _HelloHandler__WEBPACK_IMPORTED_MODULE_2__.HelloHandler(options, this.connectionAttemptUuid);
+            this.helloHandler = new _HelloHandler__WEBPACK_IMPORTED_MODULE_3__.HelloHandler(options, this.connectionAttemptUuid);
             // ok, begin the process
             const handshakePromise = this.helloHandler.listenForHelloResponses();
             if (this.previousUrl) {
-                _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.debug(`PostMessageLoader.get(): Loading previously used adaptor URL: ${this.previousUrl}`);
+                _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.debug(`PostMessageLoader.get(): Loading previously used adaptor URL: ${this.previousUrl}`);
                 //skip looking for target parent windows and open an iframe immediately
                 this.helloHandler.openFrame(this.previousUrl);
             }
@@ -3328,7 +3328,7 @@ class PostMessageLoader {
                     clearTimeout(this.timeout);
                 }
                 //perform id validation
-                this.identityValidationHandler = new _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_3__.IdentityValidationHandler(connectionDetails.messagePort, options, this.connectionAttemptUuid);
+                this.identityValidationHandler = new _IdentityValidationHandler__WEBPACK_IMPORTED_MODULE_4__.IdentityValidationHandler(connectionDetails.messagePort, options, this.connectionAttemptUuid);
                 const idValidationPromise = this.identityValidationHandler.listenForIDValidationResponses();
                 //start the message port so that we can receive responses
                 connectionDetails.messagePort.start();
@@ -3366,7 +3366,7 @@ class PostMessageLoader {
         });
     }
     async cancel() {
-        _util_Logger__WEBPACK_IMPORTED_MODULE_4__.Logger.debug('PostMessageLoader: Cleaning up');
+        _util_Logger__WEBPACK_IMPORTED_MODULE_5__.Logger.debug('PostMessageLoader: Cleaning up');
         //if we're being cancelled while still running, reject the promise
         if (this.rejectFn) {
             this.rejectFn(_finos_fdc3_standard__WEBPACK_IMPORTED_MODULE_0__.AgentError.AgentNotFound);
