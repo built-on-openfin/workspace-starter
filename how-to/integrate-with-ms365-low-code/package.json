@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-low-code",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 Low Code",
 	"main": "index.js",
 	"scripts": {

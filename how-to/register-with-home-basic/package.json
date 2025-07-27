@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-home-basic",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Register with Home - Basic",
 	"main": "index.js",
 	"scripts": {

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter-basic",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Workspace Platform Starter Basic",
 	"main": "index.js",
 	"scripts": {

@@ -74,7 +74,7 @@ To ensure the Browser UI files are ready for when your platform has finished boo
   {
    "src": "http://localhost:8080/common/assets/workspace_platform.zip",
    "alias": "self-hosted-workspace-platform",
-   "version": "21.0.0",
+   "version": "22.0.0",
    "target": "workspace.asar"
   }
  ]

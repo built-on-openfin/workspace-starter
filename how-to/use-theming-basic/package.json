@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-theming-basic",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Use Theming - Basic",
 	"main": "index.js",
 	"scripts": {

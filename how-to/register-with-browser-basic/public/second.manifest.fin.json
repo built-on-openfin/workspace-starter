@@ -22,7 +22,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://www.openfin.co/favicon.ico",
-		"name": "Register with Browser - Basic - v21.0.0",
+		"name": "Register with Browser - Basic - v22.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -35,7 +35,7 @@
 		{
 			"src": "http://localhost:8080/assets/workspace_platform.zip",
 			"alias": "self-hosted-workspace-platform",
-			"version": "21.0.0",
+			"version": "22.0.0",
 			"target": "workspace.asar"
 		}
 	],

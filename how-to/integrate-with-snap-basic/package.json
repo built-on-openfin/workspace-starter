@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-snap-basic",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Integrate with Snap - Basic",
 	"main": "index.js",
 	"scripts": {
