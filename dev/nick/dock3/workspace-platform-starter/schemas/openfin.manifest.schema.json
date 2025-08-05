@@ -15,7 +15,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_31"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -50,10 +50,10 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"BrowserContentBehavior": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_47"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -82,7 +82,7 @@
 			"$ref": "#/definitions/__type_8"
 		},
 		"ClipboardPermissions": {
-			"$ref": "#/definitions/__type_49"
+			"$ref": "#/definitions/__type_50"
 		},
 		"ContentCreationOptions": {
 			"$ref": "#/definitions/__type_11"
@@ -142,7 +142,7 @@
 			"$ref": "#/definitions/__type_13"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_3"
@@ -151,10 +151,10 @@
 			"$ref": "#/definitions/__type_2"
 		},
 		"CopyPermissions": {
-			"$ref": "#/definitions/__type_50"
+			"$ref": "#/definitions/__type_51"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_42"
 		},
 		"DipRect": {
 			"additionalProperties": false,
@@ -170,25 +170,25 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_40"
 		},
 		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_45"
 		},
 		"DomainSettings": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_42"
 		},
 		"DomainSettingsPreloadScripts": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_49"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_16"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"FileDownloadBehavior": {
 			"description": "Whether file downloads raise a user prompt.",
@@ -196,7 +196,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_44"
 		},
 		"Identity_4": {
 			"$ref": "#/definitions/__type_19"
@@ -207,28 +207,28 @@
 			"type": "string"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_39"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_6"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_41"
 		},
 		"LayoutSnapshot": {
 			"$ref": "#/definitions/__type_17"
 		},
 		"LogUploadOptions": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_55"
 		},
 		"LogUploaderUIOptions": {
-			"$ref": "#/definitions/__type_53"
+			"$ref": "#/definitions/__type_56"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"MultipleDomainMatchBehavior": {
 			"description": "Behavior for handling multiple {@link DomainSettingsRule} matches.",
@@ -439,7 +439,10 @@
 			"$ref": "#/definitions/__type_9"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_29"
+		},
+		"Partial_11": {
+			"$ref": "#/definitions/__type_38"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_12"
@@ -460,19 +463,19 @@
 			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_8": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_24"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_27"
 		},
 		"PastePermissions": {
-			"$ref": "#/definitions/__type_51"
+			"$ref": "#/definitions/__type_52"
 		},
 		"PerDomainSettings": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_43"
 		},
 		"Permissions_2": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_46"
 		},
 		"PlatformOptions": {
 			"additionalProperties": false,
@@ -583,14 +586,14 @@
 					"type": "number"
 				},
 				"defaultViewOptions": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "**Platforms Only.** Default view options apply to all platform views."
 				},
 				"defaultWidth": {
 					"type": "number"
 				},
 				"defaultWindowOptions": {
-					"$ref": "#/definitions/Partial_10",
+					"$ref": "#/definitions/Partial_11",
 					"description": "**Platforms Only.** Default window options apply to all platform windows."
 				},
 				"disableDefaultCommands": {
@@ -759,7 +762,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -786,6 +789,12 @@
 			],
 			"type": "string"
 		},
+		"PrintPermission": {
+			"$ref": "#/definitions/__type_53"
+		},
+		"PrintPlaceholder": {
+			"$ref": "#/definitions/__type_54"
+		},
 		"ProcessAffinityStrategy": {
 			"description": "Strategy to assign views to process affinity by domain.\n\n`same`: views in the same domain will have the same process affinity.<br>\n`different`: views in the same domain will have different process affinities.",
 			"enum": ["different", "same"],
@@ -798,7 +807,7 @@
 			"$ref": "#/definitions/__type_18"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_5"
@@ -845,7 +854,7 @@
 			"$ref": "#/definitions/__type"
 		},
 		"StructuredContentPermissions": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_48"
 		},
 		"TaskBar": {
 			"additionalProperties": false,
@@ -886,7 +895,7 @@
 					"type": "array"
 				},
 				"options": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Options for newly-created view."
 				}
 			},
@@ -904,10 +913,10 @@
 			"type": "string"
 		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"WebPermission": {
 			"anyOf": [
@@ -1139,7 +1148,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -1455,7 +1464,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -1957,7 +1966,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -2263,6 +2272,9 @@
 				"Clipboard": {
 					"$ref": "#/definitions/Partial_7"
 				},
+				"NotificationManager": {
+					"$ref": "#/definitions/Partial_8"
+				},
 				"System": {
 					"$ref": "#/definitions/Partial_6"
 				},
@@ -2306,7 +2318,10 @@
 		"__type_22": {
 			"additionalProperties": false,
 			"properties": {
-				"getAllExternalWindows": {
+				"downloadAsset": {
+					"type": "boolean"
+				},
+				"enableNativeWindowIntegrationProvider": {
 					"type": "boolean"
 				},
 				"getCurrentDomainSettings": {
@@ -2336,6 +2351,9 @@
 					]
 				},
 				"getDomainSettings": {
+					"type": "boolean"
+				},
+				"getInstalledApps": {
 					"type": "boolean"
 				},
 				"getOSInfo": {
@@ -2493,6 +2511,9 @@
 				"resolveDomainSettings": {
 					"type": "boolean"
 				},
+				"serveAsset": {
+					"type": "boolean"
+				},
 				"setDomainSettings": {
 					"type": "boolean"
 				},
@@ -2540,6 +2561,9 @@
 				"readText": {
 					"type": "boolean"
 				},
+				"setClipboard": {
+					"type": "boolean"
+				},
 				"write": {
 					"type": "boolean"
 				},
@@ -2560,6 +2584,15 @@
 		},
 		"__type_24": {
 			"additionalProperties": false,
+			"properties": {
+				"init": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_25": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -2577,7 +2610,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -2587,7 +2620,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -2605,7 +2638,7 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -2615,7 +2648,7 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -2827,7 +2860,22 @@
 			},
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configure the context menu when right-clicking on a window.",
+			"properties": {
+				"enabled": {
+					"description": "Displays the context menu on right click.",
+					"type": "boolean"
+				},
+				"template": {
+					"$ref": "#/definitions/Array",
+					"description": "Context menu items to display on right-click."
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2846,22 +2894,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configure the context menu when right-clicking on a window.",
-			"properties": {
-				"enabled": {
-					"description": "Displays the context menu on right click.",
-					"type": "boolean"
-				},
-				"template": {
-					"$ref": "#/definitions/Array",
-					"description": "Context menu items to display on right-click."
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2883,7 +2916,7 @@
 			},
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2974,7 +3007,7 @@
 			],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2989,7 +3022,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -3002,7 +3035,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -3021,7 +3054,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -3073,7 +3106,7 @@
 			],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -3102,7 +3135,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -3279,7 +3312,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_8",
+					"$ref": "#/definitions/Partial_9",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -3422,7 +3455,7 @@
 			},
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -3450,7 +3483,19 @@
 			},
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_4": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -3469,19 +3514,7 @@
 			},
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -3510,7 +3543,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"default": {
@@ -3552,7 +3585,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"api": {
@@ -3580,9 +3613,17 @@
 							"type": "string"
 						},
 						"print": {
-							"description": "Whether the content can be printed.\nDefaults to 'allow'.\nDisables the `print` option in the context menu, and prevents printing via both OpenFin and browser APIs.",
-							"enum": ["allow", "block"],
-							"type": "string"
+							"anyOf": [
+								{
+									"$ref": "#/definitions/PrintPermission",
+									"description": "Control print operations for a matched URL."
+								},
+								{
+									"enum": ["allow", "block"],
+									"type": "string"
+								}
+							],
+							"description": "Whether the content can be printed.\nDefaults to 'allow'.\nDisables the `print` option in the context menu, and prevents printing via both OpenFin and browser APIs."
 						},
 						"screenCapture": {
 							"$ref": "#/definitions/ScreenCaptureBehavior",
@@ -3602,7 +3643,7 @@
 			},
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_44": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -3632,7 +3673,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"fin": {
@@ -3646,7 +3687,7 @@
 			},
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_46": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -3654,6 +3695,9 @@
 				},
 				"Clipboard": {
 					"$ref": "#/definitions/Partial_7"
+				},
+				"NotificationManager": {
+					"$ref": "#/definitions/Partial_8"
 				},
 				"System": {
 					"$ref": "#/definitions/Partial_6"
@@ -3683,7 +3727,7 @@
 			},
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_47": {
 			"additionalProperties": false,
 			"description": "Opens matched URLs in the browser.",
 			"properties": {
@@ -3699,7 +3743,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_48": {
 			"additionalProperties": false,
 			"description": "Behavior when displaying content from matched URLs. Varies depending on type of navigation.",
 			"properties": {
@@ -3756,22 +3800,9 @@
 			},
 			"type": "object"
 		},
-		"__type_48": {
-			"additionalProperties": false,
-			"description": "Map of preload scripts that can enable new scripts or disable options defined preloadScripts.",
-			"type": "object"
-		},
 		"__type_49": {
 			"additionalProperties": false,
-			"description": "Clipboard Permissions",
-			"properties": {
-				"copy": {
-					"$ref": "#/definitions/CopyPermissions"
-				},
-				"paste": {
-					"$ref": "#/definitions/PastePermissions"
-				}
-			},
+			"description": "Map of preload scripts that can enable new scripts or disable options defined preloadScripts.",
 			"type": "object"
 		},
 		"__type_5": {
@@ -3808,6 +3839,19 @@
 		},
 		"__type_50": {
 			"additionalProperties": false,
+			"description": "Clipboard Permissions",
+			"properties": {
+				"copy": {
+					"$ref": "#/definitions/CopyPermissions"
+				},
+				"paste": {
+					"$ref": "#/definitions/PastePermissions"
+				}
+			},
+			"type": "object"
+		},
+		"__type_51": {
+			"additionalProperties": false,
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
 				"behavior": {
@@ -3829,7 +3873,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_51": {
+		"__type_52": {
 			"additionalProperties": false,
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
@@ -3841,19 +3885,61 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_52": {
+		"__type_53": {
+			"additionalProperties": false,
+			"description": "Control print operations for a matched URL.",
+			"properties": {
+				"behavior": {
+					"description": "Controls the behavior for print operations for a matched URL.\n\nallow: Enables all print operations.\nblock: Disables all print operations.",
+					"enum": ["allow", "block"],
+					"type": "string"
+				},
+				"placeholder": {
+					"$ref": "#/definitions/PrintPlaceholder",
+					"description": "Additional placeholder options. When setting behavior = 'block' , then this will be used to draw placeholder."
+				}
+			},
+			"required": ["behavior"],
+			"type": "object"
+		},
+		"__type_54": {
+			"additionalProperties": false,
+			"properties": {
+				"backgroundColor": {
+					"description": "This color will be background color for placeholder.",
+					"type": "string"
+				},
+				"text": {
+					"description": "This string will be visible on placeholder instead of the original content.",
+					"type": "string"
+				},
+				"textColor": {
+					"description": "This color will be text color for placeholder.",
+					"type": "string"
+				},
+				"textFontType": {
+					"description": "This font type will be font for placeholder.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_55": {
 			"additionalProperties": false,
 			"properties": {
 				"endpoint": {
+					"description": "The URL where log files are to be uploaded.",
 					"type": "string"
 				},
 				"logs": {
+					"description": "An array of strings that specifies which logs should be uploaded.",
 					"items": {
 						"type": "string"
 					},
 					"type": "array"
 				},
 				"manifests": {
+					"description": "An array of URL match patterns to define the manifests of the programs that the Log Uploader should upload logs for.",
 					"items": {
 						"type": "string"
 					},
@@ -3866,28 +3952,36 @@
 			"required": ["endpoint"],
 			"type": "object"
 		},
-		"__type_53": {
+		"__type_56": {
 			"additionalProperties": false,
+			"description": "Options for the Log Uploader UI.",
 			"properties": {
 				"description": {
+					"description": "An explanation for the user of the purpose of the tool.",
 					"type": "string"
 				},
 				"email": {
+					"description": "An email address that the user can contact with questions.",
 					"type": "string"
 				},
 				"header": {
+					"description": "Name of the organization displayed in the Uploader window.",
 					"type": "string"
 				},
 				"icon": {
+					"description": "URL of an icon to use for the Log Uploader tool. The default is the Here logo.",
 					"type": "string"
 				},
 				"title": {
+					"description": "Title for the Log Uploader window.",
 					"type": "string"
 				},
 				"website": {
+					"description": "URL of a webpage where the user can find more information about log uploading.",
 					"type": "string"
 				},
 				"websiteDescription": {
+					"description": "Description of the webpage where the user can find more information.",
 					"type": "string"
 				}
 			},
