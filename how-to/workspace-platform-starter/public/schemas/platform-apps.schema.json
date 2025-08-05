@@ -146,7 +146,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_30"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -177,7 +177,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_29"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -203,7 +203,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_40"
 		},
 		"ChromiumPolicies": {
 			"$ref": "#/definitions/__type_12"
@@ -274,7 +274,7 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_37"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_7"
@@ -330,13 +330,13 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_34"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_17"
 		},
 		"ExcludeOptions": {
-			"$ref": "#/definitions/__type_27"
+			"$ref": "#/definitions/__type_28"
 		},
 		"HostLaunchOptions": {
 			"additionalProperties": false,
@@ -409,14 +409,14 @@
 			"$ref": "#/definitions/__type_10"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_39"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
 			"description": "Are there any preferences you would like to apply when launching this application?",
 			"properties": {
 				"bounds": {
-					"$ref": "#/definitions/Partial_13",
+					"$ref": "#/definitions/Partial_14",
 					"description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
 				},
 				"defaultCentered": {
@@ -460,10 +460,10 @@
 			"$ref": "#/definitions/__type_18"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_36"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_32"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -546,13 +546,13 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_27"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_31"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_38"
 		},
 		"Partial_13": {
 			"$ref": "#/definitions/__type_41"
@@ -562,6 +562,9 @@
 		},
 		"Partial_15": {
 			"$ref": "#/definitions/__type_43"
+		},
+		"Partial_16": {
+			"$ref": "#/definitions/__type_44"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_8"
@@ -585,7 +588,7 @@
 			"$ref": "#/definitions/__type_23"
 		},
 		"Partial_9": {
-			"$ref": "#/definitions/__type_26"
+			"$ref": "#/definitions/__type_24"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -653,13 +656,13 @@
 							"$ref": "#/definitions/Partial_1"
 						},
 						{
-							"$ref": "#/definitions/Partial_10"
-						},
-						{
 							"$ref": "#/definitions/Partial_11"
 						},
 						{
 							"$ref": "#/definitions/Partial_12"
+						},
+						{
+							"$ref": "#/definitions/Partial_13"
 						},
 						{
 							"type": "string"
@@ -726,7 +729,7 @@
 			"description": "Application interop."
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_33"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -765,7 +768,7 @@
 			"$ref": "#/definitions/__type_19"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_35"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_9"
@@ -893,7 +896,7 @@
 					"type": "array"
 				},
 				"view": {
-					"$ref": "#/definitions/Partial_14",
+					"$ref": "#/definitions/Partial_15",
 					"description": "The option to override a few settings that are specific to views."
 				}
 			},
@@ -945,10 +948,10 @@
 			"type": "string"
 		},
 		"ViewVisibilityOption": {
-			"$ref": "#/definitions/__type_25"
+			"$ref": "#/definitions/__type_26"
 		},
 		"ViewVisibilityOptions": {
-			"$ref": "#/definitions/__type_24"
+			"$ref": "#/definitions/__type_25"
 		},
 		"WaitForWindowClassStrategy": {
 			"additionalProperties": false,
@@ -1088,7 +1091,7 @@
 					"type": "array"
 				},
 				"window": {
-					"$ref": "#/definitions/Partial_15",
+					"$ref": "#/definitions/Partial_16",
 					"description": "The option to override a few settings that are specific to windows."
 				}
 			},
@@ -1578,6 +1581,9 @@
 				"Clipboard": {
 					"$ref": "#/definitions/Partial_8"
 				},
+				"NotificationManager": {
+					"$ref": "#/definitions/Partial_9"
+				},
 				"System": {
 					"$ref": "#/definitions/Partial_7"
 				},
@@ -1621,7 +1627,10 @@
 		"__type_22": {
 			"additionalProperties": false,
 			"properties": {
-				"getAllExternalWindows": {
+				"downloadAsset": {
+					"type": "boolean"
+				},
+				"enableNativeWindowIntegrationProvider": {
 					"type": "boolean"
 				},
 				"getCurrentDomainSettings": {
@@ -1651,6 +1660,9 @@
 					]
 				},
 				"getDomainSettings": {
+					"type": "boolean"
+				},
+				"getInstalledApps": {
 					"type": "boolean"
 				},
 				"getOSInfo": {
@@ -1808,6 +1820,9 @@
 				"resolveDomainSettings": {
 					"type": "boolean"
 				},
+				"serveAsset": {
+					"type": "boolean"
+				},
 				"setDomainSettings": {
 					"type": "boolean"
 				},
@@ -1855,6 +1870,9 @@
 				"readText": {
 					"type": "boolean"
 				},
+				"setClipboard": {
+					"type": "boolean"
+				},
 				"write": {
 					"type": "boolean"
 				},
@@ -1875,6 +1893,15 @@
 		},
 		"__type_24": {
 			"additionalProperties": false,
+			"properties": {
+				"init": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_25": {
+			"additionalProperties": false,
 			"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
 			"properties": {
 				"showViewsOnSplitterDrag": {
@@ -1892,7 +1919,7 @@
 			},
 			"type": "object"
 		},
-		"__type_25": {
+		"__type_26": {
 			"additionalProperties": false,
 			"description": "Configuration for view visibility settings",
 			"properties": {
@@ -1902,7 +1929,7 @@
 			},
 			"type": "object"
 		},
-		"__type_26": {
+		"__type_27": {
 			"additionalProperties": false,
 			"properties": {
 				"customContext": {
@@ -1920,7 +1947,7 @@
 			},
 			"type": "object"
 		},
-		"__type_27": {
+		"__type_28": {
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
@@ -1930,7 +1957,7 @@
 			"required": ["preloadScripts"],
 			"type": "object"
 		},
-		"__type_28": {
+		"__type_29": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1949,7 +1976,22 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_30": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1971,22 +2013,7 @@
 			},
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_31": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -2025,7 +2052,7 @@
 			},
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2116,7 +2143,7 @@
 			],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2131,7 +2158,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -2144,7 +2171,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -2163,7 +2190,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2215,7 +2242,7 @@
 			],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_37": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -2244,7 +2271,7 @@
 			},
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2281,29 +2308,8 @@
 			},
 			"type": "object"
 		},
-		"__type_38": {
-			"additionalProperties": false,
-			"type": "object"
-		},
 		"__type_39": {
 			"additionalProperties": false,
-			"properties": {
-				"publickey": {
-					"type": "string"
-				},
-				"serial": {
-					"type": "string"
-				},
-				"subject": {
-					"type": "string"
-				},
-				"thumbprint": {
-					"type": "string"
-				},
-				"trusted": {
-					"type": "boolean"
-				}
-			},
 			"type": "object"
 		},
 		"__type_4": {
@@ -2483,7 +2489,7 @@
 					"type": "boolean"
 				},
 				"inheritance": {
-					"$ref": "#/definitions/Partial_9",
+					"$ref": "#/definitions/Partial_10",
 					"description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
 				},
 				"interop": {
@@ -2625,6 +2631,27 @@
 		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
+				"publickey": {
+					"type": "string"
+				},
+				"serial": {
+					"type": "string"
+				},
+				"subject": {
+					"type": "string"
+				},
+				"thumbprint": {
+					"type": "string"
+				},
+				"trusted": {
+					"type": "boolean"
+				}
+			},
+			"type": "object"
+		},
+		"__type_41": {
+			"additionalProperties": false,
+			"properties": {
 				"alias": {
 					"description": "The name of the asset",
 					"type": "string"
@@ -2652,7 +2679,7 @@
 			},
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2670,7 +2697,7 @@
 			},
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
@@ -2685,7 +2712,7 @@
 			},
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {

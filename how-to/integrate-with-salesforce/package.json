@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-salesforce",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Integrate with Salesforce",
 	"main": "index.js",
 	"scripts": {
@@ -25,12 +25,12 @@
 	"dependencies": {
 		"@openfin/salesforce": "2.3.0",
 		"@openfin/salesforce-lwc": "1.1.1",
-		"@openfin/workspace": "21.0.16",
-		"@openfin/workspace-platform": "21.0.16"
+		"@openfin/workspace": "22.3.9",
+		"@openfin/workspace-platform": "22.3.9"
 	},
 	"devDependencies": {
-		"@openfin/core": "41.102.4",
-		"@openfin/node-adapter": "41.102.4",
+		"@openfin/core": "42.100.101",
+		"@openfin/node-adapter": "42.100.101",
 		"copy-webpack-plugin": "^12.0.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",

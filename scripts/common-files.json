@@ -949,45 +949,6 @@
 		]
 	},
 	{
-		"name": "workspace-native-window-integration",
-		"fileGroups": [
-			{
-				"srcFolder": "how-to/workspace-platform-starter/public",
-				"destFolder": "how-to/workspace-native-window-integration/public",
-				"files": ["favicon.ico"]
-			},
-			{
-				"srcFolder": "how-to/workspace-platform-starter/public/common",
-				"destFolder": "how-to/workspace-native-window-integration/public/common",
-				"files": [
-					"assets/native-interop-example.zip",
-					"images/icon-blue.png",
-					"images/native/icon-winform-interop.png",
-					"style/app.css",
-					"style/style-changed-preload.js",
-					"views/platform/of-info.view.fin.json",
-					"views/platform/of-info/**/*",
-					"dos.json"
-				]
-			},
-			{
-				"srcFolder": "how-to/workspace-platform-starter/scripts",
-				"destFolder": "how-to/workspace-native-window-integration/scripts",
-				"files": ["dos.mjs", "kill.mjs", "launch.mjs"]
-			},
-			{
-				"srcFolder": "how-to/workspace-platform-starter/client/types",
-				"destFolder": "how-to/workspace-native-window-integration/client/types",
-				"files": ["fin.d.ts"]
-			},
-			{
-				"srcFolder": "how-to/workspace-platform-starter",
-				"destFolder": "how-to/workspace-native-window-integration",
-				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
-			}
-		]
-	},
-	{
 		"name": "workspace-platform-starter-basic",
 		"fileGroups": [
 			{
