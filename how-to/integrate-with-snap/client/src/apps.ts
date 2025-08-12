@@ -14,6 +14,7 @@ export async function getApps(): Promise<PlatformApp[]> {
 		OPENFIN_INFORMATION_APP_SNAPSHOT,
 		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT,
 		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID,
+		OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_MULTI,
 		SNAP_NATIVE_TEST_APP,
 		OPENFIN_WINDOW_APP
 	];
@@ -139,6 +140,30 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
 	description:
 		"Display information about the OpenFin environment as a snapped collection of classic windows.",
 	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
+	manifestType: "snapshot",
+	icons: [
+		{
+			src: "http://localhost:8080/common/images/icon-blue.png"
+		}
+	],
+	contactEmail: "contact@example.com",
+	supportEmail: "support@example.com",
+	publisher: "OpenFin",
+	intents: [],
+	images: [
+		{
+			src: "http://localhost:8080/common/images/previews/of-info.png"
+		}
+	],
+	tags: ["snapshot", "openfin", "versions"]
+};
+
+const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_MULTI: PlatformApp = {
+	appId: "multi-openfin-information-classic-snapshot",
+	title: "Multi OpenFin Information Classic Snapshot",
+	description:
+		"Display information about the OpenFin environment as a snapped collection of classic windows.",
+	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.multi.fin.json",
 	manifestType: "snapshot",
 	icons: [
 		{
