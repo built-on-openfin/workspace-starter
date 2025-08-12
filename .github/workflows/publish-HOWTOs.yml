@@ -84,7 +84,7 @@ jobs:
           path: public-github/
 
       - name: Publish
-        uses: JamesIves/github-pages-deploy-action@4.7.3
+        uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
           branch: gh-pages # Target branch to deploy to
           folder: public-github # Source folder to deploy
