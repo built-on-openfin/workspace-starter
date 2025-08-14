@@ -1908,6 +1908,7 @@
 				"DeleteWorkspace",
 				"Downloads",
 				"OpenStorefront",
+				"ManageDesktopSignals",
 				"Appearance",
 				"Quit",
 				"Custom"
@@ -3568,9 +3569,13 @@
 					"description": "Represents a potential ways to customize behavior of your Layout",
 					"properties": {
 						"constrainDragToContainer": {
+							"default": false,
+							"description": "Limits the area to which tabs can be dragged.\nIf true, the layout container is the only area where tabs can be dropped.",
 							"type": "boolean"
 						},
 						"constrainDragToHeaders": {
+							"default": false,
+							"description": "Limits the area to which tabs can be dragged. If true, stack headers are the only areas where tabs can be dropped.",
 							"type": "boolean"
 						},
 						"disableTabOverflowDropdown": {
@@ -3578,6 +3583,8 @@
 							"type": "boolean"
 						},
 						"hasHeaders": {
+							"default": true,
+							"description": "Turns tab headers on or off.\nIf false, the layout will be displayed with splitters only.",
 							"type": "boolean"
 						},
 						"newTabButtonUrl": {
@@ -3585,27 +3592,42 @@
 							"type": "string"
 						},
 						"popoutWholeStack": {
+							"default": false,
+							"description": "Whether the popout button will only act on the entire stack,\nas opposed to only the active tab.",
 							"type": "boolean"
 						},
 						"preventDragIn": {
+							"default": false,
 							"type": "boolean"
 						},
 						"preventDragOut": {
+							"default": false,
+							"description": "If true, tabs can't be dragged out of the window.",
 							"type": "boolean"
 						},
 						"preventSplitterResize": {
+							"default": false,
+							"description": "When true the splitters will not be draggable and the layout will not resize.",
 							"type": "boolean"
 						},
 						"reorderEnabled": {
+							"default": true,
+							"description": "If true, the user can re-arrange the layout by\ndragging items by their tabs to the desired location.",
 							"type": "boolean"
 						},
 						"showCloseIcon": {
+							"default": false,
+							"description": "Whether to show the close button on stack header\n(not to be confused with close button on every tab).",
 							"type": "boolean"
 						},
 						"showMaximiseIcon": {
+							"default": false,
+							"description": "Whether to show the maximize button on stack header.\nThe button will maximize the current tab to fill the entire window.",
 							"type": "boolean"
 						},
 						"showPopoutIcon": {
+							"default": false,
+							"description": "Whether to show the popout button on stack header.\nThe button will create a new window with current tab as its content.\nIn case `popoutWholeStack` is set to true, all tabs in the stack will be in the new window.",
 							"type": "boolean"
 						}
 					},
@@ -3646,6 +3668,7 @@
 				"Print",
 				"PrintAll",
 				"PrintScreen",
+				"ManageDesktopSignals",
 				"AddToChannel",
 				"Custom"
 			],
@@ -4057,9 +4080,13 @@
 					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
 				},
 				"allowLaunchIntoPlatform": {
+					"default": true,
+					"description": "Controls whether it is allowed to launch content manifests into the Platform. If omitted, defaults to `true`.\n\nNOTE: Starting in v38, the default value will change to `false` and content launching must be explicitly opted into.",
 					"type": "boolean"
 				},
 				"alwaysOnTop": {
+					"default": false,
+					"description": "Always position the window at the top of the window stack.",
 					"type": "boolean"
 				},
 				"api": {
@@ -4067,6 +4094,8 @@
 					"description": "Configurations for API injection."
 				},
 				"apiDiagnostics": {
+					"default": true,
+					"description": "When set to `false` it will disable OpenFin Diagnostics for the app.",
 					"type": "boolean"
 				},
 				"appLogsTimezone": {
@@ -4074,6 +4103,8 @@
 					"description": "Set the timezone for the app logs. When setting this value the timestamp will be in ISO 8601 format. By default, if no value is set, it will show the local time in this format: 'y-MM-dd HH:mm:ss.SSS'"
 				},
 				"aspectRatio": {
+					"default": 0,
+					"description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
 					"type": "number"
 				},
 				"autoShow": {
@@ -4100,6 +4131,7 @@
 					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"cornerRounding": {
@@ -4147,12 +4179,18 @@
 					"$ref": "#/definitions/DefaultDomainSettings"
 				},
 				"defaultHeight": {
+					"default": 500,
+					"description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
 					"type": "number"
 				},
 				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultViewOptions": {
@@ -4160,6 +4198,8 @@
 					"description": "**Platforms Only.** Default view options apply to all platform views."
 				},
 				"defaultWidth": {
+					"default": 800,
+					"description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultWindowOptions": {
@@ -4170,6 +4210,8 @@
 					"type": "boolean"
 				},
 				"disableIabSecureLogging": {
+					"default": false,
+					"description": "Disables IAB secure logging for the app.",
 					"type": "boolean"
 				},
 				"domainSettings": {
@@ -4177,15 +4219,22 @@
 					"description": "Define the {@link https://developers.openfin.co/of-docs/docs/file-download#manifest-properties-for-file-downloads file download rules} and domain-based api injection rules."
 				},
 				"enableBeforeUnload": {
+					"default": false,
+					"description": "When set to `true`, any `beforeunload` handler set on the app will fire.",
 					"type": "boolean"
 				},
 				"enableJumpList": {
+					"default": false,
+					"description": "Enables the use of the Jumplists API and the 'pin to taskbar' functionality.\nOnly relevant in Windows.",
 					"type": "boolean"
 				},
 				"frame": {
+					"default": true,
 					"type": "boolean"
 				},
 				"hideOnClose": {
+					"default": false,
+					"description": "Hides the window instead of closing it when the close button is pressed.",
 					"type": "boolean"
 				},
 				"icon": {
@@ -4204,6 +4253,8 @@
 					"type": "boolean"
 				},
 				"loadErrorMessage": {
+					"default": "'There was an error loading the application.'",
+					"description": "An error message to display when the application (launched via manifest) fails to load.\nA dialog box will be launched with the error message just before the runtime exits.\nLoad fails such as failed DNS resolutions or aborted connections as well as cancellations, _e.g.,_ `window.stop()`,\nwill trigger this dialog.\nClient response codes such as `404 Not Found` are not treated as fails as they are valid server responses.",
 					"type": "string"
 				},
 				"mainWindowOptions": {
@@ -4211,33 +4262,51 @@
 					"description": "The options of the main window of the application."
 				},
 				"maxHeight": {
+					"default": -1,
+					"description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maxViewPoolSize": {
+					"default": 1000,
+					"description": "**Platforms Only.** The maximum number of \"detached\" or \"pooled\" Views that can exist in the Platform before being closed.\nIf you do not wish for views to be pooled on your platform, set this property to zero.",
 					"type": "number"
 				},
 				"maxWidth": {
+					"default": -1,
+					"description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maximizable": {
+					"default": true,
+					"description": "Allows the window to be maximized.",
 					"type": "boolean"
 				},
 				"minHeight": {
+					"default": 0,
+					"description": "The minimum height of the window.",
 					"type": "number"
 				},
 				"minWidth": {
+					"default": true,
+					"description": "The minimum width of the window.",
 					"type": "number"
 				},
 				"minimizable": {
+					"default": true,
+					"description": "Allows the window to be minimized.",
 					"type": "boolean"
 				},
 				"name": {
 					"type": "string"
 				},
 				"nonPersistent": {
+					"default": false,
+					"description": "A flag to configure the application as non-persistent.\nRuntime exits when there are no persistent apps running.",
 					"type": "boolean"
 				},
 				"opacity": {
+					"default": 1,
+					"description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
 					"type": "number"
 				},
 				"permissions": {
@@ -4245,6 +4314,8 @@
 					"description": "The permissions for secured APIs."
 				},
 				"plugins": {
+					"default": false,
+					"description": "Enable Flash at the application level.",
 					"type": "boolean"
 				},
 				"preloadScripts": {
@@ -4254,6 +4325,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -4272,6 +4345,8 @@
 					"type": "array"
 				},
 				"preventQuitOnLastWindowClosed": {
+					"default": false,
+					"description": "**Platforms Only.** Prevent the Platform Provider from quitting automatically when the last Platform Window is closed.\n\nNote: if the Platform Provider is showing, it won't close automatically.\nIf you want a hidden Platform Provider to remain open after the last Platform Window has been closed, set this property to true.",
 					"type": "boolean"
 				},
 				"providerUrl": {
@@ -4279,6 +4354,8 @@
 					"type": "string"
 				},
 				"resizable": {
+					"default": true,
+					"description": "A flag to allow the user to resize the window.",
 					"type": "boolean"
 				},
 				"resizeRegion": {
@@ -4286,15 +4363,23 @@
 					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
 				},
 				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
 					"type": "boolean"
 				},
 				"shadow": {
+					"default": false,
+					"description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
 					"type": "boolean"
 				},
 				"showTaskbarIcon": {
+					"default": true,
+					"description": "Shows the window's icon in the taskbar.",
 					"type": "boolean"
 				},
 				"smallWindow": {
+					"default": false,
+					"description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
 					"type": "boolean"
 				},
 				"snapshot": {
@@ -4302,16 +4387,22 @@
 					"description": "**Platforms Only.** The snapshot to be applied."
 				},
 				"spellCheck": {
+					"default": false,
+					"description": "Enable spell check at the application level.",
 					"type": "boolean"
 				},
 				"state": {
-					"$ref": "#/definitions/WindowState"
+					"$ref": "#/definitions/WindowState",
+					"default": "normal",
+					"description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
 				},
 				"taskbarIconGroup": {
 					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
 					"type": "string"
 				},
 				"url": {
+					"default": "'about:blank'",
+					"description": "The url to the application (specifically the application's main window).",
 					"type": "string"
 				},
 				"uuid": {
@@ -4322,9 +4413,13 @@
 					"description": "Strategy to assign views to process affinity by domain.\n* `same` - The views in the same domain will have same renderer processes.\n* `different` - The views in the same domain will have their own renderer processes."
 				},
 				"waitForPageLoad": {
+					"default": false,
+					"description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
 					"type": "boolean"
 				},
 				"webSecurity": {
+					"default": true,
+					"description": "When set to `false` it will disable the same-origin policy for the app.",
 					"type": "boolean"
 				}
 			},
@@ -4615,6 +4710,8 @@
 					"type": "string"
 				},
 				"preventDefault": {
+					"default": false,
+					"description": "Prevent default key handling before emitting the event.",
 					"type": "boolean"
 				}
 			},
@@ -4629,9 +4726,13 @@
 			"description": "_Platform Windows Only_. Enables views to be shown when a Platform Window is being resized by the user.",
 			"properties": {
 				"enabled": {
+					"default": false,
+					"description": "Enables or disables showing views when the layout splitter or a tab is being dragged or a Platform Window is being resized.",
 					"type": "boolean"
 				},
 				"paintIntervalMs": {
+					"default": 0,
+					"description": "Number of milliseconds to wait between view repaints.",
 					"type": "number"
 				}
 			},
@@ -5720,9 +5821,11 @@
 				},
 				"alphaMask": {
 					"$ref": "#/definitions/RGB",
-					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
 				},
 				"alwaysOnTop": {
+					"default": false,
+					"description": "Always position the window at the top of the window stack.",
 					"type": "boolean"
 				},
 				"api": {
@@ -5733,6 +5836,8 @@
 					"type": "string"
 				},
 				"aspectRatio": {
+					"default": 0,
+					"description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
 					"type": "number"
 				},
 				"autoShow": {
@@ -5748,6 +5853,8 @@
 					"type": "string"
 				},
 				"backgroundThrottling": {
+					"default": false,
+					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
 				"chromiumPolicies": {
@@ -5755,6 +5862,8 @@
 					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
+					"default": true,
+					"description": "Setting this to false would keep the Window alive even if all its Views were closed.\nThis is meant for advanced users and should be used with caution.\nLimitations - Once a Layout has been emptied out of all views it's not usable anymore, and certain API calls will fail.\nUse `layout.replace` to create a fresh Layout instance in case you want to populate it with Views again.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"type": "boolean"
 				},
 				"contentCreation": {
@@ -5770,6 +5879,7 @@
 					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -5824,16 +5934,28 @@
 					"type": "boolean"
 				},
 				"defaultHeight": {
+					"default": 500,
+					"description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
 					"type": "number"
 				},
 				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultWidth": {
+					"default": 800,
+					"description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
+				},
+				"disableAppRegion": {
+					"default": false,
+					"type": "boolean"
 				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
@@ -5848,12 +5970,15 @@
 					"type": "string"
 				},
 				"frame": {
+					"default": true,
 					"type": "boolean"
 				},
 				"height": {
 					"type": "number"
 				},
 				"hideOnClose": {
+					"default": false,
+					"description": "Hides the window instead of closing it when the close button is pressed.",
 					"type": "boolean"
 				},
 				"hotkeys": {
@@ -5867,6 +5992,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -5884,6 +6011,8 @@
 					"type": "boolean"
 				},
 				"includeInSnapshots": {
+					"default": true,
+					"description": "Include window in snapshots returned by Platform.getSnapshot(). Turning this off may be desirable when dealing with\ninherently temporary windows whose state shouldn't be preserved, such as modals, menus, or popups.",
 					"type": "boolean"
 				},
 				"inheritance": {
@@ -5898,21 +6027,33 @@
 					"$ref": "#/definitions/LayoutSnapshot"
 				},
 				"maxHeight": {
+					"default": -1,
+					"description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maxWidth": {
+					"default": -1,
+					"description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maximizable": {
+					"default": true,
+					"description": "Allows the window to be maximized.",
 					"type": "boolean"
 				},
 				"minHeight": {
+					"default": 0,
+					"description": "The minimum height of the window.",
 					"type": "number"
 				},
 				"minWidth": {
+					"default": true,
+					"description": "The minimum width of the window.",
 					"type": "number"
 				},
 				"minimizable": {
+					"default": true,
+					"description": "Allows the window to be minimized.",
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
@@ -5924,6 +6065,8 @@
 					"type": "string"
 				},
 				"opacity": {
+					"default": 1,
+					"description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
 					"type": "number"
 				},
 				"permissions": {
@@ -5937,6 +6080,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -5959,29 +6104,47 @@
 					"type": "string"
 				},
 				"resizable": {
+					"default": true,
+					"description": "A flag to allow the user to resize the window.",
 					"type": "boolean"
 				},
 				"resizeRegion": {
 					"$ref": "#/definitions/ResizeRegion",
 					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
 				},
+				"roundedCorners": {
+					"description": "Controls whether frameless window should have rounded corners. Default is false for Windows and true for MacOS. Setting this property to false will prevent the window from being fullscreenable on macOS. On Windows versions older than Windows 11 Build 22000 this property has no effect, and frameless windows will not have rounded corners.",
+					"type": "boolean"
+				},
 				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
 					"type": "boolean"
 				},
 				"shadow": {
+					"default": false,
+					"description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
 					"type": "boolean"
 				},
 				"showBackgroundImages": {
+					"default": false,
+					"description": "**Platforms Only.**  If true, will show background images in the layout when the Views are hidden.\nThis occurs when the window is resizing or a tab is being dragged within the layout.",
 					"type": "boolean"
 				},
 				"showTaskbarIcon": {
+					"default": true,
+					"description": "Shows the window's icon in the taskbar.",
 					"type": "boolean"
 				},
 				"smallWindow": {
+					"default": false,
+					"description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
 					"type": "boolean"
 				},
 				"state": {
-					"$ref": "#/definitions/WindowState"
+					"$ref": "#/definitions/WindowState",
+					"default": "normal",
+					"description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
 				},
 				"taskbarIcon": {
 					"type": "string"
@@ -5992,12 +6155,17 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/WindowThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc WindowThrottling}"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"uuid": {
+					"default": "<application UUID>",
+					"description": "The `uuid` of the application, unique within the set of all `Application`s running in OpenFin Runtime.\nIf omitted, defaults to the `uuid` of the application spawning the window.\nIf given, must match the `uuid` of the application spawning the window.\nIn other words, the application's `uuid` is the only acceptable value, but is the default, so there's\nreally no need to provide it.",
 					"type": "string"
 				},
 				"viewVisibility": {
@@ -6005,10 +6173,14 @@
 					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
 				},
 				"viewsPreventingClose": {
+					"default": "'all'",
+					"description": "When `closeOnLastViewRemoved` is set to true, determines which views prevent closing the window.\nDefaults to `all`. You may want to switch this to `layout` if using View closeBehavior: 'hide'.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"enum": ["all", "layout"],
 					"type": "string"
 				},
 				"waitForPageLoad": {
+					"default": false,
+					"description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
 					"type": "boolean"
 				},
 				"width": {
@@ -6053,6 +6225,7 @@
 				"defaultLeft",
 				"defaultTop",
 				"defaultWidth",
+				"disableAppRegion",
 				"downloadShelf",
 				"excludeOptions",
 				"frame",
@@ -6079,6 +6252,7 @@
 				"processAffinity",
 				"resizable",
 				"resizeRegion",
+				"roundedCorners",
 				"saveWindowState",
 				"shadow",
 				"showBackgroundImages",
@@ -6225,9 +6399,11 @@
 				},
 				"alphaMask": {
 					"$ref": "#/definitions/RGB",
-					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
 				},
 				"alwaysOnTop": {
+					"default": false,
+					"description": "Always position the window at the top of the window stack.",
 					"type": "boolean"
 				},
 				"api": {
@@ -6238,6 +6414,8 @@
 					"type": "string"
 				},
 				"aspectRatio": {
+					"default": 0,
+					"description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
 					"type": "number"
 				},
 				"autoShow": {
@@ -6253,6 +6431,8 @@
 					"type": "string"
 				},
 				"backgroundThrottling": {
+					"default": false,
+					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
 				"chromiumPolicies": {
@@ -6260,6 +6440,8 @@
 					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
+					"default": true,
+					"description": "Setting this to false would keep the Window alive even if all its Views were closed.\nThis is meant for advanced users and should be used with caution.\nLimitations - Once a Layout has been emptied out of all views it's not usable anymore, and certain API calls will fail.\nUse `layout.replace` to create a fresh Layout instance in case you want to populate it with Views again.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"type": "boolean"
 				},
 				"contentCreation": {
@@ -6275,6 +6457,7 @@
 					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -6329,16 +6512,28 @@
 					"type": "boolean"
 				},
 				"defaultHeight": {
+					"default": 500,
+					"description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
 					"type": "number"
 				},
 				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultWidth": {
+					"default": 800,
+					"description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
+				},
+				"disableAppRegion": {
+					"default": false,
+					"type": "boolean"
 				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
@@ -6353,12 +6548,15 @@
 					"type": "string"
 				},
 				"frame": {
+					"default": true,
 					"type": "boolean"
 				},
 				"height": {
 					"type": "number"
 				},
 				"hideOnClose": {
+					"default": false,
+					"description": "Hides the window instead of closing it when the close button is pressed.",
 					"type": "boolean"
 				},
 				"hotkeys": {
@@ -6372,6 +6570,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -6389,6 +6589,8 @@
 					"type": "boolean"
 				},
 				"includeInSnapshots": {
+					"default": true,
+					"description": "Include window in snapshots returned by Platform.getSnapshot(). Turning this off may be desirable when dealing with\ninherently temporary windows whose state shouldn't be preserved, such as modals, menus, or popups.",
 					"type": "boolean"
 				},
 				"inheritance": {
@@ -6403,21 +6605,33 @@
 					"$ref": "#/definitions/LayoutSnapshot"
 				},
 				"maxHeight": {
+					"default": -1,
+					"description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maxWidth": {
+					"default": -1,
+					"description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maximizable": {
+					"default": true,
+					"description": "Allows the window to be maximized.",
 					"type": "boolean"
 				},
 				"minHeight": {
+					"default": 0,
+					"description": "The minimum height of the window.",
 					"type": "number"
 				},
 				"minWidth": {
+					"default": true,
+					"description": "The minimum width of the window.",
 					"type": "number"
 				},
 				"minimizable": {
+					"default": true,
+					"description": "Allows the window to be minimized.",
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
@@ -6429,6 +6643,8 @@
 					"type": "string"
 				},
 				"opacity": {
+					"default": 1,
+					"description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
 					"type": "number"
 				},
 				"permissions": {
@@ -6442,6 +6658,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -6467,29 +6685,47 @@
 					"$ref": "#/definitions/WindowCreationReason"
 				},
 				"resizable": {
+					"default": true,
+					"description": "A flag to allow the user to resize the window.",
 					"type": "boolean"
 				},
 				"resizeRegion": {
 					"$ref": "#/definitions/ResizeRegion",
 					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
 				},
+				"roundedCorners": {
+					"description": "Controls whether frameless window should have rounded corners. Default is false for Windows and true for MacOS. Setting this property to false will prevent the window from being fullscreenable on macOS. On Windows versions older than Windows 11 Build 22000 this property has no effect, and frameless windows will not have rounded corners.",
+					"type": "boolean"
+				},
 				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
 					"type": "boolean"
 				},
 				"shadow": {
+					"default": false,
+					"description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
 					"type": "boolean"
 				},
 				"showBackgroundImages": {
+					"default": false,
+					"description": "**Platforms Only.**  If true, will show background images in the layout when the Views are hidden.\nThis occurs when the window is resizing or a tab is being dragged within the layout.",
 					"type": "boolean"
 				},
 				"showTaskbarIcon": {
+					"default": true,
+					"description": "Shows the window's icon in the taskbar.",
 					"type": "boolean"
 				},
 				"smallWindow": {
+					"default": false,
+					"description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
 					"type": "boolean"
 				},
 				"state": {
-					"$ref": "#/definitions/WindowState"
+					"$ref": "#/definitions/WindowState",
+					"default": "normal",
+					"description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
 				},
 				"taskbarIcon": {
 					"type": "string"
@@ -6500,15 +6736,20 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/WindowThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc WindowThrottling}"
 				},
 				"updateStateIfExists": {
 					"type": "boolean"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"uuid": {
+					"default": "<application UUID>",
+					"description": "The `uuid` of the application, unique within the set of all `Application`s running in OpenFin Runtime.\nIf omitted, defaults to the `uuid` of the application spawning the window.\nIf given, must match the `uuid` of the application spawning the window.\nIn other words, the application's `uuid` is the only acceptable value, but is the default, so there's\nreally no need to provide it.",
 					"type": "string"
 				},
 				"viewVisibility": {
@@ -6516,10 +6757,14 @@
 					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
 				},
 				"viewsPreventingClose": {
+					"default": "'all'",
+					"description": "When `closeOnLastViewRemoved` is set to true, determines which views prevent closing the window.\nDefaults to `all`. You may want to switch this to `layout` if using View closeBehavior: 'hide'.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"enum": ["all", "layout"],
 					"type": "string"
 				},
 				"waitForPageLoad": {
+					"default": false,
+					"description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
 					"type": "boolean"
 				},
 				"width": {
@@ -6598,9 +6843,13 @@
 			"additionalProperties": false,
 			"properties": {
 				"height": {
+					"default": 0,
+					"description": "The height in pixels.",
 					"type": "number"
 				},
 				"width": {
+					"default": 0,
+					"description": "The width in pixels.",
 					"type": "number"
 				}
 			},
@@ -6611,6 +6860,8 @@
 			"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
 			"properties": {
 				"bottomRightCorner": {
+					"default": 9,
+					"description": "The size in pixels of an additional square resizable region located at the bottom right corner of a frameless window.",
 					"type": "number"
 				},
 				"sides": {
@@ -6618,21 +6869,31 @@
 					"description": "Enables resizing interaction for each side of the window.",
 					"properties": {
 						"bottom": {
+							"default": true,
+							"description": "Enables resizing from the bottom of the window.",
 							"type": "boolean"
 						},
 						"left": {
+							"default": true,
+							"description": "Enables resizing from the left side of the window.",
 							"type": "boolean"
 						},
 						"right": {
+							"default": true,
+							"description": "Enables resizing from the right side of the window.",
 							"type": "boolean"
 						},
 						"top": {
+							"default": true,
+							"description": "Enables resizing from the top of the window.",
 							"type": "boolean"
 						}
 					},
 					"type": "object"
 				},
 				"size": {
+					"default": 7,
+					"description": "The size of the resize region in pixels.",
 					"type": "number"
 				}
 			},
@@ -6664,6 +6925,10 @@
 				"AutofillAddressEnabled": {
 					"$ref": "#/definitions/PolicyOptions",
 					"description": "Disable AutofillAddressEnabled policy for a Window or View."
+				},
+				"AutofillCreditCardEnabled": {
+					"$ref": "#/definitions/PolicyOptions",
+					"description": "Disable AutofillCreditCardEnabled policy for a Window or View."
 				}
 			},
 			"type": "object"
@@ -6847,6 +7112,7 @@
 					"$ref": "#/definitions/ContentRedirect"
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -6893,6 +7159,11 @@
 					"type": "array"
 				},
 				"detachOnClose": {
+					"default": false,
+					"type": "boolean"
+				},
+				"disableAppRegion": {
+					"default": false,
 					"type": "boolean"
 				},
 				"downloadShelf": {
@@ -6908,6 +7179,8 @@
 					"type": "object"
 				},
 				"enableBeforeUnload": {
+					"default": false,
+					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
 					"type": "boolean"
 				},
 				"excludeOptions": {
@@ -6929,6 +7202,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -6941,6 +7216,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"isClosable": {
+					"default": true,
+					"description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
 					"type": "boolean"
 				},
 				"manifestUrl": {
@@ -6962,6 +7239,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -6980,6 +7259,8 @@
 					"type": "array"
 				},
 				"preventDragOut": {
+					"default": false,
+					"description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
 					"type": "boolean"
 				},
 				"processAffinity": {
@@ -6992,6 +7273,7 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/ViewThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
@@ -7003,6 +7285,8 @@
 					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"zoomLevel": {
@@ -7377,6 +7661,8 @@
 			"description": "Configuration for view visibility settings",
 			"properties": {
 				"enabled": {
+					"default": false,
+					"description": "Enables or disables showing views when the layout splitter or a tab is being dragged or a Platform Window is being resized.",
 					"type": "boolean"
 				}
 			},
@@ -7413,6 +7699,7 @@
 					"description": "Configure conditional injection of OpenFin API into iframes",
 					"properties": {
 						"crossOriginInjection": {
+							"default": false,
 							"description": "Inject OpenFin API into cross-origin iframes",
 							"type": "boolean"
 						},
@@ -7420,6 +7707,7 @@
 							"type": "boolean"
 						},
 						"sameOriginInjection": {
+							"default": true,
 							"description": "Inject OpenFin API into same-origin iframes",
 							"type": "boolean"
 						}
@@ -7433,6 +7721,8 @@
 			"additionalProperties": false,
 			"properties": {
 				"preloadScripts": {
+					"default": false,
+					"description": "When true, will not merge default preload scripts from {@link ApplicationOptions.defaultWindowOptions} or {@link ApplicationOptions.defaultViewOptions}.",
 					"type": "boolean"
 				}
 			},
@@ -7487,6 +7777,7 @@
 					"$ref": "#/definitions/ContentRedirect"
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -7533,6 +7824,11 @@
 					"type": "array"
 				},
 				"detachOnClose": {
+					"default": false,
+					"type": "boolean"
+				},
+				"disableAppRegion": {
+					"default": false,
 					"type": "boolean"
 				},
 				"downloadShelf": {
@@ -7548,6 +7844,8 @@
 					"type": "object"
 				},
 				"enableBeforeUnload": {
+					"default": false,
+					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
 					"type": "boolean"
 				},
 				"excludeOptions": {
@@ -7569,6 +7867,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -7581,6 +7881,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"isClosable": {
+					"default": true,
+					"description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
 					"type": "boolean"
 				},
 				"manifestUrl": {
@@ -7602,6 +7904,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -7620,6 +7924,8 @@
 					"type": "array"
 				},
 				"preventDragOut": {
+					"default": false,
+					"description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
 					"type": "boolean"
 				},
 				"processAffinity": {
@@ -7632,6 +7938,7 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/ViewThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
@@ -7643,6 +7950,8 @@
 					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"zoomLevel": {
@@ -7736,6 +8045,7 @@
 					"$ref": "#/definitions/ContentRedirect"
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -7782,6 +8092,11 @@
 					"type": "array"
 				},
 				"detachOnClose": {
+					"default": false,
+					"type": "boolean"
+				},
+				"disableAppRegion": {
+					"default": false,
 					"type": "boolean"
 				},
 				"downloadShelf": {
@@ -7797,6 +8112,8 @@
 					"type": "object"
 				},
 				"enableBeforeUnload": {
+					"default": false,
+					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
 					"type": "boolean"
 				},
 				"excludeOptions": {
@@ -7818,6 +8135,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -7830,6 +8149,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"isClosable": {
+					"default": true,
+					"description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
 					"type": "boolean"
 				},
 				"manifestUrl": {
@@ -7851,6 +8172,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -7869,6 +8192,8 @@
 					"type": "array"
 				},
 				"preventDragOut": {
+					"default": false,
+					"description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
 					"type": "boolean"
 				},
 				"processAffinity": {
@@ -7877,6 +8202,7 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/ViewThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc ViewThrottling}"
 				},
 				"title": {
@@ -7888,6 +8214,8 @@
 					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"zoomLevel": {
@@ -8669,6 +8997,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				}
 			},
@@ -8684,6 +9014,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				}
 			},
@@ -8699,9 +9031,11 @@
 				},
 				"alphaMask": {
 					"$ref": "#/definitions/RGB",
-					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
 				},
 				"alwaysOnTop": {
+					"default": false,
+					"description": "Always position the window at the top of the window stack.",
 					"type": "boolean"
 				},
 				"api": {
@@ -8712,6 +9046,8 @@
 					"type": "string"
 				},
 				"aspectRatio": {
+					"default": 0,
+					"description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
 					"type": "number"
 				},
 				"autoShow": {
@@ -8727,6 +9063,8 @@
 					"type": "string"
 				},
 				"backgroundThrottling": {
+					"default": false,
+					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
 				"chromiumPolicies": {
@@ -8734,6 +9072,8 @@
 					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
+					"default": true,
+					"description": "Setting this to false would keep the Window alive even if all its Views were closed.\nThis is meant for advanced users and should be used with caution.\nLimitations - Once a Layout has been emptied out of all views it's not usable anymore, and certain API calls will fail.\nUse `layout.replace` to create a fresh Layout instance in case you want to populate it with Views again.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"type": "boolean"
 				},
 				"contentCreation": {
@@ -8749,6 +9089,7 @@
 					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -8803,16 +9144,28 @@
 					"type": "boolean"
 				},
 				"defaultHeight": {
+					"default": 500,
+					"description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
 					"type": "number"
 				},
 				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultWidth": {
+					"default": 800,
+					"description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
+				},
+				"disableAppRegion": {
+					"default": false,
+					"type": "boolean"
 				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
@@ -8827,12 +9180,15 @@
 					"type": "string"
 				},
 				"frame": {
+					"default": true,
 					"type": "boolean"
 				},
 				"height": {
 					"type": "number"
 				},
 				"hideOnClose": {
+					"default": false,
+					"description": "Hides the window instead of closing it when the close button is pressed.",
 					"type": "boolean"
 				},
 				"hotkeys": {
@@ -8846,6 +9202,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -8863,6 +9221,8 @@
 					"type": "boolean"
 				},
 				"includeInSnapshots": {
+					"default": true,
+					"description": "Include window in snapshots returned by Platform.getSnapshot(). Turning this off may be desirable when dealing with\ninherently temporary windows whose state shouldn't be preserved, such as modals, menus, or popups.",
 					"type": "boolean"
 				},
 				"inheritance": {
@@ -8877,21 +9237,33 @@
 					"$ref": "#/definitions/LayoutSnapshot"
 				},
 				"maxHeight": {
+					"default": -1,
+					"description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maxWidth": {
+					"default": -1,
+					"description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maximizable": {
+					"default": true,
+					"description": "Allows the window to be maximized.",
 					"type": "boolean"
 				},
 				"minHeight": {
+					"default": 0,
+					"description": "The minimum height of the window.",
 					"type": "number"
 				},
 				"minWidth": {
+					"default": true,
+					"description": "The minimum width of the window.",
 					"type": "number"
 				},
 				"minimizable": {
+					"default": true,
+					"description": "Allows the window to be minimized.",
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
@@ -8903,6 +9275,8 @@
 					"type": "string"
 				},
 				"opacity": {
+					"default": 1,
+					"description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
 					"type": "number"
 				},
 				"permissions": {
@@ -8916,6 +9290,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -8938,29 +9314,47 @@
 					"type": "string"
 				},
 				"resizable": {
+					"default": true,
+					"description": "A flag to allow the user to resize the window.",
 					"type": "boolean"
 				},
 				"resizeRegion": {
 					"$ref": "#/definitions/ResizeRegion",
 					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
 				},
+				"roundedCorners": {
+					"description": "Controls whether frameless window should have rounded corners. Default is false for Windows and true for MacOS. Setting this property to false will prevent the window from being fullscreenable on macOS. On Windows versions older than Windows 11 Build 22000 this property has no effect, and frameless windows will not have rounded corners.",
+					"type": "boolean"
+				},
 				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
 					"type": "boolean"
 				},
 				"shadow": {
+					"default": false,
+					"description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
 					"type": "boolean"
 				},
 				"showBackgroundImages": {
+					"default": false,
+					"description": "**Platforms Only.**  If true, will show background images in the layout when the Views are hidden.\nThis occurs when the window is resizing or a tab is being dragged within the layout.",
 					"type": "boolean"
 				},
 				"showTaskbarIcon": {
+					"default": true,
+					"description": "Shows the window's icon in the taskbar.",
 					"type": "boolean"
 				},
 				"smallWindow": {
+					"default": false,
+					"description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
 					"type": "boolean"
 				},
 				"state": {
-					"$ref": "#/definitions/WindowState"
+					"$ref": "#/definitions/WindowState",
+					"default": "normal",
+					"description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
 				},
 				"taskbarIcon": {
 					"type": "string"
@@ -8971,12 +9365,17 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/WindowThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc WindowThrottling}"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"uuid": {
+					"default": "<application UUID>",
+					"description": "The `uuid` of the application, unique within the set of all `Application`s running in OpenFin Runtime.\nIf omitted, defaults to the `uuid` of the application spawning the window.\nIf given, must match the `uuid` of the application spawning the window.\nIn other words, the application's `uuid` is the only acceptable value, but is the default, so there's\nreally no need to provide it.",
 					"type": "string"
 				},
 				"viewVisibility": {
@@ -8984,10 +9383,14 @@
 					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
 				},
 				"viewsPreventingClose": {
+					"default": "'all'",
+					"description": "When `closeOnLastViewRemoved` is set to true, determines which views prevent closing the window.\nDefaults to `all`. You may want to switch this to `layout` if using View closeBehavior: 'hide'.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"enum": ["all", "layout"],
 					"type": "string"
 				},
 				"waitForPageLoad": {
+					"default": false,
+					"description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
 					"type": "boolean"
 				},
 				"width": {
@@ -9094,9 +9497,11 @@
 				},
 				"alphaMask": {
 					"$ref": "#/definitions/RGB",
-					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+					"description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
 				},
 				"alwaysOnTop": {
+					"default": false,
+					"description": "Always position the window at the top of the window stack.",
 					"type": "boolean"
 				},
 				"api": {
@@ -9107,6 +9512,8 @@
 					"type": "string"
 				},
 				"aspectRatio": {
+					"default": 0,
+					"description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
 					"type": "number"
 				},
 				"autoShow": {
@@ -9122,6 +9529,8 @@
 					"type": "string"
 				},
 				"backgroundThrottling": {
+					"default": false,
+					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
 				"chromiumPolicies": {
@@ -9129,6 +9538,8 @@
 					"description": "{@inheritDoc ChromiumPolicies}"
 				},
 				"closeOnLastViewRemoved": {
+					"default": true,
+					"description": "Setting this to false would keep the Window alive even if all its Views were closed.\nThis is meant for advanced users and should be used with caution.\nLimitations - Once a Layout has been emptied out of all views it's not usable anymore, and certain API calls will fail.\nUse `layout.replace` to create a fresh Layout instance in case you want to populate it with Views again.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"type": "boolean"
 				},
 				"contentCreation": {
@@ -9144,6 +9555,7 @@
 					"description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
 				},
 				"contextMenu": {
+					"default": true,
 					"type": "boolean"
 				},
 				"contextMenuOptions": {
@@ -9198,16 +9610,28 @@
 					"type": "boolean"
 				},
 				"defaultHeight": {
+					"default": 500,
+					"description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
 					"type": "number"
 				},
 				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
 				},
 				"defaultWidth": {
+					"default": 800,
+					"description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
 					"type": "number"
+				},
+				"disableAppRegion": {
+					"default": false,
+					"type": "boolean"
 				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
@@ -9222,12 +9646,15 @@
 					"type": "string"
 				},
 				"frame": {
+					"default": true,
 					"type": "boolean"
 				},
 				"height": {
 					"type": "number"
 				},
 				"hideOnClose": {
+					"default": false,
+					"description": "Hides the window instead of closing it when the close button is pressed.",
 					"type": "boolean"
 				},
 				"hotkeys": {
@@ -9241,6 +9668,8 @@
 								"type": "string"
 							},
 							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
 								"type": "boolean"
 							}
 						},
@@ -9258,6 +9687,8 @@
 					"type": "boolean"
 				},
 				"includeInSnapshots": {
+					"default": true,
+					"description": "Include window in snapshots returned by Platform.getSnapshot(). Turning this off may be desirable when dealing with\ninherently temporary windows whose state shouldn't be preserved, such as modals, menus, or popups.",
 					"type": "boolean"
 				},
 				"inheritance": {
@@ -9272,21 +9703,33 @@
 					"$ref": "#/definitions/LayoutSnapshot"
 				},
 				"maxHeight": {
+					"default": -1,
+					"description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maxWidth": {
+					"default": -1,
+					"description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
 					"type": "number"
 				},
 				"maximizable": {
+					"default": true,
+					"description": "Allows the window to be maximized.",
 					"type": "boolean"
 				},
 				"minHeight": {
+					"default": 0,
+					"description": "The minimum height of the window.",
 					"type": "number"
 				},
 				"minWidth": {
+					"default": true,
+					"description": "The minimum width of the window.",
 					"type": "number"
 				},
 				"minimizable": {
+					"default": true,
+					"description": "Allows the window to be minimized.",
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
@@ -9298,6 +9741,8 @@
 					"type": "string"
 				},
 				"opacity": {
+					"default": 1,
+					"description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
 					"type": "number"
 				},
 				"permissions": {
@@ -9311,6 +9756,8 @@
 						"description": "A script that is run before page load.",
 						"properties": {
 							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
 								"type": "boolean"
 							},
 							"state": {
@@ -9333,29 +9780,47 @@
 					"type": "string"
 				},
 				"resizable": {
+					"default": true,
+					"description": "A flag to allow the user to resize the window.",
 					"type": "boolean"
 				},
 				"resizeRegion": {
 					"$ref": "#/definitions/ResizeRegion",
 					"description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
 				},
+				"roundedCorners": {
+					"description": "Controls whether frameless window should have rounded corners. Default is false for Windows and true for MacOS. Setting this property to false will prevent the window from being fullscreenable on macOS. On Windows versions older than Windows 11 Build 22000 this property has no effect, and frameless windows will not have rounded corners.",
+					"type": "boolean"
+				},
 				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
 					"type": "boolean"
 				},
 				"shadow": {
+					"default": false,
+					"description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
 					"type": "boolean"
 				},
 				"showBackgroundImages": {
+					"default": false,
+					"description": "**Platforms Only.**  If true, will show background images in the layout when the Views are hidden.\nThis occurs when the window is resizing or a tab is being dragged within the layout.",
 					"type": "boolean"
 				},
 				"showTaskbarIcon": {
+					"default": true,
+					"description": "Shows the window's icon in the taskbar.",
 					"type": "boolean"
 				},
 				"smallWindow": {
+					"default": false,
+					"description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
 					"type": "boolean"
 				},
 				"state": {
-					"$ref": "#/definitions/WindowState"
+					"$ref": "#/definitions/WindowState",
+					"default": "normal",
+					"description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
 				},
 				"stylesheetUrl": {
 					"description": "Specify a path of a custom CSS file to be injected to all of the platform's windows.\n_note_: this option is only applied to windows that use the Default OpenFin Window.\nWindows with a specified url (Custom Windows) will not be affected by this option.",
@@ -9370,12 +9835,17 @@
 				},
 				"throttling": {
 					"$ref": "#/definitions/WindowThrottling",
+					"default": "'enabled'",
 					"description": "{@inheritDoc WindowThrottling}"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				},
 				"uuid": {
+					"default": "<application UUID>",
+					"description": "The `uuid` of the application, unique within the set of all `Application`s running in OpenFin Runtime.\nIf omitted, defaults to the `uuid` of the application spawning the window.\nIf given, must match the `uuid` of the application spawning the window.\nIn other words, the application's `uuid` is the only acceptable value, but is the default, so there's\nreally no need to provide it.",
 					"type": "string"
 				},
 				"viewVisibility": {
@@ -9383,10 +9853,14 @@
 					"description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
 				},
 				"viewsPreventingClose": {
+					"default": "'all'",
+					"description": "When `closeOnLastViewRemoved` is set to true, determines which views prevent closing the window.\nDefaults to `all`. You may want to switch this to `layout` if using View closeBehavior: 'hide'.\n**NOTE:** - This option is ignored in non-Platforms apps.",
 					"enum": ["all", "layout"],
 					"type": "string"
 				},
 				"waitForPageLoad": {
+					"default": false,
+					"description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
 					"type": "boolean"
 				},
 				"width": {
@@ -9631,6 +10105,7 @@
 			"properties": {
 				"fin": {
 					"$ref": "#/definitions/InjectionType",
+					"default": "'global'",
 					"description": "Injection setting for the `fin` API for contexts on a matched domain.\n\n* 'none': The `fin` API will be not available.\n* 'global': The entire `fin` API will be available."
 				},
 				"permissions": {
@@ -9776,6 +10251,8 @@
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
 				"behavior": {
+					"default": "'allowed'",
+					"description": "Controls the behavior for copy operations for a matched URL.\n\nallow: Enables all copy operations.\nblock: Disables all copy operations.\nprotect: Protects any copied content. Only URLs that have set paste.behavior: 'all-content' will be allowed to paste this content.",
 					"enum": ["allow", "block", "protect"],
 					"type": "string"
 				},
@@ -9784,6 +10261,8 @@
 					"description": "Additional copy operation options",
 					"properties": {
 						"replacementText": {
+							"default": "''",
+							"description": "When setting behavior = 'protected' , this string will be pasted to other applications that do not have a matching URL instead of the original content.",
 							"type": "string"
 						}
 					},
@@ -9799,6 +10278,8 @@
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
 				"behavior": {
+					"default": "'non-protected-content'",
+					"description": "Controls the behavior for paste operations for a matched URL.\n\nnon-protected-content: All matching URLs will be able to paste content copied from non-protected URLs.\nall-content: All matching URLs will be able to paste content copied from both protected (copy.behavior = 'protect') and on-protected (copy.behavior = 'allow') URLs.",
 					"enum": ["all-content", "non-protected-content"],
 					"type": "string"
 				}
