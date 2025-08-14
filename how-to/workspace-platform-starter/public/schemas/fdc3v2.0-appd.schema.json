@@ -863,6 +863,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				}
 			},
@@ -893,6 +895,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				}
 			},

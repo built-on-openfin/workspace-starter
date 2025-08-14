@@ -18,7 +18,7 @@ To make it easy to test OpenFin's cloud interop support we have generated an [op
 
 You can see this in platformProvider.interop section of the [manifest.fin.json](../public/manifest.fin.json) and [settings.json](../public/settings.json) files (an example is shown below).
 
-The new cloud interop module (from 0.42.93) has support for different authentication types. The example cloud interop module has support for basic (username and password) and jwt (although it will require the creation of an endpoint called "cloud-jwt-callback" which implements requestStream and returns the JWT either as an object or string on instantiation and when the token expires). If you do not specify an authentication method it will fall to default which assumes there is an active cookie session that works with the cloud setup.
+The new cloud interop module (from 0.42.97) has support for different authentication types. The example cloud interop module has support for basic (username and password) and jwt (although it will require the creation of an endpoint called "cloud-jwt-callback" which implements requestStream and returns the JWT either as an object or string on instantiation and when the token expires). If you do not specify an authentication method it will fall to default which assumes there is an active cookie session that works with the cloud setup.
 
 ### Settings
 
