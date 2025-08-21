@@ -67,11 +67,11 @@ npm run client
 
 1. When the app first launches you should see the following window:
 
-![Initial window launch](./assets/dock3-initial-launch.jpg)
+![Initial window launch](./assets/dock3-initial-launch.png)
 
 2. Click `Initialize` to start up the dock after modifying settings.
 
-![Dock view](./assets/dock3-view.jpg)
+![Dock view](./assets/dock3-view.png)
 
 3. You can then interact with the dock which will launch the custom commands registered with the Workplace platform.
    Currently the Dock3 provider is configured to override the launch and content menu actions with console logging, but
