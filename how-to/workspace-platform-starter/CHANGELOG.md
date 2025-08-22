@@ -1,5 +1,10 @@
 # Changelog
 
+## v22.0.0
+
+- Update to latest version of npm packages.
+- Update to the latest version of snap 1.3.1
+
 ## v21.0.0
 
 - Update to latest version of npm packages.
@@ -15,7 +20,7 @@
 - Added an [AuthClient](./client/src/framework/shapes/auth-shapes.ts) that is optionally passed to modules (it will be passed but is passed as an optional in case you ever want to restrict it) through a getAuthClient function. If the getAuthClient function is available then an authClient will be returned if configured (otherwise a warning and undefined is returned). This can be used if you want to create your own log out buttons or if you want to retrieve the current user info without using the lifecycle event.
 - Added a new browserProvider option to have a different strategy when a window is requested to be brought to front. The default (existing approach) is that the window has [setAsForeground](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#setAsForeground) called against it. The alternative strategies are [bringToFront](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#bringToFront) and bringToFrontAndFocus which calls [bringToFront](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#bringToFront) followed by [focus](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#focus). The new setting is browserProvider.bringToFrontStrategy.
 - Upgraded to Snap 1.1.0 and removed the serverAssetInfo from the manifest as Snap now fetches the app asset if it isn't specified. See [how to configure snap](./docs/how-to-configure-snap.md).
-- Upgraded Cloud Interop to 0.41.135 and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
+- Upgraded Cloud Interop to 0.42.103 and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
 
 ## v20.0.0
 
@@ -98,7 +103,7 @@
 - Included an example of the the requestStream endpoint by implementing an example source of notification data in the [client/src/modules/endpoint/example-notification-source](./client/src/modules/endpoint/example-notification-source/endpoint.ts)
 - Added an example of a lifecycle module that handles notifications coming from the notification source as well as notifications that have been sent to it. This shows how you can standardize some types of notification actions: raise-intent, launch-app, broadcast (option to broadcast on an app channel or user channel). This is just an example showing how you could expose an API to your content using an SDK approach using the Channel API or intents. This is a basic example and there are many more things to consider but it is intended as an example for a discussion around options. Documentation for this module has been provided here: [client/src/modules/lifecycle/example-notification-handler/README.md](./client/src/modules/lifecycle/example-notification-handler/README.md)
 - Update the interop broker override module pattern so that it is now passed a PlatformInteropBrokerHelpers object instead of the standard ModuleHelpers object. There are no additional functions at the moment but getApps returns all apps (even private ones) for the interop broker as it needs access to everything in order to perform intent resolution.
-- Added example of supporting workspace and desktop browser (through openfin/core-web as part of OpenFin anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an OpenFin Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v21.0.0>).
+- Added example of supporting workspace and desktop browser (through openfin/core-web as part of OpenFin anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an OpenFin Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v22.0.0>).
 - More efficient validation of appIds associated with views/windows for faster interop based actions. The appId validation in our wps module (modules directory) has extracted into its own file and tests to ensure it continues to behave as expected across future updates have been added to the test directory.
 - Module Helpers now provide a getAnalyticsClient (it is marked as optional and the result could be undefined so it leaves the option for it to be denied to a module or removed). This client supports a ModuleAnalytic event which will have a source of Module assigned to it (you can still specify type and use the data property to provide additional module specific information). This data will be passed to the analyticProviders that receive the Workspace Analytic events. See [How to Configure Analytics](./docs/how-to-configure-analytics.md).
 - Added a cloud interop override module so that you can easily test out OpenFin's cloud interop offering. See [How To Add Cloud Interop To Your Interop Broker](./docs/how-to-add-cloud-interop-to-your-interop-broker.md).

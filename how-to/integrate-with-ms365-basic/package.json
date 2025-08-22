@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-basic",
-	"version": "21.0.0",
+	"version": "22.0.0",
 	"description": "OpenFin Workspace -- Integrate with Microsoft 365 - Basic",
 	"main": "index.js",
 	"scripts": {
@@ -22,12 +22,12 @@
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.40.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "21.0.16",
-		"@openfin/workspace-platform": "21.0.16"
+		"@openfin/workspace": "22.3.18",
+		"@openfin/workspace-platform": "22.3.18"
 	},
 	"devDependencies": {
-		"@openfin/core": "41.102.4",
-		"@openfin/node-adapter": "41.102.4",
+		"@openfin/core": "42.100.107",
+		"@openfin/node-adapter": "42.100.107",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
