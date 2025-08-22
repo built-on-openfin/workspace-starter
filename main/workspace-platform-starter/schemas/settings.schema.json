@@ -28,6 +28,7 @@
             "$ref": "#/definitions/ModuleList_2",
             "description": "List of modules."
         },
+        "AiPanelOptions": {},
         "AnalyticsProviderOptions": {
             "additionalProperties": false,
             "description": "A list of modules that will be loaded and then called when analytical events come in from the platform or workspace\ncomponents.",
@@ -53,7 +54,7 @@
             "$ref": "#/definitions/__type_3"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_61"
+            "$ref": "#/definitions/__type_62"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -359,7 +360,7 @@
             "type": "object"
         },
         "AutoResizeOptions": {
-            "$ref": "#/definitions/__type_32"
+            "$ref": "#/definitions/__type_33"
         },
         "AutoplayPolicyOptions": {
             "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -441,7 +442,7 @@
             "type": "object"
         },
         "Bounds": {
-            "$ref": "#/definitions/__type_31"
+            "$ref": "#/definitions/__type_32"
         },
         "BringToFrontStrategy": {
             "description": "The strategy for bringing a window to the front.",
@@ -518,7 +519,7 @@
                     "description": "Default options when creating a new page. If `iconUrl`, `unsavedIconUrl`, `panels` or `closeButton` are not defined when creating a page, setting will default to `defaultPageOptions`."
                 },
                 "defaultViewOptions": {
-                    "$ref": "#/definitions/Partial_11",
+                    "$ref": "#/definitions/Partial_12",
                     "description": "The default options when creating a new browser window. Any option not included in WorkspacePlatform.getCurrentSync().Browser.createView(options) call will default to the value provided in this field."
                 },
                 "defaultWindowOptions": {
@@ -685,6 +686,19 @@
                     "description": "Landing page that shows up when you add a new tab from the plus button that exists in the tabstrip.\nIf you do not provide a newTabUrl, then the plus button in the tabstrip will not be shown and users cannot create a new empty tab.",
                     "type": "string"
                 },
+                "pageTabDimensions": {
+                    "additionalProperties": false,
+                    "description": "Specifies the min and max sizes for page tabs.\nPage tabs will expand to take all available space up to the specified maximum size.\nSimilarly, they will collapse down to the specified minimum size.\nWhen there is not enough room to fit the tabs, the tabstrip will become scrollable.\nSizes can be specified as pixels (e.g. \"100px\") or as percentage of tab strip width (e.g. \"20%\").\nThe default value for both min and max is \"120px\". To maintain usability, minimum values below 28px will be ignored and 28px will be used as the minimum.",
+                    "properties": {
+                        "maxWidth": {
+                            "type": "string"
+                        },
+                        "minWidth": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
                 "pages": {
                     "description": "The initial set of pages to add to the created browser window.",
                     "items": {
@@ -762,6 +776,19 @@
                 "toolbarOptions": {
                     "$ref": "#/definitions/ToolbarOptions"
                 },
+                "viewTabDimensions": {
+                    "additionalProperties": false,
+                    "description": "Specifies the min and max sizes for view tabs in a layout.\nView tabs will expand to take all available space up to the specified maximum size.\nSimilarly, they will collapse down to the specified minimum size.\nWhen there is not enough room to fit the tabs, the tabstrip will become scrollable.\nSizes can be specified as pixels (e.g. \"100px\") or as percentage of tab strip width (e.g. \"20%\").\nThe default value for both min and max is \"120px\". To maintain usability, minimum values below 28px will be ignored and 28px will be used as the minimum.",
+                    "properties": {
+                        "maxWidth": {
+                            "type": "string"
+                        },
+                        "minWidth": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
                 "windowStateButtonOptions": {
                     "$ref": "#/definitions/WindowStateButtonOptions"
                 },
@@ -795,7 +822,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_54"
+            "$ref": "#/definitions/__type_55"
         },
         "ChromiumPolicies": {
             "$ref": "#/definitions/__type_14"
@@ -953,7 +980,7 @@
             "$ref": "#/definitions/__type_16"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_51"
+            "$ref": "#/definitions/__type_52"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_9"
@@ -1065,10 +1092,37 @@
                 "backgroundPrimary": {
                     "type": "string"
                 },
+                "borderNeutral": {
+                    "type": "string"
+                },
                 "brandPrimary": {
                     "type": "string"
                 },
+                "brandPrimaryActive": {
+                    "type": "string"
+                },
+                "brandPrimaryFocused": {
+                    "type": "string"
+                },
+                "brandPrimaryHover": {
+                    "type": "string"
+                },
+                "brandPrimaryText": {
+                    "type": "string"
+                },
                 "brandSecondary": {
+                    "type": "string"
+                },
+                "brandSecondaryActive": {
+                    "type": "string"
+                },
+                "brandSecondaryFocused": {
+                    "type": "string"
+                },
+                "brandSecondaryHover": {
+                    "type": "string"
+                },
+                "brandSecondaryText": {
                     "type": "string"
                 },
                 "contentBackground1": {
@@ -1298,7 +1352,7 @@
         },
         "Data": {},
         "DeepPartial": {
-            "$ref": "#/definitions/__type_42"
+            "$ref": "#/definitions/__type_43"
         },
         "DelayStrategy": {
             "additionalProperties": false,
@@ -1358,7 +1412,7 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_48"
+            "$ref": "#/definitions/__type_49"
         },
         "DockButtonAction": {
             "additionalProperties": false,
@@ -1750,7 +1804,7 @@
             "type": "string"
         },
         "ExcludeOptions": {
-            "$ref": "#/definitions/__type_29"
+            "$ref": "#/definitions/__type_30"
         },
         "FavoriteProviderOptions": {
             "additionalProperties": false,
@@ -1940,6 +1994,7 @@
                 "DeleteWorkspace",
                 "Downloads",
                 "OpenStorefront",
+                "ManageDesktopSignals",
                 "Appearance",
                 "Quit",
                 "Custom"
@@ -1968,6 +2023,10 @@
                 },
                 "id": {
                     "description": "A unique ID used to identify the search provider.",
+                    "type": "string"
+                },
+                "inputLandingPlaceholder": {
+                    "description": "A placeholder text that would be put into the empty search field for the selected provider for home in landing mode.",
                     "type": "string"
                 },
                 "inputPlaceholder": {
@@ -2067,7 +2126,7 @@
             "$ref": "#/definitions/__type_4"
         },
         "Identity_4_1": {
-            "$ref": "#/definitions/__type_43"
+            "$ref": "#/definitions/__type_44"
         },
         "Image": {
             "additionalProperties": false,
@@ -2250,14 +2309,14 @@
             "$ref": "#/definitions/__type_12"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_53"
+            "$ref": "#/definitions/__type_54"
         },
         "LaunchPreference": {
             "additionalProperties": false,
             "description": "Are there any preferences you would like to apply when launching this application?",
             "properties": {
                 "bounds": {
-                    "$ref": "#/definitions/Partial_15",
+                    "$ref": "#/definitions/Partial_16",
                     "description": "Do you wish to specify a custom height/width and/or x/y position that should be used when this application is launched?"
                 },
                 "defaultCentered": {
@@ -2385,7 +2444,7 @@
             "description": "List of modules."
         },
         "LockUnlockPageConfig": {
-            "$ref": "#/definitions/__type_35"
+            "$ref": "#/definitions/__type_36"
         },
         "LoggerProviderOptions": {
             "$ref": "#/definitions/ModuleList_1",
@@ -3345,10 +3404,10 @@
             "type": "string"
         },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_50"
+            "$ref": "#/definitions/__type_51"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_46"
+            "$ref": "#/definitions/__type_47"
         },
         "NativeLaunchOptions": {
             "additionalProperties": false,
@@ -3499,7 +3558,7 @@
             "type": "object"
         },
         "NotificationIndicatorColorsWithScheme": {
-            "$ref": "#/definitions/__type_60"
+            "$ref": "#/definitions/__type_61"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -3534,23 +3593,23 @@
             "type": "object"
         },
         "NotificationsCustomManifestOptions": {
-            "$ref": "#/definitions/__type_44"
+            "$ref": "#/definitions/__type_45"
         },
         "O": {},
         "Omit": {
-            "$ref": "#/definitions/__type_33"
+            "$ref": "#/definitions/__type_34"
         },
         "Omit_1": {
-            "$ref": "#/definitions/__type_38"
-        },
-        "Omit_2": {
             "$ref": "#/definitions/__type_39"
         },
-        "Omit_3": {
+        "Omit_2": {
             "$ref": "#/definitions/__type_40"
         },
-        "Omit_4": {
+        "Omit_3": {
             "$ref": "#/definitions/__type_41"
+        },
+        "Omit_4": {
+            "$ref": "#/definitions/__type_42"
         },
         "OpenExternalPermission": {
             "additionalProperties": false,
@@ -3702,12 +3761,22 @@
                     "description": "Represents a potential ways to customize behavior of your Layout",
                     "properties": {
                         "constrainDragToContainer": {
+                            "default": false,
+                            "description": "Limits the area to which tabs can be dragged.\nIf true, the layout container is the only area where tabs can be dropped.",
                             "type": "boolean"
                         },
                         "constrainDragToHeaders": {
+                            "default": false,
+                            "description": "Limits the area to which tabs can be dragged. If true, stack headers are the only areas where tabs can be dropped.",
+                            "type": "boolean"
+                        },
+                        "disableTabOverflowDropdown": {
+                            "description": "When true, will disable placement of tabs that don't fit in the stack into a dropdown menu\nand the button to open the dropdown menu will never be shown.\n**CAUTION**: the overflowing tabs may end up being invisible to the user\nand certain CSS modifications will need to be implemented in order to restore usability.\nThis is an internal property and usage is highly discouraged.\n\nNot available in web layouts.",
                             "type": "boolean"
                         },
                         "hasHeaders": {
+                            "default": true,
+                            "description": "Turns tab headers on or off.\nIf false, the layout will be displayed with splitters only.",
                             "type": "boolean"
                         },
                         "newTabButtonUrl": {
@@ -3715,27 +3784,42 @@
                             "type": "string"
                         },
                         "popoutWholeStack": {
+                            "default": false,
+                            "description": "Whether the popout button will only act on the entire stack,\nas opposed to only the active tab.",
                             "type": "boolean"
                         },
                         "preventDragIn": {
+                            "default": false,
                             "type": "boolean"
                         },
                         "preventDragOut": {
+                            "default": false,
+                            "description": "If true, tabs can't be dragged out of the window.",
                             "type": "boolean"
                         },
                         "preventSplitterResize": {
+                            "default": false,
+                            "description": "When true the splitters will not be draggable and the layout will not resize.",
                             "type": "boolean"
                         },
                         "reorderEnabled": {
+                            "default": true,
+                            "description": "If true, the user can re-arrange the layout by\ndragging items by their tabs to the desired location.",
                             "type": "boolean"
                         },
                         "showCloseIcon": {
+                            "default": false,
+                            "description": "Whether to show the close button on stack header\n(not to be confused with close button on every tab).",
                             "type": "boolean"
                         },
                         "showMaximiseIcon": {
+                            "default": false,
+                            "description": "Whether to show the maximize button on stack header.\nThe button will maximize the current tab to fill the entire window.",
                             "type": "boolean"
                         },
                         "showPopoutIcon": {
+                            "default": false,
+                            "description": "Whether to show the popout button on stack header.\nThe button will create a new window with current tab as its content.\nIn case `popoutWholeStack` is set to true, all tabs in the stack will be in the new window.",
                             "type": "boolean"
                         }
                     },
@@ -3778,6 +3862,8 @@
                 "Print",
                 "PrintAll",
                 "PrintScreen",
+                "ManageDesktopSignals",
+                "AddToChannel",
                 "Custom"
             ],
             "type": "string"
@@ -3856,19 +3942,19 @@
             "$ref": "#/definitions/__type_2"
         },
         "Partial_10": {
-            "$ref": "#/definitions/__type_28"
+            "$ref": "#/definitions/__type_26"
         },
         "Partial_11": {
-            "$ref": "#/definitions/__type_30"
+            "$ref": "#/definitions/__type_29"
         },
         "Partial_12": {
-            "$ref": "#/definitions/__type_45"
+            "$ref": "#/definitions/__type_31"
         },
         "Partial_13": {
-            "$ref": "#/definitions/__type_52"
+            "$ref": "#/definitions/__type_46"
         },
         "Partial_14": {
-            "$ref": "#/definitions/__type_55"
+            "$ref": "#/definitions/__type_53"
         },
         "Partial_15": {
             "$ref": "#/definitions/__type_56"
@@ -3878,6 +3964,9 @@
         },
         "Partial_17": {
             "$ref": "#/definitions/__type_58"
+        },
+        "Partial_18": {
+            "$ref": "#/definitions/__type_59"
         },
         "Partial_2": {
             "$ref": "#/definitions/__type_6"
@@ -3904,7 +3993,7 @@
             "$ref": "#/definitions/__type_25"
         },
         "Pick": {
-            "$ref": "#/definitions/__type_37"
+            "$ref": "#/definitions/__type_38"
         },
         "PlatformApp": {
             "additionalProperties": false,
@@ -3970,19 +4059,19 @@
                 "manifest": {
                     "anyOf": [
                         {
-                            "$ref": "#/definitions/Partial_11"
+                            "$ref": "#/definitions/Partial_12"
                         },
                         {
                             "$ref": "#/definitions/Partial_2"
-                        },
-                        {
-                            "$ref": "#/definitions/Partial_12"
                         },
                         {
                             "$ref": "#/definitions/Partial_13"
                         },
                         {
                             "$ref": "#/definitions/Partial_14"
+                        },
+                        {
+                            "$ref": "#/definitions/Partial_15"
                         },
                         {
                             "type": "string"
@@ -4269,7 +4358,7 @@
             "type": "object"
         },
         "Point": {
-            "$ref": "#/definitions/__type_47"
+            "$ref": "#/definitions/__type_48"
         },
         "PolicyOptions": {
             "description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -4356,10 +4445,10 @@
             "$ref": "#/definitions/__type_21"
         },
         "Record_1": {
-            "$ref": "#/definitions/__type_59"
+            "$ref": "#/definitions/__type_60"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_49"
+            "$ref": "#/definitions/__type_50"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_11"
@@ -4508,16 +4597,20 @@
             "type": "object"
         },
         "ShowHideTabsConfig": {
-            "$ref": "#/definitions/__type_34"
+            "$ref": "#/definitions/__type_35"
         },
         "ShowViewOnWindowResizeOptions": {
             "additionalProperties": false,
             "description": "_Platform Windows Only_. Enables views to be shown when a Platform Window is being resized by the user.",
             "properties": {
                 "enabled": {
+                    "default": false,
+                    "description": "Enables or disables showing views when the layout splitter or a tab is being dragged or a Platform Window is being resized.",
                     "type": "boolean"
                 },
                 "paintIntervalMs": {
+                    "default": 0,
+                    "description": "Number of milliseconds to wait between view repaints.",
                     "type": "number"
                 }
             },
@@ -4956,7 +5049,7 @@
             "type": "object"
         },
         "TaskbarIcon": {
-            "$ref": "#/definitions/__type_36"
+            "$ref": "#/definitions/__type_37"
         },
         "ThemeProviderOptions": {
             "additionalProperties": false,
@@ -5186,7 +5279,7 @@
                     "type": "array"
                 },
                 "options": {
-                    "$ref": "#/definitions/Partial_11",
+                    "$ref": "#/definitions/Partial_12",
                     "description": "Options for newly-created view."
                 }
             },
@@ -5224,7 +5317,7 @@
                     "type": "array"
                 },
                 "view": {
-                    "$ref": "#/definitions/Partial_16",
+                    "$ref": "#/definitions/Partial_17",
                     "description": "The option to override a few settings that are specific to views."
                 }
             },
@@ -5331,10 +5424,10 @@
             "type": "string"
         },
         "ViewVisibilityOption": {
-            "$ref": "#/definitions/__type_27"
+            "$ref": "#/definitions/__type_28"
         },
         "ViewVisibilityOptions": {
-            "$ref": "#/definitions/__type_26"
+            "$ref": "#/definitions/__type_27"
         },
         "WaitForWindowClassStrategy": {
             "additionalProperties": false,
@@ -5504,7 +5597,7 @@
                     "type": "array"
                 },
                 "window": {
-                    "$ref": "#/definitions/Partial_17",
+                    "$ref": "#/definitions/Partial_18",
                     "description": "The option to override a few settings that are specific to windows."
                 }
             },
@@ -5657,11 +5750,16 @@
                     "$ref": "#/definitions/Partial_4",
                     "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
                 },
+                "aiPanelOptions": {
+                    "$ref": "#/definitions/AiPanelOptions"
+                },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
+                    "default": false,
+                    "description": "Always position the window at the top of the window stack.",
                     "type": "boolean"
                 },
                 "api": {
@@ -5672,6 +5770,8 @@
                     "type": "string"
                 },
                 "aspectRatio": {
+                    "default": 0,
+                    "description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
                     "type": "number"
                 },
                 "autoShow": {
@@ -5687,6 +5787,8 @@
                     "type": "string"
                 },
                 "backgroundThrottling": {
+                    "default": false,
+                    "description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
                     "type": "boolean"
                 },
                 "chromiumPolicies": {
@@ -5694,6 +5796,8 @@
                     "description": "{@inheritDoc ChromiumPolicies}"
                 },
                 "closeOnLastViewRemoved": {
+                    "default": true,
+                    "description": "Setting this to false would keep the Window alive even if all its Views were closed.\nThis is meant for advanced users and should be used with caution.\nLimitations - Once a Layout has been emptied out of all views it's not usable anymore, and certain API calls will fail.\nUse `layout.replace` to create a fresh Layout instance in case you want to populate it with Views again.\n**NOTE:** - This option is ignored in non-Platforms apps.",
                     "type": "boolean"
                 },
                 "contentCreation": {
@@ -5709,6 +5813,7 @@
                     "description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contextMenu": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
@@ -5766,16 +5871,28 @@
                     "type": "boolean"
                 },
                 "defaultHeight": {
+                    "default": 500,
+                    "description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
                     "type": "number"
                 },
                 "defaultLeft": {
+                    "default": 100,
+                    "description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
                     "type": "number"
                 },
                 "defaultTop": {
+                    "default": 100,
+                    "description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
                     "type": "number"
                 },
                 "defaultWidth": {
+                    "default": 800,
+                    "description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
                     "type": "number"
+                },
+                "disableAppRegion": {
+                    "default": false,
+                    "type": "boolean"
                 },
                 "downloadShelf": {
                     "$ref": "#/definitions/DownloadShelfOptions",
@@ -5790,12 +5907,15 @@
                     "type": "string"
                 },
                 "frame": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "height": {
                     "type": "number"
                 },
                 "hideOnClose": {
+                    "default": false,
+                    "description": "Hides the window instead of closing it when the close button is pressed.",
                     "type": "boolean"
                 },
                 "hotkeys": {
@@ -5809,6 +5929,8 @@
                                 "type": "string"
                             },
                             "preventDefault": {
+                                "default": false,
+                                "description": "Prevent default key handling before emitting the event.",
                                 "type": "boolean"
                             }
                         },
@@ -5828,10 +5950,12 @@
                     "type": "boolean"
                 },
                 "includeInSnapshots": {
+                    "default": true,
+                    "description": "Include window in snapshots returned by Platform.getSnapshot(). Turning this off may be desirable when dealing with\ninherently temporary windows whose state shouldn't be preserved, such as modals, menus, or popups.",
                     "type": "boolean"
                 },
                 "inheritance": {
-                    "$ref": "#/definitions/Partial_10",
+                    "$ref": "#/definitions/Partial_11",
                     "description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
                 },
                 "interop": {
@@ -5842,21 +5966,33 @@
                     "$ref": "#/definitions/LayoutSnapshot"
                 },
                 "maxHeight": {
+                    "default": -1,
+                    "description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
                     "type": "number"
                 },
                 "maxWidth": {
+                    "default": -1,
+                    "description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
                     "type": "number"
                 },
                 "maximizable": {
+                    "default": true,
+                    "description": "Allows the window to be maximized.",
                     "type": "boolean"
                 },
                 "minHeight": {
+                    "default": 0,
+                    "description": "The minimum height of the window.",
                     "type": "number"
                 },
                 "minWidth": {
+                    "default": true,
+                    "description": "The minimum width of the window.",
                     "type": "number"
                 },
                 "minimizable": {
+                    "default": true,
+                    "description": "Allows the window to be minimized.",
                     "type": "boolean"
                 },
                 "modalParentIdentity": {
@@ -5868,6 +6004,8 @@
                     "type": "string"
                 },
                 "opacity": {
+                    "default": 1,
+                    "description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
                     "type": "number"
                 },
                 "permissions": {
@@ -5881,6 +6019,8 @@
                         "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
+                                "default": false,
+                                "description": "Fail to load the window if this preload script fails",
                                 "type": "boolean"
                             },
                             "state": {
@@ -5914,29 +6054,47 @@
                     "$ref": "#/definitions/WindowCreationReason"
                 },
                 "resizable": {
+                    "default": true,
+                    "description": "A flag to allow the user to resize the window.",
                     "type": "boolean"
                 },
                 "resizeRegion": {
                     "$ref": "#/definitions/ResizeRegion",
                     "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
                 },
+                "roundedCorners": {
+                    "description": "Controls whether frameless window should have rounded corners. Default is false for Windows and true for MacOS. Setting this property to false will prevent the window from being fullscreenable on macOS. On Windows versions older than Windows 11 Build 22000 this property has no effect, and frameless windows will not have rounded corners.",
+                    "type": "boolean"
+                },
                 "saveWindowState": {
+                    "default": true,
+                    "description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
                     "type": "boolean"
                 },
                 "shadow": {
+                    "default": false,
+                    "description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
                     "type": "boolean"
                 },
                 "showBackgroundImages": {
+                    "default": false,
+                    "description": "**Platforms Only.**  If true, will show background images in the layout when the Views are hidden.\nThis occurs when the window is resizing or a tab is being dragged within the layout.",
                     "type": "boolean"
                 },
                 "showTaskbarIcon": {
+                    "default": true,
+                    "description": "Shows the window's icon in the taskbar.",
                     "type": "boolean"
                 },
                 "smallWindow": {
+                    "default": false,
+                    "description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
                     "type": "boolean"
                 },
                 "state": {
-                    "$ref": "#/definitions/WindowState"
+                    "$ref": "#/definitions/WindowState",
+                    "default": "normal",
+                    "description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
                 },
                 "taskbarIcon": {
                     "type": "string"
@@ -5947,15 +6105,20 @@
                 },
                 "throttling": {
                     "$ref": "#/definitions/WindowThrottling",
+                    "default": "'enabled'",
                     "description": "{@inheritDoc WindowThrottling}"
                 },
                 "updateStateIfExists": {
                     "type": "boolean"
                 },
                 "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
                     "type": "string"
                 },
                 "uuid": {
+                    "default": "<application UUID>",
+                    "description": "The `uuid` of the application, unique within the set of all `Application`s running in OpenFin Runtime.\nIf omitted, defaults to the `uuid` of the application spawning the window.\nIf given, must match the `uuid` of the application spawning the window.\nIn other words, the application's `uuid` is the only acceptable value, but is the default, so there's\nreally no need to provide it.",
                     "type": "string"
                 },
                 "viewVisibility": {
@@ -5963,6 +6126,8 @@
                     "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
                 },
                 "viewsPreventingClose": {
+                    "default": "'all'",
+                    "description": "When `closeOnLastViewRemoved` is set to true, determines which views prevent closing the window.\nDefaults to `all`. You may want to switch this to `layout` if using View closeBehavior: 'hide'.\n**NOTE:** - This option is ignored in non-Platforms apps.",
                     "enum": [
                         "all",
                         "layout"
@@ -5970,6 +6135,8 @@
                     "type": "string"
                 },
                 "waitForPageLoad": {
+                    "default": false,
+                    "description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
                     "type": "boolean"
                 },
                 "width": {
@@ -6052,9 +6219,13 @@
             "additionalProperties": false,
             "properties": {
                 "height": {
+                    "default": 0,
+                    "description": "The height in pixels.",
                     "type": "number"
                 },
                 "width": {
+                    "default": 0,
+                    "description": "The width in pixels.",
                     "type": "number"
                 }
             },
@@ -6065,6 +6236,8 @@
             "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window.",
             "properties": {
                 "bottomRightCorner": {
+                    "default": 9,
+                    "description": "The size in pixels of an additional square resizable region located at the bottom right corner of a frameless window.",
                     "type": "number"
                 },
                 "sides": {
@@ -6072,21 +6245,31 @@
                     "description": "Enables resizing interaction for each side of the window.",
                     "properties": {
                         "bottom": {
+                            "default": true,
+                            "description": "Enables resizing from the bottom of the window.",
                             "type": "boolean"
                         },
                         "left": {
+                            "default": true,
+                            "description": "Enables resizing from the left side of the window.",
                             "type": "boolean"
                         },
                         "right": {
+                            "default": true,
+                            "description": "Enables resizing from the right side of the window.",
                             "type": "boolean"
                         },
                         "top": {
+                            "default": true,
+                            "description": "Enables resizing from the top of the window.",
                             "type": "boolean"
                         }
                     },
                     "type": "object"
                 },
                 "size": {
+                    "default": 7,
+                    "description": "The size of the resize region in pixels.",
                     "type": "number"
                 }
             },
@@ -6118,6 +6301,10 @@
                 "AutofillAddressEnabled": {
                     "$ref": "#/definitions/PolicyOptions",
                     "description": "Disable AutofillAddressEnabled policy for a Window or View."
+                },
+                "AutofillCreditCardEnabled": {
+                    "$ref": "#/definitions/PolicyOptions",
+                    "description": "Disable AutofillCreditCardEnabled policy for a Window or View."
                 }
             },
             "type": "object"
@@ -6307,6 +6494,7 @@
                     "$ref": "#/definitions/ContentRedirect"
                 },
                 "contextMenu": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
@@ -6356,6 +6544,11 @@
                     "type": "array"
                 },
                 "detachOnClose": {
+                    "default": false,
+                    "type": "boolean"
+                },
+                "disableAppRegion": {
+                    "default": false,
                     "type": "boolean"
                 },
                 "downloadShelf": {
@@ -6373,6 +6566,8 @@
                     "type": "object"
                 },
                 "enableBeforeUnload": {
+                    "default": false,
+                    "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
                     "type": "boolean"
                 },
                 "excludeOptions": {
@@ -6394,6 +6589,8 @@
                                 "type": "string"
                             },
                             "preventDefault": {
+                                "default": false,
+                                "description": "Prevent default key handling before emitting the event.",
                                 "type": "boolean"
                             }
                         },
@@ -6408,6 +6605,8 @@
                     "$ref": "#/definitions/InteropConfig"
                 },
                 "isClosable": {
+                    "default": true,
+                    "description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
                     "type": "boolean"
                 },
                 "manifestUrl": {
@@ -6429,6 +6628,8 @@
                         "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
+                                "default": false,
+                                "description": "Fail to load the window if this preload script fails",
                                 "type": "boolean"
                             },
                             "state": {
@@ -6455,6 +6656,8 @@
                     "type": "array"
                 },
                 "preventDragOut": {
+                    "default": false,
+                    "description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
                     "type": "boolean"
                 },
                 "processAffinity": {
@@ -6467,6 +6670,7 @@
                 },
                 "throttling": {
                     "$ref": "#/definitions/ViewThrottling",
+                    "default": "'enabled'",
                     "description": "{@inheritDoc ViewThrottling}"
                 },
                 "title": {
@@ -6478,6 +6682,8 @@
                     "description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
                 },
                 "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
                     "type": "string"
                 },
                 "zoomLevel": {
@@ -6510,6 +6716,9 @@
                 },
                 "Clipboard": {
                     "$ref": "#/definitions/Partial_9"
+                },
+                "NotificationManager": {
+                    "$ref": "#/definitions/Partial_10"
                 },
                 "System": {
                     "$ref": "#/definitions/Partial_8"
@@ -6563,7 +6772,10 @@
         "__type_24": {
             "additionalProperties": false,
             "properties": {
-                "getAllExternalWindows": {
+                "downloadAsset": {
+                    "type": "boolean"
+                },
+                "enableNativeWindowIntegrationProvider": {
                     "type": "boolean"
                 },
                 "getCurrentDomainSettings": {
@@ -6596,6 +6808,9 @@
                     ]
                 },
                 "getDomainSettings": {
+                    "type": "boolean"
+                },
+                "getInstalledApps": {
                     "type": "boolean"
                 },
                 "getOSInfo": {
@@ -6708,6 +6923,9 @@
                         }
                     ]
                 },
+                "launchLogUploader": {
+                    "type": "boolean"
+                },
                 "openUrlWithBrowser": {
                     "additionalProperties": false,
                     "properties": {
@@ -6782,6 +7000,9 @@
                 "resolveDomainSettings": {
                     "type": "boolean"
                 },
+                "serveAsset": {
+                    "type": "boolean"
+                },
                 "setDomainSettings": {
                     "type": "boolean"
                 },
@@ -6832,6 +7053,9 @@
                 "readText": {
                     "type": "boolean"
                 },
+                "setClipboard": {
+                    "type": "boolean"
+                },
                 "write": {
                     "type": "boolean"
                 },
@@ -6852,6 +7076,15 @@
         },
         "__type_26": {
             "additionalProperties": false,
+            "properties": {
+                "init": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "__type_27": {
+            "additionalProperties": false,
             "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user.",
             "properties": {
                 "showViewsOnSplitterDrag": {
@@ -6869,17 +7102,19 @@
             },
             "type": "object"
         },
-        "__type_27": {
+        "__type_28": {
             "additionalProperties": false,
             "description": "Configuration for view visibility settings",
             "properties": {
                 "enabled": {
+                    "default": false,
+                    "description": "Enables or disables showing views when the layout splitter or a tab is being dragged or a Platform Window is being resized.",
                     "type": "boolean"
                 }
             },
             "type": "object"
         },
-        "__type_28": {
+        "__type_29": {
             "additionalProperties": false,
             "properties": {
                 "customContext": {
@@ -6897,18 +7132,6 @@
             },
             "type": "object"
         },
-        "__type_29": {
-            "additionalProperties": false,
-            "properties": {
-                "preloadScripts": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "preloadScripts"
-            ],
-            "type": "object"
-        },
         "__type_3": {
             "additionalProperties": false,
             "description": "Configurations for API injection.",
@@ -6922,6 +7145,7 @@
                     "description": "Configure conditional injection of OpenFin API into iframes",
                     "properties": {
                         "crossOriginInjection": {
+                            "default": false,
                             "description": "Inject OpenFin API into cross-origin iframes",
                             "type": "boolean"
                         },
@@ -6929,6 +7153,7 @@
                             "type": "boolean"
                         },
                         "sameOriginInjection": {
+                            "default": true,
                             "description": "Inject OpenFin API into same-origin iframes",
                             "type": "boolean"
                         }
@@ -6939,6 +7164,20 @@
             "type": "object"
         },
         "__type_30": {
+            "additionalProperties": false,
+            "properties": {
+                "preloadScripts": {
+                    "default": false,
+                    "description": "When true, will not merge default preload scripts from {@link ApplicationOptions.defaultWindowOptions} or {@link ApplicationOptions.defaultViewOptions}.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "preloadScripts"
+            ],
+            "type": "object"
+        },
+        "__type_31": {
             "additionalProperties": false,
             "properties": {
                 "_internalWorkspaceData": {},
@@ -6990,6 +7229,7 @@
                     "$ref": "#/definitions/ContentRedirect"
                 },
                 "contextMenu": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
@@ -7039,6 +7279,11 @@
                     "type": "array"
                 },
                 "detachOnClose": {
+                    "default": false,
+                    "type": "boolean"
+                },
+                "disableAppRegion": {
+                    "default": false,
                     "type": "boolean"
                 },
                 "downloadShelf": {
@@ -7056,6 +7301,8 @@
                     "type": "object"
                 },
                 "enableBeforeUnload": {
+                    "default": false,
+                    "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
                     "type": "boolean"
                 },
                 "excludeOptions": {
@@ -7077,6 +7324,8 @@
                                 "type": "string"
                             },
                             "preventDefault": {
+                                "default": false,
+                                "description": "Prevent default key handling before emitting the event.",
                                 "type": "boolean"
                             }
                         },
@@ -7091,6 +7340,8 @@
                     "$ref": "#/definitions/InteropConfig"
                 },
                 "isClosable": {
+                    "default": true,
+                    "description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
                     "type": "boolean"
                 },
                 "manifestUrl": {
@@ -7112,6 +7363,8 @@
                         "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
+                                "default": false,
+                                "description": "Fail to load the window if this preload script fails",
                                 "type": "boolean"
                             },
                             "state": {
@@ -7138,6 +7391,8 @@
                     "type": "array"
                 },
                 "preventDragOut": {
+                    "default": false,
+                    "description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
                     "type": "boolean"
                 },
                 "processAffinity": {
@@ -7150,6 +7405,7 @@
                 },
                 "throttling": {
                     "$ref": "#/definitions/ViewThrottling",
+                    "default": "'enabled'",
                     "description": "{@inheritDoc ViewThrottling}"
                 },
                 "title": {
@@ -7161,6 +7417,8 @@
                     "description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
                 },
                 "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
                     "type": "string"
                 },
                 "zoomLevel": {
@@ -7169,7 +7427,7 @@
             },
             "type": "object"
         },
-        "__type_31": {
+        "__type_32": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -7193,7 +7451,7 @@
             ],
             "type": "object"
         },
-        "__type_32": {
+        "__type_33": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -7215,7 +7473,7 @@
             },
             "type": "object"
         },
-        "__type_33": {
+        "__type_34": {
             "additionalProperties": false,
             "properties": {
                 "_internalWorkspaceData": {},
@@ -7263,6 +7521,7 @@
                     "$ref": "#/definitions/ContentRedirect"
                 },
                 "contextMenu": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
@@ -7312,6 +7571,11 @@
                     "type": "array"
                 },
                 "detachOnClose": {
+                    "default": false,
+                    "type": "boolean"
+                },
+                "disableAppRegion": {
+                    "default": false,
                     "type": "boolean"
                 },
                 "downloadShelf": {
@@ -7329,6 +7593,8 @@
                     "type": "object"
                 },
                 "enableBeforeUnload": {
+                    "default": false,
+                    "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
                     "type": "boolean"
                 },
                 "excludeOptions": {
@@ -7350,6 +7616,8 @@
                                 "type": "string"
                             },
                             "preventDefault": {
+                                "default": false,
+                                "description": "Prevent default key handling before emitting the event.",
                                 "type": "boolean"
                             }
                         },
@@ -7364,6 +7632,8 @@
                     "$ref": "#/definitions/InteropConfig"
                 },
                 "isClosable": {
+                    "default": true,
+                    "description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
                     "type": "boolean"
                 },
                 "manifestUrl": {
@@ -7385,6 +7655,8 @@
                         "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
+                                "default": false,
+                                "description": "Fail to load the window if this preload script fails",
                                 "type": "boolean"
                             },
                             "state": {
@@ -7411,6 +7683,8 @@
                     "type": "array"
                 },
                 "preventDragOut": {
+                    "default": false,
+                    "description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
                     "type": "boolean"
                 },
                 "processAffinity": {
@@ -7419,6 +7693,7 @@
                 },
                 "throttling": {
                     "$ref": "#/definitions/ViewThrottling",
+                    "default": "'enabled'",
                     "description": "{@inheritDoc ViewThrottling}"
                 },
                 "title": {
@@ -7430,6 +7705,8 @@
                     "description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
                 },
                 "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
                     "type": "string"
                 },
                 "zoomLevel": {
@@ -7438,7 +7715,7 @@
             },
             "type": "object"
         },
-        "__type_34": {
+        "__type_35": {
             "additionalProperties": false,
             "description": "Configuration Object for the show/hide tabs button within the browser toolbar",
             "properties": {
@@ -7482,7 +7759,7 @@
             ],
             "type": "object"
         },
-        "__type_35": {
+        "__type_36": {
             "additionalProperties": false,
             "description": "Configuration Object for the page lock/unlock button within the browser toolbar",
             "properties": {
@@ -7504,7 +7781,7 @@
             ],
             "type": "object"
         },
-        "__type_36": {
+        "__type_37": {
             "additionalProperties": false,
             "properties": {
                 "dark": {
@@ -7520,7 +7797,7 @@
             ],
             "type": "object"
         },
-        "__type_37": {
+        "__type_38": {
             "additionalProperties": false,
             "properties": {
                 "closeButton": {
@@ -7554,7 +7831,7 @@
             },
             "type": "object"
         },
-        "__type_38": {
+        "__type_39": {
             "additionalProperties": false,
             "properties": {
                 "conditions": {
@@ -7601,7 +7878,26 @@
             ],
             "type": "object"
         },
-        "__type_39": {
+        "__type_4": {
+            "additionalProperties": false,
+            "description": "Unique identifier for a window, view or iframe.",
+            "properties": {
+                "name": {
+                    "description": "The name of the component.  Must be unique within the owning application.",
+                    "type": "string"
+                },
+                "uuid": {
+                    "description": "Universally unique identifier of the application that owns the component.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "uuid"
+            ],
+            "type": "object"
+        },
+        "__type_40": {
             "additionalProperties": false,
             "properties": {
                 "appId": {
@@ -7633,26 +7929,7 @@
             ],
             "type": "object"
         },
-        "__type_4": {
-            "additionalProperties": false,
-            "description": "Unique identifier for a window, view or iframe.",
-            "properties": {
-                "name": {
-                    "description": "The name of the component.  Must be unique within the owning application.",
-                    "type": "string"
-                },
-                "uuid": {
-                    "description": "Universally unique identifier of the application that owns the component.",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name",
-                "uuid"
-            ],
-            "type": "object"
-        },
-        "__type_40": {
+        "__type_41": {
             "additionalProperties": false,
             "properties": {
                 "action": {
@@ -7697,7 +7974,7 @@
             ],
             "type": "object"
         },
-        "__type_41": {
+        "__type_42": {
             "additionalProperties": false,
             "properties": {
                 "conditions": {
@@ -7749,7 +8026,7 @@
             ],
             "type": "object"
         },
-        "__type_42": {
+        "__type_43": {
             "additionalProperties": false,
             "properties": {
                 "clientAPIVersion": {
@@ -7784,6 +8061,10 @@
                     "$ref": "#/definitions/Identity_4_1",
                     "description": "The OpenFin identity that registered this search provider."
                 },
+                "inputLandingPlaceholder": {
+                    "description": "A placeholder text that would be put into the empty search field for the selected provider for home in landing mode.",
+                    "type": "string"
+                },
                 "inputPlaceholder": {
                     "description": "The placeholder string to be displayed in a UI when targeting this specific Search Provider.",
                     "type": "string"
@@ -7807,7 +8088,7 @@
             },
             "type": "object"
         },
-        "__type_43": {
+        "__type_44": {
             "additionalProperties": false,
             "properties": {
                 "name": {
@@ -7821,7 +8102,7 @@
             },
             "type": "object"
         },
-        "__type_44": {
+        "__type_45": {
             "additionalProperties": false,
             "description": "Options for using privately hosted notification service.",
             "properties": {
@@ -7840,7 +8121,7 @@
             ],
             "type": "object"
         },
-        "__type_45": {
+        "__type_46": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -7885,7 +8166,7 @@
             },
             "type": "object"
         },
-        "__type_46": {
+        "__type_47": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -7982,7 +8263,7 @@
             ],
             "type": "object"
         },
-        "__type_47": {
+        "__type_48": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -8000,7 +8281,7 @@
             ],
             "type": "object"
         },
-        "__type_48": {
+        "__type_49": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -8016,7 +8297,24 @@
             ],
             "type": "object"
         },
-        "__type_49": {
+        "__type_5": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_50": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -8040,24 +8338,7 @@
             ],
             "type": "object"
         },
-        "__type_5": {
-            "additionalProperties": false,
-            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-            "properties": {
-                "rules": {
-                    "description": "List of rules for creation of new content.",
-                    "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "__type_50": {
+        "__type_51": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -8115,7 +8396,7 @@
             ],
             "type": "object"
         },
-        "__type_51": {
+        "__type_52": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -8146,7 +8427,7 @@
             },
             "type": "object"
         },
-        "__type_52": {
+        "__type_53": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -8183,11 +8464,11 @@
             },
             "type": "object"
         },
-        "__type_53": {
+        "__type_54": {
             "additionalProperties": false,
             "type": "object"
         },
-        "__type_54": {
+        "__type_55": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -8208,7 +8489,7 @@
             },
             "type": "object"
         },
-        "__type_55": {
+        "__type_56": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -8238,7 +8519,7 @@
             },
             "type": "object"
         },
-        "__type_56": {
+        "__type_57": {
             "additionalProperties": false,
             "properties": {
                 "height": {
@@ -8256,21 +8537,6 @@
             },
             "type": "object"
         },
-        "__type_57": {
-            "additionalProperties": false,
-            "properties": {
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "url": {
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
         "__type_58": {
             "additionalProperties": false,
             "properties": {
@@ -8281,6 +8547,8 @@
                     "$ref": "#/definitions/InteropConfig"
                 },
                 "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
                     "type": "string"
                 }
             },
@@ -8288,6 +8556,19 @@
         },
         "__type_59": {
             "additionalProperties": false,
+            "properties": {
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "__type_6": {
@@ -8300,9 +8581,11 @@
                 },
                 "alphaMask": {
                     "$ref": "#/definitions/RGB",
-                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* runtime key --disable-gpu is required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
+                    "description": "Turns anything of matching RGB value transparent.\n\nCaveats:\n* Runtime flags --disable-gpu and --allow-unsafe-compositing are required. Note: Unclear behavior on remote Desktop support\n* User cannot click-through transparent regions\n* Not supported on Mac\n* Windows Aero must be enabled\n* Won't make visual sense on Pixel-pushed environments such as Citrix\n* Not supported on rounded corner windows"
                 },
                 "alwaysOnTop": {
+                    "default": false,
+                    "description": "Always position the window at the top of the window stack.",
                     "type": "boolean"
                 },
                 "api": {
@@ -8313,6 +8596,8 @@
                     "type": "string"
                 },
                 "aspectRatio": {
+                    "default": 0,
+                    "description": "The aspect ratio of width to height to enforce for the window. If this value is equal to or less than zero,\nan aspect ratio will not be enforced.",
                     "type": "number"
                 },
                 "autoShow": {
@@ -8328,6 +8613,8 @@
                     "type": "string"
                 },
                 "backgroundThrottling": {
+                    "default": false,
+                    "description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
                     "type": "boolean"
                 },
                 "chromiumPolicies": {
@@ -8335,6 +8622,8 @@
                     "description": "{@inheritDoc ChromiumPolicies}"
                 },
                 "closeOnLastViewRemoved": {
+                    "default": true,
+                    "description": "Setting this to false would keep the Window alive even if all its Views were closed.\nThis is meant for advanced users and should be used with caution.\nLimitations - Once a Layout has been emptied out of all views it's not usable anymore, and certain API calls will fail.\nUse `layout.replace` to create a fresh Layout instance in case you want to populate it with Views again.\n**NOTE:** - This option is ignored in non-Platforms apps.",
                     "type": "boolean"
                 },
                 "contentCreation": {
@@ -8350,6 +8639,7 @@
                     "description": "Restrict redirects to URLs that match an allowed pattern.\nIn the lack of an allowlist, redirects to URLs that match a denied pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
                 },
                 "contextMenu": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "contextMenuOptions": {
@@ -8407,16 +8697,28 @@
                     "type": "boolean"
                 },
                 "defaultHeight": {
+                    "default": 500,
+                    "description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
                     "type": "number"
                 },
                 "defaultLeft": {
+                    "default": 100,
+                    "description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
                     "type": "number"
                 },
                 "defaultTop": {
+                    "default": 100,
+                    "description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
                     "type": "number"
                 },
                 "defaultWidth": {
+                    "default": 800,
+                    "description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
                     "type": "number"
+                },
+                "disableAppRegion": {
+                    "default": false,
+                    "type": "boolean"
                 },
                 "downloadShelf": {
                     "$ref": "#/definitions/DownloadShelfOptions",
@@ -8431,12 +8733,15 @@
                     "type": "string"
                 },
                 "frame": {
+                    "default": true,
                     "type": "boolean"
                 },
                 "height": {
                     "type": "number"
                 },
                 "hideOnClose": {
+                    "default": false,
+                    "description": "Hides the window instead of closing it when the close button is pressed.",
                     "type": "boolean"
                 },
                 "hotkeys": {
@@ -8450,6 +8755,8 @@
                                 "type": "string"
                             },
                             "preventDefault": {
+                                "default": false,
+                                "description": "Prevent default key handling before emitting the event.",
                                 "type": "boolean"
                             }
                         },
@@ -8469,10 +8776,12 @@
                     "type": "boolean"
                 },
                 "includeInSnapshots": {
+                    "default": true,
+                    "description": "Include window in snapshots returned by Platform.getSnapshot(). Turning this off may be desirable when dealing with\ninherently temporary windows whose state shouldn't be preserved, such as modals, menus, or popups.",
                     "type": "boolean"
                 },
                 "inheritance": {
-                    "$ref": "#/definitions/Partial_10",
+                    "$ref": "#/definitions/Partial_11",
                     "description": "Controls whether an option is inherited from the parent application. The option is set as part of the window options for the parent application in either the {@link Manifest.startup_app} or {@link Manifest.platform} properties in the manifest or in {@link ApplicationOptions.mainWindowOptions} when calling {@link Application.ApplicationModule.start Application.start}. Use { [option]: false } to disable a specific [option]. All inheritable properties will be inherited by default if omitted."
                 },
                 "interop": {
@@ -8483,21 +8792,33 @@
                     "$ref": "#/definitions/LayoutSnapshot"
                 },
                 "maxHeight": {
+                    "default": -1,
+                    "description": "The maximum height of a window. Will default to the OS defined value if set to -1.",
                     "type": "number"
                 },
                 "maxWidth": {
+                    "default": -1,
+                    "description": "The maximum width of a window. Will default to the OS defined value if set to -1.",
                     "type": "number"
                 },
                 "maximizable": {
+                    "default": true,
+                    "description": "Allows the window to be maximized.",
                     "type": "boolean"
                 },
                 "minHeight": {
+                    "default": 0,
+                    "description": "The minimum height of the window.",
                     "type": "number"
                 },
                 "minWidth": {
+                    "default": true,
+                    "description": "The minimum width of the window.",
                     "type": "number"
                 },
                 "minimizable": {
+                    "default": true,
+                    "description": "Allows the window to be minimized.",
                     "type": "boolean"
                 },
                 "modalParentIdentity": {
@@ -8509,6 +8830,8 @@
                     "type": "string"
                 },
                 "opacity": {
+                    "default": 1,
+                    "description": "A flag that specifies how transparent the window will be.\nChanging opacity doesn't work on Windows 7 without Aero so setting this value will have no effect there.\nThis value is clamped between `0.0` and `1.0`.\nIn software composition mode, the runtime flag --allow-unsafe-compositing is required.",
                     "type": "number"
                 },
                 "permissions": {
@@ -8522,6 +8845,8 @@
                         "description": "A script that is run before page load.",
                         "properties": {
                             "mandatory": {
+                                "default": false,
+                                "description": "Fail to load the window if this preload script fails",
                                 "type": "boolean"
                             },
                             "state": {
@@ -8552,29 +8877,47 @@
                     "type": "string"
                 },
                 "resizable": {
+                    "default": true,
+                    "description": "A flag to allow the user to resize the window.",
                     "type": "boolean"
                 },
                 "resizeRegion": {
                     "$ref": "#/definitions/ResizeRegion",
                     "description": "Defines a region in pixels that will respond to user mouse interaction for resizing a frameless window."
                 },
+                "roundedCorners": {
+                    "description": "Controls whether frameless window should have rounded corners. Default is false for Windows and true for MacOS. Setting this property to false will prevent the window from being fullscreenable on macOS. On Windows versions older than Windows 11 Build 22000 this property has no effect, and frameless windows will not have rounded corners.",
+                    "type": "boolean"
+                },
                 "saveWindowState": {
+                    "default": true,
+                    "description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
                     "type": "boolean"
                 },
                 "shadow": {
+                    "default": false,
+                    "description": "Displays a shadow on frameless windows.\n`shadow` and `cornerRounding` are mutually exclusive.\nOn Windows 7, Aero theme is required.",
                     "type": "boolean"
                 },
                 "showBackgroundImages": {
+                    "default": false,
+                    "description": "**Platforms Only.**  If true, will show background images in the layout when the Views are hidden.\nThis occurs when the window is resizing or a tab is being dragged within the layout.",
                     "type": "boolean"
                 },
                 "showTaskbarIcon": {
+                    "default": true,
+                    "description": "Shows the window's icon in the taskbar.",
                     "type": "boolean"
                 },
                 "smallWindow": {
+                    "default": false,
+                    "description": "Makes this window a frameless window that can be created and resized to less than 41x36 px (width x height).\n\nNote: Caveats of small windows are no Aero Snap and drag to/from maximize.\n_Windows 10: Requires `maximizable` to be false. Resizing with the mouse is only possible down to 38x39 px._",
                     "type": "boolean"
                 },
                 "state": {
-                    "$ref": "#/definitions/WindowState"
+                    "$ref": "#/definitions/WindowState",
+                    "default": "normal",
+                    "description": "The visible state of the window on creation.\nOne of:\n* `\"maximized\"`\n* `\"minimized\"`\n* `\"normal\"`"
                 },
                 "taskbarIcon": {
                     "type": "string"
@@ -8585,12 +8928,17 @@
                 },
                 "throttling": {
                     "$ref": "#/definitions/WindowThrottling",
+                    "default": "'enabled'",
                     "description": "{@inheritDoc WindowThrottling}"
                 },
                 "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
                     "type": "string"
                 },
                 "uuid": {
+                    "default": "<application UUID>",
+                    "description": "The `uuid` of the application, unique within the set of all `Application`s running in OpenFin Runtime.\nIf omitted, defaults to the `uuid` of the application spawning the window.\nIf given, must match the `uuid` of the application spawning the window.\nIn other words, the application's `uuid` is the only acceptable value, but is the default, so there's\nreally no need to provide it.",
                     "type": "string"
                 },
                 "viewVisibility": {
@@ -8598,6 +8946,8 @@
                     "description": "_Platform Windows Only_. Controls behavior for showing views when they are being resized by the user."
                 },
                 "viewsPreventingClose": {
+                    "default": "'all'",
+                    "description": "When `closeOnLastViewRemoved` is set to true, determines which views prevent closing the window.\nDefaults to `all`. You may want to switch this to `layout` if using View closeBehavior: 'hide'.\n**NOTE:** - This option is ignored in non-Platforms apps.",
                     "enum": [
                         "all",
                         "layout"
@@ -8605,6 +8955,8 @@
                     "type": "string"
                 },
                 "waitForPageLoad": {
+                    "default": false,
+                    "description": "When set to `true`, the window will not appear until the `window` object's `load` event fires.\nWhen set to `false`, the window will appear immediately without waiting for content to be loaded.",
                     "type": "boolean"
                 },
                 "width": {
@@ -8627,6 +8979,10 @@
             "type": "object"
         },
         "__type_61": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_62": {
             "additionalProperties": false,
             "properties": {
                 "alias": {

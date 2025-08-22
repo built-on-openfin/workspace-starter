@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "41.134.102.4"
+		"version": "42.138.100.107"
 	},
 	"platform": {
 		"uuid": "customize-home-templates",
@@ -34,7 +34,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/customize-home-templates/favicon.ico",
-		"name": "Customize Home Templates - v21.0.0",
+		"name": "Customize Home Templates - v22.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
