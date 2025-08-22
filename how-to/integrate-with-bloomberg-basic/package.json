@@ -25,12 +25,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/bloomberg": "^2.0.0",
-		"@openfin/core": "42.100.101",
-		"@openfin/workspace": "22.3.9",
-		"@openfin/workspace-platform": "22.3.9"
+		"@openfin/core": "42.100.107",
+		"@openfin/workspace": "22.3.18",
+		"@openfin/workspace-platform": "22.3.18"
 	},
 	"devDependencies": {
-		"@openfin/node-adapter": "42.100.101",
+		"@openfin/node-adapter": "42.100.107",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

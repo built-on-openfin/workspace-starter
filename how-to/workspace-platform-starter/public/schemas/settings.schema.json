@@ -6923,6 +6923,9 @@
                         }
                     ]
                 },
+                "launchLogUploader": {
+                    "type": "boolean"
+                },
                 "openUrlWithBrowser": {
                     "additionalProperties": false,
                     "properties": {
