@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "41.134.102.4"
+		"version": "41.134.102.7"
 	},
 	"startup_app": {
 		"name": "Integrate With Snap - Classic App",
