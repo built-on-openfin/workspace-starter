@@ -49,7 +49,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint",
 		"test": "jest --config ./jest.config.js",
-		"e2e": "of-automation http://localhost:8080/test.manifest.fin.json ./e2e/**/*.spec.ts --workspace 22.3.4 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
+		"e2e": "of-automation http://localhost:8080/test.manifest.fin.json ./e2e/**/*.spec.ts --workspace 22.3.18 --testFailCount 1 --framework jest --storageFolder ./e2e/storage"
 	},
 	"author": "john.mandia@openfin.co",
 	"contributors": [
