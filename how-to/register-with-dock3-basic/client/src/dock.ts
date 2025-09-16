@@ -7,6 +7,7 @@ import type {
 } from "@openfin/workspace-platform";
 
 import { Dock } from "@openfin/workspace-platform";
+import type { ContentMenuEntry } from "@openfin/workspace/client-api-platform/src/shapes";
 
 /**
  * Type consolidating all dock3 provider settings
@@ -37,11 +38,13 @@ export async function initializeDock3API(
 			override: (Base) =>
 				/**
 				 * Custom provider overrides for Dock3
+				 * Dock3 is a stateless component, so custom overrides are needed to maintain state.
 				 */
 				class CustomProvider extends Base {
 					/**
 					 * Override for dock3 launch app function.
-					 * @param payload payload being launched
+					 * This function should be customized to best match the needs of the application.
+					 * @param payload content being launched
 					 */
 					public async launchEntry(payload: LaunchDockEntryPayload): Promise<void> {
 						console.log("Launching Dock Entry:", payload);
@@ -49,10 +52,49 @@ export async function initializeDock3API(
 
 					/**
 					 * Override for dock3 bookmark content function.
-					 * @param payload payload being bookmarked
+					 * This function should be customized to best match the needs of the application.
+					 * @param payload content being bookmarked
 					 */
 					public async bookmarkContentMenuEntry(payload: BookmarkDockEntryPayload): Promise<void> {
 						console.log("Bookmarking Dock Entry:", payload.entry);
+
+						// Update the config to mark the entry as bookmarked
+						const currentConfig = this.config;
+						const entryId = payload.entry.id;
+
+						/**
+						 * Helper function to update content menu entries.
+						 * @param entries - array of content menu entries
+						 * @returns updated array with bookmarked entries
+						 */
+						function updateContentMenuEntry(entries: ContentMenuEntry[]): ContentMenuEntry[] {
+							return entries.map((entry) => {
+								if (entry.id === entryId) {
+									return { ...entry, bookmarked: true };
+								}
+								if (entry.type === "folder") {
+									return { ...entry, children: updateContentMenuEntry(entry.children) };
+								}
+								return entry;
+							});
+						}
+
+						// Update content menu entries
+						if (currentConfig.contentMenu) {
+							const updatedContentMenu = updateContentMenuEntry(currentConfig.contentMenu);
+							currentConfig.contentMenu = updatedContentMenu;
+						}
+
+						// Update favorites if the entry exists there
+						if (currentConfig.favorites) {
+							const updatedFavorites = currentConfig.favorites.map((favorite) =>
+								(favorite.id === entryId ? { ...favorite, bookmarked: true } : favorite)
+							);
+							currentConfig.favorites = updatedFavorites;
+						}
+
+						// Update the dock3 provider's config
+						await this.updateConfig(currentConfig);
 					}
 
 					/**
