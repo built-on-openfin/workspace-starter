@@ -53,6 +53,42 @@
 			const textError = document.querySelector('#textError');
 			textError.textContent = '';
 			const btnLogin = document.querySelector('#btnLogin');
+
+			/**
+			 * Sanitizes a URL to prevent open redirect vulnerabilities.
+			 * @param {string} url - The URL to sanitize.
+			 * @returns {string} - A sanitized URL or default fallback.
+			 */
+			function sanitizeUrl(url) {
+				// Default fallback URL
+				const defaultUrl = '/platform/provider.html';
+				
+				if (!url) {
+					return defaultUrl;
+				}
+				
+				try {
+					const urlObj = new URL(url, window.location.origin);
+					
+					// Only allow same-origin URLs
+					if (urlObj.origin !== window.location.origin) {
+						return defaultUrl;
+					}
+					
+					// Only allow relative paths that don't contain dangerous characters
+					const pathname = urlObj.pathname;
+					if (pathname.startsWith('/') && !pathname.includes('..') &&
+						!pathname.includes('<') && !pathname.includes('>')) {
+						return pathname;
+					}
+					
+					return defaultUrl;
+				} catch (e) {
+					// If URL parsing fails, return default
+					return defaultUrl;
+				}
+			}
+
 			btnLogin.addEventListener('click', async () => {
 				// On success this will set a cookie and redirect to the page
 				// in RETURN_URL which is substituted by the web server
@@ -74,7 +110,8 @@
 						if (!response.ok) {
 							textError.textContent = response.statusText;
 						} else if (response.redirected) {
-							window.location.href = response.url;
+							const sanitizedUrl = sanitizeUrl(response.url);
+							window.location.href = sanitizedUrl;
 						}
 					})
 					.catch((err) => {
