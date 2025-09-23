@@ -31,14 +31,16 @@ router.post("/proxy", async (request, response) => {
 
 				// Block private/internal IP addresses and localhost
 				const hostname = url.hostname.toLowerCase();
-				if (hostname === "localhost" ||
+				if (
+					hostname === "localhost" ||
 					hostname === "127.0.0.1" ||
 					hostname === "0.0.0.0" ||
 					hostname.startsWith("192.168.") ||
 					hostname.startsWith("10.") ||
 					hostname.startsWith("172.") ||
 					hostname.endsWith(".local") ||
-					hostname.endsWith(".internal")) {
+					hostname.endsWith(".internal")
+				) {
 					throw new Error("Access to private/internal addresses is not allowed");
 				}
 

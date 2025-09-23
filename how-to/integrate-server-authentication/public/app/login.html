@@ -62,26 +62,30 @@
 			function sanitizeUrl(url) {
 				// Default fallback URL
 				const defaultUrl = '/platform/provider.html';
-				
+
 				if (!url) {
 					return defaultUrl;
 				}
-				
+
 				try {
 					const urlObj = new URL(url, window.location.origin);
-					
+
 					// Only allow same-origin URLs
 					if (urlObj.origin !== window.location.origin) {
 						return defaultUrl;
 					}
-					
+
 					// Only allow relative paths that don't contain dangerous characters
 					const pathname = urlObj.pathname;
-					if (pathname.startsWith('/') && !pathname.includes('..') &&
-						!pathname.includes('<') && !pathname.includes('>')) {
+					if (
+						pathname.startsWith('/') &&
+						!pathname.includes('..') &&
+						!pathname.includes('<') &&
+						!pathname.includes('>')
+					) {
 						return pathname;
 					}
-					
+
 					return defaultUrl;
 				} catch (e) {
 					// If URL parsing fails, return default

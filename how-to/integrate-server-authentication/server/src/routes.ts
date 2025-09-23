@@ -55,8 +55,12 @@ function sanitizeReturnUrl(returnUrl: string | undefined): string {
 	}
 
 	// Only allow relative URLs that don't contain dangerous characters or path traversal
-	if (returnUrl.startsWith("/") && !returnUrl.includes("..") &&
-		!returnUrl.includes("<") && !returnUrl.includes(">")) {
+	if (
+		returnUrl.startsWith("/") &&
+		!returnUrl.includes("..") &&
+		!returnUrl.includes("<") &&
+		!returnUrl.includes(">")
+	) {
 		return returnUrl;
 	}
 
