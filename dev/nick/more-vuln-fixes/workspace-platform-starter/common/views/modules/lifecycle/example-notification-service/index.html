@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Example Notification Service App</title>
+		<script src="https://built-on-openfin.github.io/web-starter/web/v22.0.0/web-client-api/js/shim.api.bundle.js"></script>
+		<script type="module" src="./index.js"></script>
+		<link rel="stylesheet" href="../../../../style/app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Example Notification Service App</h1>
+				<h1 class="tag">
+					A very simple app that raises requests for notifications through a lifecycle module.
+				</h1>
+			</div>
+			<div class="row middle gap10">
+				<image src="../../../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="row fill gap20">
+			<div class="row fill gap40">
+				<div class="fill col gap20">
+					<form class="col gap40 scroll-vertical">
+						<div class="form-section col gap10">
+							<h2>Notification Settings</h2>
+							<fieldset>
+								<label for="notificationTypeExamples" title="Sample messages.">Example Messages</label>
+								<select name="notificationTypeExamples" id="notificationTypeExamples"></select>
+							</fieldset>
+							<fieldset>
+								<label for="message" title="The message to send to the example notification service">
+									Message To Send
+								</label>
+								<textarea id="message" rows="30" class="full"></textarea>
+							</fieldset>
+						</div>
+					</form>
+				</div>
+				<div class="col fill gap20">
+					<h2>Logs</h2>
+					<pre id="log" class="fill scroll-vertical"></pre>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="row spread">
+				<div class="row gap10">
+					<button id="btnRaiseIntent">Raise Intent</button>
+					<button id="btnClear">Clear Logs</button>
+				</div>
+				<div class="row gap10">
+					<a
+						href="https://github.com/built-on-openfin/workspace-starter/blob/workspace/v22.0.0/how-to/workspace-platform-starter/client/src/modules/lifecycle/example-notification-service/README.md"
+						target="_blank"
+					>
+						Example Notification Service
+					</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
