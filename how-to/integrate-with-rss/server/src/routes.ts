@@ -21,6 +21,29 @@ router.post("/proxy", async (request, response) => {
 			} = request.body;
 
 			if (params.url) {
+				// Validate URL to prevent SSRF attacks
+				const url = new URL(params.url);
+
+				// Only allow HTTP and HTTPS protocols
+				if (!["http:", "https:"].includes(url.protocol)) {
+					throw new Error("Only HTTP and HTTPS protocols are allowed");
+				}
+
+				// Block private/internal IP addresses and localhost
+				const hostname = url.hostname.toLowerCase();
+				if (
+					hostname === "localhost" ||
+					hostname === "127.0.0.1" ||
+					hostname === "0.0.0.0" ||
+					hostname.startsWith("192.168.") ||
+					hostname.startsWith("10.") ||
+					hostname.startsWith("172.") ||
+					hostname.endsWith(".local") ||
+					hostname.endsWith(".internal")
+				) {
+					throw new Error("Access to private/internal addresses is not allowed");
+				}
+
 				params.headers = params.headers ?? {};
 				if (params.method === "post" && !params.headers.contentType) {
 					params.headers.contentType = "application/json";

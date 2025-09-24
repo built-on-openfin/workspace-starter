@@ -3,6 +3,10 @@ import express from "express";
 import router from "./routes";
 
 const app = express();
+
+// Disable X-Powered-By header to hide Express framework information
+app.disable("x-powered-by");
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);

@@ -1,4 +1,5 @@
 import express, { type NextFunction, type Request, type Response } from "express";
+import rateLimit from "express-rate-limit";
 import { readFile } from "fs/promises";
 import path from "path";
 
@@ -20,6 +21,15 @@ function corsMiddleware(req: Request, res: Response, next: NextFunction): void {
 	next();
 }
 
+// Rate limiting configuration to prevent DoS attacks
+const fileEndpointLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per windowMs
+	message: "Too many requests from this IP, please try again later.",
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false // Disable the `X-RateLimit-*` headers
+});
+
 /**
  * Clears the session dictionary of the given session id.
  * @param sessionId The session id to clear.
@@ -32,10 +42,36 @@ function clearSessionDictionary(sessionId: string): void {
 }
 
 /**
+ * Sanitizes a return URL to prevent open redirect vulnerabilities.
+ * @param returnUrl The URL to sanitize.
+ * @returns A sanitized URL or default fallback.
+ */
+function sanitizeReturnUrl(returnUrl: string | undefined): string {
+	// Default fallback URL
+	const defaultUrl = "/platform/provider.html";
+
+	if (!returnUrl) {
+		return defaultUrl;
+	}
+
+	// Only allow relative URLs that don't contain dangerous characters or path traversal
+	if (
+		returnUrl.startsWith("/") &&
+		!returnUrl.includes("..") &&
+		!returnUrl.includes("<") &&
+		!returnUrl.includes(">")
+	) {
+		return returnUrl;
+	}
+
+	return defaultUrl;
+}
+
+/**
  * Get the platform provider.html, if the user has no authentication cookie
  * then instead redirect to the login route.
  */
-router.get("/platform/provider.html", (req, res, next) => {
+router.get("/platform/provider.html", fileEndpointLimiter, (req, res, next) => {
 	console.log("Received request for /platform/provider.html");
 	if (req.cookies?.[SESSION_COOKIE_NAME] && sessionIds[req.cookies[SESSION_COOKIE_NAME]]) {
 		const sessionId = sessionIds[req.cookies[SESSION_COOKIE_NAME]];
@@ -56,7 +92,7 @@ router.get("/platform/provider.html", (req, res, next) => {
 /**
  * The stuck page represents a page that is intended to be a redirect where encountered an error and stopped.
  */
-router.get("/app/stuck", (req, res, next) => {
+router.get("/app/stuck", fileEndpointLimiter, (req, res, next) => {
 	console.log("Received request for /app/stuck");
 	res.sendFile(path.join(__dirname, "..", "..", "public/app/stuck.html"));
 });
@@ -64,7 +100,7 @@ router.get("/app/stuck", (req, res, next) => {
 /**
  * The friendly error page is something shown to users if something has gone wrong e.g. they are stuck before the provider is loaded.
  */
-router.get("/app/friendly-error", (req, res, next) => {
+router.get("/app/friendly-error", fileEndpointLimiter, (req, res, next) => {
 	console.log("Received request for /app/friendly-error");
 	res.sendFile(path.join(__dirname, "..", "..", "public/app/friendly-error.html"));
 });
@@ -72,7 +108,7 @@ router.get("/app/friendly-error", (req, res, next) => {
 /**
  * Get the app.html content, if not authentication redirect to the login page.
  */
-router.get("/app", (req, res, next) => {
+router.get("/app", fileEndpointLimiter, (req, res, next) => {
 	console.log("Received request for /app");
 	if (req.cookies?.[SESSION_COOKIE_NAME] && sessionIds[req.cookies[SESSION_COOKIE_NAME]]) {
 		console.log("Session cookie available. Navigating to /app/app.html");
@@ -86,7 +122,7 @@ router.get("/app", (req, res, next) => {
 /**
  * Don't allow direct access to the app.html page
  */
-router.get("/app/app.html", (req, res, next) => {
+router.get("/app/app.html", fileEndpointLimiter, (req, res, next) => {
 	console.log("Access to raw html denied. Navigating to /app");
 	res.redirect("/app");
 });
@@ -94,7 +130,7 @@ router.get("/app/app.html", (req, res, next) => {
 /**
  * Don't allow direct access to the login.html page
  */
-router.get("/app/login.html", (req, res, next) => {
+router.get("/app/login.html", fileEndpointLimiter, (req, res, next) => {
 	console.log("Access to raw html denied. Navigating to /app/login");
 	res.redirect("/app/login");
 });
@@ -114,7 +150,18 @@ router.get("/app/login", async (req, res, next) => {
 	res.clearCookie(SESSION_COOKIE_NAME);
 	console.log("Navigating to /app/login.html");
 	const loginHtml = await readFile(path.join(__dirname, "..", "..", "public/app/login.html"), "utf8");
-	res.send(loginHtml.replace("{RETURN_URL}", (req.query.return as string) ?? "/platform/provider.html"));
+
+	// Sanitize return URL to prevent XSS attacks
+	const returnUrl = req.query.return as string;
+	const sanitizedReturnUrl = sanitizeReturnUrl(returnUrl);
+
+	// Encode the sanitized URL as needed
+	const htmlEncodedReturnUrl = sanitizedReturnUrl
+		.replace(/&/g, "&amp;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#x27;");
+
+	res.send(loginHtml.replace("{RETURN_URL}", htmlEncodedReturnUrl));
 });
 
 /**
@@ -142,10 +189,11 @@ router.post("/app/login", (req, res, next) => {
 		sessionIds[sessionId] = sessionId;
 		res.cookie(SESSION_COOKIE_NAME, sessionId);
 		const returnUrl = req.body?.returnUrl as string;
+		const sanitizedReturnUrl = sanitizeReturnUrl(returnUrl);
 		console.log(
-			`Login details test@example.com / pass1234 session cookies set. Redirecting to originally requested url: ${returnUrl}`
+			`Login details test@example.com / pass1234 session cookies set. Redirecting to originally requested url: ${sanitizedReturnUrl}`
 		);
-		res.redirect(returnUrl);
+		res.redirect(sanitizedReturnUrl);
 	} else if (req.body?.email === "stuck@example.com" && req.body?.password === "pass1234") {
 		const sessionId = `${Date.now()}`;
 		sessionIds[sessionId] = sessionId;
@@ -170,4 +218,4 @@ router.post("/app/login", (req, res, next) => {
 /**
  * Serve all files in the 'public' directory permitting CORS on Home domains.
  */
-router.get("*", corsMiddleware, express.static("public"));
+router.get("*", fileEndpointLimiter, corsMiddleware, express.static("public"));
