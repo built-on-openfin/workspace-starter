@@ -43,14 +43,15 @@ function clearSessionDictionary(sessionId: string): void {
 
 /**
  * Sanitizes a return URL to prevent open redirect vulnerabilities.
- * @param returnUrl The URL to sanitize.
+ * @param returnUrl The URL to sanitize (can be string, array, object, or undefined from query params).
  * @returns A sanitized URL or default fallback.
  */
-function sanitizeReturnUrl(returnUrl: string | undefined): string {
+function sanitizeReturnUrl(returnUrl: unknown): string {
 	// Default fallback URL
 	const defaultUrl = "/platform/provider.html";
 
-	if (!returnUrl) {
+	// Ensure returnUrl is a string
+	if (!returnUrl || typeof returnUrl !== "string") {
 		return defaultUrl;
 	}
 
@@ -152,16 +153,40 @@ router.get("/app/login", async (req, res, next) => {
 	const loginHtml = await readFile(path.join(__dirname, "..", "..", "public/app/login.html"), "utf8");
 
 	// Sanitize return URL to prevent XSS attacks
-	const returnUrl = req.query.return as string;
-	const sanitizedReturnUrl = sanitizeReturnUrl(returnUrl);
+	const sanitizedReturnUrl = sanitizeReturnUrl(req.query.return);
 
-	// Encode the sanitized URL as needed
+	// Get CSRF token and encode it for HTML
+	const csrfToken = (req as Request & { generateCsrfToken: () => string }).generateCsrfToken();
+
+	// Encode values for safe HTML output
 	const htmlEncodedReturnUrl = sanitizedReturnUrl
 		.replace(/&/g, "&amp;")
 		.replace(/"/g, "&quot;")
 		.replace(/'/g, "&#x27;");
 
-	res.send(loginHtml.replace("{RETURN_URL}", htmlEncodedReturnUrl));
+	const htmlEncodedCsrfToken = csrfToken
+		.replace(/&/g, "&amp;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#x27;");
+
+	// Replace placeholders in the HTML
+	const finalHtml = loginHtml
+		.replace("{RETURN_URL}", htmlEncodedReturnUrl)
+		.replace("{CSRF_TOKEN}", htmlEncodedCsrfToken);
+
+	res.send(finalHtml);
+});
+
+/**
+ * Get CSRF token for authenticated users
+ */
+router.get("/api/csrf-token", (req, res, next) => {
+	if (req.cookies?.[SESSION_COOKIE_NAME] && sessionIds[req.cookies[SESSION_COOKIE_NAME]]) {
+		const csrfToken = (req as Request & { generateCsrfToken: () => string }).generateCsrfToken();
+		res.json({ csrfToken });
+	} else {
+		res.status(401).json({ error: "Unauthorized" });
+	}
 });
 
 /**
@@ -188,8 +213,7 @@ router.post("/app/login", (req, res, next) => {
 		const sessionId = `${Date.now()}`;
 		sessionIds[sessionId] = sessionId;
 		res.cookie(SESSION_COOKIE_NAME, sessionId);
-		const returnUrl = req.body?.returnUrl as string;
-		const sanitizedReturnUrl = sanitizeReturnUrl(returnUrl);
+		const sanitizedReturnUrl = sanitizeReturnUrl(req.body?.returnUrl);
 		console.log(
 			`Login details test@example.com / pass1234 session cookies set. Redirecting to originally requested url: ${sanitizedReturnUrl}`
 		);
