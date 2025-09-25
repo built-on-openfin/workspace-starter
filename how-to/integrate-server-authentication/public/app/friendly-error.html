@@ -40,7 +40,7 @@
 					// Get CSRF token first
 					const tokenResponse = await fetch('http://localhost:8080/api/csrf-token');
 					const { csrfToken } = await tokenResponse.json();
-					
+
 					// On logout the session cookies are cleared and close the app
 					await fetch('http://localhost:8080/app/logout', {
 						method: 'post',
