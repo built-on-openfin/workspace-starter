@@ -87,8 +87,10 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 			// Add any apps
 			let apps = getApps();
-			if (request.query.length >= 3) {
-				apps = apps.filter((a) => a.title.toLowerCase().includes(request.query.toLowerCase()));
+			// Validate that query is a string and has sufficient length
+			if (typeof request.query === "string" && request.query.length >= 3) {
+				const queryLower = request.query.toLowerCase();
+				apps = apps.filter((a) => a.title.toLowerCase().includes(queryLower));
 			}
 
 			results = results.concat(

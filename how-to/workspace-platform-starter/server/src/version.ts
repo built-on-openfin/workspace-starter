@@ -1,4 +1,5 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
 import { readFileSync } from "fs";
 import path from "path";
 
@@ -33,7 +34,20 @@ export function init(app: express.Application): void {
 		"You can then enable different modes and different settings through the example version service configuration found here:",
 		configPath
 	);
-	app.post("/version", express.json(), (request, response) => {
+
+	// Rate limiting middleware to prevent DoS attacks
+	const versionRateLimit = rateLimit({
+		windowMs: 15 * 60 * 1000, // 15 minutes
+		max: 100, // Limit each IP to 100 requests per windowMs
+		message: {
+			error: "Too many requests from this IP, please try again later.",
+			retryAfter: "15 minutes"
+		},
+		standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+		legacyHeaders: false // Disable the `X-RateLimit-*` headers
+	});
+
+	app.post("/version", versionRateLimit, express.json(), (request, response) => {
 		console.log(request.body); // your JSON
 		const configText = readFileSync(configPath, "utf8");
 		const config = JSON.parse(configText);

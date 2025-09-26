@@ -19,10 +19,11 @@ const csrfConfig = {
 
 const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf(csrfConfig);
 
-// Apply CSRF protection to all routes except GET requests to login page
+// Apply CSRF protection to all routes except login-related routes
 app.use((req, res, next) => {
-	// Skip CSRF for GET requests to login page (user not authenticated yet)
-	if (req.method === "GET" && req.path === "/app/login") {
+	// Skip CSRF for login-related routes (user not authenticated yet)
+	if ((req.method === "GET" && req.path === "/app/login") ||
+		(req.method === "POST" && req.path === "/app/login")) {
 		return next();
 	}
 	// Apply CSRF protection to all other routes

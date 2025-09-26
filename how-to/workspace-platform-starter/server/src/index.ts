@@ -6,6 +6,8 @@ import { init as registerStorageService } from "./storage";
 import { init as registerVersionService } from "./version";
 
 const app = express();
+// Disable X-Powered-By header for security
+app.disable("x-powered-by");
 app.use(cors({ origin: "*" }));
 
 const mainPath = path.join(__dirname, "..", "..", "public");

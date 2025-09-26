@@ -2,12 +2,30 @@ const query = document.querySelector('#query');
 const action = document.querySelector('#action');
 
 /**
- * Is the query text a url.
+ * Is the query text a safe url.
  * @param value The value to test.
- * @returns True if the input is a url.
+ * @returns True if the input is a safe url.
  */
 function isQueryAUrl(value) {
-	return /^https?:\/\//.test(value);
+	try {
+		const url = new URL(value);
+		// Only allow http and https protocols
+		if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+			return false;
+		}
+
+		// Additional security: Check for suspicious patterns
+		// Block dangerous protocols that could be used for XSS
+		const lowerValue = value.toLowerCase();
+		const dangerousProtocols = ['data:', 'file:', 'vbscript:'];
+		if (dangerousProtocols.some((protocol) => lowerValue.includes(protocol))) {
+			return false;
+		}
+
+		return true;
+	} catch {
+		return false;
+	}
 }
 
 /**

@@ -86,7 +86,7 @@ async function initializeWorkspaceComponents(customSettings: CustomSettings): Pr
 			// Get the list of all the apps
 			let apps = await getApps(customSettings.appProvider);
 
-			if (request.query.length >= 3) {
+			if (request.query && typeof request.query === "string" && request.query.length >= 3) {
 				// Filter them by title if we have a query
 				apps = apps.filter((app) => app.title.toLowerCase().includes(request.query.toLowerCase()));
 			}
