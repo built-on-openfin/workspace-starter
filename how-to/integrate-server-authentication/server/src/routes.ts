@@ -2,6 +2,7 @@ import express, { type NextFunction, type Request, type Response } from "express
 import rateLimit from "express-rate-limit";
 import { readFile } from "fs/promises";
 import path from "path";
+import xss from "xss";
 
 const router = express.Router();
 export default router;
@@ -42,7 +43,7 @@ function clearSessionDictionary(sessionId: string): void {
 }
 
 /**
- * Sanitizes a return URL to prevent open redirect vulnerabilities.
+ * Sanitizes a return URL to prevent open redirect vulnerabilities and XSS attacks.
  * @param returnUrl The URL to sanitize (can be string, array, object, or undefined from query params).
  * @returns A sanitized URL or default fallback.
  */
@@ -62,7 +63,12 @@ function sanitizeReturnUrl(returnUrl: unknown): string {
 		!returnUrl.includes("<") &&
 		!returnUrl.includes(">")
 	) {
-		return returnUrl;
+		// Use xss library to sanitize the URL for additional XSS protection
+		return xss(returnUrl, {
+			whiteList: {}, // Remove all HTML tags
+			stripIgnoreTag: true, // Remove unrecognized tags
+			stripIgnoreTagBody: ["script"] // Remove script tags and their content
+		});
 	}
 
 	return defaultUrl;
@@ -155,38 +161,17 @@ router.get("/app/login", async (req, res, next) => {
 	// Sanitize return URL to prevent XSS attacks
 	const sanitizedReturnUrl = sanitizeReturnUrl(req.query.return);
 
-	// Get CSRF token and encode it for HTML
-	const csrfToken = (req as Request & { generateCsrfToken: () => string }).generateCsrfToken();
-
-	// Encode values for safe HTML output
-	const htmlEncodedReturnUrl = sanitizedReturnUrl
-		.replace(/&/g, "&amp;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#x27;");
-
-	const htmlEncodedCsrfToken = csrfToken
-		.replace(/&/g, "&amp;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#x27;");
+	// Use xss library to encode values for safe HTML output
+	const htmlEncodedReturnUrl = xss(sanitizedReturnUrl, {
+		whiteList: {}, // Remove all HTML tags
+		stripIgnoreTag: true, // Remove unrecognized tags
+		stripIgnoreTagBody: ["script"] // Remove script tags and their content
+	});
 
 	// Replace placeholders in the HTML
-	const finalHtml = loginHtml
-		.replace("{RETURN_URL}", htmlEncodedReturnUrl)
-		.replace("{CSRF_TOKEN}", htmlEncodedCsrfToken);
+	const finalHtml = loginHtml.replace("{RETURN_URL}", htmlEncodedReturnUrl);
 
 	res.send(finalHtml);
-});
-
-/**
- * Get CSRF token for authenticated users
- */
-router.get("/api/csrf-token", (req, res, next) => {
-	if (req.cookies?.[SESSION_COOKIE_NAME] && sessionIds[req.cookies[SESSION_COOKIE_NAME]]) {
-		const csrfToken = (req as Request & { generateCsrfToken: () => string }).generateCsrfToken();
-		res.json({ csrfToken });
-	} else {
-		res.status(401).json({ error: "Unauthorized" });
-	}
 });
 
 /**

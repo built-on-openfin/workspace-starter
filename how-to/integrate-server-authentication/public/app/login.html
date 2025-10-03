@@ -40,7 +40,6 @@
 					<label for="textPassword">Password</label>
 					<input type="password" id="textPassword" />
 				</fieldset>
-				<input type="hidden" id="csrfToken" value="{CSRF_TOKEN}" />
 				<button type="button" id="btnLogin">Login</button>
 				<span id="textError" class="error"></span>
 			</form>
@@ -51,7 +50,6 @@
 		<script>
 			const textEmailAddress = document.querySelector('#textEmailAddress');
 			const textPassword = document.querySelector('#textPassword');
-			const csrfToken = document.querySelector('#csrfToken');
 			const textError = document.querySelector('#textError');
 			textError.textContent = '';
 			const btnLogin = document.querySelector('#btnLogin');
@@ -104,8 +102,7 @@
 					redirect: 'follow',
 					headers: {
 						Accept: 'application/json',
-						'Content-Type': 'application/json',
-						'X-CSRF-Token': csrfToken.value
+						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
 						email: textEmailAddress.value,

@@ -25,7 +25,9 @@
 		"@openfin/workspace": "22.3.19",
 		"@openfin/workspace-platform": "22.3.19",
 		"cookie-parser": "^1.4.6",
-		"express-rate-limit": "^8.1.0"
+		"csrf-csrf": "^4.0.3",
+		"express-rate-limit": "^8.1.0",
+		"xss": "^1.0.15"
 	},
 	"devDependencies": {
 		"@openfin/core": "42.100.107",
