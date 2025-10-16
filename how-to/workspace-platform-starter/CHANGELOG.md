@@ -4,6 +4,7 @@
 
 - Update to latest version of npm packages.
 - Update to the latest version of snap 1.3.1
+- Updated the contact samples in public/common to include interop json files to describe their interop capabilities and added support for ViewProfile alongside ViewContact.
 
 ## v21.0.0
 
