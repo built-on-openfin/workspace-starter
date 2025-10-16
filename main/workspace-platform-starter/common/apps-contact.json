@@ -76,6 +76,11 @@
 				"name": "ViewContact",
 				"displayName": "View Contact",
 				"contexts": ["fdc3.contact"]
+			},
+			{
+				"name": "ViewProfile",
+				"displayName": "View Profile",
+				"contexts": ["fdc3.contact"]
 			}
 		],
 		"images": [
@@ -104,6 +109,11 @@
 			{
 				"name": "ViewContact",
 				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			},
+			{
+				"name": "ViewProfile",
+				"displayName": "View Profile",
 				"contexts": ["fdc3.contact"]
 			}
 		],
