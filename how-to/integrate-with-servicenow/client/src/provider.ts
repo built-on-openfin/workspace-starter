@@ -140,7 +140,7 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 			if (apps) {
 				// Get any apps
 				let appResults: App[] = apps.slice();
-				if (request.query.length >= 3) {
+				if (request.query && typeof request.query === "string" && request.query.length >= 3) {
 					appResults = appResults.filter((a) => a.title.toLowerCase().includes(request.query.toLowerCase()));
 				}
 

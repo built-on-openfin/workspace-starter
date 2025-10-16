@@ -30,14 +30,24 @@
 
 		<script>
 			const btnLogout = document.querySelector('#btnLogout');
-			btnLogout.addEventListener('click', () => {
-				// On logout the session cookies are cleared and close the app
-				fetch('http://localhost:8080/app/logout', {
-					method: 'post',
-					redirect: 'follow'
-				}).then(async (response) => {
+			btnLogout.addEventListener('click', async () => {
+				try {
+					// Get CSRF token first
+					const tokenResponse = await fetch('http://localhost:8080/api/csrf-token');
+					const { csrfToken } = await tokenResponse.json();
+
+					// On logout the session cookies are cleared and close the app
+					await fetch('http://localhost:8080/app/logout', {
+						method: 'post',
+						redirect: 'follow',
+						headers: {
+							'X-CSRF-Token': csrfToken
+						}
+					});
 					await fin.Platform.getCurrentSync().quit();
-				});
+				} catch (error) {
+					console.error('Logout failed:', error);
+				}
 			});
 			const btnExit = document.querySelector('#btnExit');
 			btnExit.addEventListener('click', async () => {
