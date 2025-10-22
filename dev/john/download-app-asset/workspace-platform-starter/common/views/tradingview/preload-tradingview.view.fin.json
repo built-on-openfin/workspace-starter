@@ -1,0 +1,12 @@
+{
+	"url": "https://www.tradingview.com/chart/?symbol=AAPL",
+	"fdc3InteropApi": "2.0",
+	"interop": {
+		"currentContextGroup": "green"
+	},
+	"preloadScripts": [
+		{
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/download-app-asset/workspace-platform-starter/common/views/tradingview/preload-tradingview.js"
+		}
+	]
+}
