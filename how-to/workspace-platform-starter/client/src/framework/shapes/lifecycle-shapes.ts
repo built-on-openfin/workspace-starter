@@ -17,6 +17,7 @@ export type LifecycleEvents =
 	| "workspace-changed"
 	| "page-changed"
 	| "apps-changed"
+	| "app-asset-download"
 	| "favorite-changed"
 	| "condition-changed"
 	| "language-changed";
@@ -147,4 +148,34 @@ export interface LanguageChangedLifecyclePayload {
 	 * The Locale.
 	 */
 	locale?: Locale;
+}
+
+/**
+ * App Asset event payload.
+ */
+export interface AppAssetDownloadLifecyclePayload {
+	/**
+	 * appId.
+	 */
+	appId?: string;
+
+	/**
+	 * app title.
+	 */
+	appTitle?: string;
+
+	/**
+	 * download percent complete (0-100).
+	 */
+	downloadPercent?: number;
+
+	/**
+	 * download state.
+	 */
+	state: "started" | "in-progress" | "completed" | "failed";
+
+	/**
+	 * app asset alias.
+	 */
+	alias?: string;
 }
