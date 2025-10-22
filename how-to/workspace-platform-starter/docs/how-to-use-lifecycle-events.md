@@ -87,6 +87,26 @@ npm run generate-module lifecycle "My Lifecycle"
 
 This will generate the code in the modules/lifecycle folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
 
+## Listening to LifeCycle Events from other module types
+
+There are times where you may want to listen to specific lifecycle events from another module type. This is possible by using the helpers to listen to the event. The following is an example of listening for when an inline app asset app is triggering a download of the app asset dynamically. Please remember that this is being called as the app asset is downloading so do any work asynchronously and try not to delay the execution. We do not await the publication of the lifecycle event but it is still best practice to try to reduce any slow work when receiving a stream of events.
+
+```js
+import type { AppAssetDownloadLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
+
+// an example of code being called in the initialize function of a module
+if (helpers.subscribeLifecycleEvent) {
+   await helpers.subscribeLifecycleEvent<AppAssetDownloadLifecyclePayload>(
+    "app-asset-download",
+    async (platform, payload) => {
+     this._logger?.info(
+      `App Asset Download Lifecycle Event Received for appId: ${payload?.appId}, alias: ${payload?.alias}, state: ${payload?.state}, downloadPercent: ${payload?.downloadPercent}`
+     );
+    }
+   );
+  }
+```
+
 ## Source Reference
 
 - [lifecycle.ts](../client/src/framework/lifecycle.ts)

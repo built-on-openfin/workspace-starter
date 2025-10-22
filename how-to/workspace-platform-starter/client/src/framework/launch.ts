@@ -886,6 +886,7 @@ export async function launchAppAsset(
 				appId: appAssetApp.appId,
 				appTitle: appAssetApp.title,
 				alias: appAssetInfo.alias,
+				downloadPercent: 0,
 				state: "started"
 			};
 			try {
