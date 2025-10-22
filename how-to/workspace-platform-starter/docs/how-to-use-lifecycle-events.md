@@ -75,6 +75,7 @@ The lifecycle events that are available to connect to are:
 - `favorite-changed` - The event is called when a favorite is set/delete, it is passed the `FavoriteChangedLifecyclePayload` payload which contains the `action` and information about the favorite.
 - `condition-changed` - The event is called when a condition is changed, it is passed the `ConditionChangedLifecyclePayload` payload which contains `conditionId` of the condition that changed, if `conditionId` us undefined, a number of conditions might have changed.
 - `language-changed` - The event is called when a language is changed, it is passed the `LanguageChangedLifecyclePayload` payload which contains `locale` which is the locale that was selected.
+- `app-asset-download` - The event is called when an inline app asset is launched and we download the app asset dynamically. During each stage from it starting to in progress, completed or failed we pass the `AppAssetDownloadLifecyclePayload` payload with the details.
 
 ## Generate From Template
 
@@ -85,6 +86,26 @@ npm run generate-module lifecycle "My Lifecycle"
 ```
 
 This will generate the code in the modules/lifecycle folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
+## Listening to LifeCycle Events from other module types
+
+There are times where you may want to listen to specific lifecycle events from another module type. This is possible by using the helpers to listen to the event. The following is an example of listening for when an inline app asset app is triggering a download of the app asset dynamically. Please remember that this is being called as the app asset is downloading so do any work asynchronously and try not to delay the execution. We do not await the publication of the lifecycle event but it is still best practice to try to reduce any slow work when receiving a stream of events.
+
+```js
+import type { AppAssetDownloadLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
+
+// an example of code being called in the initialize function of a module
+if (helpers.subscribeLifecycleEvent) {
+   await helpers.subscribeLifecycleEvent<AppAssetDownloadLifecyclePayload>(
+    "app-asset-download",
+    async (platform, payload) => {
+     this._logger?.info(
+      `App Asset Download Lifecycle Event Received for appId: ${payload?.appId}, alias: ${payload?.alias}, state: ${payload?.state}, downloadPercent: ${payload?.downloadPercent}`
+     );
+    }
+   );
+  }
+```
 
 ## Source Reference
 
