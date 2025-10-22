@@ -21,16 +21,28 @@ async function initializeDOM() {
 async function setupListeners() {
 	await usersModule.initialize();
 
-	let hasViewContactIntentHandler = false;
+	let hasIntentHandler = false;
+	let supportedIntent;
 	try {
-		const info = await fdc3.findIntent('ViewContact');
-		if (info) {
-			hasViewContactIntentHandler = true;
+		const viewProfileIntent = await fdc3.findIntent('ViewProfile');
+		if (Array.isArray(viewProfileIntent?.apps) && viewProfileIntent.apps.length > 0) {
+			hasIntentHandler = true;
+			supportedIntent = viewProfileIntent?.intent?.name;
 		}
 	} catch {}
 
-	if (!hasViewContactIntentHandler) {
-		console.warn('No ViewContact intent handler is available, will not show Raise Intent button');
+	if (!hasIntentHandler) {
+		try {
+			const viewContactIntent = await fdc3.findIntent('ViewContact');
+			if (Array.isArray(viewContactIntent?.apps) && viewContactIntent.apps.length > 0) {
+				hasIntentHandler = true;
+				supportedIntent = viewContactIntent?.intent?.name;
+			}
+		} catch {}
+	}
+
+	if (!hasIntentHandler) {
+		console.warn('No ViewProfile/ViewContact intent handler is available, will not show Raise Intent button');
 	}
 
 	const users = usersModule.getUsers();
@@ -82,12 +94,12 @@ async function setupListeners() {
 
 		actionRow.append(selectButton);
 
-		if (hasViewContactIntentHandler) {
+		if (hasIntentHandler) {
 			const raiseIntentButton = document.createElement('button');
 			raiseIntentButton.textContent = 'Raise Intent';
 			raiseIntentButton.classList.add('small');
 			raiseIntentButton.classList.add('secondary');
-			raiseIntentButton.addEventListener('click', () => raiseIntent(user));
+			raiseIntentButton.addEventListener('click', () => raiseIntent(user, supportedIntent));
 			actionRow.append(raiseIntentButton);
 		}
 

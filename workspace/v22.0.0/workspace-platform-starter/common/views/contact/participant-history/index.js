@@ -18,6 +18,7 @@ function setupListeners() {
 	try {
 		window.fdc3.addContextListener(contextHandler);
 		window.fdc3.addIntentListener('ViewContact', contextHandler);
+		window.fdc3.addIntentListener('ViewProfile', contextHandler);
 	} catch (error) {
 		console.error('There was an error while setting up all of the fdc3 listeners', error);
 	}
