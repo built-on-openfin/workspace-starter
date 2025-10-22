@@ -9,6 +9,7 @@ import {
 import { isAppPreferenceUpdatable } from "./apps";
 import { launchConnectedApp } from "./connections";
 import * as endpointProvider from "./endpoint";
+import { fireLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import { MANIFEST_TYPES } from "./manifest-types";
 import { bringViewToFront, bringWindowToFront, doesViewExist, doesWindowExist } from "./platform/browser";
@@ -24,6 +25,7 @@ import type {
 	HostLaunchOptions
 } from "./shapes/app-shapes";
 import type { WindowPositioningOptions } from "./shapes/browser-shapes";
+import type { AppAssetDownloadLifecyclePayload } from "./shapes/lifecycle-shapes";
 import * as snapProvider from "./snap";
 import { formatError, getCommandLineArgs, isEmpty, isStringValue, objectClone, randomUUID } from "./utils";
 import { getWindowPositionOptions, getWindowPositionUsingStrategy } from "./utils-position";
@@ -880,13 +882,39 @@ export async function launchAppAsset(
 		}
 		if (isEmpty(availableAppAsset) || appAssetInfo.version !== availableAppAsset.version) {
 			logger.info(`App asset with alias: ${appAssetInfo.alias} does not exist in memory. Fetching it.`);
+			const appAssetDownloadEvent: AppAssetDownloadLifecyclePayload = {
+				appId: appAssetApp.appId,
+				appTitle: appAssetApp.title,
+				alias: appAssetInfo.alias,
+				state: "started"
+			};
 			try {
+				await fireLifecycleEvent(getCurrentSync(), "app-asset-download", appAssetDownloadEvent);
 				await fin.System.downloadAsset(appAssetInfo, (progress) => {
 					const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
+					appAssetDownloadEvent.state = "in-progress";
+					appAssetDownloadEvent.downloadPercent = downloadedPercent;
+					fireLifecycleEvent(getCurrentSync(), "app-asset-download", appAssetDownloadEvent)
+						.then(() => {
+							logger.debug(`Fired app-asset-download lifecycle event for appId: ${appAssetApp.appId}`);
+							return true;
+						})
+						.catch((lifecycleError) => {
+							logger.error(
+								`Error firing app-asset-download lifecycle event for appId: ${appAssetApp.appId}`,
+								lifecycleError
+							);
+						});
 					logger.info(`Downloaded ${downloadedPercent}% of app asset with appId of ${appAssetApp.appId}`);
 				});
+				appAssetDownloadEvent.state = "completed";
+				appAssetDownloadEvent.downloadPercent = 100;
+				await fireLifecycleEvent(getCurrentSync(), "app-asset-download", appAssetDownloadEvent);
 			} catch (error) {
 				logger.error(`Error trying to download app asset with app id: ${appAssetApp.appId}`, error);
+				appAssetDownloadEvent.state = "failed";
+				appAssetDownloadEvent.downloadPercent = 0;
+				await fireLifecycleEvent(getCurrentSync(), "app-asset-download", appAssetDownloadEvent);
 				return;
 			}
 		}

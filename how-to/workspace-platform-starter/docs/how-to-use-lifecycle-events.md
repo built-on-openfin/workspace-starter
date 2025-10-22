@@ -75,6 +75,7 @@ The lifecycle events that are available to connect to are:
 - `favorite-changed` - The event is called when a favorite is set/delete, it is passed the `FavoriteChangedLifecyclePayload` payload which contains the `action` and information about the favorite.
 - `condition-changed` - The event is called when a condition is changed, it is passed the `ConditionChangedLifecyclePayload` payload which contains `conditionId` of the condition that changed, if `conditionId` us undefined, a number of conditions might have changed.
 - `language-changed` - The event is called when a language is changed, it is passed the `LanguageChangedLifecyclePayload` payload which contains `locale` which is the locale that was selected.
+- `app-asset-download` - The event is called when an inline app asset is launched and we download the app asset dynamically. During each stage from it starting to in progress, completed or failed we pass the `AppAssetDownloadLifecyclePayload` payload with the details.
 
 ## Generate From Template
 
