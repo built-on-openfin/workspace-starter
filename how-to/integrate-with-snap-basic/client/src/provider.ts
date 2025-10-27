@@ -85,7 +85,7 @@ async function initializeDOM(): Promise<void> {
 	btnGetGroupsForCurrentWindow = document.querySelector<HTMLButtonElement>("#btnGetGroupsForCurrentWindow");
 	logging = document.querySelector<HTMLPreElement>("#logging");
 	btnClearLog = document.querySelector<HTMLButtonElement>("#btnClearLog");
-	btnShowHideDebugWindow = document.querySelector<HTMLButtonElement>("#btnShowDebugWindow");
+	btnShowHideDebugWindow = document.querySelector<HTMLButtonElement>("#btnShowHideDebugWindow");
 
 	if (
 		chkShowDebugWindow &&
@@ -557,7 +557,10 @@ async function launchWindowOptionsApp(): Promise<void> {
 		// window does not exist, so create it
 		await fin.Window.create({
 			name: windowOptionsName,
-			url: "https://built-on-openfin.github.io/container-starter/v34/use-window-options/html/app.html"
+			autoShow: true,
+			defaultHeight: 600,
+			defaultWidth: 800,
+			url: "https://built-on-openfin.github.io/container-starter/main/use-window-options/html/app.html"
 		});
 	}
 }

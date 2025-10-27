@@ -10,6 +10,8 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"defaultHeight": 800,
+		"defaultWidth": 800,
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {

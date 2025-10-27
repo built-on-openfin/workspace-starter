@@ -9,6 +9,8 @@
 		"uuid": "integrate-with-snap-basic",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
+		"defaultHeight": 800,
+		"defaultWidth": 800,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
