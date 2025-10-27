@@ -87,9 +87,12 @@ export async function initializeDock3API(
 
 						// Update favorites if the entry exists there
 						if (currentConfig.favorites) {
-							const updatedFavorites = currentConfig.favorites.map((favorite) =>
-								(favorite.id === entryId ? { ...favorite, bookmarked: true } : favorite)
-							);
+							const updatedFavorites = currentConfig.favorites.map((favorite) => {
+								if (favorite.id === entryId) {
+									return { ...favorite, bookmarked: true };
+								}
+								return favorite;
+							});
 							currentConfig.favorites = updatedFavorites;
 						}
 
