@@ -174,7 +174,7 @@ async function initializeDOM(): Promise<void> {
 					};
 					await server.start(options);
 
-					if(chkShowDebugWindow?.checked) {
+					if (chkShowDebugWindow?.checked) {
 						debugWindowShown = true;
 					} else {
 						debugWindowShown = false;
