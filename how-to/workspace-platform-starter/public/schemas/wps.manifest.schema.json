@@ -2343,6 +2343,10 @@
 		"LockUnlockPageConfig": {
 			"$ref": "#/definitions/__type_36"
 		},
+		"LogTypes": {
+			"enum": ["app", "debug", "debug:self", "debug:self:archive", "debug:self:archive:last", "rvm"],
+			"type": "string"
+		},
 		"LogUploadOptions": {
 			"$ref": "#/definitions/__type_81"
 		},
@@ -5578,6 +5582,16 @@
 						},
 						"futureVersion": {
 							"type": "string"
+						},
+						"policies": {
+							"additionalProperties": false,
+							"properties": {
+								"CloudAPAuthEnabled": {
+									"enum": ["disabled", "enabled"],
+									"type": "string"
+								}
+							},
+							"type": "object"
 						},
 						"version": {
 							"type": "string"
@@ -10233,7 +10247,7 @@
 		},
 		"__type_75": {
 			"additionalProperties": false,
-			"description": "Map of preload scripts that can enable new scripts or disable options defined preloadScripts.",
+			"description": "Enables or disables specific preload scripts by URL.\n\nUses the script's full URL as the key and an object\nwith an `enabled` boolean property as the value.",
 			"type": "object"
 		},
 		"__type_76": {
@@ -10356,9 +10370,9 @@
 					"type": "string"
 				},
 				"logs": {
-					"description": "An array of strings that specifies which logs should be uploaded.",
+					"description": "An array of strings that specifies which logs should be uploaded.\napp: Uploads app logs\nrvm: Uploads rvm logs\ndebug: Uploads debug logs\ndebug:self: Uploads the most current debug log the current application\ndebug:self:archive: Uploads all debug logs for the current application\ndebug:self:archive:last: Uploads the last two debug logs for the current application\n\nFor the debug log options, the one with the most specific matching pattern will be used.",
 					"items": {
-						"type": "string"
+						"$ref": "#/definitions/LogTypes"
 					},
 					"type": "array"
 				},
@@ -10368,6 +10382,10 @@
 						"type": "string"
 					},
 					"type": "array"
+				},
+				"sizeLimit": {
+					"description": "Max file size limit in Megabytes for the logs archive.",
+					"type": "number"
 				},
 				"ui": {
 					"$ref": "#/definitions/LogUploaderUIOptions"

@@ -3,9 +3,11 @@
 ## v22.0.0
 
 - Update to latest version of npm packages.
-- Update to the latest version of snap 1.3.1
+- Update to the latest version of snap 1.3.3
 - Updated the contact samples in public/common to include interop json files to describe their interop capabilities and added support for ViewProfile alongside ViewContact.
 - Exposed a new lifecycle event - app-asset-download for when the platform starts the check to see if an inline-app-asset needs downloading (state: "started" | "in-progress" | "completed" | "failed";) downloadPercent and appId and title are included as well. An inline-app-asset may go from started to completed straight away if it is already downloaded. This can be accessible by modules through the helper functions so you can decide to publish notifications or show a UI to complement the logging that already happens. Updated [how-to-use-lifecycle-events.md](./docs/how-to-use-lifecycle-events.md) documentation.
+- Upgraded cloud interop to 0.42.114
+- Upgraded Snap to 1.3.3
 
 ## v21.0.0
 
@@ -22,7 +24,7 @@
 - Added an [AuthClient](./client/src/framework/shapes/auth-shapes.ts) that is optionally passed to modules (it will be passed but is passed as an optional in case you ever want to restrict it) through a getAuthClient function. If the getAuthClient function is available then an authClient will be returned if configured (otherwise a warning and undefined is returned). This can be used if you want to create your own log out buttons or if you want to retrieve the current user info without using the lifecycle event.
 - Added a new browserProvider option to have a different strategy when a window is requested to be brought to front. The default (existing approach) is that the window has [setAsForeground](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#setAsForeground) called against it. The alternative strategies are [bringToFront](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#bringToFront) and bringToFrontAndFocus which calls [bringToFront](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#bringToFront) followed by [focus](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.Window.html#focus). The new setting is browserProvider.bringToFrontStrategy.
 - Upgraded to Snap 1.1.0 and removed the serverAssetInfo from the manifest as Snap now fetches the app asset if it isn't specified. See [how to configure snap](./docs/how-to-configure-snap.md).
-- Upgraded Cloud Interop to 0.42.103 and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
+- Upgraded Cloud Interop and updated the [cloud interop override example](./client/src/modules/interop-override/openfin-cloud-interop/interop-override.ts)
 
 ## v20.0.0
 

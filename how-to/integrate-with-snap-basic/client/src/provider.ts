@@ -19,6 +19,7 @@ let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
 let btnNativeTestApp: HTMLButtonElement | null;
 let btnWindowTestApp: HTMLButtonElement | null;
+let btnShowHideDebugWindow: HTMLButtonElement | null;
 let selAttachPosition: HTMLSelectElement | null;
 let selSnapKey: HTMLSelectElement | null;
 let selUnsnapKey: HTMLSelectElement | null;
@@ -34,6 +35,7 @@ let btnGetGroupsForCurrentWindow: HTMLButtonElement | null;
 let btnClearLog: HTMLButtonElement | null;
 let serverStatus: HTMLParagraphElement | null;
 let logging: HTMLPreElement | null;
+let debugWindowShown = false;
 
 let serverState: "starting" | "started" | "stopping" | "stopped" = "stopped";
 let isWindowOpen = false;
@@ -83,6 +85,7 @@ async function initializeDOM(): Promise<void> {
 	btnGetGroupsForCurrentWindow = document.querySelector<HTMLButtonElement>("#btnGetGroupsForCurrentWindow");
 	logging = document.querySelector<HTMLPreElement>("#logging");
 	btnClearLog = document.querySelector<HTMLButtonElement>("#btnClearLog");
+	btnShowHideDebugWindow = document.querySelector<HTMLButtonElement>("#btnShowDebugWindow");
 
 	if (
 		chkShowDebugWindow &&
@@ -106,7 +109,8 @@ async function initializeDOM(): Promise<void> {
 		btnGetAttached &&
 		btnGetGroups &&
 		btnGetGroupsForCurrentWindow &&
-		btnClearLog
+		btnClearLog &&
+		btnShowHideDebugWindow
 	) {
 		const app = await fin.Application.getCurrent();
 		const manifest = await app.getManifest();
@@ -170,6 +174,11 @@ async function initializeDOM(): Promise<void> {
 					};
 					await server.start(options);
 
+					if(chkShowDebugWindow?.checked) {
+						debugWindowShown = true;
+					} else {
+						debugWindowShown = false;
+					}
 					await server.enableAutoWindowRegistration();
 
 					server.addEventListener("client-registered", (event: Snap.ClientRegisteredEvent) => {
@@ -333,6 +342,12 @@ async function initializeDOM(): Promise<void> {
 					logInformation(`Group Id For Current Window: ${groupId}`);
 				}
 			});
+			btnShowHideDebugWindow.addEventListener("click", async () => {
+				if (server) {
+					debugWindowShown = !debugWindowShown;
+					await server.showDebugWindow(debugWindowShown);
+				}
+			});
 			updateServerStatus();
 		}
 	}
@@ -372,7 +387,8 @@ function updateServerStatus(): void {
 		btnGetLayout &&
 		btnGetAttached &&
 		btnGetGroups &&
-		btnGetGroupsForCurrentWindow
+		btnGetGroupsForCurrentWindow &&
+		btnShowHideDebugWindow
 	) {
 		if (serverState === "starting" || serverState === "stopping") {
 			chkShowDebugWindow.disabled = true;
@@ -386,6 +402,7 @@ function updateServerStatus(): void {
 			btnGetAttached.disabled = true;
 			btnGetGroups.disabled = true;
 			btnGetGroupsForCurrentWindow.disabled = true;
+			btnShowHideDebugWindow.disabled = true;
 			serverStatus.textContent = `Snap Server is ${serverState}`;
 		} else if (serverState === "started") {
 			chkShowDebugWindow.disabled = true;
@@ -399,6 +416,7 @@ function updateServerStatus(): void {
 			btnGetAttached.disabled = false;
 			btnGetGroups.disabled = false;
 			btnGetGroupsForCurrentWindow.disabled = false;
+			btnShowHideDebugWindow.disabled = false;
 			serverStatus.textContent = "Snap Server is started";
 		} else {
 			chkShowDebugWindow.disabled = false;
@@ -412,6 +430,7 @@ function updateServerStatus(): void {
 			btnGetAttached.disabled = true;
 			btnGetGroups.disabled = true;
 			btnGetGroupsForCurrentWindow.disabled = true;
+			btnShowHideDebugWindow.disabled = true;
 			serverStatus.textContent = "Snap Server is stopped";
 		}
 	}
