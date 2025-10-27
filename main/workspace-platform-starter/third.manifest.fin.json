@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=workspace-platform-starter-for-fdc3",
-		"version": "42.138.100.107"
+		"version": "42.138.102.4"
 	},
 	"platform": {
 		"name": "Workspace Platform Starter FDC3",

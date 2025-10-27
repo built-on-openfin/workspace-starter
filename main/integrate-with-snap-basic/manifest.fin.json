@@ -3,12 +3,14 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "42.138.100.107"
+		"version": "42.138.102.4"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-snap-basic/favicon.ico",
 		"autoShow": true,
+		"defaultHeight": 800,
+		"defaultWidth": 800,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-snap-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
