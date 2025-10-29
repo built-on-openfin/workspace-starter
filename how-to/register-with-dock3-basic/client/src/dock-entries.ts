@@ -481,7 +481,7 @@ export const overFlowDockFavorites: DockEntry[] = [
 		label: "Figma",
 		icon: "https://img.icons8.com/color/48/figma.png",
 		id: "figma",
-			type: "item",
+		type: "item",
 		itemData: {
 			url: "https://www.figma.com"
 		}
