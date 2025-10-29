@@ -6,7 +6,7 @@ import type {
 	LaunchDockEntryPayload
 } from "@openfin/workspace-platform";
 
-import { Dock } from "@openfin/workspace-platform";
+import { Dock, getCurrentSync } from "@openfin/workspace-platform";
 import type { ContentMenuEntry } from "@openfin/workspace/client-api-platform/src/shapes";
 
 /**
@@ -48,6 +48,21 @@ export async function initializeDock3API(
 					 */
 					public async launchEntry(payload: LaunchDockEntryPayload): Promise<void> {
 						console.log("Launching Dock Entry:", payload);
+						const platform = getCurrentSync();
+
+						// Launch the entry with the URL from the itemData.
+						//
+						// The itemData field of "DockEntry" can have any type of data,
+						// so we need to check if the url is present in this implementation.
+						// For more advanced use cases, you can use the itemData field to pass
+						// more complex data. For example, you could pass a "contentId" field
+						// that could be used to look up the entry in an app/content directory
+						// and determine how to launch it (e.g is it a native app, web content, etc).
+						if (payload.entry.itemData?.url) {
+							await platform.createView({ url: payload.entry.itemData?.url });
+						} else {
+							console.error("No URL found for dock entry:", payload.entry);
+						}
 					}
 
 					/**
