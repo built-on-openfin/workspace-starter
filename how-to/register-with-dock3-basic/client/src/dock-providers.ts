@@ -1,5 +1,5 @@
 import type { Dock3Config } from "@openfin/workspace-platform";
-import { defaultContentMenu, defaultDockFavorites } from "./dock-entries";
+import { defaultContentMenu, defaultDockFavorites, overFlowDockFavorites } from "./dock-entries";
 
 const sampleProviders = {
 	google: {
@@ -36,7 +36,7 @@ const sampleProviders = {
 		id: "nameless",
 		title: "",
 		icon: "",
-		favorites: [],
+		favorites: overFlowDockFavorites,
 		contentMenu: []
 	}
 };
