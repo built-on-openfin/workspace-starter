@@ -10,7 +10,75 @@
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter-basic/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter-basic/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true
+		"preventQuitOnLastWindowClosed": true,
+		"interopBrokerConfiguration": {
+			"contextGroups": [
+				{
+					"id": "fdc3.channel.1",
+					"displayMetadata": {
+						"name": "Channel 1",
+						"color": "red",
+						"glyph": "1"
+					}
+				},
+				{
+					"id": "fdc3.channel.2",
+					"displayMetadata": {
+						"name": "Channel 2",
+						"color": "orange",
+						"glyph": "2"
+					}
+				},
+				{
+					"id": "fdc3.channel.3",
+					"displayMetadata": {
+						"name": "Channel 3",
+						"color": "yellow",
+						"glyph": "3"
+					}
+				},
+				{
+					"id": "fdc3.channel.4",
+					"displayMetadata": {
+						"name": "Channel 4",
+						"color": "green",
+						"glyph": "4"
+					}
+				},
+				{
+					"id": "fdc3.channel.5",
+					"displayMetadata": {
+						"name": "Channel 5",
+						"color": "cyan",
+						"glyph": "5"
+					}
+				},
+				{
+					"id": "fdc3.channel.6",
+					"displayMetadata": {
+						"name": "Channel 6",
+						"color": "blue",
+						"glyph": "6"
+					}
+				},
+				{
+					"id": "fdc3.channel.7",
+					"displayMetadata": {
+						"name": "Channel 7",
+						"color": "magenta",
+						"glyph": "7"
+					}
+				},
+				{
+					"id": "fdc3.channel.8",
+					"displayMetadata": {
+						"name": "Channel 8",
+						"color": "purple",
+						"glyph": "8"
+					}
+				}
+			]
+		}
 	},
 	"shortcut": {
 		"company": "OpenFin",
