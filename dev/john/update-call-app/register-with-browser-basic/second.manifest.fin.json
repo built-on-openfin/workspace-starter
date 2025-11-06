@@ -1,0 +1,131 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "42.138.102.4"
+	},
+	"platform": {
+		"uuid": "register-with-browser-basic-asar",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-call-app/register-with-browser-basic/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-call-app/register-with-browser-basic/platform/provider.html",
+		"preventQuitOnLastWindowClosed": false,
+		"permissions": {
+			"System": {
+				"downloadAsset": true,
+				"serveAsset": true
+			}
+		}
+	},
+	"shortcut": {
+		"company": "OpenFin",
+		"description": "A way of showing examples of what OpenFin can do.",
+		"icon": "https://www.openfin.co/favicon.ico",
+		"name": "Register with Browser - Basic - v22.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "OpenFin",
+		"product": "Workspace Starter - Register With Browser Basic - Self Host - Client",
+		"email": "support@openfin.co",
+		"forwardErrorReports": true
+	},
+	"appAssets": [
+		{
+			"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/update-call-app/register-with-browser-basic/assets/workspace_platform.zip",
+			"alias": "self-hosted-workspace-platform",
+			"version": "22.0.0",
+			"target": "workspace.asar"
+		}
+	],
+	"snapshot": {
+		"windows": [
+			{
+				"defaultHeight": 900,
+				"defaultWidth": 1200,
+				"layout": {
+					"content": [
+						{
+							"type": "row",
+							"content": [
+								{
+									"type": "column",
+									"width": 100,
+									"content": [
+										{
+											"type": "row",
+											"height": 50,
+											"content": [
+												{
+													"type": "stack",
+													"width": 100,
+													"height": 100,
+													"content": [
+														{
+															"type": "component",
+															"componentName": "view",
+															"componentState": {
+																"url": "https://resources.here.io/docs/core/hc-ui/",
+																"componentName": "view",
+																"interop": {},
+																"workspacePlatform": {
+																	"browserNavigationButtons": {
+																		"back": true,
+																		"forward": true,
+																		"reload": true
+																	}
+																}
+															},
+															"title": "Here Core UI Docs"
+														}
+													]
+												}
+											]
+										},
+										{
+											"type": "row",
+											"height": 50,
+											"content": [
+												{
+													"type": "column",
+													"width": 100,
+													"content": [
+														{
+															"type": "stack",
+															"width": 100,
+															"height": 100,
+															"content": [
+																{
+																	"type": "component",
+																	"componentName": "view",
+																	"componentState": {
+																		"url": "https://developer.openfin.co/workspace/docs/platform/latest/index.html",
+																		"componentName": "view",
+																		"interop": {},
+																		"workspacePlatform": {
+																			"browserNavigationButtons": {
+																				"back": true,
+																				"forward": true,
+																				"reload": true
+																			}
+																		}
+																	},
+																	"title": "Workspace Platform API Docs"
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		]
+	}
+}
