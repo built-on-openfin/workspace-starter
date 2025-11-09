@@ -11,6 +11,26 @@
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
+		"defaultWindowOptions": {
+			"workspacePlatform": {
+				"pageTabDimensions": {
+					"minWidth": "30px",
+					"maxWidth": "400px"
+				},
+				"viewTabDimensions": {
+					"minWidth": "50px",
+					"maxWidth": "400px"
+				}
+			},
+			"experimental": {
+				"showFavicons": true
+			},
+			"preloadScripts": [
+				{
+					"url": "http://localhost:8080/tab/tab-extension.js"
+				}
+			]
+		},
 		"interopBrokerConfiguration": {
 			"contextGroups": [
 				{
