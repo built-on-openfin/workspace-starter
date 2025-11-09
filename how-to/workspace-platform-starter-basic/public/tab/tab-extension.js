@@ -48,13 +48,14 @@ setTimeout(() => {
 
         .browser-tabs-selected-label {
             display: none;
-            padding: 0 12px 0 8px;
+            padding: 0 0 0 8px;
             color: var(--tab-font-color, #a5aebd);
             font-size: 12px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 200px;
+            min-width: 0;
+            flex: 1 1 auto;
             line-height: 28px;
             cursor: pointer;
             -webkit-app-region: no-drag;
@@ -65,6 +66,27 @@ setTimeout(() => {
         }
 
         .browser-tabs-scroll-buttons-container.visible .browser-tabs-selected-label {
+            display: block;
+        }
+
+        .browser-tabs-resize-handle {
+            display: none;
+            width: 1px;
+            height: 20px;
+            background-color: var(--tab-font-color, #a5aebd);
+            cursor: ew-resize;
+            flex-shrink: 0;
+            margin: 0 8px;
+            position: relative;
+            -webkit-app-region: no-drag;
+        }
+
+        .browser-tabs-resize-handle:hover {
+            background-color: #fff;
+            width: 2px;
+        }
+
+        .browser-tabs-scroll-buttons-container.visible .browser-tabs-resize-handle {
             display: block;
         }
     `;
@@ -109,6 +131,11 @@ setTimeout(() => {
     selectedLabel.className = 'browser-tabs-selected-label';
     selectedLabel.textContent = '';
 
+    // Create resize handle (pipe separator)
+    const resizeHandle = document.createElement('div');
+    resizeHandle.className = 'browser-tabs-resize-handle';
+    resizeHandle.setAttribute('aria-label', 'Resize label width');
+
     // Create right scroll button
     const rightButton = document.createElement('button');
     rightButton.className = 'browser-tabs-scroll-button right';
@@ -120,8 +147,9 @@ setTimeout(() => {
         </svg>
     `;
 
-    // Add label and buttons to container (label first, then buttons)
+    // Add label, resize handle, and buttons to container
     buttonsContainer.appendChild(selectedLabel);
+    buttonsContainer.appendChild(resizeHandle);
     buttonsContainer.appendChild(leftButton);
     buttonsContainer.appendChild(rightButton);
 
@@ -135,6 +163,7 @@ setTimeout(() => {
             const title = selectedTab.getAttribute('title');
             console.log('Selected tab title:', title);
             selectedLabel.textContent = title || '';
+            selectedLabel.setAttribute('title', title || '');
         }
     }
 
@@ -208,6 +237,42 @@ setTimeout(() => {
         if (selectedTab) {
             selectedTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+    });
+
+    // Drag functionality for resize handle
+    let startX = 0;
+    let startWidth = 0;
+    const minWidth = 0;
+
+    const handleMouseMove = (e) => {
+        const deltaX = e.clientX - startX;
+        const newWidth = Math.max(minWidth, startWidth + deltaX);
+        
+        if (newWidth === 0) {
+            selectedLabel.style.display = 'none';
+            selectedLabel.style.maxWidth = '0px';
+        } else {
+            selectedLabel.style.display = 'block';
+            selectedLabel.style.maxWidth = `${newWidth}px`;
+        }
+    };
+
+    const handleMouseUp = () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+    };
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+        startX = e.clientX;
+        startWidth = selectedLabel.offsetWidth;
+        e.preventDefault();
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+        
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
     });
 
     console.log('Browser Tabs scroll controls initialized', {
