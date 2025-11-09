@@ -12,14 +12,13 @@ setTimeout(() => {
             align-items: center;
             height: 100%;
             gap: 0;
-            margin-left: 16px;
         }
 
         .browser-tabs-scroll-buttons-container.visible {
             display: flex;
         }
 
-                .browser-tabs-scroll-button {
+        .browser-tabs-scroll-button {
             width: 28px;
             height: 28px;
             display: inline-flex;
@@ -45,6 +44,28 @@ setTimeout(() => {
         .browser-tabs-scroll-button svg {
             width: 16px;
             height: 16px;
+        }
+
+        .browser-tabs-selected-label {
+            display: none;
+            padding: 0 12px 0 8px;
+            color: var(--tab-font-color, #a5aebd);
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+            line-height: 28px;
+            cursor: pointer;
+            -webkit-app-region: no-drag;
+        }
+
+        .browser-tabs-selected-label:hover {
+            opacity: 0.8;
+        }
+
+        .browser-tabs-scroll-buttons-container.visible .browser-tabs-selected-label {
+            display: block;
         }
     `;
     document.head.appendChild(style);
@@ -83,6 +104,11 @@ setTimeout(() => {
         </svg>
     `;
 
+    // Create selected tab label
+    const selectedLabel = document.createElement('span');
+    selectedLabel.className = 'browser-tabs-selected-label';
+    selectedLabel.textContent = '';
+
     // Create right scroll button
     const rightButton = document.createElement('button');
     rightButton.className = 'browser-tabs-scroll-button right';
@@ -94,58 +120,94 @@ setTimeout(() => {
         </svg>
     `;
 
-    // Add buttons to container
+    // Add label and buttons to container (label first, then buttons)
+    buttonsContainer.appendChild(selectedLabel);
     buttonsContainer.appendChild(leftButton);
     buttonsContainer.appendChild(rightButton);
 
     // Append buttons container to the left controls (will appear on the right side due to marginLeft: auto)
     leftControlsContainer.appendChild(buttonsContainer);
 
+    // Function to update selected tab label
+    function updateSelectedTabLabel() {
+        const selectedTab = tabsContainer.querySelector('[aria-selected="true"]');
+        if (selectedTab) {
+            const title = selectedTab.getAttribute('title');
+            console.log('Selected tab title:', title);
+            selectedLabel.textContent = title || '';
+        }
+    }
+
     // Function to check if scrollable and show/hide buttons
     function updateScrollButtons() {
         const isScrollable = tabsContainer.scrollWidth > tabsContainer.clientWidth;
-        
         buttonsContainer.classList.toggle('visible', isScrollable);
-        
-        console.log('Tabs scrollable:', isScrollable, {
-            scrollWidth: tabsContainer.scrollWidth,
-            clientWidth: tabsContainer.clientWidth
-        });
+        updateSelectedTabLabel();
     }
 
     // Initial check
     updateScrollButtons();
 
     // Watch for changes (when tabs are added/removed)
-    const observer = new ResizeObserver(updateScrollButtons);
-    observer.observe(tabsContainer);
+    const resizeObserver = new ResizeObserver(updateScrollButtons);
+    resizeObserver.observe(tabsContainer);
+
+    // Watch for tab selection changes and title updates
+    const mutationObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'attributes') {
+                // Update label when tab is selected or when selected tab's title changes
+                if (mutation.attributeName === 'aria-selected' || 
+                    (mutation.attributeName === 'title' && mutation.target.getAttribute('aria-selected') === 'true')) {
+                    updateSelectedTabLabel();
+                    break;
+                }
+            }
+        }
+    });
+    
+    // Observe all tabs for aria-selected and title changes
+    mutationObserver.observe(tabsContainer, {
+        attributes: true,
+        attributeFilter: ['aria-selected', 'title'],
+        subtree: true
+    });
 
     // Add click handlers for scrolling
     leftButton.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Left button clicked, scrolling left');
         tabsContainer.scrollBy({ left: -200, behavior: 'smooth' });
     });
-    
-    leftButton.addEventListener('mousedown', (e) => {
-        console.log('Left button mousedown detected');
+
+    // Right-click on left button to scroll to start
+    leftButton.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        tabsContainer.scrollTo({ left: 0, behavior: 'smooth' });
     });
 
     rightButton.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Right button clicked, scrolling right');
         tabsContainer.scrollBy({ left: 200, behavior: 'smooth' });
     });
-    
-    rightButton.addEventListener('mousedown', (e) => {
-        console.log('Right button mousedown detected');
+
+    // Right-click on right button to scroll to end
+    rightButton.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        tabsContainer.scrollTo({ left: tabsContainer.scrollWidth, behavior: 'smooth' });
     });
-    
-    // Add mouseover to test if buttons are receiving any events
-    buttonsContainer.addEventListener('mouseover', () => {
-        console.log('Mouse over buttons container');
+
+    // Click on label to scroll selected tab into view
+    selectedLabel.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const selectedTab = tabsContainer.querySelector('[aria-selected="true"]');
+        if (selectedTab) {
+            selectedTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
     });
 
     console.log('Browser Tabs scroll controls initialized', {
