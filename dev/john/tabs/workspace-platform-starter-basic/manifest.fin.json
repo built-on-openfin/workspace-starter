@@ -11,6 +11,26 @@
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/tabs/workspace-platform-starter-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
+		"defaultWindowOptions": {
+			"workspacePlatform": {
+				"pageTabDimensions": {
+					"minWidth": "30px",
+					"maxWidth": "400px"
+				},
+				"viewTabDimensions": {
+					"minWidth": "50px",
+					"maxWidth": "400px"
+				}
+			},
+			"experimental": {
+				"showFavicons": true
+			},
+			"preloadScripts": [
+				{
+					"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/tabs/workspace-platform-starter-basic/tab/tab-extension.js"
+				}
+			]
+		},
 		"interopBrokerConfiguration": {
 			"contextGroups": [
 				{
