@@ -179,16 +179,23 @@ setTimeout(() => {
 				buttonsContainer.classList.toggle('visible', isScrollable);
 				updateSelectedTabLabel();
 
-				// Add padding to tabs to make space for controls
-				if (isScrollable) {
-					// Wait for display to update, then measure
-					requestAnimationFrame(() => {
-						const controlsWidth = buttonsContainer.offsetWidth;
-						tabsContainer.style.paddingLeft = `${controlsWidth}px`;
-					});
-				} else {
-					tabsContainer.style.paddingLeft = '';
-				}
+				// Calculate available space for tabs
+				requestAnimationFrame(() => {
+					const headerWidth = header.offsetWidth;
+					const lmControls = header.querySelector('.lm_controls');
+					const newTabButton = header.querySelector('.newTabButton');
+					const controlsWidth = lmControls ? lmControls.offsetWidth : 0;
+					const newTabButtonWidth = newTabButton ? newTabButton.offsetWidth : 0;
+					const buttonsWidth = isScrollable ? buttonsContainer.offsetWidth : 0;
+					
+					// Reserve space for: scroll buttons + newTabButton + lm_controls + margin
+					const reservedSpace = buttonsWidth + newTabButtonWidth + controlsWidth + 10;
+					const availableWidth = headerWidth - reservedSpace;
+					
+					// Set max-width on tabs container and padding for scroll buttons
+					tabsContainer.style.maxWidth = `${availableWidth}px`;
+					tabsContainer.style.paddingLeft = isScrollable ? `${buttonsWidth}px` : '';
+				});
 			}
 
 			// Initial check
