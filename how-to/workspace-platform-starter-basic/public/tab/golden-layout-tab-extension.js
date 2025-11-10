@@ -5,6 +5,10 @@ setTimeout(() => {
 		const style = document.createElement('style');
 		style.textContent = `
         /* Golden Layout Tabs Scroll Controls */
+        .lm_header {
+            position: relative;
+        }
+
         .lm-tabs-scroll-buttons-container {
             display: none;
             flex-direction: row;
@@ -12,7 +16,12 @@ setTimeout(() => {
             align-items: center;
             height: 100%;
             gap: 0;
-            margin-right: 8px;
+            background-color: var(--tab-background-color, #1e1f23);
+            padding: 0 4px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
         }
 
         .lm-tabs-scroll-buttons-container.visible {
@@ -90,18 +99,6 @@ setTimeout(() => {
         .lm-tabs-scroll-buttons-container.visible .lm-tabs-resize-handle {
             display: block;
         }
-
-        /* Adjust header to accommodate controls */
-        .lm_header {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
-
-        .lm_tabs {
-            flex: 1 1 auto;
-            min-width: 0;
-        }
     `;
 		document.head.append(style);
 
@@ -161,8 +158,8 @@ setTimeout(() => {
 			buttonsContainer.append(leftButton);
 			buttonsContainer.append(rightButton);
 
-			// Insert controls before tabs container
-			header.insertBefore(buttonsContainer, tabsContainer);
+			// Insert controls as first child of header (before newTabButton and tabs)
+			header.insertBefore(buttonsContainer, header.firstChild);
 
 			// Function to update selected tab label
 			function updateSelectedTabLabel() {
@@ -181,6 +178,17 @@ setTimeout(() => {
 
 				buttonsContainer.classList.toggle('visible', isScrollable);
 				updateSelectedTabLabel();
+
+				// Add padding to tabs to make space for controls
+				if (isScrollable) {
+					// Wait for display to update, then measure
+					requestAnimationFrame(() => {
+						const controlsWidth = buttonsContainer.offsetWidth;
+						tabsContainer.style.paddingLeft = `${controlsWidth}px`;
+					});
+				} else {
+					tabsContainer.style.paddingLeft = '';
+				}
 			}
 
 			// Initial check
