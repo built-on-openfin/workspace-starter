@@ -102,6 +102,10 @@ setTimeout(() => {
     `;
 		document.head.append(style);
 
+		/**
+		 * Initialize scroll controls for a given Golden Layout stack.
+		 * @param stack stack element to bind to.
+		 */
 		function initializeStackControls(stack) {
 			const header = stack.querySelector('.lm_header');
 			const tabsContainer = stack.querySelector('.lm_tabs');
@@ -161,7 +165,9 @@ setTimeout(() => {
 			// Insert controls as first child of header (before newTabButton and tabs)
 			header.insertBefore(buttonsContainer, header.firstChild);
 
-			// Function to update selected tab label
+			/**
+			 * Update the label showing the title of the selected tab.
+			 */
 			function updateSelectedTabLabel() {
 				const selectedTab = tabsContainer.querySelector('.lm_tab[aria-selected="true"]');
 				if (selectedTab) {
@@ -171,10 +177,13 @@ setTimeout(() => {
 				}
 			}
 
-			// Function to check if scrollable and show/hide buttons
+			/**
+			 * Update the visibility of scroll buttons based on scrollability.
+			 */
 			function updateScrollButtons() {
 				const scrollShadows = tabsContainer.querySelectorAll('.scroll-shadow');
-				const isScrollable = scrollShadows.length > 0 && tabsContainer.scrollWidth > tabsContainer.clientWidth;
+				const isScrollable =
+					scrollShadows.length > 0 && tabsContainer.scrollWidth > tabsContainer.clientWidth;
 
 				buttonsContainer.classList.toggle('visible', isScrollable);
 				updateSelectedTabLabel();
@@ -187,11 +196,11 @@ setTimeout(() => {
 					const controlsWidth = lmControls ? lmControls.offsetWidth : 0;
 					const newTabButtonWidth = newTabButton ? newTabButton.offsetWidth : 0;
 					const buttonsWidth = isScrollable ? buttonsContainer.offsetWidth : 0;
-					
+
 					// Reserve space for: scroll buttons + newTabButton + lm_controls + margin
 					const reservedSpace = buttonsWidth + newTabButtonWidth + controlsWidth + 10;
 					const availableWidth = headerWidth - reservedSpace;
-					
+
 					// Set max-width on tabs container and padding for scroll buttons
 					tabsContainer.style.maxWidth = `${availableWidth}px`;
 					tabsContainer.style.paddingLeft = isScrollable ? `${buttonsWidth}px` : '';
@@ -208,15 +217,14 @@ setTimeout(() => {
 			// Watch for tab selection changes and title updates
 			const mutationObserver = new MutationObserver((mutations) => {
 				for (const mutation of mutations) {
-					if (mutation.type === 'attributes') {
-						// Update label when tab is selected or when selected tab's title changes
-						if (
-							mutation.attributeName === 'aria-selected' ||
-							(mutation.attributeName === 'title' && mutation.target.getAttribute('aria-selected') === 'true')
-						) {
-							updateSelectedTabLabel();
-							break;
-						}
+					if (
+						mutation.type === 'attributes' && // Update label when tab is selected or when selected tab's title changes
+						(mutation.attributeName === 'aria-selected' ||
+							(mutation.attributeName === 'title' &&
+								mutation.target.getAttribute('aria-selected') === 'true'))
+					) {
+						updateSelectedTabLabel();
+						break;
 					}
 					// Check for scroll shadow changes (indicates scrollability changed)
 					if (mutation.type === 'childList') {
@@ -276,6 +284,10 @@ setTimeout(() => {
 			let startWidth = 0;
 			const minWidth = 0;
 
+			/**
+			 * Handle mouse move for resizing label.
+			 * @param e - The mouse move event.
+			 */
 			function handleMouseMove(e) {
 				const deltaX = e.clientX - startX;
 				const newWidth = Math.max(minWidth, startWidth + deltaX);
@@ -289,6 +301,9 @@ setTimeout(() => {
 				}
 			}
 
+			/**
+			 * Handle mouse up event to stop resizing.
+			 */
 			function handleMouseUp() {
 				document.removeEventListener('mousemove', handleMouseMove);
 				document.removeEventListener('mouseup', handleMouseUp);
@@ -310,12 +325,14 @@ setTimeout(() => {
 			console.log('Golden Layout tabs scroll controls initialized for stack', stack);
 		}
 
-		// Initialize controls for all existing stacks
+		/**
+		 * Initialize controls for all existing stacks on the page.
+		 */
 		function initializeAllStacks() {
 			const stacks = document.querySelectorAll('.lm_stack');
-			stacks.forEach((stack) => {
+			for (const stack of stacks) {
 				initializeStackControls(stack);
-			});
+			}
 		}
 
 		// Initial initialization
@@ -325,7 +342,7 @@ setTimeout(() => {
 		const stackObserver = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
 				if (mutation.type === 'childList') {
-					mutation.addedNodes.forEach((node) => {
+					for (const node of mutation.addedNodes) {
 						if (node.nodeType === Node.ELEMENT_NODE) {
 							// Check if the added node is a stack
 							if (node.classList && node.classList.contains('lm_stack')) {
@@ -334,12 +351,12 @@ setTimeout(() => {
 							// Also check for stacks within the added node
 							const nestedStacks = node.querySelectorAll && node.querySelectorAll('.lm_stack');
 							if (nestedStacks) {
-								nestedStacks.forEach((stack) => {
+								for (const stack of nestedStacks) {
 									initializeStackControls(stack);
-								});
+								}
 							}
 						}
-					});
+					}
 				}
 			}
 		});
