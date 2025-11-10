@@ -207,30 +207,49 @@ setTimeout(() => {
 				});
 			}
 
+			// Debounced version for resize events
+			/**
+			 * Debounced update scroll buttons function.
+			 * @param mutations - Mutation records.
+			 */
+			function debouncedUpdate(mutations) {
+				clearTimeout(debouncedUpdate.timeout);
+				debouncedUpdate.timeout = setTimeout(() => updateScrollButtons(), 100);
+			}
+
 			// Initial check
 			updateScrollButtons();
 
-			// Watch for changes (when tabs are added/removed)
-			const resizeObserver = new ResizeObserver(updateScrollButtons);
+			// Watch for changes (when tabs are added/removed) - debounced for performance
+			const resizeObserver = new ResizeObserver(debouncedUpdate);
 			resizeObserver.observe(tabsContainer);
 
-			// Watch for tab selection changes and title updates
+			// Single MutationObserver for all changes - more efficient than multiple observers
 			const mutationObserver = new MutationObserver((mutations) => {
+				let needsUpdate = false;
+				let needsLabelUpdate = false;
+
 				for (const mutation of mutations) {
-					if (
-						mutation.type === 'attributes' && // Update label when tab is selected or when selected tab's title changes
-						(mutation.attributeName === 'aria-selected' ||
-							(mutation.attributeName === 'title' &&
-								mutation.target.getAttribute('aria-selected') === 'true'))
-					) {
-						updateSelectedTabLabel();
-						break;
+					if (mutation.type === 'attributes') {
+						// Update label when tab is selected or when selected tab's title changes
+						if (
+							mutation.attributeName === 'aria-selected' ||
+							(mutation.attributeName === 'title' && mutation.target.getAttribute('aria-selected') === 'true')
+						) {
+							needsLabelUpdate = true;
+						}
+					} else if (mutation.type === 'childList') {
+						// Check for scroll shadow changes (indicates scrollability changed)
+						needsUpdate = true;
 					}
-					// Check for scroll shadow changes (indicates scrollability changed)
-					if (mutation.type === 'childList') {
-						updateScrollButtons();
-						break;
-					}
+				}
+
+				// Batch updates to avoid multiple reflows
+				if (needsLabelUpdate) {
+					updateSelectedTabLabel();
+				}
+				if (needsUpdate) {
+					debouncedUpdate();
 				}
 			});
 
@@ -242,40 +261,48 @@ setTimeout(() => {
 				childList: true
 			});
 
-			// Add click handlers for scrolling
-			leftButton.addEventListener('click', (e) => {
+			// Store observers for cleanup
+			stack._scrollControlsCleanup = () => {
+				resizeObserver.disconnect();
+				mutationObserver.disconnect();
+			};
+
+			// Use event delegation on buttonsContainer for better performance
+			buttonsContainer.addEventListener('click', (e) => {
 				e.preventDefault();
 				e.stopPropagation();
-				tabsContainer.scrollBy({ left: -200, behavior: 'smooth' });
+
+				const target = e.target.closest('.lm-tabs-scroll-button, .lm-tabs-selected-label');
+				if (!target) {
+					return;
+				}
+
+				if (target === leftButton) {
+					tabsContainer.scrollBy({ left: -200, behavior: 'smooth' });
+				} else if (target === rightButton) {
+					tabsContainer.scrollBy({ left: 200, behavior: 'smooth' });
+				} else if (target === selectedLabel) {
+					const selectedTab = tabsContainer.querySelector('.lm_tab[aria-selected="true"]');
+					if (selectedTab) {
+						selectedTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+					}
+				}
 			});
 
-			// Right-click on left button to scroll to start
-			leftButton.addEventListener('contextmenu', (e) => {
+			// Handle right-clicks for scroll to start/end
+			buttonsContainer.addEventListener('contextmenu', (e) => {
 				e.preventDefault();
 				e.stopPropagation();
-				tabsContainer.scrollTo({ left: 0, behavior: 'smooth' });
-			});
 
-			rightButton.addEventListener('click', (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				tabsContainer.scrollBy({ left: 200, behavior: 'smooth' });
-			});
+				const target = e.target.closest('.lm-tabs-scroll-button');
+				if (!target) {
+					return;
+				}
 
-			// Right-click on right button to scroll to end
-			rightButton.addEventListener('contextmenu', (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				tabsContainer.scrollTo({ left: tabsContainer.scrollWidth, behavior: 'smooth' });
-			});
-
-			// Click on label to scroll selected tab into view
-			selectedLabel.addEventListener('click', (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				const selectedTab = tabsContainer.querySelector('.lm_tab[aria-selected="true"]');
-				if (selectedTab) {
-					selectedTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+				if (target === leftButton) {
+					tabsContainer.scrollTo({ left: 0, behavior: 'smooth' });
+				} else if (target === rightButton) {
+					tabsContainer.scrollTo({ left: tabsContainer.scrollWidth, behavior: 'smooth' });
 				}
 			});
 
