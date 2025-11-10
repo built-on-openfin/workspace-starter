@@ -28,6 +28,9 @@
 			"preloadScripts": [
 				{
 					"url": "http://localhost:8080/tab/tab-extension.js"
+				},
+				{
+					"url": "http://localhost:8080/tab/golden-layout-tab-extension.js"
 				}
 			]
 		},
