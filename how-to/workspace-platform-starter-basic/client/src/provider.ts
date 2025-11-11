@@ -54,7 +54,18 @@ async function initializeWorkspacePlatform(
 					pages: [],
 					favicon: platformSettings.icon,
 					newPageUrl,
-					newTabUrl
+					newTabUrl,
+					pageTabDimensions: {
+						minWidth: "100px",
+						maxWidth: "400px"
+					},
+					viewTabDimensions: {
+						minWidth: "48px",
+						maxWidth: "400px"
+					},
+					navigationButtons: {
+						enabled: true
+					}
 				}
 			}
 		},
