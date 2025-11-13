@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Basic Dock3 Example</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script src="../js/provider.bundle.js"></script>
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Basic Dock3 Example</h1>
+				<h1 class="tag">Demonstrate basic dock3 interactions.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="col fill gap20 scroll-vertical">
+			<p>
+				Please click the Initialize button to create a Dock3 Provider (it will start up Dock3 and OpenFin
+				Workspace if it isn't already running). Once a dock is initialized it will appear automatically and
+				the minimize and shutdown buttons will be enabled. Use Minmize to minimize the dock you just created.
+				Shutdown will remove your dock entry from OpenFin Workspace.
+			</p>
+			<p>This is a simple example showing how you can hand code a Dock.</p>
+			<div class="row gap10">
+				<button id="initialize">Initialize Dock3</button>
+				<button id="shutdown">Shutdown Dock3</button>
+				<button id="minimize">Minimize Dock</button>
+				<fieldset class="row">
+					<input type="checkbox" checked="true" id="enableContentMenuBookmarking" />
+					<label for="enableContentMenuBookmarking">Enable Content Menu Bookmarking</label>
+				</fieldset>
+			</div>
+			<div class="col gap20">
+				<h2>Options</h2>
+				<div class="row wrap gap20">
+					<fieldset class="row">
+						<input type="checkbox" checked="true" id="showHomeButton" />
+						<label for="showHomeButton">Home Button</label>
+					</fieldset>
+					<fieldset class="row">
+						<input type="checkbox" checked="true" id="showNotificationButton" />
+						<label for="showNotificationButton">Notification Button</label>
+					</fieldset>
+					<fieldset class="row">
+						<input type="checkbox" checked="true" id="showContentMenuButton" />
+						<label for="showContentMenuButton">Content Menu Button</label>
+					</fieldset>
+					<fieldset class="row">
+						<input type="checkbox" checked="true" id="showStorefrontButton" />
+						<label for="showStorefrontButton">Store Button</label>
+					</fieldset>
+					<fieldset class="row">
+						<input type="checkbox" checked="true" id="showWorkspacesButton" />
+						<label for="showWorkspacesButton">Workspaces Button</label>
+					</fieldset>
+				</div>
+				<div class="row wrap gap20">
+					<fieldset class="row">
+						<input type="checkbox" checked="true" id="skipSavedConfig" />
+						<label for="skipSavedConfig">Skip Saved Dock Configuration</label>
+					</fieldset>
+					<fieldset class="row">
+						<input type="checkbox" id="saveWindowState" />
+						<label for="saveWindowState">Save Window State</label>
+					</fieldset>
+					<fieldset class="row">
+						<input type="checkbox" id="defaultCentered" />
+						<label for="defaultCentered">Default Centeredn</label>
+					</fieldset>
+				</div>
+				<div class="row wrap gap20">
+					<fieldset class="row">
+						<label for="defaultTopPos">Default Top Position (NaN for undefined)</label>
+						<input type="text" id="defaultTopPos" />
+						<label for="defaultLeftPos">Default Left Position (NaN for undefined)</label>
+						<input type="text" id="defaultLeftPos" />
+					</fieldset>
+				</div>
+				<div class="row wrap gap10">
+					<button id="setGoogleConfig">Set Google Config</button>
+					<button id="setBarclaysConfig">Set Barclays Config</button>
+					<button id="setARCoreConfig">Set ARCore Config</button>
+					<button id="setNamelessConfig">Set Nameless Config</button>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>
