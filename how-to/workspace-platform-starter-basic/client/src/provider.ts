@@ -46,6 +46,15 @@ async function initializeWorkspacePlatform(
 		newTabUrl = browserSettings.newTabUrl;
 	}
 
+	const aiCompanionOptions = {
+		aiPanelOptions: {
+			enabled: true,
+			// TODO - Update with actual AI Panel url
+			url: "http://localhost/ai/index.html",
+			contextDomains: ["https://*", "https://*.wikipedia.org/*"]
+		}
+	};
+
 	await init({
 		enableEnterpriseBrowserSupport: true,
 		browser: {
@@ -62,7 +71,8 @@ async function initializeWorkspacePlatform(
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error
 			browserBaseUrl: "http://localhost:8080",
-			isAddressBarEnabled: false
+			isAddressBarEnabled: false,
+			...aiCompanionOptions
 		},
 		theme: [
 			{
