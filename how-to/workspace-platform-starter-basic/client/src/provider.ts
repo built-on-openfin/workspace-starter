@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import { Dock, Home, Storefront, type App } from "@openfin/workspace";
-import { CustomActionCallerType, init } from "@openfin/workspace-platform";
+import { CustomActionCallerType, init, WindowType } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 import { register as registerDock } from "./dock";
 import { register as registerHome } from "./home";
@@ -47,6 +47,7 @@ async function initializeWorkspacePlatform(
 	}
 
 	await init({
+		enableEnterpriseBrowserSupport: true,
 		browser: {
 			defaultWindowOptions: {
 				icon: platformSettings.icon,
@@ -54,9 +55,14 @@ async function initializeWorkspacePlatform(
 					pages: [],
 					favicon: platformSettings.icon,
 					newPageUrl,
-					newTabUrl
+					newTabUrl,
+					windowType: WindowType.Enterprise
 				}
-			}
+			},
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-expect-error
+			browserBaseUrl: "http://localhost:8080",
+			isAddressBarEnabled: false
 		},
 		theme: [
 			{
