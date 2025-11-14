@@ -65,7 +65,8 @@ async function initializeWorkspacePlatform(
 					favicon: platformSettings.icon,
 					newPageUrl,
 					newTabUrl,
-					windowType: WindowType.Enterprise
+					windowType: WindowType.Enterprise,
+					navigationButtons: { enabled: false }
 				}
 			},
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
