@@ -110,7 +110,7 @@ function initializeDOM() {
 	function setupListeners() {
 		const startCallIntent = 'StartCall';
 		const openAppIntent = 'OpenApp';
-		const viewProfileIntent = 'ViewProfile';
+
 		try {
 			fdc3.addContextListener('fdc3.contact', (ctx, metadata) => {
 				console.log('Received Context', ctx, metadata);
@@ -127,10 +127,6 @@ function initializeDOM() {
 			fdc3.addIntentListener(openAppIntent, (ctx, metadata) => {
 				console.log(`Received Context For Intent: ${openAppIntent}`, ctx, metadata);
 				updateCallInformation(ctx, openAppIntent);
-			});
-			fdc3.addIntentListener(viewProfileIntent, (ctx, metadata) => {
-				console.log(`Received Context For Intent: ${viewProfileIntent}`, ctx, metadata);
-				updateCallInformation(ctx, viewProfileIntent);
 			});
 		} catch (error) {
 			console.error('Error setting up all of the fdc3 listeners', error);
