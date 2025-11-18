@@ -1,2 +1,0 @@
-const e={analytics:new class{async initialize(e,i,n){this._logger=i("ConsoleAnalyticsModule"),this._logger.info("Initialized"),this._logger.info("Session Id: ",n.sessionId);const s="trace"===e?.data?.eventLogLevel?"debug":e?.data?.eventLogLevel??"info";this._logEvent=(e,i)=>{this._logger&&this._logger[s](e,JSON.stringify(i))}}async handleAnalytics(e){this._logEvent&&this._logEvent("Received the following analytics events",e)}async closedown(){this._logger&&this._logger.info("closing down")}}};export{e as entryPoints};
-//# sourceMappingURL=console.bundle.js.map
