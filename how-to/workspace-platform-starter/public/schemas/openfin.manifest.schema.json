@@ -219,6 +219,7 @@
 			"$ref": "#/definitions/__type_17"
 		},
 		"LogTypes": {
+			"description": "Log types\n\nNote: For the debug log options, the one with the most specific matching pattern will be used.",
 			"enum": ["app", "debug", "debug:self", "debug:self:archive", "debug:self:archive:last", "rvm"],
 			"type": "string"
 		},
@@ -1258,6 +1259,10 @@
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
 				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
+				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
 					"type": "boolean"
@@ -1644,6 +1649,10 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -2221,6 +2230,10 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -3112,6 +3125,10 @@
 					},
 					"type": "array"
 				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
+				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
 				},
@@ -3664,6 +3681,10 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -4361,7 +4382,7 @@
 					"type": "string"
 				},
 				"logs": {
-					"description": "An array of strings that specifies which logs should be uploaded.\napp: Uploads app logs\nrvm: Uploads rvm logs\ndebug: Uploads debug logs\ndebug:self: Uploads the most current debug log the current application\ndebug:self:archive: Uploads all debug logs for the current application\ndebug:self:archive:last: Uploads the last two debug logs for the current application\n\nFor the debug log options, the one with the most specific matching pattern will be used.",
+					"description": "An array of strings that specifies which logs should be uploaded.",
 					"items": {
 						"$ref": "#/definitions/LogTypes"
 					},
