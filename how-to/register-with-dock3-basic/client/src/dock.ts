@@ -8,6 +8,7 @@ import type {
 
 import { Dock, getCurrentSync } from "@openfin/workspace-platform";
 import type { ContentMenuEntry } from "@openfin/workspace/client-api-platform/src/shapes";
+import type { MoreMenuCustomOptionPayload } from "@openfin/workspace/dock3/src/api/protocol";
 
 /**
  * Type consolidating all dock3 provider settings
@@ -62,6 +63,33 @@ export async function initializeDock3API(
 							await platform.createView({ url: payload.entry.itemData?.url });
 						} else {
 							console.error("No URL found for dock entry:", payload.entry);
+						}
+					}
+
+					/**
+					 * Override for dock3 more menu custom option clicked.
+					 * This function should be customized to best match the needs of the application.
+					 * @param payload payload for more menu custom option clicked
+					 * @returns void
+					 */
+					public async moreMenuCustomOptionClicked(payload: MoreMenuCustomOptionPayload): Promise<void> {
+						console.log("Dock3Panel::moreMenuCustomOptionClicked", payload);
+						switch (payload.action) {
+							case "launch-log-uploader":
+								// eslint-disable-next-line no-alert
+								alert("Studio: Upload Logs!");
+								break;
+							case "launch-about-page":
+								// eslint-disable-next-line no-alert
+								alert("Studio: About dialog!");
+								break;
+							default:
+								console.log(
+									"Dock3Panel::moreMenuCustomOptionClicked",
+									"Unknown action:",
+									payload.action
+								);
+								break;
 						}
 					}
 
