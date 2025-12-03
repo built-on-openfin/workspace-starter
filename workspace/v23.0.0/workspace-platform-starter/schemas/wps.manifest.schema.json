@@ -34,7 +34,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -45,6 +45,29 @@
 			},
 			"type": "object"
 		},
+		"Anchor": {
+			"$ref": "#/definitions/__type_32"
+		},
+		"AnchorLocation": {
+			"description": "Defines the point within the rectangle that should be used as the anchor\nwhen positioning UI elements relative to another surface.",
+			"enum": [
+				"bottomCenter",
+				"bottomLeft",
+				"bottomRight",
+				"float",
+				"leftBottom",
+				"leftCenter",
+				"leftTop",
+				"none",
+				"rightBottom",
+				"rightCenter",
+				"rightTop",
+				"topCenter",
+				"topLeft",
+				"topRight"
+			],
+			"type": "string"
+		},
 		"Api": {
 			"$ref": "#/definitions/__type_3"
 		},
@@ -52,7 +75,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_62"
+			"$ref": "#/definitions/__type_65"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -320,6 +343,34 @@
 			},
 			"type": "array"
 		},
+		"Array_3": {
+			"items": {
+				"additionalProperties": false,
+				"description": "Defines a set of color overrides for Chromium UI surfaces based on a theme\nprovider (e.g., light or dark mode).",
+				"properties": {
+					"colorProviderKey": {
+						"additionalProperties": false,
+						"description": "Identifies the color provider mode that the palette applies to.",
+						"properties": {
+							"colorMode": {
+								"description": "The UI color mode that this palette is intended to style.",
+								"enum": ["dark", "light"],
+								"type": "string"
+							}
+						},
+						"required": ["colorMode"],
+						"type": "object"
+					},
+					"colorsMap": {
+						"$ref": "#/definitions/ThemeColorsMap",
+						"description": "A mapping of known Chromium color IDs to ARGB values (0xAARRGGBB)."
+					}
+				},
+				"required": ["colorProviderKey", "colorsMap"],
+				"type": "object"
+			},
+			"type": "array"
+		},
 		"AuthProviderOptions": {
 			"additionalProperties": false,
 			"description": "Auth Provider Options. Specify a single auth module if your application requires authentication before allowing the\nuser to use the platform.",
@@ -331,7 +382,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -339,7 +390,7 @@
 			"type": "object"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_36"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -413,7 +464,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_35"
 		},
 		"BringToFrontStrategy": {
 			"description": "The strategy for bringing a window to the front.",
@@ -446,7 +497,7 @@
 			"type": "string"
 		},
 		"BrowserContentBehavior": {
-			"$ref": "#/definitions/__type_73"
+			"$ref": "#/definitions/__type_76"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -498,7 +549,7 @@
 				"globalMenu": {
 					"description": "This setting lets you customize the default workspace browser main menu and specify your own.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -550,7 +601,7 @@
 				"pageMenu": {
 					"description": "This setting lets you customize the page right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -572,7 +623,7 @@
 				"viewMenu": {
 					"description": "This setting lets you customize the view right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -774,13 +825,13 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_55"
+			"$ref": "#/definitions/__type_58"
 		},
 		"ChromiumPolicies": {
 			"$ref": "#/definitions/__type_14"
 		},
 		"ClipboardPermissions": {
-			"$ref": "#/definitions/__type_76"
+			"$ref": "#/definitions/__type_79"
 		},
 		"CombinedStrategy": {
 			"additionalProperties": false,
@@ -953,7 +1004,7 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_52"
+			"$ref": "#/definitions/__type_55"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_9"
@@ -973,7 +1024,7 @@
 			"type": "object"
 		},
 		"CopyPermissions": {
-			"$ref": "#/definitions/__type_77"
+			"$ref": "#/definitions/__type_80"
 		},
 		"CustomActionSpecifier": {
 			"additionalProperties": false,
@@ -1316,10 +1367,10 @@
 		},
 		"Data": {},
 		"DeepPartial": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_46"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_68"
+			"$ref": "#/definitions/__type_71"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1373,10 +1424,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_49"
+			"$ref": "#/definitions/__type_52"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_66"
+			"$ref": "#/definitions/__type_69"
 		},
 		"DockButtonAction": {
 			"additionalProperties": false,
@@ -1633,13 +1684,16 @@
 			"type": "object"
 		},
 		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_71"
+			"$ref": "#/definitions/__type_74"
 		},
 		"DomainSettings": {
-			"$ref": "#/definitions/__type_68"
+			"$ref": "#/definitions/__type_71"
 		},
 		"DomainSettingsPreloadScripts": {
-			"$ref": "#/definitions/__type_75"
+			"$ref": "#/definitions/__type_78"
+		},
+		"DownloadBubbleOptions": {
+			"$ref": "#/definitions/__type_31"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_19"
@@ -1727,14 +1781,14 @@
 				"endpoints": {
 					"description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
 					"items": {
-						"$ref": "#/definitions/EndpointDefinition<unknown>"
+						"$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -1872,7 +1926,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_70"
+			"$ref": "#/definitions/__type_73"
 		},
 		"GetInfoOptions": {
 			"additionalProperties": false,
@@ -1909,6 +1963,7 @@
 				"Downloads",
 				"OpenStorefront",
 				"ManageDesktopSignals",
+				"FindInPage",
 				"Appearance",
 				"Quit",
 				"Custom"
@@ -1985,6 +2040,29 @@
 					},
 					"type": "object"
 				},
+				"subHeader": {
+					"additionalProperties": false,
+					"description": "Optional subheader configuration for the home landing page.",
+					"properties": {
+						"icon": {
+							"description": "URL of the icon to display in the subheader.",
+							"type": "string"
+						},
+						"subtitle": {
+							"description": "Subtitle text to display in the subheader.",
+							"type": "string"
+						},
+						"title1": {
+							"description": "First title text to display in the subheader.",
+							"type": "string"
+						},
+						"title2": {
+							"description": "Second title text to display in the subheader (renders on a new line).",
+							"type": "string"
+						}
+					},
+					"type": "object"
+				},
 				"title": {
 					"description": "A UI friendly title for the search provider.",
 					"type": "string"
@@ -2036,7 +2114,7 @@
 			"$ref": "#/definitions/__type_4"
 		},
 		"Identity_4_1": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_47"
 		},
 		"Image": {
 			"additionalProperties": false,
@@ -2146,7 +2224,7 @@
 				"integrations": {
 					"description": "This is the old module list name, remove in future.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
+						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2157,7 +2235,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
+						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -2204,16 +2282,16 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_65"
+			"$ref": "#/definitions/__type_68"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_67"
+			"$ref": "#/definitions/__type_70"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_54"
+			"$ref": "#/definitions/__type_57"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
@@ -2341,7 +2419,7 @@
 			"description": "List of modules."
 		},
 		"LockUnlockPageConfig": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_39"
 		},
 		"LogTypes": {
 			"description": "Log types\n\nNote: For the debug log options, the one with the most specific matching pattern will be used.",
@@ -2349,10 +2427,10 @@
 			"type": "string"
 		},
 		"LogUploadOptions": {
-			"$ref": "#/definitions/__type_81"
+			"$ref": "#/definitions/__type_84"
 		},
 		"LogUploaderUIOptions": {
-			"$ref": "#/definitions/__type_82"
+			"$ref": "#/definitions/__type_85"
 		},
 		"LoggerProviderOptions": {
 			"$ref": "#/definitions/ModuleList_1",
@@ -2515,7 +2593,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2587,7 +2665,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2659,7 +2737,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2731,7 +2809,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2777,7 +2855,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2922,7 +3000,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -3137,7 +3215,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3151,7 +3229,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3165,7 +3243,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3179,7 +3257,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3193,7 +3271,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3207,7 +3285,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3235,10 +3313,10 @@
 			"type": "string"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_51"
+			"$ref": "#/definitions/__type_54"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_47"
+			"$ref": "#/definitions/__type_50"
 		},
 		"MultipleDomainMatchBehavior": {
 			"description": "Behavior for handling multiple {@link DomainSettingsRule} matches.",
@@ -3275,7 +3353,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>_1"
+						"$ref": "#/definitions/NativePreference%3Cnever%3E_1"
 					},
 					"type": "array"
 				}
@@ -3386,7 +3464,7 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_61"
+			"$ref": "#/definitions/__type_64"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -3417,23 +3495,23 @@
 			"type": "object"
 		},
 		"NotificationsCustomManifestOptions": {
-			"$ref": "#/definitions/__type_45"
+			"$ref": "#/definitions/__type_48"
 		},
 		"O": {},
 		"Omit": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_37"
 		},
 		"Omit_1": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_42"
 		},
 		"Omit_2": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_43"
 		},
 		"Omit_3": {
-			"$ref": "#/definitions/__type_41"
+			"$ref": "#/definitions/__type_44"
 		},
 		"Omit_4": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_45"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -3634,6 +3712,11 @@
 							"default": false,
 							"description": "Whether to show the popout button on stack header.\nThe button will create a new window with current tab as its content.\nIn case `popoutWholeStack` is set to true, all tabs in the stack will be in the new window.",
 							"type": "boolean"
+						},
+						"tabOverflowBehavior": {
+							"description": "When set to 'scroll', enables horizontal scrolling of tabs when they overflow the stack width.\nWhen set to 'dropdown', the default behavior occurs, in which excess tabs appear in a menu.\n\nSetting this to `scroll` might break styles written for the default dropdown behavior, as it significantly changes the DOM structure and CSS of tabs.\n\nThe DOM structure is modified in this way:\n- `lm_tabs` is wrapped in a div with class `lm_scroll_shadow`. This div is revealed by a mask on the tabs when they are overflowing.\n- the `.newTabButton` (if enabled) is a direct child of `.lm_header`\n\n**The following CSS variables are available to customize tab appearance:**\n\n- `--layout-tab-width`: The default (max) width of the tabs. Using this enables using `lm_tab` as a queryable CSS container (must be an absolute value to use container queries). Default: `fit-content`\n- `--layout-tab-min-width`: The minimum width of the tabs before they start overflowing. Set this to enable tab shrinking. Defaults to the same value as `--layout-tab-width` (no shrinking).\n- `--layout-tab-overflow-fade-size`: The width of the scroll shadows when tabs are overflowing. Default: `20px`\n- `--layout-tab-overflow-shadow-color`: The color of the scroll shadows when tabs are overflowing. Enabling a contrasting shadow color may require setting the background color on `.lm_tabs` if it was not previously set via `--tabs-background-color`. Default is transparent so overlowing tabs fade into the background.\n\n**CSS Variables for advanced customization (dynamically updated and set on `lm_tabs`):**\n\n- `--layout-tab-overflow-fade-left`: The strength of the left fade when tabs are overflowing. This is a number between 0 and 1 where 0 means no fade and 1 means a full fade.\n- `--layout-tab-overflow-fade-right`: The strength of the right fade when tabs are overflowing. This is a number between 0 and 1 where 0 means no fade and 1 means a full fade.\n- `--layout-tabs-overflowing`: A [CSS space toggle](https://css-tricks.com/the-css-custom-property-toggle-trick/) that is empty when tabs are overflowing and `initial` otherwise. If you are targeting only Chrome 137 or greater, you might want to use the `if()` function with left/right fade instead of this toggle.",
+							"enum": ["dropdown", "scroll"],
+							"type": "string"
 						}
 					},
 					"type": "object"
@@ -3745,28 +3828,28 @@
 			"$ref": "#/definitions/__type_29"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_34"
 		},
 		"Partial_13": {
-			"$ref": "#/definitions/__type_46"
+			"$ref": "#/definitions/__type_49"
 		},
 		"Partial_14": {
-			"$ref": "#/definitions/__type_53"
-		},
-		"Partial_15": {
 			"$ref": "#/definitions/__type_56"
 		},
-		"Partial_16": {
-			"$ref": "#/definitions/__type_57"
-		},
-		"Partial_17": {
-			"$ref": "#/definitions/__type_58"
-		},
-		"Partial_18": {
+		"Partial_15": {
 			"$ref": "#/definitions/__type_59"
 		},
+		"Partial_16": {
+			"$ref": "#/definitions/__type_60"
+		},
+		"Partial_17": {
+			"$ref": "#/definitions/__type_61"
+		},
+		"Partial_18": {
+			"$ref": "#/definitions/__type_62"
+		},
 		"Partial_19": {
-			"$ref": "#/definitions/__type_64"
+			"$ref": "#/definitions/__type_67"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -3793,16 +3876,16 @@
 			"$ref": "#/definitions/__type_25"
 		},
 		"PastePermissions": {
-			"$ref": "#/definitions/__type_78"
+			"$ref": "#/definitions/__type_81"
 		},
 		"PerDomainSettings": {
-			"$ref": "#/definitions/__type_69"
-		},
-		"Permissions_2": {
 			"$ref": "#/definitions/__type_72"
 		},
+		"Permissions_2": {
+			"$ref": "#/definitions/__type_75"
+		},
 		"Pick": {
-			"$ref": "#/definitions/__type_38"
+			"$ref": "#/definitions/__type_41"
 		},
 		"PlatformApp": {
 			"additionalProperties": false,
@@ -4060,7 +4143,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -4461,7 +4544,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -4490,7 +4573,7 @@
 			"type": "object"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_48"
+			"$ref": "#/definitions/__type_51"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -4546,6 +4629,8 @@
 				"reload",
 				"selectAll",
 				"separator",
+				"snapToBottom",
+				"snapToTop",
 				"spellCheck",
 				"undo"
 			],
@@ -4557,10 +4642,10 @@
 			"type": "string"
 		},
 		"PrintPermission": {
-			"$ref": "#/definitions/__type_79"
+			"$ref": "#/definitions/__type_82"
 		},
 		"PrintPlaceholder": {
-			"$ref": "#/definitions/__type_80"
+			"$ref": "#/definitions/__type_83"
 		},
 		"ProcessAffinityStrategy": {
 			"description": "Strategy to assign views to process affinity by domain.\n\n`same`: views in the same domain will have the same process affinity.<br>\n`different`: views in the same domain will have different process affinities.",
@@ -4574,10 +4659,13 @@
 			"$ref": "#/definitions/__type_21"
 		},
 		"Record_1": {
-			"$ref": "#/definitions/__type_60"
+			"$ref": "#/definitions/__type_63"
+		},
+		"Rectangle": {
+			"$ref": "#/definitions/__type_33"
 		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_50"
+			"$ref": "#/definitions/__type_53"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_11"
@@ -4697,7 +4785,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -4724,7 +4812,7 @@
 			"type": "object"
 		},
 		"ShowHideTabsConfig": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_38"
 		},
 		"ShowViewOnWindowResizeOptions": {
 			"additionalProperties": false,
@@ -4782,7 +4870,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_63"
+			"$ref": "#/definitions/__type_66"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -5115,7 +5203,7 @@
 			"type": "object"
 		},
 		"StructuredContentPermissions": {
-			"$ref": "#/definitions/__type_74"
+			"$ref": "#/definitions/__type_77"
 		},
 		"TaskBar": {
 			"additionalProperties": false,
@@ -5133,7 +5221,62 @@
 			"type": "object"
 		},
 		"TaskbarIcon": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_40"
+		},
+		"ThemeColorsMap": {
+			"additionalProperties": false,
+			"description": "All supported color slots for the Download Bubble and related UI.",
+			"properties": {
+				"kColorBubbleBackground": {
+					"description": "Enterprise/Window/Background – bubble header and footer background.",
+					"type": "number"
+				},
+				"kColorBubbleBorder": {
+					"description": "Windows only – Enterprise/Window/Border.",
+					"type": "number"
+				},
+				"kColorBubbleBorderShadowLarge": {
+					"description": "Windows only – Enterprise/Window/Border (large shadow).",
+					"type": "number"
+				},
+				"kColorBubbleBorderShadowSmall": {
+					"description": "Windows only – Enterprise/Window/Border (small shadow).",
+					"type": "number"
+				},
+				"kColorDialogBackground": {
+					"description": "Enterprise/Window/Background – downloaded item row background.",
+					"type": "number"
+				},
+				"kColorDownloadBubbleRowHover": {
+					"description": "Enterprise/Search Result/Background/Hover – download item row hover.",
+					"type": "number"
+				},
+				"kColorDownloadBubbleShowAllDownloadsIcon": {
+					"description": "Enterprise/Window/Icon – “Show all downloads” icon color.",
+					"type": "number"
+				},
+				"kColorHoverButtonBackgroundHovered": {
+					"description": "Enterprise/Search Result/Background/Hover – full download history\nbutton (full row) hover background.",
+					"type": "number"
+				},
+				"kColorIcon": {
+					"description": "Shared/Icon Button/Subtle/Icon/Default – SVG icon color\n(except full download history button).",
+					"type": "number"
+				},
+				"kColorLabelBackground": {
+					"description": "Label background used for readability adjustment.\nSet to transparent (0) to disable Chromium’s readability alignment logic.",
+					"type": "number"
+				},
+				"kColorLabelForeground": {
+					"description": "Enterprise/Window/Text/Base – main label text color.\nMay be post-processed to increase readability on kColorDialogBackground\n(can be disabled via transparent kColorLabelBackground).",
+					"type": "number"
+				},
+				"kColorSecondaryForeground": {
+					"description": "Enterprise/Window/Text/Soft – secondary text color.\nMay be post-processed to increase readability on kColorDialogBackground\n(can be disabled via transparent kColorLabelBackground).",
+					"type": "number"
+				}
+			},
+			"type": "object"
 		},
 		"ThemeProviderOptions": {
 			"additionalProperties": false,
@@ -5229,7 +5372,7 @@
 				"menuEntries": {
 					"description": "The menu entries to display.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CTrayMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -5248,19 +5391,19 @@
 		"UpdatableLaunchPreferenceDefinition": {
 			"anyOf": [
 				{
-					"$ref": "#/definitions/WindowPreference<never>"
+					"$ref": "#/definitions/WindowPreference%3Cnever%3E"
 				},
 				{
 					"$ref": "#/definitions/WindowPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/ViewPreference<never>"
+					"$ref": "#/definitions/ViewPreference%3Cnever%3E"
 				},
 				{
 					"$ref": "#/definitions/ViewPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/NativePreference<never>"
+					"$ref": "#/definitions/NativePreference%3Cnever%3E"
 				}
 			],
 			"description": "A type that contains the available updatable launch preferences"
@@ -5383,7 +5526,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference<never>_1"
+								"$ref": "#/definitions/ViewPreference%3Cnever%3E_1"
 							}
 						]
 					},
@@ -5593,6 +5736,9 @@
 								}
 							},
 							"type": "object"
+						},
+						"themePalette": {
+							"$ref": "#/definitions/Array_3"
 						},
 						"version": {
 							"type": "string"
@@ -5812,7 +5958,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference<never>_1"
+								"$ref": "#/definitions/WindowPreference%3Cnever%3E_1"
 							}
 						]
 					},
@@ -5972,9 +6118,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -6020,10 +6174,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -6554,9 +6704,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -6602,10 +6760,6 @@
 				"icon": {
 					"description": "The icon to display on the taskbar.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -7201,6 +7355,10 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -7234,10 +7392,6 @@
 						"type": "object"
 					},
 					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -7761,6 +7915,62 @@
 		},
 		"__type_31": {
 			"additionalProperties": false,
+			"description": "Configuration options for enabling and positioning the download bubble UI.",
+			"properties": {
+				"anchor": {
+					"$ref": "#/definitions/Anchor",
+					"description": "Anchor configuration describing where the download bubble should attach."
+				},
+				"enabled": {
+					"description": "Whether the download bubble feature is enabled.",
+					"type": "boolean"
+				}
+			},
+			"required": ["anchor", "enabled"],
+			"type": "object"
+		},
+		"__type_32": {
+			"additionalProperties": false,
+			"description": "Represents an anchor configuration consisting of a bounding rectangle\nand an anchor point describing which part of that rectangle should be\nused as the reference for positioning the download bubble.",
+			"properties": {
+				"bounds": {
+					"$ref": "#/definitions/Rectangle",
+					"description": "The DOM or screen-space rectangle that defines the anchor area."
+				},
+				"location": {
+					"$ref": "#/definitions/AnchorLocation",
+					"description": "The location within the rectangle that should act as the anchor\n (e.g., `topRight`, `bottomLeft`, `center`, etc.).\nFor example, `topRight` means the rectangle's top-right corner is used\nas the anchoring reference point."
+				}
+			},
+			"required": ["bounds", "location"],
+			"type": "object"
+		},
+		"__type_33": {
+			"additionalProperties": false,
+			"description": "A rectangular area on the screen.",
+			"properties": {
+				"height": {
+					"description": "The height of the rectangle in pixels",
+					"type": "number"
+				},
+				"width": {
+					"description": "The width of the rectangle in pixels",
+					"type": "number"
+				},
+				"x": {
+					"description": "The x coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				},
+				"y": {
+					"description": "The y coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				}
+			},
+			"required": ["height", "width", "x", "y"],
+			"type": "object"
+		},
+		"__type_34": {
+			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
@@ -7873,6 +8083,10 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -7906,10 +8120,6 @@
 						"type": "object"
 					},
 					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -7994,7 +8204,7 @@
 			},
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -8013,7 +8223,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -8035,7 +8245,7 @@
 			},
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -8145,6 +8355,10 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -8178,10 +8392,6 @@
 						"type": "object"
 					},
 					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -8262,7 +8472,7 @@
 			},
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_38": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the show/hide tabs button within the browser toolbar",
 			"properties": {
@@ -8304,7 +8514,7 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_39": {
 			"additionalProperties": false,
 			"description": "Configuration Object for the page lock/unlock button within the browser toolbar",
 			"properties": {
@@ -8324,7 +8534,23 @@
 			"required": ["type"],
 			"type": "object"
 		},
-		"__type_37": {
+		"__type_4": {
+			"additionalProperties": false,
+			"description": "Unique identifier for a window, view or iframe.",
+			"properties": {
+				"name": {
+					"description": "The name of the component.  Must be unique within the owning application.",
+					"type": "string"
+				},
+				"uuid": {
+					"description": "Universally unique identifier of the application that owns the component.",
+					"type": "string"
+				}
+			},
+			"required": ["name", "uuid"],
+			"type": "object"
+		},
+		"__type_40": {
 			"additionalProperties": false,
 			"properties": {
 				"dark": {
@@ -8337,7 +8563,7 @@
 			"required": ["dark", "light"],
 			"type": "object"
 		},
-		"__type_38": {
+		"__type_41": {
 			"additionalProperties": false,
 			"properties": {
 				"closeButton": {
@@ -8371,7 +8597,7 @@
 			},
 			"type": "object"
 		},
-		"__type_39": {
+		"__type_42": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -8413,23 +8639,7 @@
 			"required": ["display"],
 			"type": "object"
 		},
-		"__type_4": {
-			"additionalProperties": false,
-			"description": "Unique identifier for a window, view or iframe.",
-			"properties": {
-				"name": {
-					"description": "The name of the component.  Must be unique within the owning application.",
-					"type": "string"
-				},
-				"uuid": {
-					"description": "Universally unique identifier of the application that owns the component.",
-					"type": "string"
-				}
-			},
-			"required": ["name", "uuid"],
-			"type": "object"
-		},
-		"__type_40": {
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"appId": {
@@ -8459,7 +8669,7 @@
 			"required": ["appId"],
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"action": {
@@ -8500,7 +8710,7 @@
 			"required": ["action"],
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"conditions": {
@@ -8550,7 +8760,7 @@
 			"required": ["options"],
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_46": {
 			"additionalProperties": false,
 			"properties": {
 				"clientAPIVersion": {
@@ -8605,6 +8815,10 @@
 					"$ref": "#/definitions/ScoreOrder_1",
 					"description": "The order to sort the score in. The default is `ascending`."
 				},
+				"subHeader": {
+					"$ref": "#/definitions/%7Btitle1%3F%3Astring%3Btitle2%3F%3Astring%3Bsubtitle%3F%3Astring%3Bicon%3F%3Astring%3B%7D_1",
+					"description": "Optional subheader configuration for the home landing page."
+				},
 				"title": {
 					"description": "A UI friendly title for the search provider.",
 					"type": "string"
@@ -8612,7 +8826,7 @@
 			},
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_47": {
 			"additionalProperties": false,
 			"properties": {
 				"name": {
@@ -8626,7 +8840,7 @@
 			},
 			"type": "object"
 		},
-		"__type_45": {
+		"__type_48": {
 			"additionalProperties": false,
 			"description": "Options for using privately hosted notification service.",
 			"properties": {
@@ -8642,7 +8856,7 @@
 			"required": ["manifestUrl", "manifestUuid"],
 			"type": "object"
 		},
-		"__type_46": {
+		"__type_49": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -8681,7 +8895,22 @@
 			},
 			"type": "object"
 		},
-		"__type_47": {
+		"__type_5": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_50": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -8772,7 +9001,7 @@
 			],
 			"type": "object"
 		},
-		"__type_48": {
+		"__type_51": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -8787,7 +9016,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_49": {
+		"__type_52": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -8800,22 +9029,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_5": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_50": {
+		"__type_53": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -8834,7 +9048,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_51": {
+		"__type_54": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -8886,7 +9100,7 @@
 			],
 			"type": "object"
 		},
-		"__type_52": {
+		"__type_55": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,
@@ -8915,7 +9129,7 @@
 			},
 			"type": "object"
 		},
-		"__type_53": {
+		"__type_56": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -8952,11 +9166,11 @@
 			},
 			"type": "object"
 		},
-		"__type_54": {
+		"__type_57": {
 			"additionalProperties": false,
 			"type": "object"
 		},
-		"__type_55": {
+		"__type_58": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -8977,7 +9191,7 @@
 			},
 			"type": "object"
 		},
-		"__type_56": {
+		"__type_59": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -9002,58 +9216,6 @@
 				},
 				"version": {
 					"description": "The version of the package",
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"__type_57": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"type": "number"
-				},
-				"left": {
-					"type": "number"
-				},
-				"top": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_58": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"default": "about:blank",
-					"description": "The URL of the window",
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"__type_59": {
-			"additionalProperties": false,
-			"properties": {
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"url": {
-					"default": "about:blank",
-					"description": "The URL of the window",
 					"type": "string"
 				}
 			},
@@ -9205,9 +9367,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -9253,10 +9423,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -9452,13 +9618,65 @@
 		},
 		"__type_60": {
 			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
 			"type": "object"
 		},
 		"__type_61": {
 			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_62": {
+			"additionalProperties": false,
+			"properties": {
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_63": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_64": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_65": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -9489,7 +9707,7 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_63": {
+		"__type_66": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -9529,7 +9747,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_64": {
+		"__type_67": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -9675,9 +9893,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -9723,10 +9949,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -9924,7 +10146,7 @@
 			},
 			"type": "object"
 		},
-		"__type_65": {
+		"__type_68": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -9952,7 +10174,7 @@
 			},
 			"type": "object"
 		},
-		"__type_66": {
+		"__type_69": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -9971,7 +10193,23 @@
 			},
 			"type": "object"
 		},
-		"__type_67": {
+		"__type_7": {
+			"additionalProperties": false,
+			"properties": {
+				"blue": {
+					"type": "number"
+				},
+				"green": {
+					"type": "number"
+				},
+				"red": {
+					"type": "number"
+				}
+			},
+			"required": ["blue", "green", "red"],
+			"type": "object"
+		},
+		"__type_70": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -10000,7 +10238,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_68": {
+		"__type_71": {
 			"additionalProperties": false,
 			"properties": {
 				"default": {
@@ -10042,7 +10280,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_69": {
+		"__type_72": {
 			"additionalProperties": false,
 			"properties": {
 				"api": {
@@ -10093,6 +10331,10 @@
 					"$ref": "#/definitions/FileDownloadSettings",
 					"description": "{@inheritDoc FileDownloadSettings}"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"preloadScripts": {
 					"$ref": "#/definitions/DomainSettingsPreloadScripts",
 					"description": "{@inheritdoc DomainSettingsPreloadScripts}"
@@ -10100,23 +10342,7 @@
 			},
 			"type": "object"
 		},
-		"__type_7": {
-			"additionalProperties": false,
-			"properties": {
-				"blue": {
-					"type": "number"
-				},
-				"green": {
-					"type": "number"
-				},
-				"red": {
-					"type": "number"
-				}
-			},
-			"required": ["blue", "green", "red"],
-			"type": "object"
-		},
-		"__type_70": {
+		"__type_73": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -10146,7 +10372,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_71": {
+		"__type_74": {
 			"additionalProperties": false,
 			"properties": {
 				"fin": {
@@ -10161,7 +10387,7 @@
 			},
 			"type": "object"
 		},
-		"__type_72": {
+		"__type_75": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -10201,7 +10427,7 @@
 			},
 			"type": "object"
 		},
-		"__type_73": {
+		"__type_76": {
 			"additionalProperties": false,
 			"description": "Opens matched URLs in the browser.",
 			"properties": {
@@ -10217,7 +10443,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_74": {
+		"__type_77": {
 			"additionalProperties": false,
 			"description": "Behavior when displaying content from matched URLs. Varies depending on type of navigation.",
 			"properties": {
@@ -10274,12 +10500,12 @@
 			},
 			"type": "object"
 		},
-		"__type_75": {
+		"__type_78": {
 			"additionalProperties": false,
 			"description": "Enables or disables specific preload scripts by URL.\n\nUses the script's full URL as the key and an object\nwith an `enabled` boolean property as the value.",
 			"type": "object"
 		},
-		"__type_76": {
+		"__type_79": {
 			"additionalProperties": false,
 			"description": "Clipboard Permissions",
 			"properties": {
@@ -10292,7 +10518,26 @@
 			},
 			"type": "object"
 		},
-		"__type_77": {
+		"__type_8": {
+			"additionalProperties": false,
+			"properties": {
+				"devtools": {
+					"description": "Should the context menu contain a button for opening devtools.",
+					"type": "boolean"
+				},
+				"enable": {
+					"description": "Should the context menu display on right click.",
+					"type": "boolean"
+				},
+				"reload": {
+					"description": "Should the context menu contain a button for reloading the page.",
+					"type": "boolean"
+				}
+			},
+			"required": ["enable"],
+			"type": "object"
+		},
+		"__type_80": {
 			"additionalProperties": false,
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
@@ -10319,7 +10564,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_78": {
+		"__type_81": {
 			"additionalProperties": false,
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
@@ -10333,7 +10578,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_79": {
+		"__type_82": {
 			"additionalProperties": false,
 			"description": "Control print operations for a matched URL.",
 			"properties": {
@@ -10350,26 +10595,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_8": {
-			"additionalProperties": false,
-			"properties": {
-				"devtools": {
-					"description": "Should the context menu contain a button for opening devtools.",
-					"type": "boolean"
-				},
-				"enable": {
-					"description": "Should the context menu display on right click.",
-					"type": "boolean"
-				},
-				"reload": {
-					"description": "Should the context menu contain a button for reloading the page.",
-					"type": "boolean"
-				}
-			},
-			"required": ["enable"],
-			"type": "object"
-		},
-		"__type_80": {
+		"__type_83": {
 			"additionalProperties": false,
 			"properties": {
 				"backgroundColor": {
@@ -10391,7 +10617,7 @@
 			},
 			"type": "object"
 		},
-		"__type_81": {
+		"__type_84": {
 			"additionalProperties": false,
 			"properties": {
 				"endpoint": {
@@ -10423,7 +10649,7 @@
 			"required": ["endpoint"],
 			"type": "object"
 		},
-		"__type_82": {
+		"__type_85": {
 			"additionalProperties": false,
 			"description": "Options for the Log Uploader UI.",
 			"properties": {
@@ -10473,6 +10699,28 @@
 			},
 			"type": "object"
 		},
-		"unknown": {}
+		"unknown": {},
+		"{title1?:string;title2?:string;subtitle?:string;icon?:string;}_1": {
+			"additionalProperties": false,
+			"properties": {
+				"icon": {
+					"description": "URL of the icon to display in the subheader.",
+					"type": "string"
+				},
+				"subtitle": {
+					"description": "Subtitle text to display in the subheader.",
+					"type": "string"
+				},
+				"title1": {
+					"description": "First title text to display in the subheader.",
+					"type": "string"
+				},
+				"title2": {
+					"description": "Second title text to display in the subheader (renders on a new line).",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
 	}
 }
