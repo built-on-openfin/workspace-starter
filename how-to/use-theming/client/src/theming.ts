@@ -44,11 +44,15 @@ export async function setColorScheme(schemeType: ColorSchemeOptionType): Promise
 	const platform = getCurrentSync();
 	const theme = await platform.Theme.getThemes();
 	let palette: CustomPaletteSet;
-	if (theme.length > 0) {
-		if ("palette" in theme[0]) {
-			palette = theme[0].palette;
+
+	if (Array.isArray(theme) && theme.length > 0) {
+		const selectedTheme = theme[0];
+		if ("palette" in selectedTheme) {
+			palette = selectedTheme.palette;
+		} else if ("palettes" in selectedTheme) {
+			palette = selectedTheme.palettes[finalScheme as "light" | "dark"];
 		} else {
-			palette = theme[0].palettes[finalScheme as "light" | "dark"];
+			palette = DEFAULT_PALETTES[finalScheme as "light" | "dark"];
 		}
 	} else {
 		palette = DEFAULT_PALETTES[finalScheme as "light" | "dark"];

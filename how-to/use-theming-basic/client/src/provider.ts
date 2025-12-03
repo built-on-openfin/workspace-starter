@@ -4,7 +4,6 @@ import {
 	ColorSchemeOptionType,
 	getCurrentSync,
 	init,
-	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
@@ -209,17 +208,20 @@ async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void>
 	}
 
 	// Get the current palette from the platform based on the selected scheme.
-	const currentPalette = (themes[0] as CustomThemeOptionsWithScheme).palettes[scheme];
+	if (Array.isArray(themes) && themes.length > 0) {
+		const currentTheme = themes[0];
 
-	// Broadcast a message using interop so that any views with the style preload
-	// scripts can react and update their UIs accordingly
-	const finMeInterop = fin.Interop.connectSync(fin.me.uuid, {});
-	const appSessionContextGroup = await finMeInterop.joinSessionContextGroup("platform/events");
-	await appSessionContextGroup.setContext({
-		type: "platform.theme",
-		schemeType: scheme,
-		palette: currentPalette
-	} as OpenFin.Context);
+		if ("palettes" in currentTheme) {
+			const currentPalette = currentTheme.palettes[scheme];
+			const finMeInterop = fin.Interop.connectSync(fin.me.uuid, {});
+			const appSessionContextGroup = await finMeInterop.joinSessionContextGroup("platform/events");
+			await appSessionContextGroup.setContext({
+				type: "platform.theme",
+				schemeType: scheme,
+				palette: currentPalette
+			} as OpenFin.Context);
+		}
+	}
 }
 
 /**
