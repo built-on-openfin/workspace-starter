@@ -149,7 +149,14 @@ async function initializeDOM(): Promise<void> {
 					saveWindowState: saveWindowState?.checked ?? false,
 					defaultCentered: defaultCentered?.checked ?? false,
 					defaultLeft: Number(defaultLeftPos?.value ?? Number.NaN),
-					defaultTop: Number(defaultTopPos?.value ?? Number.NaN)
+					defaultTop: Number(defaultTopPos?.value ?? Number.NaN),
+					experimental: {
+                        snapZone: {
+                            enabled: true,
+                            threshold: 10,
+                            locationPreference: ["top", "bottom"]
+                        }
+                    }
 				};
 
 				dockProvider = await initializeDock3API(settings, dockConfig);
@@ -296,10 +303,19 @@ function getDockConfig(configName: "google" | "barclays" | "arcore" | "nameless"
 	config.defaultDockButtons = dockButtons;
 
 	config.uiConfig = {
-		contentMenu: {
-			enableBookmarking: enableContentMenuBookmarking?.checked ?? false
-		}
-	};
+        contentMenu: {
+            enableBookmarking: enableContentMenuBookmarking?.checked ?? false
+        },
+        moreMenu: {
+            moreMenuCustomOption: {
+                label: "Help",
+                options: [
+                    { tooltip: "Upload Logs", action: "launch-log-uploader" },
+                    { tooltip: "About", action: "launch-about-page" }
+                ]
+            }
+        }
+    };
 
 	return config;
 }
