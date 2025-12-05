@@ -14,6 +14,18 @@ const updatableNotifications: {
 } = {};
 let updatableNotificationTimer: number | undefined;
 
+// Keep track of notifications with countdowns
+const countdownNotifications: {
+	[id: string]: { secondsRemaining: number; reminderDate: Date };
+} = {};
+let countdownTimer: number | undefined;
+
+// Keep track of notifications that need to cancel reminders after countdown
+const cancelReminderNotifications: {
+	[id: string]: { secondsRemaining: number };
+} = {};
+let cancelReminderTimer: number | undefined;
+
 let loggingElement: HTMLElement | null;
 let codeElement: HTMLTextAreaElement | null;
 
@@ -263,6 +275,16 @@ async function initializeDom(): Promise<void> {
 		);
 	}
 
+	const btnNotificationWithReminder = document.querySelector("#btnNotificationWithReminder");
+	if (btnNotificationWithReminder) {
+		btnNotificationWithReminder.addEventListener("click", async () => showReminderNotification());
+	}
+
+	const btnNotificationWithReminderCancel = document.querySelector("#btnNotificationWithReminderCancel");
+	if (btnNotificationWithReminderCancel) {
+		btnNotificationWithReminderCancel.addEventListener("click", async () => showReminderCancelNotification());
+	}
+
 	const btnNotificationsCenterShow = document.querySelector<HTMLButtonElement>("#btnNotificationsCenterShow");
 	if (btnNotificationsCenterShow) {
 		btnNotificationsCenterShow.addEventListener("click", async () => {
@@ -321,6 +343,22 @@ async function initializeListeners(): Promise<void> {
 			if (Object.keys(updatableNotifications).length === 0) {
 				window.clearInterval(updatableNotificationTimer);
 				updatableNotificationTimer = undefined;
+			}
+		}
+
+		if (countdownNotifications[event.notification.id]) {
+			delete countdownNotifications[event.notification.id];
+			if (Object.keys(countdownNotifications).length === 0) {
+				window.clearInterval(countdownTimer);
+				countdownTimer = undefined;
+			}
+		}
+
+		if (cancelReminderNotifications[event.notification.id]) {
+			delete cancelReminderNotifications[event.notification.id];
+			if (Object.keys(cancelReminderNotifications).length === 0) {
+				window.clearInterval(cancelReminderTimer);
+				cancelReminderTimer = undefined;
 			}
 		}
 	});
@@ -1189,6 +1227,183 @@ async function showCustomIndicatorNotification(): Promise<void> {
 
 	codeShowExample(notification);
 	await Notifications.create(notification);
+}
+
+/**
+ * Helper function to create a notification and countdown to set a reminder.
+ * @param title The title of the notification.
+ * @param reminderDate The date when the reminder should trigger.
+ * @param countdownSeconds The number of seconds to countdown before setting the reminder.
+ * @param onReminderSet Optional callback called when the reminder is successfully set.
+ * @returns The notification ID.
+ */
+async function createReminderNotification(
+	title: string,
+	reminderDate: Date,
+	countdownSeconds: number,
+	onReminderSet?: (notificationId: string) => void | Promise<void>
+): Promise<string> {
+	const id = randomUUID();
+
+	const notification: Notifications.NotificationOptions = {
+		title,
+		body: `Setting reminder in ${countdownSeconds} second${countdownSeconds !== 1 ? "s" : ""}...`,
+		toast: "transient",
+		category: "default",
+		template: "markdown",
+		id,
+		platform: PLATFORM_ID
+	};
+
+	// Start countdown
+	countdownNotifications[id] = {
+		secondsRemaining: countdownSeconds,
+		reminderDate
+	};
+
+	// Start countdown timer if not already running
+	if (countdownTimer === undefined) {
+		countdownTimer = window.setInterval(async () => {
+			for (const notificationId in countdownNotifications) {
+				const countdown = countdownNotifications[notificationId];
+				countdown.secondsRemaining--;
+
+				if (countdown.secondsRemaining > 0) {
+					// Update notification with countdown
+					const updateOptions: Notifications.UpdatableNotificationOptions = {
+						template: "markdown",
+						body: `Setting reminder in ${countdown.secondsRemaining} second${countdown.secondsRemaining !== 1 ? "s" : ""}...`,
+						id: notificationId
+					};
+					await Notifications.update(updateOptions);
+				} else {
+					// Countdown reached 0, set the reminder
+					try {
+						loggingAddEntry(
+							`Setting reminder for notification: ${notificationId} at ${countdown.reminderDate.toLocaleString()}`
+						);
+						const result = await Notifications.setReminder(notificationId, countdown.reminderDate);
+
+						if (result) {
+							// Update notification to show reminder was set
+							const updateOptions: Notifications.UpdatableNotificationOptions = {
+								template: "markdown",
+								body: `Reminder set for ${countdown.reminderDate.toLocaleString()}`,
+								id: notificationId
+							};
+							await Notifications.update(updateOptions);
+							loggingAddEntry(`Reminder set successfully for notification: ${notificationId}`);
+
+							// Call callback if provided
+							if (onReminderSet) {
+								await onReminderSet(notificationId);
+							}
+						} else {
+							loggingAddEntry(`Reminder setting returned false for notification: ${notificationId}`);
+						}
+					} catch (err) {
+						loggingAddEntry(`Error setting reminder: ${err}`);
+					}
+
+					// Remove from tracking
+					delete countdownNotifications[notificationId];
+				}
+			}
+
+			// Clean up timer if no more countdowns
+			if (Object.keys(countdownNotifications).length === 0) {
+				window.clearInterval(countdownTimer);
+				countdownTimer = undefined;
+			}
+		}, 1000);
+	}
+
+	codeShowExample(notification);
+	await Notifications.create(notification);
+	return id;
+}
+
+/**
+ * Display a notification that will countdown and set a reminder.
+ */
+async function showReminderNotification(): Promise<void> {
+	// 2 minutes in milliseconds (2 * 60 * 1000)
+	const reminderDate = new Date(Date.now() + 120000);
+	const countdownSeconds: number = 5; // 5 second countdown before setting reminder
+
+	await createReminderNotification("Reminder Notification", reminderDate, countdownSeconds);
+}
+
+/**
+ * Display a notification that will countdown, set a reminder, then countdown again and cancel the reminder.
+ */
+async function showReminderCancelNotification(): Promise<void> {
+	// 2 minutes in milliseconds (2 * 60 * 1000)
+	const reminderDate = new Date(Date.now() + 120000);
+	const countdownSeconds: number = 5; // 5 second countdown before setting reminder
+	const cancelCountdownSeconds: number = 10; // 10 second countdown before canceling reminder
+
+	await createReminderNotification(
+		"Reminder Cancel Notification",
+		reminderDate,
+		countdownSeconds,
+		async (notificationId) => {
+			// Start cancel countdown after reminder is set
+			cancelReminderNotifications[notificationId] = {
+				secondsRemaining: cancelCountdownSeconds
+			};
+
+			// Start cancel reminder timer if not already running
+			if (cancelReminderTimer === undefined) {
+				cancelReminderTimer = window.setInterval(async () => {
+					for (const cancelId in cancelReminderNotifications) {
+						const cancelCountdown = cancelReminderNotifications[cancelId];
+						cancelCountdown.secondsRemaining--;
+
+						if (cancelCountdown.secondsRemaining > 0) {
+							// Update notification with cancel countdown
+							const cancelUpdateOptions: Notifications.UpdatableNotificationOptions = {
+								template: "markdown",
+								body: `Canceling reminder in ${cancelCountdown.secondsRemaining} second${cancelCountdown.secondsRemaining !== 1 ? "s" : ""}...`,
+								id: cancelId
+							};
+							await Notifications.update(cancelUpdateOptions);
+						} else {
+							// Cancel countdown reached 0, cancel the reminder
+							try {
+								loggingAddEntry(`Canceling reminder for notification: ${cancelId}`);
+								const cancelResult = await Notifications.cancelReminder(cancelId);
+
+								if (cancelResult) {
+									// Update notification to tell user the reminder was cancelled
+									const cancelFinalUpdateOptions: Notifications.UpdatableNotificationOptions = {
+										template: "markdown",
+										body: "Reminder cancelled",
+										id: cancelId
+									};
+									await Notifications.update(cancelFinalUpdateOptions);
+									loggingAddEntry(`Reminder canceled successfully for notification: ${cancelId}`);
+								} else {
+									loggingAddEntry(`Reminder cancel returned false for notification: ${cancelId}`);
+								}
+							} catch (err) {
+								loggingAddEntry(`Error canceling reminder: ${err}`);
+							}
+
+							// Remove from tracking
+							delete cancelReminderNotifications[cancelId];
+						}
+					}
+
+					// Clean up timer if no more cancel countdowns
+					if (Object.keys(cancelReminderNotifications).length === 0) {
+						window.clearInterval(cancelReminderTimer);
+						cancelReminderTimer = undefined;
+					}
+				}, 1000);
+			}
+		}
+	);
 }
 
 /**
