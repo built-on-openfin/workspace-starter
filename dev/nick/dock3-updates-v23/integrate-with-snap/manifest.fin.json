@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "42.138.103.1"
+		"version": "43.142.100.105"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap",
@@ -23,7 +23,7 @@
 		"company": "OpenFin",
 		"description": "A way of showing examples of what OpenFin can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/dock3-updates-v23/integrate-with-snap/favicon.ico",
-		"name": "Integrate With Snap - v22.0.0",
+		"name": "Integrate With Snap - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

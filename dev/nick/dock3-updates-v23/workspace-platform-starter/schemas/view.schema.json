@@ -2,6 +2,29 @@
 	"$ref": "#/definitions/ViewOptions",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
+		"Anchor": {
+			"$ref": "#/definitions/__type_29"
+		},
+		"AnchorLocation": {
+			"description": "Defines the point within the rectangle that should be used as the anchor\nwhen positioning UI elements relative to another surface.",
+			"enum": [
+				"bottomCenter",
+				"bottomLeft",
+				"bottomRight",
+				"float",
+				"leftBottom",
+				"leftCenter",
+				"leftTop",
+				"none",
+				"rightBottom",
+				"rightCenter",
+				"rightTop",
+				"topCenter",
+				"topLeft",
+				"topRight"
+			],
+			"type": "string"
+		},
 		"Api": {
 			"$ref": "#/definitions/__type"
 		},
@@ -15,7 +38,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_33"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +69,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_32"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -110,6 +133,9 @@
 		"ContextMenuSettings": {
 			"$ref": "#/definitions/__type_5"
 		},
+		"DownloadBubbleOptions": {
+			"$ref": "#/definitions/__type_28"
+		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_16"
 		},
@@ -156,7 +182,7 @@
 			"$ref": "#/definitions/__type_7"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_31"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_12"
@@ -202,6 +228,8 @@
 				"reload",
 				"selectAll",
 				"separator",
+				"snapToBottom",
+				"snapToTop",
 				"spellCheck",
 				"undo"
 			],
@@ -212,6 +240,9 @@
 		},
 		"Record": {
 			"$ref": "#/definitions/__type_18"
+		},
+		"Rectangle": {
+			"$ref": "#/definitions/__type_30"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_8"
@@ -378,6 +409,10 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -411,10 +446,6 @@
 						"type": "object"
 					},
 					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -876,7 +907,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
 					},
 					"type": "array"
 				}
@@ -1238,256 +1269,34 @@
 		},
 		"__type_28": {
 			"additionalProperties": false,
+			"description": "Configuration options for enabling and positioning the download bubble UI.",
 			"properties": {
-				"_internalWorkspaceData": {},
-				"accelerator": {
-					"$ref": "#/definitions/Partial_2",
-					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				"anchor": {
+					"$ref": "#/definitions/Anchor",
+					"description": "Anchor configuration describing where the download bubble should attach."
 				},
-				"api": {
-					"$ref": "#/definitions/ApiSettings",
-					"description": "Configurations for API injection."
-				},
-				"autoResize": {
-					"$ref": "#/definitions/AutoResizeOptions"
-				},
-				"autoplayPolicy": {
-					"$ref": "#/definitions/AutoplayPolicyOptions",
-					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
-				},
-				"backgroundColor": {
-					"description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
-					"type": "string"
-				},
-				"bounds": {
-					"$ref": "#/definitions/Bounds",
-					"description": "Initial bounds given relative to the window."
-				},
-				"chromiumPolicies": {
-					"$ref": "#/definitions/ChromiumPolicies",
-					"description": "{@inheritDoc ChromiumPolicies}"
-				},
-				"closeBehavior": {
-					"description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
-					"enum": ["destroy", "detach", "hide"],
-					"type": "string"
-				},
-				"contentCreation": {
-					"$ref": "#/definitions/ContentCreationOptions",
-					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
-				},
-				"contentNavigation": {
-					"$ref": "#/definitions/ContentNavigation",
-					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
-				},
-				"contentRedirect": {
-					"$ref": "#/definitions/ContentRedirect"
-				},
-				"contextMenu": {
-					"default": true,
+				"enabled": {
+					"description": "Whether the download bubble feature is enabled.",
 					"type": "boolean"
-				},
-				"contextMenuOptions": {
-					"$ref": "#/definitions/ContextMenuOptions",
-					"description": "Configure the context menu when right-clicking on a window."
-				},
-				"contextMenuSettings": {
-					"$ref": "#/definitions/ContextMenuSettings"
-				},
-				"customContext": {
-					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. For usage example, see {@link MutableWindowOptionscustomContext Example}."
-				},
-				"customData": {
-					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-				},
-				"customRequestHeaders": {
-					"description": "Custom headers for requests sent by the view.",
-					"items": {
-						"additionalProperties": false,
-						"description": "Custom headers for requests sent by the window.",
-						"properties": {
-							"headers": {
-								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
-								"items": {
-									"additionalProperties": {
-										"type": "string"
-									},
-									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
-									"type": "object"
-								},
-								"type": "array"
-							},
-							"urlPatterns": {
-								"description": "The URL patterns for which the headers will be applied.",
-								"items": {
-									"type": "string"
-								},
-								"type": "array"
-							}
-						},
-						"required": ["headers", "urlPatterns"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"detachOnClose": {
-					"default": false,
-					"type": "boolean"
-				},
-				"disableAppRegion": {
-					"default": false,
-					"type": "boolean"
-				},
-				"downloadShelf": {
-					"additionalProperties": false,
-					"description": "Controls interaction of the view with its parent window's download shelf.",
-					"properties": {
-						"enabled": {
-							"description": "Whether downloads in this view trigger opening the download shelf on its parent BrowserWindow.",
-							"type": "boolean"
-						}
-					},
-					"required": ["enabled"],
-					"type": "object"
-				},
-				"enableBeforeUnload": {
-					"default": false,
-					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
-					"type": "boolean"
-				},
-				"excludeOptions": {
-					"$ref": "#/definitions/ExcludeOptions",
-					"description": "Control which options to ignore when creating a Platform View."
-				},
-				"experimental": {},
-				"fdc3InteropApi": {
-					"type": "string"
-				},
-				"hotkeys": {
-					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example, see {@link MutableWindowOptionshotkeys Example}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
-					"items": {
-						"additionalProperties": false,
-						"description": "A hotkey binding.",
-						"properties": {
-							"keys": {
-								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
-								"type": "string"
-							},
-							"preventDefault": {
-								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
-								"type": "boolean"
-							}
-						},
-						"required": ["keys"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
-				},
-				"interop": {
-					"$ref": "#/definitions/InteropConfig"
-				},
-				"isClosable": {
-					"default": true,
-					"description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
-					"type": "boolean"
-				},
-				"manifestUrl": {
-					"description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
-					"type": "string"
-				},
-				"name": {
-					"description": "The name of the view.",
-					"type": "string"
-				},
-				"permissions": {
-					"$ref": "#/definitions/Partial_4",
-					"description": "API permissions for code running in the view."
-				},
-				"preloadScripts": {
-					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
-					"items": {
-						"additionalProperties": false,
-						"description": "A script that is run before page load.",
-						"properties": {
-							"mandatory": {
-								"default": false,
-								"description": "Fail to load the window if this preload script fails",
-								"type": "boolean"
-							},
-							"state": {
-								"description": "Preload script execution state.",
-								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
-								"type": "string"
-							},
-							"url": {
-								"description": "The URL from which the script was loaded.",
-								"type": "string"
-							}
-						},
-						"required": ["url"],
-						"type": "object"
-					},
-					"type": "array"
-				},
-				"preventDragOut": {
-					"default": false,
-					"description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
-					"type": "boolean"
-				},
-				"processAffinity": {
-					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
-					"type": "string"
-				},
-				"target": {
-					"$ref": "#/definitions/Identity_4",
-					"description": "The identity of the window this view should be attached to."
-				},
-				"throttling": {
-					"$ref": "#/definitions/ViewThrottling",
-					"default": "'enabled'",
-					"description": "{@inheritDoc ViewThrottling}"
-				},
-				"title": {
-					"description": "Defaults to `name`.",
-					"type": "string"
-				},
-				"titlePriority": {
-					"$ref": "#/definitions/ViewTitlePriority",
-					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
-				},
-				"url": {
-					"default": "about:blank",
-					"description": "The URL of the window",
-					"type": "string"
-				},
-				"zoomLevel": {
-					"type": "number"
 				}
 			},
+			"required": ["anchor", "enabled"],
 			"type": "object"
 		},
 		"__type_29": {
 			"additionalProperties": false,
+			"description": "Represents an anchor configuration consisting of a bounding rectangle\nand an anchor point describing which part of that rectangle should be\nused as the reference for positioning the download bubble.",
 			"properties": {
-				"height": {
-					"type": "number"
+				"bounds": {
+					"$ref": "#/definitions/Rectangle",
+					"description": "The DOM or screen-space rectangle that defines the anchor area."
 				},
-				"left": {
-					"type": "number"
-				},
-				"top": {
-					"type": "number"
-				},
-				"width": {
-					"type": "number"
+				"location": {
+					"$ref": "#/definitions/AnchorLocation",
+					"description": "The location within the rectangle that should act as the anchor\n (e.g., `topRight`, `bottomLeft`, `center`, etc.).\nFor example, `topRight` means the rectangle's top-right corner is used\nas the anchoring reference point."
 				}
 			},
-			"required": ["height", "left", "top", "width"],
+			"required": ["bounds", "location"],
 			"type": "object"
 		},
 		"__type_3": {
@@ -1636,9 +1445,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -1684,10 +1501,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -1882,6 +1695,284 @@
 			"type": "object"
 		},
 		"__type_30": {
+			"additionalProperties": false,
+			"description": "A rectangular area on the screen.",
+			"properties": {
+				"height": {
+					"description": "The height of the rectangle in pixels",
+					"type": "number"
+				},
+				"width": {
+					"description": "The width of the rectangle in pixels",
+					"type": "number"
+				},
+				"x": {
+					"description": "The x coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				},
+				"y": {
+					"description": "The y coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				}
+			},
+			"required": ["height", "width", "x", "y"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
+			"properties": {
+				"_internalWorkspaceData": {},
+				"accelerator": {
+					"$ref": "#/definitions/Partial_2",
+					"description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+				},
+				"api": {
+					"$ref": "#/definitions/ApiSettings",
+					"description": "Configurations for API injection."
+				},
+				"autoResize": {
+					"$ref": "#/definitions/AutoResizeOptions"
+				},
+				"autoplayPolicy": {
+					"$ref": "#/definitions/AutoplayPolicyOptions",
+					"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+				},
+				"backgroundColor": {
+					"description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+					"type": "string"
+				},
+				"bounds": {
+					"$ref": "#/definitions/Bounds",
+					"description": "Initial bounds given relative to the window."
+				},
+				"chromiumPolicies": {
+					"$ref": "#/definitions/ChromiumPolicies",
+					"description": "{@inheritDoc ChromiumPolicies}"
+				},
+				"closeBehavior": {
+					"description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
+					"enum": ["destroy", "detach", "hide"],
+					"type": "string"
+				},
+				"contentCreation": {
+					"$ref": "#/definitions/ContentCreationOptions",
+					"description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+				},
+				"contentNavigation": {
+					"$ref": "#/definitions/ContentNavigation",
+					"description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
+				},
+				"contentRedirect": {
+					"$ref": "#/definitions/ContentRedirect"
+				},
+				"contextMenu": {
+					"default": true,
+					"type": "boolean"
+				},
+				"contextMenuOptions": {
+					"$ref": "#/definitions/ContextMenuOptions",
+					"description": "Configure the context menu when right-clicking on a window."
+				},
+				"contextMenuSettings": {
+					"$ref": "#/definitions/ContextMenuSettings"
+				},
+				"customContext": {
+					"description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. For usage example, see {@link MutableWindowOptionscustomContext Example}."
+				},
+				"customData": {
+					"description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+				},
+				"customRequestHeaders": {
+					"description": "Custom headers for requests sent by the view.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Custom headers for requests sent by the window.",
+						"properties": {
+							"headers": {
+								"description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+								"items": {
+									"additionalProperties": {
+										"type": "string"
+									},
+									"description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"urlPatterns": {
+								"description": "The URL patterns for which the headers will be applied.",
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": ["headers", "urlPatterns"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"detachOnClose": {
+					"default": false,
+					"type": "boolean"
+				},
+				"disableAppRegion": {
+					"default": false,
+					"type": "boolean"
+				},
+				"downloadShelf": {
+					"additionalProperties": false,
+					"description": "Controls interaction of the view with its parent window's download shelf.",
+					"properties": {
+						"enabled": {
+							"description": "Whether downloads in this view trigger opening the download shelf on its parent BrowserWindow.",
+							"type": "boolean"
+						}
+					},
+					"required": ["enabled"],
+					"type": "object"
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
+				"enableBeforeUnload": {
+					"default": false,
+					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
+					"type": "boolean"
+				},
+				"excludeOptions": {
+					"$ref": "#/definitions/ExcludeOptions",
+					"description": "Control which options to ignore when creating a Platform View."
+				},
+				"experimental": {},
+				"fdc3InteropApi": {
+					"type": "string"
+				},
+				"hotkeys": {
+					"description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example, see {@link MutableWindowOptionshotkeys Example}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A hotkey binding.",
+						"properties": {
+							"keys": {
+								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+								"type": "string"
+							},
+							"preventDefault": {
+								"default": false,
+								"description": "Prevent default key handling before emitting the event.",
+								"type": "boolean"
+							}
+						},
+						"required": ["keys"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"interop": {
+					"$ref": "#/definitions/InteropConfig"
+				},
+				"isClosable": {
+					"default": true,
+					"description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
+					"type": "boolean"
+				},
+				"manifestUrl": {
+					"description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
+					"type": "string"
+				},
+				"name": {
+					"description": "The name of the view.",
+					"type": "string"
+				},
+				"permissions": {
+					"$ref": "#/definitions/Partial_4",
+					"description": "API permissions for code running in the view."
+				},
+				"preloadScripts": {
+					"description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "A script that is run before page load.",
+						"properties": {
+							"mandatory": {
+								"default": false,
+								"description": "Fail to load the window if this preload script fails",
+								"type": "boolean"
+							},
+							"state": {
+								"description": "Preload script execution state.",
+								"enum": ["failed", "load-failed", "load-started", "load-succeeded", "succeeded"],
+								"type": "string"
+							},
+							"url": {
+								"description": "The URL from which the script was loaded.",
+								"type": "string"
+							}
+						},
+						"required": ["url"],
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"preventDragOut": {
+					"default": false,
+					"description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
+					"type": "boolean"
+				},
+				"processAffinity": {
+					"description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+					"type": "string"
+				},
+				"target": {
+					"$ref": "#/definitions/Identity_4",
+					"description": "The identity of the window this view should be attached to."
+				},
+				"throttling": {
+					"$ref": "#/definitions/ViewThrottling",
+					"default": "'enabled'",
+					"description": "{@inheritDoc ViewThrottling}"
+				},
+				"title": {
+					"description": "Defaults to `name`.",
+					"type": "string"
+				},
+				"titlePriority": {
+					"$ref": "#/definitions/ViewTitlePriority",
+					"description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
+				},
+				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
+					"type": "string"
+				},
+				"zoomLevel": {
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_32": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"left": {
+					"type": "number"
+				},
+				"top": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"required": ["height", "left", "top", "width"],
+			"type": "object"
+		},
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {

@@ -1,6 +1,29 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
+		"Anchor": {
+			"$ref": "#/definitions/__type_30"
+		},
+		"AnchorLocation": {
+			"description": "Defines the point within the rectangle that should be used as the anchor\nwhen positioning UI elements relative to another surface.",
+			"enum": [
+				"bottomCenter",
+				"bottomLeft",
+				"bottomRight",
+				"float",
+				"leftBottom",
+				"leftCenter",
+				"leftTop",
+				"none",
+				"rightBottom",
+				"rightCenter",
+				"rightTop",
+				"topCenter",
+				"topLeft",
+				"topRight"
+			],
+			"type": "string"
+		},
 		"Api": {
 			"$ref": "#/definitions/__type_1"
 		},
@@ -146,7 +169,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_33"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -177,7 +200,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_32"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -203,7 +226,7 @@
 			"type": "object"
 		},
 		"CertificationInfo": {
-			"$ref": "#/definitions/__type_40"
+			"$ref": "#/definitions/__type_43"
 		},
 		"ChromiumPolicies": {
 			"$ref": "#/definitions/__type_12"
@@ -274,7 +297,7 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_37"
+			"$ref": "#/definitions/__type_40"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_7"
@@ -330,7 +353,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_37"
+		},
+		"DownloadBubbleOptions": {
+			"$ref": "#/definitions/__type_29"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_17"
@@ -409,7 +435,7 @@
 			"$ref": "#/definitions/__type_10"
 		},
 		"LaunchExternalProcessListener": {
-			"$ref": "#/definitions/__type_39"
+			"$ref": "#/definitions/__type_42"
 		},
 		"LaunchPreference": {
 			"additionalProperties": false,
@@ -460,10 +486,10 @@
 			"$ref": "#/definitions/__type_18"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_39"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_35"
 		},
 		"NativeLaunchOptions": {
 			"additionalProperties": false,
@@ -495,7 +521,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>"
+						"$ref": "#/definitions/NativePreference%3Cnever%3E"
 					},
 					"type": "array"
 				}
@@ -549,22 +575,22 @@
 			"$ref": "#/definitions/__type_27"
 		},
 		"Partial_11": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_34"
 		},
 		"Partial_12": {
-			"$ref": "#/definitions/__type_38"
-		},
-		"Partial_13": {
 			"$ref": "#/definitions/__type_41"
 		},
+		"Partial_13": {
+			"$ref": "#/definitions/__type_44"
+		},
 		"Partial_14": {
-			"$ref": "#/definitions/__type_42"
+			"$ref": "#/definitions/__type_45"
 		},
 		"Partial_15": {
-			"$ref": "#/definitions/__type_43"
+			"$ref": "#/definitions/__type_46"
 		},
 		"Partial_16": {
-			"$ref": "#/definitions/__type_44"
+			"$ref": "#/definitions/__type_47"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_8"
@@ -729,7 +755,7 @@
 			"description": "Application interop."
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_36"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -751,6 +777,8 @@
 				"reload",
 				"selectAll",
 				"separator",
+				"snapToBottom",
+				"snapToTop",
 				"spellCheck",
 				"undo"
 			],
@@ -767,8 +795,11 @@
 		"Record": {
 			"$ref": "#/definitions/__type_19"
 		},
+		"Rectangle": {
+			"$ref": "#/definitions/__type_31"
+		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_38"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_9"
@@ -893,7 +924,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreference%3Cnever%3E"
 							}
 						]
 					},
@@ -1088,7 +1119,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreference%3Cnever%3E"
 							}
 						]
 					},
@@ -1258,6 +1289,10 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -1291,10 +1326,6 @@
 						"type": "object"
 					},
 					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1999,6 +2030,77 @@
 		},
 		"__type_29": {
 			"additionalProperties": false,
+			"description": "Configuration options for enabling and positioning the download bubble UI.",
+			"properties": {
+				"anchor": {
+					"$ref": "#/definitions/Anchor",
+					"description": "Anchor configuration describing where the download bubble should attach."
+				},
+				"enabled": {
+					"description": "Whether the download bubble feature is enabled.",
+					"type": "boolean"
+				}
+			},
+			"required": ["anchor", "enabled"],
+			"type": "object"
+		},
+		"__type_3": {
+			"additionalProperties": false,
+			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+			"properties": {
+				"rules": {
+					"description": "List of rules for creation of new content.",
+					"items": {
+						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["rules"],
+			"type": "object"
+		},
+		"__type_30": {
+			"additionalProperties": false,
+			"description": "Represents an anchor configuration consisting of a bounding rectangle\nand an anchor point describing which part of that rectangle should be\nused as the reference for positioning the download bubble.",
+			"properties": {
+				"bounds": {
+					"$ref": "#/definitions/Rectangle",
+					"description": "The DOM or screen-space rectangle that defines the anchor area."
+				},
+				"location": {
+					"$ref": "#/definitions/AnchorLocation",
+					"description": "The location within the rectangle that should act as the anchor\n (e.g., `topRight`, `bottomLeft`, `center`, etc.).\nFor example, `topRight` means the rectangle's top-right corner is used\nas the anchoring reference point."
+				}
+			},
+			"required": ["bounds", "location"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
+			"description": "A rectangular area on the screen.",
+			"properties": {
+				"height": {
+					"description": "The height of the rectangle in pixels",
+					"type": "number"
+				},
+				"width": {
+					"description": "The width of the rectangle in pixels",
+					"type": "number"
+				},
+				"x": {
+					"description": "The x coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				},
+				"y": {
+					"description": "The y coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				}
+			},
+			"required": ["height", "width", "x", "y"],
+			"type": "object"
+		},
+		"__type_32": {
+			"additionalProperties": false,
 			"properties": {
 				"height": {
 					"type": "number"
@@ -2016,22 +2118,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-			"properties": {
-				"rules": {
-					"description": "List of rules for creation of new content.",
-					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-					},
-					"type": "array"
-				}
-			},
-			"required": ["rules"],
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2053,7 +2140,7 @@
 			},
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -2092,7 +2179,7 @@
 			},
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2183,7 +2270,7 @@
 			],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2198,7 +2285,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -2211,7 +2298,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -2230,7 +2317,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_39": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2280,76 +2367,6 @@
 				"monitorRect",
 				"name"
 			],
-			"type": "object"
-		},
-		"__type_37": {
-			"additionalProperties": {
-				"additionalProperties": {
-					"additionalProperties": false,
-					"description": "Data passed between entities and applications.",
-					"properties": {
-						"id": {
-							"additionalProperties": {
-								"type": "string"
-							},
-							"description": "An object containing string key-value pairs for the bulk of the data for the context. Differs between context types.",
-							"type": "object"
-						},
-						"name": {
-							"description": "User-readable name for the incoming context.",
-							"type": "string"
-						},
-						"type": {
-							"description": "Conserved type for the context (e.g. `instrument` or `country`).",
-							"type": "string"
-						}
-					},
-					"required": ["type"],
-					"type": "object"
-				},
-				"type": "object"
-			},
-			"type": "object"
-		},
-		"__type_38": {
-			"additionalProperties": false,
-			"properties": {
-				"alias": {
-					"type": "string"
-				},
-				"arguments": {
-					"description": "The arguments to pass to the application.",
-					"type": "string"
-				},
-				"certificate": {
-					"$ref": "#/definitions/CertificationInfo"
-				},
-				"cwd": {
-					"description": "Current working directory.",
-					"type": "string"
-				},
-				"initialWindowState": {
-					"description": "Initial window state after launching: 'normal' (default), 'minimized', 'maximized'.",
-					"type": "string"
-				},
-				"lifetime": {
-					"type": "string"
-				},
-				"listener": {
-					"$ref": "#/definitions/LaunchExternalProcessListener"
-				},
-				"path": {
-					"description": "The file path to where the running application resides.",
-					"type": "string"
-				},
-				"uuid": {
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"__type_39": {
-			"additionalProperties": false,
 			"type": "object"
 		},
 		"__type_4": {
@@ -2498,9 +2515,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -2546,10 +2571,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -2744,6 +2765,76 @@
 			"type": "object"
 		},
 		"__type_40": {
+			"additionalProperties": {
+				"additionalProperties": {
+					"additionalProperties": false,
+					"description": "Data passed between entities and applications.",
+					"properties": {
+						"id": {
+							"additionalProperties": {
+								"type": "string"
+							},
+							"description": "An object containing string key-value pairs for the bulk of the data for the context. Differs between context types.",
+							"type": "object"
+						},
+						"name": {
+							"description": "User-readable name for the incoming context.",
+							"type": "string"
+						},
+						"type": {
+							"description": "Conserved type for the context (e.g. `instrument` or `country`).",
+							"type": "string"
+						}
+					},
+					"required": ["type"],
+					"type": "object"
+				},
+				"type": "object"
+			},
+			"type": "object"
+		},
+		"__type_41": {
+			"additionalProperties": false,
+			"properties": {
+				"alias": {
+					"type": "string"
+				},
+				"arguments": {
+					"description": "The arguments to pass to the application.",
+					"type": "string"
+				},
+				"certificate": {
+					"$ref": "#/definitions/CertificationInfo"
+				},
+				"cwd": {
+					"description": "Current working directory.",
+					"type": "string"
+				},
+				"initialWindowState": {
+					"description": "Initial window state after launching: 'normal' (default), 'minimized', 'maximized'.",
+					"type": "string"
+				},
+				"lifetime": {
+					"type": "string"
+				},
+				"listener": {
+					"$ref": "#/definitions/LaunchExternalProcessListener"
+				},
+				"path": {
+					"description": "The file path to where the running application resides.",
+					"type": "string"
+				},
+				"uuid": {
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_42": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_43": {
 			"additionalProperties": false,
 			"properties": {
 				"publickey": {
@@ -2764,7 +2855,7 @@
 			},
 			"type": "object"
 		},
-		"__type_41": {
+		"__type_44": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -2794,7 +2885,7 @@
 			},
 			"type": "object"
 		},
-		"__type_42": {
+		"__type_45": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2812,7 +2903,7 @@
 			},
 			"type": "object"
 		},
-		"__type_43": {
+		"__type_46": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
@@ -2829,7 +2920,7 @@
 			},
 			"type": "object"
 		},
-		"__type_44": {
+		"__type_47": {
 			"additionalProperties": false,
 			"properties": {
 				"customData": {
