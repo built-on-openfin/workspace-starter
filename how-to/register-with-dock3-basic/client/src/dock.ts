@@ -77,11 +77,11 @@ export async function initializeDock3API(
 						switch (payload.action) {
 							case "launch-log-uploader":
 								// eslint-disable-next-line no-alert
-								alert("Studio: Upload Logs!");
+								alert("Dock3: Upload Logs!");
 								break;
 							case "launch-about-page":
 								// eslint-disable-next-line no-alert
-								alert("Studio: About dialog!");
+								alert("Dock3: About dialog!");
 								break;
 							default:
 								console.log(

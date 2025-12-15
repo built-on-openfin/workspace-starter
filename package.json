@@ -59,9 +59,6 @@
   "overrides": {
     "parse-bmfont-xml": {
       "xml2js": "0.5.0"
-    },
-    "@openfin/workspace-platform": {
-      "@openfin/theme-engine": "^1.0.0-alpha"
     }
   }
 }
