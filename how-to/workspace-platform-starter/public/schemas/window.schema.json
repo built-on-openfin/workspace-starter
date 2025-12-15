@@ -2,6 +2,29 @@
 	"$ref": "#/definitions/PlatformWindowOptions",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
+		"Anchor": {
+			"$ref": "#/definitions/__type_29"
+		},
+		"AnchorLocation": {
+			"description": "Defines the point within the rectangle that should be used as the anchor\nwhen positioning UI elements relative to another surface.",
+			"enum": [
+				"bottomCenter",
+				"bottomLeft",
+				"bottomRight",
+				"float",
+				"leftBottom",
+				"leftCenter",
+				"leftTop",
+				"none",
+				"rightBottom",
+				"rightCenter",
+				"rightTop",
+				"topCenter",
+				"topLeft",
+				"topRight"
+			],
+			"type": "string"
+		},
 		"Api": {
 			"$ref": "#/definitions/__type_9"
 		},
@@ -15,7 +38,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_33"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +69,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_32"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -110,6 +133,9 @@
 		"ContextMenuSettings": {
 			"$ref": "#/definitions/__type_1"
 		},
+		"DownloadBubbleOptions": {
+			"$ref": "#/definitions/__type_28"
+		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_15"
 		},
@@ -156,7 +182,7 @@
 			"$ref": "#/definitions/__type_8"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_31"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_11"
@@ -329,9 +355,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -377,10 +411,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -598,6 +628,8 @@
 				"reload",
 				"selectAll",
 				"separator",
+				"snapToBottom",
+				"snapToTop",
 				"spellCheck",
 				"undo"
 			],
@@ -608,6 +640,9 @@
 		},
 		"Record": {
 			"$ref": "#/definitions/__type_17"
+		},
+		"Rectangle": {
+			"$ref": "#/definitions/__type_30"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_4"
@@ -782,7 +817,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
 					},
 					"type": "array"
 				}
@@ -936,9 +971,17 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
+				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
 				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
@@ -984,10 +1027,6 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -1729,6 +1768,78 @@
 		},
 		"__type_28": {
 			"additionalProperties": false,
+			"description": "Configuration options for enabling and positioning the download bubble UI.",
+			"properties": {
+				"anchor": {
+					"$ref": "#/definitions/Anchor",
+					"description": "Anchor configuration describing where the download bubble should attach."
+				},
+				"enabled": {
+					"description": "Whether the download bubble feature is enabled.",
+					"type": "boolean"
+				}
+			},
+			"required": ["anchor", "enabled"],
+			"type": "object"
+		},
+		"__type_29": {
+			"additionalProperties": false,
+			"description": "Represents an anchor configuration consisting of a bounding rectangle\nand an anchor point describing which part of that rectangle should be\nused as the reference for positioning the download bubble.",
+			"properties": {
+				"bounds": {
+					"$ref": "#/definitions/Rectangle",
+					"description": "The DOM or screen-space rectangle that defines the anchor area."
+				},
+				"location": {
+					"$ref": "#/definitions/AnchorLocation",
+					"description": "The location within the rectangle that should act as the anchor\n (e.g., `topRight`, `bottomLeft`, `center`, etc.).\nFor example, `topRight` means the rectangle's top-right corner is used\nas the anchoring reference point."
+				}
+			},
+			"required": ["bounds", "location"],
+			"type": "object"
+		},
+		"__type_3": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"default": 0,
+					"description": "The height in pixels.",
+					"type": "number"
+				},
+				"width": {
+					"default": 0,
+					"description": "The width in pixels.",
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
+			"additionalProperties": false,
+			"description": "A rectangular area on the screen.",
+			"properties": {
+				"height": {
+					"description": "The height of the rectangle in pixels",
+					"type": "number"
+				},
+				"width": {
+					"description": "The width of the rectangle in pixels",
+					"type": "number"
+				},
+				"x": {
+					"description": "The x coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				},
+				"y": {
+					"description": "The y coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				}
+			},
+			"required": ["height", "width", "x", "y"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
@@ -1841,6 +1952,10 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
+				"enableAppLogging": {
+					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
+					"type": "boolean"
+				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -1874,10 +1989,6 @@
 						"type": "object"
 					},
 					"type": "array"
-				},
-				"ignoreChildFrameName": {
-					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
-					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -1962,7 +2073,7 @@
 			},
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -1981,23 +2092,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"default": 0,
-					"description": "The height in pixels.",
-					"type": "number"
-				},
-				"width": {
-					"default": 0,
-					"description": "The width in pixels.",
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
