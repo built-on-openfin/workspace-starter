@@ -84,11 +84,7 @@ export async function initializeDock3API(
 								alert("Dock3: About dialog!");
 								break;
 							default:
-								console.log(
-									"Dock3Panel::moreMenuCustomOptionClicked",
-									"Unknown action:",
-									payload.action
-								);
+								console.log("Dock3Panel::moreMenuCustomOptionClicked", "Unknown action:", payload.action);
 								break;
 						}
 					}
