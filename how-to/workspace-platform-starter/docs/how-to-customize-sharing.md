@@ -237,7 +237,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "43.142.100.105",
+                "runtimeVersion": "43.142.100.110",
                 "monitorInfo": { ... },
             "windows": [
                 { ... }
@@ -351,7 +351,7 @@ The snapshot is a workspace platform snapshot. MonitorInfo and Window details ha
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "43.142.100.105",
+                "runtimeVersion": "43.142.100.110",
                 "monitorInfo": { ... },
             },
             "windows": [
