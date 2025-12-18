@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Content Creation Rule Examples</title>
+		<link rel="icon" type="image/x-icon" href="../../../favicon.ico" />
+		<link rel="stylesheet" href="../../style/app.css" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Example Content Creation Rules</h1>
+				<h1 class="tag">Demonstrate content creations rules for views/windows.</h1>
+			</div>
+			<div class="row middle gap20">
+				<image src="../../images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+
+		<main class="col gap10 col left scroll-horizontal">
+			<h3>Window Rules</h3>
+			<a href="https://www.newscientist.com/" target="_blank" class="button small">
+				Open New Scientist in Window
+			</a>
+			<h3>View Rules</h3>
+			<a href="https://www.scientificamerican.com/" target="_blank" class="button small">
+				Open Scientific American in Top Level View
+			</a>
+			<button
+				onclick="window.open('https://www.scientificamerican.com/', '_blank', 'view-position=right')"
+				class="small"
+			>
+				Open Scientific American in View to Right
+			</button>
+			<button
+				onclick="window.open('https://www.scientificamerican.com/', '_blank', 'view-position=left')"
+				class="small"
+			>
+				Open Scientific American in View to Left
+			</button>
+			<button
+				onclick="window.open('https://www.scientificamerican.com/', '_blank', 'view-position=top')"
+				class="small"
+			>
+				Open Scientific American in View to Top
+			</button>
+			<button
+				onclick="window.open('https://www.scientificamerican.com/', '_blank', 'view-position=bottom')"
+				class="small"
+			>
+				Open Scientific American in View to Bottom
+			</button>
+			<button
+				onclick="window.open('https://www.scientificamerican.com/', '_blank', 'view-position=stack-left')"
+				class="small"
+			>
+				Open Scientific American in View to Left in Stack
+			</button>
+			<button
+				onclick="window.open('https://www.scientificamerican.com/', '_blank', 'view-position=stack-right')"
+				class="small"
+			>
+				Open Scientific American in View to Right in Stack
+			</button>
+			<h3>Browser Rules</h3>
+			<button onclick="window.open('https://www.livescience.com/', '_blank')" class="small">
+				Open Live Science in Browser
+			</button>
+			<h3>Block Rules</h3>
+			<button onclick="window.open('https://www.sciencenews.org/', '_blank')" class="small">
+				Block Science News
+			</button>
+		</main>
+	</body>
+</html>
