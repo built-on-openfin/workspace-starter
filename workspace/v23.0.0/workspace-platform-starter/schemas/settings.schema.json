@@ -2,6 +2,17 @@
     "$ref": "#/definitions/CustomSettings",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
+        "AccessibilityOptions": {
+            "additionalProperties": false,
+            "description": "Configuration options for accessibility features in the Browser.",
+            "properties": {
+                "viewTabOptions": {
+                    "$ref": "#/definitions/ViewTabOptions",
+                    "description": "View tab keyboard navigation options."
+                }
+            },
+            "type": "object"
+        },
         "ActionConnection": {
             "additionalProperties": false,
             "description": "Specific type for an action connection.",
@@ -241,6 +252,18 @@
                 }
             },
             "type": "object"
+        },
+        "AppLogLevel": {
+            "default": "'debug'\n\nPlease note, if the manifest setting `platform.enableAppLogging`  or `startup_app.enableAppLogging` is set to `false`, this feature will be disabled.",
+            "description": "The `appLogLevel` option allows the verbosity of app logs that are collected for a Window or View to be controlled for its application.\n\nThis setting can also be specified in a Domain Setting Rule, allowing per url overrides to be defined. Please note, when a domain setting is actively\ncontrolling a url's appLogLevel, its view/window options will be ignored.",
+            "enum": [
+                "debug",
+                "error",
+                "info",
+                "silent",
+                "warn"
+            ],
+            "type": "string"
         },
         "AppProviderOptions": {
             "additionalProperties": false,
@@ -644,6 +667,10 @@
         "BrowserWorkspacePlatformWindowOptions": {
             "additionalProperties": false,
             "properties": {
+                "accessibilityOptions": {
+                    "$ref": "#/definitions/AccessibilityOptions",
+                    "description": "Accessibility options for the browser window.\nThese options override the default accessibility options set at the platform or browser initialization level."
+                },
                 "disableMultiplePages": {
                     "description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
                     "type": "boolean"
@@ -1821,6 +1848,7 @@
             "enum": [
                 "Close",
                 "ColorLinking",
+                "Download",
                 "Maximise",
                 "Minimise",
                 "PresetLayouts",
@@ -5451,6 +5479,17 @@
             ],
             "type": "object"
         },
+        "ViewTabElements": {
+            "description": "UI elements within a view tab that can be navigated to via keyboard.",
+            "enum": [
+                "active-tab",
+                "active-tab-close-button",
+                "add-tab-button",
+                "inactive-tab",
+                "inactive-tab-close-button"
+            ],
+            "type": "string"
+        },
         "ViewTabMenuOptionType": {
             "description": "View tab context menu types for {@link WorkspacePlatformProvider.openViewTabContextMenu} override.",
             "enum": [
@@ -5469,6 +5508,27 @@
                 "Custom"
             ],
             "type": "string"
+        },
+        "ViewTabOptions": {
+            "additionalProperties": false,
+            "description": "Configuration options for view tab keyboard navigation behavior.",
+            "properties": {
+                "arrowNavigation": {
+                    "description": "Elements in the view tab that are able to be focused using\narrow keys when an element in the view is selected.\nThe order of the items in the array have no impact.\nNote: these are not mutually exclusive and can overlap.\nDefault (when undefined): [\"inactive-tab\",\"active-tab\",\"active-tab-close-button\",\"inactive-tab-close-button\",\"add-tab-button\"]",
+                    "items": {
+                        "$ref": "#/definitions/ViewTabElements"
+                    },
+                    "type": "array"
+                },
+                "tabNavigation": {
+                    "description": "Elements in the view tab that are able to be focused using\ntab and shift+tab when an element in the view is selected.\nThe order of the items in the array have no impact.\nNote: these are not mutually exclusive and can overlap.\nDefault (when undefined): [\"active-tab\",\"add-tab-button\"]",
+                    "items": {
+                        "$ref": "#/definitions/ViewTabElements"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
         },
         "ViewThrottling": {
             "description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
@@ -5829,6 +5889,10 @@
                     "$ref": "#/definitions/Api",
                     "description": "Configurations for API injection."
                 },
+                "appLogLevel": {
+                    "$ref": "#/definitions/AppLogLevel",
+                    "description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+                },
                 "applicationIcon": {
                     "type": "string"
                 },
@@ -5965,10 +6029,6 @@
                     "$ref": "#/definitions/DownloadShelfOptions",
                     "description": "Controls the styling and behavior of the window download shelf."
                 },
-                "enableAppLogging": {
-                    "description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-                    "type": "boolean"
-                },
                 "excludeOptions": {
                     "$ref": "#/definitions/ExcludeOptions",
                     "description": "Control which options to ignore when creating a Platform Window."
@@ -5979,6 +6039,7 @@
                 },
                 "frame": {
                     "default": true,
+                    "description": "Show the window's frame.",
                     "type": "boolean"
                 },
                 "height": {
@@ -5999,9 +6060,18 @@
                                 "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
+                            "phase": {
+                                "default": "'capture'",
+                                "description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+                                "enum": [
+                                    "bubble",
+                                    "capture"
+                                ],
+                                "type": "string"
+                            },
                             "preventDefault": {
                                 "default": false,
-                                "description": "Prevent default key handling before emitting the event.",
+                                "description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
                                 "type": "boolean"
                             }
                         },
@@ -6525,6 +6595,10 @@
                     "$ref": "#/definitions/ApiSettings",
                     "description": "Configurations for API injection."
                 },
+                "appLogLevel": {
+                    "$ref": "#/definitions/AppLogLevel",
+                    "description": "Specifies the AppLogLevel for the specified View. See {@link AppLogLevel} for more information."
+                },
                 "autoResize": {
                     "$ref": "#/definitions/AutoResizeOptions"
                 },
@@ -6636,10 +6710,6 @@
                     ],
                     "type": "object"
                 },
-                "enableAppLogging": {
-                    "description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
-                    "type": "boolean"
-                },
                 "enableBeforeUnload": {
                     "default": false,
                     "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -6663,9 +6733,18 @@
                                 "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
+                            "phase": {
+                                "default": "'capture'",
+                                "description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+                                "enum": [
+                                    "bubble",
+                                    "capture"
+                                ],
+                                "type": "string"
+                            },
                             "preventDefault": {
                                 "default": false,
-                                "description": "Prevent default key handling before emitting the event.",
+                                "description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
                                 "type": "boolean"
                             }
                         },
@@ -7331,6 +7410,10 @@
                     "$ref": "#/definitions/ApiSettings",
                     "description": "Configurations for API injection."
                 },
+                "appLogLevel": {
+                    "$ref": "#/definitions/AppLogLevel",
+                    "description": "Specifies the AppLogLevel for the specified View. See {@link AppLogLevel} for more information."
+                },
                 "autoResize": {
                     "$ref": "#/definitions/AutoResizeOptions"
                 },
@@ -7442,10 +7525,6 @@
                     ],
                     "type": "object"
                 },
-                "enableAppLogging": {
-                    "description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
-                    "type": "boolean"
-                },
                 "enableBeforeUnload": {
                     "default": false,
                     "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -7469,9 +7548,18 @@
                                 "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
+                            "phase": {
+                                "default": "'capture'",
+                                "description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+                                "enum": [
+                                    "bubble",
+                                    "capture"
+                                ],
+                                "type": "string"
+                            },
                             "preventDefault": {
                                 "default": false,
-                                "description": "Prevent default key handling before emitting the event.",
+                                "description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
                                 "type": "boolean"
                             }
                         },
@@ -7631,6 +7719,10 @@
                     "$ref": "#/definitions/ApiSettings",
                     "description": "Configurations for API injection."
                 },
+                "appLogLevel": {
+                    "$ref": "#/definitions/AppLogLevel",
+                    "description": "Specifies the AppLogLevel for the specified View. See {@link AppLogLevel} for more information."
+                },
                 "autoResize": {
                     "$ref": "#/definitions/AutoResizeOptions"
                 },
@@ -7738,10 +7830,6 @@
                     ],
                     "type": "object"
                 },
-                "enableAppLogging": {
-                    "description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
-                    "type": "boolean"
-                },
                 "enableBeforeUnload": {
                     "default": false,
                     "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -7765,9 +7853,18 @@
                                 "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
+                            "phase": {
+                                "default": "'capture'",
+                                "description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+                                "enum": [
+                                    "bubble",
+                                    "capture"
+                                ],
+                                "type": "string"
+                            },
                             "preventDefault": {
                                 "default": false,
-                                "description": "Prevent default key handling before emitting the event.",
+                                "description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
                                 "type": "boolean"
                             }
                         },
@@ -8694,6 +8791,10 @@
                     "$ref": "#/definitions/Api",
                     "description": "Configurations for API injection."
                 },
+                "appLogLevel": {
+                    "$ref": "#/definitions/AppLogLevel",
+                    "description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+                },
                 "applicationIcon": {
                     "type": "string"
                 },
@@ -8830,10 +8931,6 @@
                     "$ref": "#/definitions/DownloadShelfOptions",
                     "description": "Controls the styling and behavior of the window download shelf."
                 },
-                "enableAppLogging": {
-                    "description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-                    "type": "boolean"
-                },
                 "excludeOptions": {
                     "$ref": "#/definitions/ExcludeOptions",
                     "description": "Control which options to ignore when creating a Platform Window."
@@ -8844,6 +8941,7 @@
                 },
                 "frame": {
                     "default": true,
+                    "description": "Show the window's frame.",
                     "type": "boolean"
                 },
                 "height": {
@@ -8864,9 +8962,18 @@
                                 "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
                                 "type": "string"
                             },
+                            "phase": {
+                                "default": "'capture'",
+                                "description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+                                "enum": [
+                                    "bubble",
+                                    "capture"
+                                ],
+                                "type": "string"
+                            },
                             "preventDefault": {
                                 "default": false,
-                                "description": "Prevent default key handling before emitting the event.",
+                                "description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
                                 "type": "boolean"
                             }
                         },

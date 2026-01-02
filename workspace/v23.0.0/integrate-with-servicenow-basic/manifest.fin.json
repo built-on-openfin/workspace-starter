@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.100.110"
+		"version": "43.142.100.111"
 	},
 	"platform": {
 		"uuid": "integrate-with-servicenow-basic",
