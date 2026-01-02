@@ -31,6 +31,12 @@
 		"ApiSettings": {
 			"$ref": "#/definitions/__type_10"
 		},
+		"AppLogLevel": {
+			"default": "'debug'\n\nPlease note, if the manifest setting `platform.enableAppLogging`  or `startup_app.enableAppLogging` is set to `false`, this feature will be disabled.",
+			"description": "The `appLogLevel` option allows the verbosity of app logs that are collected for a Window or View to be controlled for its application.\n\nThis setting can also be specified in a Domain Setting Rule, allowing per url overrides to be defined. Please note, when a domain setting is actively\ncontrolling a url's appLogLevel, its view/window options will be ignored.",
+			"enum": ["debug", "error", "info", "silent", "warn"],
+			"type": "string"
+		},
 		"Array": {
 			"items": {
 				"$ref": "#/definitions/PrebuiltContextMenuItem"
@@ -709,6 +715,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"hideOnClose": {
@@ -979,9 +986,15 @@
 					"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 					"type": "string"
 				},
+				"phase": {
+					"default": "'capture'",
+					"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+					"enum": ["bubble", "capture"],
+					"type": "string"
+				},
 				"preventDefault": {
 					"default": false,
-					"description": "Prevent default key handling before emitting the event.",
+					"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 					"type": "boolean"
 				}
 			},
@@ -1202,6 +1215,10 @@
 					"$ref": "#/definitions/Api",
 					"description": "Configurations for API injection."
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+				},
 				"applicationIcon": {
 					"type": "string"
 				},
@@ -1335,10 +1352,6 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
-				"enableAppLogging": {
-					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-					"type": "boolean"
-				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
@@ -1349,6 +1362,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -1369,9 +1383,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -1597,6 +1617,10 @@
 					"$ref": "#/definitions/Api",
 					"description": "Configurations for API injection."
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+				},
 				"applicationIcon": {
 					"type": "string"
 				},
@@ -1730,10 +1754,6 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
-				"enableAppLogging": {
-					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-					"type": "boolean"
-				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
@@ -1744,6 +1764,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -1764,9 +1785,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -2182,6 +2209,10 @@
 					"$ref": "#/definitions/Api",
 					"description": "Configurations for API injection."
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+				},
 				"applicationIcon": {
 					"type": "string"
 				},
@@ -2315,10 +2346,6 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
-				"enableAppLogging": {
-					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-					"type": "boolean"
-				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
@@ -2329,6 +2356,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -2349,9 +2377,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -3189,6 +3223,10 @@
 					"$ref": "#/definitions/ApiSettings",
 					"description": "Configurations for API injection."
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the specified View. See {@link AppLogLevel} for more information."
+				},
 				"autoResize": {
 					"$ref": "#/definitions/AutoResizeOptions"
 				},
@@ -3291,10 +3329,6 @@
 					"required": ["enabled"],
 					"type": "object"
 				},
-				"enableAppLogging": {
-					"description": "When set to `false`, disables sending application logs to RVM for this view.\nWhen omitted, inherits from the parent application.",
-					"type": "boolean"
-				},
 				"enableBeforeUnload": {
 					"default": false,
 					"description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
@@ -3318,9 +3352,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -3709,6 +3749,10 @@
 					"$ref": "#/definitions/Api",
 					"description": "Configurations for API injection."
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+				},
 				"applicationIcon": {
 					"type": "string"
 				},
@@ -3842,10 +3886,6 @@
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
 				},
-				"enableAppLogging": {
-					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-					"type": "boolean"
-				},
 				"excludeOptions": {
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
@@ -3856,6 +3896,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -3876,9 +3917,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -4212,6 +4259,10 @@
 					"$ref": "#/definitions/DomainApiSettings",
 					"description": "{@inheritDoc ApiInjection}"
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Allows the app log level of any matching content to be overriden.\nSee also {@link AppLogLevel} for more information."
+				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
 					"description": "{@inheritdoc ChromiumPolicies}"
@@ -4255,10 +4306,6 @@
 				"downloadSettings": {
 					"$ref": "#/definitions/FileDownloadSettings",
 					"description": "{@inheritDoc FileDownloadSettings}"
-				},
-				"enableAppLogging": {
-					"description": "When set to `false`, disables sending application logs to RVM for this window.\nWhen omitted, inherits from the parent application.",
-					"type": "boolean"
 				},
 				"preloadScripts": {
 					"$ref": "#/definitions/DomainSettingsPreloadScripts",
