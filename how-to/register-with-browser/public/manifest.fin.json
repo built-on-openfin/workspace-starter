@@ -10,7 +10,13 @@
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true
+		"preventQuitOnLastWindowClosed": true,
+		"commands": [
+            {
+                "command": "findInPage.show",
+                "keys": "CommandOrControl+f"
+            }
+        ]
 	},
 	"shortcut": {
 		"company": "OpenFin",
