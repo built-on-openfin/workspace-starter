@@ -1,4 +1,5 @@
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace";
+import type { DockAllowedWindowOptions } from "@openfin/workspace-platform";
 import type { PopupMenuStyles } from "./menu-shapes";
 /**
  * Options for the dock provider.
@@ -37,6 +38,15 @@ export interface DockProviderOptions {
 	 * Configured a default for the popup menu style, defaults to platform.
 	 */
 	popupMenuStyle?: PopupMenuStyles;
+	/**
+	 * The type of the dock to target. The v1 version is the original dock that is provided as part of the @openfin/workspace package. The v3 version is the latest version of the dock and is platform specific and registered through @openfin/workspace-platform.
+	 * The v3 dock can also be self-hosted. The default is 1.
+	 */
+	dockType?: "1" | "3";
+	/**
+	 * If using dock type 3 this allows you to specify additional options for the dock window.
+	 */
+	dockWindowOptions?: DockAllowedWindowOptions;
 }
 /**
  * Shared properties for dock buttons.

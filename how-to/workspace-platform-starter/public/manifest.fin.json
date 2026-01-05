@@ -1023,6 +1023,7 @@
 				"hideNotificationsButton": false,
 				"hideStorefrontButton": false
 			},
+			"dockType": "3",
 			"entries": [
 				{
 					"id": "workspaces",

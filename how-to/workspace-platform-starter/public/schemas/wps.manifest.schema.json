@@ -354,13 +354,27 @@
 			"type": "array"
 		},
 		"Array_2": {
+			"items": {
+				"enum": ["bottom", "top"],
+				"type": "string"
+			},
+			"type": "array"
+		},
+		"Array_3": {
+			"items": {
+				"enum": ["inspect", "snapToBottom", "snapToTop"],
+				"type": "string"
+			},
+			"type": "array"
+		},
+		"Array_4": {
 			"description": "List of extended custom themes.",
 			"items": {
 				"$ref": "#/definitions/PlatformCustomTheme"
 			},
 			"type": "array"
 		},
-		"Array_3": {
+		"Array_5": {
 			"items": {
 				"additionalProperties": false,
 				"description": "Defines a set of color overrides for Chromium UI surfaces based on a theme\nprovider (e.g., light or dark mode).",
@@ -1450,6 +1464,69 @@
 		"DisplayMetadata": {
 			"$ref": "#/definitions/__type_69"
 		},
+		"DockAllowedWindowOptions": {
+			"additionalProperties": false,
+			"properties": {
+				"contextMenuOptions": {
+					"additionalProperties": false,
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"template": {
+							"$ref": "#/definitions/Array_3"
+						}
+					},
+					"type": "object"
+				},
+				"defaultCentered": {
+					"description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value.\n\n**NOTE:** On macOS _defaultCenter_ is somewhat above center vertically.",
+					"type": "boolean"
+				},
+				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+					"type": "number"
+				},
+				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+					"type": "number"
+				},
+				"experimental": {
+					"additionalProperties": false,
+					"properties": {
+						"snapZone": {
+							"additionalProperties": false,
+							"properties": {
+								"enabled": {
+									"type": "boolean"
+								},
+								"locationPreference": {
+									"$ref": "#/definitions/Array_2"
+								},
+								"threshold": {
+									"type": "number"
+								}
+							},
+							"required": ["enabled"],
+							"type": "object"
+						}
+					},
+					"type": "object"
+				},
+				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
+					"type": "boolean"
+				},
+				"taskbarIconGroup": {
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
 		"DockButtonAction": {
 			"additionalProperties": false,
 			"description": "A button which launches an app by it's custom action.",
@@ -1657,6 +1734,15 @@
 				"disableUserRearrangement": {
 					"description": "Disallow rearrangement of dock icons by setting this flag.",
 					"type": "boolean"
+				},
+				"dockType": {
+					"description": "The type of the dock to target. The v1 version is the original dock that is provided as part of the",
+					"enum": ["1", "3"],
+					"type": "string"
+				},
+				"dockWindowOptions": {
+					"$ref": "#/definitions/DockAllowedWindowOptions",
+					"description": "If using dock type 3 this allows you to specify additional options for the dock window."
 				},
 				"entries": {
 					"description": "What apps, actions or drop downs should be made available via the dock.",
@@ -4148,7 +4234,7 @@
 			"type": "object"
 		},
 		"PlatformCustomThemes": {
-			"$ref": "#/definitions/Array_2"
+			"$ref": "#/definitions/Array_4"
 		},
 		"PlatformInteropBrokerOptions": {
 			"additionalProperties": false,
@@ -5807,7 +5893,7 @@
 							"type": "object"
 						},
 						"themePalette": {
-							"$ref": "#/definitions/Array_3"
+							"$ref": "#/definitions/Array_5"
 						},
 						"version": {
 							"type": "string"

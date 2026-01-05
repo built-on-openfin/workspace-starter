@@ -8,11 +8,21 @@ import {
 	type DockProviderRegistration,
 	type WorkspaceButton
 } from "@openfin/workspace";
-import { getCurrentSync, type WorkspacePlatformModule } from "@openfin/workspace-platform";
+import {
+	getCurrentSync,
+	type WorkspacePlatformModule,
+	Dock as Dock3,
+	type LaunchDockEntryPayload,
+	type BookmarkDockEntryPayload,
+	CustomActionPayload,
+	CustomActionCallerType
+} from "@openfin/workspace-platform";
 import type {
 	DockProviderConfigWithIdentity,
 	DockButton as PlatformDockButton
 } from "@openfin/workspace-platform/client-api/src";
+import type { MoreMenuCustomOptionPayload } from "@openfin/workspace-platform/dock3/src/api/protocol";
+import type { ContentMenuEntry, DockEntry } from "@openfin/workspace/client-api-platform/src";
 import { checkConditions } from "workspace-platform-starter/conditions";
 import type { ConditionChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
 import type {
@@ -21,7 +31,7 @@ import type {
 	EndpointDockSetRequest
 } from "workspace-platform-starter/shapes/platform-shapes";
 import { imageUrlToDataUrl } from "workspace-platform-starter/utils-img";
-import { PLATFORM_ACTION_IDS } from "../actions";
+import { callAction, PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
 import * as endpointProvider from "../endpoint";
 import { subscribeLifecycleEvent, unsubscribeLifecycleEvent } from "../lifecycle";
@@ -71,30 +81,177 @@ export async function register(
 		dockProviderOptions = options;
 		registeredBootstrapOptions = bootstrapOptions;
 
-		const buttons = await buildButtons();
-		logger.info("Dock register about to be called.");
+		if (dockProviderOptions.dockType && dockProviderOptions.dockType === "3") {
+			logger.info("The v3 dock has been selected.");
+			// get the current button definitions taking into account visibility
+			const allDockV1Buttons = await buildButtons();
+			const mapToV3Buttons = await buildDock3ButtonEntries(allDockV1Buttons);
+			await Dock3.init({
+				config: {
+					title: dockProviderOptions.title,
+					icon: dockProviderOptions.icon,
+					defaultDockButtons: buildWorkspaceButtons(),
+					favorites: objectClone(mapToV3Buttons.favorites),
+					contentMenu: objectClone(mapToV3Buttons.contentMenu)
+				},
+				windowOptions: dockProviderOptions.dockWindowOptions,
+				override: (Base) =>
+					/**
+					 * Custom provider overrides for Dock3
+					 * Dock3 is a stateless component, so custom overrides are needed to maintain state.
+					 */
+					class CustomProvider extends Base {
+						/**
+						 * Override for dock3 launch app function.
+						 * This function should be customized to best match the needs of the application.
+						 * @param payload content being launched
+						 */
+						public async launchEntry(payload: LaunchDockEntryPayload): Promise<void> {
+							console.log("Launching Dock Entry:", payload);
+							if (payload.entry.itemData.action) {
+								try {
+									// we need the x and y co-ordinates in case the action needs used the info when running against dock1 actions that should still work in dock3
+									const dockWindowIdentity = { name: "dock3", uuid: fin.me.uuid };
+									const dockWindow = await fin.Window.wrap(dockWindowIdentity);
+									const coordinates = (await dockWindow.executeJavaScript(`
+  (function() {
+    const button = document.querySelector('[title="${payload.entry.label}"]');
+    if (button) {
+      const rect = button.getBoundingClientRect();
+      return {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height,
+        screenX: window.screenX + rect.left,
+        screenY: window.screenY + rect.top
+      };
+    }
+    return null;
+  })()
+`)) as {
+										x: number;
+										y: number;
+										width: number;
+										height: number;
+										screenX: number;
+										screenY: number;
+									} | null;
+									logger.info("Dock button coordinates:", coordinates);
+									const customActionPayload: CustomActionPayload = {
+										callerType: CustomActionCallerType.CustomButton,
+										windowIdentity: dockWindowIdentity,
+										customData: payload.entry.itemData.action.customData,
+										x: coordinates?.x ?? 100,
+										y: coordinates?.y ?? 25
+									};
+									await callAction(payload.entry.itemData.action.id, customActionPayload);
+								} catch (error) {
+									logger.error("Error launching action from dock entry:", payload, error);
+								}
+							}
+						}
 
-		registration = await buildDockProvider(buttons);
+						/**
+						 * Override for dock3 more menu custom option clicked.
+						 * This function should be customized to best match the needs of the application.
+						 * @param payload payload for more menu custom option clicked
+						 * @returns void
+						 */
+						public async moreMenuCustomOptionClicked(payload: MoreMenuCustomOptionPayload): Promise<void> {
+							console.log("Dock3Panel::moreMenuCustomOptionClicked", payload);
+							switch (payload.action) {
+								case "launch-log-uploader":
+									// eslint-disable-next-line no-alert
+									alert("Dock3: Upload Logs!");
+									break;
+								case "launch-about-page":
+									// eslint-disable-next-line no-alert
+									alert("Dock3: About dialog!");
+									break;
+								default:
+									console.log("Dock3Panel::moreMenuCustomOptionClicked", "Unknown action:", payload.action);
+									break;
+							}
+						}
 
-		if (registration) {
-			registrationInfo = await Dock.register(registration);
+						/**
+						 * Override for dock3 bookmark content function.
+						 * This function should be customized to best match the needs of the application.
+						 * @param payload content being bookmarked
+						 */
+						public async bookmarkContentMenuEntry(payload: BookmarkDockEntryPayload): Promise<void> {
+							console.log("Bookmarking Dock Entry:", payload.entry);
 
-			logger.info("Version:", registrationInfo);
-			logger.info("Dock provider initialized");
+							// Update the config to mark the entry as bookmarked
+							const currentConfig = this.config;
+							const entryId = payload.entry.id;
 
-			themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refreshDock());
-			appsChangedSubscriptionId = subscribeLifecycleEvent("apps-changed", async () => refreshDock());
-			conditionChangedSubscriptionId = subscribeLifecycleEvent<ConditionChangedLifecyclePayload>(
-				"condition-changed",
-				async (_, payload) => {
-					if (usedConditions.size > 0) {
-						const conditionId = payload?.conditionId;
-						if (isEmpty(conditionId) || usedConditions.has(conditionId)) {
-							await refreshDock();
+							/**
+							 * Helper function to update content menu entries.
+							 * @param entries - array of content menu entries
+							 * @returns updated array with bookmarked entries
+							 */
+							function updateContentMenuEntry(entries: ContentMenuEntry[]): ContentMenuEntry[] {
+								return entries.map((entry) => {
+									if (entry.id === entryId) {
+										return { ...entry, bookmarked: true };
+									}
+									if (entry.type === "folder") {
+										return { ...entry, children: updateContentMenuEntry(entry.children) };
+									}
+									return entry;
+								});
+							}
+
+							// Update content menu entries
+							if (currentConfig.contentMenu) {
+								const updatedContentMenu = updateContentMenuEntry(currentConfig.contentMenu);
+								currentConfig.contentMenu = updatedContentMenu;
+							}
+
+							// Update favorites if the entry exists there
+							if (currentConfig.favorites) {
+								const updatedFavorites = currentConfig.favorites.map((favorite) => {
+									if (favorite.id === entryId) {
+										return { ...favorite, bookmarked: true };
+									}
+									return favorite;
+								});
+								currentConfig.favorites = updatedFavorites;
+							}
+
+							// Update the dock3 provider's config
+							await this.updateConfig(currentConfig);
 						}
 					}
-				}
-			);
+			});
+		} else {
+			const buttons = await buildButtons();
+			logger.info("Dock register about to be called.");
+
+			registration = await buildDockProvider(buttons);
+
+			if (registration) {
+				registrationInfo = await Dock.register(registration);
+
+				logger.info("Version:", registrationInfo);
+				logger.info("Dock provider initialized");
+
+				themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refreshDock());
+				appsChangedSubscriptionId = subscribeLifecycleEvent("apps-changed", async () => refreshDock());
+				conditionChangedSubscriptionId = subscribeLifecycleEvent<ConditionChangedLifecyclePayload>(
+					"condition-changed",
+					async (_, payload) => {
+						if (usedConditions.size > 0) {
+							const conditionId = payload?.conditionId;
+							if (isEmpty(conditionId) || usedConditions.has(conditionId)) {
+								await refreshDock();
+							}
+						}
+					}
+				);
+			}
 		}
 	}
 
@@ -208,6 +365,50 @@ async function buildButtons(): Promise<DockButton[]> {
 	}
 
 	return [];
+}
+
+/**
+ * Build the Dock3 button entries from Dock v1 buttons.
+ * @param dockv1Buttons The Dock v1 buttons.
+ * @returns The Dock3 button entries.
+ */
+async function buildDock3ButtonEntries(
+	dockv1Buttons: DockButton[]
+): Promise<{ favorites?: DockEntry[]; contentMenu?: ContentMenuEntry[] }> {
+	const favorites: DockEntry[] = [];
+	const contentMenu: ContentMenuEntry[] = [];
+	const schemeMode = await getCurrentColorSchemeMode();
+
+	for (const button of dockv1Buttons) {
+		if (button.type === DockButtonNames.ActionButton) {
+			const favButton: DockEntry = {
+				id: button.id ?? button.action.id,
+				type: "item",
+				label: button.tooltip,
+				itemData: { action: button.action },
+				icon: button.iconUrl ?? ""
+			};
+			if (button?.iconUrl?.includes(`/${schemeMode}/`)) {
+				let darkIcon: string = button.iconUrl;
+				let lightIcon: string = button.iconUrl;
+
+				if (schemeMode === "dark") {
+					lightIcon = button.iconUrl.replace(`/${schemeMode}/`, "/light/");
+				} else if (schemeMode === "light") {
+					darkIcon = button.iconUrl.replace(`/${schemeMode}/`, "/dark/");
+				}
+				favButton.icon = {
+					dark: darkIcon,
+					light: lightIcon
+				};
+			}
+			favorites.push(favButton);
+		}
+	}
+	return {
+		favorites,
+		contentMenu
+	};
 }
 
 /**
