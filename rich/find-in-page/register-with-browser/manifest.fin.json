@@ -10,7 +10,13 @@
 		"icon": "https://built-on-openfin.github.io/workspace-starter/rich/find-in-page/register-with-browser/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/rich/find-in-page/register-with-browser/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true
+		"preventQuitOnLastWindowClosed": true,
+		"commands": [
+            {
+                "command": "findInPage.show",
+                "keys": "CommandOrControl+f"
+            }
+        ]
 	},
 	"shortcut": {
 		"company": "OpenFin",

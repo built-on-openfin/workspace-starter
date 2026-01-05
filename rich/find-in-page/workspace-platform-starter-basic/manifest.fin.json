@@ -78,7 +78,13 @@
 					}
 				}
 			]
-		}
+		},
+		"commands": [
+            {
+                "command": "findInPage.show",
+                "keys": "CommandOrControl+f"
+            }
+        ]
 	},
 	"shortcut": {
 		"company": "OpenFin",
