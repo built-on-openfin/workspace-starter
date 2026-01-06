@@ -3,11 +3,10 @@
 ## v23.0.0
 
 - Update to latest version of npm packages.
-- Update to the latest version of snap 1.3.4
+- Update to the latest version of snap to latest supported version
 - Updated the contact samples in public/common to include interop json files to describe their interop capabilities and added support for ViewProfile alongside ViewContact.
 - Exposed a new lifecycle event - app-asset-download for when the platform starts the check to see if an inline-app-asset needs downloading (state: "started" | "in-progress" | "completed" | "failed";) downloadPercent and appId and title are included as well. An inline-app-asset may go from started to completed straight away if it is already downloaded. This can be accessible by modules through the helper functions so you can decide to publish notifications or show a UI to complement the logging that already happens. Updated [how-to-use-lifecycle-events.md](./docs/how-to-use-lifecycle-events.md) documentation.
-- Upgraded cloud interop to 0.43.104
-- Upgraded Snap to 1.3.4
+- Upgraded cloud interop to latest supported version
 
 ## v21.0.0
 
