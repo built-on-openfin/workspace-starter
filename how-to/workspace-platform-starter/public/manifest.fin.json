@@ -1021,9 +1021,31 @@
 				"hideHomeButton": false,
 				"hideWorkspacesButton": false,
 				"hideNotificationsButton": false,
-				"hideStorefrontButton": false
+				"hideStorefrontButton": false,
+				"hideContentButton": false
 			},
 			"dockType": "3",
+			"dock3WindowOptions": {
+				"experimental": {
+					"snapZone": {
+						"enabled": true
+					}
+				}
+			},
+			"dock3UIConfig": {
+						"contentMenu": {
+							"enableBookmarking": true
+						},
+						"moreMenu": {
+							"moreMenuCustomOption": {
+								"label": "Help",
+								"options": [
+									{ "tooltip": "Upload Logs", "action": "launch-log-uploader" },
+									{ "tooltip": "About", "action": "launch-about-page" }
+								]
+							}
+						}
+					},
 			"entries": [
 				{
 					"id": "workspaces",
@@ -1032,12 +1054,12 @@
 					"action": {
 						"id": "workspaces-menu"
 					},
-					"visible": false
+					"visible": true
 				},
 				{
 					"id": "dock-apps",
 					"display": "individual",
-					"tags": ["dock"]
+					"tags": ["dock", "fdc3"]
 				},
 				{
 					"id": "fdc3-apps",

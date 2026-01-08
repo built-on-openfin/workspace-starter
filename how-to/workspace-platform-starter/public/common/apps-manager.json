@@ -20,7 +20,7 @@
 				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
 			}
 		],
-		"tags": ["page", "openfin", "manager", "fcd3"]
+		"tags": ["page", "openfin", "manager", "fcd3", "dock"]
 	},
 	{
 		"appId": "manager-portal-fixed-panels",
@@ -66,7 +66,7 @@
 				"src": "http://localhost:8080/common/images/previews/manager/preview-manager-portal-my-team.jpeg"
 			}
 		],
-		"tags": ["view", "manager", "fcd3"]
+		"tags": ["view", "manager", "fcd3", "dock"]
 	},
 	{
 		"appId": "annual-leave",

@@ -15,7 +15,8 @@ import {
 	type LaunchDockEntryPayload,
 	type BookmarkDockEntryPayload,
 	CustomActionPayload,
-	CustomActionCallerType
+	CustomActionCallerType,
+	Dock3Button
 } from "@openfin/workspace-platform";
 import type {
 	DockProviderConfigWithIdentity,
@@ -49,7 +50,7 @@ import type {
 } from "../shapes/dock-shapes";
 import type { ColorSchemeMode } from "../shapes/theme-shapes";
 import { getCurrentColorSchemeMode, getCurrentIconFolder, themeUrl } from "../themes";
-import { isEmpty, isStringValue, objectClone } from "../utils";
+import { isEmpty, isStringValue, objectClone, randomUUID } from "../utils";
 import { getVersionInfo } from "../version";
 
 const logger = createLogger("Dock");
@@ -86,15 +87,17 @@ export async function register(
 			// get the current button definitions taking into account visibility
 			const allDockV1Buttons = await buildButtons();
 			const mapToV3Buttons = await buildDock3ButtonEntries(allDockV1Buttons);
+			const dockWindowIdentity = { name: "dock3", uuid: fin.me.uuid };
 			await Dock3.init({
 				config: {
 					title: dockProviderOptions.title,
 					icon: dockProviderOptions.icon,
 					defaultDockButtons: buildWorkspaceButtons(),
+					uiConfig: dockProviderOptions.dock3UIConfig,
 					favorites: objectClone(mapToV3Buttons.favorites),
 					contentMenu: objectClone(mapToV3Buttons.contentMenu)
 				},
-				windowOptions: dockProviderOptions.dockWindowOptions,
+				windowOptions: dockProviderOptions.dock3WindowOptions,
 				override: (Base) =>
 					/**
 					 * Custom provider overrides for Dock3
@@ -111,7 +114,6 @@ export async function register(
 							if (payload.entry.itemData.action) {
 								try {
 									// we need the x and y co-ordinates in case the action needs used the info when running against dock1 actions that should still work in dock3
-									const dockWindowIdentity = { name: "dock3", uuid: fin.me.uuid };
 									const dockWindow = await fin.Window.wrap(dockWindowIdentity);
 									const coordinates = (await dockWindow.executeJavaScript(`
   (function() {
@@ -160,19 +162,14 @@ export async function register(
 						 */
 						public async moreMenuCustomOptionClicked(payload: MoreMenuCustomOptionPayload): Promise<void> {
 							console.log("Dock3Panel::moreMenuCustomOptionClicked", payload);
-							switch (payload.action) {
-								case "launch-log-uploader":
-									// eslint-disable-next-line no-alert
-									alert("Dock3: Upload Logs!");
-									break;
-								case "launch-about-page":
-									// eslint-disable-next-line no-alert
-									alert("Dock3: About dialog!");
-									break;
-								default:
-									console.log("Dock3Panel::moreMenuCustomOptionClicked", "Unknown action:", payload.action);
-									break;
-							}
+							const customActionPayload: CustomActionPayload = {
+										callerType: CustomActionCallerType.CustomButton,
+										windowIdentity: dockWindowIdentity,
+										customData: payload.customData,
+										x: 100,
+										y: 25
+									};
+									await callAction(payload.action, customActionPayload);
 						}
 
 						/**
@@ -299,7 +296,7 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 			icon: dockProviderOptions.icon,
 			workspaceComponents: buildWorkspaceButtons(
 				Array.isArray(registration?.workspaceComponents) ? registration?.workspaceComponents : undefined
-			),
+			) as WorkspaceButton[],
 			disableUserRearrangement: dockProviderOptions?.disableUserRearrangement ?? false,
 			buttons: objectClone(registeredButtons)
 		};
@@ -311,8 +308,8 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
  * @param previousOrder The previous order of workspace buttons.
  * @returns The list of workspace buttons.
  */
-function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): WorkspaceButton[] {
-	const workspaceButtonsSet = new Set<WorkspaceButton>();
+function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): Dock3Button[] {
+	const workspaceButtonsSet = new Set<Dock3Button>();
 
 	if (!(dockProviderOptions?.workspaceComponents?.hideWorkspacesButton ?? false)) {
 		workspaceButtonsSet.add("switchWorkspace");
@@ -335,8 +332,11 @@ function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): Workspace
 	) {
 		workspaceButtonsSet.add("store");
 	}
+	if (!(dockProviderOptions?.workspaceComponents?.hideContentButton ?? false)) {
+		workspaceButtonsSet.add("contentMenu");
+	}
 
-	const workspaceButtons: WorkspaceButton[] = [];
+	const workspaceButtons: Dock3Button[] = [];
 
 	for (const button of previousOrder) {
 		if (workspaceButtonsSet.has(button)) {
@@ -349,6 +349,7 @@ function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): Workspace
 		workspaceButtons.push(...workspaceButtonsSet);
 	}
 
+	logger.info("Workspace buttons for dock:", workspaceButtons);
 	return workspaceButtons;
 }
 
@@ -365,6 +366,58 @@ async function buildButtons(): Promise<DockButton[]> {
 	}
 
 	return [];
+}
+
+function buildSchemeIcon(schemeMode: string, iconUrl :string): string | { dark: string; light: string } {
+	if (iconUrl?.includes(`/${schemeMode}/`)) {
+		let darkIcon: string = iconUrl;
+		let lightIcon: string = iconUrl;
+
+		if (schemeMode === "dark") {
+			lightIcon = iconUrl.replace(`/${schemeMode}/`, "/light/");
+		} else if (schemeMode === "light") {
+			darkIcon = iconUrl.replace(`/${schemeMode}/`, "/dark/");
+		}
+		return {
+			dark: darkIcon,
+			light: lightIcon
+		};
+	}
+	return iconUrl;
+}
+
+/**
+ * Maps options into ContentMenuEntry items, creating folders for nested options.
+ * @param options - The options to map
+ * @returns Array of ContentMenuEntry items
+ */
+function mapOptionsToContentMenu(options: Dock.DockButton["options"]): ContentMenuEntry[] {
+	if(isEmpty(options)) {
+		return [];
+	}
+    return options.map((option) => {
+        // Check if this option has nested children
+        if (option.options && Array.isArray(option.options) && option.options.length > 0) {
+            // Create a folder entry with children
+            return {
+                type: "folder",
+                id: (option as unknown as { id: string })?.id ?? randomUUID(), // Generate a unique ID
+                label: option.tooltip,
+                children: mapOptionsToContentMenu(option.options) // Recursively map children
+            } as ContentMenuEntry;
+        }
+
+        // Create a simple content menu entry
+        return {
+            type: "item",
+            id: (option as unknown as { id: string })?.id ?? randomUUID(),
+            label: option.tooltip,
+            icon: option.iconUrl,
+            itemData: {
+                action: option.action
+            }
+        } as ContentMenuEntry;
+    });
 }
 
 /**
@@ -386,25 +439,33 @@ async function buildDock3ButtonEntries(
 				type: "item",
 				label: button.tooltip,
 				itemData: { action: button.action },
-				icon: button.iconUrl ?? ""
+				icon: buildSchemeIcon(schemeMode, button.iconUrl ?? "")
 			};
-			if (button?.iconUrl?.includes(`/${schemeMode}/`)) {
-				let darkIcon: string = button.iconUrl;
-				let lightIcon: string = button.iconUrl;
-
-				if (schemeMode === "dark") {
-					lightIcon = button.iconUrl.replace(`/${schemeMode}/`, "/light/");
-				} else if (schemeMode === "light") {
-					darkIcon = button.iconUrl.replace(`/${schemeMode}/`, "/dark/");
-				}
-				favButton.icon = {
-					dark: darkIcon,
-					light: lightIcon
-				};
-			}
 			favorites.push(favButton);
+		} else if (button.type === DockButtonNames.DropdownButton || isEmpty(button.type)) {
+			if(button.options && button.options.length > 0) {
+				const folderItem: ContentMenuEntry = {
+                type: "folder",
+                id: button.id ?? randomUUID(), // Generate a unique ID
+                label: button.tooltip,
+                children: mapOptionsToContentMenu(button.options) // Recursively map children
+            } as ContentMenuEntry;
+				contentMenu.push(folderItem);
+			} else {
+				const rootItem: ContentMenuEntry = {
+							type: "item",
+							id: button.id ?? randomUUID(),
+							label: button.tooltip,
+							icon: buildSchemeIcon(schemeMode, button.iconUrl ?? ""),
+							itemData: { action: button?.action },
+							bookmarked: false
+						};
+				contentMenu.push(rootItem);
+			}
 		}
 	}
+	console.log("Dock3 Buttons - Favorites:", favorites);
+	console.log("Dock3 Buttons - Content Menu:", contentMenu);
 	return {
 		favorites,
 		contentMenu
@@ -807,7 +868,7 @@ export async function loadConfig(
 		// not supposed to
 		config.workspaceComponents = buildWorkspaceButtons(
 			Array.isArray(config.workspaceComponents) ? config.workspaceComponents : undefined
-		);
+		) as WorkspaceButton[];
 	}
 
 	return config;

@@ -1,5 +1,5 @@
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace";
-import type { DockAllowedWindowOptions } from "@openfin/workspace-platform";
+import type { DockAllowedWindowOptions, Dock3Config } from "@openfin/workspace-platform";
 import type { PopupMenuStyles } from "./menu-shapes";
 
 /**
@@ -56,7 +56,12 @@ export interface DockProviderOptions {
 	/**
 	 * If using dock type 3 this allows you to specify additional options for the dock window.
 	 */
-	dockWindowOptions?: DockAllowedWindowOptions;
+	dock3WindowOptions?: DockAllowedWindowOptions;
+
+	/**
+	 * UI Configuration Options supported by Dock 3.0
+	 */
+	dock3UIConfig?: Dock3Config["uiConfig"];
 }
 
 /**
