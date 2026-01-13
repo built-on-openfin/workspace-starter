@@ -10,6 +10,11 @@ OpenFin Workspace empowers you to take advantage of our dock3 component by using
 2. Customize the dock configuration (appearance and behavior).
 3. Minimize the dock.
 
+It has two examples.
+
+- One example (manifest.fin.json) uses the hosted dock3 html, css, js from the Here CDN.
+- The second example (second.manifest.fin.json) launches the same snapshot but includes an app asset which is the self hosted version of the Dock3 UI.
+
 This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
 
 ## Running the Sample
@@ -17,7 +22,8 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Dock Basic](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv21.0.0%2Fregister-with-dock3-basic%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Dock3 Basic](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv21.0.0%2Fregister-with-dock3-basic%2Fmanifest.fin.json)
+  [Starter Register With Dock3 Basic (Self-hosted)](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv21.0.0%2Fregister-with-dock3-basic%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -49,6 +55,12 @@ npm run start
 npm run client
 ```
 
+or
+
+```shell
+npm run secondclient
+```
+
 5. Build the project if you modify the code.
 
 ```shell
@@ -57,7 +69,7 @@ npm run build
 
 ### Note About The App
 
-This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
+This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) or the [second manifest file](public/second.manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
 
 ### How this example works
 

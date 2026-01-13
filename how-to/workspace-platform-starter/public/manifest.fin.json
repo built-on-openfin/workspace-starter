@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=workspace-platform-starter",
-		"version": "43.142.100.111"
+		"version": "43.142.101.1"
 	},
 	"platform": {
 		"name": "workspace-platform-starter",
@@ -71,7 +71,13 @@
 					"enabled": true
 				}
 			}
-		}
+		},
+		"commands": [
+			{
+				"command": "findInPage.show",
+				"keys": "CommandOrControl+f"
+			}
+		]
 	},
 	"shortcut": {
 		"company": "OpenFin",
