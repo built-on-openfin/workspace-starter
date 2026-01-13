@@ -2,7 +2,7 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "",
+		"arguments": "--security-realm=register-with-home",
 		"version": "43.142.100.111"
 	},
 	"platform": {
@@ -59,6 +59,12 @@
 		"homeProvider": {
 			"id": "register-with-home",
 			"title": "Home Starter",
+			"subHeader": {
+				"title1": "Welcome to",
+				"title2": "OpenFin Home Starter",
+				"subtitle": "Your gateway to OpenFin applications",
+				"icon": "http://localhost:8080/favicon.ico"
+			},
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]

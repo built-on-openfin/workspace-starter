@@ -123,10 +123,12 @@ export async function register(
 		title: homeSettings.title,
 		id: homeSettings.id,
 		icon: homeSettings.icon,
+		subHeader: homeSettings.subHeader,
 		onUserInput,
 		onResultDispatch: onSelection
 	};
 
+	console.log(`In home.ts with these settings: ${JSON.stringify(homeSettings.subHeader)}`);
 	homeRegistration = await Home.register(homeProvider);
 	console.log("Home configured.");
 	console.log(homeRegistration);

@@ -28,6 +28,16 @@ export interface HomeProviderSettings {
 	title: string;
 
 	/**
+	 * The sub header to display on home.
+	 */
+	subHeader?: {
+		title1: string;
+		title2: string;
+		subtitle: string;
+		icon: string;
+	};
+
+	/**
 	 * The icon to display in home.
 	 */
 	icon: string;
