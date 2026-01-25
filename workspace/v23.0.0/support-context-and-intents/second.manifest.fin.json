@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=second-support-context-and-intents",
-		"version": "43.142.101.1"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "second-support-context-and-intents",
