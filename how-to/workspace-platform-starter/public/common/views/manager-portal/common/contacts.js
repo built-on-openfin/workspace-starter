@@ -89,7 +89,7 @@ async function getManifestCustomSettings() {
 			return manifest.customSettings ?? {};
 		}
 	} catch {
-		// not in an OpenFin container.
+		// not in an HERE container.
 	}
 	return {};
 }

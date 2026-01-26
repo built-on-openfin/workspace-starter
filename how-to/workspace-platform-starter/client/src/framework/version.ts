@@ -132,7 +132,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 			break;
 		}
 		case "workspacePlatformClient": {
-			versionLabel = "Workspace Platform Client Version";
+			versionLabel = "HERE Core UI Platform Client Version";
 			setVersionNumber = isEmpty(versionInfo.workspacePlatformClient);
 			if (setVersionNumber) {
 				versionInfo.workspacePlatformClient = versionNumber;

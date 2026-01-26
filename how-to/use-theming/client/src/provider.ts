@@ -60,11 +60,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param themingPayload Is there a custom theming payload to use for the theme.
  */
 async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	// Build the custom palette based on anything in the theming payload.
 	let customTheme: CustomThemeOptions | CustomThemeOptionsWithScheme;
@@ -117,7 +117,7 @@ async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Pro
 }
 
 /**
- * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ * Initialize minimal HERE Core UI Components for home/store so that the buttons show on dock.
  * @param options Which components to show.
  */
 async function initializeWorkspaceComponents(options?: ThemeDisplayOptions): Promise<void> {
@@ -286,7 +286,7 @@ function extractPayloadFromParams(initParams?: InitParams): ThemingPayload | und
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
  * @returns The overridden class.
  */
 function overrideCallback(

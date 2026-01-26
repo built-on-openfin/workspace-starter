@@ -2,11 +2,40 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"additionalProperties": false,
 	"definitions": {
+		"Anchor": {
+			"$ref": "#/definitions/__type_29"
+		},
+		"AnchorLocation": {
+			"description": "Defines the point within the rectangle that should be used as the anchor\nwhen positioning UI elements relative to another surface.",
+			"enum": [
+				"bottomCenter",
+				"bottomLeft",
+				"bottomRight",
+				"float",
+				"leftBottom",
+				"leftCenter",
+				"leftTop",
+				"none",
+				"rightBottom",
+				"rightCenter",
+				"rightTop",
+				"topCenter",
+				"topLeft",
+				"topRight"
+			],
+			"type": "string"
+		},
 		"Api": {
 			"$ref": "#/definitions/__type_9"
 		},
 		"ApiSettings": {
 			"$ref": "#/definitions/__type_9"
+		},
+		"AppLogLevel": {
+			"default": "'debug'\n\nPlease note, if the manifest setting `platform.enableAppLogging`  or `startup_app.enableAppLogging` is set to `false`, this feature will be disabled.",
+			"description": "The `appLogLevel` option allows the verbosity of app logs that are collected for a Window or View to be controlled for its application.\n\nThis setting can also be specified in a Domain Setting Rule, allowing per url overrides to be defined. Please note, when a domain setting is actively\ncontrolling a url's appLogLevel, its view/window options will be ignored.",
+			"enum": ["debug", "error", "info", "silent", "warn"],
+			"type": "string"
 		},
 		"Array": {
 			"items": {
@@ -15,7 +44,7 @@
 			"type": "array"
 		},
 		"AutoResizeOptions": {
-			"$ref": "#/definitions/__type_30"
+			"$ref": "#/definitions/__type_33"
 		},
 		"AutoplayPolicyOptions": {
 			"description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`.",
@@ -46,7 +75,7 @@
 			"type": "object"
 		},
 		"Bounds": {
-			"$ref": "#/definitions/__type_29"
+			"$ref": "#/definitions/__type_32"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -105,7 +134,7 @@
 			"$ref": "#/definitions/__type_12"
 		},
 		"ContextGroupStates": {
-			"$ref": "#/definitions/__type_36"
+			"$ref": "#/definitions/__type_39"
 		},
 		"ContextMenuOptions": {
 			"$ref": "#/definitions/__type_2"
@@ -127,7 +156,10 @@
 			"type": "object"
 		},
 		"DipScaleRects": {
-			"$ref": "#/definitions/__type_33"
+			"$ref": "#/definitions/__type_36"
+		},
+		"DownloadBubbleOptions": {
+			"$ref": "#/definitions/__type_28"
 		},
 		"DownloadShelfOptions": {
 			"$ref": "#/definitions/__type_15"
@@ -150,10 +182,10 @@
 			"$ref": "#/definitions/__type_16"
 		},
 		"MonitorDetails": {
-			"$ref": "#/definitions/__type_35"
+			"$ref": "#/definitions/__type_38"
 		},
 		"MonitorInfo": {
-			"$ref": "#/definitions/__type_31"
+			"$ref": "#/definitions/__type_34"
 		},
 		"OpenExternalPermission": {
 			"additionalProperties": false,
@@ -181,7 +213,7 @@
 			"$ref": "#/definitions/__type_8"
 		},
 		"Partial_10": {
-			"$ref": "#/definitions/__type_28"
+			"$ref": "#/definitions/__type_31"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_11"
@@ -208,7 +240,7 @@
 			"$ref": "#/definitions/__type_26"
 		},
 		"Point": {
-			"$ref": "#/definitions/__type_32"
+			"$ref": "#/definitions/__type_35"
 		},
 		"PolicyOptions": {
 			"description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -230,6 +262,8 @@
 				"reload",
 				"selectAll",
 				"separator",
+				"snapToBottom",
+				"snapToTop",
 				"spellCheck",
 				"undo"
 			],
@@ -241,8 +275,11 @@
 		"Record": {
 			"$ref": "#/definitions/__type_17"
 		},
+		"Rectangle": {
+			"$ref": "#/definitions/__type_30"
+		},
 		"RectangleByEdgePositions": {
-			"$ref": "#/definitions/__type_34"
+			"$ref": "#/definitions/__type_37"
 		},
 		"ResizeRegion": {
 			"$ref": "#/definitions/__type_4"
@@ -399,6 +436,10 @@
 					"$ref": "#/definitions/Api",
 					"description": "Configurations for API injection."
 				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
+				},
 				"applicationIcon": {
 					"type": "string"
 				},
@@ -524,6 +565,10 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
@@ -538,6 +583,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -558,9 +604,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -824,7 +876,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
 					},
 					"type": "array"
 				}
@@ -852,6 +904,10 @@
 				"api": {
 					"$ref": "#/definitions/Api",
 					"description": "Configurations for API injection."
+				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the Window. See {@link AppLogLevel} for more information."
 				},
 				"applicationIcon": {
 					"type": "string"
@@ -978,6 +1034,10 @@
 					"default": false,
 					"type": "boolean"
 				},
+				"downloadBubble": {
+					"$ref": "#/definitions/DownloadBubbleOptions",
+					"description": "Configuration for download bubble UI."
+				},
 				"downloadShelf": {
 					"$ref": "#/definitions/DownloadShelfOptions",
 					"description": "Controls the styling and behavior of the window download shelf."
@@ -992,6 +1052,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -1012,9 +1073,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -1771,6 +1838,78 @@
 		},
 		"__type_28": {
 			"additionalProperties": false,
+			"description": "Configuration options for enabling and positioning the download bubble UI.",
+			"properties": {
+				"anchor": {
+					"$ref": "#/definitions/Anchor",
+					"description": "Anchor configuration describing where the download bubble should attach."
+				},
+				"enabled": {
+					"description": "Whether the download bubble feature is enabled.",
+					"type": "boolean"
+				}
+			},
+			"required": ["anchor", "enabled"],
+			"type": "object"
+		},
+		"__type_29": {
+			"additionalProperties": false,
+			"description": "Represents an anchor configuration consisting of a bounding rectangle\nand an anchor point describing which part of that rectangle should be\nused as the reference for positioning the download bubble.",
+			"properties": {
+				"bounds": {
+					"$ref": "#/definitions/Rectangle",
+					"description": "The DOM or screen-space rectangle that defines the anchor area."
+				},
+				"location": {
+					"$ref": "#/definitions/AnchorLocation",
+					"description": "The location within the rectangle that should act as the anchor\n (e.g., `topRight`, `bottomLeft`, `center`, etc.).\nFor example, `topRight` means the rectangle's top-right corner is used\nas the anchoring reference point."
+				}
+			},
+			"required": ["bounds", "location"],
+			"type": "object"
+		},
+		"__type_3": {
+			"additionalProperties": false,
+			"properties": {
+				"height": {
+					"default": 0,
+					"description": "The height in pixels.",
+					"type": "number"
+				},
+				"width": {
+					"default": 0,
+					"description": "The width in pixels.",
+					"type": "number"
+				}
+			},
+			"type": "object"
+		},
+		"__type_30": {
+			"additionalProperties": false,
+			"description": "A rectangular area on the screen.",
+			"properties": {
+				"height": {
+					"description": "The height of the rectangle in pixels",
+					"type": "number"
+				},
+				"width": {
+					"description": "The width of the rectangle in pixels",
+					"type": "number"
+				},
+				"x": {
+					"description": "The x coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				},
+				"y": {
+					"description": "The y coordinate of the rectangle's origin in pixels",
+					"type": "number"
+				}
+			},
+			"required": ["height", "width", "x", "y"],
+			"type": "object"
+		},
+		"__type_31": {
+			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
 				"accelerator": {
@@ -1780,6 +1919,10 @@
 				"api": {
 					"$ref": "#/definitions/ApiSettings",
 					"description": "Configurations for API injection."
+				},
+				"appLogLevel": {
+					"$ref": "#/definitions/AppLogLevel",
+					"description": "Specifies the AppLogLevel for the specified View. See {@link AppLogLevel} for more information."
 				},
 				"autoResize": {
 					"$ref": "#/definitions/AutoResizeOptions"
@@ -1906,9 +2049,15 @@
 								"description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
 								"type": "string"
 							},
+							"phase": {
+								"default": "'capture'",
+								"description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+								"enum": ["bubble", "capture"],
+								"type": "string"
+							},
 							"preventDefault": {
 								"default": false,
-								"description": "Prevent default key handling before emitting the event.",
+								"description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
 								"type": "boolean"
 							}
 						},
@@ -2004,7 +2153,7 @@
 			},
 			"type": "object"
 		},
-		"__type_29": {
+		"__type_32": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2023,23 +2172,7 @@
 			"required": ["height", "left", "top", "width"],
 			"type": "object"
 		},
-		"__type_3": {
-			"additionalProperties": false,
-			"properties": {
-				"height": {
-					"default": 0,
-					"description": "The height in pixels.",
-					"type": "number"
-				},
-				"width": {
-					"default": 0,
-					"description": "The width in pixels.",
-					"type": "number"
-				}
-			},
-			"type": "object"
-		},
-		"__type_30": {
+		"__type_33": {
 			"additionalProperties": false,
 			"properties": {
 				"height": {
@@ -2061,7 +2194,7 @@
 			},
 			"type": "object"
 		},
-		"__type_31": {
+		"__type_34": {
 			"additionalProperties": false,
 			"properties": {
 				"deviceScaleFactor": {
@@ -2152,7 +2285,7 @@
 			],
 			"type": "object"
 		},
-		"__type_32": {
+		"__type_35": {
 			"additionalProperties": false,
 			"properties": {
 				"x": {
@@ -2167,7 +2300,7 @@
 			"required": ["x", "y"],
 			"type": "object"
 		},
-		"__type_33": {
+		"__type_36": {
 			"additionalProperties": false,
 			"properties": {
 				"dipRect": {
@@ -2180,7 +2313,7 @@
 			"required": ["dipRect", "scaledRect"],
 			"type": "object"
 		},
-		"__type_34": {
+		"__type_37": {
 			"additionalProperties": false,
 			"properties": {
 				"bottom": {
@@ -2199,7 +2332,7 @@
 			"required": ["bottom", "left", "right", "top"],
 			"type": "object"
 		},
-		"__type_35": {
+		"__type_38": {
 			"additionalProperties": false,
 			"properties": {
 				"available": {
@@ -2251,7 +2384,7 @@
 			],
 			"type": "object"
 		},
-		"__type_36": {
+		"__type_39": {
 			"additionalProperties": {
 				"additionalProperties": {
 					"additionalProperties": false,

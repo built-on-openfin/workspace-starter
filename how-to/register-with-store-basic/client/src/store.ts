@@ -79,7 +79,7 @@ export async function register(
 							id: "top-row-item-1",
 							title: "Dev Tools",
 							description:
-								"A collection of developer tools that can aid with building and debugging OpenFin applications.",
+								"A collection of developer tools that can aid with building and debugging HERE applications.",
 							image: {
 								src: "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 							},
@@ -129,7 +129,7 @@ export async function register(
 			}),
 			getFooter: async () => ({
 				logo: { src: "http://localhost:8080/favicon.ico", size: "32" },
-				text: "Welcome to the OpenFin Sample Footer",
+				text: "Welcome to the HERE Sample Footer",
 				links: [
 					{
 						title: "Github",
@@ -155,7 +155,7 @@ export async function register(
 
 /**
  * Get the actions that will be triggered by the button clicks.
- * The action are added to the workspace platform when it is created.
+ * The action are added to the HERE Core UI Platform when it is created.
  * @returns The maps of the custom actions.
  */
 export function storeGetCustomActions(): CustomActionsMap {

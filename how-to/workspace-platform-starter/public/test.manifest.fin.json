@@ -3,11 +3,11 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "42.138.103.1"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "test-workspace-platform-starter",
-		"name": "Test Workspace Platform Starter",
+		"name": "Test HERE Core UI Platform Starter",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
@@ -61,9 +61,9 @@
 		}
 	},
 	"supportInformation": {
-		"company": "OpenFin",
-		"product": "Workspace Starter - Workspace Platform Starter - Test Client",
-		"email": "support@openfin.co",
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter - Test Client",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"snapshot": {

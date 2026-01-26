@@ -1,21 +1,21 @@
-![OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)](../../assets/OpenFin-Workspace-Starter.png)
+![HERE Core UI Example Application -- Adding your application to HERE Core UI (Home, Browser & Store)](../../assets/HERO-STARTER-HERE-CORE-UI.png)
 
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 # Register With Store
 
-OpenFin Workspace empowers you to take advantage of our store component by using our Storefront API to register your own store and populate it with your custom content. This example additionally lets you populate the Home UI using the same data source. This gives you the choice of fetching your list of applications from a _Content Discovery Service_ or somewhere else.
+HERE Core UI empowers you to take advantage of our store component by using our Storefront API to register your own store and populate it with your custom content. This example additionally lets you populate the Home UI using the same data source. This gives you the choice of fetching your list of applications from a _Content Discovery Service_ or somewhere else.
 
-This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+This application you are about to install is an example of plugging in your own content or app via code and using configuration and rest services to determine the data to show and how it should be structured. This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
-This application also shows you how to use the new @openfin/workspace-platform npm module to use OpenFin Browser under your own application and to control how pages are displayed and launched within the Home UI.
+This application also shows you how to use the new @openfin/workspace-platform npm module to use HERE Browser under your own application and to control how pages are displayed and launched within the Home UI.
 
 ## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Store](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv22.0.0%2Fregister-with-store%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Store](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.0.0%2Fregister-with-store%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -25,11 +25,11 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 22.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of HERE Core UI to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
+   (**WARNING**: This script kills all open HERE processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```shell
 npm run dos
@@ -41,7 +41,7 @@ npm run dos
 npm run start
 ```
 
-4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your HERE Core UI Platform (this starts Workspace if it isn't already running).
 
 ```shell
 npm run client
@@ -70,8 +70,8 @@ The Server in this example provides two sets of content over HTTP GET.
 
 The [list of applications](./public/common/) apps\*.json contains a number of examples:
 
-- Load views into OpenFin Browser
-- Launch an OpenFin application using its manifest file
+- Load views into HERE Browser
+- Launch an HERE application using its manifest file
 - Launch a native application
 - Launch a page using the snapshot manifest type
 
@@ -83,7 +83,7 @@ This is a headless application. If you wish to debug it then you can update the 
 
 ### How this example works
 
-You have your own [Workspace Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
+You have your own [HERE Core UI Platform](public/manifest.fin.json) that is defined through a manifest. It is headless and it starts up a [custom platform provider](public/platform/provider.html). It is launched by the following command (step 5 above):
 
 ```shell
 npm run client
@@ -91,14 +91,14 @@ npm run client
 
 The custom platform provider [provider.ts](client/src/provider.ts) imports the [platform.ts](client/src/platform.ts) and initializes the platform.
 
-The [platform.ts](client/src/platform.ts) initializes the workspace platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify default window options for OpenFin Browser based windows. This lets us specify the icons, title and theme for the Browser Windows.
+The [platform.ts](client/src/platform.ts) initializes the HERE Core UI Platform by using the init function from [@openfin/workspace-platform](https://www.npmjs.com/package/@openfin/workspace-platform). This function lets us specify default window options for HERE Browser based windows. This lets us specify the icons, title and theme for the Browser Windows.
 
 Once initialized the bootstrapper (that was also imported) is called [bootstrapper](client/src/bootstrapper.ts).
 
 The bootstrapper has two main responsibilities:
 
 1. Import [store.ts](client/src/store.ts) and ensure that a store provider is registered if store is enabled.
-2. Listen for when your workspace platform is about to close and deregister from store.
+2. Listen for when your HERE Core UI Platform is about to close and deregister from store.
 
 The **store provider**([store.ts](client/src/store.ts)) imports the following:
 
@@ -152,7 +152,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
         "items": [
           {
             "title": "Dev Tools",
-            "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+            "description": "A collection of developer tools that can aid with building and debugging HERE applications.",
             "image": {
               "src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
             },
@@ -160,7 +160,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
           },
           {
             "title": "Learning Resource",
-            "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+            "description": "A collection of developer documents that can aid with building and debugging HERE applications.",
             "image": {
               "src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
             },
@@ -238,7 +238,7 @@ The [platform.ts](client/src/platform.ts) file reads the customSettings section 
     ],
     "footer": {
       "logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
-      "text": "Welcome to the OpenFin Sample Footer",
+      "text": "Welcome to the HERE Sample Footer",
       "links": [
         {
           "title": "Github",
@@ -289,19 +289,19 @@ This is because the `id` represents the route that the user navigates to. So, if
 
 ---
 
-These are settings you can experiment with (e.g., if you already have your own CDS for apps, you can update the URL and restart the Workspace Platform. Your server will need to support CORS).
+These are settings you can experiment with (e.g., if you already have your own CDS for apps, you can update the URL and restart the HERE Core UI Platform. Your server will need to support CORS).
 
 The search provider checks the [apps.ts](client/src/apps.ts) file for a list of applications and then it reads the apps directory REST endpoint and returns it. The search provider then maps the apps to an array of SearchResult objects. The apps file checks to see if it has permission to launch external processes or download app assets and filter out entries as appropriate. It logs a warning of the apps filtered out and in a real app you could move this logic to the launch action to then notify the user they can't launch that app on this machine.
 
-When a user selects a result in OpenFin Home, it is returned to the search provider and the search provider uses [app.ts](client/src/app.ts) to launch the result.
+When a user selects a result in HERE Home, it is returned to the search provider and the search provider uses [app.ts](client/src/app.ts) to launch the result.
 
-The [app.ts](client/src/app.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's Workspace Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the OpenFin workspace platform module.
+The [app.ts](client/src/app.ts) file imports [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) and [OpenFin's HERE Core UI Platform NPM Module](https://www.npmjs.com/package/@openfin/workspace-platform). It checks the passed app. If the passed app is a Native Application (manifestType: "external") that requires launch external process permissions then it is up to the **Platform Workspace** to support the permission. They can pass the app to launchApp or call fin.System.launchExternalProcess if they want custom logic. If you don't have the launchExternalProcess permission apps.ts filters unsuitable apps out. For any other type of app/manifestType then the entry is passed to the launchApp function provided by the HERE HERE Core UI Platform module.
 
-The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the OpenFin Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps\*.json](../public/common/) file (simulating your server) will populate both.
+The [store.ts](client/src/store.ts) file is driven by the config in the manifest file and takes advantage of the building blocks provided in [OpenFin's Workspace NPM Module](https://www.npmjs.com/package/@openfin/workspace) to build the HERE Store. It uses [apps.ts](client/src/apps.ts) to use the same source data as the home provider. This way adding a single entry in the [apps\*.json](../public/common/) file (simulating your server) will populate both.
 
 ### Note About This Example
 
-This is an example of how to use our APIs to configure OpenFin Workspace. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
+This is an example of how to use our APIs to configure HERE Core UI. It's purpose is to provide an example and provide suggestions. This is not a production application and shouldn't be treated as such. Please use this as a guide and provide feedback. Thanks!
 
 ## FAQ
 
@@ -312,12 +312,10 @@ This is an example of how to use our APIs to configure OpenFin Workspace. It's p
 
 - I am not seeing what I expected?
 
-  - To ensure you are running the right version of this example run the npm run dos command and npm run kill command before running the workspace platform using npm run client (you only need to run the dos command once and it will lock the workspace version for this sample)
+  - To ensure you are running the right version of this example run the npm run dos command and npm run kill command before running the HERE Core UI Platform using npm run client (you only need to run the dos command once and it will lock the workspace version for this sample)
 
 - Things have moved/gone?
 
   - Please check the upgrade guide which covers what has changed between releases: [Migrate from a previous version guide](../migrate-from-a-previous-version)
 
 ---
-
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

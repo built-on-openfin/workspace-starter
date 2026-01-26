@@ -39,10 +39,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	await init({
 		browser: {
@@ -69,7 +69,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 }
 
 /**
- * Initialize workspace components.
+ * Initialize HERE Core UI Components.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
 	await Home.register({

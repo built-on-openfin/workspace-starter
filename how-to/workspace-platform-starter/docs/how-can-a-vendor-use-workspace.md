@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # Persona - A Vendor?
 
-A vendor is an organization that provides OpenFin enabled content, data or services that a client organization can benefit from.
+A vendor is an organization that provides HERE enabled content, data or services that a client organization can benefit from.
 
 ## How can a Vendor start with OpenFin?
 
@@ -15,12 +15,12 @@ Just as web developers use to start off as mobile first and then build from ther
 The first step is to think of your content. You are going to have some content that will be loaded into your platform and then used by your clients.
 This can be any standard html page (client or server rendered) but there are some things to consider:
 
-- Is your content supposed to be rendered in a classic window or a view (we recommend views as it gives you additional options and means your content can be easily laid out and benefit from the layout management capabilities offered by OpenFin Browser)?
+- Is your content supposed to be rendered in a classic window or a view (we recommend views as it gives you additional options and means your content can be easily laid out and benefit from the layout management capabilities offered by HERE Browser)?
 - Is your content responsive? Views can be arranged with different widths and heights so having a responsive layout will mean it can provide your end user with more options with regards to how it can be arranged.
 - Is there an easy way to hide (or not load) content that isn't needed (big header, footer or side panels)? You want your content to take center stage.
 - Can your content be broken into smaller views so that an end user can load just what they need and arrange it alongside the way they want?
   - This isn't something that is mandatory but the flexibility of allowing a user to pick just the content they need is very empowering an opens up the possibility of streamlined workflows.
-  - If you want a single connection to your back-end then you might consider a [shared web worker](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) or launching a background window with autoshow false (OpenFin Window) to establish the connection and share messages to your children views using the OpenFin Interop/Channel APIs or something like the [browser broadcast channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API). **Note that Shared Web Workers and Broadcast Channel API is restricted to views from the same domain whereas the OpenFin APIs are not.**
+  - If you want a single connection to your back-end then you might consider a [shared web worker](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) or launching a background window with autoshow false (OpenFin Window) to establish the connection and share messages to your children views using the HERE Interop/Channel APIs or something like the [browser broadcast channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API). **Note that Shared Web Workers and Broadcast Channel API is restricted to views from the same domain whereas the HERE APIs are not.**
 
 ---
 
@@ -33,12 +33,12 @@ The content you created can be launched in your platform but you want to structu
 A platform can launch views using the following options:
 
 - Just the url of your page: this is easy but then you have no standard way of suggesting how the entry should be described or what options it should be launched with (e.g. fdc3 version or customData).
-- You can have a json file that represents your view. This would be populated with OpenFin view options: A json file containing the url alongside other view options for your content: [View Options](https://developer.openfin.co/docs/javascript/stable/View.html#~options).
+- You can have a json file that represents your view. This would be populated with HERE view options: A json file containing the url alongside other view options for your content: [View Options](https://developer.openfin.co/docs/javascript/stable/interfaces/OpenFin.ViewOptions.html).
 - To add additional meta data for your content such as a title, description, images, icons, intent support etc then you can create an app definition for your content. See how to define apps in [Platform Format](./how-to-define-apps.md), [FDC3 1.2 Format](./how-to-define-apps-fdc3-1-2.md) or [FDC3 2.0 Format](./how-to-define-apps-fdc3-2-0.md)
 
 #### Platform Description
 
-OpenFin Platforms are launched via a [manifest](https://developers.openfin.co/of-docs/docs/application-configuration). This manifest can contain information related to your platform and you can also provide information on your site. You might also want to create an app definition that wouldn't be used in your platform (as you are the platform) but would allow clients to add your platform to their directory. This definition could be done in a [Platform Format](./how-to-define-apps.md), [FDC3 1.2 Format](./how-to-define-apps-fdc3-1-2.md) or [FDC3 2.0 Format](./how-to-define-apps-fdc3-2-0.md) and the definition would include the link to your platform's manifest. When it comes to deployment please look at our [How to deploy](./how-to-deploy-your-platform.md) page for further links. |
+HERE Platforms are launched via a [manifest](https://resources.here.io/docs/core/develop/manifests/). This manifest can contain information related to your platform and you can also provide information on your site. You might also want to create an app definition that wouldn't be used in your platform (as you are the platform) but would allow clients to add your platform to their directory. This definition could be done in a [Platform Format](./how-to-define-apps.md), [FDC3 1.2 Format](./how-to-define-apps-fdc3-1-2.md) or [FDC3 2.0 Format](./how-to-define-apps-fdc3-2-0.md) and the definition would include the link to your platform's manifest. When it comes to deployment please look at our [How to deploy](./how-to-deploy-your-platform.md) page for further links. |
 
 ---
 
@@ -52,7 +52,7 @@ You have content that is beneficial to your client. When a client engages with y
 
 Sharing context with your content is really useful and opens up the option for you to share this context with a client's platform or to be driven by a client's platform. You can extend your platform to offer the following:
 
-- **Client Platforms connect to your platform** (you can decide whether to allow a connection and whether the connection requires a token for validation purposes). By default a platform allows connections but you can override the **isConnectionAuthorized** function to provide your own logic. We have a pattern in workspace platform starter called connectionProvider where you can determine what should be allowed to connect to your broker and if a payload onconnection should be validated. See [How to manage connections to your platform](./how-to-manage-connections-to-your-platform.md). A client can then listen to your user channels (green, blue, etc) and react when you publish an object. They might also publish a context to your channels from their platform so that your application reacts. If you want to restrict possible actions and you have your own broker there is a function you can override: **isActionAuthorized**. The connectionProvider doesn't expose this yet so please talk to us if you have a use case. A discussion with the client is **necessary** to cover points such as:
+- **Client Platforms connect to your platform** (you can decide whether to allow a connection and whether the connection requires a token for validation purposes). By default a platform allows connections but you can override the **isConnectionAuthorized** function to provide your own logic. We have a pattern in HERE Core UI Platform starter called connectionProvider where you can determine what should be allowed to connect to your broker and if a payload onconnection should be validated. See [How to manage connections to your platform](./how-to-manage-connections-to-your-platform.md). A client can then listen to your user channels (green, blue, etc) and react when you publish an object. They might also publish a context to your channels from their platform so that your application reacts. If you want to restrict possible actions and you have your own broker there is a function you can override: **isActionAuthorized**. The connectionProvider doesn't expose this yet so please talk to us if you have a use case. A discussion with the client is **necessary** to cover points such as:
 
   - Connection requirements.
   - What types do you both agree to listen to.
@@ -107,7 +107,7 @@ The vendor connecting to the client would be similar to the above diagram but th
 
 ### Services (SDKs)
 
-If there are specific APIs and functions you want to expose to clients then you might want to use our [Channel API](https://developers.openfin.co/of-docs/docs/channels) so that you can build a specific API that your clients can connect to.
+If there are specific APIs and functions you want to expose to clients then you might want to use our [Channel API](https://resources.here.io/docs/core/container/interop/channels/) so that you can build a specific API that your clients can connect to.
 The Channel API is a low level API (the Interop and FDC3 APIs are built on top of it) that lets you have granular control over the exposed functions and who is allowed to connect via the **onConnection** function (similar to how InteropBrokers validate connections).
 
 #### SDK Options
@@ -146,7 +146,7 @@ flowchart TD
     end
 ```
 
-Once connected the client can call functions exposed by the Vendor's service and optionally the Vendor can call functions on the client connection on the Client's platform if they implement an agreed function. This flow can be using OpenFin APIs directly or it can be through a Vendor SDK.
+Once connected the client can call functions exposed by the Vendor's service and optionally the Vendor can call functions on the client connection on the Client's platform if they implement an agreed function. This flow can be using HERE APIs directly or it can be through a Vendor SDK.
 
 ---
 
@@ -155,19 +155,19 @@ Once connected the client can call functions exposed by the Vendor's service and
 A client might be launching your platform from their platform, they might be sharing context and calling specific services exposed by your platform as well. They may wish to take things a step further if they have the ability to save their platform's layout/workspace.
 You might want to expose the ability for another platform to get a representation of **your** layout when someone calls save on their platform.
 
-This is an advanced feature. This is enabled by adding [snapshot source support](https://developer.openfin.co/docs/javascript/stable/SnapshotSource.html). Right now the [connectionProvider](./how-to-manage-connections-to-your-platform.md) supports apps registering against your platform as a snapshot source but not the other way around. If you have a use case please let us know.
+This is an advanced feature. This is enabled by adding [snapshot source support](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.SnapshotSource.html). Right now the [connectionProvider](./how-to-manage-connections-to-your-platform.md) supports apps registering against your platform as a snapshot source but not the other way around. If you have a use case please let us know.
 
 ---
 
-### Workspace Components
+### HERE Core UI Components
 
-One of the benefits of being a Workspace Platform is that you can take advantage of our Workspace components. This means you can provide your clients with:
+One of the benefits of being a HERE Core UI Platform is that you can take advantage of our Workspace components. This means you can provide your clients with:
 
 - An easy way to search your content through Home.
 - An easy way to list all your content through Store.
 - An easy way to provide a configurable list of frequently launched apps through dock.
 - An easy way to see the notifications you have raised through our notification center.
 
-If your client's also use OpenFin Workspace then you will plug into the existing instances of these Workspace components alongside the Client's platform and the users will already be familiar with how to interact with your platform. To find out what the Workspace Components are capable of please go back to the main index to continue learning about Workspace and how it can be configured.
+If your client's also use HERE Core UI then you will plug into the existing instances of these Workspace components alongside the Client's platform and the users will already be familiar with how to interact with your platform. To find out what the HERE Core UI Components are capable of please go back to the main index to continue learning about Workspace and how it can be configured.
 
 [<- Back to Table Of Contents](../README.md)

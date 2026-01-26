@@ -1,7 +1,7 @@
 {
 	"name": "automation-testing-selenium",
-	"version": "22.0.0",
-	"description": "OpenFin Workspace Starter Selenium Example",
+	"version": "23.0.0",
+	"description": "HERE Core UI Starter Selenium Example",
 	"scripts": {
 		"build": "echo Nothing to build",
 		"test": "node ./selenium.js",

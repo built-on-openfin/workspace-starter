@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=integrate-with-openid-connect-app",
-		"version": "42.138.103.1"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "integrate-with-openid-connect-app",
@@ -12,9 +12,9 @@
 		"providerUrl": "http://localhost:8080/platform/app.html"
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Integrate With OpenId Connect - App",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {

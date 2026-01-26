@@ -24,11 +24,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	const defaultBroker = createInteropOverride(customSettings);
 	const interopOverride: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [defaultBroker];

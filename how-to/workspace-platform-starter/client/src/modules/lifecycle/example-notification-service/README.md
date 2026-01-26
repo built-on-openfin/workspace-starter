@@ -15,7 +15,7 @@ This is an example. The goal of this module is as follows:
   - endpoint - lookup the specified endpoint id (you must permission this module to have access to the specified endpoint id) and call an action passing in a context or request object as the request
   - launch-content - launches the page with the provided page id or focuses on that page if it is already open.
   - Add your option here. This is an example so the idea is that this should be a discussion between the platform and content developers about use cases.
-- Think about server side support. The example uses an endpoint to fire actions and listen to a stream. If everything goes through the endpoint the notification could go to the server and come back through a websocket (the workspace platform starter server does not include websocket support to simplify things but we do have a node-starter example that can be used with this example. See [node-starter/how-to/setup-an-example-websocket-server](https://github.com/built-on-openfin/node-starter/tree/main/how-to/setup-an-example-websocket-server)). Things to consider:
+- Think about server side support. The example uses an endpoint to fire actions and listen to a stream. If everything goes through the endpoint the notification could go to the server and come back through a websocket (the HERE Core UI Platform starter server does not include websocket support to simplify things but we do have a node-starter example that can be used with this example. See [node-starter/how-to/setup-an-example-websocket-server](https://github.com/built-on-openfin/node-starter/tree/main/how-to/setup-an-example-websocket-server)). Things to consider:
   - Do you pass all notifications and actions to the server so that they can be audited and passed to other connected machines or are some local and go straight to the stream instead of doing a round trip to the server?
   - Do you store a correlation id and send that to the server so that you know which notification actions (create, update, clear, close) you need to reflect locally.
   - How do you identify this instance (app uuid), machine and user (fin.System.getUniqueUserId) so that you can easily determine what notifications are missing.
@@ -145,7 +145,7 @@ Create a notification:
 ```js
 {
  "eventId": "create",
- "payload": { } // This will be the NotificationOptions object used by the OpenFin Notification Library.
+ "payload": { } // This will be the NotificationOptions object used by the HERE Notification Library.
 }
 ```
 
@@ -154,7 +154,7 @@ Update a notification:
 ```js
 {
  "eventId": "update",
- "payload": { } // This will be the UpdatableNotificationOptions object used by the OpenFin Notification Library.
+ "payload": { } // This will be the UpdatableNotificationOptions object used by the HERE Notification Library.
 }
 ```
 
@@ -185,7 +185,7 @@ Whether you are using the Channel API or raising an intent we have defined the f
 ```js
 {
  "type": "openfin.notificationoptions",
- "notification": { } // This will be the NotificationOptions object used by the OpenFin Notification Library.
+ "notification": { } // This will be the NotificationOptions object used by the HERE Notification Library.
 }
 ```
 
@@ -617,7 +617,7 @@ This was added through the platform-apps.json file in the public folder.
 {
   "appId": "workspace-platform-starter",
   "name": "workspace-platform-starter",
-  "title": "Workspace Platform Starter Platform",
+  "title": "HERE Core UI Platform Starter Platform",
   "description": "The platform that is currently running.",
   "manifest": {
     "url": "http://localhost:8080/platform/provider.html"
@@ -625,14 +625,14 @@ This was added through the platform-apps.json file in the public folder.
   "manifestType": "inline-window",
   "icons": [
     {
-      "src": "http://localhost:8080/common/images/icon-blue.png"
+      "src": "http://localhost:8080/common/images/favicon-32x32.png"
     }
   ],
   "instanceMode": "single",
   "private": true,
   "contactEmail": "contact@example.com",
   "supportEmail": "support@example.com",
-  "publisher": "OpenFin",
+  "publisher": "HERE",
   "intents": [
     {
       "name": "CreateNotification",

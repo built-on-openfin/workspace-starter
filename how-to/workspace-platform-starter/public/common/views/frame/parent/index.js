@@ -58,7 +58,7 @@ function handleMessage(message) {
 		case 'send-identity': {
 			const identity = message?.data?.identity;
 			if (identity !== undefined) {
-				console.log('Adding identity of OpenFin enabled frame.', identity);
+				console.log('Adding identity of HERE enabled frame.', identity);
 				finFrames.push(identity);
 			}
 			break;

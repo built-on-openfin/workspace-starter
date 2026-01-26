@@ -13,7 +13,7 @@ export interface AppDefinition {
 	name: string;
 	/**
 	 * URI or full JSON of the application manifest providing all details related to launch and use requirements as
-	 * described by OpenFin. The format of this manifest for this platform is OpenFin specific, but can be identified by
+	 * described by OpenFin. The format of this manifest for this platform is HERE specific, but can be identified by
 	 * the manifestType attribute.
 	 */
 	manifest: string;
@@ -28,11 +28,11 @@ export interface AppDefinition {
 	 */
 	version?: string;
 	/**
-	 * Title for the application, Can be used in the OpenFin Workspace HOME, STORE and DOCK components.
+	 * Title for the application, Can be used in the HERE Core UI HOME, STORE and DOCK components.
 	 */
 	title?: string;
 	/**
-	 * Optional tooltip description e.g. for a OpenFin Workspace Dock button
+	 * Optional tooltip description e.g. for a HERE Core UI Dock button
 	 */
 	tooltip?: string;
 	/**
@@ -57,7 +57,7 @@ export interface AppDefinition {
 	 */
 	publisher?: string;
 	/**
-	 * Holds Icons used for the application. The icon can be used in the OpenFin Workspace HOME, STORE and DOCK
+	 * Holds Icons used for the application. The icon can be used in the HERE Core UI HOME, STORE and DOCK
 	 * components.
 	 */
 	icons?: AppIcon[];
@@ -131,7 +131,7 @@ export interface CustomConfig {
 	 */
 	autostart?: string | boolean;
 	/**
-	 * Should this application not be listed in OpenFin Workspace components e.g. Workspace HOME, DOCK or STORE. It may
+	 * Should this application not be listed in HERE Core UI components e.g. Workspace HOME, DOCK or STORE. It may
 	 * be that this app entry is mainly for responding to intent requests and shouldn't be launched directly.
 	 */
 	private?: string | boolean;

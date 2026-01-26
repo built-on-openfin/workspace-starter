@@ -19,7 +19,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -71,12 +71,12 @@
 		},
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -113,12 +113,12 @@
 		},
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewInstrument",

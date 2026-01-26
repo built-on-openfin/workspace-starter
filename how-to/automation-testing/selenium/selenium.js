@@ -10,7 +10,7 @@ const { Builder } = require('selenium-webdriver');
 
 /**
  * Run the selenium tests.
- * @param openFinRVM The location of the OpenFin RVM.
+ * @param openFinRVM The location of the HERE RVM.
  * @param manifestUrl The url of the manifest to launch.
  * @param chromeDriverPort The port to use for chromedriver.
  * @param devToolsPort The port to use for devtools.
@@ -19,15 +19,15 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	let seleniumDriver;
 	let openFinRVMProcess;
 	try {
-		console.log('Removing any existing OpenFin processes');
+		console.log('Removing any existing HERE processes');
 		await fkill(
 			['OpenFin.exe', 'OpenFinRVM.exe', 'chromedriver.exe', 'OpenFin', 'OpenFinRVM', 'chromedriver'],
 			{ silent: true, force: true }
 		);
 
-		// Spawn the OpenFin runtime with a specific debugging port and also
+		// Spawn the HERE runtime with a specific debugging port and also
 		// configure the selenium web driver to use the same port for debugger address
-		console.log('Start OpenFin Runtime');
+		console.log('Start HERE Runtime');
 		openFinRVMProcess = childProcess.spawn(
 			openFinRVM,
 			[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
@@ -62,7 +62,7 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 		// which can be use in tests to access the raw selenium methods
 		globalThis.webDriver = new SeleniumWebDriver(seleniumDriver);
 
-		console.log('Waiting for OpenFin runtime to be available...');
+		console.log('Waiting for HERE runtime to be available...');
 		await OpenFinSystem.waitForReady(10000);
 
 		await runMochaTests();
@@ -108,7 +108,7 @@ async function runMochaTests() {
 // The version of the chromedriver in the package.json should match the runtime version from the app manifest.
 // e.g. if the manifest runtime version is 42.138.102.4 then the chromedriver version should be "126.0.0"
 const testManifestUrl =
-	'https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/register-with-home/manifest.fin.json';
+	'https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/manifest.fin.json';
 const chromeDriverPort = 5678;
 const devToolsPort = 9122;
 

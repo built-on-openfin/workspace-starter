@@ -12,7 +12,7 @@ export interface VersionInfo {
 	 */
 	platformClient?: string;
 	/**
-	 * The version of the workspace platform client code
+	 * The version of the HERE Core UI Platform client code
 	 */
 	workspacePlatformClient?: string;
 	/**
@@ -20,7 +20,7 @@ export interface VersionInfo {
 	 */
 	workspaceClient?: string;
 	/**
-	 * The version of the workspace components this platform is currently connected to
+	 * The version of the HERE Core UI Components this platform is currently connected to
 	 */
 	workspace?: string;
 	/**

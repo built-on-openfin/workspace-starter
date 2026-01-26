@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -192,7 +192,7 @@ You can specify which settings are updatable and when it comes to "url" or "host
 
 ### Launch Preferences - Window Launch Options For Inline Windows / Windows
 
-These settings apply to Classic OpenFin Windows.
+These settings apply to Classic HERE Windows.
 
 The launch preference will let you override the settings that might exist in the inline definition or external manifest for situations where a platform might need to alter settings specific to the platform or how the application is used within the platform. The application can also be passed settings dynamically at the time of launch if the app definition supports it.
 

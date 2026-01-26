@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param platformSettings The platform settings from the manifest.
  * @param browserSettings The custom settings from the manifest.
  * @param browserSettings.newPageUrl A new page url to load when the browser is opened.
@@ -35,7 +35,7 @@ async function initializeWorkspacePlatform(
 	platformSettings: PlatformSettings,
 	browserSettings: { newPageUrl?: string; newTabUrl?: string }
 ): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	let newPageUrl: string | undefined;
 	let newTabUrl: string | undefined;
 

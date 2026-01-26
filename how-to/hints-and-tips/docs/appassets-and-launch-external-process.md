@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -28,9 +28,9 @@ graph TD
   end
 ```
 
-In the example above we have a developer who has created a simple OpenFin Application. They have a .NET app that they wish to use with the OpenFin application. They have zipped up the app as exe.zip and placed it on their server. They have created a manifest.json file to specify the app asset they need, the version of OpenFin they wish to use, the permissions required and the url to load when launched (which launches the .NET app). The index.html page and manifest are uploaded to the server alongside the exe.zip.
+In the example above we have a developer who has created a simple HERE Application. They have a .NET app that they wish to use with the HERE application. They have zipped up the app as exe.zip and placed it on their server. They have created a manifest.json file to specify the app asset they need, the version of HERE they wish to use, the permissions required and the url to load when launched (which launches the .NET app). The index.html page and manifest are uploaded to the server alongside the exe.zip.
 
-An end user installs the OpenFin Application and clicks on the desktop shortcut. The OpenFin installation has added the OpenFin RVM to the user's machine. The desktop shortcut points to the RVM and passes the url to the manifest hosted on the developer's server. The RVM notes that the manifest lists an app asset and that it doesn't exist on disk. The RVM downloads and extracts the app asset into a versioned folder under the OpenFin Application's directory.
+An end user installs the HERE Application and clicks on the desktop shortcut. The HERE installation has added the HERE RVM to the user's machine. The desktop shortcut points to the RVM and passes the url to the manifest hosted on the developer's server. The RVM notes that the manifest lists an app asset and that it doesn't exist on disk. The RVM downloads and extracts the app asset into a versioned folder under the HERE Application's directory.
 
 When the index.html page is loaded and requests the launch of the .NET app it already exists on disk and is launched.
 
@@ -45,35 +45,35 @@ graph TD
   end
 ```
 
-Once the .NET app is downloaded as an app asset, launched via launch external process the OpenFin application can connect to a Channel API Service exposed by the .NET application. The .NET application will see the connection request and can validate whether it should accept it. Once connected the OpenFin application can call functions/methods exposed by the .NET app. The .NET app in turn can call functions/methods (if any) exposed by the OpenFin application. The [Channel API](https://developers.openfin.co/of-docs/docs/channels) is a low level API that can be used to build an SDK that exposes a set of functions that can be called by applications.
+Once the .NET app is downloaded as an app asset, launched via launch external process the HERE application can connect to a Channel API Service exposed by the .NET application. The .NET application will see the connection request and can validate whether it should accept it. Once connected the HERE application can call functions/methods exposed by the .NET app. The .NET app in turn can call functions/methods (if any) exposed by the HERE application. The [Channel API](https://resources.here.io/docs/core/container/interop/channels/) is a low level API that can be used to build an SDK that exposes a set of functions that can be called by applications.
 
-A basic example of a .NET app exposing a service to a OpenFin application can be seen at the end of this article.
+A basic example of a .NET app exposing a service to a HERE application can be seen at the end of this article.
 
 ## Common use cases for App Assets and Launch External Process
 
-The general recommendation is to only use app assets and launch external process if you really need to. If you can rely solely on the OpenFin runtime and the fin APIs then you will have the smoothest deployment and upgrade experience. There are some uses cases where this is not possible and here are two of them:
+The general recommendation is to only use app assets and launch external process if you really need to. If you can rely solely on the HERE runtime and the fin APIs then you will have the smoothest deployment and upgrade experience. There are some uses cases where this is not possible and here are two of them:
 
 ### Native Application Migration
 
 Some companies have native applications that have been used for a number of years. These applications are rich in functionality but the goal is to move to HTML. How do you move to the Web while keeping a native experience in a manageable amount of time?
 
-If your application can be copied to another machine and run without installation then it can be packaged and versioned using app assets. With an app asset you can setup an OpenFin application that gets installed and when launched downloads and launches the native application. You can then migrate content to the web in a phased approach and have it loaded into OpenFin. Existing features are still available through the native app that was launched and any data/services that are required can be exposed to the OpenFin Application from the native app using the [Channel API](https://developers.openfin.co/of-docs/docs/channels) (you might decide to migrate the client side features first and expose your backend through your native application until you are ready to also move the backend). You can then chip away and move more and more of the UI to the web until the native app can become headless and kept around for any remaining services that are required. Eventually you may be able to remove the dependency on the app asset and have a pure OpenFin application.
+If your application can be copied to another machine and run without installation then it can be packaged and versioned using app assets. With an app asset you can setup an HERE application that gets installed and when launched downloads and launches the native application. You can then migrate content to the web in a phased approach and have it loaded into OpenFin. Existing features are still available through the native app that was launched and any data/services that are required can be exposed to the HERE Application from the native app using the [Channel API](https://resources.here.io/docs/core/container/interop/channels/) (you might decide to migrate the client side features first and expose your backend through your native application until you are ready to also move the backend). You can then chip away and move more and more of the UI to the web until the native app can become headless and kept around for any remaining services that are required. Eventually you may be able to remove the dependency on the app asset and have a pure HERE application.
 
 ### SideCar / Helper Application
 
-There are times where your application needs features that are available to languages such as C# (.NET) or Java but not available through the OpenFin Runtime. An app asset can act as a sidecar/helper application that exposes additional capabilities to your OpenFin application. This will require additional permissions and adds additional steps to your deployment (packaging and downloading app assets) but this may be an acceptable trade off to provide the features your application requires. A sidecar/helper application can be very small as it is only exposing the features that your application requires instead of an existing application such as the earlier use case.
+There are times where your application needs features that are available to languages such as C# (.NET) or Java but not available through the HERE Runtime. An app asset can act as a sidecar/helper application that exposes additional capabilities to your HERE application. This will require additional permissions and adds additional steps to your deployment (packaging and downloading app assets) but this may be an acceptable trade off to provide the features your application requires. A sidecar/helper application can be very small as it is only exposing the features that your application requires instead of an existing application such as the earlier use case.
 
 ## A deeper dive into App Assets and Launch External Process
 
 ### App Assets
 
-App Assets is a way of defining something you wish to package and make available through your OpenFin application. Generally these are applications of one kind or another. App Assets can be defined in two ways.
+App Assets is a way of defining something you wish to package and make available through your HERE application. Generally these are applications of one kind or another. App Assets can be defined in two ways.
 
 #### App Assets via Manifest
 
-In your manifest file (this is a json file that describes your OpenFin application and is hosted on your server) you can add an appAssets setting which defines one or more App Assets that should be fetched as part of your application.
+In your manifest file (this is a json file that describes your HERE application and is hosted on your server) you can add an appAssets setting which defines one or more App Assets that should be fetched as part of your application.
 
-This snippet is taken from our website: [Launch Assets By Using A Secured API](https://developers.openfin.co/of-docs/docs/launch-assets-by-using-a-secured-api#launch-application-assets)
+This snippet is taken from our website: [Launch Assets By Using A Secured API](https://resources.here.io/docs/core/develop/security/secure-assets/#launch-application-assets)
 
 ```json
 "appAssets": [
@@ -99,7 +99,7 @@ The definition of an app asset and what each property means can be found here: [
 
 Both apps provide a source url, a version number for the zipped file, an alias which can be used for launching it, a target to indicate what file should be launched within the zip file once extracted and what command line args should be passed when calling it.
 
-The main difference between the two is that the first entry will cause the OpenFin application to fail if it can't be downloaded whereas the second entry says that the OpenFin app can continue loading if it fails to fetch the asset.
+The main difference between the two is that the first entry will cause the HERE application to fail if it can't be downloaded whereas the second entry says that the HERE app can continue loading if it fails to fetch the asset.
 
 #### App Assets via Code
 
@@ -132,7 +132,7 @@ If you already have this version of the app asset then the RVM will not re-fetch
 
 #### Where do App Assets go?
 
-App assets are downloaded and extracted within your OpenFin application's folder. Using **myApp** as an example it would end up in the following location:
+App assets are downloaded and extracted within your HERE application's folder. Using **myApp** as an example it would end up in the following location:
 
 > `C:\Users\{YOUR_USER_ID}\AppData\Local\OpenFin\apps\{YOUR_APPLICATION}\assets\myApp\4.12.8`
 
@@ -197,7 +197,7 @@ There are a few things to consider with launch external process and app assets:
 
 #### Permissions for Launch External Process
 
-We have an article about the ability to set granular permissions for launching app assets so please refer to this article: [Launch Assets By Using A Secured API](https://developers.openfin.co/of-docs/docs/launch-assets-by-using-a-secured-api#launch-application-assets)
+We have an article about the ability to set granular permissions for launching app assets so please refer to this article: [Launch Assets By Using A Secured API](https://resources.here.io/docs/core/develop/security/secure-assets/#launch-application-assets)
 
 Here is a snippet from that article that shows the permissions needed to be able to launch the app asset used in this example:
 
@@ -276,4 +276,4 @@ async function getCanDownloadAppAssets(): Promise<boolean> {
 
 ## Examples
 
-One example that covers the use case of a C# sidecar/helper app that is required by an OpenFin application can be found on our csharp-starter repo here: [how to use a sidecar application - basic](https://github.com/built-on-openfin/csharp-starter/tree/main/how-to.v2/use-a-sidecar-app-basic).
+One example that covers the use case of a C# sidecar/helper app that is required by an HERE application can be found on our csharp-starter repo here: [how to use a sidecar application - basic](https://github.com/built-on-openfin/csharp-starter/tree/main/how-to.v2/use-a-sidecar-app-basic).

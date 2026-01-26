@@ -11,55 +11,55 @@ export function getApps(): App[] {
 }
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP_BROWSER_VIEW: App = {
 	appId: "openfin-information-browser-view",
 	title: "OpenFin Information Browser View",
-	description: "Display information about the OpenFin environment in a browser view",
+	description: "Display information about the HERE environment in a browser view",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin", "versions"]
+	tags: ["view", "HERE", "versions"]
 };
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP_PLATFORM_WINDOW: App = {
 	appId: "openfin-information-platform-window",
 	title: "OpenFin Information Platform Window",
-	description: "Display information about the OpenFin environment in a platform window",
+	description: "Display information about the HERE environment in a platform window",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "platform-window",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["platform-window", "openfin", "versions"]
+	tags: ["platform-window", "HERE", "versions"]
 };
 
 /**

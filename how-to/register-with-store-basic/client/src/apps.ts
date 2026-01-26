@@ -3,45 +3,45 @@ import type { App } from "@openfin/workspace";
 import { AppManifestType, getCurrentSync } from "@openfin/workspace-platform";
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 export const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
-	description: "Display information about the OpenFin environment",
+	description: "Display information about the HERE environment",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin", "versions"]
+	tags: ["view", "HERE", "versions"]
 };
 
 /**
- * App definition for the OpenFin Notification Process Manager development tool.
+ * App definition for the HERE Notification Process Manager development tool.
  */
 export const PROCESS_MANAGER: App = {
 	appId: "openfin-process-manager",
-	title: "OpenFin Process Manager",
+	title: "HERE Process Manager",
 	manifestType: "manifest",
 	description:
-		"Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
+		"Process Manager: This is OpenFin's tool for helping developers build HERE Applications. It lets you see the HERE applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
 	manifest: "https://cdn.openfin.co/release/apps/openfin/processmanager/app.json",
 	icons: [{ src: "https://cdn.openfin.co/release/apps/openfin/processmanager/2.0.2/ofpm-icon.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
@@ -59,12 +59,12 @@ export const DEVELOPER_CONTENT: App = {
 	title: "OpenFin Developer Docs",
 	manifestType: "snapshot",
 	description:
-		"Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
+		"Shows a collection of HERE developer pages and provides an example of how you can present a pre-built page as a launch target in HERE Home. This entry has a manifest type of 'snapshot'.",
 	manifest: "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
-	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
+	icons: [{ src: "http://localhost:8080/common/images/favicon-32x32.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{

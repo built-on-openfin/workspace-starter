@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -13,7 +13,7 @@ The approach that we have taken is that you define your landing page properties 
 ```json
 "storefrontProvider": {
    "id": "workspace-platform-starter",
-   "title": "Workspace Platform Starter",
+   "title": "HERE Core UI Platform Starter",
    "icon": "http://localhost:8080/favicon.ico",
    "landingPage": {
     "hero": {
@@ -32,7 +32,7 @@ The approach that we have taken is that you define your landing page properties 
      "items": [
       {
        "title": "Dev Tools",
-       "description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+       "description": "A collection of developer tools that can aid with building and debugging HERE applications.",
        "image": {
         "src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
        },
@@ -41,7 +41,7 @@ The approach that we have taken is that you define your landing page properties 
       },
       {
        "title": "Learning Resource",
-       "description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+       "description": "A collection of developer documents that can aid with building and debugging HERE applications.",
        "image": {
         "src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
        },
@@ -132,7 +132,7 @@ The approach that we have taken is that you define your landing page properties 
      "src": "http://localhost:8080/favicon.ico",
      "size": "32"
     },
-    "text": "Welcome to the OpenFin Sample Footer",
+    "text": "Welcome to the HERE Sample Footer",
     "links": [
      {
       "title": "Github",

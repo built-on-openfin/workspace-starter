@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--integrate-with-openid-connect",
-	"version": "22.0.0",
-	"description": "OpenFin Workspace -- Integrate with OpenId Connect",
+	"version": "23.0.0",
+	"description": "HERE Core UI -- Integrate with OpenId Connect",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
@@ -24,12 +24,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/openid-connect": "^1.0.0",
-		"@openfin/workspace": "22.3.27",
-		"@openfin/workspace-platform": "22.3.27"
+		"@openfin/workspace": "23.0.20",
+		"@openfin/workspace-platform": "23.0.20"
 	},
 	"devDependencies": {
-		"@openfin/core": "42.103.1",
-		"@openfin/node-adapter": "42.103.1",
+		"@openfin/core": "43.101.2",
+		"@openfin/node-adapter": "43.101.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

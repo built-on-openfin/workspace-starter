@@ -82,7 +82,7 @@ export async function getDefaultWindowOptions(
 		}
 		// end backwards compatibility
 
-		// we are going to override the ones specified at the workspace platform level
+		// we are going to override the ones specified at the HERE Core UI Platform level
 		// as this is our more flexible extension with conditions
 		const buttons = await getToolbarButtons();
 		if (!isEmpty(buttons)) {

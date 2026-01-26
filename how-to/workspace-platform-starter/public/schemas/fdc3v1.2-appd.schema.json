@@ -30,7 +30,7 @@
 					"type": "string"
 				},
 				"icons": {
-					"description": "Holds Icons used for the application. The icon can be used in the OpenFin Workspace HOME, STORE and DOCK\ncomponents.",
+					"description": "Holds Icons used for the application. The icon can be used in the HERE Core UI HOME, STORE and DOCK\ncomponents.",
 					"items": {
 						"$ref": "#/definitions/AppIcon"
 					},
@@ -51,7 +51,7 @@
 					"type": "array"
 				},
 				"manifest": {
-					"description": "URI or full JSON of the application manifest providing all details related to launch and use requirements as\ndescribed by OpenFin. The format of this manifest for this platform is OpenFin specific, but can be identified by\nthe manifestType attribute.",
+					"description": "URI or full JSON of the application manifest providing all details related to launch and use requirements as\ndescribed by OpenFin. The format of this manifest for this platform is HERE specific, but can be identified by\nthe manifestType attribute.",
 					"type": "string"
 				},
 				"manifestType": {
@@ -71,11 +71,11 @@
 					"type": "string"
 				},
 				"title": {
-					"description": "Title for the application, Can be used in the OpenFin Workspace HOME, STORE and DOCK components.",
+					"description": "Title for the application, Can be used in the HERE Core UI HOME, STORE and DOCK components.",
 					"type": "string"
 				},
 				"tooltip": {
-					"description": "Optional tooltip description e.g. for a OpenFin Workspace Dock button",
+					"description": "Optional tooltip description e.g. for a HERE Core UI Dock button",
 					"type": "string"
 				},
 				"version": {
@@ -191,7 +191,7 @@
 					"description": "Contains additional information related to the launch of an application."
 				},
 				"private": {
-					"description": "Should this application not be listed in OpenFin Workspace components e.g. Workspace HOME, DOCK or STORE. It may\nbe that this app entry is mainly for responding to intent requests and shouldn't be launched directly.",
+					"description": "Should this application not be listed in HERE Core UI components e.g. Workspace HOME, DOCK or STORE. It may\nbe that this app entry is mainly for responding to intent requests and shouldn't be launched directly.",
 					"type": ["string", "boolean"]
 				}
 			},
@@ -372,7 +372,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>"
+						"$ref": "#/definitions/NativePreference%3Cnever%3E"
 					},
 					"type": "array"
 				}
@@ -447,7 +447,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreference%3Cnever%3E"
 							}
 						]
 					},
@@ -563,7 +563,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreference%3Cnever%3E"
 							}
 						]
 					},

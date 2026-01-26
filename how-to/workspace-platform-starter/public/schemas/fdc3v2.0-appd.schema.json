@@ -48,14 +48,14 @@
 							"$ref": "#/definitions/OtherAppDetails"
 						}
 					],
-					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests OpenFin object."
+					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests HERE object."
 				},
 				"hostManifests": {
 					"$ref": "#/definitions/HostManifests",
 					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details."
 				},
 				"icons": {
-					"description": "Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or\nSTORE Components",
+					"description": "Holds Icons used for the application, This icon could be used for entries in the HERE Core UI HOME, DOCK or\nSTORE Components",
 					"items": {
 						"$ref": "#/definitions/AppImage"
 					},
@@ -63,7 +63,7 @@
 				},
 				"interop": {
 					"$ref": "#/definitions/AppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens\nfor.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and\nintents, for use by other app developers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an HERE Platform/ interop agent, by declaring what intents an app listens\nfor.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and\nintents, for use by other app developers and desktop assemblers."
 				},
 				"lang": {
 					"description": "A language tag that specifies the primary language of both the application and its entry, as defined by IETF RFC\n5646.",
@@ -92,7 +92,7 @@
 					"type": "string"
 				},
 				"screenshots": {
-					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional\ndescription/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be\nused by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
+					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional\ndescription/tooltip. These images could be used in the HERE Core UI STORE and HOME components or it could be\nused by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
 					"items": {
 						"$ref": "#/definitions/Screenshot"
 					},
@@ -414,7 +414,7 @@
 			"properties": {
 				"OpenFin": {
 					"additionalProperties": false,
-					"description": "The OpenFin settings for this FDC3 2.0 App Definition",
+					"description": "The HERE settings for this FDC3 2.0 App Definition",
 					"properties": {
 						"config": {
 							"additionalProperties": false,
@@ -444,7 +444,7 @@
 							"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
 						},
 						"type": {
-							"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
+							"description": "this is the manifest type id used by HERE and specified if root type is defined as other.",
 							"type": "string"
 						}
 					},
@@ -548,7 +548,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>"
+						"$ref": "#/definitions/NativePreference%3Cnever%3E"
 					},
 					"type": "array"
 				}
@@ -587,7 +587,7 @@
 		},
 		"OtherAppDetails": {
 			"additionalProperties": false,
-			"description": "Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section",
+			"description": "Use an empty object here and fill in the details object in the HERE definition in the hostManifests section",
 			"type": "object"
 		},
 		"Partial": {
@@ -664,7 +664,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference<never>"
+								"$ref": "#/definitions/ViewPreference%3Cnever%3E"
 							}
 						]
 					},
@@ -792,7 +792,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference<never>"
+								"$ref": "#/definitions/WindowPreference%3Cnever%3E"
 							}
 						]
 					},

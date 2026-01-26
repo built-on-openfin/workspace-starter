@@ -4,7 +4,6 @@ import {
 	ColorSchemeOptionType,
 	getCurrentSync,
 	init,
-	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
@@ -30,10 +29,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -118,7 +117,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 }
 
 /**
- * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ * Initialize minimal HERE Core UI Components for home/store so that the buttons show on dock.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
 	await Home.register({
@@ -166,7 +165,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
  * @returns The overridden class.
  */
 function overrideCallback(
@@ -209,21 +208,24 @@ async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void>
 	}
 
 	// Get the current palette from the platform based on the selected scheme.
-	const currentPalette = (themes[0] as CustomThemeOptionsWithScheme).palettes[scheme];
+	if (Array.isArray(themes) && themes.length > 0) {
+		const currentTheme = themes[0];
 
-	// Broadcast a message using interop so that any views with the style preload
-	// scripts can react and update their UIs accordingly
-	const finMeInterop = fin.Interop.connectSync(fin.me.uuid, {});
-	const appSessionContextGroup = await finMeInterop.joinSessionContextGroup("platform/events");
-	await appSessionContextGroup.setContext({
-		type: "platform.theme",
-		schemeType: scheme,
-		palette: currentPalette
-	} as OpenFin.Context);
+		if ("palettes" in currentTheme) {
+			const currentPalette = currentTheme.palettes[scheme];
+			const finMeInterop = fin.Interop.connectSync(fin.me.uuid, {});
+			const appSessionContextGroup = await finMeInterop.joinSessionContextGroup("platform/events");
+			await appSessionContextGroup.setContext({
+				type: "platform.theme",
+				schemeType: scheme,
+				palette: currentPalette
+			} as OpenFin.Context);
+		}
+	}
 }
 
 /**
- * If the OpenFin color scheme is set to System we need to work out
+ * If the HERE color scheme is set to System we need to work out
  * if the OS is currently set to dark or light.
  * @returns The OS preference for color scheme.
  */

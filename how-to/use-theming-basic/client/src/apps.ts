@@ -11,29 +11,29 @@ export function getApps(): App[] {
 }
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
-	description: "Display information about the OpenFin environment",
+	description: "Display information about the HERE environment",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin", "versions"]
+	tags: ["view", "HERE", "versions"]
 };
 
 /**
@@ -45,10 +45,10 @@ const COMMON_STYLES_APP: App = {
 	description: "A view demonstrating the common styles.",
 	manifest: "http://localhost:8080/common/style/style-view.json",
 	manifestType: "view",
-	icons: [{ src: "http://localhost:8080/common/images/icon-blue.png" }],
+	icons: [{ src: "http://localhost:8080/common/images/favicon-32x32.png" }],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
