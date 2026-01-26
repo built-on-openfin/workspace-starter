@@ -19,7 +19,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -71,12 +71,12 @@
 		},
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-store/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-store/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{

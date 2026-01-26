@@ -19,16 +19,16 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/workspace-platform-starter/favicon.ico",
-		"name": "Workspace Platform Starter - v23.0.0",
+		"name": "HERE Core UI Platform Starter - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
-		"product": "Workspace Starter - Workspace Platform Starter - Client",
-		"email": "support@openfin.co",
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter - Client",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"snapshot": {

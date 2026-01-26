@@ -8,12 +8,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "StartCall",
@@ -42,12 +42,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -65,12 +65,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -94,12 +94,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -123,12 +123,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -157,12 +157,12 @@
 		"manifestType": "window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -192,12 +192,12 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/snapshots/contact-overview.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -210,6 +210,6 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/common/images/previews/contact/client-overview.png"
 			}
 		],
-		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+		"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
 	}
 ]

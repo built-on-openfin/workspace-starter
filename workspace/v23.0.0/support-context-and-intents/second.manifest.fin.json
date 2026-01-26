@@ -33,9 +33,9 @@
 		}
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Support Context And Intents - Second Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {

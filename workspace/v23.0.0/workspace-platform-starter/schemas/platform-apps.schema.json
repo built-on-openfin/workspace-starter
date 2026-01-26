@@ -673,7 +673,7 @@
 				},
 				"interop": {
 					"$ref": "#/definitions/PlatformAppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an HERE Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
 				},
 				"launchPreference": {
 					"$ref": "#/definitions/LaunchPreference",

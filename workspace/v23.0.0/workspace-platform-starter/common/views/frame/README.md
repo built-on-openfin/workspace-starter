@@ -8,7 +8,7 @@ If the fin api is available (the fdc3 api will also be available if it is availa
 
 If the fin api is disabled (and therefore the fdc3 api) for the iframed content then we have an example.html page that loads a script ["framed.js"](./framed/framed.js) that enables the title monitoring and provides a basic fdc3 API that supports broadcasting on system/user channels or adding a context listener.
 
-This is just an example of how you can use the OpenFin APIs, browser APIs (postMessage) and OpenFin settings.
+This is just an example of how you can use the HERE APIs, browser APIs (postMessage) and HERE settings.
 
 ## Framed Content
 
@@ -47,12 +47,12 @@ A lot of sites do not allow their content to be contained within an iframe unles
   "manifestType": "inline-view",
   "icons": [
    {
-    "src": "http://localhost:8080/common/images/icon-blue.png"
+    "src": "http://localhost:8080/common/images/favicon-32x32.png"
    }
   ],
   "contactEmail": "contact@example.com",
   "supportEmail": "support@example.com",
-  "publisher": "OpenFin",
+  "publisher": "HERE",
   "intents": [],
   "images": [],
   "tags": ["developer", "view"]
@@ -86,12 +86,12 @@ A lot of sites do not allow their content to be contained within an iframe unles
   "manifestType": "inline-view",
   "icons": [
    {
-    "src": "http://localhost:8080/common/images/icon-blue.png"
+    "src": "http://localhost:8080/common/images/favicon-32x32.png"
    }
   ],
   "contactEmail": "contact@example.com",
   "supportEmail": "support@example.com",
-  "publisher": "OpenFin",
+  "publisher": "HERE",
   "intents": [],
   "images": [],
   "tags": ["developer", "view"]
@@ -133,7 +133,7 @@ The framed content cannot:
 - Open new windows (so it can't open a new window and have access to the fin API if you don't want to as you specified that restriction to the frame)
 - Navigate the parent (top) to a different url (so it could load itself into the parent view).
 
-This is just an example to show how you could use iframes in an OpenFin Platform, please read the ([sandboxed iframes](https://web.dev/sandboxed-iframes/)) post and read around if you want to know more about iframes and sandboxing.
+This is just an example to show how you could use iframes in an HERE Platform, please read the ([sandboxed iframes](https://web.dev/sandboxed-iframes/)) post and read around if you want to know more about iframes and sandboxing.
 
 ### API Settings
 

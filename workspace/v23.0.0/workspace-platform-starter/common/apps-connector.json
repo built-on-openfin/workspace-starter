@@ -3,7 +3,7 @@
 		"appId": "salesforce-app",
 		"name": "salesforce-app",
 		"title": "Salesforce",
-		"description": "If you are using the OpenFin Salesforce App on the app exchange then you can make it an intent target and add an app entry for it.",
+		"description": "If you are using the HERE Salesforce App on the app exchange then you can make it an intent target and add an app entry for it.",
 		"manifest": {
 			"url": "",
 			"fdc3InteropApi": "2.0",
@@ -17,7 +17,7 @@
 		"icons": [],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",

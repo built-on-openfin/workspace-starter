@@ -20,16 +20,16 @@
 		"defaultWindowOptions": {}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/integrate-with-snap/favicon.ico",
 		"name": "Integrate With Snap - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Integrate With Snap - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"appAssets": [],
