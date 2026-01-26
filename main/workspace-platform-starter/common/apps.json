@@ -23,12 +23,12 @@
 		"manifestType": "inline-window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "ViewContact",
@@ -53,10 +53,10 @@
 		"description": "A style guide used to aid in the building of workspace starter samples.",
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/style/style-view.json",
 		"manifestType": "view",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png" }],
+		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -69,7 +69,7 @@
 		"appId": "openfin-versions-workspace",
 		"name": "openfin-versions-workspace",
 		"title": "OpenFin Versions - Workspace",
-		"description": "Launch the OpenFin Workspace Versions page. This launches the url as a view to demonstrate the capability. This is an example of a inline-view entry in the app catalog.",
+		"description": "Launch the HERE Core UI Versions page. This launches the url as a view to demonstrate the capability. This is an example of a inline-view entry in the app catalog.",
 		"manifest": {
 			"url": "https://developer.openfin.co/versions/?product=Runtime#/?product=Workspace",
 			"name": "openfin-versions"
@@ -77,12 +77,12 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["versions", "view"]
@@ -91,19 +91,19 @@
 		"appId": "openfin-versions-runtime",
 		"name": "openfin-versions-runtime",
 		"title": "OpenFin Versions - Runtime",
-		"description": "Launch the OpenFin Runtime Versions page. This launches in a classic window to demonstrate the capability. This is a example of an inline-window entry in the app catalog.",
+		"description": "Launch the HERE Runtime Versions page. This launches in a classic window to demonstrate the capability. This is a example of an inline-window entry in the app catalog.",
 		"manifest": {
 			"url": "https://developer.openfin.co/versions/?product=Runtime"
 		},
 		"manifestType": "inline-window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["versions", "window"]
@@ -112,17 +112,17 @@
 		"appId": "openfin-versions-integrations",
 		"name": "openfin-versions-integrations",
 		"title": "OpenFin Versions - Integrations",
-		"description": "Launch the OpenFin Integrations Versions page. This launches the url into the desktop browser to demonstrate the capability. This is an example of a desktop-browser entry in the app catalog.",
+		"description": "Launch the HERE Integrations Versions page. This launches the url into the desktop browser to demonstrate the capability. This is an example of a desktop-browser entry in the app catalog.",
 		"manifest": "https://developer.openfin.co/versions/?product=Runtime#/?product=Integrations",
 		"manifestType": "desktop-browser",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["versions", "desktop-browser"]
@@ -131,40 +131,40 @@
 		"appId": "openfin-information",
 		"name": "openfin-information",
 		"title": "OpenFin Information",
-		"description": "Display information about the OpenFin environment",
+		"description": "Display information about the HERE environment",
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/of-info.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/previews/of-info.png"
 			}
 		],
-		"tags": ["view", "openfin", "versions"]
+		"tags": ["view", "HERE", "versions"]
 	},
 	{
 		"appId": "openfin-developer-page",
 		"name": "openfin-developer-page",
 		"title": "OpenFin Developer Docs",
 		"manifestType": "snapshot",
-		"description": "Shows a collection of OpenFin developer pages and provides an example of how you can present a pre-built page as a launch target in OpenFin Home. This entry has a manifest type of 'snapshot'.",
+		"description": "Shows a collection of HERE developer pages and provides an example of how you can present a pre-built page as a launch target in HERE Home. This entry has a manifest type of 'snapshot'.",
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/snapshots/developer.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -182,12 +182,12 @@
 		"manifest": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/windows/hidden-window/hidden.window.fin.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["window", "headless", "developer"]
@@ -201,12 +201,12 @@
 		"manifestType": "window",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -248,12 +248,12 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
@@ -287,12 +287,12 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
@@ -308,12 +308,12 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
@@ -332,12 +332,12 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["developer", "view"]
@@ -348,7 +348,7 @@
 		"title": "Navigate",
 		"manifestType": "inline-view",
 		"intents": [],
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"description": "Search Google or Navigate to a url. This view demonstrates the new navigation controls available in Workspace v17+",
 		"manifest": {
 			"url": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
@@ -365,10 +365,10 @@
 		"supportEmail": "support@example.com",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
-		"tags": ["openfin", "navigate", "view"],
+		"tags": ["HERE", "navigate", "view"],
 		"images": []
 	}
 ]

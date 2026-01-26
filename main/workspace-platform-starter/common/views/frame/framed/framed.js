@@ -1,5 +1,5 @@
 (async () => {
-	// if fdc3 is injected by the OpenFin runtime it will be available before this script runs
+	// if fdc3 is injected by the HERE runtime it will be available before this script runs
 	if (window.fdc3 === undefined) {
 		try {
 			const fdc3Module = await import('../framed/frame.fdc3.js');

@@ -8,12 +8,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["view", "fdc3", "preload"]
@@ -27,12 +27,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/main/support-context-and-intents/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
 		"tags": ["view", "fdc3", "preload"]

@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=second-support-context-and-intents",
-		"version": "42.138.103.1"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "second-support-context-and-intents",
@@ -33,9 +33,9 @@
 		}
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Support Context And Intents - Second Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {

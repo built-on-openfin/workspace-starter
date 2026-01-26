@@ -5,12 +5,26 @@
 		"arguments": "",
 		"version": "43.142.101.2"
 	},
+	"appAssets": [
+		{
+			"src": "https://built-on-openfin.github.io/workspace-starter/main/register-with-dock3-basic/assets/workspace_platform.zip",
+			"alias": "self-hosted-workspace-platform",
+			"version": "23.0.0",
+			"target": "workspace.asar"
+		}
+	],
 	"platform": {
 		"uuid": "register-with-dock3-basic",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/register-with-dock3-basic/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/main/register-with-dock3-basic/platform/provider.html",
-		"preventQuitOnLastWindowClosed": true
+		"preventQuitOnLastWindowClosed": true,
+		"permissions": {
+			"System": {
+				"downloadAsset": true,
+				"serveAsset": true
+			}
+		}
 	},
 	"shortcut": {
 		"company": "HERE",

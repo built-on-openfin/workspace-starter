@@ -12,18 +12,18 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/images/previews/view-intents-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-intents-fdc3.png",
 					"label": "Intents using FDC3"
 				}
 			],
 			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "other",
 			"details": {},
 			"interop": {
@@ -77,9 +77,9 @@
 				"appChannels": []
 			},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
 				}
 			}
 		},
@@ -94,27 +94,27 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/images/previews/view-context-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-context-fdc3.png",
 					"label": "Contexts using FDC3"
 				}
 			],
 			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "other",
 			"details": {
-				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
 			},
 			"interop": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
 				}
 			}
 		},
@@ -129,27 +129,27 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/images/previews/view-context-fdc3.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-context-fdc3.png",
 					"label": "Contexts using FDC3"
 				}
 			],
 			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "other",
 			"details": {
-				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
 			},
 			"interop": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json",
+					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json",
 					"config": {
 						"launchPreference": {
 							"bounds": {
@@ -190,7 +190,7 @@
 			"type": "other",
 			"details": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
 				}
@@ -245,7 +245,7 @@
 				}
 			],
 			"categories": ["data", "grid", "blotter", "trading", "low-code", "no-code"],
-			"version": "22.0.0",
+			"version": "23.0.0",
 			"tooltip": "AdapTable Tools FDC3 Demo",
 			"lang": "en-US",
 			"publisher": "AdapTable Tools",
@@ -255,7 +255,7 @@
 			"type": "other",
 			"details": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/views/vendor/adaptable/adaptable-fdc3-demo.view.fin.json"
 				}

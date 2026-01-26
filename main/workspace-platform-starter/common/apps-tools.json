@@ -4,16 +4,16 @@
 		"name": "notifications-studio",
 		"title": "OpenFin Notifications Studio",
 		"manifestType": "manifest",
-		"description": "Notifications Studio: This is OpenFin's tool for demonstrating the power of our Notification Center. Use it to create local notifications or use some of the examples shown in our Catalog. Experiment with our features and see the power that OpenFin Notification Center can bring to your applications.",
+		"description": "Notifications Studio: This is OpenFin's tool for demonstrating the power of our Notification Center. Use it to create local notifications or use some of the examples shown in our Catalog. Experiment with our features and see the power that HERE Notification Center can bring to your applications.",
 		"manifest": "https://cdn.openfin.co/studio/notification/app.json",
 		"icons": [
 			{
-				"src": "https://cdn.openfin.co/demos/notifications/generator/images/icon-blue.png"
+				"src": "https://cdn.openfin.co/demos/notifications/generator/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -25,9 +25,9 @@
 	{
 		"appId": "openfin-process-manager",
 		"name": "openfin-process-manager",
-		"title": "OpenFin Process Manager",
+		"title": "HERE Process Manager",
 		"manifestType": "manifest",
-		"description": "Process Manager: This is OpenFin's tool for helping developers build OpenFin Applications. It lets you see the OpenFin applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
+		"description": "Process Manager: This is OpenFin's tool for helping developers build HERE Applications. It lets you see the HERE applications that are running, the performance of the applications (memory and cpu) and easy access to the dev tools for the Windows of your application.",
 		"manifest": "https://cdn.openfin.co/release/apps/openfin/processmanager/app.json",
 		"icons": [
 			{
@@ -36,7 +36,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
