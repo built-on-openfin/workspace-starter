@@ -1,7 +1,7 @@
 {
 	"name": "integrate-with-bloomberg-basic",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace - Example shows how to connect to a Bloomberg terminal and issue basic commands to drive it",
+	"description": "HERE Core UI - Example shows how to connect to a Bloomberg terminal and issue basic commands to drive it",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

@@ -324,7 +324,7 @@
 		},
 		"Partial<Omit<Manifest,\"assetsUrl\"|\"services\">>": {
 			"additionalProperties": false,
-			"description": "A type alias for the OpenFin manifest.",
+			"description": "A type alias for the HERE manifest.",
 			"properties": {
 				"appAssets": {
 					"items": {

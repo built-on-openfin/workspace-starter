@@ -55,7 +55,7 @@ export type PlatformApp = App & {
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This
 	 * metadata serves multiple purposes:
-	 * - It supports intent resolution by an OpenFin Platform/ interop agent, by
+	 * - It supports intent resolution by an HERE Platform/ interop agent, by
 	 * declaring what intents an app listens for.
 	 * - It may be used, for example in an app catalog UI, to find apps that
 	 * 'interoperate with' other apps.

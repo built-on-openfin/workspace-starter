@@ -2,7 +2,7 @@
 	{
 		"appId": "workspace-platform-starter",
 		"name": "workspace-platform-starter",
-		"title": "Workspace Platform Starter Platform",
+		"title": "HERE Core UI Platform Starter Platform",
 		"description": "The platform that is currently running.",
 		"manifest": {
 			"url": "http://localhost:8080/platform/provider.html"
@@ -10,14 +10,14 @@
 		"manifestType": "inline-window",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"instanceMode": "single",
 		"private": true,
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "CreateNotification",

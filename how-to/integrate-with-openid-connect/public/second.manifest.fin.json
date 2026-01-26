@@ -12,9 +12,9 @@
 		"providerUrl": "http://localhost:8080/platform/app.html"
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Integrate With OpenId Connect - App",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {

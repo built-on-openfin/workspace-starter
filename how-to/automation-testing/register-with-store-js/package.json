@@ -1,7 +1,7 @@
 {
   "name": "automation-testing-register-with-store-js",
   "version": "23.0.0",
-  "description": "OpenFin Workspace Starter Automation Tests",
+  "description": "HERE Core UI Starter Automation Tests",
   "scripts": {
     "build": "echo Nothing to build",
     "test-remote-mocha": "of-automation https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-store/manifest.fin.json ./tests/**/*.spec.js --workspace 23.0.20",

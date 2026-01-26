@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--use-theming",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Use Theming",
+	"description": "HERE Core UI -- Use Theming",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

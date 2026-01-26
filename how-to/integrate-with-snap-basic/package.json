@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--integrate-with-snap-basic",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Integrate with Snap - Basic",
+	"description": "HERE Core UI -- Integrate with Snap - Basic",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

@@ -34,7 +34,7 @@ exports.config = {
 		timeout: 60000
 	},
 	onPrepare: async () => {
-		console.log('Removing any existing OpenFin processes');
+		console.log('Removing any existing HERE processes');
 		await fkill(
 			['OpenFin.exe', 'OpenFinRVM.exe', 'chromedriver.exe', 'OpenFin', 'OpenFinRVM', 'chromedriver'],
 			{ silent: true, force: true }
@@ -76,7 +76,7 @@ exports.config = {
 	before: async (_, __, browser) => {
 		// Set the global webdriver object used by the helpers
 		globalThis.webDriver = new NodeWebDriver(browser);
-		console.log('Waiting for OpenFin runtime to be available...');
+		console.log('Waiting for HERE runtime to be available...');
 		await OpenFinSystem.waitForReady(10000);
 		console.log('Running Tests...');
 	},
@@ -87,7 +87,7 @@ exports.config = {
 	},
 	onComplete: async () => {
 		const openFinRVMProcessPID = await getValue('openFinRVMProcessPID');
-		console.log('Closing the OpenFin runtime', openFinRVMProcessPID);
+		console.log('Closing the HERE runtime', openFinRVMProcessPID);
 		await fkill(openFinRVMProcessPID, { silent: true, force: true });
 	}
 };

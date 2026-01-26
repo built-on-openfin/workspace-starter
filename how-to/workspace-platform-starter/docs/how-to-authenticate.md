@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -60,7 +60,7 @@ This example module is there for you to test different auth flows (e.g. autoLogi
 
 ### OpenID Connect Example Module
 
-OpenFin provider an OpenID Connect (OIDC) auth package [https://www.npmjs.com/package/@openfin/openid-connect](https://www.npmjs.com/package/@openfin/openid-connect) which performs the standard OIDC authentication handshake process.
+HERE provider an OpenID Connect (OIDC) auth package [https://www.npmjs.com/package/@openfin/openid-connect](https://www.npmjs.com/package/@openfin/openid-connect) which performs the standard OIDC authentication handshake process.
 
 We have provided an implementation of an auth module which uses the OIDC package, see [../client/src/modules/auth/openid-connect/auth.ts](../client/src/modules/auth/openid-connect/auth.ts)
 
@@ -138,7 +138,7 @@ This would present the Log Out and Quit App menu option underneath the Quit menu
 
 ## Other Examples
 
-We also have a few other examples if you would like to know more about authentication and OpenFin in general:
+We also have a few other examples if you would like to know more about authentication and HERE in general:
 
 - [How To Integrate With OpenID Connect (OIDC)](../../integrate-with-openid-connect/README.md)
 - [How To Integrate Server Authentication](../../integrate-server-authentication/README.md)

@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -13,14 +13,14 @@ This section is going to be broken down into two sections.
 
 If you are looking to learn how to use the notifications API please use the following two sources:
 
-- [Notification Center Documentation](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center) at developers.openfin.co.
+- [Notification Center Documentation](https://resources.here.io/docs/core/addenda/deprecated/notifications-hc-ui-platform/) at developers.openfin.co.
 - Example: [how-to/use-notifications](../../use-notifications/README.md)
 
 These sources will let you explore what Notifications are capable of.
 
 ## Patterns for Notification Usage
 
-This is an example of how you can use Notifications in our workspace platform starter example.
+This is an example of how you can use Notifications in our HERE Core UI Platform starter example.
 
 ### Scenarios
 
@@ -68,12 +68,12 @@ If you have more than one team or division under your platform then they may wan
 
 ## Configuring the Notifications Provider
 
-The notificationsProvider settings lets you specify settings that are passed onto the workspace notification registration (id, title and icon). It also includes additional settings specific to the workspace platform starter i.e. notificationClients.
+The notificationsProvider settings lets you specify settings that are passed onto the workspace notification registration (id, title and icon). It also includes additional settings specific to the HERE Core UI Platform starter i.e. notificationClients.
 
 ```json
 "notificationProvider": {
    "id": "workspace-platform-starter",
-   "title": "Workspace Platform Starter",
+   "title": "HERE Core UI Platform Starter",
    "icon": "http://localhost:8080/favicon.ico",
    "notificationClients": {
     "defaults": {

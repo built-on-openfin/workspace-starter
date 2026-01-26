@@ -3968,7 +3968,7 @@
 				},
 				"interop": {
 					"$ref": "#/definitions/PlatformAppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an HERE Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
 				},
 				"launchPreference": {
 					"$ref": "#/definitions/LaunchPreference",
@@ -4585,14 +4585,14 @@
 				},
 				"workspaceAsar": {
 					"additionalProperties": false,
-					"description": "Are you self hosting the workspace platform UI and related assets (workspace 20.1+).",
+					"description": "Are you self hosting the HERE Core UI Platform UI and related assets (workspace 20.1+).",
 					"properties": {
 						"alias": {
-							"description": "The alias that you have used when defining the app asset in your manifest that has the workspace platform zip that is provided in the",
+							"description": "The alias that you have used when defining the app asset in your manifest that has the HERE Core UI Platform zip that is provided in the",
 							"type": "string"
 						},
 						"enabled": {
-							"description": "This is a Workspace Platform Starter specific setting. Default is true if an alias is specified.",
+							"description": "This is a HERE Core UI Platform Starter specific setting. Default is true if an alias is specified.",
 							"type": "boolean"
 						}
 					},
@@ -5470,7 +5470,7 @@
 					"type": "string"
 				},
 				"workspace": {
-					"description": "The version of the workspace components this platform is currently connected to",
+					"description": "The version of the HERE Core UI Components this platform is currently connected to",
 					"type": "string"
 				},
 				"workspaceClient": {
@@ -5478,7 +5478,7 @@
 					"type": "string"
 				},
 				"workspacePlatformClient": {
-					"description": "The version of the workspace platform client code",
+					"description": "The version of the HERE Core UI Platform client code",
 					"type": "string"
 				}
 			},
@@ -5692,7 +5692,7 @@
 		},
 		"WPSManifest": {
 			"additionalProperties": false,
-			"description": "A wrapper around the OpenFin manifest that adds custom settings.",
+			"description": "A wrapper around the HERE manifest that adds custom settings.",
 			"properties": {
 				"appAssets": {
 					"items": {
@@ -5721,7 +5721,7 @@
 				},
 				"customSettings": {
 					"$ref": "#/definitions/CustomSettings",
-					"description": "Custom settings for the workspace platform."
+					"description": "Custom settings for the HERE Core UI Platform."
 				},
 				"devtools_port": {
 					"type": "number"

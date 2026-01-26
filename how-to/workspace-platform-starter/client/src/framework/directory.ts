@@ -174,7 +174,7 @@ async function getApps(results: DirectoryApps): Promise<PlatformApp[]> {
 }
 
 /**
- * Map platform apps from the OpenFin format to standard PlatformApp.
+ * Map platform apps from the HERE format to standard PlatformApp.
  * @param applications The applications to map.
  * @returns The list of mapped applications.
  */

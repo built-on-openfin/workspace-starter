@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--register-with-home-basic",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Register with Home - Basic",
+	"description": "HERE Core UI -- Register with Home - Basic",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

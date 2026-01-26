@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--register-with-platform-windows",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Register with Platform Windows",
+	"description": "HERE Core UI -- Register with Platform Windows",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

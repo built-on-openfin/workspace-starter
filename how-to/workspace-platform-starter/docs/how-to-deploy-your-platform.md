@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Deploy Your Platform
 
-The OpenFin website has a section dedicated to deployment, see [Deploying Applications](https://developers.openfin.co/of-docs/docs/deploying-applications)
+The HERE website has a section dedicated to deployment, see [Deploying Applications](https://developers.openfin.co/of-docs/docs/deploying-applications)
 
 ## Installer
 
@@ -12,19 +12,19 @@ If you have a manifest setup to your liking (e.g. a local setup would be [manife
 
 - [https://install.openfin.co](https://install.openfin.co)
 
-This page will take the url to your manifest (you can use localhost for testing) and give you a zipped installer. The zipped installer is our Runtime Version Manager (RVM see [Installation With RVM](https://developers.openfin.co/of-docs/docs/installation-with-rvm)) and this will install without requiring admin rights and pull down the required OpenFin runtime from our CDN.
+This page will take the url to your manifest (you can use localhost for testing) and give you a zipped installer. The zipped installer is our Runtime Version Manager (RVM see [Installation With RVM](https://developers.openfin.co/of-docs/docs/installation-with-rvm)) and this will install without requiring admin rights and pull down the required HERE runtime from our CDN.
 
 Your manifest can add specify settings that can customize the download screen (see [Customizing Dialog Settings](https://developers.openfin.co/of-docs/docs/application-configuration#section-dialogsettings-properties)) as well as present a splash screen (see [Splash Screen Settings In Top Level Properties](https://developers.openfin.co/of-docs/docs/application-configuration#section-top-level-properties)).
 
-You can then create installers for your other environments (e.g. DEV, UAT) if you wish to have others install and test your Workspace Platform.
+You can then create installers for your other environments (e.g. DEV, UAT) if you wish to have others install and test your HERE Core UI Platform.
 
-## Detecting If OpenFin is installed
+## Detecting If HERE is installed
 
-When you are deploying your application and an end user is visiting your site using a desktop browser you can now detect whether or not OpenFin is installed and if it is capable of launching applications using the fins link protocol (which is the default installation behavior).
+When you are deploying your application and an end user is visiting your site using a desktop browser you can now detect whether or not HERE is installed and if it is capable of launching applications using the fins link protocol (which is the default installation behavior).
 
 With this knowledge you can present them with a link to click and launch if they are capable of doing so, or a download link so they can download and run the installer:
 
-[Detect OpenFin support from a web browser](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
+[Detect HERE support from a web browser](https://developers.openfin.co/of-docs/docs/how-to-detect-openfin-in-your-app)
 
 ## Versioning - Determining the version of Workspace and Notification Center you are running against
 
@@ -128,14 +128,14 @@ Serve the content, the `-c-` option disables caching making it easier to test:
 npx http-server packaged\local -p 8181 -c-1
 ```
 
-Start the OpenFin app:
+Start the HERE app:
 
 ```shell
 start fin://localhost:8181/manifest.fin.json
 ```
 
-## Self Hosted Workspace Components
+## Self Hosted HERE Core UI Components
 
-If you are self hosting workspace components remember to include them in your deployments across environments. Please see [How To Self Host Workspace Components](./how-to-self-host-workspace.md) for more information.
+If you are self hosting HERE Core UI Components remember to include them in your deployments across environments. Please see [How To Self Host HERE Core UI Components](./how-to-self-host-workspace.md) for more information.
 
 [<- Back to Table Of Contents](../README.md)

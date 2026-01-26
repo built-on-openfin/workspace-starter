@@ -18,11 +18,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -57,7 +57,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspaceComponents(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing the workspace components");
+	console.log("Initializing the HERE Core UI Components");
 
 	// Register with store and show it
 	await register(customSettings.appProvider, customSettings.storefrontProvider);

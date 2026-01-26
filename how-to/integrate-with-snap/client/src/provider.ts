@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	// Provide default icons and default theme for the browser windows
 	await initializeWorkspacePlatform();
 
-	// Initialize dummy workspace components.
+	// Initialize dummy HERE Core UI Components.
 	await initializeWorkspaceComponents();
 
 	const settings = await getSettings();
@@ -26,10 +26,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -101,7 +101,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
  * @returns The overridden class.
  */
 function overrideCallback(

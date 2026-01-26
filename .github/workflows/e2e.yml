@@ -1,4 +1,4 @@
-name: Workspace Platform Starter - E2E Tests
+name: HERE Core UI Platform Starter - E2E Tests
 
 on: 
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
 
-      - name: Run Workspace Platform Starter E2E Tests
+      - name: Run HERE Core UI Platform Starter E2E Tests
         working-directory: ./how-to/workspace-platform-starter
         run: |
           npm run build

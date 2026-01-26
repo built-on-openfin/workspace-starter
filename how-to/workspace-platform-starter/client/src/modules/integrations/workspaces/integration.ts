@@ -612,7 +612,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 	/**
 	 * Rebuild the results after color scheme change.
-	 * @param platform The workspace platform.
+	 * @param platform The HERE Core UI Platform.
 	 */
 	private async rebuildResults(platform: WorkspacePlatformModule): Promise<void> {
 		if (this._integrationHelpers && !isEmpty(this._lastQuery) && !isEmpty(this._lastQueryMinLength)) {
@@ -629,7 +629,7 @@ export class WorkspacesProvider implements IntegrationModule<WorkspacesSettings>
 
 	/**
 	 * Build the results for the workspaces.
-	 * @param platform The workspace platform.
+	 * @param platform The HERE Core UI Platform.
 	 * @param workspaces The list of workspaces to build the results for.
 	 * @param query The query.
 	 * @param queryMinLength The min query length.

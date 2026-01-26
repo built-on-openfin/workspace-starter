@@ -22,7 +22,7 @@ export function init(app: express.Application): void {
 		}`
 	);
 	console.log(
-		"You can then add this to your local workspace platform's versionProvider configuration:",
+		"You can then add this to your local HERE Core UI Platform's versionProvider configuration:",
 		`
 	{
 		"endpointId": "version",

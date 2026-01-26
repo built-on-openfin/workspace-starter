@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Integrate with Microsoft 365",
+	"description": "HERE Core UI -- Integrate with Microsoft 365",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

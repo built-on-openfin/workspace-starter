@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Add Salesforce, ServiceNow or MS365 support to Home?
 
-Workspace has built-in support for MS365 through our [low code implementation](./how-to-setup-low-code-integrations.md) and this can be configured in Workspace Platform Starter. OpenFin also offers npm packages that make it easy to integrate with other platforms and we have examples on how to use our [Salesforce](../../integrate-with-salesforce/README.md), [ServiceNow](../../integrate-with-servicenow/README.md), and [MS365](../../integrate-with-ms365/README.md) npm packages. These examples are built and published on github.io and the following section shows how they can be added to a manifest (or through a settings service).
+Workspace has built-in support for MS365 through our [low code implementation](./how-to-setup-low-code-integrations.md) and this can be configured in HERE Core UI Platform Starter. HERE also offers npm packages that make it easy to integrate with other platforms and we have examples on how to use our [Salesforce](../../integrate-with-salesforce/README.md), [ServiceNow](../../integrate-with-servicenow/README.md), and [MS365](../../integrate-with-ms365/README.md) npm packages. These examples are built and published on github.io and the following section shows how they can be added to a manifest (or through a settings service).
 
 ## Salesforce
 
@@ -52,7 +52,7 @@ If you wish to have content launched from the Salesforce integration to be an in
 
 ### Preload scripts
 
-In the integration definition and the salesforce app definition you will see a reference to preload scripts. If you are using a [Lightning Web Security Salesforce application](https://developer.salesforce.com/docs/platform/lwc/guide/security-lwsec-intro.html) then you can delete the preload script entries as they are not needed. For more information about the OpenFin SalesForce app which simplifies Salesforce integration please visit: <https://developers.openfin.co/of-docs/docs/salesforce-appexchange>.
+In the integration definition and the salesforce app definition you will see a reference to preload scripts. If you are using a [Lightning Web Security Salesforce application](https://developer.salesforce.com/docs/platform/lwc/guide/security-lwsec-intro.html) then you can delete the preload script entries as they are not needed. For more information about the HERE SalesForce app which simplifies Salesforce integration please visit: <https://developers.openfin.co/of-docs/docs/salesforce-appexchange>.
 
 ## ServiceNow
 
@@ -152,10 +152,10 @@ Our MS365 example already exists in the main [manifest.fin.json](../public/manif
 
 To know more about how custom integrations can be added to Home please see [How to Add Integrations to Home](./how-to-add-integrations-to-home.md).
 
-To know more about our integrations please visit the content on the OpenFin website:
+To know more about our integrations please visit the content on the HERE website:
 
 - [Salesforce Integration](https://developers.openfin.co/of-docs/docs/salesforce-integration)
-- [ServiceNow Integration](https://developers.openfin.co/of-docs/docs/servicenow-integration)
-- [MS365 Integration](https://developers.openfin.co/of-docs/docs/ms365-integration)
+- [ServiceNow Integration](https://resources.here.io/docs/core/integrations/servicenow/)
+- [MS365 Integration](https://resources.here.io/docs/core/integrations/microsoft-365/)
 
 [<- Back to Table Of Contents](../README.md)

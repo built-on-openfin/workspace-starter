@@ -124,7 +124,7 @@ export async function register(
 
 /**
  * Get the actions that will be triggered by the button clicks.
- * The action are added to the workspace platform when it is created.
+ * The action are added to the HERE Core UI Platform when it is created.
  * @returns The maps of the custom actions.
  */
 export function dockGetCustomActions(): CustomActionsMap {

@@ -1,14 +1,14 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Add Cloud Interop To Your Interop Broker
 
-Workspace Platform Starter includes a default interop broker override that includes support for FDC3 2.0 and intents as well as context. It has been built to support interop with support for the Platform Apps format used by Workspace Platform Starter (directories can still use the FDC3 1.2 & 2.0 format as these are mapped internally to the PlatformApp format).
+HERE Core UI Platform Starter includes a default interop broker override that includes support for FDC3 2.0 and intents as well as context. It has been built to support interop with support for the Platform Apps format used by HERE Core UI Platform Starter (directories can still use the FDC3 1.2 & 2.0 format as these are mapped internally to the PlatformApp format).
 
-OpenFin Workspace 18.0+ lets you specify an array of interop overrides that can be layered on top of each other so that different overrides can add custom behavior.
+HERE Core UI 18.0+ lets you specify an array of interop overrides that can be layered on top of each other so that different overrides can add custom behavior.
 
-Workspace Platform Starter 18.0 supports this ability by adding module support to platformProvider.interop and this support lets us easily offer optional cloud interop support through a module.
+HERE Core UI Platform Starter 18.0 supports this ability by adding module support to platformProvider.interop and this support lets us easily offer optional cloud interop support through a module.
 
 ## Cloud Interop interop override is available as a module
 
@@ -22,7 +22,7 @@ The new cloud interop module (from 0.43.113) has support for different authentic
 
 ### Settings
 
-The settings are in a manifest and static settings.json file but this type of information is best served from a service after the user has authenticated. Do not check in your credentials. Please contact your OpenFin Sales Account Manager to get your cloud credentials.
+The settings are in a manifest and static settings.json file but this type of information is best served from a service after the user has authenticated. Do not check in your credentials. Please contact your HERE Sales Account Manager to get your cloud credentials.
 
 ```json
 "platformProvider": {
@@ -57,7 +57,7 @@ Once you have cloud interop enabled you will be able to share context across use
 
 ## Other Examples
 
-We have also updated our _support-context-and-intents_ how-to example to optionally support cloud interop. This is a much simpler example and doesn't use the module pattern which is useful if you have your own workspace platform and you just want to see how to use the [@openfin/cloud-interop](https://www.npmjs.com/package/@openfin/cloud-interop) npm module.
+We have also updated our _support-context-and-intents_ how-to example to optionally support cloud interop. This is a much simpler example and doesn't use the module pattern which is useful if you have your own HERE Core UI Platform and you just want to see how to use the [@openfin/cloud-interop](https://www.npmjs.com/package/@openfin/cloud-interop) npm module.
 
 ## Source Reference
 

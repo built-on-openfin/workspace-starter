@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Customize Notification Center
 
-The notification center is one of the standard components of OpenFin workspace, for an in depth look at the component see [Notification Center Overview](https://developers.openfin.co/of-docs/docs/overview-notifications) and [Connect A Workspace Platform to Notification Center](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center).
+The notification center is one of the standard components of HERE workspace, for an in depth look at the component see [Notification Center Overview](https://resources.here.io/docs/core/hc-ui/notifications/) and [Connect A HERE Core UI Platform to Notification Center](https://resources.here.io/docs/core/addenda/deprecated/notifications-hc-ui-platform/).
 
 The notification center will use the theming that you have configured for your platform, see [How To Theme Your Platform](./how-to-theme-your-platform.md)
 
@@ -24,12 +24,12 @@ For more details on the bootstrapping process see [How To Customize The Bootstra
 
 All of the notification center specific configuration options are stored in `notificationProvider`
 
-As with the other workspace components you can set the `id`, `title` and `icon` used when the platform launches home e.g.
+As with the other HERE Core UI Components you can set the `id`, `title` and `icon` used when the platform launches home e.g.
 
 ```json
 "notificationProvider": {
     "id": "workspace-platform-starter",
-    "title": "Workspace Platform Starter",
+    "title": "HERE Core UI Platform Starter",
     "icon": "http://localhost:8080/favicon.ico"
 }
 ```

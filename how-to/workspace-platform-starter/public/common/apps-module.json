@@ -19,13 +19,13 @@
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"instanceMode": "multi",
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "HandleNotification",

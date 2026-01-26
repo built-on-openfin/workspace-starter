@@ -26,7 +26,7 @@ export interface AnalyticsProviderOptions extends ModuleList {
 }
 
 /**
- * Additional source for workspace platform events.
+ * Additional source for HERE Core UI Platform events.
  */
 export const PLATFORM_ANALYTICS_SOURCE = "WorkspacePlatform";
 

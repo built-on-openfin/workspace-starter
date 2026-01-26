@@ -206,7 +206,7 @@ describe("Register with Home", () => {
 		expect(filterIds[3]).equal("intent");
 		expect(filterIds[4]).equal("interop");
 		expect(filterIds[5]).equal("native");
-		expect(filterIds[6]).equal("openfin");
+		expect(filterIds[6]).equal("HERE");
 		expect(filterIds[7]).equal("tools");
 		expect(filterIds[8]).equal("view");
 	});

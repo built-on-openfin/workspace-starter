@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter",
 	"version": "23.0.0",
-	"description": "This npm package contains an opinionated implementation of a workspace platform. It shows you the type of patterns available to a workspace platform developer.",
+	"description": "This npm package contains an opinionated implementation of a HERE Core UI Platform. It shows you the type of patterns available to a HERE Core UI Platform developer.",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
 		"kill": "node ./scripts/kill.mjs",

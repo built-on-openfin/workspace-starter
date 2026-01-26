@@ -22,8 +22,8 @@
 				}
 			],
 			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "other",
 			"details": {},
 			"interop": {
@@ -77,7 +77,7 @@
 				"appChannels": []
 			},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.json"
 				}
@@ -104,15 +104,15 @@
 				}
 			],
 			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "other",
 			"details": {
 				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
 			},
 			"interop": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json"
 				}
@@ -139,15 +139,15 @@
 				}
 			],
 			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "other",
 			"details": {
 				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
 			},
 			"interop": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.json",
 					"config": {
@@ -190,7 +190,7 @@
 			"type": "other",
 			"details": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
 				}
@@ -255,7 +255,7 @@
 			"type": "other",
 			"details": {},
 			"hostManifests": {
-				"OpenFin": {
+				"HERE": {
 					"type": "view",
 					"details": "http://localhost:8080/common/views/vendor/adaptable/adaptable-fdc3-demo.view.fin.json"
 				}

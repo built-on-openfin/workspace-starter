@@ -928,7 +928,7 @@ export async function launchAppAsset(
 		return;
 	}
 	if (appAssetApp.instanceMode === "single") {
-		// use the appId as the UUID and OpenFin will only be able to launch a single instance
+		// use the appId as the UUID and HERE will only be able to launch a single instance
 		options.uuid = options.uuid ?? appAssetApp.appId;
 	} else {
 		options.uuid = `${options.uuid ?? appAssetApp.appId}/${
@@ -971,7 +971,7 @@ export async function launchExternal(
 		return;
 	}
 	if (externalApp.instanceMode === "single") {
-		// use the appId as the UUID and OpenFin will only be able to launch a single instance
+		// use the appId as the UUID and HERE will only be able to launch a single instance
 		options.uuid = options.uuid ?? externalApp.appId;
 	} else {
 		options.uuid = `${options.uuid ?? externalApp.appId}/${

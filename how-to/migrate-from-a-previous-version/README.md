@@ -1,7 +1,7 @@
-![OpenFin Workspace Example Application -- Adding your application to Storefront](../../assets/OpenFin-Workspace-Starter.png)
+![HERE Core UI Example Application -- Adding your application to Storefront](../../assets/HERO-STARTER-HERE-CORE-UI.png)
 
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes. Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
-> OpenFin Workspace is currently **only supported on Windows**.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes. Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
+> HERE Core UI is currently **only supported on Windows**.
 
 ## Migrate from a previous version - From v19.1 to v19.2
 
@@ -40,7 +40,7 @@
 v15 introduces a number of new features:
 
 - Download Manager (Beta)
-- Browser Windows and Platform Windows Can Coexist in a Workspace Platform
+- Browser Windows and Platform Windows Can Coexist in a HERE Core UI Platform
 - New Registration Method for Notification Center -> You must now call register in order for the notification center to startup if it isn't already running.
 
 ## Migrate from a previous version - From v13.1 to v14
@@ -73,15 +73,15 @@ The layout types `LayoutComponentExtended`, `LayoutComponentStateExtended`, `Lay
 
 The Openfin runtime core types have been updated. When you move to the matching types for the runtime you may get a number of TypeScript errors:
 
-#### OpenFin Error
+#### HERE Error
 
 ```shell
 TS2503: Cannot find namespace 'OpenFin'.
 ```
 
-#### OpenFin Error Resolution
+#### HERE Error Resolution
 
-OpenFin is no longer made globally available by default. import the OpenFin type to resolve the issue.
+HERE is no longer made globally available by default. import the HERE type to resolve the issue.
 
 ```javascript
 import type OpenFin from '@openfin/core';
@@ -174,7 +174,7 @@ This should not be an issue if the other TypeScript errors have been resolved.
 ### Workspace 12 Enhancements
 
 - Version Fallback Mechanism.
-  OpenFin Workspace now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
+  HERE Core UI now leverages the Fallback Manifest functionality which was recently introduced with RVM 9 (Stable). With Workspace 12, if an end-user is unable to retrieve the necessary assets for an upgrade to Workspace 13 and beyond, the end-user will remain on their current Workspace version. RVM 9 required.
 
 ### Notification 1.21.0 Enhancements
 
@@ -195,7 +195,7 @@ End-users can now view or dismiss all persistent Notifications on their desktop 
 
 ### Workspace Subdomain
 
-OpenFin Workspace and Notifications assets are now delivered from the Workspace subdomain (workspace.openfin.co) by default.
+HERE Core UI and Notifications assets are now delivered from the Workspace subdomain (workspace.openfin.co) by default.
 
 ### Resolved Issues
 
@@ -225,14 +225,14 @@ You should update your dev dependencies
 
 ### Workspace 11 Enhancements
 
-- Fixed Panels for Pages - Workspace Platform and content providers can configure fixed panels on any side of a Browser Page. Developers can programmatically control the size, contents, and options of these panels. The panels are configured at the Page level and saved/restored with snapshots. End-user cannot rearrange, move, or remove these panels.
-- Custom Buttons and Landing Page in Store - An Application’s buttons and text in OpenFin Store are now fully customizable. Each application can have both a primary button and a set of secondary buttons. The Landing Page can display either an application or navigation item in any row.
+- Fixed Panels for Pages - HERE Core UI Platform and content providers can configure fixed panels on any side of a Browser Page. Developers can programmatically control the size, contents, and options of these panels. The panels are configured at the Page level and saved/restored with snapshots. End-user cannot rearrange, move, or remove these panels.
+- Custom Buttons and Landing Page in Store - An Application’s buttons and text in HERE Store are now fully customizable. Each application can have both a primary button and a set of secondary buttons. The Landing Page can display either an application or navigation item in any row.
 
 ### Notification 1.20.0 Enhancements
 
 - Custom Toast Location - End-users can now set a specific location within a monitor for where their Notifications will display.
 
-These are enhancements to the Workspace Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
+These are enhancements to the HERE Core UI Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
 
 ## What dependencies will I need for v11
 
@@ -282,7 +282,7 @@ Your broker can still override functions related to context groups and manifest 
 
 ### Workspace 10 Enhancements
 
-- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The workspace-platform-starter example shows how this can be done alongside the documentation on the OpenFin developer docs. Your old theme definition will continue to work so this isn't a breaking change.
+- Light Mode, Dark Mode, and Sync with OS Setting. You can now specify a light and dark palette with your theme and Workspace Browser will provide you with a menu to toggle between them or use the OS Preference to decide. You can also trigger the change via an api and listen to a change event. The workspace-platform-starter example shows how this can be done alongside the documentation on the HERE developer docs. Your old theme definition will continue to work so this isn't a breaking change.
 - New Actions Available in Context Menus - Defined via ViewOptions and WindowOptions. You can now specify additional options such as Print, Back and Forward.
 - API Control Over Home Search String - You can now trigger an update to the text shown in the Home Search Box. We provide examples of this in the customize-home-templates example (where the help search entry can update the search box when selected).
 - Content Renders when Resizing Views - In Browser when you resize a view using the layout controls, the view content remains visible.
@@ -290,9 +290,9 @@ Your broker can still override functions related to context groups and manifest 
 
 ### Notification 1.19.2 Enhancements
 
-- We now expose a show/hide API similar to the other workspace components (the toggle api still works)
+- We now expose a show/hide API similar to the other HERE Core UI Components (the toggle api still works)
 
-These are enhancements to the Workspace Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
+These are enhancements to the HERE Core UI Components that can be picked up. To upgrade please update your package.json references (and DOS setting if you have it locked to a specific workspace version).
 
 ## What dependencies will I need for v10
 
@@ -315,7 +315,7 @@ The background color of the hero section of the store by specifying **contentBac
 
 ### UI Enhancements
 
-- Updated Workspace Store icon throughout OpenFin Workspace to be consistent and intuitive to end-users.
+- Updated Workspace Store icon throughout HERE Core UI to be consistent and intuitive to end-users.
 - Updated Layout splitters in the Workspace Browser to inherit colors from the theme object. Previously, splitters were always black, regardless of the theme.
 - Updated the appearance of the minimize, maximize, close buttons in Workspace Store and the close button in Notifications to match the rest of Workspace components.
 
@@ -347,15 +347,15 @@ The main focus of this release is:
 
 ### New and improved Dock
 
-OpenFin has introduced the ability for developers to register a Workspace Platform with the Dock component. This enables end-users to access multiple Workspace Platforms in a single, unified Dock component.
+HERE has introduced the ability for developers to register a HERE Core UI Platform with the Dock component. This enables end-users to access multiple HERE Core UI Platforms in a single, unified Dock component.
 
-In addition, Dock is fully themable by Workspace Platforms, to deliver a branded experience whilst being part of a shared experience.
+In addition, Dock is fully themable by HERE Core UI Platforms, to deliver a branded experience whilst being part of a shared experience.
 
-Developers of Workspace Platform can also fully customize the buttons in Dock. For example, they can add, remove and reorder buttons in Dock.
+Developers of HERE Core UI Platform can also fully customize the buttons in Dock. For example, they can add, remove and reorder buttons in Dock.
 
 ### Change of Behavior - Home doesn't automatically appear on registration
 
-Home no longer appears when a Workspace Platform first registers the Home component. For Home to show automatically, developers of Workspace Platforms must add `Home.show()` right after registering the Home component. This is the pattern followed in the starters so if you have been following the starters you have already been doing this.
+Home no longer appears when a HERE Core UI Platform first registers the Home component. For Home to show automatically, developers of HERE Core UI Platforms must add `Home.show()` right after registering the Home component. This is the pattern followed in the starters so if you have been following the starters you have already been doing this.
 
 ### Version Information upon registration
 
@@ -387,7 +387,7 @@ We have introduced new starters:
 - register-with-dock-basic - a starter that gives you an easy introduction to Dock and how you can customize it.
 - integrate-with-rss - a few people have asked us about providing a feed for notifications and opening the result in a window. We've used rss as an example and created a starter you can experiment with.
 - common - we have an updated Winform app that demonstrates context sharing and we now point to our brand new Process Manager to help you in debugging your application.
-- workspace-platform-starter - workspace platform starter continues to be the main example that shows a way of combining all the workspace components and some patterns as suggestions. The following changes have been applied:
+- workspace-platform-starter - HERE Core UI Platform starter continues to be the main example that shows a way of combining all the HERE Core UI Components and some patterns as suggestions. The following changes have been applied:
 
   - DockProvider - Dock support has been added and is configurable through the manifest file
   - An additional example endpoint has been added. This one lets you expose an endpoint that wraps a channel api.
@@ -400,24 +400,24 @@ The main focus of this release is:
 
 ### Support Platform Windows
 
-For developers of existing applications that use the Platform API, you now have the option to use OpenFin Workspace components while continuing to use your existing custom platform windows. This provides additional flexibility on deciding when to adopt our out-of-the box Browser component, easing your transition to Workspace.
+For developers of existing applications that use the Platform API, you now have the option to use HERE Core UI components while continuing to use your existing custom platform windows. This provides additional flexibility on deciding when to adopt our out-of-the box Browser component, easing your transition to Workspace.
 
 - We have a sample [how-to/register-with-platform-windows](../register-with-platform-windows)
-- [https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace](https://developers.openfin.co/of-docs/docs/integrate-platform-apps-with-workspace)
+- [https://resources.here.io/docs/core/hc-ui/develop/platform-apps/](https://resources.here.io/docs/core/hc-ui/develop/platform-apps/)
 
 ### Asynchronous Search Results in Home
 
 Platform Providers can now configure search results to display only on-demand, after the end-user selects a result. This can significantly improve performance for queries that can have numerous results. For example, your Home Provider can fetch only the top-level search results in the initial query and then display the details of a particular result only after a user clicks on it, deferring the lookup of additional rich information to your backend services only when that information is required. Templates to indicate result loading or failure to the user are included.
 
 - The [how-to/customize-home-templates](../customize-home-templates) sample has been updated with examples.
-- [https://developers.openfin.co/of-docs/docs/provide-search-results-async](https://developers.openfin.co/of-docs/docs/provide-search-results-async)
+- [https://resources.here.io/docs/core/hc-ui/home/async/](https://resources.here.io/docs/core/hc-ui/home/async/)
 
 ### Content Locking
 
 Platform Providers can now lock Browser Windows and/or Pages to offer fixed, repeatable experiences for end-users. End-users can also manually lock and unlock Pages themselves in Workspace Browser, if that feature is enabled through a Platform Provider’s configuration.
 
 - The [how-to/register-with-browser](../register-with-browser) samples shows a page with browser lock/unlock enabled.
-- [https://developers.openfin.co/of-docs/docs/lock-content-in-browser](https://developers.openfin.co/of-docs/docs/lock-content-in-browser)
+- [https://resources.here.io/docs/core/hc-ui/browser/lock/](https://resources.here.io/docs/core/hc-ui/browser/lock/)
 
 ### Improved Designs of Home Filters
 
@@ -448,7 +448,7 @@ The main focus of this release is on introducing support for Workspace Managemen
 
 If you have customized the main browser menu you may want to change the way the menu is constructed so that it inherits the default menu options instead of being a list of specific menu options (the workspace-platform-starter example shows this change between the move from v6 to v7) or you can extend that custom menu to include the new options that are available as seen in the following documentation:
 
-- [https://developers.openfin.co/of-docs/docs/workspace-management](https://developers.openfin.co/of-docs/docs/workspace-management)
+- [https://resources.here.io/docs/core/hc-ui/browser/manage-multiple](https://resources.here.io/docs/core/hc-ui/browser/manage-multiple)
 
 ## What dependencies will I need for v7?
 
@@ -463,11 +463,11 @@ You will need the following dependencies
 
 # Migrate from a previous version - From v5.5 to v6.0
 
-With Workspace 6.0, OpenFin has added additional options when it comes to customization. You can now customize:
+With Workspace 6.0, HERE has added additional options when it comes to customization. You can now customize:
 
-- The browser controls and menu [(https://developers.openfin.co/of-docs/docs/customize-browser-features)](https://developers.openfin.co/of-docs/docs/customize-browser-features)
-- Customize the template displayed as part of a search result entry in home [(https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)](https://developers.openfin.co/of-docs/docs/customize-search-results-in-home)
-- Register your workspace platform with Notification Center so that your theming is taken into account.[(https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)](https://developers.openfin.co/of-docs/docs/connect-a-workspace-platform-to-notification-center)
+- The browser controls and menu [(https://resources.here.io/docs/core/hc-ui/browser/customize/)](https://resources.here.io/docs/core/hc-ui/browser/customize/)
+- Customize the template displayed as part of a search result entry in home [(https://resources.here.io/docs/core/hc-ui/home/customize/)](https://resources.here.io/docs/core/hc-ui/home/customize/)
+- Register your HERE Core UI Platform with Notification Center so that your theming is taken into account.[(https://resources.here.io/docs/core/addenda/deprecated/notifications-hc-ui-platform/)](https://resources.here.io/docs/core/addenda/deprecated/notifications-hc-ui-platform/)
 
 ## What dependencies will I need v5?
 
@@ -486,7 +486,7 @@ There are no breaking changes in this release (just fixes and the new features m
 
 # Migrate from a previous version - From v5 to v5.5
 
-With Workspace 5.5, OpenFin has continued extended theme support so that the provided palette now applies to the OpenFin Home and Store Components.
+With Workspace 5.5, HERE has continued extended theme support so that the provided palette now applies to the HERE Home and Store Components.
 
 ## What dependencies will I need for v6?
 
@@ -501,11 +501,11 @@ You will need the following dependencies
 
 ## What changes will I need to do if I want the simplest move from v5 to v5.5?
 
-There are no breaking changes and this release just includes fixes and extends theming support to OpenFin Home and Store (no api changes are required). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 5.5.0 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 5.5.0.
+There are no breaking changes and this release just includes fixes and extends theming support to HERE Home and Store (no api changes are required). If you have pinned your workspace version you will need to update your desktop owner setting to point to version 5.5.0 (if you have not pinned it then you will get the latest version of workspace on your next launch). If you are running a sample from this branch then running the npm command "npm run dos" update your desktop owner settings to point to the local dos file that specifies version 5.5.0.
 
 # Migrate from a previous version - From v4 to v5
 
-With Workspace 5.0, OpenFin has extended the ability for Workspace customers to have more granular control of their Workspace implementation. The **@openfin/workspace** module adds additional capabilities such as an improved ability to theme components. We have also introduced a new npm module **@openfin/workspace-platform** which lets you instantiate a workspace platform instead of the existing platform api. This lets you application launch OpenFin Browser Windows (with pages) under your own application instead of under Workspace giving you greater control and flexibility.
+With Workspace 5.0, HERE has extended the ability for Workspace customers to have more granular control of their Workspace implementation. The **@openfin/workspace** module adds additional capabilities such as an improved ability to theme components. We have also introduced a new npm module **@openfin/workspace-platform** which lets you instantiate a HERE Core UI Platform instead of the existing platform api. This lets you application launch HERE Browser Windows (with pages) under your own application instead of under Workspace giving you greater control and flexibility.
 
 ## What dependencies will I need for v5?
 
@@ -636,7 +636,7 @@ This requires two changes:
 
 File: [platform.ts](../register-with-store/client/src/platform.ts)
 
-Instead of initializing an OpenFin Platform you will be initializing an OpenFin Workspace Platform.
+Instead of initializing an HERE Platform you will be initializing an HERE Core UI Platform.
 
 So this:
 
@@ -663,7 +663,7 @@ export async function init() {
 }
 ```
 
-Once you know your app has initialized a workspace platform you can now safely reference it and use the launchApp function it provides. The platform.ts file in the sample shows an example of configuring the icons and window title but it was excluded from the snippet above to keep things simple.
+Once you know your app has initialized a HERE Core UI Platform you can now safely reference it and use the launchApp function it provides. The platform.ts file in the sample shows an example of configuring the icons and window title but it was excluded from the snippet above to keep things simple.
 
 File: [launch.ts](../register-with-store/client/src/launch.ts)
 
@@ -706,7 +706,7 @@ export async function launch(appEntry: App) {
 
 ### Hand Crafted Snapshots might fail to load correctly
 
-In the store sample there is a [developer.snapshot.fin.json](../register-with-store/public/developer.snapshot.fin.json) file that includes two views showing OpenFin related documentation. The snapshot had the following:
+In the store sample there is a [developer.snapshot.fin.json](../register-with-store/public/developer.snapshot.fin.json) file that includes two views showing HERE related documentation. The snapshot had the following:
 
 ```javascript
 ...
@@ -729,7 +729,7 @@ Desktop Owner Settings are still needed for two things:
 
 ## How do I configure the logo and title for the browser?
 
-This is now done when you initialize your workspace platform. You can specify Default Window Options for your Browser Windows. Example taken from the store example: [platform.ts](../register-with-store/client/src/platform.ts)
+This is now done when you initialize your HERE Core UI Platform. You can specify Default Window Options for your Browser Windows. Example taken from the store example: [platform.ts](../register-with-store/client/src/platform.ts)
 
 ```javascript
 import { init as workspacePlatformInit, BrowserInitConfig } from '@openfin/workspace-platform';
@@ -762,17 +762,17 @@ So now that your code is working what else has changed from a user perspective?
 
 ### Workspaces & Pages
 
-Workspaces & Pages are no longer shown by default in the Home UI - We now provide APIs to be able to fetch saved pages and return them in the search results yourself. If you want to implement workspaces then you will need to do that through your workspace platform.
+Workspaces & Pages are no longer shown by default in the Home UI - We now provide APIs to be able to fetch saved pages and return them in the search results yourself. If you want to implement workspaces then you will need to do that through your HERE Core UI Platform.
 
 The save icon is present on your browser's window and by default it will save your page to indexedDB. Version 5 provides APIs to get these pages. You can also specify a different storage location (e.g. you may decide you want to save them to a rest endpoint).
 
-If you have existing pages from version 1-4 that you need to migrate please contact [support@openfin.co](mailto:support@openfin.co) who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the OpenFin site.
+If you have existing pages from version 1-4 that you need to migrate please contact [support@here.io](mailto:support@here.io) who can either help or put you in touch with a solution engineer. Documentation on migration approaches will also be available on the HERE site.
 
 ### The share capability is gone
 
 The ability to share content will come back but has been removed in order to plan an approach that suits the SDK first approach that we have in place.
 
-Please contact [support@openfin.co](mailto:support@openfin.co) who can put you in contact with one of our Solution Engineers if you currently use this feature and want to talk about options.
+Please contact [support@here.io](mailto:support@here.io) who can put you in contact with one of our Solution Engineers if you currently use this feature and want to talk about options.
 
 ### The Add New Page/View button (and right click context menu option) is hidden by default and needs to be configured
 
@@ -786,11 +786,11 @@ The new features for this release will be covered is covered in our release note
 
 ### @openfin/workspace-platform
 
-There is a new npm module available that continues to empower you as the workspace platform developer.
+There is a new npm module available that continues to empower you as the HERE Core UI Platform developer.
 
-This module lets you initialize a workspace platform instead of a standard OpenFin platform and in doing so gives you the following:
+This module lets you initialize a HERE Core UI Platform instead of a standard HERE platform and in doing so gives you the following:
 
-- An API to launch OpenFin Browser windows and Pages (that fall under your platform and not OpenFin Workspace).
+- An API to launch HERE Browser windows and Pages (that fall under your platform and not HERE Core UI).
 - The ability to specify custom urls for the "Add Page" and "Add View" views.
 - The ability to specify default window options so that you can customize the logo shown in the menu and taskbar as well as the Window Title without needing Desktop Owner Settings.
 - An API for the retrieval and saving of Pages with a local store as default but with the option of overriding and providing your own logic for where pages should be saved and retrieved.
@@ -912,7 +912,7 @@ The following new feature has been added for your end users:
 
 # Migrate from a previous version - From v1-v3 to v4
 
-With Workspace 4.0, OpenFin has introduced the ability for Workspace customers to have more granular control of their Workspace implementation. This control is enabled through Workspace by exposing an API that allows for Provider Apps to perform the function of a CLI Provider. This approach allows Provider Apps to register with the Home API and then perform such actions as:
+With Workspace 4.0, HERE has introduced the ability for Workspace customers to have more granular control of their Workspace implementation. This control is enabled through Workspace by exposing an API that allows for Provider Apps to perform the function of a CLI Provider. This approach allows Provider Apps to register with the Home API and then perform such actions as:
 
 Manage the application, view and workspaces content available in Workspace
 Provide an async (aka “lazy”) Search
@@ -921,11 +921,11 @@ Display icons for all registered Providers in the Home/Search UI
 Selecting a given CLI provider icon to show the results from that provider
 Apply icons/ logos
 
-With the addition of the CLI Provider concept, OpenFin has deprecated Workspace Desktop Owner Setting overrides (customConfig options ) that pertain to apps and workspaces REST URLs in favor of this programmatic API approach.
+With the addition of the CLI Provider concept, HERE has deprecated Workspace Desktop Owner Setting overrides (customConfig options ) that pertain to apps and workspaces REST URLs in favor of this programmatic API approach.
 
 ## Behavior Changes v4
 
-- The fins link or desktop icon to start workspace components is no longer supported. These must be started by a workspace platform or CLI provider. The system will now return an error if the fins link is used to start a workspace component.
+- The fins link or desktop icon to start HERE Core UI Components is no longer supported. These must be started by a HERE Core UI Platform or CLI provider. The system will now return an error if the fins link is used to start a workspace component.
 - The “/W” entry point into the Workspaces directory has been removed.
 - The command buttons (Storefront, Notifications etc) no longer show on the Home UI. They are available as root commands by typing /.
 - You can no longer specify a Content Discovery Service (CDS). An example is available for how to mimic this functionality using the new APIs available in the howto.
@@ -987,7 +987,7 @@ We have an example ([how-to/register-with-home](../register-with-home/)) that sh
 
 ## I used DesktopOwnerSettings to configure a share url. How do I do that now?
 
-If you have never configured a share url in DesktopOwnerSettings then we recommend not starting that now as we are looking at having an API driven approach. If you already have this configured then it will continue to work in version 4 of OpenFin Workspace.
+If you have never configured a share url in DesktopOwnerSettings then we recommend not starting that now as we are looking at having an API driven approach. If you already have this configured then it will continue to work in version 4 of HERE Core UI.
 
 ```javascript
  "shareUrl": "https://yourserver/api/share"
@@ -1017,15 +1017,15 @@ No. Your pages and workspaces will still be listed in Home.
 
 No. There is a version 3 branch configured to help teams who are still on version 3: [https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/](https://github.com/built-on-openfin/workspace-starter/tree/workspace/v3.0.0/)
 
-## I am seeing a message when I try to launch OpenFin Workspace. How do I get Workspace running?
+## I am seeing a message when I try to launch HERE Core UI. How do I get Workspace running?
 
 ![Workspace Dialog](workspace-dialog.png)
 
-Seeing this messages means you are running version 4+ of OpenFin Workspace. From version 4 OpenFin Workspace is an API driven experience and is launched from an application instead of directly. The how-to samples in this repo show you how to build an application that uses our openfin/workspace APIs.
+Seeing this messages means you are running version 4+ of HERE Core UI. From version 4 HERE Core UI is an API driven experience and is launched from an application instead of directly. The how-to samples in this repo show you how to build an application that uses our openfin/workspace APIs.
 
-It may be that your existing shortcuts point to the **latest** version of OpenFin Workspace instead of a specific version. To pin to an earlier version of OpenFin Workspace please look at the question below.
+It may be that your existing shortcuts point to the **latest** version of HERE Core UI instead of a specific version. To pin to an earlier version of HERE Core UI please look at the question below.
 
-## I am not ready to move to OpenFin Workspace v4, how do I stick with version 3?
+## I am not ready to move to HERE Core UI v4, how do I stick with version 3?
 
 To stay on version v3 you can do the following:
 
@@ -1084,12 +1084,12 @@ or a url (if you have a webserver):
 
 Once you have done either of the approaches above you need to:
 
-- Use TaskManager, ProcessExplorer or the command line to close all OpenFin applications (so that the new DesktopOwnerSettings will get picked up).
+- Use TaskManager, ProcessExplorer or the command line to close all HERE applications (so that the new DesktopOwnerSettings will get picked up).
 
-- Launch OpenFin Workspace using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): [fins://system-apps/workspace](fins://system-apps/workspace)
+- Launch HERE Core UI using the system apps fins link (this will pick up your version setting and update any desktop shortcuts): [fins://system-apps/workspace](fins://system-apps/workspace)
 
-You should now see version 3 of OpenFin Workspace.
+You should now see version 3 of HERE Core UI.
 
 ---
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)
+

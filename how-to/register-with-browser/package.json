@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--register-with-browser",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Register with browser",
+	"description": "HERE Core UI -- Register with browser",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",

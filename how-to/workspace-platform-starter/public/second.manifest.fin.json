@@ -7,7 +7,7 @@
 	},
 	"platform": {
 		"uuid": "second-workspace-platform-starter",
-		"name": "Second Workspace Platform Starter",
+		"name": "Second HERE Core UI Platform Starter",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
@@ -61,9 +61,9 @@
 		}
 	},
 	"supportInformation": {
-		"company": "OpenFin",
-		"product": "Workspace Starter - Workspace Platform Starter - Second Client",
-		"email": "support@openfin.co",
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter - Second Client",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"snapshot": {

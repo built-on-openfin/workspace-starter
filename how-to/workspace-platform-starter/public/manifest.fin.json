@@ -80,16 +80,16 @@
 		]
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter - v23.0.0",
+		"name": "HERE Core UI Platform Starter - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
-		"product": "Workspace Starter - Workspace Platform Starter - Client",
-		"email": "support@openfin.co",
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter - Client",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"snapshot": {
@@ -120,8 +120,8 @@
 				{
 					"id": "default-wps-platform",
 					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Workspace Platform Starter Platform Override",
-					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+					"title": "HERE Core UI Platform Starter Platform Override",
+					"description": "This is the implementation included in HERE Core UI Platform starter but it is now exposed as a module to allow for easy replacement.",
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/platform-override/wps-platform-override.bundle.js",
 					"data": {
@@ -230,8 +230,8 @@
 					{
 						"id": "default-wps-interop",
 						"icon": "http://localhost:8080/favicon.ico",
-						"title": "Workspace Platform Starter Interop Broker",
-						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+						"title": "HERE Core UI Platform Starter Interop Broker",
+						"description": "This is the implementation included in HERE Core UI Platform starter but it is now exposed as a module to allow for easy replacement.",
 						"enabled": true,
 						"url": "http://localhost:8080/js/modules/interop-override/wps-interop-override.bundle.js",
 						"data": {
@@ -880,14 +880,14 @@
 		},
 		"homeProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"landingPage": {
 				"hero": {
@@ -906,7 +906,7 @@
 					"items": [
 						{
 							"title": "Dev Tools",
-							"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+							"description": "A collection of developer tools that can aid with building and debugging HERE applications.",
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 							},
@@ -915,7 +915,7 @@
 						},
 						{
 							"title": "Learning Resource",
-							"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+							"description": "A collection of developer documents that can aid with building and debugging HERE applications.",
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
 							},
@@ -1006,7 +1006,7 @@
 					"src": "http://localhost:8080/favicon.ico",
 					"size": "32"
 				},
-				"text": "Welcome to the OpenFin Sample Footer",
+				"text": "Welcome to the HERE Sample Footer",
 				"links": [
 					{
 						"title": "Github",
@@ -1021,7 +1021,7 @@
 		},
 		"dockProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"workspaceComponents": {
 				"hideHomeButton": false,
@@ -1179,7 +1179,7 @@
 		},
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"notificationClients": {
 				"defaults": {

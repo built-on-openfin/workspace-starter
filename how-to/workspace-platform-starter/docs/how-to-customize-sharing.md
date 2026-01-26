@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -120,17 +120,17 @@ This would give you the following icon and menu in the browser, the entries are 
 
 ## If You Have Opted Into Home Workspace Or Page Management
 
-If you have enabled workspace management (see [How To Workspace Platform Starter Management](./how-to-workspace-platform-starter-management.md)) or page management (see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)) through home then the template will check to see if it should provide the option of sharing the workspace/page.
+If you have enabled workspace management (see [How To HERE Core UI Platform Starter Management](./how-to-workspace-platform-starter-management.md)) or page management (see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)) through home then the template will check to see if it should provide the option of sharing the workspace/page.
 
 # Where Are Shared Workspaces/Pages Saved?
 
-By default in our two examples we save the json data to an OpenFin cloud service. Additionally, strictly for development purposes, we provide a local server endpoint that can be used to test local payloads sent from the platform provider.
+By default in our two examples we save the json data to an HERE cloud service. Additionally, strictly for development purposes, we provide a local server endpoint that can be used to test local payloads sent from the platform provider.
 
-This service is not for production use and all saves are cleared after 24 hours. Please contact OpenFin if you would like to talk about this service.
+This service is not for production use and all saves are cleared after 24 hours. Please contact HERE if you would like to talk about this service.
 
 The service is configured via endpoints (see [How To Define Endpoints](./how-to-define-endpoints.md)). The examples have the following defined:
 
-Default configuration for use with the workspace platform provider using a remotely hosted demo endpoint:
+Default configuration for use with the HERE Core UI Platform provider using a remotely hosted demo endpoint:
 
 ```json
  "endpointProvider": {
@@ -228,7 +228,7 @@ Layout would be an object representing the page layout. It has been omitted to k
 
 ### Request To Your Endpoint For Sharing A Workspace
 
-The snapshot is a workspace platform snapshot. MonitorInfo and Window details have been omitted for brevity.
+The snapshot is a HERE Core UI Platform snapshot. MonitorInfo and Window details have been omitted for brevity.
 
 ```json
 {
@@ -271,7 +271,7 @@ or
 { "url": "https://workspace.openfin.co/api/share/UniqueIDRepresentingSavedShare" }
 ```
 
-**Workspace Platform Starter** will use the id if provided or will fall back to trimming the id from the returned **url**. The id will be passed to the endpoint that you have defined for **share-get**.
+**HERE Core UI Platform Starter** will use the id if provided or will fall back to trimming the id from the returned **url**. The id will be passed to the endpoint that you have defined for **share-get**.
 
 ### What Would The User See After Raising A Share Request?
 
@@ -309,7 +309,7 @@ You can decide if this is going to be a get request or a post. The example we ha
 https://workspace.openfin.co/api/share/UniqueIDRepresentingSavedShare
 ```
 
-### Response Expected From Workspace Platform Starter For A Shared Page
+### Response Expected From HERE Core UI Platform Starter For A Shared Page
 
 Layout would be an object representing the page layout. It has been omitted to keep the snippet small:
 
@@ -338,9 +338,9 @@ Layout would be an object representing the page layout. It has been omitted to k
 
 Here you can see that the response is similar to the request to share. The id you provided and a createdAt entry is returned as well.
 
-### Response Expected From Workspace Platform Starter For A Shared Workspace
+### Response Expected From HERE Core UI Platform Starter For A Shared Workspace
 
-The snapshot is a workspace platform snapshot. MonitorInfo and Window details have been omitted for brevity.
+The snapshot is a HERE Core UI Platform snapshot. MonitorInfo and Window details have been omitted for brevity.
 
 ```json
 {

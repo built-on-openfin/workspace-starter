@@ -1,7 +1,7 @@
 {
   "name": "openfin-workspace-starter",
   "version": "23.0.0",
-  "description": "OpenFin Workspace Starter",
+  "description": "HERE Core UI",
   "scripts": {
     "build": "node ./scripts/workspaces.mjs build",
     "package-how-tos": "node ./scripts/package.js --legacy",
