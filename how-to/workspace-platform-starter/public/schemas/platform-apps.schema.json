@@ -527,7 +527,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference%3Cnever%3E"
+						"$ref": "#/definitions/NativePreference<never>"
 					},
 					"type": "array"
 				}
@@ -930,7 +930,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference%3Cnever%3E"
+								"$ref": "#/definitions/ViewPreference<never>"
 							}
 						]
 					},
@@ -1125,7 +1125,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference%3Cnever%3E"
+								"$ref": "#/definitions/WindowPreference<never>"
 							}
 						]
 					},
@@ -2067,7 +2067,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}

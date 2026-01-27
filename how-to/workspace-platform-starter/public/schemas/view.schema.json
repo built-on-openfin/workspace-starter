@@ -923,7 +923,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
