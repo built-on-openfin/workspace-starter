@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.100.111"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "integrate-with-servicenow",
@@ -21,16 +21,16 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/integrate-with-servicenow/favicon.ico",
 		"name": "Integrate With ServiceNow - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Integrate With ServiceNow - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {

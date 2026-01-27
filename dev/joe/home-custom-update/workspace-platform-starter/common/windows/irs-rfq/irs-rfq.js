@@ -406,7 +406,7 @@ async function showNotification(
 		category: 'default',
 		template: 'custom',
 		id,
-		icon: `${webRoot}/images/icon-blue.png`,
+		icon: `${webRoot}/images/favicon-32x32.png`,
 		indicator: {
 			color: indicatorColor,
 			text: indicatorValue

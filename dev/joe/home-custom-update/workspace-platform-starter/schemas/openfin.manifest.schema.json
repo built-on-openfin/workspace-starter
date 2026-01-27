@@ -1,5 +1,5 @@
 {
-	"$ref": "#/definitions/Partial%3COmit%3CManifest%2C%22assetsUrl%22%7C%22services%22%3E%3E",
+	"$ref": "#/definitions/Partial<Omit<Manifest%2C%22assetsUrl%22%7C%22services%22>>",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
 		"Anchor": {
@@ -324,7 +324,7 @@
 		},
 		"Partial<Omit<Manifest,\"assetsUrl\"|\"services\">>": {
 			"additionalProperties": false,
-			"description": "A type alias for the OpenFin manifest.",
+			"description": "A type alias for the HERE manifest.",
 			"properties": {
 				"appAssets": {
 					"items": {
@@ -1404,6 +1404,10 @@
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
 				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
+				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
 					"type": "boolean"
@@ -1806,6 +1810,10 @@
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
 				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
+				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
 					"type": "boolean"
@@ -2180,7 +2188,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -2397,6 +2405,10 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",
@@ -3369,6 +3381,10 @@
 					},
 					"type": "array"
 				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
+				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
 				},
@@ -3937,6 +3953,10 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",

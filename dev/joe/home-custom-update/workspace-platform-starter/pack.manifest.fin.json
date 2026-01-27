@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.100.111"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"name": "default-workspace-platform",
@@ -72,16 +72,16 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/favicon.ico",
-		"name": "Default Workspace Platform - v23.0.0",
+		"name": "Default HERE Core UI Platform - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
-		"product": "Workspace Starter - Default Workspace Platform - Client",
-		"email": "support@openfin.co",
+		"company": "HERE",
+		"product": "Workspace Starter - Default HERE Core UI Platform - Client",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {
@@ -171,8 +171,8 @@
 					{
 						"id": "default-wps-interop",
 						"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/favicon.ico",
-						"title": "Workspace Platform Starter Interop Broker",
-						"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+						"title": "HERE Core UI Platform Starter Interop Broker",
+						"description": "This is the implementation included in HERE Core UI Platform starter but it is now exposed as a module to allow for easy replacement.",
 						"enabled": true,
 						"url": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/js/modules/interop-override/wps-interop-override.bundle.js",
 						"data": {
@@ -437,25 +437,25 @@
 		},
 		"homeProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/favicon.ico"
 		},
 		"dockProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/favicon.ico",
 			"entries": []
 		},
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
-			"title": "Workspace Platform Starter",
+			"title": "HERE Core UI Platform Starter",
 			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/favicon.ico"
 		},
 		"integrationProvider": {

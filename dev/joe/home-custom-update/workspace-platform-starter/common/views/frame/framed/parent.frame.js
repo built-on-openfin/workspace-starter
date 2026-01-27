@@ -95,7 +95,7 @@ async function handleMessage(message, source) {
 		case 'send-identity': {
 			const identity = message?.data?.identity;
 			if (identity !== undefined) {
-				console.log('Parent Module: Adding identity of OpenFin enabled frame.', identity);
+				console.log('Parent Module: Adding identity of HERE enabled frame.', identity);
 				finFrames.push(identity);
 			}
 			break;

@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.100.111"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "register-with-browser-basic-asar",
@@ -19,16 +19,16 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://www.openfin.co/favicon.ico",
 		"name": "Register with Browser - Basic - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Register With Browser Basic - Self Host - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"appAssets": [
@@ -111,7 +111,7 @@
 																			}
 																		}
 																	},
-																	"title": "Workspace Platform API Docs"
+																	"title": "HERE Core UI Platform API Docs"
 																}
 															]
 														}

@@ -11,12 +11,12 @@
 			"manifestType": "view",
 			"icons": [
 				{
-					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/icon-blue.png"
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/favicon-32x32.png"
 				}
 			],
 			"contactEmail": "contact@example.com",
 			"supportEmail": "support@example.com",
-			"publisher": "OpenFin",
+			"publisher": "HERE",
 			"intents": [],
 			"images": [
 				{
@@ -34,12 +34,12 @@
 			"manifestType": "view",
 			"icons": [
 				{
-					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/icon-blue.png"
+					"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/favicon-32x32.png"
 				}
 			],
 			"contactEmail": "contact@example.com",
 			"supportEmail": "support@example.com",
-			"publisher": "OpenFin",
+			"publisher": "HERE",
 			"intents": [
 				{
 					"name": "StartCall",
@@ -117,7 +117,7 @@
 			],
 			"contactEmail": "contact@example.com",
 			"supportEmail": "support@example.com",
-			"publisher": "OpenFin",
+			"publisher": "HERE",
 			"intents": [
 				{
 					"name": "ViewContact",

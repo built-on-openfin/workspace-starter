@@ -8,12 +8,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -31,12 +31,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/icon-blue.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/home-custom-update/workspace-platform-starter/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "StartCall",
@@ -90,6 +90,6 @@
 				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
-		"tags": ["view", "interop", "intent", "openfin", "tools"]
+		"tags": ["view", "interop", "intent", "HERE", "tools"]
 	}
 ]
