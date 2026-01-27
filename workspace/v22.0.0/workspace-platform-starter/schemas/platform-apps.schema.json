@@ -2512,6 +2512,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {

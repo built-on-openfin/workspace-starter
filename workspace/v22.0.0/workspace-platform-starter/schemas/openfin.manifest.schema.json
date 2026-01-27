@@ -1,5 +1,5 @@
 {
-	"$ref": "#/definitions/Partial<Omit<Manifest,\"assetsUrl\"|\"services\">>",
+	"$ref": "#/definitions/Partial<Omit<Manifest%2C%22assetsUrl%22%7C%22services%22>>",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
 		"Api": {
@@ -652,6 +652,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"hideOnClose": {
@@ -1224,6 +1225,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -1615,6 +1617,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -2196,6 +2199,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -3647,6 +3651,7 @@
 				},
 				"frame": {
 					"default": true,
+					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
