@@ -3,12 +3,12 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--security-realm=register-with-home",
-		"version": "43.142.100.111"
+		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "register-with-home",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": false,
+		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
@@ -61,8 +61,8 @@
 			"title": "Home Starter",
 			"subHeader": {
 				"title1": "Welcome to",
-				"title2": "OpenFin Home Starter",
-				"subtitle": "Your gateway to OpenFin applications",
+				"title2": "HERE Home Starter",
+				"subtitle": "Your gateway to HERE applications",
 				"icon": "http://localhost:8080/favicon.ico"
 			},
 			"icon": "http://localhost:8080/favicon.ico",
