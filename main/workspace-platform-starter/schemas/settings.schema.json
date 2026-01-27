@@ -47,7 +47,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -398,7 +398,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -579,7 +579,7 @@
                 "globalMenu": {
                     "description": "This setting lets you customize the default workspace browser main menu and specify your own.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
+                        "$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
                     },
                     "type": "array"
                 },
@@ -631,7 +631,7 @@
                 "pageMenu": {
                     "description": "This setting lets you customize the page right click context menu and add your own entries.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
+                        "$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
                     },
                     "type": "array"
                 },
@@ -653,7 +653,7 @@
                 "viewMenu": {
                     "description": "This setting lets you customize the view right click context menu and add your own entries.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
+                        "$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
                     },
                     "type": "array"
                 },
@@ -1830,14 +1830,14 @@
                 "endpoints": {
                     "description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
                     "items": {
-                        "$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/EndpointDefinition<unknown>"
                     },
                     "type": "array"
                 },
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -2324,7 +2324,7 @@
                 "integrations": {
                     "description": "This is the old module list name, remove in future.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -2335,7 +2335,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -2693,7 +2693,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
                     },
                     "type": "array"
                 },
@@ -2772,7 +2772,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
                     },
                     "type": "array"
                 },
@@ -2851,7 +2851,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
                     },
                     "type": "array"
                 },
@@ -2930,7 +2930,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
                     },
                     "type": "array"
                 },
@@ -2987,7 +2987,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
                     },
                     "type": "array"
                 },
@@ -3155,7 +3155,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -3384,7 +3384,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -3398,7 +3398,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -3412,7 +3412,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -3426,7 +3426,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -3440,7 +3440,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -3454,7 +3454,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -3517,7 +3517,7 @@
                 "updatable": {
                     "description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
                     "items": {
-                        "$ref": "#/definitions/NativePreference%3Cnever%3E_1"
+                        "$ref": "#/definitions/NativePreference<never>_1"
                     },
                     "type": "array"
                 }
@@ -4364,7 +4364,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -4411,7 +4411,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 },
@@ -4680,7 +4680,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+                        "$ref": "#/definitions/ModuleDefinition<unknown>"
                     },
                     "type": "array"
                 }
@@ -5240,7 +5240,7 @@
                 "menuEntries": {
                     "description": "The menu entries to display.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry%3CTrayMenuOptionType%3E"
+                        "$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
                     },
                     "type": "array"
                 },
@@ -5263,19 +5263,19 @@
         "UpdatableLaunchPreferenceDefinition": {
             "anyOf": [
                 {
-                    "$ref": "#/definitions/WindowPreference%3Cnever%3E"
+                    "$ref": "#/definitions/WindowPreference<never>"
                 },
                 {
                     "$ref": "#/definitions/WindowPreferenceUrl"
                 },
                 {
-                    "$ref": "#/definitions/ViewPreference%3Cnever%3E"
+                    "$ref": "#/definitions/ViewPreference<never>"
                 },
                 {
                     "$ref": "#/definitions/ViewPreferenceUrl"
                 },
                 {
-                    "$ref": "#/definitions/NativePreference%3Cnever%3E"
+                    "$ref": "#/definitions/NativePreference<never>"
                 }
             ],
             "description": "A type that contains the available updatable launch preferences"
@@ -5401,7 +5401,7 @@
                                 "$ref": "#/definitions/ViewPreferenceUrl"
                             },
                             {
-                                "$ref": "#/definitions/ViewPreference%3Cnever%3E_1"
+                                "$ref": "#/definitions/ViewPreference<never>_1"
                             }
                         ]
                     },
@@ -5713,7 +5713,7 @@
                                 "$ref": "#/definitions/WindowPreferenceUrl"
                             },
                             {
-                                "$ref": "#/definitions/WindowPreference%3Cnever%3E_1"
+                                "$ref": "#/definitions/WindowPreference<never>_1"
                             }
                         ]
                     },
@@ -8440,7 +8440,7 @@
                 "rules": {
                     "description": "List of rules for creation of new content.",
                     "items": {
-                        "$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
                     },
                     "type": "array"
                 }
