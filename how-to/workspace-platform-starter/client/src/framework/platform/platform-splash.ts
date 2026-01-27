@@ -27,11 +27,11 @@ export async function open(): Promise<void> {
 
 	if (!disabled) {
 		try {
-			const title = customSettings?.splashScreenProvider?.title ?? manifest.shortcut?.name ?? "OpenFin";
+			const title = customSettings?.splashScreenProvider?.title ?? manifest.shortcut?.name ?? "HERE";
 			const icon =
 				customSettings?.splashScreenProvider?.icon ??
 				manifest.platform?.icon ??
-				"../common/images/icon-blue.png";
+				"../common/images/favicon-32x32.png";
 			let backgroundColor: string | undefined = customSettings?.splashScreenProvider?.backgroundColor;
 			let textColor: string | undefined = customSettings?.splashScreenProvider?.textColor;
 			let borderColor: string | undefined = customSettings?.splashScreenProvider?.borderColor;

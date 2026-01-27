@@ -24,7 +24,7 @@ export async function init(options: TrayProviderOptions | undefined): Promise<vo
 
 		if (!isStringValue(icon)) {
 			const manifest = await app.getManifest();
-			icon = manifest.platform?.icon ?? "http://localhost:8080/common/images/icon-blue.png";
+			icon = manifest.platform?.icon ?? "http://localhost:8080/common/images/favicon-32x32.png";
 		}
 
 		await app.setTrayIcon(icon);

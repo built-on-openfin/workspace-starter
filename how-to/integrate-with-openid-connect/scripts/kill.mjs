@@ -1,10 +1,10 @@
 /**
- * This script will kill all OpenFin tasks from running.
+ * This script will kill all HERE tasks from running.
  * Useful if you want to make sure you have nothing left running in the background.
  */
 import { exec } from 'child_process';
 
-console.log('Kill All OpenFin Tasks');
+console.log('Kill All HERE Tasks');
 console.log('======================');
 console.log();
 

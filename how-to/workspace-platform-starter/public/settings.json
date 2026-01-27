@@ -31,8 +31,8 @@
 			{
 				"id": "default-wps-platform",
 				"icon": "http://localhost:8080/favicon.ico",
-				"title": "Workspace Platform Starter Platform Override",
-				"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+				"title": "HERE Core UI Platform Starter Platform Override",
+				"description": "This is the implementation included in HERE Core UI Platform starter but it is now exposed as a module to allow for easy replacement.",
 				"enabled": true,
 				"url": "http://localhost:8080/js/modules/platform-override/wps-platform-override.bundle.js",
 				"data": {
@@ -117,8 +117,8 @@
 				{
 					"id": "default-wps-interop",
 					"icon": "http://localhost:8080/favicon.ico",
-					"title": "Workspace Platform Starter Interop Broker",
-					"description": "This is the implementation included in workspace platform starter but it is now exposed as a module to allow for easy replacement.",
+					"title": "HERE Core UI Platform Starter Interop Broker",
+					"description": "This is the implementation included in HERE Core UI Platform starter but it is now exposed as a module to allow for easy replacement.",
 					"enabled": true,
 					"url": "http://localhost:8080/js/modules/interop-override/wps-interop-override.bundle.js",
 					"data": {
@@ -721,7 +721,7 @@
 				"items": [
 					{
 						"title": "Dev Tools",
-						"description": "A collection of developer tools that can aid with building and debugging OpenFin applications.",
+						"description": "A collection of developer tools that can aid with building and debugging HERE applications.",
 						"image": {
 							"src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 						},
@@ -730,7 +730,7 @@
 					},
 					{
 						"title": "Learning Resource",
-						"description": "A collection of developer documents that can aid with building and debugging OpenFin applications.",
+						"description": "A collection of developer documents that can aid with building and debugging HERE applications.",
 						"image": {
 							"src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
 						},
@@ -821,7 +821,7 @@
 				"src": "http://localhost:8080/common/favicon-32x32.png",
 				"size": "32"
 			},
-			"text": "Welcome to the OpenFin Sample Footer",
+			"text": "Welcome to the HERE Sample Footer",
 			"links": [
 				{
 					"title": "Github",
@@ -844,7 +844,7 @@
 	},
 	"dockProvider": {
 		"id": "workspace-platform-starter",
-		"title": "Workspace Platform Starter",
+		"title": "HERE Core UI Platform Starter",
 		"icon": "http://localhost:8080/favicon.ico",
 		"workspaceComponents": {
 			"hideHomeButton": false,

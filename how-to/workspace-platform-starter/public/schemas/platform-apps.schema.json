@@ -527,7 +527,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference%3Cnever%3E"
+						"$ref": "#/definitions/NativePreference<never>"
 					},
 					"type": "array"
 				}
@@ -673,7 +673,7 @@
 				},
 				"interop": {
 					"$ref": "#/definitions/PlatformAppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an HERE Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
 				},
 				"launchPreference": {
 					"$ref": "#/definitions/LaunchPreference",
@@ -930,7 +930,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference%3Cnever%3E"
+								"$ref": "#/definitions/ViewPreference<never>"
 							}
 						]
 					},
@@ -1125,7 +1125,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference%3Cnever%3E"
+								"$ref": "#/definitions/WindowPreference<never>"
 							}
 						]
 					},
@@ -1338,6 +1338,10 @@
 						"type": "object"
 					},
 					"type": "array"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"interop": {
 					"$ref": "#/definitions/InteropConfig"
@@ -2063,7 +2067,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -2590,6 +2594,10 @@
 				"icon": {
 					"description": "A URL for the icon to be shown in the window title bar and the taskbar.\nWhen omitted, inherits from the parent application.\n\nNote: Window OS caches taskbar icons, therefore an icon change might only be visible after the cache is removed or the uuid is changed.",
 					"type": "string"
+				},
+				"ignoreChildFrameName": {
+					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+					"type": "boolean"
 				},
 				"ignoreSavedWindowState": {
 					"description": "Ignores the cached state of the window.\nDefaults the opposite value of `saveWindowState` to maintain backwards compatibility.",

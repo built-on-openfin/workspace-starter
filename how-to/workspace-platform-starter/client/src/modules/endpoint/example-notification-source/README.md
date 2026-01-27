@@ -103,7 +103,7 @@ Create a notification:
 ```js
 {
  "eventId": "create",
- "payload": { } // This will be the NotificationOptions object used by the OpenFin Notification Library.
+ "payload": { } // This will be the NotificationOptions object used by the HERE Notification Library.
 }
 ```
 
@@ -112,7 +112,7 @@ Update a notification:
 ```js
 {
  "eventId": "update",
- "payload": { } // This will be the UpdatableNotificationOptions object used by the OpenFin Notification Library.
+ "payload": { } // This will be the UpdatableNotificationOptions object used by the HERE Notification Library.
 }
 ```
 

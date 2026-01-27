@@ -10,7 +10,7 @@ const { Builder } = require('selenium-webdriver');
 
 /**
  * Run the selenium tests.
- * @param openFinRVM The location of the OpenFin RVM.
+ * @param openFinRVM The location of the HERE RVM.
  * @param manifestUrl The url of the manifest to launch.
  * @param chromeDriverPort The port to use for chromedriver.
  * @param devToolsPort The port to use for devtools.
@@ -19,15 +19,15 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 	let seleniumDriver;
 	let openFinRVMProcess;
 	try {
-		console.log('Removing any existing OpenFin processes');
+		console.log('Removing any existing HERE processes');
 		await fkill(
 			['OpenFin.exe', 'OpenFinRVM.exe', 'chromedriver.exe', 'OpenFin', 'OpenFinRVM', 'chromedriver'],
 			{ silent: true, force: true }
 		);
 
-		// Spawn the OpenFin runtime with a specific debugging port and also
+		// Spawn the HERE runtime with a specific debugging port and also
 		// configure the selenium web driver to use the same port for debugger address
-		console.log('Start OpenFin Runtime');
+		console.log('Start HERE Runtime');
 		openFinRVMProcess = childProcess.spawn(
 			openFinRVM,
 			[`--config=${manifestUrl}`, `--runtime-arguments="--remote-debugging-port=${devToolsPort}"`],
@@ -62,7 +62,7 @@ async function run(openFinRVM, manifestUrl, chromeDriverPort, devToolsPort) {
 		// which can be use in tests to access the raw selenium methods
 		globalThis.webDriver = new SeleniumWebDriver(seleniumDriver);
 
-		console.log('Waiting for OpenFin runtime to be available...');
+		console.log('Waiting for HERE runtime to be available...');
 		await OpenFinSystem.waitForReady(10000);
 
 		await runMochaTests();

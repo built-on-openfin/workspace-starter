@@ -1,7 +1,7 @@
 {
 	"name": "openfin-workspace--integrate-with-snap",
 	"version": "23.0.0",
-	"description": "OpenFin Workspace -- Integrate with Snap",
+	"description": "HERE Core UI -- Integrate with Snap",
 	"main": "index.js",
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
@@ -22,12 +22,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/snap-sdk": "1.3.4",
-		"@openfin/workspace": "23.0.13",
-		"@openfin/workspace-platform": "23.0.13"
+		"@openfin/workspace": "23.0.20",
+		"@openfin/workspace-platform": "23.0.20"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.100.111",
-		"@openfin/node-adapter": "43.100.111",
+		"@openfin/core": "43.101.2",
+		"@openfin/node-adapter": "43.101.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

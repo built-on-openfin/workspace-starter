@@ -1,15 +1,15 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # Versioning Information
 
-In the workspace platform starter sample we give an example of a [versioning strategy](../../workspace-platform-starter/docs/how-to-add-versioning-support.md). There is a lot of logic under the covers to handle different approaches but this document shows how you can easily get information related to:
+In the HERE Core UI Platform starter sample we give an example of a [versioning strategy](../../workspace-platform-starter/docs/how-to-add-versioning-support.md). There is a lot of logic under the covers to handle different approaches but this document shows how you can easily get information related to:
 
 - app - examples of how you can specify and read your app version
 - rvm - what rvm version are you running against?
 - container - what version of container are you running?
-- workspace - what version of workspace components are you connected to and what version did you build against?
+- workspace - what version of HERE Core UI Components are you connected to and what version did you build against?
 - notification center - what version of notification center is running and what is the API version you are using?
 
 ## App version

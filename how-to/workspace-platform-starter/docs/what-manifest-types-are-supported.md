@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -40,7 +40,7 @@ The endpoint manifest type can accept custom endpoint ids if none of the support
 When defining command line arguments for **inline-external** or **inline-appasset** applications we support two tokens which will be replaced before the command line arguments are passed.
 
 - {OF-PLAT-UUID} - will be replaced with the UUID of the platform that launched the native app (this is useful if you wish to connect to a channel exposed by the platform that uses it's uuid as part of the channel name or if you want to connect to the interop broker of the platform that launched you).
-- {OF-EXT-UUID} which will pass the UUID we launched your external application with. This will be the appId the platform has for the native app in it's directory. This will be used unless a uuid is specified in the app asset/launch external options. This uuid could then be used by native apps that use our adapter and create an OpenFin runtime instance.
+- {OF-EXT-UUID} which will pass the UUID we launched your external application with. This will be the appId the platform has for the native app in it's directory. This will be used unless a uuid is specified in the app asset/launch external options. This uuid could then be used by native apps that use our adapter and create an HERE runtime instance.
 
 ## Source Reference
 

@@ -117,7 +117,7 @@ async function initializeDOM(): Promise<void> {
 
 		if (manifest.appAssets?.[0]?.src === "SNAP_ASSET_URL") {
 			logError(
-				"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
+				"Please request the SNAP_ASSET_URL from HERE and update manifest.fin.json before running the sample"
 			);
 			updateServerStatus();
 			chkShowDebugWindow.disabled = true;

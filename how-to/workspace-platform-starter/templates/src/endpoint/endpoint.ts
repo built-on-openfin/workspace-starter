@@ -90,7 +90,7 @@ export class ExampleEndpointProvider implements Endpoint<ExampleEndpointProvider
 		request?: unknown
 	): Promise<ReadableStream<unknown> | undefined> {
 		// An example is shown below that sends a message every second and below that is an example of code consuming a stream.
-		// Readable streams can be used in OpenFin and in the browser: https://caniuse.com/?search=ReadableStream
+		// Readable streams can be used in HERE and in the browser: https://caniuse.com/?search=ReadableStream
 		// More information about how you can consume a readable stream can be found here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
 
 		// You can cache the stream and return the same stream for each request and optionally use stream.tee() to split the stream or you can create a new stream for each request.

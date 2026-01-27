@@ -46,11 +46,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	await init({
 		browser: {
 			browserIconSize: customSettings.browserIconSize,
@@ -84,7 +84,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * Bring the platform to life.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
-	console.log("Initializing the workspace components");
+	console.log("Initializing the HERE Core UI Components");
 
 	// When the platform requests to be close we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();
@@ -289,7 +289,7 @@ async function showPopup(
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
  * @returns The overridden class.
  */
 function overrideCallback(

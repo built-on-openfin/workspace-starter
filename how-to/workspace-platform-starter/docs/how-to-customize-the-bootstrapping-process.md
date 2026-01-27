@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -16,7 +16,7 @@ The bootstrapping process has a number of options to determine what the applicat
 }
 ```
 
-The `home`, `store`, `dock`, and `notifications` options determine if a provider for each of those workspace components is registered. You can find more details on how to configure the providers for each of the component in their own sections.
+The `home`, `store`, `dock`, and `notifications` options determine if a provider for each of those HERE Core UI Components is registered. You can find more details on how to configure the providers for each of the component in their own sections.
 
 - [Home](./how-to-customize-home.md)
 - [Store](./how-to-customize-store.md)
@@ -40,9 +40,9 @@ If the platform is already running and the user double clicks the desktop shortc
 
 [Lifecycle events](./how-to-use-lifecycle-events.md) are raised during the bootstrapping process.
 
-After all of the workspace components have been initialized the `after-bootstrap` event is fired. When the application is closing down the `before-quit` event is fired.
+After all of the HERE Core UI Components have been initialized the `after-bootstrap` event is fired. When the application is closing down the `before-quit` event is fired.
 
-If you don't want to display any of the built-in workspace components on startup you can set the config as follows:
+If you don't want to display any of the built-in HERE Core UI Components on startup you can set the config as follows:
 
 ```json
 "bootstrap": {

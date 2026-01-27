@@ -46,7 +46,7 @@ This is defined in the modules section of the platformProvider settings.
 
 Order is important when it comes to platform and interop overrides. The request will hit the first entry in the array and every time super.x is called it will go to the next entry in the array until it hits the default implementation.
 
-For this example we want to intercept the getPage request **before** the default workspace platform starter implementation. This lets our module get the page from the workspace platform starter platform override module (which might call super.getPage to call the default implementation or it can return the page if it has been configured to store pages in a backend server). If this module was placed after the workspace platform starter module in the array and it was configured to save and get pages from a server then our implementation of getPage would never be called.
+For this example we want to intercept the getPage request **before** the default HERE Core UI Platform starter implementation. This lets our module get the page from the HERE Core UI Platform starter platform override module (which might call super.getPage to call the default implementation or it can return the page if it has been configured to store pages in a backend server). If this module was placed after the HERE Core UI Platform starter module in the array and it was configured to save and get pages from a server then our implementation of getPage would never be called.
 
 ## How can I test this?
 

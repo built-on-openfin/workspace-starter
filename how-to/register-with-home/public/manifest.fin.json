@@ -2,13 +2,13 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--security-realm=register-with-home",
+		"arguments": "",
 		"version": "43.142.101.2"
 	},
 	"platform": {
 		"uuid": "register-with-home",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": true,
+		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
@@ -33,16 +33,16 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Register With Home - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Register With Home - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {
@@ -59,12 +59,6 @@
 		"homeProvider": {
 			"id": "register-with-home",
 			"title": "Home Starter",
-			"subHeader": {
-				"title1": "Welcome to",
-				"title2": "HERE Home Starter",
-				"subtitle": "Your gateway to HERE applications",
-				"icon": "http://localhost:8080/favicon.ico"
-			},
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]

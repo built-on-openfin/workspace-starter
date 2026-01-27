@@ -6,7 +6,7 @@ import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
 
 /**
  * Save the request.
- * @param platform The workspace platform.
+ * @param platform The HERE Core UI Platform.
  * @param logger The logger for information.
  * @param endpointClient The endpoint client.
  * @param endpointId The endpoint id.

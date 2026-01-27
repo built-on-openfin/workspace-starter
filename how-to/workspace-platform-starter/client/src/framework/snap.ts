@@ -60,7 +60,7 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 
 			if (serverAssetInfo.src === "SNAP_ASSET_URL") {
 				logger.error(
-					"Please request the SNAP_ASSET_URL from OpenFin and update SnapProvider.serverAssetInfo.src before running the platform"
+					"Please request the SNAP_ASSET_URL from HERE and update SnapProvider.serverAssetInfo.src before running the platform"
 				);
 				return;
 			}

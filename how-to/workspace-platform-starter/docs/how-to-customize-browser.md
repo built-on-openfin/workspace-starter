@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Customize Browser
 
-The browser is the component of OF Workspace that displays your views, see [Browser Overview](https://developers.openfin.co/of-docs/docs/browser-sdk-overview) in the main developer docs for more details.
+The browser is the component of OF Workspace that displays your views, see [Browser Overview](https://resources.here.io/docs/core/hc-ui/browser/) in the main developer docs for more details.
 
 ![Browser](./assets/browser-window.png)
 
@@ -70,7 +70,7 @@ The theming for the browser window is configured in the platform using a pallett
 
 ## defaultWindowOptions
 
-We have extended the browser provider to support the same defaultWindowOptions as the workspace platform. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
+We have extended the browser provider to support the same defaultWindowOptions as the HERE Core UI Platform. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
 
 ## defaultPageOptions
 

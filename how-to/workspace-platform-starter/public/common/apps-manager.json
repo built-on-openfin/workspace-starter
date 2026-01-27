@@ -8,19 +8,19 @@
 		"manifest": "http://localhost:8080/common/views/manager-portal/manager-portal.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
 				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
 			}
 		],
-		"tags": ["page", "openfin", "manager", "fcd3"]
+		"tags": ["page", "HERE", "manager", "fcd3"]
 	},
 	{
 		"appId": "manager-portal-fixed-panels",
@@ -31,19 +31,19 @@
 		"manifest": "http://localhost:8080/common/views/manager-portal/manager-portal-fixed.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
 				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
 			}
 		],
-		"tags": ["page", "openfin", "manager", "fcd3"]
+		"tags": ["page", "HERE", "manager", "fcd3"]
 	},
 	{
 		"appId": "my-team",
@@ -54,12 +54,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -82,7 +82,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -105,7 +105,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -128,7 +128,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -151,7 +151,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{

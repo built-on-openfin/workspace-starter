@@ -37,7 +37,7 @@ let bootstrapOptions: BootstrapOptions | undefined;
 let deregistered = false;
 
 /**
- * Bootstrap the workspace components.
+ * Bootstrap the HERE Core UI Components.
  * @returns True if the platform started successfully.
  */
 export async function init(): Promise<boolean> {

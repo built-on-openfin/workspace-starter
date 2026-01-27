@@ -3,24 +3,24 @@
 		"appId": "openfin-information",
 		"name": "openfin-information",
 		"title": "OpenFin Information",
-		"description": "Display information about the OpenFin environment",
+		"description": "Display information about the HERE environment",
 		"manifest": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
 				"src": "http://localhost:8080/common/images/previews/of-info.png"
 			}
 		],
-		"tags": ["view", "openfin", "versions"]
+		"tags": ["view", "HERE", "versions"]
 	},
 	{
 		"appId": "snapshot-ten-window",
@@ -31,15 +31,15 @@
 		"manifest": "http://localhost:8080/common/snapshots/ten-windows.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
-		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+		"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "snapshot-twenty-window",
@@ -50,15 +50,15 @@
 		"manifest": "http://localhost:8080/common/snapshots/twenty-windows.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
-		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+		"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "snapshot-example-ten-window",
@@ -69,15 +69,15 @@
 		"manifest": "http://localhost:8080/common/snapshots/ten-windows.example.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
-		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+		"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "snapshot-example-twenty-window",
@@ -88,15 +88,15 @@
 		"manifest": "http://localhost:8080/common/snapshots/twenty-windows.example.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [],
-		"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+		"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
 	},
 	{
 		"appId": "interop-broadcast-view",
@@ -107,12 +107,12 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
@@ -135,7 +135,7 @@
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{

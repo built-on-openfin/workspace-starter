@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -35,7 +35,7 @@ This connection type exists when you want your platform to support app entries p
 
 An external application can be part of a snapshot source. It can connect to the connectionProvider and register itself as a [SnapshotSource JavaScript](https://developer.openfin.co/docs/javascript/stable/SnapshotSource.html), [SnapshotSource .NET](https://cdn.openfin.co/docs/csharp/latest/OpenfinDesktop/html/473E6D3D.htm). The connecting client will need to support the getSnapshot and applySnapshot functions to return data that can be saved as part of a snapshot and used to rehydrate the state of the connected client when the snapshot is applied.
 
-If you want the workspace platform to support launching your application if it isn't connected but is part of a snapshot then you can provide a standard app definition in the root of your snapshot object. The workspace platform will try and launch that app if it's manifest type is supported.
+If you want the HERE Core UI Platform to support launching your application if it isn't connected but is part of a snapshot then you can provide a standard app definition in the root of your snapshot object. The HERE Core UI Platform will try and launch that app if it's manifest type is supported.
 
 In the case of a .NET app this may be a inline launch external process app definition which includes command line args that provide the .NET app with the information needed to rehydrate state (e.g. your standard snapshot object includes a guid that is used to lookup state within the .NET app and this is passed via a command line arg if the app isn't already running).
 
@@ -47,7 +47,7 @@ In the case of a .NET app this may be a inline launch external process app defin
 
 ### actions
 
-The workspace platform may expose certain actions that can be called by connected applications. At this time (Workspace 10+) the following actions are supported:
+The HERE Core UI Platform may expose certain actions that can be called by connected applications. At this time (Workspace 10+) the following actions are supported:
 
 - show-home
 - hide-home
@@ -58,7 +58,7 @@ The workspace platform may expose certain actions that can be called by connecte
 - show-notifications
 - hide-notifications
 
-This is useful if your native applications have icons to improve their integration with a workspace platform.
+This is useful if your native applications have icons to improve their integration with a HERE Core UI Platform.
 
 The supported actions can be defined at a top level (default for all connected clients that support the connection type actions) or they can be specified at a lower level (e.g. this application can only show/hide home).
 
@@ -97,7 +97,7 @@ public async Task<bool> CanExecuteAction(string action)
 
 ### broker
 
-The workspace platform has a broker implementation and that means that context can be shared across views/applications. A workspace platform may wish to control who can connect to their broker (the default is to allow all connections).
+The HERE Core UI Platform has a broker implementation and that means that context can be shared across views/applications. A HERE Core UI Platform may wish to control who can connect to their broker (the default is to allow all connections).
 
 The connectionProvider has a function that is used to see if a connection is listed and valid. Our interop broker calls this to see if a connection (be it an internal view or window or external application) supports the connectionType "broker". You can allow all connections (which is the default broker behavior and can be accomplished by adding the broker connection type against a wildcard entry) or you could allow any connection from within your platform but require a payload from every other connection to verify the connection (see validating a connection below).
 
@@ -151,7 +151,7 @@ You can specify an endpoint that will receive the payload passed when an externa
 
 The settings are as follows:
 
-- **connectionId**: This is the id of the channel api apps will connect to (apps do not need to connect to it for the broker connection if that is all they are doing). The channel name will be prefixed with the uuid of your platform. Given the example above the channel id will be {youruuid}-{connectionId}: **workspace-platform-starter-workspace-connection**. Connected clients can explicitly call a disconnect function to let the workspace platform they are disconnecting e.g.
+- **connectionId**: This is the id of the channel api apps will connect to (apps do not need to connect to it for the broker connection if that is all they are doing). The channel name will be prefixed with the uuid of your platform. Given the example above the channel id will be {youruuid}-{connectionId}: **workspace-platform-starter-workspace-connection**. Connected clients can explicitly call a disconnect function to let the HERE Core UI Platform they are disconnecting e.g.
 
 ```csharp
 await _connectionService.DispatchAsync("disconnect");
@@ -159,7 +159,7 @@ await _connectionService.DispatchAsync("disconnect");
 
 - **connectionValidationEndpoint**: This is the id of an endpoint (see [how to define endpoints](./how-to-define-endpoints.md)) that will be used to validate the identity and payload of a connecting client (see [example connection validation endpoint module](../client/src/modules/endpoint/example-connection-validation/endpoint.ts) that is loaded but always returns true).
 - **supportedActions**: An array of default supported actions.
-- **connections**: An array of connections your platform supports (as you can see in the example above we have added an entry for workspace platform view/window connections and an entry to allow all other connections but require payload verification).
+- **connections**: An array of connections your platform supports (as you can see in the example above we have added an entry for HERE Core UI Platform view/window connections and an entry to allow all other connections but require payload verification).
 
 ## Example of Connecting Clients
 
