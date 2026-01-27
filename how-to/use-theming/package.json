@@ -21,11 +21,11 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "22.3.27"
+		"@openfin/workspace": "22.3.29"
 	},
 	"devDependencies": {
-		"@openfin/core": "42.103.1",
-		"@openfin/node-adapter": "42.103.1",
+		"@openfin/core": "42.103.4",
+		"@openfin/node-adapter": "42.103.4",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
