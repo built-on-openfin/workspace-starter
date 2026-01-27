@@ -1,5 +1,5 @@
 {
-	"$ref": "#/definitions/Partial%3COmit%3CManifest%2C%22assetsUrl%22%7C%22services%22%3E%3E",
+	"$ref": "#/definitions/Partial<Omit<Manifest%2C%22assetsUrl%22%7C%22services%22>>",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
 		"Api": {
@@ -2031,7 +2031,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
