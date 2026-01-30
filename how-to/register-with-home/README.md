@@ -1,4 +1,4 @@
-![HERE Core UI Example Application -- Adding your application the Content Discovery Service Via API](../../assets/HERO-STARTER-HERE-CORE-UI.png)
+![HERE Core UI Example Application -- Adding your application the Content Discovery Service Via API](./HERE_Core_UI_Starter.png)
 
 > **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
@@ -54,7 +54,7 @@ npm run client
 npm run build
 ```
 
-![Register With Home](openfin-register-with-home.gif)
+![Register With Home](new-home.png)
 
 ### Note About The App
 
@@ -147,6 +147,7 @@ The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method rea
 | **homeProvider** | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                        |
 | id               | What your provider should be called                                                                                                                                                                                                                                                                                                                                  |
 | title            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                             |
+| subHeader               | A custom and optional object to add branding and a welcome message to the Home component.  Please see the image above for referencing where the text and optional icon is placed.
 | icon             | The icon to show in the Home UI (top right section as well as an icon to switch between providers when there is more than one registered)                                                                                                                                                                                                                            |
 | queryMinLength   | How many characters should be typed before filtering the list?                                                                                                                                                                                                                                                                                                       |
 | queryAgainst     | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
