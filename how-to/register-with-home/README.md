@@ -1,4 +1,4 @@
-![HERE Core UI Example Application -- Adding your application the Content Discovery Service Via API](./HERE_Core_UI_Starter.png)
+![HERE Core UI Example Application -- Adding your application the Content Discovery Service Via API](../../assets/HERO-STARTER-HERE-CORE-UI.png)
 
 > **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
