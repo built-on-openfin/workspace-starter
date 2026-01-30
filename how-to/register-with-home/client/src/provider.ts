@@ -7,7 +7,7 @@ import type { CustomSettings } from "./shapes";
 window.addEventListener("DOMContentLoaded", async () => {
 	// Load the settings from the manifest
 	const customSettings = await getManifestCustomSettings();
-
+	console.log("Custom settings loaded from manifest:", customSettings);
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
@@ -73,7 +73,7 @@ async function initializeWorkspaceComponents(customSettings: CustomSettings): Pr
 async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
-
+	console.log("Retrieving manifest for application:", app.identity.uuid);
 	// Extract the custom settings for this application
 	const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
 	return manifest.customSettings ?? {};

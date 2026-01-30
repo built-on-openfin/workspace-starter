@@ -107,6 +107,7 @@ const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
+  subHeader: homeSettings.subHeader,
   onUserInput: onUserInput,
   onResultDispatch: onSelection
 };
@@ -125,6 +126,12 @@ The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method rea
         "homeProvider": {
             "id":"register-with-home",
             "title":"Home Starter",
+            "subHeader": {
+              "title1": "Welcome to the",
+              "title2": "HERE Home Starter",
+              "subtitle": "Your gateway to HERE applications",
+              "icon": "http://localhost:8080/favicon.ico"
+            },
             "icon":"http://localhost:8080/favicon.ico",
             "queryMinLength": 3,
             "queryAgainst": ["title"]
@@ -165,6 +172,7 @@ const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
+  subHeader: homeSettings.subHeader,
   onUserInput: onUserInput,
   onResultDispatch: onSelection
 };
