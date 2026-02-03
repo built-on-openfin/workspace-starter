@@ -7,7 +7,6 @@
 	},
 	"platform": {
 		"uuid": "register-with-home",
-		"name": "Register With Home - v23.0.0",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/platform/provider.html",
@@ -60,12 +59,6 @@
 		"homeProvider": {
 			"id": "register-with-home",
 			"title": "Home Starter",
-			"subHeader": {
-				"title1": "Welcome to the",
-				"title2": "HERE Home Starter",
-				"subtitle": "Your gateway to HERE applications",
-				"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/favicon.ico"
-			},
 			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/register-with-home/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
