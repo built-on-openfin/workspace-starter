@@ -8,7 +8,7 @@
 	"platform": {
 		"name": "workspace-platform-starter",
 		"uuid": "workspace-platform-starter",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "http://localhost:8080/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
