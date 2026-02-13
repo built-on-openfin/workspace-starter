@@ -8,7 +8,7 @@
 	"platform": {
 		"name": "workspace-platform-starter",
 		"uuid": "workspace-platform-starter",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon-32x32.png",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
