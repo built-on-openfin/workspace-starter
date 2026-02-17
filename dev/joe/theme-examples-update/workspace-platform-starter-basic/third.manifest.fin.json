@@ -6,6 +6,7 @@
 		"version": "43.142.101.4"
 	},
 	"platform": {
+		"name": "HERE Core UI Platform Starter Basic Third",
 		"uuid": "workspace-platform-start-basic-third",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/theme-examples-update/workspace-platform-starter-basic/favicon.ico",
 		"autoShow": false,
