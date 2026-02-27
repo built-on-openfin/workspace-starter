@@ -7,6 +7,7 @@
 - Updated the contact samples in public/common to include interop json files to describe their interop capabilities and added support for ViewProfile alongside ViewContact.
 - Exposed a new lifecycle event - app-asset-download for when the platform starts the check to see if an inline-app-asset needs downloading (state: "started" | "in-progress" | "completed" | "failed";) downloadPercent and appId and title are included as well. An inline-app-asset may go from started to completed straight away if it is already downloaded. This can be accessible by modules through the helper functions so you can decide to publish notifications or show a UI to complement the logging that already happens. Updated [how-to-use-lifecycle-events.md](./docs/how-to-use-lifecycle-events.md) documentation.
 - Upgraded cloud interop to latest supported version
+- Updated the launch logic for desktop browser so that it does return an identity to indicate that something was launched. Since the desktop browser doesn't have a uuid or name the application id will be used for uuid, name and appId. If the launch of the desktop triggers the launch of an application capable of registering an intent handler (e.g. a click once application) then it should register using the same id as it's app id when instantiating the HERE runtime.
 
 ## v21.0.0
 
