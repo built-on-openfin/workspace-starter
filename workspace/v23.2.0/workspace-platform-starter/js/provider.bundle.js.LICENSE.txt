@@ -2,7 +2,7 @@
 
 /*! For license information please see notifications.js.LICENSE.txt */
 
-/*! For license information please see openfin.ms365.js.LICENSE.txt */
+/*! For license information please see openfin.ms365.cjs.LICENSE.txt */
 
 /**
  * @license React
