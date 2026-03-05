@@ -22,8 +22,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/snap-sdk": "1.4.0",
-		"@openfin/workspace": "23.2.6",
-		"@openfin/workspace-platform": "23.2.6"
+		"@openfin/workspace": "23.2.11",
+		"@openfin/workspace-platform": "23.2.11"
 	},
 	"devDependencies": {
 		"@openfin/core": "43.101.4",
