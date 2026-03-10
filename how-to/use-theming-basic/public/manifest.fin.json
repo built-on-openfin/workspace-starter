@@ -2,14 +2,14 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "",
+		"arguments": " --security-realm=use-theming-basic --enable-mesh --v=1",
 		"version": "43.142.101.4"
 	},
 	"platform": {
 		"name": "Use Theming Basic",
 		"uuid": "use-theming-basic",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": false,
+		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},

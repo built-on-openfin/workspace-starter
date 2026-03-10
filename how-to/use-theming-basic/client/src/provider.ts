@@ -1,10 +1,9 @@
-import type OpenFin from "@openfin/core";
 import { CLITemplate, Home, type App } from "@openfin/workspace";
 import {
 	ColorSchemeOptionType,
+	CustomActionCallerType,
 	getCurrentSync,
-	init,
-	type WorkspacePlatformProvider
+	init
 } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 import { getApps, launchApp } from "./apps";
@@ -17,15 +16,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 	// When the platform api is ready we bootstrap the platform.
 	const platform = getCurrentSync();
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
-
+	await addListeners();
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons and default theme for the browser
+	console.log("DOM ready, initializing platform");
 	await initializeWorkspacePlatform();
-
-	// Now that the platform has initialized get the initial state
-	// of the theme and update the style preload channel with it
-	const schemeType = await platform.Theme.getSelectedScheme();
-	await updateViewTheme(schemeType);
 });
 
 /**
@@ -45,74 +40,33 @@ async function initializeWorkspacePlatform(): Promise<void> {
 		},
 		theme: [
 			{
-				label: "Default",
-				default: "light",
-				palettes: {
+				label: "Custom Theme",
+				seed: {
+					"brand.base.dark": "#140611",
+					"brand.accent.dark": "#FFD6D2",
+					"brand.base.light": "#FFFFFF",
+					"brand.accent.light": "#641E55"
+				},
+				overrides: {
 					light: {
-						brandPrimary: "#0A76D3",
-						brandSecondary: "#1E1F23",
-						backgroundPrimary: "#FAFBFE",
-						background1: "#FFFFFF",
-						background2: "#FAFBFE",
-						background3: "#F3F5F8",
-						background4: "#ECEEF1",
-						background5: "#DDDFE4",
-						background6: "#C9CBD2",
-						statusSuccess: "#35C759",
-						statusWarning: "#F48F00",
-						statusCritical: "#BE1D1F",
-						statusActive: "#0498FB",
-						inputBackground: "#ECEEF1",
-						inputColor: "#1E1F23",
-						inputPlaceholder: "#383A40",
-						inputDisabled: "#7D808A",
-						inputFocused: "#C9CBD2",
-						textDefault: "#1E1F23",
-						textHelp: "#2F3136",
-						textInactive: "#7D808A",
-						contentBackground1: "#0A76D3",
-						contentBackground2: "#000000",
-						contentBackground3: "#000000",
-						contentBackground4: "#000000",
-						contentBackground5: "#000000",
-						linkDefault: "#6CADE5",
-						linkHover: "#0A76D3"
+						"icon.symbol": "http://localhost:8080/common/images/favicon-32x32.png"
 					},
 					dark: {
-						brandPrimary: "#0A76D3",
-						brandSecondary: "#383A40",
-						backgroundPrimary: "#1E1F23",
-						background1: "#111214",
-						background2: "#1E1F23",
-						background3: "#24262B",
-						background4: "#2F3136",
-						background5: "#383A40",
-						background6: "#53565F",
-						statusSuccess: "#35C759",
-						statusWarning: "#F48F00",
-						statusCritical: "#BE1D1F",
-						statusActive: "#0498FB",
-						inputBackground: "#53565F",
-						inputColor: "#FFFFFF",
-						inputPlaceholder: "#C9CBD2",
-						inputDisabled: "#7D808A",
-						inputFocused: "#C9CBD2",
-						textDefault: "#FFFFFF",
-						textHelp: "#C9CBD2",
-						textInactive: "#7D808A",
-						contentBackground1: "#0A76D3",
-						contentBackground2: "#000000",
-						contentBackground3: "#000000",
-						contentBackground4: "#000000",
-						contentBackground5: "#000000",
-						linkDefault: "#6CADE5",
-						linkHover: "#0A76D3"
+						"icon.symbol": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				}
 			}
 		],
-		// Override some platform methods so we can be notified of the color scheme changing
-		overrideCallback
+		customActions: {
+			"swap-theme": async (e): Promise<void> => {
+				if (
+					e.callerType === CustomActionCallerType.CustomButton ||
+					e.callerType === CustomActionCallerType.CustomDropdownItem
+				) {
+					await toggleTheme();
+				}
+			}
+		}
 	});
 }
 
@@ -120,6 +74,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
  * Initialize minimal HERE Core UI Components for home/store so that the buttons show on dock.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
+	console.log("Initializing Home and Notifications");
 	await Home.register({
 		title: PLATFORM_TITLE,
 		id: PLATFORM_ID,
@@ -164,74 +119,89 @@ async function initializeWorkspaceComponents(): Promise<void> {
 }
 
 /**
- * Override methods in the platform.
- * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
- * @returns The overridden class.
+ * Adding Listeners to the Platform Window for Testing.
  */
-function overrideCallback(
-	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
-): WorkspacePlatformProvider {
-	/**
-	 * Override the platform methods so that we can intercept the
-	 * color scheme changing.
-	 */
-	class Override extends WorkspacePlatformProvider {
-		/**
-		 * The color scheme was changed.
-		 * @param schemeType The scheme it was changed to.
-		 * @returns Nothing.
-		 */
-		public async setSelectedScheme(schemeType: ColorSchemeOptionType): Promise<void> {
-			// Override the platform callback to we can detect the theme has changed
-			// and send this information to all the views with the preload script.
-			await updateViewTheme(schemeType);
-			return super.setSelectedScheme(schemeType);
-		}
+async function addListeners(): Promise<void> {
+	const toggleButton = document.querySelector<HTMLButtonElement>("#toggleTheme");
+	if (toggleButton) {
+		toggleButton.addEventListener("click", async () => {
+			await toggleTheme();
+		});
 	}
-	return new Override();
 }
+
 
 /**
  * Sends a channel message to all the views which have the theming
  * preload script included, so that they can also update their colors.
  * @param schemeType The new scheme type to display.
  */
-async function updateViewTheme(schemeType: ColorSchemeOptionType): Promise<void> {
+async function updateViewTheme(schemeType?: ColorSchemeOptionType): Promise<void> {
+	// If a scheme wasn't explicitly passed, ask the platform for the
+	// currently selected one.  This allows callers (such as our toggle
+	// helper) to simply call updateViewTheme() without knowing the
+	// current state.
 	const platform = getCurrentSync();
-	const themes = await platform.Theme.getThemes();
-
-	let scheme: "dark" | "light";
-	if (schemeType === ColorSchemeOptionType.System || !schemeType) {
-		scheme = getSystemPreferredColorScheme();
-	} else {
-		scheme = schemeType;
+	if (schemeType === undefined) {
+		schemeType = await platform.Theme.getSelectedScheme();
 	}
 
-	// Get the current palette from the platform based on the selected scheme.
-	if (Array.isArray(themes) && themes.length > 0) {
-		const currentTheme = themes[0];
+	const themes = await platform.Theme.getGeneratedPalettes();
+	console.log(`Themes: ${JSON.stringify(themes)}`);
 
-		if ("palettes" in currentTheme) {
-			const currentPalette = currentTheme.palettes[scheme];
-			const finMeInterop = fin.Interop.connectSync(fin.me.uuid, {});
-			const appSessionContextGroup = await finMeInterop.joinSessionContextGroup("platform/events");
-			await appSessionContextGroup.setContext({
-				type: "platform.theme",
-				schemeType: scheme,
-				palette: currentPalette
-			} as OpenFin.Context);
-		}
-	}
+	// when we eventually wire up the palette communication to the views
+	// we'll reuse the schemeType determined above.  the old commented
+	// logic looked like this:
+	//	// let scheme: "dark" | "light";
+	//	// if (schemeType === ColorSchemeOptionType.System || !schemeType) {
+	//	//	scheme = getSystemPreferredColorScheme();
+	//	//} else {
+	//	//	scheme = schemeType;
+	//	//}
+	//	// ...send palette via interop...
 }
+
+/**
+ * Flip between light and dark themes.  The button click handler can call
+ * this function; it will determine the active scheme and then request the
+ * opposite one from the platform.  After switching we forward the new
+ * scheme to `updateViewTheme` so that any preload views can receive the
+ * updated palette.
+ */
+async function toggleTheme(): Promise<void> {
+	const platform = getCurrentSync();
+	const current = await platform.Theme.getSelectedScheme();
+	console.log(`Toggling Current scheme: ${current}`);
+	let next: ColorSchemeOptionType;
+
+	// system and undefined are treated as light by default; adjust if you
+	// want a different fallback behaviour.
+	switch (current) {
+		case "dark":
+			next = ColorSchemeOptionType.Light;
+			break;
+		case "light":
+			next = ColorSchemeOptionType.Dark;
+			break;
+		default:
+			next = ColorSchemeOptionType.Light;
+	}
+
+	await platform.Theme.setSelectedScheme(next);
+	// make sure the views know about the change too
+	await updateViewTheme(next);
+}
+
+// expose helper for UI button handlers or debugging
 
 /**
  * If the HERE color scheme is set to System we need to work out
  * if the OS is currently set to dark or light.
  * @returns The OS preference for color scheme.
  */
-function getSystemPreferredColorScheme(): "dark" | "light" {
-	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
-		return "dark";
-	}
-	return "light";
-}
+// function getSystemPreferredColorScheme(): "dark" | "light" {
+// 	if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+// 		return "dark";
+// 	}
+// 	return "light";
+// }
