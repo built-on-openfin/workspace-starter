@@ -341,18 +341,23 @@ export async function launchApp(
 			}
 
 			if (launch) {
-				await server.launch({
+				logger.info(
+					`Launching app with clientId ${clientId} using snap with path: ${path}, args: ${args}, and launchStrategy:`,
+					launchStrategy
+				);
+				const launchResult = await server.launch({
 					path,
 					clientId,
 					args,
 					strategy: launchStrategy
 				});
+				logger.info(`Launched app with clientId ${clientId} using snap with result:`, launchResult);
 			}
 
 			return clientId;
 		}
 	} catch (error) {
-		console.error("Failed to launch app.", formatError(error));
+		logger.error("Failed to launch app.", formatError(error));
 	}
 }
 
