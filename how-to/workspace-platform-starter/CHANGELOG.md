@@ -10,6 +10,7 @@
 - Enabled Snap (this will run on windows).
 - Added an example of a externally hosted wpf click once application that supports intents.
 - Added more logging for snap and the default interop broker.
+- Updated to snap 1.5.
 
 ## v21.0.0
 
