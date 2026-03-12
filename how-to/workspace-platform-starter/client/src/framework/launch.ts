@@ -110,6 +110,14 @@ export async function launch(
 			}
 			case MANIFEST_TYPES.DesktopBrowser.id: {
 				await fin.System.openUrlWithBrowser(app.manifest);
+				logger.info(
+					`Launched desktop browser with url: ${app.manifest} for app: ${app.appId}. As this is a desktop browser we do not have an identity to return so we are returning the appId as the uuid and name. If the url launch triggers a registration of an intent handler by the app they should connect to the platform using their defined appId.`
+				);
+				platformAppIdentities.push({
+					uuid: app.appId,
+					name: app.appId,
+					appId: app.appId
+				});
 				break;
 			}
 			case MANIFEST_TYPES.Endpoint.id: {
