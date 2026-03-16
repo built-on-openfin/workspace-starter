@@ -17,9 +17,9 @@
   "author": "martyn.janes@openfin.co",
   "license": "SEE LICENSE IN LICENSE.MD",
   "devDependencies": {
-    "@openfin/automation-cli": "^1.2.0",
-    "@openfin/automation-helpers": "^1.2.0",
-    "@types/chai": "4.3.12",
+    "@openfin/automation-cli": "^1.3.1",
+    "@openfin/automation-helpers": "^1.3.1",
+    "@types/chai": "5.2.3",
     "chai": "4.3.10"
   }
 }
