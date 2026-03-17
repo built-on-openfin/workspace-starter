@@ -200,13 +200,13 @@ describe("Register with Home", () => {
 	it("Can get the filter ids", async () => {
 		const filterIds = await OpenFinHome.filtersIds();
 		expect(filterIds.length).equal(9);
-		expect(filterIds[0]).equal("appasset");
-		expect(filterIds[1]).equal("developer");
-		expect(filterIds[2]).equal("dock");
-		expect(filterIds[3]).equal("intent");
-		expect(filterIds[4]).equal("interop");
-		expect(filterIds[5]).equal("native");
-		expect(filterIds[6]).equal("HERE");
+		expect(filterIds[0]).equal("here");
+		expect(filterIds[1]).equal("appasset");
+		expect(filterIds[2]).equal("developer");
+		expect(filterIds[3]).equal("dock");
+		expect(filterIds[4]).equal("intent");
+		expect(filterIds[5]).equal("interop");
+		expect(filterIds[6]).equal("native");
 		expect(filterIds[7]).equal("tools");
 		expect(filterIds[8]).equal("view");
 	});
@@ -236,6 +236,19 @@ describe("Register with Home", () => {
 	});
 
 	it("Can check selected entry content", async () => {
+		// Clear filters set by earlier tests (they stay applied after panel close and hide results)
+		await OpenFinHome.filtersOpen();
+		await WebDriver.sleep(500);
+		await OpenFinHome.filtersByIndexSet(4, false);
+		await OpenFinHome.filtersByIdSet("view", false);
+		await OpenFinHome.filtersClose(true);
+		await WebDriver.sleep(500);
+		await OpenFinHome.searchClear();
+		await OpenFinHome.search("interop");
+		await WebDriver.sleep(1000);
+		await OpenFinHome.searchResultById("interop-intent-view", "select");
+		await WebDriver.sleep(500);
+
 		const itemHtml = await OpenFinHome.searchResultSelectedItem();
 		expect(itemHtml).contains("Intents using Interop API");
 

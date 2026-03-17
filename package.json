@@ -51,6 +51,7 @@
   "license": "SEE LICENSE IN LICENSE.MD",
   "devDependencies": {
     "@openfin/node-adapter": "43.101.2",
+    "eslint-rule-composer": "^0.3.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "replace-in-file": "7.1.0",
@@ -59,6 +60,28 @@
   "overrides": {
     "parse-bmfont-xml": {
       "xml2js": "0.5.0"
-    }
+    },
+    "ws": "^8.17.1",
+    "puppeteer-core": {
+      "ws": "^8.17.1",
+      "@puppeteer/browsers": {
+        "tar-fs": "^3.1.1"
+      }
+    },
+    "webdriverio": {
+      "puppeteer-core": {
+        "ws": "^8.17.1",
+        "@puppeteer/browsers": {
+          "tar-fs": "^3.1.1"
+        }
+      }
+    },
+    "tar-fs": "^3.1.1",
+    "glob": "^11.1.0",
+    "@openfin/automation-cli": {
+      "glob": "^11.1.0"
+    },
+    "markdown-it": "^14.1.1",
+    "serialize-javascript": ">=7.0.3"
   }
 }
