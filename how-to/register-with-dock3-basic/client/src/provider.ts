@@ -1,9 +1,9 @@
 import { Home, Storefront, type StorefrontFooter, type StorefrontLandingPage } from "@openfin/workspace";
-import { init } from "@openfin/workspace-platform";
 import type { Dock3Button, Dock3Config, Dock3Provider } from "@openfin/workspace-platform";
 import { initializeDock3API } from "./dock";
 import type { Dock3ProviderSettings } from "./dock";
 import getDock3Provider from "./dock-providers";
+import { WorkspacePlatformLoader } from "./workspace-platform-loader";
 
 let initializeButton: HTMLButtonElement | null;
 let minimizeButton: HTMLButtonElement | null;
@@ -57,6 +57,7 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeWorkspacePlatform(workspaceAsar?: { alias: string }): Promise<void> {
 	console.log(`Initializing HERE Core UI Platform with asar: ${workspaceAsar?.alias ?? "none"}`);
+	const { init } = await WorkspacePlatformLoader.import();
 	await init({
 		browser: {
 			defaultWindowOptions: {
