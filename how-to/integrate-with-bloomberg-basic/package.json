@@ -25,7 +25,7 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/bloomberg": "^2.0.0",
-		"@openfin/core": "43.101.2",
+		"@openfin/core": "43.102.2",
 		"@openfin/workspace": "23.0.1-alpha.e4b85504",
 		"@openfin/workspace-platform": "23.0.1-alpha.e4b85504"
 	},

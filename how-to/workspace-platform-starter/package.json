@@ -70,7 +70,7 @@
 	"devDependencies": {
 		"@openfin/automation-cli": "^1.2.0",
 		"@openfin/automation-helpers": "^1.2.0",
-		"@openfin/core": "43.101.2",
+		"@openfin/core": "43.102.2",
 		"@openfin/node-adapter": "43.101.2",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^4.17.21",

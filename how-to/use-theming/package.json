@@ -24,7 +24,7 @@
 		"@openfin/workspace": "23.0.1-alpha.e4b85504"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.101.2",
+		"@openfin/core": "43.102.2",
 		"@openfin/node-adapter": "43.101.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
