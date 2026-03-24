@@ -242,7 +242,7 @@ In the above example we would have the following app endpointId definition:
         },
 ```
 
-The inline-apps endpoint module can be seen [here](../client/src/modules/endpoint/inline-apps/endpoint.ts).
+The inline-apps endpoint module can be seen [right here](../client/src/modules/endpoint/inline-apps/endpoint.ts).
 
 ## Where Are Apps Used?
 

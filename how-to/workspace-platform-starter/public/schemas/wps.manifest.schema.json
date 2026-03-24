@@ -3527,6 +3527,9 @@
 			},
 			"type": "object"
 		},
+		"NotificationIndicatorColors": {
+			"$ref": "#/definitions/__type_63"
+		},
 		"NotificationIndicatorColorsWithScheme": {
 			"$ref": "#/definitions/__type_64"
 		},
@@ -4126,7 +4129,7 @@
 					"type": "string"
 				},
 				"notificationIndicatorColors": {
-					"$ref": "#/definitions/Record_1",
+					"$ref": "#/definitions/NotificationIndicatorColors",
 					"description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
 				},
 				"palette": {
@@ -4722,9 +4725,6 @@
 		},
 		"Record": {
 			"$ref": "#/definitions/__type_21"
-		},
-		"Record_1": {
-			"$ref": "#/definitions/__type_63"
 		},
 		"Rectangle": {
 			"$ref": "#/definitions/__type_33"
