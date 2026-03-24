@@ -59,6 +59,12 @@
 		"homeProvider": {
 			"id": "register-with-home",
 			"title": "Home Starter",
+			"subHeader": {
+				"title1": "Welcome to the",
+				"title2": "HERE Home Starter",
+				"subtitle": "Your gateway to HERE applications",
+				"icon": "http://localhost:8080/favicon.ico"
+			},
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]

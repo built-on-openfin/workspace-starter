@@ -54,7 +54,7 @@ npm run client
 npm run build
 ```
 
-![Register With Home](openfin-register-with-home.gif)
+![Register With Home](new-home.png)
 
 ### Note About The App
 
@@ -107,6 +107,7 @@ const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
+  subHeader: homeSettings.subHeader,
   onUserInput: onUserInput,
   onResultDispatch: onSelection
 };
@@ -125,6 +126,12 @@ The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method rea
         "homeProvider": {
             "id":"register-with-home",
             "title":"Home Starter",
+            "subHeader": {
+              "title1": "Welcome to the",
+              "title2": "HERE Home Starter",
+              "subtitle": "Your gateway to HERE applications",
+              "icon": "http://localhost:8080/favicon.ico"
+            },
             "icon":"http://localhost:8080/favicon.ico",
             "queryMinLength": 3,
             "queryAgainst": ["title"]
@@ -140,6 +147,7 @@ The [provider.ts](client/src/provider.ts) `getManifestCustomSettings` method rea
 | **homeProvider** | Config related to the home provider setup to list things in Home and the Browser Add New View                                                                                                                                                                                                                                                                        |
 | id               | What your provider should be called                                                                                                                                                                                                                                                                                                                                  |
 | title            | The title that should be shown in the Home UI to represent your provider                                                                                                                                                                                                                                                                                             |
+| subHeader        | A custom and optional object to add branding and a welcome message to the Home component. Please see the image above for referencing where the text and optional icon is placed.                                                                                                                                                                                     |
 | icon             | The icon to show in the Home UI (top right section as well as an icon to switch between providers when there is more than one registered)                                                                                                                                                                                                                            |
 | queryMinLength   | How many characters should be typed before filtering the list?                                                                                                                                                                                                                                                                                                       |
 | queryAgainst     | What do you wish to run the query against when inspecting your search results. An array of entries. If not specified it will default to ["title"]. Since this example stores the app definition inside of a cli search result's data field you can add data.tags to the array so that it will see if the query matches the start of a tag e.g. ["title","data.tags"] |
@@ -165,6 +173,7 @@ const homeProvider: HomeProvider = {
   title: settings.homeProvider.title,
   id: settings.homeProvider.id,
   icon: settings.homeProvider.icon,
+  subHeader: homeSettings.subHeader,
   onUserInput: onUserInput,
   onResultDispatch: onSelection
 };
