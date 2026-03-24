@@ -168,5 +168,54 @@
 			}
 		],
 		"tags": ["native", "dock"]
+	},
+	{
+		"appId": "wpf-interop-test",
+		"name": "wpf-interop-test",
+		"title": "WPF ClickOnce Using Snap",
+		"description": "Launch Native using snap",
+		"manifest": {
+			"path": "msedge",
+			"arguments": "https://built-on-openfin.github.io/starter-assets/assets/workspace-platform-starter/clickonce/interop-intents-v1.application"
+		},
+		"manifestType": "inline-external",
+		"icons": [],
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "Microsoft",
+		"images": [],
+		"tags": ["native"],
+		"instanceMode": "single",
+		"intents": [
+			{
+				"name": "ViewContact",
+				"displayName": "View Contact",
+				"contexts": ["fdc3.contact"]
+			},
+			{
+				"name": "ViewNews",
+				"displayName": "View News",
+				"contexts": ["fdc3.organization"]
+			},
+			{
+				"name": "ViewInstrument",
+				"displayName": "View Instrument",
+				"contexts": ["fdc3.instrument"]
+			}
+		],
+		"launchPreference": {
+			"options": {
+				"type": "native",
+				"snap": {
+					"strategy": {
+						"type": "independent",
+						"timeoutMs": 100000,
+						"alwaysLaunchNewInstance": true,
+						"matchNameRegex": "^MainWindow",
+						"resizingBehavior": "default"
+					}
+				}
+			}
+		}
 	}
 ]
