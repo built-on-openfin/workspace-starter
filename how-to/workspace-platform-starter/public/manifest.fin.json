@@ -136,7 +136,9 @@
 					"width": 665,
 					"fdc3InteropApi": "2.0"
 				},
-				"intentOptions": {},
+				"intentOptions": {
+					"intentTimeout": 60000
+				},
 				"openOptions": {},
 				"contextOptions": {},
 				"getInfoOptions": {
@@ -1831,12 +1833,12 @@
 			]
 		},
 		"snapProvider": {
-			"enabled": false,
+			"enabled": true,
 			"id": "workspace-platform-starter",
 			"enableAutoWindowRegistration": true,
 			"serverOptions": {
 				"showDebug": false,
-				"keyToStick": true,
+				"keyToStick": "shift",
 				"disableBlurDropPreview": false,
 				"disableGPUAcceleratedDragging": false,
 				"disableUserUnstick": false,

@@ -45,7 +45,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -399,7 +399,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -566,7 +566,7 @@
 				"globalMenu": {
 					"description": "This setting lets you customize the default workspace browser main menu and specify your own.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -618,7 +618,7 @@
 				"pageMenu": {
 					"description": "This setting lets you customize the page right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -640,7 +640,7 @@
 				"viewMenu": {
 					"description": "This setting lets you customize the view right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -1802,14 +1802,14 @@
 				"endpoints": {
 					"description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
 					"items": {
-						"$ref": "#/definitions/EndpointDefinition<unknown>"
+						"$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -2166,6 +2166,37 @@
 			"required": ["src"],
 			"type": "object"
 		},
+		"IndependentStrategy": {
+			"additionalProperties": false,
+			"description": "An independent application launch and window discovery strategy for capturing top-level windows\nbelonging to external applications that are launched independently of Snap, or optionally launching\nsuch applications if needed.\n\nThis strategy supports integration with applications outside the OpenFin ecosystem,\nincluding those launched via methods such as click-once or shell execution.",
+			"properties": {
+				"alwaysLaunchNewInstance": {
+					"description": "If true, always launch a new application instance even if one or more instances exist.\nIf false, only hook existing instances. Defaults to false.",
+					"type": "boolean"
+				},
+				"matchClassRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window class against. If not provided, any window class will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"matchNameRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window caption against. If not provided, any window caption will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
+				"timeoutMs": {
+					"description": "The timeout period milliseconds after which the window search will be abandoned",
+					"type": "number"
+				},
+				"type": {
+					"const": "independent",
+					"type": "string"
+				}
+			},
+			"required": ["timeoutMs", "type"],
+			"type": "object"
+		},
 		"InitOptionsProviderOptions": {
 			"$ref": "#/definitions/ModuleList",
 			"description": "List of modules."
@@ -2254,7 +2285,7 @@
 				"integrations": {
 					"description": "This is the old module list name, remove in future.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
+						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2265,7 +2296,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
+						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -2365,6 +2396,9 @@
 				},
 				{
 					"$ref": "#/definitions/CombinedStrategy"
+				},
+				{
+					"$ref": "#/definitions/IndependentStrategy"
 				}
 			]
 		},
@@ -2623,7 +2657,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2695,7 +2729,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2767,7 +2801,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2839,7 +2873,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -2885,7 +2919,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate<unknown>"
+						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -3030,7 +3064,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -3245,7 +3279,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3259,7 +3293,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3273,7 +3307,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3287,7 +3321,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3301,7 +3335,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3315,7 +3349,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -3383,7 +3417,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference<never>_1"
+						"$ref": "#/definitions/NativePreference%3Cnever%3E_1"
 					},
 					"type": "array"
 				}
@@ -4173,7 +4207,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -4575,7 +4609,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				},
@@ -4816,7 +4850,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition<unknown>"
+						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
 					},
 					"type": "array"
 				}
@@ -5409,7 +5443,7 @@
 				"menuEntries": {
 					"description": "The menu entries to display.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
+						"$ref": "#/definitions/MenuEntry%3CTrayMenuOptionType%3E"
 					},
 					"type": "array"
 				},
@@ -5428,19 +5462,19 @@
 		"UpdatableLaunchPreferenceDefinition": {
 			"anyOf": [
 				{
-					"$ref": "#/definitions/WindowPreference<never>"
+					"$ref": "#/definitions/WindowPreference%3Cnever%3E"
 				},
 				{
 					"$ref": "#/definitions/WindowPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/ViewPreference<never>"
+					"$ref": "#/definitions/ViewPreference%3Cnever%3E"
 				},
 				{
 					"$ref": "#/definitions/ViewPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/NativePreference<never>"
+					"$ref": "#/definitions/NativePreference%3Cnever%3E"
 				}
 			],
 			"description": "A type that contains the available updatable launch preferences"
@@ -5563,7 +5597,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference<never>_1"
+								"$ref": "#/definitions/ViewPreference%3Cnever%3E_1"
 							}
 						]
 					},
@@ -6027,7 +6061,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference<never>_1"
+								"$ref": "#/definitions/WindowPreference%3Cnever%3E_1"
 							}
 						]
 					},
@@ -9023,7 +9057,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
 					},
 					"type": "array"
 				}
