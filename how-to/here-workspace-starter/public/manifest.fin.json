@@ -2,12 +2,12 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--enable-mesh --security-realm=workspace-platform-starter",
+		"arguments": "--enable-mesh --security-realm=here-workspace-starter",
 		"version": "43.142.101.2"
 	},
 	"platform": {
-		"name": "workspace-platform-starter",
-		"uuid": "workspace-platform-starter",
+		"name": "here-workspace-starter",
+		"uuid": "here-workspace-starter",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
@@ -29,14 +29,20 @@
 					"protocols": ["mailto", "msteams", "tel"]
 				}
 			},
-			"webAPIs": ["clipboard-sanitized-write"]
+			"webAPIs": [
+				"clipboard-sanitized-write"
+			]
 		},
 		"defaultWindowOptions": {
 			"permissions": {
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": ["mailto", "msteams", "tel"]
+						"protocols": [
+							"mailto",
+							"msteams",
+							"tel"
+						]
 					}
 				}
 			},
@@ -57,7 +63,11 @@
 				"System": {
 					"openUrlWithBrowser": {
 						"enabled": true,
-						"protocols": ["mailto", "msteams", "tel"]
+						"protocols": [
+							"mailto",
+							"msteams",
+							"tel"
+						]
 					}
 				}
 			}
@@ -84,7 +94,10 @@
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
 		"name": "HERE Core UI Platform Starter - v23.0.0",
-		"target": ["desktop", "start-menu"]
+		"target": [
+			"desktop",
+			"start-menu"
+		]
 	},
 	"supportInformation": {
 		"company": "HERE",
@@ -109,7 +122,10 @@
 			"store": true,
 			"dock": true,
 			"notifications": true,
-			"autoShow": ["dock", "home"]
+			"autoShow": [
+				"dock",
+				"home"
+			]
 		},
 		"platformProvider": {
 			"rootUrl": "http://localhost:8080",
@@ -159,32 +175,49 @@
 						{
 							"name": "StartCall",
 							"displayName": "Start a Call",
-							"contexts": ["fdc3.contact", "fdc3.contactList"]
+							"contexts": [
+								"fdc3.contact",
+								"fdc3.contactList"
+							]
 						},
 						{
 							"name": "StartChat",
 							"displayName": "Start a Chat",
-							"contexts": ["fdc3.contact", "fdc3.contactList"]
+							"contexts": [
+								"fdc3.contact",
+								"fdc3.contactList"
+							]
 						},
 						{
 							"name": "ViewChart",
 							"displayName": "View Chart",
-							"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+							"contexts": [
+								"fdc3.instrument",
+								"fdc3.instrumentList",
+								"fdc3.portfolio",
+								"fdc3.position"
+							]
 						},
 						{
 							"name": "ViewContact",
 							"displayName": "View Contact Details",
-							"contexts": ["fdc3.contact"]
+							"contexts": [
+								"fdc3.contact"
+							]
 						},
 						{
 							"name": "ViewProfile",
 							"displayName": "View Profile",
-							"contexts": ["fdc3.contact"]
+							"contexts": [
+								"fdc3.contact"
+							]
 						},
 						{
 							"name": "ViewQuote",
 							"displayName": "View Quote",
-							"contexts": ["fdc3.instrument"]
+							"contexts": [
+								"fdc3.instrument"
+							]
 						},
 						{
 							"name": "ViewNews",
@@ -200,12 +233,18 @@
 						{
 							"name": "ViewAnalysis",
 							"displayName": "View Analysis",
-							"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+							"contexts": [
+								"fdc3.instrument",
+								"fdc3.organization",
+								"fdc3.portfolio"
+							]
 						},
 						{
 							"name": "ViewInstrument",
 							"displayName": "View Instrument Details",
-							"contexts": ["fdc3.instrument"]
+							"contexts": [
+								"fdc3.instrument"
+							]
 						}
 					]
 				},
@@ -455,27 +494,40 @@
 					{
 						"enabled": true,
 						"id": "default-workspace",
-						"endpointIds": ["get-default-workspace", "set-default-workspace"]
+						"endpointIds": [
+							"get-default-workspace",
+							"set-default-workspace"
+						]
 					},
 					{
 						"enabled": true,
 						"id": "pages-share",
-						"endpointIds": ["share-get", "share-set"]
+						"endpointIds": [
+							"share-get",
+							"share-set"
+						]
 					},
 					{
 						"enabled": true,
 						"id": "workspaces-share",
-						"endpointIds": ["share-get", "share-set"]
+						"endpointIds": [
+							"share-get",
+							"share-set"
+						]
 					},
 					{
 						"enabled": true,
 						"id": "default-wps-interop",
-						"endpointIds": ["*"]
+						"endpointIds": [
+							"*"
+						]
 					},
 					{
 						"enabled": true,
 						"id": "default-wps-platform",
-						"endpointIds": ["*"]
+						"endpointIds": [
+							"*"
+						]
 					},
 					{
 						"enabled": true,
@@ -573,7 +625,9 @@
 						"type": "Quit",
 						"operation": "after"
 					},
-					"conditions": ["authenticated"]
+					"conditions": [
+						"authenticated"
+					]
 				}
 			],
 			"pageMenu": [
@@ -656,7 +710,9 @@
 							"customData": {}
 						}
 					},
-					"conditions": ["themed"]
+					"conditions": [
+						"themed"
+					]
 				},
 				{
 					"include": false,
@@ -702,7 +758,9 @@
 							}
 						}
 					},
-					"conditions": ["removed-from-snapshot"]
+					"conditions": [
+						"removed-from-snapshot"
+					]
 				},
 				{
 					"include": false,
@@ -720,7 +778,9 @@
 							}
 						}
 					},
-					"conditions": ["included-in-snapshot"]
+					"conditions": [
+						"included-in-snapshot"
+					]
 				},
 				{
 					"include": true,
@@ -797,7 +857,9 @@
 							"customData": {}
 						}
 					},
-					"conditions": ["sharing"]
+					"conditions": [
+						"sharing"
+					]
 				},
 				{
 					"include": true,
@@ -885,7 +947,9 @@
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
-			"queryAgainst": ["title"]
+			"queryAgainst": [
+				"title"
+			]
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
@@ -897,7 +961,9 @@
 					"description": "This is a demonstration of the hero section that you can configure for your store.",
 					"cta": {
 						"title": "Hero Apps!",
-						"tags": ["hero"]
+						"tags": [
+							"hero"
+						]
 					},
 					"image": {
 						"src": "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
@@ -912,7 +978,9 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
 							},
-							"tags": ["tools"],
+							"tags": [
+								"tools"
+							],
 							"buttonTitle": "View"
 						},
 						{
@@ -921,14 +989,19 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
 							},
-							"tags": ["page"],
+							"tags": [
+								"page"
+							],
 							"buttonTitle": "View"
 						}
 					]
 				},
 				"middleRow": {
 					"title": "A collection of simple views that show how to share context using the FDC3 or Interop APIs.",
-					"tags": ["fdc3", "interop"]
+					"tags": [
+						"fdc3",
+						"interop"
+					]
 				},
 				"bottomRow": {
 					"title": "Quick Access",
@@ -939,7 +1012,9 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
 							},
-							"tags": ["view"],
+							"tags": [
+								"view"
+							],
 							"buttonTitle": "View"
 						},
 						{
@@ -948,7 +1023,9 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
 							},
-							"tags": ["manifest"],
+							"tags": [
+								"manifest"
+							],
 							"buttonTitle": "View"
 						},
 						{
@@ -957,7 +1034,9 @@
 							"image": {
 								"src": "http://localhost:8080/common/images/store/coding-6-unsplash.jpg"
 							},
-							"tags": ["native"],
+							"tags": [
+								"native"
+							],
 							"buttonTitle": "View"
 						}
 					]
@@ -969,23 +1048,37 @@
 					"items": [
 						{
 							"title": "All Apps",
-							"tags": ["view", "page", "manifest", "native", "desktop-browser"]
+							"tags": [
+								"view",
+								"page",
+								"manifest",
+								"native",
+								"desktop-browser"
+							]
 						},
 						{
 							"title": "Views",
-							"tags": ["view"]
+							"tags": [
+								"view"
+							]
 						},
 						{
 							"title": "Pages",
-							"tags": ["page"]
+							"tags": [
+								"page"
+							]
 						},
 						{
 							"title": "Manifest",
-							"tags": ["manifest"]
+							"tags": [
+								"manifest"
+							]
 						},
 						{
 							"title": "Native",
-							"tags": ["native"]
+							"tags": [
+								"native"
+							]
 						}
 					]
 				},
@@ -994,11 +1087,15 @@
 					"items": [
 						{
 							"title": "FDC3 API",
-							"tags": ["fdc3"]
+							"tags": [
+								"fdc3"
+							]
 						},
 						{
 							"title": "Interop API",
-							"tags": ["interop"]
+							"tags": [
+								"interop"
+							]
 						}
 					]
 				}
@@ -1044,20 +1141,26 @@
 				{
 					"id": "dock-apps",
 					"display": "individual",
-					"tags": ["dock"]
+					"tags": [
+						"dock"
+					]
 				},
 				{
 					"id": "fdc3-apps",
 					"display": "group",
 					"tooltip": "FDC3",
-					"tags": ["fdc3"]
+					"tags": [
+						"fdc3"
+					]
 				},
 				{
 					"id": "manager-apps",
 					"display": "group",
 					"tooltip": "Manager",
 					"iconUrl": "http://localhost:8080/common/images/icon-gradient.png",
-					"tags": ["manager"]
+					"tags": [
+						"manager"
+					]
 				},
 				{
 					"id": "favorites",
@@ -1066,7 +1169,9 @@
 					"action": {
 						"id": "favorites-menu"
 					},
-					"conditions": ["favorites"]
+					"conditions": [
+						"favorites"
+					]
 				},
 				{
 					"id": "pages",
@@ -1433,7 +1538,10 @@
 					"title": "Init Options Interop",
 					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
-						"supportedActions": ["raise-intent", "share-context"]
+						"supportedActions": [
+							"raise-intent",
+							"share-context"
+						]
 					}
 				},
 				{
@@ -1442,7 +1550,9 @@
 					"title": "Init Options Launch App",
 					"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
 					"data": {
-						"supportedActions": ["launch-app"],
+						"supportedActions": [
+							"launch-app"
+						],
 						"supportedManifestTypes": [
 							"view",
 							"inline-view",
@@ -1459,7 +1569,9 @@
 					"title": "Init Options Show Page",
 					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js",
 					"data": {
-						"supportedActions": ["show-page"]
+						"supportedActions": [
+							"show-page"
+						]
 					}
 				},
 				{
@@ -1468,7 +1580,9 @@
 					"title": "Init Options Launch Workspace",
 					"url": "http://localhost:8080/js/modules/init-options/launch-workspace.bundle.js",
 					"data": {
-						"supportedActions": ["launch-workspace"]
+						"supportedActions": [
+							"launch-workspace"
+						]
 					}
 				}
 			]
@@ -1799,7 +1913,9 @@
 					"position": {
 						"operation": "end"
 					},
-					"conditions": ["authenticated"]
+					"conditions": [
+						"authenticated"
+					]
 				}
 			]
 		},
@@ -1808,7 +1924,11 @@
 			"favoriteIcon": "http://localhost:8080/common/icons/{theme}/{scheme}/favorite.svg",
 			"unfavoriteIcon": "http://localhost:8080/common/icons/{theme}/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
-			"supportedFavoriteTypes": ["workspace", "page", "app"]
+			"supportedFavoriteTypes": [
+				"workspace",
+				"page",
+				"app"
+			]
 		},
 		"lifecycleProvider": {
 			"modules": [
@@ -1858,7 +1978,9 @@
 						"rules": [
 							{
 								"behavior": "window",
-								"match": ["https://www.newscientist.com/*"],
+								"match": [
+									"https://www.newscientist.com/*"
+								],
 								"options": {
 									"defaultWidth": 800,
 									"defaultHeight": 600
@@ -1866,15 +1988,22 @@
 							},
 							{
 								"behavior": "browser",
-								"match": ["https://www.livescience.com/*"]
+								"match": [
+									"https://www.livescience.com/*"
+								]
 							},
 							{
 								"behavior": "block",
-								"match": ["https://www.sciencenews.org/*"]
+								"match": [
+									"https://www.sciencenews.org/*"
+								]
 							},
 							{
 								"behavior": "view",
-								"match": ["https://*", "http://*"]
+								"match": [
+									"https://*",
+									"http://*"
+								]
 							}
 						]
 					}

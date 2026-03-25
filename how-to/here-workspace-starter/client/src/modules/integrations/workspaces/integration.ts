@@ -14,19 +14,19 @@ import {
 	type FavoriteEntry,
 	type FavoriteInfo,
 	type FavoriteTypeNames
-} from "workspace-platform-starter/shapes/favorite-shapes";
+} from "here-workspace-starter/shapes/favorite-shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition
-} from "workspace-platform-starter/shapes/integrations-shapes";
+} from "here-workspace-starter/shapes/integrations-shapes";
 import type {
 	FavoriteChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
-} from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/lifecycle-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty, isStringValue, randomUUID } from "here-workspace-starter/utils";
 import type { WorkspacesSettings } from "./shapes";
 
 /**

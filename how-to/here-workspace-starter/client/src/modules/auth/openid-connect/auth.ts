@@ -5,10 +5,10 @@ import {
 	type OidcAuthenticationResult,
 	type UserInfoClaims
 } from "@openfin/openid-connect";
-import type { AuthEventTypes, AuthProvider } from "workspace-platform-starter/shapes/auth-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { formatError, isEmpty, isNumber, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+import type { AuthEventTypes, AuthProvider } from "here-workspace-starter/shapes/auth-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { formatError, isEmpty, isNumber, isStringValue, randomUUID } from "here-workspace-starter/utils";
 import type { OpenIdConnectProviderOptions } from "./shapes";
 
 /**

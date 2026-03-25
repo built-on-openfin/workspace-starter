@@ -13,14 +13,14 @@ import type {
 	DockProviderConfigWithIdentity,
 	DockButton as PlatformDockButton
 } from "@openfin/workspace-platform/client-api/src";
-import { checkConditions } from "workspace-platform-starter/conditions";
-import type { ConditionChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
+import { checkConditions } from "here-workspace-starter/conditions";
+import type { ConditionChangedLifecyclePayload } from "here-workspace-starter/shapes/lifecycle-shapes";
 import type {
 	EndpointDockGetRequest,
 	EndpointDockGetResponse,
 	EndpointDockSetRequest
-} from "workspace-platform-starter/shapes/platform-shapes";
-import { imageUrlToDataUrl } from "workspace-platform-starter/utils-img";
+} from "here-workspace-starter/shapes/platform-shapes";
+import { imageUrlToDataUrl } from "here-workspace-starter/utils-img";
 import { PLATFORM_ACTION_IDS } from "../actions";
 import { getApp, getAppsByTag } from "../apps";
 import * as endpointProvider from "../endpoint";

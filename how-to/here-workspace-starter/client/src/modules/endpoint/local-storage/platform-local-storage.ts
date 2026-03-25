@@ -1,6 +1,6 @@
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { PlatformStorage } from "workspace-platform-starter/shapes/platform-storage-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { PlatformStorage } from "here-workspace-starter/shapes/platform-storage-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 
 /**
  * Implement platform storage using local storage.

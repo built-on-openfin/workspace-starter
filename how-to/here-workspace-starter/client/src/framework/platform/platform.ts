@@ -4,10 +4,10 @@ import {
 	init as workspacePlatformInit,
 	type BrowserInitConfig
 } from "@openfin/workspace-platform";
-import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
-import { getCanDownloadAppAssets } from "workspace-platform-starter/utils-capability";
-import { getWindowPositionOptions } from "workspace-platform-starter/utils-position";
-import { saveConfig, loadConfig } from "workspace-platform-starter/workspace/dock";
+import type { PlatformApp } from "here-workspace-starter/shapes/app-shapes";
+import { getCanDownloadAppAssets } from "here-workspace-starter/utils-capability";
+import { getWindowPositionOptions } from "here-workspace-starter/utils-position";
+import { saveConfig, loadConfig } from "here-workspace-starter/workspace/dock";
 import * as actionsProvider from "../actions";
 import * as analyticsProvider from "../analytics";
 import * as appProvider from "../apps";

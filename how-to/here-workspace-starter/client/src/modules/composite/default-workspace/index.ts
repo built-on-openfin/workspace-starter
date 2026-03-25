@@ -1,4 +1,4 @@
-import type { ModuleImplementation, ModuleTypes } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleImplementation, ModuleTypes } from "here-workspace-starter/shapes/module-shapes";
 import { DefaultWorkspaceActions } from "./actions";
 import { ApplyDefaultWorkspaceProvider } from "./lifecycle";
 import { SetDefaultWorkspaceProvider } from "./menus";

@@ -5,10 +5,10 @@ import type {
 	Workspace,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import { CustomActionCallerType, type Actions } from "here-workspace-starter/shapes/actions-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 import type { CustomMenuProviderSettings } from "./shapes";
 
 /**

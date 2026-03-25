@@ -4,9 +4,9 @@ import type {
 	PlatformInteropOverride,
 	PlatformInteropOverrideOptions,
 	PlatformInteropBrokerHelpers
-} from "workspace-platform-starter/shapes/interopbroker-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+} from "here-workspace-starter/shapes/interopbroker-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
 import { getConstructorOverride as wpsConstructorOverride } from "./broker/wps-interop-override";
 import type { WpsInteropOverrideOptions } from "./shapes";
 /**

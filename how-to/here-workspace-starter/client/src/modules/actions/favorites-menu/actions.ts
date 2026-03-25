@@ -3,19 +3,19 @@ import type {
 	CustomActionsMap,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
-import type { LaunchPreference } from "workspace-platform-starter/shapes/app-shapes";
+import { CustomActionCallerType, type Actions } from "here-workspace-starter/shapes/actions-shapes";
+import type { LaunchPreference } from "here-workspace-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	FAVORITE_TYPE_NAME_PAGE,
 	FAVORITE_TYPE_NAME_WORKSPACE,
 	type FavoriteEntry
-} from "workspace-platform-starter/shapes/favorite-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { PopupMenuEntry } from "workspace-platform-starter/shapes/menu-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
-import { getWindowPositionUsingStrategy } from "workspace-platform-starter/utils-position";
+} from "here-workspace-starter/shapes/favorite-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { PopupMenuEntry } from "here-workspace-starter/shapes/menu-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
+import { getWindowPositionUsingStrategy } from "here-workspace-starter/utils-position";
 import type { FavoritesMenuSettings } from "./shapes";
 
 /**

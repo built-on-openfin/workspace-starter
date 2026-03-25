@@ -1,14 +1,14 @@
 // eslint-disable-next-line max-classes-per-file
 import type OpenFin from "@openfin/core";
 import type { Page, WorkspacePlatformProvider } from "@openfin/workspace-platform";
-import type { PlatformApp } from "workspace-platform-starter/shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import type { PlatformApp } from "here-workspace-starter/shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
 import type {
 	PlatformOverride,
 	PlatformOverrideHelpers,
 	PlatformOverrideOptions
-} from "workspace-platform-starter/shapes/platform-shapes";
+} from "here-workspace-starter/shapes/platform-shapes";
 import type { ApplicationUrlAndAccessValidatorOptions } from "./shapes";
 
 /**

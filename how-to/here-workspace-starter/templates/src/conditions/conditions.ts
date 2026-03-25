@@ -3,9 +3,9 @@ import type {
 	ConditionContextTypes,
 	ConditionMap,
 	Conditions
-} from "workspace-platform-starter/shapes/conditions-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+} from "here-workspace-starter/shapes/conditions-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
 import type { ExampleConditionsProviderOptions } from "./shapes";
 
 /**

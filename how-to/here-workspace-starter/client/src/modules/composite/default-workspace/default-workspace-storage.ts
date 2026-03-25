@@ -1,8 +1,8 @@
-import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
-import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+import type { EndpointClient } from "here-workspace-starter/shapes/endpoint-shapes";
+import type { Logger } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import type { VersionInfo } from "here-workspace-starter/shapes/version-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 import type {
 	DefaultWorkspacePayload,
 	DefaultWorkspaceProviderOptions,

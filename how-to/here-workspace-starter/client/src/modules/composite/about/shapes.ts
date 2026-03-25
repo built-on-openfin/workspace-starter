@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { MenuEntryDynamic } from "workspace-platform-starter/shapes/menu-shapes";
+import type { MenuEntryDynamic } from "here-workspace-starter/shapes/menu-shapes";
 
 /**
  * State to share between the module components.

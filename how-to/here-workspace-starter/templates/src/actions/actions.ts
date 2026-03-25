@@ -3,9 +3,9 @@ import type {
 	CustomActionsMap,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
+import type { ActionHelpers, Actions } from "here-workspace-starter/shapes/actions-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
 import type { ExampleActionsProviderOptions } from "./shapes";
 
 /**

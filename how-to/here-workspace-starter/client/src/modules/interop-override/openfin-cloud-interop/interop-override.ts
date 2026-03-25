@@ -5,10 +5,10 @@ import type {
 	PlatformInteropOverride,
 	PlatformInteropOverrideOptions,
 	PlatformInteropBrokerHelpers
-} from "workspace-platform-starter/shapes/interopbroker-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isStringValue } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/interopbroker-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
+import { isStringValue } from "here-workspace-starter/utils";
 import type { OpenFinCloudInteropOptions } from "./shapes";
 
 /**

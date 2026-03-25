@@ -6,7 +6,7 @@ import type {
 	PageLayout,
 	Workspace
 } from "@openfin/workspace-platform";
-import { deepEqual, deepMerge, isEmpty, objectClone } from "workspace-platform-starter/utils";
+import { deepEqual, deepMerge, isEmpty, objectClone } from "here-workspace-starter/utils";
 
 /**
  * All the workspace keys.

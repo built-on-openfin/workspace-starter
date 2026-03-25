@@ -1,9 +1,9 @@
 import type { NotificationOptions } from "@openfin/workspace/notifications";
-import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { NotificationSourceEvents } from "workspace-platform-starter/shapes/notification-shapes";
-import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+import type { Endpoint, EndpointDefinition } from "here-workspace-starter/shapes/endpoint-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import type { NotificationSourceEvents } from "here-workspace-starter/shapes/notification-shapes";
+import { isEmpty, isStringValue } from "here-workspace-starter/utils";
 import { NotificationLifecycleEventSource } from "./lifecycle-event-source";
 import type { ExampleNotificationSourceProviderOptions } from "./shapes";
 

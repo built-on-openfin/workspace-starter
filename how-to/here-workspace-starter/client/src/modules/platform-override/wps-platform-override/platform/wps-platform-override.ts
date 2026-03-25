@@ -29,17 +29,17 @@ import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform
 import type {
 	AnalyticsClient,
 	PlatformAnalyticsEvent
-} from "workspace-platform-starter/shapes/analytics-shapes";
-import type { UnsavedPagePromptStrategy } from "workspace-platform-starter/shapes/browser-shapes";
-import type { PlatformConnectionClient } from "workspace-platform-starter/shapes/connection-shapes";
-import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
+} from "here-workspace-starter/shapes/analytics-shapes";
+import type { UnsavedPagePromptStrategy } from "here-workspace-starter/shapes/browser-shapes";
+import type { PlatformConnectionClient } from "here-workspace-starter/shapes/connection-shapes";
+import type { EndpointClient } from "here-workspace-starter/shapes/endpoint-shapes";
 import type {
 	LanguageChangedLifecyclePayload,
 	PageChangedLifecyclePayload,
 	WorkspaceChangedLifecyclePayload
-} from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
-import type { PlatformMenuClient, PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
+} from "here-workspace-starter/shapes/lifecycle-shapes";
+import type { Logger } from "here-workspace-starter/shapes/logger-shapes";
+import type { PlatformMenuClient, PopupMenuStyles } from "here-workspace-starter/shapes/menu-shapes";
 import type {
 	EndpointPageGetRequest,
 	EndpointPageGetResponse,
@@ -55,10 +55,10 @@ import type {
 	EndpointWorkspaceSetRequest,
 	PlatformOverrideHelpers,
 	PlatformOverrideOptions
-} from "workspace-platform-starter/shapes/platform-shapes";
+} from "here-workspace-starter/shapes/platform-shapes";
 
-import { ColorSchemeMode, type PlatformThemeClient } from "workspace-platform-starter/shapes/theme-shapes";
-import { randomUUID, isEmpty } from "workspace-platform-starter/utils";
+import { ColorSchemeMode, type PlatformThemeClient } from "here-workspace-starter/shapes/theme-shapes";
+import { randomUUID, isEmpty } from "here-workspace-starter/utils";
 import {
 	mapPlatformPageFromStorage,
 	mapPlatformPageToStorage,

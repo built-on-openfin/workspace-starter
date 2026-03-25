@@ -4,7 +4,7 @@ import type {
 	EndpointListResponse,
 	EndpointSetRequest,
 	PlatformStorageMetadata
-} from "workspace-platform-starter/shapes/platform-shapes";
+} from "here-workspace-starter/shapes/platform-shapes";
 
 // This code demonstrates the implementation of a storage service.
 // used by the endpoints workspace-list, workspace-get, workspace-set, workspace-remove, page-list, page-get, page-set, page-remove

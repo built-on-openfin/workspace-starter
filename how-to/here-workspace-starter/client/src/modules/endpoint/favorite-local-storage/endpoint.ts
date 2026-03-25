@@ -1,4 +1,4 @@
-import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
+import type { Endpoint, EndpointDefinition } from "here-workspace-starter/shapes/endpoint-shapes";
 import type {
 	EndpointFavoriteEntry,
 	EndpointFavoriteGetRequest,
@@ -7,10 +7,10 @@ import type {
 	EndpointFavoriteListResponse,
 	EndpointFavoriteRemoveRequest,
 	EndpointFavoriteSetRequest
-} from "workspace-platform-starter/shapes/favorite-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/favorite-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 
 /**
  * Implementation for the favorite local storage endpoint provider.

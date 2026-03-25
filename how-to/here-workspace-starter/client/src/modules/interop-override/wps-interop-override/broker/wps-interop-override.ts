@@ -7,20 +7,20 @@ import type {
 } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 
-import { mapToAppMetaData as mapTo12AppMetaData } from "workspace-platform-starter/fdc3/1.2/mapper";
-import { mapToAppMetaData as mapTo20AppMetaData } from "workspace-platform-starter/fdc3/2.0/mapper";
+import { mapToAppMetaData as mapTo12AppMetaData } from "here-workspace-starter/fdc3/1.2/mapper";
+import { mapToAppMetaData as mapTo20AppMetaData } from "here-workspace-starter/fdc3/2.0/mapper";
 import {
 	OPEN_ERROR as OpenError,
 	RESOLVE_ERROR as ResolveError
-} from "workspace-platform-starter/fdc3/errors";
-import { MANIFEST_TYPES } from "workspace-platform-starter/manifest-types";
-import type { ConnectionClient, EndpointClient } from "workspace-platform-starter/shapes";
+} from "here-workspace-starter/fdc3/errors";
+import { MANIFEST_TYPES } from "here-workspace-starter/manifest-types";
+import type { ConnectionClient, EndpointClient } from "here-workspace-starter/shapes";
 import type {
 	AppsForIntent,
 	PlatformApp,
 	PlatformAppIdentifier
-} from "workspace-platform-starter/shapes/app-shapes";
-import type { AppMetadata as AppMetadataV1Point2 } from "workspace-platform-starter/shapes/fdc3-1-2-shapes";
+} from "here-workspace-starter/shapes/app-shapes";
+import type { AppMetadata as AppMetadataV1Point2 } from "here-workspace-starter/shapes/fdc3-1-2-shapes";
 import type {
 	ApiMetadata,
 	CaptureApiPayload,
@@ -34,8 +34,8 @@ import type {
 	PlatformInteropBrokerHelpers,
 	ContextOptions,
 	GetInfoOptions
-} from "workspace-platform-starter/shapes/interopbroker-shapes";
-import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
+} from "here-workspace-starter/shapes/interopbroker-shapes";
+import type { Logger } from "here-workspace-starter/shapes/logger-shapes";
 import {
 	formatError,
 	isEmpty,
@@ -43,7 +43,7 @@ import {
 	isStringValue,
 	randomUUID,
 	sanitizeString
-} from "workspace-platform-starter/utils";
+} from "here-workspace-starter/utils";
 import { AppIdHelper } from "./app-id-helper";
 import { AppIntentHelper } from "./app-intent-helper";
 import { getAppsMetaData } from "./app-meta-data-helper";

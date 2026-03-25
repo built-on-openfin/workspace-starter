@@ -1,8 +1,8 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
-import type { Logger } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ShareConfirmationOptions } from "workspace-platform-starter/shapes/share-shapes";
-import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+import type { EndpointClient } from "here-workspace-starter/shapes/endpoint-shapes";
+import type { Logger } from "here-workspace-starter/shapes/logger-shapes";
+import type { ShareConfirmationOptions } from "here-workspace-starter/shapes/share-shapes";
+import { isEmpty, isStringValue } from "here-workspace-starter/utils";
 
 /**
  * Save the request.

@@ -1,4 +1,4 @@
-import type { LogLevel } from "workspace-platform-starter/shapes/logger-shapes";
+import type { LogLevel } from "here-workspace-starter/shapes/logger-shapes";
 
 /**
  * Options for the console analytics module.

@@ -22,6 +22,18 @@ registerShareService(app, baseUrl);
 registerVersionService(app);
 registerStorageService(app);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
 	console.log("server is listening on port", port);
+});
+
+server.on("error", (err: NodeJS.ErrnoException) => {
+	if (err.code === "EADDRINUSE") {
+		console.error(
+			`Port ${port} is already in use. Stop the other process (e.g. an earlier npm start) or free the port, then try again.\n` +
+				`  macOS/Linux: lsof -i :${port}   then kill <PID>`
+		);
+	} else {
+		console.error(err);
+	}
+	process.exit(1);
 });

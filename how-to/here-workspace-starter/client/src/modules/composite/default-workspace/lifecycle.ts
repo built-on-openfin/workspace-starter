@@ -3,10 +3,10 @@ import type {
 	Lifecycle,
 	LifecycleEventMap,
 	WorkspaceChangedLifecyclePayload
-} from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/lifecycle-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty, isStringValue } from "here-workspace-starter/utils";
 import { DefaultWorkspaceStorage } from "./default-workspace-storage";
 import type { DefaultWorkspaceProviderOptions } from "./shapes";
 

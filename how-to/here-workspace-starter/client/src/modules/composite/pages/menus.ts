@@ -1,14 +1,14 @@
 import type OpenFin from "@openfin/core";
 import type { GlobalContextMenuOptionType, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
 import type {
 	MenuEntry,
 	MenuType,
 	Menus,
 	RelatedMenuId
-} from "workspace-platform-starter/shapes/menu-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/menu-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 import type { PageMenuSettings } from "./shapes";
 
 /**

@@ -1,7 +1,7 @@
 import type { OpenFin } from "@openfin/core";
 import type { BrowserCreateWindowRequest, Page, WorkspacePlatformModule } from "@openfin/workspace-platform";
-import type { BrowserProviderOptions } from "workspace-platform-starter/shapes/browser-shapes";
-import { deepMerge, isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+import type { BrowserProviderOptions } from "here-workspace-starter/shapes/browser-shapes";
+import { deepMerge, isEmpty, isStringValue, randomUUID } from "here-workspace-starter/utils";
 
 let defaultOptions:
 	| {

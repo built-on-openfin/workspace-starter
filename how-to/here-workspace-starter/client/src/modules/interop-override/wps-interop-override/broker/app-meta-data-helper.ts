@@ -1,6 +1,6 @@
 import type { AppIdentifier, AppMetadata } from "@finos/fdc3";
-import type { PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
-import type { AppMetadata as AppMetadataV1Point2 } from "workspace-platform-starter/shapes/fdc3-1-2-shapes";
+import type { PlatformApp } from "here-workspace-starter/shapes/app-shapes";
+import type { AppMetadata as AppMetadataV1Point2 } from "here-workspace-starter/shapes/fdc3-1-2-shapes";
 
 /**
  * Gets app meta data in the right format based on the version.

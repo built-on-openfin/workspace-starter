@@ -9,10 +9,10 @@ import {
 	CustomActionCallerType,
 	type ActionHelpers,
 	type Actions
-} from "workspace-platform-starter/shapes/actions-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/actions-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty, isStringValue, randomUUID } from "here-workspace-starter/utils";
 import { MANIFEST_TYPES } from "../../../framework/manifest-types";
 
 /**

@@ -1,6 +1,6 @@
-import type { Endpoint, EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import type { Endpoint, EndpointDefinition } from "here-workspace-starter/shapes/endpoint-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
 import type { ExampleEndpointProviderOptions } from "./shapes";
 
 /**

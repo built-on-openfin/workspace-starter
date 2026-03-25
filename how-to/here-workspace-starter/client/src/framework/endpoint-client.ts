@@ -1,4 +1,4 @@
-import { createLogger } from "workspace-platform-starter/logger-provider";
+import { createLogger } from "here-workspace-starter/logger-provider";
 import type {
 	EndpointClientOptions,
 	EndpointClient as EndpointClientInterface

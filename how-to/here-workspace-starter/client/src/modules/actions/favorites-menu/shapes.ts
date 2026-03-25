@@ -1,4 +1,4 @@
-import type { PopupMenuStyles } from "workspace-platform-starter/shapes/menu-shapes";
+import type { PopupMenuStyles } from "here-workspace-starter/shapes/menu-shapes";
 
 /**
  * Settings for favorites menu integration.

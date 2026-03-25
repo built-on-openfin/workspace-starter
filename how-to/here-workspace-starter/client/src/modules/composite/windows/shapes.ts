@@ -1,4 +1,4 @@
-import type { MenuPosition, MenuSeparatorPosition } from "workspace-platform-starter/shapes/menu-shapes";
+import type { MenuPosition, MenuSeparatorPosition } from "here-workspace-starter/shapes/menu-shapes";
 
 /**
  * Setting for the window menu entries.

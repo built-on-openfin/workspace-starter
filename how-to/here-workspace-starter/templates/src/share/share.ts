@@ -1,7 +1,7 @@
 import type OpenFin from "@openfin/core";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { Share, ShareEntry } from "workspace-platform-starter/shapes/share-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import type { Share, ShareEntry } from "here-workspace-starter/shapes/share-shapes";
 import type { ExampleShareProviderOptions } from "./shapes";
 
 /**

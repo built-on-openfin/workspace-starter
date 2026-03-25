@@ -1,12 +1,12 @@
-import type { EndpointDefinition } from "workspace-platform-starter/shapes/endpoint-shapes";
+import type { EndpointDefinition } from "here-workspace-starter/shapes/endpoint-shapes";
 import type {
 	ContextProcessorEndpoint,
 	ContextToProcess,
 	ProcessedContext
-} from "workspace-platform-starter/shapes/interopbroker-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isStringValue, objectClone } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/interopbroker-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty, isStringValue, objectClone } from "here-workspace-starter/utils";
 import type { ContextProcessorSettings } from "./shapes";
 
 /**

@@ -7,23 +7,23 @@ import type {
 	HomeSearchResponse,
 	HomeSearchResult
 } from "@openfin/workspace";
-import type { ManifestTypeId, PlatformApp } from "workspace-platform-starter/shapes/app-shapes";
+import type { ManifestTypeId, PlatformApp } from "here-workspace-starter/shapes/app-shapes";
 import {
 	FAVORITE_TYPE_NAME_APP,
 	type FavoriteClient,
 	type FavoriteEntry,
 	type FavoriteInfo,
 	type FavoriteTypeNames
-} from "workspace-platform-starter/shapes/favorite-shapes";
+} from "here-workspace-starter/shapes/favorite-shapes";
 import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition
-} from "workspace-platform-starter/shapes/integrations-shapes";
-import type { FavoriteChangedLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty, isObject, isStringValue, randomUUID } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/integrations-shapes";
+import type { FavoriteChangedLifecyclePayload } from "here-workspace-starter/shapes/lifecycle-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty, isObject, isStringValue, randomUUID } from "here-workspace-starter/utils";
 import type { AppManifestTypeMapping, AppSettings } from "./shapes";
 
 /**

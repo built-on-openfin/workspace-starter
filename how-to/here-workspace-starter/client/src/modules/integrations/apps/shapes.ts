@@ -1,4 +1,4 @@
-import type { ManifestTypeId } from "workspace-platform-starter/shapes/app-shapes";
+import type { ManifestTypeId } from "here-workspace-starter/shapes/app-shapes";
 
 /**
  * Settings for apps integration.

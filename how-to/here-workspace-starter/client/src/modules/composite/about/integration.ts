@@ -12,11 +12,11 @@ import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition
-} from "workspace-platform-starter/shapes/integrations-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
-import type { VersionInfo } from "workspace-platform-starter/shapes/version-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/integrations-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition } from "here-workspace-starter/shapes/module-shapes";
+import type { VersionInfo } from "here-workspace-starter/shapes/version-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 import type { AboutProviderSettings } from "./shapes";
 
 /**

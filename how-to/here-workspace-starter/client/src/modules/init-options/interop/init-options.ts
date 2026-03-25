@@ -2,10 +2,10 @@ import type {
 	ActionHandlerContext,
 	InitOptionsHandler,
 	InitOptionsHandlerOptions
-} from "workspace-platform-starter/shapes/init-options-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/init-options-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 import type { RaiseIntentPayload, ShareContextPayload } from "./shapes";
 
 /**

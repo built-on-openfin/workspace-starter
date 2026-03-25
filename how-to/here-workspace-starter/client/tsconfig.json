@@ -12,8 +12,8 @@
 		"moduleResolution": "node",
 		"types": ["./types/fin"],
 		"paths": {
-			"workspace-platform-starter/*": ["./src/framework/*"],
-			"workspace-platform-starter/utils": ["./src/framework/utils"]
+			"here-workspace-starter/*": ["./src/framework/*"],
+			"here-workspace-starter/utils": ["./src/framework/utils"]
 		}
 	},
 	"include": ["./src/**/*.ts"]

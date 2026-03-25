@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type { WorkspacePlatformProvider } from "@openfin/workspace-platform";
-import type { BrowserProviderOptions } from "workspace-platform-starter/shapes/browser-shapes";
+import type { BrowserProviderOptions } from "here-workspace-starter/shapes/browser-shapes";
 import { getApps } from "../apps";
 import { createLogger } from "../logger-provider";
 import { initializeModules, loadModules } from "../modules";

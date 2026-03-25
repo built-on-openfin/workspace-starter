@@ -8,11 +8,11 @@ import type {
 	NotificationOptions,
 	UpdatableNotificationOptions
 } from "@openfin/workspace/notifications";
-import { OPEN_ERROR } from "workspace-platform-starter/fdc3/errors";
-import type { EndpointClient } from "workspace-platform-starter/shapes/endpoint-shapes";
-import type { Lifecycle, LifecycleEventMap } from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
+import { OPEN_ERROR } from "here-workspace-starter/fdc3/errors";
+import type { EndpointClient } from "here-workspace-starter/shapes/endpoint-shapes";
+import type { Lifecycle, LifecycleEventMap } from "here-workspace-starter/shapes/lifecycle-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
 import type {
 	NotificationClient,
 	NotificationsEventMap,
@@ -20,8 +20,8 @@ import type {
 	NotificationSourceCloseEvent,
 	NotificationSourceCreateEvent,
 	NotificationSourceUpdateEvent
-} from "workspace-platform-starter/shapes/notification-shapes";
-import { isEmpty } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/notification-shapes";
+import { isEmpty } from "here-workspace-starter/utils";
 import type { ExampleNotificationServiceProviderOptions, NotificationCustomData } from "./shapes";
 
 /**

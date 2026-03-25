@@ -1,4 +1,4 @@
-import type { ModuleImplementation, ModuleTypes } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleImplementation, ModuleTypes } from "here-workspace-starter/shapes/module-shapes";
 import { ExampleLogProvider } from "./log";
 
 /**

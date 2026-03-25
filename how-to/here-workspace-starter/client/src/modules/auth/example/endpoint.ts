@@ -2,11 +2,11 @@ import type {
 	Endpoint,
 	EndpointDefinition,
 	FetchOptions
-} from "workspace-platform-starter/shapes/endpoint-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import type { CustomSettings } from "workspace-platform-starter/shapes/setting-shapes";
-import { isEmpty, isStringValue } from "workspace-platform-starter/utils";
+} from "here-workspace-starter/shapes/endpoint-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import type { CustomSettings } from "here-workspace-starter/shapes/setting-shapes";
+import { isEmpty, isStringValue } from "here-workspace-starter/utils";
 import type { AppWithTagsOrCategories, ExampleEndpointOptions, ExampleUserRoleMapping } from "./shapes";
 import { getCurrentUser } from "./util";
 

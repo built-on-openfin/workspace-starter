@@ -13,8 +13,8 @@ import {
 	addEventListener as notificationAddEventListener,
 	removeEventListener as notificationRemoveEventListener
 } from "@openfin/workspace/notifications";
-import { createLogger } from "workspace-platform-starter/logger-provider";
-import { isEmpty, randomUUID } from "workspace-platform-starter/utils";
+import { createLogger } from "here-workspace-starter/logger-provider";
+import { isEmpty, randomUUID } from "here-workspace-starter/utils";
 import type {
 	NotificationClient,
 	NotificationClientOptions,

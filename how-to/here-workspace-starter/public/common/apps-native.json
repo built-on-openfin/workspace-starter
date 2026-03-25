@@ -176,7 +176,7 @@
 		"description": "Launch Native using snap",
 		"manifest": {
 			"path": "msedge",
-			"arguments": "https://built-on-openfin.github.io/starter-assets/assets/workspace-platform-starter/clickonce/interop-intents-v1.application"
+			"arguments": "https://built-on-openfin.github.io/starter-assets/assets/here-workspace-starter/clickonce/interop-intents-v1.application"
 		},
 		"manifestType": "inline-external",
 		"icons": [],

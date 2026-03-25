@@ -12,8 +12,8 @@ import type {
 	IntegrationHelpers,
 	IntegrationModule,
 	IntegrationModuleDefinition
-} from "workspace-platform-starter/shapes/integrations-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
+} from "here-workspace-starter/shapes/integrations-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
 import type { ExampleIntegrationsProviderOptions } from "./shapes";
 
 /**
@@ -350,7 +350,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 				data: {
 					imageButtonTextId: "Image Based Button",
 					imageSrcId:
-						"https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/workspace-platform-starter/common/images/ms/apps/outlook-calendar.svg",
+						"https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/here-workspace-starter/common/images/ms/apps/outlook-calendar.svg",
 					textContent: "This is text content",
 					imageContent: "https://cdn.openfin.co/workspace/23.0.20/icons/defaultFavicon.svg",
 					listContent: [

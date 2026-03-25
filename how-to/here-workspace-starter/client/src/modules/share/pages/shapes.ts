@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import type { Page } from "@openfin/workspace-platform";
-import type { ShareConfirmationType } from "workspace-platform-starter/shapes/share-shapes";
+import type { ShareConfirmationType } from "here-workspace-starter/shapes/share-shapes";
 
 /**
  * Options for the pages share provider.

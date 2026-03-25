@@ -1,5 +1,5 @@
-import type { MenuPosition } from "workspace-platform-starter/shapes/menu-shapes";
-import type { PlatformStorageMetadata } from "workspace-platform-starter/shapes/platform-shapes";
+import type { MenuPosition } from "here-workspace-starter/shapes/menu-shapes";
+import type { PlatformStorageMetadata } from "here-workspace-starter/shapes/platform-shapes";
 /**
  * Options for the set default workspace menus provider.
  */

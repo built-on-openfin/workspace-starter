@@ -1,8 +1,8 @@
 import type { NotificationOptions } from "@openfin/workspace/notifications";
-import type { LifecycleEvents } from "workspace-platform-starter/shapes/lifecycle-shapes";
-import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
-import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
-import { randomUUID } from "workspace-platform-starter/utils";
+import type { LifecycleEvents } from "here-workspace-starter/shapes/lifecycle-shapes";
+import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
+import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
+import { randomUUID } from "here-workspace-starter/utils";
 import type { ExampleNotificationSourceProviderOptions } from "./shapes";
 
 /**

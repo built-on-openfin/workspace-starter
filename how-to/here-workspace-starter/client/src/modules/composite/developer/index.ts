@@ -1,4 +1,4 @@
-import type { ModuleImplementation, ModuleTypes } from "workspace-platform-starter/shapes/module-shapes";
+import type { ModuleImplementation, ModuleTypes } from "here-workspace-starter/shapes/module-shapes";
 import { DeveloperActions } from "./actions";
 import { DevAnalyticsModule } from "./analytics";
 import { DeveloperMenus } from "./menus";
