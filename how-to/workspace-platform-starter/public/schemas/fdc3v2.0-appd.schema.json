@@ -454,6 +454,37 @@
 			"required": ["OpenFin"],
 			"type": "object"
 		},
+		"IndependentStrategy": {
+			"additionalProperties": false,
+			"description": "An independent application launch and window discovery strategy for capturing top-level windows\nbelonging to external applications that are launched independently of Snap, or optionally launching\nsuch applications if needed.\n\nThis strategy supports integration with applications outside the OpenFin ecosystem,\nincluding those launched via methods such as click-once or shell execution.",
+			"properties": {
+				"alwaysLaunchNewInstance": {
+					"description": "If true, always launch a new application instance even if one or more instances exist.\nIf false, only hook existing instances. Defaults to false.",
+					"type": "boolean"
+				},
+				"matchClassRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window class against. If not provided, any window class will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"matchNameRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window caption against. If not provided, any window caption will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
+				"timeoutMs": {
+					"description": "The timeout period milliseconds after which the window search will be abandoned",
+					"type": "number"
+				},
+				"type": {
+					"const": "independent",
+					"type": "string"
+				}
+			},
+			"required": ["timeoutMs", "type"],
+			"type": "object"
+		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_2"
 		},
@@ -499,6 +530,9 @@
 				},
 				{
 					"$ref": "#/definitions/CombinedStrategy"
+				},
+				{
+					"$ref": "#/definitions/IndependentStrategy"
 				}
 			]
 		},
@@ -548,7 +582,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference%3Cnever%3E"
+						"$ref": "#/definitions/NativePreference<never>"
 					},
 					"type": "array"
 				}
@@ -664,7 +698,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference%3Cnever%3E"
+								"$ref": "#/definitions/ViewPreference<never>"
 							}
 						]
 					},
@@ -792,7 +826,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference%3Cnever%3E"
+								"$ref": "#/definitions/WindowPreference<never>"
 							}
 						]
 					},
