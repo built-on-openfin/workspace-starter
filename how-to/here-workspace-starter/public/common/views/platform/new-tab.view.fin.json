@@ -1,0 +1,8 @@
+{
+	"url": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+	"preloadScripts": [
+		{
+			"url": "http://localhost:8080/common/style/style-changed-preload.js"
+		}
+	]
+}

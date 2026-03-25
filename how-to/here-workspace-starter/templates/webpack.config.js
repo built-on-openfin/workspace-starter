@@ -1,0 +1,402 @@
+const path = require('path');
+
+const alias = {
+	'workspace-platform-starter/utils': path.resolve(__dirname, '../client/src/framework/utils')
+};
+
+const configs = [
+	{
+		entry: './templates/src/actions/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'actions.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/analytics/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'analytics.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/auth/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'auth.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/conditions/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'conditions.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/endpoint/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'endpoint.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/init-options/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'init-options.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/integrations/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'integrations.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/lifecycle/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'lifecycle.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/log/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'log.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/menus/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'menus.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/content-creation/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'content-creation.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/share/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'share.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/interop-override/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'interop-override.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	},
+	{
+		entry: './templates/src/platform-override/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
+			]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'platform-override.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve('templates', 'build')
+		},
+		experiments: {
+			outputModule: true
+		}
+	}
+];
+
+module.exports = configs;
