@@ -2,13 +2,14 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "",
-		"version": "43.142.102.2"
+		"arguments": "--security-realm=use-theming-basic --enable-mesh --v=1",
+		"version": "43.142.101.4"
 	},
 	"platform": {
+		"name": "Use Theming Basic",
 		"uuid": "use-theming-basic",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming-basic/favicon.ico",
-		"autoShow": false,
+		"autoShow": true,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
