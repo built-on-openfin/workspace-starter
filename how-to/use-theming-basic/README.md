@@ -46,9 +46,10 @@ npm run build
 ```
 
 ---
+
 ## Additions to Theming in version 23.2.0
 
-When using "@openfin/workspace": "23.2.6" or later, HERE has added a new option to take control of the way that you theme your Platform with an extended tokenized theming engine.  This introduces a new object body to the theming object that you would commonly use as part of your Platform initialization.
+When using "@openfin/workspace": "23.2.6" or later, HERE has added a new option to take control of the way that you theme your Platform with an extended tokenized theming engine. This introduces a new object body to the theming object that you would commonly use as part of your Platform initialization.
 
 ```json
 WorkspacePlatform.init({
@@ -95,12 +96,12 @@ WorkspacePlatform.init({
 })
 ```
 
-For this basic example, we will keep it simple, and talk about the "seed" object.  You'll notice that these are the most basic colors you can skin your platform in. We give you the option to give both a light and dark mode color option for the base and the accent colors. Once entered, when the Platform is created, the theming engine uses these colors to fill out any stylized elements in the Platform with your colors as a guide.
+For this basic example, we will keep it simple, and talk about the "seed" object. You'll notice that these are the most basic colors you can skin your platform in. We give you the option to give both a light and dark mode color option for the base and the accent colors. Once entered, when the Platform is created, the theming engine uses these colors to fill out any stylized elements in the Platform with your colors as a guide.
 
-You'll also notice an "overrides" key in the new theme object.  This is for more granular control for coloring of any platform styled elements.  We will do deeper into these options in the [how-to/use-theming](../use-theming/README.md) example in this repository, but there is a much larger set of tokens that can be applied for getting the exact look that you're trying to achieve.
+You'll also notice an "overrides" key in the new theme object. This is for more granular control for coloring of any platform styled elements. We will do deeper into these options in the [how-to/use-theming](../use-theming/README.md) example in this repository, but there is a much larger set of tokens that can be applied for getting the exact look that you're trying to achieve.
 
 **You have a couple of options on where to keep your theme as well:**
 
 1. Type it in-line into the theme object in your platform init() method, like we have [here](./client/src/provider.ts). This keeps it super-simple, but once you get more complex, you'll need to keep it some where more configurable.
 
-2. Keep your theming in your manifest.fin.json file, as a **customSetting** object that can be called at runtime. There is an example of doing that in our [how-to/workspace-platform-starter-basic](../workspace-platform-starter-basic/public/third.manifest.fin.json) repository.  Keeping your theme in your manifest gives you the ability to only need one place to configure it, without having to rebuild and re-host your platform files.
+2. Keep your theming in your manifest.fin.json file, as a **customSetting** object that can be called at runtime. There is an example of doing that in our [how-to/workspace-platform-starter-basic](../workspace-platform-starter-basic/public/third.manifest.fin.json) repository. Keeping your theme in your manifest gives you the ability to only need one place to configure it, without having to rebuild and re-host your platform files.

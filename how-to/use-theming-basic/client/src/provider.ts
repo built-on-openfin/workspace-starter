@@ -130,7 +130,6 @@ async function addListeners(): Promise<void> {
 	}
 }
 
-
 /**
  * Sends a channel message to all the views which have the theming
  * preload script included, so that they can also update their colors.
