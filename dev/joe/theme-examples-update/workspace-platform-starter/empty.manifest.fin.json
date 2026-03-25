@@ -1,0 +1,37 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "43.142.102.2"
+	},
+	"platform": {
+		"name": "Empty Workspace Starter",
+		"uuid": "empty-workspace-platform-starter",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/theme-examples-update/workspace-platform-starter/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/joe/theme-examples-update/workspace-platform-starter/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"appLogsTimezone": "utc",
+		"enableAppLogging": false,
+		"logManagement": {
+			"enabled": false
+		}
+	},
+	"shortcut": {
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/theme-examples-update/workspace-platform-starter/favicon.ico",
+		"name": "HERE Core UI Platform Starter - v23.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter - Client",
+		"email": "support@here.io",
+		"forwardErrorReports": true
+	},
+	"snapshot": {
+		"windows": []
+	}
+}
