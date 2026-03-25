@@ -2,7 +2,7 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": " --security-realm=use-theming-basic --enable-mesh --v=1",
+		"arguments": "--security-realm=use-theming-basic --enable-mesh --v=1",
 		"version": "43.142.101.4"
 	},
 	"platform": {
