@@ -18,13 +18,13 @@ let isInitialized = false;
 /**
  * Initialize the platform provider.
  * @param options Options for the platform provider.
- * @param browserOptions Options for the browser that the platform should consider
  * @param helpers Module helpers to pass to any loaded modules.
+ * @param browserOptions Options for the browser that the platform should consider
  */
 export async function init(
 	options: PlatformProviderOptions | undefined,
-	browserOptions: BrowserProviderOptions,
-	helpers: PlatformOverrideHelpers
+	helpers: PlatformOverrideHelpers,
+	browserProviderOptions?: BrowserProviderOptions
 ): Promise<void> {
 	if (options && !isInitialized) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,7 +48,7 @@ export async function init(
 		for (const platformModule of modules) {
 			const platformConstructor = await platformModule.implementation.getConstructorOverride({
 				platformProviderOptions: options,
-				browserProviderOptions: browserOptions
+				browserProviderOptions: browserProviderOptions ?? {}
 			});
 			allOverrides.push(platformConstructor);
 			logger.info(`Added platformOverride module: ${platformModule.definition.id}`);

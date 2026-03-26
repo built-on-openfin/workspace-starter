@@ -1,107 +1,11 @@
-import type {
-	BrowserInitConfig,
-	GlobalContextMenuOptionType,
-	PageTabContextMenuOptionType,
-	ToolbarButton,
-	ViewTabMenuOptionType
-} from "@openfin/workspace-platform";
-import type { MenuEntry, PopupMenuStyles } from "./menu-shapes";
+import type { ToolbarButton } from "@openfin/workspace-platform";
 
 /**
+ * ENTERPRISE OVERRIDES IGNORE MOST OF THESE
  * Browser Provider Options includes the default window/page and view options.
  */
-export type BrowserProviderOptions = Pick<
-	BrowserInitConfig,
-	"defaultWindowOptions" | "defaultPageOptions" | "defaultViewOptions" | "title"
-> & {
-	/**
-	 * This setting lets you override the default workspace browser buttons and specify your own.
-	 */
-	toolbarButtons?: WorkspacePlatformToolbarButton[];
-
-	/**
-	 * This setting lets you customize the default workspace browser main menu and specify your own.
-	 */
-	globalMenu?: MenuEntry<GlobalContextMenuOptionType>[];
-
-	/**
-	 * This setting lets you customize the page right click context menu and add your own entries.
-	 */
-	pageMenu?: MenuEntry<PageTabContextMenuOptionType>[];
-
-	/**
-	 * This setting lets you customize the view right click context menu and add your own entries.
-	 */
-	viewMenu?: MenuEntry<ViewTabMenuOptionType>[];
-
-	/**
-	 * This setting lets you configure options related to the menus shown in the browser.
-	 */
-	menuOptions?: {
-		/**
-		 * Should the workspace default options be included or do you want to be specific about what should show in the
-		 * menu.
-		 */
-		includeDefaults?: {
-			/**
-			 * Should we include all the default options for the global menu? Default is true.
-			 */
-			globalMenu?: boolean;
-
-			/**
-			 * Should we include all the default options for the page menu? Default is true.
-			 */
-			pageMenu?: boolean;
-
-			/**
-			 * Should we include all the default options for the view menu? Default is true.
-			 */
-			viewMenu?: boolean;
-		};
-
-		/**
-		 * Style the menus, if no options are provided it will use the build in version.
-		 */
-		styles?: {
-			/**
-			 * Override the style for the global menu (top left icon)
-			 */
-			globalMenu?: PopupMenuStyles;
-			/**
-			 * Override the style for the page menu (right click on page tab)
-			 */
-			pageMenu?: PopupMenuStyles;
-			/**
-			 * Override the style for the view menu (right click on view tab)
-			 */
-			viewMenu?: PopupMenuStyles;
-		};
-	};
-
-	/**
-	 * The strategy for window positioning.
-	 */
-	windowPositioningStrategy?: CascadingWindowOffsetStrategy;
-
-	/**
-	 * By default we implement a Window Positioning Strategy that will try and position launched windows with an
-	 * offset. The way the windows are offset can be configured by specifying windowPositioningStrategy.
-	 * If you want to turn this off (e.g. automation tests that do not care about the layout of windows) then you
-	 * can set this value to true.
-	 */
-	disableWindowPositioningStrategy?: boolean;
-
-	/**
-	 * Some options for whether or not a closing page will prompt the user to save unsaved changes.
-	 */
-	unsavedPagePromptStrategy?: UnsavedPagePromptStrategy;
-
-	/**
-	 * The strategy for bringing a window to the front.
-	 */
-	bringToFrontStrategy?: BringToFrontStrategy;
-};
-
+// TODO:/ ANY FOR NOW, need to rework the browser window creation stuff ENTIRELY
+export type BrowserProviderOptions = any;
 /**
  * Options for window positioning.
  */

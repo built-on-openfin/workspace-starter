@@ -1,11 +1,4 @@
-import type OpenFin from "@openfin/core";
-import {
-	getCurrentSync,
-	init as workspacePlatformInit,
-	type BrowserInitConfig
-} from "@openfin/workspace-platform";
 import type { PlatformApp } from "here-workspace-starter/shapes/app-shapes";
-import { getCanDownloadAppAssets } from "here-workspace-starter/utils-capability";
 import { getWindowPositionOptions } from "here-workspace-starter/utils-position";
 import { saveConfig, loadConfig } from "here-workspace-starter/workspace/dock";
 import * as actionsProvider from "../actions";
@@ -34,6 +27,7 @@ import { getPlatformThemeClient, getThemes, notifyColorScheme, supportsColorSche
 import { isEmpty, isStringValue, randomUUID } from "../utils";
 import * as versionProvider from "../version";
 import * as lowCodeIntegrationProvider from "../workspace/low-code-integrations";
+import hereConfig from "../../../here.config";
 import { getDefaultWindowOptions, setDefaultBringToFrontStrategy } from "./browser";
 import * as interopProvider from "./interop";
 import * as platformOverride from "./platform-override";
@@ -47,6 +41,7 @@ const logger = loggerProvider.createLogger("Platform");
  * @returns True if the platform was initialized.
  */
 export async function init(): Promise<boolean> {
+	fin.me.showDeveloperTools().catch(() => {});
 	await platformSplashProvider.updateProgress("Platform");
 
 	const customSettings = await getManifestCustomSettings();
@@ -155,23 +150,6 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	}
 
 	logger.info("Initializing platform");
-	const browser: BrowserInitConfig = {};
-
-	if (!isEmpty(customSettings?.browserProvider?.title)) {
-		browser.title = customSettings?.browserProvider?.title;
-	}
-	if (!isEmpty(customSettings?.browserProvider)) {
-		browser.defaultWindowOptions = await getDefaultWindowOptions(customSettings?.browserProvider);
-	}
-	if (!isEmpty(customSettings?.browserProvider?.defaultPageOptions)) {
-		browser.defaultPageOptions = customSettings?.browserProvider?.defaultPageOptions;
-	}
-	if (!isEmpty(customSettings?.browserProvider?.defaultViewOptions)) {
-		browser.defaultViewOptions = customSettings?.browserProvider?.defaultViewOptions;
-	}
-	if (!isEmpty(customSettings?.browserProvider?.bringToFrontStrategy)) {
-		setDefaultBringToFrontStrategy(customSettings.browserProvider.bringToFrontStrategy);
-	}
 
 	const customActions = await actionsProvider.init(customSettings?.actionsProvider, helpers);
 	const theme = await getThemes();
@@ -184,17 +162,12 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 
 	await contentCreationProvider.init(customSettings?.contentCreationProvider, helpers);
 
-	if (contentCreationProvider.isEnabled()) {
-		browser.defaultViewOptions = browser.defaultViewOptions ?? ({} as OpenFin.ViewOptions);
-		await contentCreationProvider.populateRules(browser.defaultViewOptions);
-
-		browser.defaultWindowOptions = browser.defaultWindowOptions ?? {};
-		await contentCreationProvider.populateRules(browser.defaultWindowOptions);
-	}
 	const windowPositioningOptions = await getWindowPositionOptions(customSettings?.browserProvider);
 	await interopProvider.init(customSettings?.platformProvider, windowPositioningOptions, helpers);
 
-	const platform = getCurrentSync();
+	const workspace = hereConfig.experimental.toWorkspace();
+	const platform = workspace.getCurrentSync();
+	
 	await platform.once("platform-api-ready", async () => {
 		logger.info("Platform API Ready");
 		fin.me.interop = fin.Interop.connectSync(fin.me.uuid, {});
@@ -204,53 +177,52 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 		});
 	});
 
-	await platformOverride.init(customSettings?.platformProvider, customSettings?.browserProvider ?? {}, {
-		...helpers,
-		getApps: async (): Promise<PlatformApp[]> => {
-			logger.info("getApps: getting public apps for module.");
-			return appProvider.getApps();
+	await platformOverride.init(
+		customSettings?.platformProvider,
+		{
+			...helpers,
+			getApps: async (): Promise<PlatformApp[]> => {
+				logger.info("getApps: getting public apps for module.");
+				return appProvider.getApps();
+			},
+			getAnalyticsClient: async () => analyticsProvider.getAnalyticsPlatformClient(),
+			getSnapClient: async () => snapProvider,
+			fireLifecycleEvent: lifecycleProvider.fireLifecycleEvent,
+			getMenuClient: async () => ({
+				getPopupMenuStyle: menusProvider.getPopupMenuStyle,
+				showPopupMenu: menusProvider.showPopupMenu,
+				getGlobalMenu: menusProvider.getGlobalMenu,
+				getPageMenu: menusProvider.getPageMenu,
+				getViewMenu: menusProvider.getViewMenu
+			}),
+			getButtonClient: async () => buttons,
+			getDockClient: async () => ({ loadConfig, saveConfig }),
+			getThemeClient: getPlatformThemeClient,
+			getConnectionClient: async () => connectionProvider.getPlatformConnectionClient()
 		},
-		getAnalyticsClient: async () => analyticsProvider.getAnalyticsPlatformClient(),
-		getSnapClient: async () => snapProvider,
-		fireLifecycleEvent: lifecycleProvider.fireLifecycleEvent,
-		getMenuClient: async () => ({
-			getPopupMenuStyle: menusProvider.getPopupMenuStyle,
-			showPopupMenu: menusProvider.showPopupMenu,
-			getGlobalMenu: menusProvider.getGlobalMenu,
-			getPageMenu: menusProvider.getPageMenu,
-			getViewMenu: menusProvider.getViewMenu
-		}),
-		getButtonClient: async () => buttons,
-		getDockClient: async () => ({ loadConfig, saveConfig }),
-		getThemeClient: getPlatformThemeClient,
-		getConnectionClient: async () => connectionProvider.getPlatformConnectionClient()
-	});
+		customSettings?.browserProvider
+	);
 
 	const interopOverride = interopProvider.getInteropConstructorOverrides();
 	const overrideCallback = platformOverride.getPlatformConstructorOverrides();
 
-	// If the workspaceAsar is enabled, we need to pass the workspaceAsar settings to the platform
-	// you need to ensure you have an app asset in the manifest with a matching alias.
-	const workspaceAsar =
-		isStringValue(customSettings?.platformProvider?.workspaceAsar?.alias) &&
-		customSettings?.platformProvider?.workspaceAsar?.enabled !== false &&
-		(await getCanDownloadAppAssets())
-			? customSettings?.platformProvider?.workspaceAsar
-			: undefined;
-
-	await workspacePlatformInit({
-		browser,
+	await workspace.init({
+		// @ts-expect-error Starter manifest language type is wider than workspace init options.
 		language: isStringValue(customSettings?.platformProvider?.language?.initialLanguage)
 			? { initialLanguage: customSettings?.platformProvider?.language?.initialLanguage }
 			: undefined,
+		// @ts-expect-error Platform theme shape differs from enterprise workspace CustomTheme[].
 		theme,
 		notifications: customSettings?.notificationProvider?.notificationsCustomManifest,
 		customActions,
+		// @ts-expect-error Interop override types come from @openfin/workspace-platform; workspace.init expects enterprise-api variants.
 		interopOverride,
+		// @ts-expect-error Platform override types come from @openfin/workspace-platform; workspace.init expects enterprise-api variants.
 		overrideCallback,
 		integrations,
-		workspaceAsar,
+
 		analytics: customSettings?.analyticsProvider?.sendToOpenFin ? { sendToOpenFin: true } : undefined
 	});
+
 	return true;
 }
