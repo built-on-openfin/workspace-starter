@@ -70,7 +70,13 @@
 						]
 					}
 				}
-			}
+			},
+			"preloadScripts": [
+				{
+					"url": "http://localhost:8080/common/ai-context/dom-sender.cjs",
+					"mandatory": false
+				}
+			]
 		},
 		"interopBrokerConfiguration": {
 			"logging": {
@@ -87,7 +93,54 @@
 				"command": "findInPage.show",
 				"keys": "CommandOrControl+f"
 			}
-		]
+		],
+		"domainSettings": {
+			"default": {
+				"preloadScripts": {
+					"http://localhost:8080/common/ai-context/dom-sender.cjs": {
+						"enabled": false
+					}
+				}
+			},
+			"rules": [
+				{
+					"match": [
+						"https://llm-test.is.here.io/*"
+					],
+					"options": {
+						"preloadScripts": {
+							"http://localhost:8080/common/ai-context/ai-context.cjs": {
+								"enabled": true
+							}
+						}
+					}
+				},
+				{
+					"match": [
+						"http://localhost:8080/common/views/contact/*"
+					],
+					"options": {
+						"preloadScripts": {
+							"http://localhost:8080/common/ai-context/dom-sender.cjs": {
+								"enabled": true
+							}
+						}
+					}
+				},
+				{
+					"match": [
+						"http://localhost:8080/common/views/manager-portal/*"
+					],
+					"options": {
+						"preloadScripts": {
+							"http://localhost:8080/common/ai-context/dom-sender.cjs": {
+								"enabled": true
+							}
+						}
+					}
+				}
+			]
+		}
 	},
 	"shortcut": {
 		"company": "HERE",
@@ -544,6 +597,10 @@
 			}
 		},
 		"browserProvider": {
+			"aiPanelOptions": {
+				"enabled": true,
+				"url": "https://llm-test.is.here.io/"
+			},
 			"defaultWindowOptions": {
 				"viewVisibility": {
 					"showViewsOnTabDrag": {

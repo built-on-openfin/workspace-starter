@@ -26,6 +26,7 @@ import type {
 	Locale
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import { AIContextProvider } from "here-workspace-starter/ai-context";
 import type {
 	AnalyticsClient,
 	PlatformAnalyticsEvent
@@ -65,7 +66,7 @@ import {
 	mapPlatformWorkspaceToStorage,
 	mapStorageToPlatformWorkspace
 } from "./platform-mapper";
-import { buildDefaultOptions, duplicateLayout, getPageBoundsAndState } from "./util";
+import { buildDefaultOptions, duplicateLayout, getPageBoundsAndState, setDefaultOptions } from "./util";
 
 const WORKSPACE_ENDPOINT_ID_LIST = "workspace-list";
 const WORKSPACE_ENDPOINT_ID_GET = "workspace-get";
@@ -129,6 +130,8 @@ export async function getConstructorOverride(
 	}
 	const versionInfo = await helpers.getVersionInfo();
 	const getCurrentSync = helpers.getPlatform;
+	// Use the provider injected by the platform so we use the same initialized instance (avoids separate-bundle singleton).
+	const aiContextProvider = helpers.getAIContextProvider?.() ?? AIContextProvider.get();
 	const menuClient = (await helpers.getMenuClient()) as PlatformMenuClient;
 	const fireLifecycleEvent = helpers.fireLifecycleEvent;
 	const utilClient = helpers.getUtilClient();
@@ -140,6 +143,11 @@ export async function getConstructorOverride(
 	const connectionClient: PlatformConnectionClient = await helpers.getConnectionClient();
 	const buttonClient = await helpers.getButtonClient();
 	const dockClient = await helpers.getDockClient();
+	// Seed default options (window/page/view) with browserProvider so defaultViewOptions.preloadScripts
+	// (e.g. dom-sender.cjs) are used when mapping storage and when the platform applies view defaults.
+	const browserProviderOptions = overrideOptions?.browserProviderOptions;
+	const seededDefaults = await buildDefaultOptions(browserProviderOptions);
+	setDefaultOptions(seededDefaults);
 	// eslint-disable-next-line func-style, @typescript-eslint/explicit-function-return-type
 	const notifyLanguageChange = async (locale: Locale) => {
 		const platform = getCurrentSync();
@@ -157,6 +165,14 @@ export async function getConstructorOverride(
 		 * Create a class which overrides the platform provider.
 		 */
 		class Override extends Base {
+			/**
+			 * AI context for the window (aligned with cloud-platform). Used when a view calls platform.getClient().dispatch('getAIContext', identity).
+			 * @param winIdentity Window identity.
+			 * @returns Context payload for the AI panel.
+			 */
+			public getAIContext = async (winIdentity: OpenFin.Identity) =>
+				aiContextProvider.getAIContext(winIdentity);
+
 			/**
 			 * Supports launching a manifest into a platform.
 			 * @param payload The manifest to load into the platform
@@ -881,6 +897,14 @@ export async function getConstructorOverride(
 					// the window may have closed straight after opening (e.g. automation testing)
 				}
 
+				if (aiContextProvider.isEnabled()) {
+					setTimeout(async () => {
+						await aiContextProvider.setupWinListeners(window.identity);
+						// Push initial context so the AI panel receives context even if no view event has fired yet
+						aiContextProvider.fireContextChanged(window.identity);
+					}, 1_000);
+				}
+
 				// If the default buttons were overwritten then hopefully the creator
 				// used correctly themed versions, but in case they didn't we send
 				// an update for the colors.
@@ -1048,6 +1072,9 @@ export async function getConstructorOverride(
 						id: payload.pageId
 					})
 				]);
+				if (aiContextProvider.isEnabled()) {
+					aiContextProvider.fireContextChanged(payload.identity, payload.pageId);
+				}
 			}
 		};
 }

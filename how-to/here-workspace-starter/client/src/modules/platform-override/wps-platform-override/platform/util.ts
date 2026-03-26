@@ -11,6 +11,20 @@ let defaultOptions:
 	  }
 	| undefined;
 
+export type DefaultOptions = {
+	window: Partial<BrowserCreateWindowRequest> | undefined;
+	page: Partial<Page> | undefined;
+	view: Partial<OpenFin.ViewOptions> | undefined;
+};
+
+/**
+ * Set cached default options (e.g. from platform override init with browserProvider).
+ * When set, buildDefaultOptions() returns this instead of reading manifest only.
+ */
+export function setDefaultOptions(opts: DefaultOptions | undefined): void {
+	defaultOptions = opts;
+}
+
 /**
  * Takes a layout and walks through all the nodes and applies logic to nodes that have
  * a url and a name that matches a pattern. Updates the name to make it unique (if applicable)

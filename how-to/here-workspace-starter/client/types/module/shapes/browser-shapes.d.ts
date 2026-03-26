@@ -88,6 +88,13 @@ export type BrowserProviderOptions = Pick<
 	 * The strategy for bringing a window to the front.
 	 */
 	bringToFrontStrategy?: BringToFrontStrategy;
+	/**
+	 * AI panel options (aligned with cloud-platform). When enabled, the platform can open an AI panel view and use getAIContext.
+	 */
+	aiPanelOptions?: {
+		enabled?: boolean;
+		url?: string;
+	};
 };
 /**
  * Options for window positioning.

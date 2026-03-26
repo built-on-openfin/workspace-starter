@@ -8,6 +8,7 @@ import type {
 	WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
+import type { AIContextResponse } from "@openfin/ai-context";
 import type { BrowserProviderOptions } from "./browser-shapes";
 import type { ButtonClient } from "./button-shapes";
 import type { PlatformConnectionClient } from "./connection-shapes";
@@ -294,6 +295,15 @@ export type PlatformOverrideHelpers = ModuleHelpers & {
 	 * @returns The platform connection client.
 	 */
 	getConnectionClient(): Promise<PlatformConnectionClient>;
+	/**
+	 * Returns the AI context provider instance (initialized by the platform).
+	 * When the override is loaded in a separate bundle, the singleton may be uninitialized; this supplies the same instance.
+	 */
+	getAIContextProvider?: () => {
+		getAIContext(winIdentity: OpenFin.Identity): Promise<AIContextResponse>;
+		isEnabled(): boolean;
+		fireContextChanged(identity: OpenFin.Identity, pageId?: string): void;
+	};
 };
 /**
  * Options to pass when initializing the platform override.
