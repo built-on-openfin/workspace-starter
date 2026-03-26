@@ -100,22 +100,22 @@ export class DeveloperMenus implements Menus {
 						type: "Close"
 					},
 					separator: "after"
-				},
-				{
-					include: true,
-					label: "Copy Page Snapshot",
-					data: {
-						type: "Custom",
-						action: {
-							id: "developer-get-snapshot"
-						}
-					},
-					position: {
-						operation: "before",
-						type: "Close"
-					},
-					separator: "after"
 				}
+				// {
+				// 	include: true,
+				// 	label: "Copy Page Snapshot",
+				// 	data: {
+				// 		type: "Custom",
+				// 		action: {
+				// 			id: "developer-get-snapshot"
+				// 		}
+				// 	},
+				// 	position: {
+				// 		operation: "before",
+				// 		type: "Close"
+				// 	},
+				// 	separator: "after"
+				// }
 			];
 		} else if (menuType === "view") {
 			return [
@@ -131,40 +131,40 @@ export class DeveloperMenus implements Menus {
 					position: {
 						operation: "before",
 						type: "CloseTab"
-					},
-					separator: "before"
-				},
-				{
-					include: true,
-					label: "Create App Definition",
-					data: {
-						type: "Custom",
-						action: {
-							id: "raise-create-app-definition-intent"
-						}
-					},
-					position: {
-						operation: "after",
-						type: "Custom",
-						customId: "developer-inspect"
 					}
-				},
-				{
-					include: true,
-					label: "Copy Url",
-					data: {
-						type: "Custom",
-						action: {
-							id: "copy-url"
-						}
-					},
-					position: {
-						operation: "after",
-						type: "Custom",
-						customId: "raise-create-app-definition-intent"
-					},
-					separator: "after"
+					// separator: "before"
 				}
+				// {
+				// 	include: true,
+				// 	label: "Create App Definition",
+				// 	data: {
+				// 		type: "Custom",
+				// 		action: {
+				// 			id: "raise-create-app-definition-intent"
+				// 		}
+				// 	},
+				// 	position: {
+				// 		operation: "after",
+				// 		type: "Custom",
+				// 		customId: "developer-inspect"
+				// 	}
+				// },
+				// {
+				// 	include: true,
+				// 	label: "Copy Url",
+				// 	data: {
+				// 		type: "Custom",
+				// 		action: {
+				// 			id: "copy-url"
+				// 		}
+				// 	},
+				// 	position: {
+				// 		operation: "after",
+				// 		type: "Custom",
+				// 		customId: "raise-create-app-definition-intent"
+				// 	},
+				// 	separator: "after"
+				// }
 			];
 		}
 	}

@@ -628,9 +628,25 @@
 					"conditions": [
 						"authenticated"
 					]
+				},
+				{
+					"include": true,
+					"label": "Manage desktop signals",
+					"position": {
+						"type": "ManageDesktopSignals",
+						"operation": "delete"
+					}
 				}
 			],
 			"pageMenu": [
+				{
+					"include": true,
+					"label": "Manage desktop signals",
+					"position": {
+						"type": "ManageDesktopSignals",
+						"operation": "delete"
+					}
+				},
 				{
 					"include": true,
 					"label": "Move Page to new Window",
