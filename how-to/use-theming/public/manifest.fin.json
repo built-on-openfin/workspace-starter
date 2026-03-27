@@ -18,7 +18,12 @@
 					"enabled": true,
 					"protocols": ["mailto"]
 				}
-			}
+			},
+			"Clipboard": {
+				"write": true,
+				"setClipboard": true
+			},
+			"webAPIs": ["clipboard-sanitized-write"]
 		},
 		"defaultWindowOptions": {
 			"permissions": {
@@ -27,7 +32,21 @@
 						"enabled": true,
 						"protocols": ["mailto"]
 					}
-				}
+				},
+				"Clipboard": {
+					"write": true,
+					"setClipboard": true
+				},
+				"webAPIs": ["clipboard-sanitized-write"]
+			}
+		},
+		"defaultViewOptions": {
+			"permissions": {
+				"Clipboard": {
+					"write": true,
+					"setClipboard": true
+				},
+				"webAPIs": ["clipboard-sanitized-write"]
 			}
 		}
 	},

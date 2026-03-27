@@ -8,16 +8,14 @@ import {
 	type StorefrontFooter,
 	type StorefrontLandingPage
 } from "@openfin/workspace";
-import type { CustomThemeOptions } from "@openfin/workspace-platform";
 import {
 	init,
 	type ColorSchemeOptionType,
-	type CustomThemeOptionsWithScheme,
 	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 import { THEME_BUILDER_APP, getApps, launchApp } from "./apps";
-import { DEFAULT_PALETTES } from "./default-palettes";
+import { DEFAULT_THEME_OVERRIDES, DEFAULT_THEME_SEED } from "./default-palettes";
 import type { CustomUserAppArgs, InitParams, ThemeDisplayOptions, ThemingPayload } from "./shapes";
 import { getThemeActions, getThemeButton, initColorScheme, setColorScheme } from "./theming";
 
@@ -65,35 +63,26 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Promise<void> {
 	console.log("Initializing HERE Core UI Platform");
+	const normalizedPayload = normalizeThemingPayload(themingPayload);
 
-	// Build the custom palette based on anything in the theming payload.
-	let customTheme: CustomThemeOptions | CustomThemeOptionsWithScheme;
-	if (themingPayload && "palette" in themingPayload) {
-		// If there is a palette property in the themingPayload
-		// then this is an old style palette with a single color scheme
-		customTheme = {
-			label: "theme",
-			palette: {
-				...DEFAULT_PALETTES.dark,
-				...themingPayload?.palette
+	// Build a seed-first theme that keeps legacy payload fields working.
+	const customTheme = {
+		label: "theme",
+		seed: {
+			...DEFAULT_THEME_SEED,
+			...normalizedPayload?.seed
+		},
+		overrides: {
+			dark: {
+				...DEFAULT_THEME_OVERRIDES.dark,
+				...normalizedPayload?.overrides?.dark
+			},
+			light: {
+				...DEFAULT_THEME_OVERRIDES.light,
+				...normalizedPayload?.overrides?.light
 			}
-		};
-	} else {
-		// New style palette with dark and light
-		customTheme = {
-			label: "theme",
-			palettes: {
-				dark: {
-					...DEFAULT_PALETTES.dark,
-					...themingPayload?.palettes?.dark
-				},
-				light: {
-					...DEFAULT_PALETTES.light,
-					...themingPayload?.palettes?.light
-				}
-			}
-		};
-	}
+		}
+	};
 
 	await init({
 		browser: {
@@ -220,7 +209,7 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 	let themingPayload: ThemingPayload | undefined;
 
 	if (customInitOptions?.userAppConfigArgs?.action === APPLY_THEME_ACTION) {
-		themingPayload = extractPayloadFromParams(customInitOptions?.userAppConfigArgs);
+		themingPayload = normalizeThemingPayload(extractPayloadFromParams(customInitOptions?.userAppConfigArgs));
 		console.log("Loaded payload from command line", themingPayload);
 	}
 
@@ -231,7 +220,7 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 		if (loadedAction === APPLY_THEME_ACTION) {
 			const loadedPayload = window.localStorage.getItem("customPayload");
 			if (loadedPayload) {
-				themingPayload = JSON.parse(loadedPayload) as ThemingPayload;
+				themingPayload = normalizeThemingPayload(JSON.parse(loadedPayload) as ThemingPayload);
 				console.log("Loaded payload from localStorage", themingPayload);
 			}
 		}
@@ -254,7 +243,10 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 			console.log("Store theming options and restart app");
 			window.localStorage.setItem("customAction", APPLY_THEME_ACTION);
 			if (runThemingOptions !== undefined) {
-				window.localStorage.setItem("customPayload", JSON.stringify(runThemingOptions));
+				window.localStorage.setItem(
+					"customPayload",
+					JSON.stringify(normalizeThemingPayload(runThemingOptions))
+				);
 			}
 
 			await app.restart();
@@ -282,6 +274,26 @@ function extractPayloadFromParams(initParams?: InitParams): ThemingPayload | und
 	} catch (err) {
 		console.error("Error decoding payload, it should be Base64 encoded", initParams, err);
 	}
+}
+
+/**
+ * Normalize payload shape so both seed-first and overrides-heavy payloads are deterministic.
+ * @param payload The raw payload.
+ * @returns Normalized payload.
+ */
+function normalizeThemingPayload(payload?: ThemingPayload): ThemingPayload | undefined {
+	if (!payload) {
+		return payload;
+	}
+
+	return {
+		seed: payload.seed,
+		overrides: {
+			dark: payload.overrides?.dark,
+			light: payload.overrides?.light
+		},
+		options: payload.options
+	};
 }
 
 /**
