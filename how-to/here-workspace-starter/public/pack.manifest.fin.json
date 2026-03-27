@@ -6,8 +6,8 @@
 		"version": "43.142.101.2"
 	},
 	"platform": {
-		"name": "default-workspace-platform",
-		"uuid": "workspace-platform-starter",
+		"name": "default-here-workspace-starter",
+		"uuid": "here-workspace-starter",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
@@ -436,25 +436,27 @@
 			]
 		},
 		"homeProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
-			"queryAgainst": ["title"]
+			"queryAgainst": [
+				"title"
+			]
 		},
 		"storefrontProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico"
 		},
 		"dockProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"entries": []
 		},
 		"notificationProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico"
 		},
@@ -722,7 +724,7 @@
 			"connections": [
 				{
 					"identity": {
-						"uuid": "workspace-platform-starter"
+						"uuid": "here-workspace-starter"
 					},
 					"validatePayload": false,
 					"connectionTypes": [
@@ -880,7 +882,7 @@
 		},
 		"snapProvider": {
 			"enabled": false,
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"serverAssetInfo": {
 				"src": "https://cdn.openfin.co/release/snap/1.0.0/snap.zip",
 				"alias": "openfin-snap",

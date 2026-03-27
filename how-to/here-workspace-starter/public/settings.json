@@ -694,14 +694,16 @@
 		]
 	},
 	"homeProvider": {
-		"id": "second-workspace-platform-starter",
+		"id": "second-here-workspace-starter",
 		"title": "Second Home Starter",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"queryMinLength": 3,
-		"queryAgainst": ["title"]
+		"queryAgainst": [
+			"title"
+		]
 	},
 	"storefrontProvider": {
-		"id": "second-workspace-platform-starter",
+		"id": "second-here-workspace-starter",
 		"title": "Second Custom Storefront",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"landingPage": {
@@ -843,7 +845,7 @@
 		]
 	},
 	"dockProvider": {
-		"id": "workspace-platform-starter",
+		"id": "here-workspace-starter",
 		"title": "HERE Core UI Platform Starter",
 		"icon": "http://localhost:8080/favicon.ico",
 		"workspaceComponents": {
@@ -931,7 +933,7 @@
 		]
 	},
 	"notificationProvider": {
-		"id": "second-workspace-platform-starter",
+		"id": "second-here-workspace-starter",
 		"title": "Second Notification Starter",
 		"icon": "http://localhost:8080/common/favicon-32x32.png"
 	},
@@ -1156,7 +1158,7 @@
 		"connections": [
 			{
 				"identity": {
-					"uuid": "second-workspace-starter-how-to-workspace-platform-starter"
+					"uuid": "second-workspace-starter-how-to-here-workspace-starter"
 				},
 				"validatePayload": false,
 				"connectionTypes": [

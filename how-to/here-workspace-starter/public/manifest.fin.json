@@ -20,6 +20,8 @@
 		},
 		"permissions": {
 			"System": {
+				"getDomainSettings": true,
+				"resolveDomainSettings": true,
 				"launchExternalProcess": true,
 				"terminateExternalProcess": true,
 				"downloadAsset": true,
@@ -735,213 +737,7 @@
 					"separator": "after"
 				}
 			],
-			"toolbarButtons": [
-				{
-					"include": false,
-					"id": "change-opacity",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Change Opacity",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/favicon.ico",
-						"action": {
-							"id": "change-opacity",
-							"customData": {
-								"sourceId": "change-opacity",
-								"replacementId": "restore-opacity"
-							}
-						}
-					}
-				},
-				{
-					"include": false,
-					"id": "restore-opacity",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Restore Opacity",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/favicon.ico",
-						"action": {
-							"id": "restore-opacity",
-							"customData": {
-								"sourceId": "restore-opacity",
-								"replacementId": "change-opacity"
-							}
-						}
-					}
-				},
-				{
-					"include": false,
-					"id": "toggle-scheme",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Toggle Scheme",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/theme.svg",
-						"action": {
-							"id": "toggle-scheme",
-							"customData": {}
-						}
-					},
-					"conditions": [
-						"themed"
-					]
-				},
-				{
-					"include": false,
-					"id": "home-show",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Show Home",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/search.svg",
-						"action": {
-							"id": "home-show",
-							"customData": {}
-						}
-					}
-				},
-				{
-					"include": false,
-					"id": "notification-toggle",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Toggle Notification Center",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/bell.svg",
-						"action": {
-							"id": "notification-toggle",
-							"customData": {}
-						}
-					}
-				},
-				{
-					"include": false,
-					"id": "include-in-snapshot",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Include in Snapshot",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/snapshot-removed.svg",
-						"action": {
-							"id": "include-in-snapshot",
-							"customData": {
-								"sourceId": "include-in-snapshot",
-								"replacementId": "remove-from-snapshot"
-							}
-						}
-					},
-					"conditions": [
-						"removed-from-snapshot"
-					]
-				},
-				{
-					"include": false,
-					"id": "remove-from-snapshot",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Remove from snapshot",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/snapshot-included.svg",
-						"action": {
-							"id": "remove-from-snapshot",
-							"customData": {
-								"sourceId": "remove-from-snapshot",
-								"replacementId": "include-in-snapshot"
-							}
-						}
-					},
-					"conditions": [
-						"included-in-snapshot"
-					]
-				},
-				{
-					"include": true,
-					"id": "pin-window",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Pin this window",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/pin.svg",
-						"action": {
-							"id": "pin-window",
-							"customData": {
-								"sourceId": "pin-window",
-								"replacementId": "unpin-window"
-							}
-						}
-					}
-				},
-				{
-					"include": false,
-					"id": "unpin-window",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Unpin this window",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/pin-vertical.svg",
-						"action": {
-							"id": "unpin-window",
-							"customData": {
-								"sourceId": "unpin-window",
-								"replacementId": "pin-window"
-							}
-						}
-					}
-				},
-				{
-					"include": true,
-					"id": "lock-unlock",
-					"button": {
-						"type": "LockUnlockPage"
-					}
-				},
-				{
-					"include": true,
-					"id": "show-hide-tabs",
-					"button": {
-						"type": "ShowHideTabs"
-					}
-				},
-				{
-					"include": true,
-					"id": "color-linking",
-					"button": {
-						"type": "ColorLinking"
-					}
-				},
-				{
-					"include": true,
-					"id": "preset-layouts",
-					"button": {
-						"type": "PresetLayouts"
-					}
-				},
-				{
-					"include": true,
-					"id": "share",
-					"button": {
-						"type": "Custom",
-						"tooltip": "Share",
-						"disabled": false,
-						"iconUrl": "http://localhost:8080/common/icons/{theme}/{scheme}/share.svg",
-						"action": {
-							"id": "share",
-							"customData": {}
-						}
-					},
-					"conditions": [
-						"sharing"
-					]
-				},
-				{
-					"include": true,
-					"id": "save-menu",
-					"button": {
-						"type": "SaveMenu"
-					}
-				}
-			]
+			"toolbarButtons": []
 		},
 		"themeProvider": {
 			"themes": [
@@ -1016,7 +812,7 @@
 			]
 		},
 		"homeProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
@@ -1025,7 +821,7 @@
 			]
 		},
 		"storefrontProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"landingPage": {
@@ -1192,7 +988,7 @@
 			}
 		},
 		"dockProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"workspaceComponents": {
@@ -1358,7 +1154,7 @@
 			]
 		},
 		"notificationProvider": {
-			"id": "workspace-platform-starter",
+			"id": "here-workspace-starter",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"notificationClients": {
@@ -1797,7 +1593,7 @@
 			"connections": [
 				{
 					"identity": {
-						"uuid": "workspace-platform-starter"
+						"uuid": "here-workspace-starter"
 					},
 					"validatePayload": false,
 					"connectionTypes": [
@@ -2026,12 +1822,12 @@
 			]
 		},
 		"snapProvider": {
-			"enabled": true,
-			"id": "workspace-platform-starter",
+			"enabled": false,
+			"id": "here-workspace-starter",
 			"enableAutoWindowRegistration": true,
 			"serverOptions": {
 				"showDebug": false,
-				"keyToStick": "shift",
+				"keyToStick": true,
 				"disableBlurDropPreview": false,
 				"disableGPUAcceleratedDragging": false,
 				"disableUserUnstick": false,

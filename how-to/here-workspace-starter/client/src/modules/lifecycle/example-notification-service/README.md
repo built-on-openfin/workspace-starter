@@ -615,8 +615,8 @@ This was added through the platform-apps.json file in the public folder.
 
 ```json
 {
-  "appId": "workspace-platform-starter",
-  "name": "workspace-platform-starter",
+  "appId": "here-workspace-starter",
+  "name": "here-workspace-starter",
   "title": "HERE Core UI Platform Starter Platform",
   "description": "The platform that is currently running.",
   "manifest": {
