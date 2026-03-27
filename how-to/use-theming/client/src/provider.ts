@@ -63,23 +63,22 @@ window.addEventListener("DOMContentLoaded", async () => {
  */
 async function initializeWorkspacePlatform(themingPayload?: ThemingPayload): Promise<void> {
 	console.log("Initializing HERE Core UI Platform");
-	const normalizedPayload = normalizeThemingPayload(themingPayload);
 
-	// Build a seed-first theme that keeps legacy payload fields working.
+	// Build a seed-first theme from defaults plus optional payload.
 	const customTheme = {
 		label: "theme",
 		seed: {
 			...DEFAULT_THEME_SEED,
-			...normalizedPayload?.seed
+			...themingPayload?.seed
 		},
 		overrides: {
 			dark: {
 				...DEFAULT_THEME_OVERRIDES.dark,
-				...normalizedPayload?.overrides?.dark
+				...themingPayload?.overrides?.dark
 			},
 			light: {
 				...DEFAULT_THEME_OVERRIDES.light,
-				...normalizedPayload?.overrides?.light
+				...themingPayload?.overrides?.light
 			}
 		}
 	};
@@ -209,7 +208,7 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 	let themingPayload: ThemingPayload | undefined;
 
 	if (customInitOptions?.userAppConfigArgs?.action === APPLY_THEME_ACTION) {
-		themingPayload = normalizeThemingPayload(extractPayloadFromParams(customInitOptions?.userAppConfigArgs));
+		themingPayload = extractPayloadFromParams(customInitOptions?.userAppConfigArgs);
 		console.log("Loaded payload from command line", themingPayload);
 	}
 
@@ -220,8 +219,12 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 		if (loadedAction === APPLY_THEME_ACTION) {
 			const loadedPayload = window.localStorage.getItem("customPayload");
 			if (loadedPayload) {
-				themingPayload = normalizeThemingPayload(JSON.parse(loadedPayload) as ThemingPayload);
-				console.log("Loaded payload from localStorage", themingPayload);
+				try {
+					themingPayload = JSON.parse(loadedPayload) as ThemingPayload;
+					console.log("Loaded payload from localStorage", themingPayload);
+				} catch (err) {
+					console.error("Error decoding payload from localStorage", err);
+				}
 			}
 		}
 
@@ -243,10 +246,7 @@ async function handleInitParams(): Promise<ThemingPayload | undefined> {
 			console.log("Store theming options and restart app");
 			window.localStorage.setItem("customAction", APPLY_THEME_ACTION);
 			if (runThemingOptions !== undefined) {
-				window.localStorage.setItem(
-					"customPayload",
-					JSON.stringify(normalizeThemingPayload(runThemingOptions))
-				);
+				window.localStorage.setItem("customPayload", JSON.stringify(runThemingOptions));
 			}
 
 			await app.restart();
@@ -274,26 +274,6 @@ function extractPayloadFromParams(initParams?: InitParams): ThemingPayload | und
 	} catch (err) {
 		console.error("Error decoding payload, it should be Base64 encoded", initParams, err);
 	}
-}
-
-/**
- * Normalize payload shape so both seed-first and overrides-heavy payloads are deterministic.
- * @param payload The raw payload.
- * @returns Normalized payload.
- */
-function normalizeThemingPayload(payload?: ThemingPayload): ThemingPayload | undefined {
-	if (!payload) {
-		return payload;
-	}
-
-	return {
-		seed: payload.seed,
-		overrides: {
-			dark: payload.overrides?.dark,
-			light: payload.overrides?.light
-		},
-		options: payload.options
-	};
 }
 
 /**
