@@ -12,7 +12,8 @@
 		<div>Shell...</div>
 		<script type="module">
 			import('../js/shell.bundle.js').then(async (module) => {
-				await module.init();
+				const entry = module.default ?? module;
+				await entry.init();
 			});
 		</script>
 	</body>

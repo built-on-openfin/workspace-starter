@@ -13,7 +13,9 @@
 		<div>Custom Provider...</div>
 		<script type="module">
 			import('../js/provider.bundle.js').then(async (module) => {
-				await module.init();
+				// Webpack library output exposes entry exports on `default`, not as named exports.
+				const entry = module.default ?? module;
+				await entry.init();
 			});
 		</script>
 	</body>

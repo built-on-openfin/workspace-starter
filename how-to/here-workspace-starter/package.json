@@ -5,6 +5,7 @@
 	"scripts": {
 		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
 		"kill": "node ./scripts/kill.mjs",
+		"prepare": "node ./prepare-browser.mjs",
 		"build": "npm run build-server & npm run build-client",
 		"build-server": "tsc --project ./server",
 		"prebuild-client": "node -p \"'// Generated from package.json version at build time. Do not modify directly.\\nexport const PLATFORM_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > client/src/framework/platform/platform-version.ts",
