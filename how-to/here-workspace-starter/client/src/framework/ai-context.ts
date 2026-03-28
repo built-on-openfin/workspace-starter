@@ -17,6 +17,9 @@ import type { Logger } from "here-workspace-starter/shapes/logger-shapes";
  */
 export type IsAIContextPermitted = (url: string) => boolean | Promise<boolean>;
 
+/**
+ * Options used to initialize {@link AIContextProvider.initialize}.
+ */
 export type AIContextProviderInit = {
 	getPlatform: () => WorkspacePlatformModule;
 	logger: Logger;
@@ -48,34 +51,71 @@ const WIN_VIEW_EVENTS = [
 	"view-removed-from-layout"
 ] as const;
 
+/**
+ * Default URL filter: allow all views to contribute AI context.
+ * @param _url View URL (unused).
+ * @returns Always true.
+ */
+function defaultPermitAllUrl(_url: string): boolean {
+	return true;
+}
+
+/**
+ * Bridges workspace platform windows/pages to @openfin/ai-context.
+ */
 export class AIContextProvider {
 	private _getAIContext?: Awaited<ReturnType<typeof useAIContext>>["getAIContext"];
+
 	private _fireContextChanged?: Awaited<ReturnType<typeof useAIContext>>["fireContextChanged"];
+
 	private _getPlatform: (() => WorkspacePlatformModule) | undefined;
+
 	private _logger: Logger | undefined;
+
 	private _enabled = false;
-	private _isAIContextPermitted: IsAIContextPermitted = () => true;
+
+	private _isAIContextPermitted: IsAIContextPermitted;
+
 	private readonly _windows = new Set<string>();
 
-	static get(): AIContextProvider {
+	/**
+	 * Use {@link AIContextProvider.get}; prevents external instantiation.
+	 */
+	private constructor() {
+		this._isAIContextPermitted = defaultPermitAllUrl;
+	}
+
+	/**
+	 * Returns the shared provider instance, creating it on first use.
+	 * @returns The singleton instance.
+	 */
+	public static get(): AIContextProvider {
 		if (!instance) {
 			instance = new AIContextProvider();
 		}
 		return instance;
 	}
 
-	static reset(): void {
+	/**
+	 * Clears singleton state (e.g. for tests).
+	 */
+	public static reset(): void {
 		if (instance) {
 			instance._windows.clear();
 		}
 		instance = undefined;
 	}
 
-	async initialize(init: AIContextProviderInit): Promise<void> {
+	/**
+	 * Loads @openfin/ai-context when enabled and stores platform/logger references.
+	 * @param init Initialization options.
+	 * @returns Resolves when setup completes.
+	 */
+	public async initialize(init: AIContextProviderInit): Promise<void> {
 		this._getPlatform = init.getPlatform;
 		this._logger = init.logger;
-		this._enabled = !!init.enabled;
-		this._isAIContextPermitted = init.isAIContextPermitted ?? (() => true);
+		this._enabled = Boolean(init.enabled);
+		this._isAIContextPermitted = init.isAIContextPermitted ?? defaultPermitAllUrl;
 		if (!this._enabled) {
 			this._logger?.info("AI context disabled, skipping useAIContext");
 			return;
@@ -83,7 +123,9 @@ export class AIContextProvider {
 		try {
 			const { getAIContext, fireContextChanged } = await useAIContext({
 				fin: fin as unknown as Parameters<typeof useAIContext>[0]["fin"],
-				logger: (msg, ...args) => this._logger?.info(String(msg), ...args)
+				logger: (msg: unknown, ...args: unknown[]): void => {
+					this._logger?.info(String(msg), ...args);
+				}
 			});
 			this._getAIContext = getAIContext;
 			this._fireContextChanged = fireContextChanged;
@@ -93,8 +135,12 @@ export class AIContextProvider {
 		}
 	}
 
-	isEnabled(): boolean {
-		return this._enabled && !!this._getAIContext;
+	/**
+	 * Whether AI context calls are active (enabled and package initialized).
+	 * @returns True when getAIContext can run against the real implementation.
+	 */
+	public isEnabled(): boolean {
+		return this._enabled && Boolean(this._getAIContext);
 	}
 
 	/**
@@ -102,8 +148,10 @@ export class AIContextProvider {
 	 * find active page, getViewIdentities (with optional URL filter), then call package getAIContext.
 	 * When the request is from the AI center window we use last focused content window so we scrape
 	 * the tab the user was viewing (e.g. participant-selection with dom-sender).
+	 * @param winIdentity Window to resolve context for.
+	 * @returns AI context payload or a placeholder when unavailable.
 	 */
-	async getAIContext(winIdentity: OpenFin.Identity): Promise<AIContextResponse> {
+	public async getAIContext(winIdentity: OpenFin.Identity): Promise<AIContextResponse> {
 		if (!this._getAIContext || !this._getPlatform) {
 			return this.placeholderResponse();
 		}
@@ -167,30 +215,44 @@ export class AIContextProvider {
 	/**
 	 * Notify that context changed (e.g. after setActivePage). Calls ai-context fireContextChanged with
 	 * ContextChangedOptions { pageStates, newOptions }. Package debounces internally.
+	 * @param windowId Window whose context changed.
+	 * @param pageId Optional page id; defaults to active page.
 	 */
-	fireContextChanged(windowId: OpenFin.Identity, pageId?: string): void {
+	public fireContextChanged(windowId: OpenFin.Identity, pageId?: string): void {
 		if (!this._getPlatform) {
 			return;
 		}
 		const fireContextChanged = this._fireContextChanged;
+		// Fire-and-forget; errors are logged in catch.
 		this.buildContextChangedOptions(windowId, pageId)
 			.then(async (opts) => {
-				if (!opts) return;
+				if (!opts) {
+					return null;
+				}
 				if (fireContextChanged) {
 					await fireContextChanged(opts);
 				}
+				return null;
 			})
-			.catch((err) => this._logger?.warn("fireContextChanged failed", err));
+			.catch((err) => {
+				this._logger?.warn("fireContextChanged failed", err);
+			});
 	}
 
 	/**
 	 * Set up window/view event listeners so context is refreshed when views change.
 	 * Call from platform override createWindow to ensure every new window is wired up.
+	 * @param windowId Window identity to subscribe to.
+	 * @returns Resolves when listeners are registered.
 	 */
-	async setupWinListeners(windowId: OpenFin.Identity): Promise<void> {
-		await this._setupWindowListeners(windowId);
+	public async setupWinListeners(windowId: OpenFin.Identity): Promise<void> {
+		await this.setupWindowListeners(windowId);
 	}
 
+	/**
+	 * Empty AI context response used when the feature is off or calls fail.
+	 * @returns Placeholder response object.
+	 */
 	private placeholderResponse(): AIContextResponse {
 		return { currentContext: undefined, results: {} } as unknown as AIContextResponse;
 	}
@@ -198,10 +260,14 @@ export class AIContextProvider {
 	/**
 	 * Get page states for a window (aligned with cloud-platform #getPageStates).
 	 * Uses platform Browser.wrapSync(winIdentity).getPages() and getActivePage when available.
+	 * @param windowIdentity Host browser window.
+	 * @returns Page state records for the window.
 	 */
 	private async getPageStates(windowIdentity: OpenFin.Identity): Promise<PageStateRecord[]> {
 		const platform = this._getPlatform?.();
-		if (!platform) return [];
+		if (!platform) {
+			return [];
+		}
 		const browserWindow = platform.Browser.wrapSync(windowIdentity);
 		const pages = await browserWindow.getPages();
 		const activePageId =
@@ -224,6 +290,8 @@ export class AIContextProvider {
 
 	/**
 	 * Get view identities for a window, filtered by business logic captured in this._isAIContextPermitted().
+	 * @param windowIdentity Host window identity.
+	 * @returns Allowed view identities for AI context.
 	 */
 	private async getViewIdentities(windowIdentity: OpenFin.Identity): Promise<OpenFin.Identity[]> {
 		const views = await fin.Platform.Layout.wrapSync(windowIdentity).getCurrentViews();
@@ -241,6 +309,11 @@ export class AIContextProvider {
 		return viewIdentities;
 	}
 
+	/**
+	 * Loads page states and view identities for a window in parallel.
+	 * @param winIdentity Window identity.
+	 * @returns Combined page and view data.
+	 */
 	private async getPageStatesAndViewIdentities(
 		winIdentity: OpenFin.Identity
 	): Promise<{ pageStates: PageStateRecord[]; viewIdentities: OpenFin.Identity[] }> {
@@ -251,6 +324,12 @@ export class AIContextProvider {
 		return { pageStates, viewIdentities };
 	}
 
+	/**
+	 * Builds options for fireContextChanged from current window state.
+	 * @param windowId Window identity.
+	 * @param pageId Optional page id.
+	 * @returns Options for the ai-context package, or undefined if no page.
+	 */
 	private async buildContextChangedOptions(
 		windowId: OpenFin.Identity,
 		pageId?: string
@@ -272,23 +351,23 @@ export class AIContextProvider {
 		};
 	}
 
-	private async _setupWindowListeners(windowId: OpenFin.Identity): Promise<void> {
+	/**
+	 * Registers view lifecycle listeners and cleans them up when the window closes.
+	 * @param windowId Window to wire.
+	 * @returns Resolves when registration completes.
+	 */
+	private async setupWindowListeners(windowId: OpenFin.Identity): Promise<void> {
 		if (this._windows.has(windowId.name)) {
 			return;
 		}
 		try {
 			this._windows.add(windowId.name);
 			const win = fin.Window.wrapSync(windowId);
-			const contextChangedListener = () => this.fireContextChanged(windowId);
 			const cleanupListeners = await Promise.all(
-				WIN_VIEW_EVENTS.map(async (eventName) => {
-					const listener = () => contextChangedListener();
-					await win.on(eventName, listener);
-					return () => win.removeListener(eventName, listener);
-				})
+				WIN_VIEW_EVENTS.map(async (eventName) => this.attachWinViewEventListener(win, windowId, eventName))
 			);
 			await win.once("closed", async () => {
-				await Promise.allSettled(cleanupListeners.map((c) => c()));
+				await Promise.allSettled(cleanupListeners.map(async (c) => c()));
 				this._windows.delete(windowId.name);
 			});
 			this._logger?.info("setupWinListeners: listeners set up for window", windowId.name);
@@ -296,5 +375,35 @@ export class AIContextProvider {
 			this._windows.delete(windowId.name);
 			this._logger?.warn("setupWinListeners: error setting up listeners for window", windowId.name, e);
 		}
+	}
+
+	/**
+	 * Subscribes to one view event and returns a cleanup function.
+	 * @param win Wrapped OpenFin window.
+	 * @param windowId Identity used when emitting context changes.
+	 * @param eventName View event name.
+	 * @returns Cleanup that removes the listener.
+	 */
+	private async attachWinViewEventListener(
+		win: OpenFin.Window,
+		windowId: OpenFin.Identity,
+		eventName: (typeof WIN_VIEW_EVENTS)[number]
+	): Promise<() => Promise<void>> {
+		/**
+		 * Emits a context-changed signal for this window.
+		 */
+		const emitContextChanged = (): void => {
+			this.fireContextChanged(windowId);
+		};
+		/**
+		 * Forwards a view lifecycle event to the context pipeline.
+		 */
+		function onViewEvent(): void {
+			emitContextChanged();
+		}
+		await win.on(eventName, onViewEvent);
+		return async (): Promise<void> => {
+			await win.removeListener(eventName, onViewEvent);
+		};
 	}
 }

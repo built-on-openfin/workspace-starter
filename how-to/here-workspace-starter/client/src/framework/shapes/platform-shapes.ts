@@ -301,6 +301,11 @@ export type PlatformOverrideHelpers = ModuleHelpers & {
 		payload?: T
 	) => Promise<void>;
 	/**
+	 * Returns the AI context provider instance (initialized by the platform).
+	 * When the override is loaded in a separate bundle, the singleton may be uninitialized; this supplies the same instance.
+	 */
+	getAIContextProvider?: () => AIContextProvider;
+	/**
 	 * Returns the menu client for the platform override.
 	 * @returns The menu client.
 	 */
@@ -328,12 +333,6 @@ export type PlatformOverrideHelpers = ModuleHelpers & {
 	 * @returns The platform connection client.
 	 */
 	getConnectionClient(): Promise<PlatformConnectionClient>;
-
-	/**
-	 * Returns the AI context provider instance (initialized by the platform).
-	 * When the override is loaded in a separate bundle, the singleton may be uninitialized; this supplies the same instance.
-	 */
-	getAIContextProvider?: () => AIContextProvider;
 };
 
 /**

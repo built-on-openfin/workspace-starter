@@ -4,7 +4,8 @@ import type { ToolbarButton } from "@openfin/workspace-platform";
  * ENTERPRISE OVERRIDES IGNORE MOST OF THESE
  * Browser Provider Options includes the default window/page and view options.
  */
-// TODO:/ ANY FOR NOW, need to rework the browser window creation stuff ENTIRELY
+// TODO: narrow when browser window creation is reworked; callers merge manifest + provider options.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- intentional until Enterprise browser types are modeled
 export type BrowserProviderOptions = any;
 /**
  * Options for window positioning.

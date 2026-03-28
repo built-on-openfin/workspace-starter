@@ -35,5 +35,6 @@ server.on("error", (err: NodeJS.ErrnoException) => {
 	} else {
 		console.error(err);
 	}
+	// eslint-disable-next-line unicorn/no-process-exit -- fatal listen/bind failure; explicit exit code for npm/CI
 	process.exit(1);
 });

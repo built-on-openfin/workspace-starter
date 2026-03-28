@@ -19,7 +19,7 @@ let isInitialized = false;
  * Initialize the platform provider.
  * @param options Options for the platform provider.
  * @param helpers Module helpers to pass to any loaded modules.
- * @param browserOptions Options for the browser that the platform should consider
+ * @param browserProviderOptions Options for the browser that the platform should consider when creating windows.
  */
 export async function init(
 	options: PlatformProviderOptions | undefined,

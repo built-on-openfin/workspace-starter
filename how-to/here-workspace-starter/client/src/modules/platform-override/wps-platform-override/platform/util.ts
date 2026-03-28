@@ -11,15 +11,22 @@ let defaultOptions:
 	  }
 	| undefined;
 
-export type DefaultOptions = {
+/**
+ * Cached default window, page, and view options for browser creation.
+ */
+export interface DefaultOptions {
+	/** Default browser window request fragment. */
 	window: Partial<BrowserCreateWindowRequest> | undefined;
+	/** Default page fragment. */
 	page: Partial<Page> | undefined;
+	/** Default view options fragment. */
 	view: Partial<OpenFin.ViewOptions> | undefined;
-};
+}
 
 /**
  * Set cached default options (e.g. from platform override init with browserProvider).
  * When set, buildDefaultOptions() returns this instead of reading manifest only.
+ * @param opts Cached defaults, or undefined to clear the cache.
  */
 export function setDefaultOptions(opts: DefaultOptions | undefined): void {
 	defaultOptions = opts;

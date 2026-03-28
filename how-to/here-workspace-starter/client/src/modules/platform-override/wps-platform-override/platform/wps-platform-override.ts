@@ -1,3 +1,4 @@
+import type { AIContextResponse } from "@openfin/ai-context";
 import type OpenFin from "@openfin/core";
 import type { LayoutClient } from "@openfin/snap-sdk";
 import type {
@@ -170,7 +171,7 @@ export async function getConstructorOverride(
 			 * @param winIdentity Window identity.
 			 * @returns Context payload for the AI panel.
 			 */
-			public getAIContext = async (winIdentity: OpenFin.Identity) =>
+			public getAIContext = async (winIdentity: OpenFin.Identity): Promise<AIContextResponse> =>
 				aiContextProvider.getAIContext(winIdentity);
 
 			/**
