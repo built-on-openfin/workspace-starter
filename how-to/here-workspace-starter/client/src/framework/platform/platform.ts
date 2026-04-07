@@ -224,17 +224,13 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	const overrideCallback = platformOverride.getPlatformConstructorOverrides();
 
 	await workspace.init({
-		// @ts-expect-error TODO investigate (stale starter types)
 		language: isStringValue(customSettings?.platformProvider?.language?.initialLanguage)
 			? { initialLanguage: customSettings?.platformProvider?.language?.initialLanguage }
 			: undefined,
-		// @ts-expect-error Platform theme shape differs from enterprise workspace CustomTheme[].
 		theme,
 		notifications: customSettings?.notificationProvider?.notificationsCustomManifest,
 		customActions,
-		// @ts-expect-error Interop override types come from @openfin/workspace-platform; workspace.init expects enterprise-api variants.
 		interopOverride,
-		// @ts-expect-error TODO investigate
 		overrideCallback,
 		integrations,
 

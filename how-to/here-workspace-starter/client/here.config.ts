@@ -1,4 +1,4 @@
-import { defineConfig } from "@openfin/enterprise-api/experimental";
+import { defineConfig } from "@openfin/here-supertabs";
 
 export default defineConfig({
 	build: {

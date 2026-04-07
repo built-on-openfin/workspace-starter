@@ -1,15 +1,15 @@
-import { existsSync, mkdirSync, rmSync } from "fs";
 import { execSync } from "node:child_process";
-import { resolve } from "node:path";
+import { existsSync, mkdirSync, rmSync } from "node:fs";
+import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Resolve the browser static assets from the @openfin/enterprise-api package (e.g. enterprise-api/browser when main is in out/).
-const mainDir = resolve(fileURLToPath(import.meta.resolve("@openfin/enterprise-api")), "..");
-const enterpriseApiPath = resolve(mainDir, "../browser");
+const mainDir = dirname(fileURLToPath(import.meta.resolve("@openfin/here-supertabs")));
+const enterpriseApiPath = resolve(mainDir, "./browser");
 
 if (!existsSync(enterpriseApiPath)) {
 	throw new Error(
-		`Enterprise Browser static assets not found at ${enterpriseApiPath}. Ensure @openfin/enterprise-api is installed and has a browser folder (run npm install).`
+		`Enterprise Browser static assets not found at ${enterpriseApiPath}. Ensure @openfin/here-supertabs is installed and has a browser folder (run npm install).`
 	);
 }
 
