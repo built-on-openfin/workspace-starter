@@ -150,8 +150,15 @@ export class TreeInlineSource {
 	): Promise<HomeSearchResponse> {
 		this._lastResults = [];
 
-		if (query.length > 0) {
-			const queryOrg = new RegExp(query, "i");
+		let searchQuery = "";
+		if (query.startsWith("/tree-inline ")) {
+			searchQuery = query.slice("/tree-inline ".length);
+		} else if (!query.startsWith("/tree-inline")) {
+			searchQuery = query;
+		}
+
+		if (searchQuery.length > 0) {
+			const queryOrg = new RegExp(searchQuery, "i");
 			const matchingOrgs: EntityOrganization[] | undefined = this._orgData?.filter(
 				(o) => queryOrg.test(o.id) || queryOrg.test(o.name)
 			);
