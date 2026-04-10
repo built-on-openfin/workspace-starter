@@ -21,8 +21,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/servicenow": "^1.0.1",
-		"@openfin/workspace": "23.2.15",
-		"@openfin/workspace-platform": "23.2.15",
+		"@openfin/workspace": "23.2.16",
+		"@openfin/workspace-platform": "23.2.16",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
