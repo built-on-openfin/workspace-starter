@@ -63,7 +63,7 @@
 		"express-rate-limit": "^8.1.0",
 		"@openfin/ai-context": "file:./openfin-ai-context-0.0.1.tgz",
 		"@openfin/ai-context-client": "file:./openfin-ai-context-client-0.0.1.tgz",
-		"@openfin/here-supertabs": "file:./openfin-here-supertabs-0.0.1.tgz"
+		"@openfin/here-supertabs": "file:./openfin-here-supertabs-0.0.2.tgz"
 	},
 	"devDependencies": {
 		"@openfin/automation-cli": "^1.2.0",
