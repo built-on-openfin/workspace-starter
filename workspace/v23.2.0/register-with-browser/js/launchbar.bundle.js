@@ -13850,7 +13850,7 @@ async function createCustomToolbarWindow() {
             {
                 type: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.BrowserButtonType.Custom,
                 tooltip: "Announce",
-                iconUrl: "http://localhost:8080/icons/announce.svg",
+                iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/icons/announce.svg",
                 action: {
                     id: "announce"
                 }
@@ -13858,7 +13858,7 @@ async function createCustomToolbarWindow() {
             {
                 type: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.BrowserButtonType.Custom,
                 tooltip: "Print",
-                iconUrl: "http://localhost:8080/icons/print.svg",
+                iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/icons/print.svg",
                 action: {
                     id: "custom-print"
                 }
@@ -13926,7 +13926,7 @@ async function createWindowWithLockedPage() {
             {
                 type: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.BrowserButtonType.Custom,
                 tooltip: "Manual Lock Page",
-                iconUrl: "http://localhost:8080/icons/lock.svg",
+                iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/icons/lock.svg",
                 action: {
                     id: "lock-page-toggle"
                 }
@@ -13964,28 +13964,28 @@ async function createWindowWithFixedViews() {
             position: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.PanelPosition.Top,
             height: "50px",
             viewOptions: {
-                url: "http://localhost:8080/html/top-panel.html"
+                url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/html/top-panel.html"
             }
         },
         {
             position: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.PanelPosition.Left,
             width: "50px",
             viewOptions: {
-                url: "http://localhost:8080/html/left-panel.html"
+                url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/html/left-panel.html"
             }
         },
         {
             position: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.PanelPosition.Right,
             width: "50px",
             viewOptions: {
-                url: "http://localhost:8080/html/right-panel.html"
+                url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/html/right-panel.html"
             }
         },
         {
             position: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.PanelPosition.Bottom,
             height: "50px",
             viewOptions: {
-                url: "http://localhost:8080/html/bottom-panel.html"
+                url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/html/bottom-panel.html"
             }
         }
     ];
@@ -13994,7 +13994,7 @@ async function createWindowWithFixedViews() {
             position: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.PanelPosition.Top,
             height: "50px",
             viewOptions: {
-                url: "http://localhost:8080/html/top-panel.html"
+                url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/html/top-panel.html"
             }
         }
     ];

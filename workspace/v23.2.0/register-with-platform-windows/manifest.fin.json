@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-platform-windows",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -25,7 +25,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/favicon.ico",
 		"name": "Register With Platform Windows - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},

@@ -8,7 +8,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -31,7 +31,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",

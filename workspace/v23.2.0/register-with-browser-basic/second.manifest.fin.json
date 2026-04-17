@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-browser-basic-asar",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser-basic/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser-basic/platform/provider.html",
 		"preventQuitOnLastWindowClosed": false,
 		"permissions": {
 			"System": {
@@ -33,7 +33,7 @@
 	},
 	"appAssets": [
 		{
-			"src": "http://localhost:8080/assets/workspace_platform.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser-basic/assets/workspace_platform.zip",
 			"alias": "self-hosted-workspace-platform",
 			"version": "23.0.0",
 			"target": "workspace.asar"

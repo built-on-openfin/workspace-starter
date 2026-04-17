@@ -1,5 +1,5 @@
 {
-	"url": "http://localhost:8080/common/views/contact/participant-summary/index.html",
+	"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/contact/participant-summary/index.html",
 	"fdc3InteropApi": "2.0",
 	"interop": {
 		"currentContextGroup": "green"

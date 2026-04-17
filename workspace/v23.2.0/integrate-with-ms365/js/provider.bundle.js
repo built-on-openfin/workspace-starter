@@ -16537,7 +16537,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "integrate-with-ms365";
 const PLATFORM_TITLE = "Integrate with Microsoft 365";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-ms365/favicon.ico";
 let ms365Integration;
 let debounceTimerId;
 window.addEventListener("DOMContentLoaded", async () => {

@@ -12539,11 +12539,11 @@ const OPENFIN_INFORMATION_APP_BROWSER_VIEW = {
     appId: "openfin-information-browser-view",
     title: "OpenFin Information Browser View",
     description: "Display information about the HERE environment in a browser view",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12552,7 +12552,7 @@ const OPENFIN_INFORMATION_APP_BROWSER_VIEW = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "HERE", "versions"]
@@ -12564,11 +12564,11 @@ const OPENFIN_INFORMATION_APP_PLATFORM_WINDOW = {
     appId: "openfin-information-platform-window",
     title: "OpenFin Information Platform Window",
     description: "Display information about the HERE environment in a platform window",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/common/views/platform/of-info.view.fin.json",
     manifestType: "platform-window",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12577,7 +12577,7 @@ const OPENFIN_INFORMATION_APP_PLATFORM_WINDOW = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/common/images/previews/of-info.png"
         }
     ],
     tags: ["platform-window", "HERE", "versions"]
@@ -12616,7 +12616,7 @@ async function launchApp(app) {
                 workspacePlatform: {
                     windowType: "platform"
                 },
-                url: "http://localhost:8080/windows/platform-window.html",
+                url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/windows/platform-window.html",
                 layout: {
                     content: [
                         {
@@ -13861,7 +13861,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "register-with-platform-windows";
 const PLATFORM_TITLE = "Register With Platform Windows";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-platform-windows/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.
     const platform = fin.Platform.getCurrentSync();

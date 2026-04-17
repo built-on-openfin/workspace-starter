@@ -13903,7 +13903,7 @@ async function showPopup(dimensions, parentIdentity, title, instructions, button
                 buttons
             }
         },
-        url: "http://localhost:8080/html/popup.html",
+        url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser/html/popup.html",
         x: halfParentWidth - halfWidth,
         y: halfParentHeight - halfHeight,
         width: dimensions.width,

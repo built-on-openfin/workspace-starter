@@ -8,9 +8,9 @@
 	"platform": {
 		"uuid": "fourth-workspace-starter-how-to-workspace-platform-starter",
 		"name": "Fourth HERE Core UI Platform Starter",
-		"icon": "http://localhost:8080/common/favicon-32x32.png",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/shell/shell.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/shell/shell.html",
 		"preventQuitOnLastWindowClosed": true,
 		"appLogsTimezone": "utc",
 		"enableAppLogging": false,
@@ -74,21 +74,21 @@
 	},
 	"customSettings": {
 		"platformProvider": {
-			"rootUrl": "http://localhost:8080",
+			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter",
 			"sharing": true,
-			"initUrl": "http://localhost:8080/js/provider.bundle.js"
+			"initUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/provider.bundle.js"
 		},
 		"authProvider": {
 			"modules": [
 				{
 					"title": "Example Authentication",
 					"id": "example",
-					"url": "http://localhost:8080/js/modules/auth/example.bundle.js",
+					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/auth/example.bundle.js",
 					"data": {
 						"autoLogin": false,
-						"loginUrl": "http://localhost:8080/windows/modules/auth/example-login.html",
-						"logoutUrl": "http://localhost:8080/windows/modules/auth/example-logged-out.html",
-						"authenticatedUrl": "http://localhost:8080/windows/modules/auth/example-logged-in.html",
+						"loginUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/windows/modules/auth/example-login.html",
+						"logoutUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/windows/modules/auth/example-logged-out.html",
+						"authenticatedUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/windows/modules/auth/example-logged-in.html",
 						"checkLoginStatusInSeconds": 1,
 						"checkSessionValidityInSeconds": -1
 					}
@@ -103,7 +103,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "http://localhost:8080/settings.json"
+						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/settings.json"
 					}
 				}
 			]

@@ -13721,9 +13721,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const PLATFORM_ID = "use-notifications";
-const PLATFORM_ICON = "http://localhost:8080/images/icon-dot.png";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-notifications/images/icon-dot.png";
 const PLATFORM_TITLE = "Use Notifications";
-const NOTIFICATION_SOUND_URL = "http://localhost:8080/assets/notification.mp3";
+const NOTIFICATION_SOUND_URL = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-notifications/assets/notification.mp3";
 // Keep track of notifications we are updating
 const updatableNotifications = {};
 let updatableNotificationTimer;
@@ -14721,7 +14721,7 @@ async function showCustomNotification() {
             d10: "550",
             d11: "650",
             d12: "750",
-            exampleImageUrl: "http://localhost:8080/images/example.png",
+            exampleImageUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-notifications/images/example.png",
             actionableUrlTitle: "OpenFin Website",
             actionableUrlTooltip: "http://www.openfin.co"
         }

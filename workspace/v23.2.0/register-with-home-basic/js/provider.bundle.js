@@ -12539,11 +12539,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the HERE environment",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12552,7 +12552,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "HERE", "versions"]
@@ -12573,7 +12573,7 @@ const PROCESS_MANAGER = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/openfin-process-manager.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/images/previews/openfin-process-manager.png"
         }
     ],
     tags: ["hero", "manifest", "tools"]
@@ -12586,15 +12586,15 @@ const DEVELOPER_CONTENT = {
     title: "OpenFin Developer Docs",
     manifestType: "snapshot",
     description: "Shows a collection of HERE developer pages and provides an example of how you can present a pre-built page as a launch target in HERE Home. This entry has a manifest type of 'snapshot'.",
-    manifest: "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
-    icons: [{ src: "http://localhost:8080/common/images/favicon-32x32.png" }],
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/snapshots/developer.snapshot.fin.json",
+    icons: [{ src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/images/favicon-32x32.png" }],
     contactEmail: "contact@example.com",
     supportEmail: "support@example.com",
     publisher: "HERE",
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/openfin-page-docs.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/common/images/previews/openfin-page-docs.png"
         }
     ],
     tags: ["page"]
@@ -13990,7 +13990,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "register-with-home-basic";
 const PLATFORM_TITLE = "Register With Home Basic";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home-basic/favicon.ico";
 let homeRegistration;
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.

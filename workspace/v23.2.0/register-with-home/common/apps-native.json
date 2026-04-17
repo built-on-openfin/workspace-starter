@@ -9,12 +9,12 @@
 			"alias": "winform-interop-example",
 			"version": "4.5.0",
 			"args": "workspaceUUID={OF-PLAT-UUID} nativeUUID={OF-EXT-UUID} registerIntents",
-			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe"
 		},
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/native/icon-winform-interop.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/native/icon-winform-interop.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -39,7 +39,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/native/openfin-winform-interop.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/native/openfin-winform-interop.png"
 			}
 		],
 		"tags": ["native", "appasset", "dock", "developer"],
@@ -66,12 +66,12 @@
 		"manifest": {
 			"alias": "snap-native-test-app",
 			"version": "1.0.0",
-			"src": "http://localhost:8080/common/assets/snap-native-test-app.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/assets/snap-native-test-app.zip",
 			"target": "snap-native-test-app.exe"
 		},
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -80,7 +80,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/native/snap-native-test-app.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/native/snap-native-test-app.png"
 			}
 		],
 		"tags": ["native", "appasset", "developer"],
@@ -106,7 +106,7 @@
 		"manifest": "notepad.exe",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/native/icon-notepad.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/native/icon-notepad.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -115,7 +115,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/native/microsoft-notepad-native.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/native/microsoft-notepad-native.png"
 			}
 		],
 		"tags": ["native", "dock"]

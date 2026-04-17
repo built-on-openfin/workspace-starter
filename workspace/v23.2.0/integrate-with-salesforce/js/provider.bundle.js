@@ -15430,7 +15430,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "integrate-with-salesforce";
 const PLATFORM_TITLE = "Integrate with Salesforce";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-salesforce/favicon.ico";
 let salesforceIntegration;
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.

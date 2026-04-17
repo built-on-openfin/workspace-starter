@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-store",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -35,7 +35,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/favicon.ico",
 		"name": "Register With Store - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -48,10 +48,10 @@
 	"customSettings": {
 		"appProvider": {
 			"appSourceUrls": [
-				"http://localhost:8080/common/apps-contact.json",
-				"http://localhost:8080/common/apps-interop.json",
-				"http://localhost:8080/common/apps-native.json",
-				"http://localhost:8080/common/apps-tools.json"
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/apps-contact.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/apps-interop.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/apps-native.json",
+				"https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/apps-tools.json"
 			],
 			"manifestTypes": ["view", "snapshot", "manifest", "external", "window", "inline-appasset"],
 			"cacheDurationInMinutes": 1
@@ -59,7 +59,7 @@
 		"storefrontProvider": {
 			"id": "register-with-store",
 			"title": "Register With Store",
-			"icon": "http://localhost:8080/favicon.ico",
+			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/favicon.ico",
 			"landingPage": {
 				"hero": {
 					"title": "Custom Hero Title",
@@ -69,7 +69,7 @@
 						"tags": ["hero"]
 					},
 					"image": {
-						"src": "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
+						"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/images/store/superhero-unsplash.jpg"
 					}
 				},
 				"topRow": {
@@ -79,7 +79,7 @@
 							"title": "Dev Tools",
 							"description": "A collection of developer tools that can aid with building and debugging HERE applications.",
 							"image": {
-								"src": "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/images/store/coding-2-unsplash.jpg"
 							},
 							"tags": ["tools"]
 						},
@@ -87,7 +87,7 @@
 							"title": "Learning Resource",
 							"description": "A collection of developer documents that can aid with building and debugging HERE applications.",
 							"image": {
-								"src": "http://localhost:8080/common/images/store/coding-3-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/images/store/coding-3-unsplash.jpg"
 							},
 							"tags": ["page"]
 						}
@@ -104,7 +104,7 @@
 							"title": "Views",
 							"description": "A collection of views made available through our catalog.",
 							"image": {
-								"src": "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/images/store/coding-4-unsplash.jpg"
 							},
 							"tags": ["view"]
 						},
@@ -112,7 +112,7 @@
 							"title": "Web Apps",
 							"description": "A collection of web apps built using OpenFin.",
 							"image": {
-								"src": "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/images/store/coding-5-unsplash.jpg"
 							},
 							"tags": ["manifest"]
 						},
@@ -120,7 +120,7 @@
 							"title": "Native Apps",
 							"description": "A collection of native apps made available through our catalog.",
 							"image": {
-								"src": "http://localhost:8080/common/images/store/coding-6-unsplash.jpg"
+								"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/common/images/store/coding-6-unsplash.jpg"
 							},
 							"tags": ["native"]
 						}
@@ -162,7 +162,7 @@
 				}
 			],
 			"footer": {
-				"logo": { "src": "http://localhost:8080/favicon.ico", "size": "32" },
+				"logo": { "src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store/favicon.ico", "size": "32" },
 				"text": "Welcome to the HERE Sample Footer",
 				"links": [
 					{

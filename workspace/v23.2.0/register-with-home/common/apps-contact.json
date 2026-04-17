@@ -4,11 +4,11 @@
 		"name": "call-app",
 		"title": "Call Application",
 		"description": "Start a call.",
-		"manifest": "http://localhost:8080/common/views/contact/call-app.view.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/views/contact/call-app.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -28,7 +28,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/call-app.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/call-app.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact"]
@@ -38,11 +38,11 @@
 		"name": "participant-selection",
 		"title": "Participant Selection",
 		"description": "Select a participant.",
-		"manifest": "http://localhost:8080/common/views/contact/participant-selection.view.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/views/contact/participant-selection.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -51,7 +51,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/participant-selection.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/participant-selection.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact"]
@@ -61,11 +61,11 @@
 		"name": "participant-history",
 		"title": "Participant History",
 		"description": "View participant history.",
-		"manifest": "http://localhost:8080/common/views/contact/participant-history.view.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/views/contact/participant-history.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -80,7 +80,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/participant-history.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/participant-history.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact"]
@@ -90,11 +90,11 @@
 		"name": "investments-and-models",
 		"title": "Investments and Models",
 		"description": "View investments and models.",
-		"manifest": "http://localhost:8080/common/views/contact/investments-and-models.view.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/views/contact/investments-and-models.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -109,7 +109,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/investments-and-models.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/investments-and-models.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact"]
@@ -119,11 +119,11 @@
 		"name": "participant-summary-view",
 		"title": "Participant Summary",
 		"description": "View summary of the participant",
-		"manifest": "http://localhost:8080/common/views/contact/participant-summary.view.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/views/contact/participant-summary.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -143,7 +143,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/participant-summary-view.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/participant-summary-view.png"
 			}
 		],
 		"tags": ["view", "interop", "fdc3", "contact"]
@@ -153,11 +153,11 @@
 		"name": "participant-summary-window",
 		"title": "Participant Summary Window",
 		"description": "View summary of the participant",
-		"manifest": "http://localhost:8080/common/views/contact/participant-summary.window.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/views/contact/participant-summary.window.fin.json",
 		"manifestType": "window",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -177,7 +177,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/participant-summary-window.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/participant-summary-window.png"
 			}
 		],
 		"tags": ["window", "interop", "fdc3", "contact"]
@@ -189,10 +189,10 @@
 		"manifestType": "snapshot",
 		"instanceMode": "new",
 		"description": "Provides a summary of the current client",
-		"manifest": "http://localhost:8080/common/snapshots/contact-overview.snapshot.fin.json",
+		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/snapshots/contact-overview.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/favicon-32x32.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -207,7 +207,7 @@
 		],
 		"images": [
 			{
-				"src": "http://localhost:8080/common/images/previews/contact/client-overview.png"
+				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/common/images/previews/contact/client-overview.png"
 			}
 		],
 		"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]

@@ -14854,7 +14854,7 @@ const SOURCES = [
         definition: {
             id: "quote",
             data: {
-                rootUrl: "http://localhost:8080/data/quotes/"
+                rootUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/customize-home-templates/data/quotes/"
             }
         },
         instance: new _sources_quote_quote_source__WEBPACK_IMPORTED_MODULE_2__.QuoteSource()
@@ -14872,7 +14872,7 @@ const SOURCES = [
         definition: {
             id: "async",
             data: {
-                rootUrl: "http://localhost:8080/data/contacts/"
+                rootUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/customize-home-templates/data/contacts/"
             }
         },
         instance: new _sources_async_contacts_async_contacts_source__WEBPACK_IMPORTED_MODULE_0__.AsyncContactsSource()
@@ -14881,7 +14881,7 @@ const SOURCES = [
         definition: {
             id: "tree-query",
             data: {
-                rootUrl: "http://localhost:8080/data/organizations/"
+                rootUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/customize-home-templates/data/organizations/"
             }
         },
         instance: new _sources_tree_query_tree_query_source__WEBPACK_IMPORTED_MODULE_6__.TreeQuerySource()
@@ -14890,7 +14890,7 @@ const SOURCES = [
         definition: {
             id: "tree-inline",
             data: {
-                rootUrl: "http://localhost:8080/data/organizations/"
+                rootUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/customize-home-templates/data/organizations/"
             }
         },
         instance: new _sources_tree_inline_tree_inline_source__WEBPACK_IMPORTED_MODULE_5__.TreeInlineSource()
@@ -41576,7 +41576,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "customize-home-templates";
 const PLATFORM_TITLE = "Customize Home Templates";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/customize-home-templates/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.
     const platform = fin.Platform.getCurrentSync();

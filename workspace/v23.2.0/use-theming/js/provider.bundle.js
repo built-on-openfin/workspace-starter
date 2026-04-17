@@ -12564,11 +12564,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the HERE environment",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12577,7 +12577,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "HERE", "versions"]
@@ -12591,7 +12591,7 @@ const THEME_BUILDER_APP = {
     description: "A tool to help in the building of a theme.",
     manifest: "https://built-on-openfin.github.io/dev-extensions/extensions/v23.2.0/branding/theme-definition-builder/theme-definition-builder-view.json",
     manifestType: "view",
-    icons: [{ src: "http://localhost:8080/common/images/favicon-32x32.png" }],
+    icons: [{ src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/favicon-32x32.png" }],
     contactEmail: "contact@example.com",
     supportEmail: "support@example.com",
     publisher: "HERE",
@@ -12610,16 +12610,16 @@ const COMMON_STYLES_APP = {
     appId: "common-styles",
     title: "Common Styles Example",
     description: "A view demonstrating the common styles.",
-    manifest: "http://localhost:8080/common/style/style-view.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/style/style-view.json",
     manifestType: "view",
-    icons: [{ src: "http://localhost:8080/common/images/favicon-32x32.png" }],
+    icons: [{ src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/favicon-32x32.png" }],
     contactEmail: "contact@example.com",
     supportEmail: "support@example.com",
     publisher: "HERE",
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/starter-style-guide.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/previews/starter-style-guide.png"
         }
     ],
     tags: ["view", "theme", "tool"]
@@ -12683,10 +12683,10 @@ const DEFAULT_THEME_SEED = {
 };
 const DEFAULT_THEME_OVERRIDES = {
     light: {
-        "icon.symbol": "http://localhost:8080/common/images/favicon-32x32.png"
+        "icon.symbol": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/favicon-32x32.png"
     },
     dark: {
-        "icon.symbol": "http://localhost:8080/common/images/favicon-32x32.png"
+        "icon.symbol": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/images/favicon-32x32.png"
     }
 };
 
@@ -12759,7 +12759,7 @@ function getThemeButton() {
     return {
         type: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_0__.BrowserButtonType.Custom,
         tooltip: "Theme",
-        iconUrl: `http://localhost:8080/common/icons/default/${currentColorScheme}/theme.svg`,
+        iconUrl: `https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/common/icons/default/${currentColorScheme}/theme.svg`,
         action: {
             id: "change-theme"
         }
@@ -14029,7 +14029,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "use-theming";
 const PLATFORM_TITLE = "Use Theming";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/use-theming/favicon.ico";
 const APPLY_THEME_ACTION = "apply-theme";
 window.addEventListener("DOMContentLoaded", async () => {
     // Check to see if there was a theming payload supplied on the command line

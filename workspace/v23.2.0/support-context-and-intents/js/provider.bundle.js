@@ -16330,7 +16330,7 @@ function createInteropOverride(customSettings) {
             const width = customSettings?.platformProvider?.intentPicker?.width ?? 400;
             // this logic runs in the provider so we are using it as a way of determining the root (so it works with root hosting and subdirectory based hosting if a url is not provided)
             const url = customSettings?.platformProvider?.intentPicker?.url ??
-                "http://localhost:8080/common/windows/intents/picker.html";
+                "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/common/windows/intents/picker.html";
             const winOption = {
                 name: "intent-picker",
                 includeInSnapshots: false,
@@ -18039,7 +18039,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = fin.me.identity.uuid;
 const PLATFORM_TITLE = "Support Context and Intents";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // Load the settings from the manifest
     const customSettings = await getManifestCustomSettings();

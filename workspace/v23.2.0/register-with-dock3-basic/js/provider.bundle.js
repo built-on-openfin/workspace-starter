@@ -14530,7 +14530,7 @@ let dockConfig;
 let dockProvider;
 const PLATFORM_ID = "register-with-dock3-basic";
 const PLATFORM_TITLE = "Register With Dock3 Basic";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock3-basic/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.
     const platform = fin.Platform.getCurrentSync();

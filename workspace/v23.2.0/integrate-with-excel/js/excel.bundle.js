@@ -329,7 +329,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _excel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./excel */ "./client/src/excel.ts");
 
 window.addEventListener("DOMContentLoaded", async () => {
-    const root = "http://localhost:8080";
+    const root = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel";
     const excelSettings = {
         appAsset: {
             alias: "excel-interop-example.xlsx",

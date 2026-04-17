@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap-basic/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "http://localhost:8080/platform/provider.html",
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap-basic/platform/provider.html",
 		"defaultHeight": 800,
 		"defaultWidth": 800,
 		"preventQuitOnLastWindowClosed": true,
@@ -34,7 +34,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "http://localhost:8080/favicon.ico",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap-basic/favicon.ico",
 		"name": "Integrate with Snap - Basic - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -53,7 +53,7 @@
 			"mandatory": false
 		},
 		{
-			"src": "http://localhost:8080/apps/snap-native-test-app.zip",
+			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap-basic/apps/snap-native-test-app.zip",
 			"alias": "snap-native-test-app",
 			"version": "1.0.0",
 			"target": "snap-native-test-app.exe",

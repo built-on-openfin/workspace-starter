@@ -12595,7 +12595,7 @@ async function register(id, title, icon, options) {
                 {
                     type: _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__.DockButtonNames.DropdownButton,
                     tooltip: "Social",
-                    iconUrl: "http://localhost:8080/assets/spanner.svg",
+                    iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock-basic/assets/spanner.svg",
                     contextMenu: {
                         removeOption: true
                     },
@@ -12706,7 +12706,7 @@ function buildDockConfiguration(isEnabled) {
         {
             type: _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__.DockButtonNames.DropdownButton,
             tooltip: "Social",
-            iconUrl: "http://localhost:8080/assets/spanner.svg",
+            iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock-basic/assets/spanner.svg",
             contextMenu: {
                 removeOption: true
             },
@@ -13978,7 +13978,7 @@ let customOpenUrlInput;
 let enableRearrangementButton;
 const PLATFORM_ID = "register-with-dock-basic";
 const PLATFORM_TITLE = "Register With Dock Basic";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock-basic/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.
     const platform = fin.Platform.getCurrentSync();

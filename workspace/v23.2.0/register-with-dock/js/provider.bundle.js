@@ -12602,17 +12602,17 @@ function dockGetCustomActions() {
                     {
                         label: "Chart 1",
                         id: "chart-1",
-                        icon: "http://localhost:8080/assets/menu/chart1.svg"
+                        icon: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/menu/chart1.svg"
                     },
                     {
                         label: "Chart 2",
                         id: "chart-2",
-                        icon: "http://localhost:8080/assets/menu/chart2.svg"
+                        icon: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/menu/chart2.svg"
                     },
                     {
                         label: "Chart 3",
                         id: "chart-3",
-                        icon: "http://localhost:8080/assets/menu/chart3.svg"
+                        icon: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/menu/chart3.svg"
                     }
                 ]);
                 console.log("The user selected", res);
@@ -12628,7 +12628,7 @@ function buildDockConfiguration() {
     const buttons = [
         {
             tooltip: "Add View",
-            iconUrl: "http://localhost:8080/assets/view-add.svg",
+            iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/view-add.svg",
             action: {
                 id: "view-add"
             }
@@ -12637,7 +12637,7 @@ function buildDockConfiguration() {
             type: _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__.DockButtonNames.DropdownButton,
             tooltip: "Favorites",
             id: "favorites",
-            iconUrl: "http://localhost:8080/assets/favorites.svg",
+            iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/favorites.svg",
             options: favorites.length > 0
                 ? favorites.map((fav) => ({
                     tooltip: fav.title,
@@ -12658,7 +12658,7 @@ function buildDockConfiguration() {
         },
         {
             tooltip: "Custom Menu",
-            iconUrl: "http://localhost:8080/assets/custom-menu.svg",
+            iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/custom-menu.svg",
             action: {
                 id: "custom-menu"
             }
@@ -12820,7 +12820,7 @@ async function getDockBrowserButtons() {
             {
                 type: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_1__.BrowserButtonType.Custom,
                 tooltip: "Remove from Favorites",
-                iconUrl: "http://localhost:8080/assets/favorite-remove.svg",
+                iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/favorite-remove.svg",
                 action: {
                     id: "favorite-remove"
                 }
@@ -12831,7 +12831,7 @@ async function getDockBrowserButtons() {
         {
             type: _openfin_workspace_platform__WEBPACK_IMPORTED_MODULE_1__.BrowserButtonType.Custom,
             tooltip: "Add to Favorites",
-            iconUrl: "http://localhost:8080/assets/favorite-add.svg",
+            iconUrl: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/assets/favorite-add.svg",
             action: {
                 id: "favorite-add"
             }
@@ -12892,7 +12892,7 @@ async function showCustomMenu(position, parentIdentity, menuEntries) {
                 menuEntries
             }
         },
-        url: "http://localhost:8080/html/custom-menu.html",
+        url: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/html/custom-menu.html",
         x: dockBounds.left + menuPos - 20,
         y: dockBounds.top + 34,
         width: 100,
@@ -14151,8 +14151,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "register-with-dock";
 const PLATFORM_TITLE = "Register With Dock";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
-const NEW_TAB_URL = "http://localhost:8080/common/views/platform/new-tab/new-tab.html";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/favicon.ico";
+const NEW_TAB_URL = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-dock/common/views/platform/new-tab/new-tab.html";
 window.addEventListener("DOMContentLoaded", async () => {
     // The DOM is ready so initialize the platform
     // Provide default icons and default theme for the browser windows

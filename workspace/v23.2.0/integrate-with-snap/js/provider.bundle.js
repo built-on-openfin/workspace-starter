@@ -12583,11 +12583,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the HERE environment",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12596,7 +12596,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "HERE", "versions"]
@@ -12608,11 +12608,11 @@ const OPENFIN_INFORMATION_APP_SNAPSHOT = {
     appId: "openfin-information-snapshot",
     title: "OpenFin Information Snapshot",
     description: "Display information about the HERE environment as a snapped collection of two windows.",
-    manifest: "http://localhost:8080/common/views/platform/of-info.snapshot.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.snapshot.fin.json",
     manifestType: "snapshot",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12621,7 +12621,7 @@ const OPENFIN_INFORMATION_APP_SNAPSHOT = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/previews/of-info.png"
         }
     ],
     tags: ["snapshot", "HERE", "versions"]
@@ -12633,11 +12633,11 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID = {
     appId: "openfin-information-snapshot-classic-snapid",
     title: "OpenFin Information Classic Snapshot With Snap Id",
     description: "Display information about the HERE environment as a snapped collection of classic windows using the snapId to link them.",
-    manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot-snapclientid.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info-classic.snapshot-snapclientid.fin.json",
     manifestType: "snapshot",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12646,7 +12646,7 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/previews/of-info.png"
         }
     ],
     tags: ["snapshot", "HERE", "versions"]
@@ -12658,11 +12658,11 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT = {
     appId: "openfin-information-classic-snapshot",
     title: "OpenFin Information Classic Snapshot",
     description: "Display information about the HERE environment as a snapped collection of classic windows.",
-    manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info-classic.snapshot.fin.json",
     manifestType: "snapshot",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12671,7 +12671,7 @@ const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/previews/of-info.png"
         }
     ],
     tags: ["snapshot", "HERE", "versions"]
@@ -12683,11 +12683,11 @@ const OPENFIN_WINDOW_APP = {
     appId: "openfin-window-options-builder",
     title: "Window Options Builder",
     description: "A tool to create a classic window and demonstrate the different window options available",
-    manifest: "http://localhost:8080/common/views/window-options/window.options.builder.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/window-options/window.options.builder.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12705,7 +12705,7 @@ const SNAP_NATIVE_TEST_APP = {
     title: "Snap Native Test App",
     description: "Open a native test application",
     manifest: {
-        src: "http://localhost:8080/apps/snap-native-test-app.zip",
+        src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/apps/snap-native-test-app.zip",
         alias: "snap-native-test-app",
         version: "1.0.0",
         target: "snap-native-test-app.exe",
@@ -12718,7 +12718,7 @@ const SNAP_NATIVE_TEST_APP = {
     manifestType: "inline-appasset",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -14253,7 +14253,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "integrate-with-snap";
 const PLATFORM_TITLE = "Integrate With Snap";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/favicon.ico";
 window.addEventListener("DOMContentLoaded", async () => {
     // The DOM is ready so initialize the platform
     // Provide default icons and default theme for the browser windows

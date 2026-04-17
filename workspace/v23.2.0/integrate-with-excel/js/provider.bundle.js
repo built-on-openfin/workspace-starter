@@ -12539,11 +12539,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the HERE environment",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12552,7 +12552,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "HERE", "versions"]
@@ -12568,7 +12568,7 @@ const FDC3_BROADCAST = {
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12593,7 +12593,7 @@ const INTEROP_BROADCAST = {
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12614,11 +12614,11 @@ const EXCEL_WINDOW = {
     appId: "excel-window",
     title: "Excel Window",
     description: "A window that launches Excel and listens for changes. This is an alternative to the Excel Home integration.",
-    manifest: "http://localhost:8080/windows/excel.window.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/windows/excel.window.fin.json",
     manifestType: "window",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -14255,7 +14255,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "integrate-with-excel";
 const PLATFORM_TITLE = "Integrate with Excel";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-excel/favicon.ico";
 let excelIntegration;
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.

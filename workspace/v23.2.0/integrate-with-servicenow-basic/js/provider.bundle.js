@@ -13722,7 +13722,7 @@ __webpack_require__.r(__webpack_exports__);
 // used to access your ServiceNow deployment
 const INSTANCE_URL = "";
 const CLIENT_ID = "";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow-basic/favicon.ico";
 // Connection and current list of contacts
 let serviceNowConnection;
 let contacts = [];

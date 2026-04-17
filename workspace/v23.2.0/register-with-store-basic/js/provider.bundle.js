@@ -12534,11 +12534,11 @@ const OPENFIN_INFORMATION_APP = {
     appId: "openfin-information",
     title: "OpenFin Information",
     description: "Display information about the HERE environment",
-    manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/views/platform/of-info.view.fin.json",
     manifestType: "view",
     icons: [
         {
-            src: "http://localhost:8080/common/images/favicon-32x32.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/favicon-32x32.png"
         }
     ],
     contactEmail: "contact@example.com",
@@ -12547,7 +12547,7 @@ const OPENFIN_INFORMATION_APP = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/of-info.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/previews/of-info.png"
         }
     ],
     tags: ["view", "HERE", "versions"]
@@ -12568,7 +12568,7 @@ const PROCESS_MANAGER = {
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/tools/openfin-process-manager.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/previews/tools/openfin-process-manager.png"
         }
     ],
     tags: ["hero", "manifest", "tools"]
@@ -12581,15 +12581,15 @@ const DEVELOPER_CONTENT = {
     title: "OpenFin Developer Docs",
     manifestType: "snapshot",
     description: "Shows a collection of HERE developer pages and provides an example of how you can present a pre-built page as a launch target in HERE Home. This entry has a manifest type of 'snapshot'.",
-    manifest: "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
-    icons: [{ src: "http://localhost:8080/common/images/favicon-32x32.png" }],
+    manifest: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/snapshots/developer.snapshot.fin.json",
+    icons: [{ src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/favicon-32x32.png" }],
     contactEmail: "contact@example.com",
     supportEmail: "support@example.com",
     publisher: "HERE",
     intents: [],
     images: [
         {
-            src: "http://localhost:8080/common/images/previews/openfin-page-docs.png"
+            src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/previews/openfin-page-docs.png"
         }
     ],
     tags: ["page"]
@@ -12712,7 +12712,7 @@ async function register(id, title, icon) {
                         }
                     },
                     image: {
-                        src: "http://localhost:8080/common/images/store/superhero-unsplash.jpg"
+                        src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/store/superhero-unsplash.jpg"
                     }
                 },
                 topRow: {
@@ -12723,7 +12723,7 @@ async function register(id, title, icon) {
                             title: "Dev Tools",
                             description: "A collection of developer tools that can aid with building and debugging HERE applications.",
                             image: {
-                                src: "http://localhost:8080/common/images/store/coding-2-unsplash.jpg"
+                                src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/store/coding-2-unsplash.jpg"
                             },
                             templateId: _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__.StorefrontTemplate.AppGrid,
                             templateData: {
@@ -12745,7 +12745,7 @@ async function register(id, title, icon) {
                             title: "Views",
                             description: "A collection of views made available through our catalog.",
                             image: {
-                                src: "http://localhost:8080/common/images/store/coding-4-unsplash.jpg"
+                                src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/store/coding-4-unsplash.jpg"
                             },
                             templateId: _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__.StorefrontTemplate.AppGrid,
                             templateData: {
@@ -12758,7 +12758,7 @@ async function register(id, title, icon) {
                             title: "Web Apps",
                             description: "A collection of web apps built using OpenFin.",
                             image: {
-                                src: "http://localhost:8080/common/images/store/coding-5-unsplash.jpg"
+                                src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/common/images/store/coding-5-unsplash.jpg"
                             },
                             templateId: _openfin_workspace__WEBPACK_IMPORTED_MODULE_0__.StorefrontTemplate.AppGrid,
                             templateData: {
@@ -12770,7 +12770,7 @@ async function register(id, title, icon) {
                 }
             }),
             getFooter: async () => ({
-                logo: { src: "http://localhost:8080/favicon.ico", size: "32" },
+                logo: { src: "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/favicon.ico", size: "32" },
                 text: "Welcome to the HERE Sample Footer",
                 links: [
                     {
@@ -14037,7 +14037,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const PLATFORM_ID = "register-with-store-basic";
 const PLATFORM_TITLE = "Register With Store Basic";
-const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+const PLATFORM_ICON = "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-store-basic/favicon.ico";
 let storeRegistration;
 window.addEventListener("DOMContentLoaded", async () => {
     // When the platform api is ready we bootstrap the platform.

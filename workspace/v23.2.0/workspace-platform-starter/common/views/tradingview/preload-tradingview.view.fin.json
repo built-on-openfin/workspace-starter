@@ -6,7 +6,7 @@
 	},
 	"preloadScripts": [
 		{
-			"url": "http://localhost:8080/common/views/tradingview/preload-tradingview.js"
+			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/tradingview/preload-tradingview.js"
 		}
 	]
 }
