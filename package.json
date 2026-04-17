@@ -32,13 +32,7 @@
     "how-to/integrate-with-openid-connect",
     "how-to/integrate-with-rss",
     "how-to/integrate-with-salesforce-basic",
-    "how-to/migrate-from-a-previous-version",
-    "how-to/automation-testing",
-    "how-to/automation-testing/register-with-home-js",
-    "how-to/automation-testing/register-with-home-ts",
-    "how-to/automation-testing/register-with-store-js",
-    "how-to/automation-testing/selenium",
-    "how-to/automation-testing/wdio"
+    "how-to/migrate-from-a-previous-version"
   ],
   "packageCustomFolder": "",
   "contributors": [
@@ -53,7 +47,7 @@
     "@openfin/node-adapter": "43.102.2",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
-    "replace-in-file": "7.1.0",
+    "replace-in-file": "8.4.0",
     "yargs": "17.7.2"
   },
   "overrides": {
