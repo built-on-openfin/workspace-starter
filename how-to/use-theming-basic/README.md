@@ -102,6 +102,6 @@ You'll also notice an "overrides" key in the new theme object. This is for more 
 
 **You have a couple of options on where to keep your theme as well:**
 
-1. Type it in-line into the theme object in your platform init() method, like we have [here](./client/src/provider.ts). This keeps it super-simple, but once you get more complex, you'll need to keep it some where more configurable.
+1. Type it in-line into the theme object in your platform init() method, like we have [in the provider.ts file](./client/src/provider.ts). This keeps it super-simple, but once you get more complex, you'll need to keep it some where more configurable.
 
 2. Keep your theming in your manifest.fin.json file, as a **customSetting** object that can be called at runtime. There is an example of doing that in our [how-to/workspace-platform-starter-basic](../workspace-platform-starter-basic/public/third.manifest.fin.json) repository. Keeping your theme in your manifest gives you the ability to only need one place to configure it, without having to rebuild and re-host your platform files.

@@ -12,7 +12,7 @@ The HERE Core UI is a full-featured work environment designed to improve the way
 
 ## What version does this branch cover?
 
-This branch covers version **v23.2.0** of HERE Core UI (there are versioned branches for other releases). [Click here to visit the release notes.](https://cdn.openfin.co/versions/?product=UI%20Components#23.2.15)
+This branch covers version **v23.2.0** of HERE Core UI (there are versioned branches for other releases). [Click here to visit the release notes.](https://cdn.openfin.co/versions/?product=UI%20Components#23.2.16)
 
 ## Before you get started
 
@@ -76,17 +76,6 @@ There are topics that a HERE Core UI Platform developer may want to look into in
 | [How To Integrate with Snap](./how-to/integrate-with-snap)                                     | This example shows how to use the HERE Snap SDK to allow snapping and docking of native applications to your HERE windows. Also saving and restoring them as part of a snapshot. This is for Windows Only.                                                                                                                                                                       | [Workspace Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.2.0%2Fintegrate-with-snap%2Fmanifest.fin.json) [Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.2.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)                                                                                                                                                                                                                                                                                                                                                                                 |
 | [How To Integrate with OpenId Connect](./how-to/integrate-with-openid-connect/README.md)       | This example demonstrates how to use Single Single On to integrate with an OpenId Connect provider to authenticate your application.                                                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                  |
 | [How To Integrate Server Authentication](./how-to/integrate-server-authentication)             | This example demonstrates how to authenticate with a servers login page.                                                                                                                                                                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                  |
-
-## Automation Testing
-
-HERE provides some packages to assist in automation testing of your apps.
-
-- [@openfin/automation-cli](https://www.npmjs.com/package/@openfin/automation-cli) - A command line tool for running tests in an HERE environment.
-- [@openfin/automation-helpers](https://www.npmjs.com/package/@openfin/automation-helpers) - A package of helper methods for interacting with HERE components.
-
-| Example                                           | Description                                                                                    | Live Launch |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- |
-| [Automation Testing](./how-to/automation-testing) | This howto contains multiple examples of using the HERE automation testing CLI and helpers. |             |
 
 ## Integrations
 

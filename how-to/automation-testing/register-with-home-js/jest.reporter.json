@@ -1,7 +1,0 @@
-{
-	"reporter": "jest-html-reporters",
-	"options": {
-		"publicPath": "./reports/jest",
-		"filename": "report.html"
-	}
-}
