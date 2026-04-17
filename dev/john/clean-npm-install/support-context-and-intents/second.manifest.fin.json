@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "second-support-context-and-intents",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/common/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -41,7 +41,7 @@
 	"customSettings": {
 		"platformProvider": {
 			"intentPicker": {
-				"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/common/windows/intents/picker.html",
+				"url": "http://localhost:8080/common/windows/intents/picker.html",
 				"height": 400,
 				"width": 400
 			},
@@ -49,10 +49,10 @@
 		},
 		"appProvider": {
 			"appSourceUrls": [
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/common/apps-contact.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/common/apps-interop.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/common/apps-preload.json",
-				"https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/support-context-and-intents/common/apps-native.json"
+				"http://localhost:8080/common/apps-contact.json",
+				"http://localhost:8080/common/apps-interop.json",
+				"http://localhost:8080/common/apps-preload.json",
+				"http://localhost:8080/common/apps-native.json"
 			],
 			"cacheDurationInMinutes": 1,
 			"manifestTypes": ["view", "snapshot", "manifest", "external", "inline-view", "inline-appasset"]

@@ -6,7 +6,7 @@
 		"description": "A developer tool to help build an app definition",
 		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/app/app-definition-builder/app-definition-builder-view.json",
 		"manifestType": "view",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/favicon-32x32.png" }],
+		"icons": [{ "src": "http://localhost:8080/common/images/favicon-32x32.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "HERE",
@@ -31,7 +31,7 @@
 		"description": "A tool to help in the building of a theme.",
 		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/branding/theme-definition-builder/theme-definition-builder-view.json",
 		"manifestType": "view",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/favicon-32x32.png" }],
+		"icons": [{ "src": "http://localhost:8080/common/images/favicon-32x32.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "HERE",
@@ -50,7 +50,7 @@
 		"description": "A tool to help in the building of a page.",
 		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/layout/views/page-layout-snapshot.json",
 		"manifestType": "snapshot",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/favicon-32x32.png" }],
+		"icons": [{ "src": "http://localhost:8080/common/images/favicon-32x32.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "HERE",
@@ -68,10 +68,10 @@
 		"title": "OpenFin Developer Docs",
 		"manifestType": "snapshot",
 		"description": "Shows a collection of HERE developer pages and provides an example of how you can present a pre-built page as a launch target in HERE Home. This entry has a manifest type of 'snapshot'.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/snapshots/developer.snapshot.fin.json",
+		"manifest": "http://localhost:8080/common/snapshots/developer.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/favicon-32x32.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -80,7 +80,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/previews/openfin-page-docs.png"
+				"src": "http://localhost:8080/common/images/previews/openfin-page-docs.png"
 			}
 		],
 		"tags": ["page", "developer"]
@@ -92,7 +92,7 @@
 		"description": "A collection of information and tools that help you get started with HERE Core UI.",
 		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/common/snapshots/snapshot-getting-started.json",
 		"manifestType": "snapshot",
-		"icons": [{ "src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/favicon-32x32.png" }],
+		"icons": [{ "src": "http://localhost:8080/common/images/favicon-32x32.png" }],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
 		"publisher": "HERE",
@@ -109,7 +109,7 @@
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/favicon-32x32.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",

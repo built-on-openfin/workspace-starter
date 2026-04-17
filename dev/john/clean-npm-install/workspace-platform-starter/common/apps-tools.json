@@ -17,7 +17,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/previews/tools/openfin-notification-studio.png"
+				"src": "http://localhost:8080/common/images/previews/tools/openfin-notification-studio.png"
 			}
 		],
 		"tags": ["hero", "manifest", "tools"]
@@ -40,7 +40,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/images/previews/tools/openfin-process-manager.png"
+				"src": "http://localhost:8080/common/images/previews/tools/openfin-process-manager.png"
 			}
 		],
 		"tags": ["hero", "manifest", "tools"]

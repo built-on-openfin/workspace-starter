@@ -4,5 +4,5 @@
 	"interop": {
 		"currentContextGroup": "green"
 	},
-	"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter/common/views/google/preload-google.js" }]
+	"preloadScripts": [{ "url": "http://localhost:8080/common/views/google/preload-google.js" }]
 }

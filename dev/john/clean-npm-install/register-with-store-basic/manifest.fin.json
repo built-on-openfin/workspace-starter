@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-store-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-store-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-store-basic/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -35,7 +35,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-store-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Register With Store Basic - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},

@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-dock3-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-dock3-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-dock3-basic/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {

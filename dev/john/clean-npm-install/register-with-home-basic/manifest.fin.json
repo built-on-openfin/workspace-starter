@@ -7,15 +7,15 @@
 	},
 	"platform": {
 		"uuid": "register-with-home-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-home-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-home-basic/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-home-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Register With Home - Basic - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},

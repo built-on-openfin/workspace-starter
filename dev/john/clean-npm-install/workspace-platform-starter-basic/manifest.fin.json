@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "workspace-platform-start-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"interopBrokerConfiguration": {
 			"contextGroups": [
@@ -89,7 +89,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "HERE Core UI Platform Starter Basic - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -100,20 +100,20 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/platform/new-tab/new-tab.html",
-		"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/platform/new-tab/new-tab.html",
-		"appsUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/apps.json",
+		"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+		"newTabUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+		"appsUrl": "http://localhost:8080/apps.json",
 		"apps": [
 			{
 				"appId": "call-app",
 				"name": "call-app",
 				"title": "Call Application",
 				"description": "Start a call.",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/call-app.view.fin.json",
+				"manifest": "http://localhost:8080/common/views/contact/call-app.view.fin.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -133,7 +133,7 @@
 				],
 				"images": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/previews/contact/call-app.png"
+						"src": "http://localhost:8080/common/images/previews/contact/call-app.png"
 					}
 				],
 				"tags": ["view", "interop", "fdc3", "contact"]
@@ -143,11 +143,11 @@
 				"name": "participant-selection",
 				"title": "Participant Selection",
 				"description": "Select a participant.",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-selection.view.fin.json",
+				"manifest": "http://localhost:8080/common/views/contact/participant-selection.view.fin.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -156,7 +156,7 @@
 				"intents": [],
 				"images": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/previews/contact/participant-selection.png"
+						"src": "http://localhost:8080/common/images/previews/contact/participant-selection.png"
 					}
 				],
 				"tags": ["view", "interop", "fdc3", "contact"]
@@ -166,11 +166,11 @@
 				"name": "participant-history",
 				"title": "Participant History",
 				"description": "View participant history.",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-history.view.fin.json",
+				"manifest": "http://localhost:8080/common/views/contact/participant-history.view.fin.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -185,7 +185,7 @@
 				],
 				"images": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/previews/contact/participant-history.png"
+						"src": "http://localhost:8080/common/images/previews/contact/participant-history.png"
 					}
 				],
 				"tags": ["view", "interop", "fdc3", "contact"]
@@ -195,11 +195,11 @@
 				"name": "investments-and-models",
 				"title": "Investments and Models",
 				"description": "View investments and models.",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/investments-and-models.view.fin.json",
+				"manifest": "http://localhost:8080/common/views/contact/investments-and-models.view.fin.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -214,7 +214,7 @@
 				],
 				"images": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/previews/contact/investments-and-models.png"
+						"src": "http://localhost:8080/common/images/previews/contact/investments-and-models.png"
 					}
 				],
 				"tags": ["view", "interop", "fdc3", "contact"]
@@ -224,11 +224,11 @@
 				"name": "participant-summary-view",
 				"title": "Participant Summary",
 				"description": "View summary of the participant",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-summary.view.fin.json",
+				"manifest": "http://localhost:8080/common/views/contact/participant-summary.view.fin.json",
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -243,7 +243,7 @@
 				],
 				"images": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/previews/contact/participant-summary-view.png"
+						"src": "http://localhost:8080/common/images/previews/contact/participant-summary-view.png"
 					}
 				],
 				"tags": ["view", "interop", "fdc3", "contact"]
@@ -254,10 +254,10 @@
 				"title": "Client Overview",
 				"manifestType": "snapshot",
 				"description": "Provides a summary of the current client",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/snapshots/contact-overview.snapshot.fin.json",
+				"manifest": "http://localhost:8080/common/snapshots/contact-overview.snapshot.fin.json",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
@@ -272,7 +272,7 @@
 				],
 				"images": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/previews/contact/client-overview.png"
+						"src": "http://localhost:8080/common/images/previews/contact/client-overview.png"
 					}
 				],
 				"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
@@ -283,10 +283,10 @@
 				"title": "New Page",
 				"manifestType": "view",
 				"description": "Search Google or open a url",
-				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/platform/new-tab.view.fin.json",
+				"manifest": "http://localhost:8080/common/views/platform/new-tab.view.fin.json",
 				"icons": [
 					{
-						"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",

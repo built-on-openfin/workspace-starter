@@ -66,10 +66,10 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://cdn.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://cdn.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": -1,
 			"maxWidth": -1,
 			"maximizable": true,
@@ -198,7 +198,7 @@
 															"detachOnClose": false,
 															"isClosable": true,
 															"preventDragOut": false,
-															"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-summary/index.html",
+															"url": "http://localhost:8080/common/views/contact/participant-summary/index.html",
 															"componentName": "view",
 															"fdc3InteropApi": "2.0",
 															"interop": {
@@ -206,7 +206,7 @@
 															},
 															"preloadScripts": [
 																{
-																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/style/style-changed-preload.js"
+																	"url": "http://localhost:8080/common/style/style-changed-preload.js"
 																}
 															],
 															"hotkeys": [
@@ -300,7 +300,7 @@
 																"width": false,
 																"height": false
 															},
-															"initialUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-summary/index.html",
+															"initialUrl": "http://localhost:8080/common/views/contact/participant-summary/index.html",
 															"processAffinity": "x",
 															"zoomLevel": 0
 														},
@@ -333,7 +333,7 @@
 															"detachOnClose": false,
 															"isClosable": true,
 															"preventDragOut": false,
-															"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/investments-and-models/index.html",
+															"url": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
 															"componentName": "view",
 															"fdc3InteropApi": "2.0",
 															"interop": {
@@ -341,7 +341,7 @@
 															},
 															"preloadScripts": [
 																{
-																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/style/style-changed-preload.js"
+																	"url": "http://localhost:8080/common/style/style-changed-preload.js"
 																}
 															],
 															"hotkeys": [
@@ -435,7 +435,7 @@
 																"width": false,
 																"height": false
 															},
-															"initialUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/investments-and-models/index.html",
+															"initialUrl": "http://localhost:8080/common/views/contact/investments-and-models/index.html",
 															"processAffinity": "x",
 															"zoomLevel": 0
 														},
@@ -484,7 +484,7 @@
 																	"detachOnClose": false,
 																	"isClosable": true,
 																	"preventDragOut": false,
-																	"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-history/index.html",
+																	"url": "http://localhost:8080/common/views/contact/participant-history/index.html",
 																	"componentName": "view",
 																	"fdc3InteropApi": "2.0",
 																	"interop": {
@@ -492,7 +492,7 @@
 																	},
 																	"preloadScripts": [
 																		{
-																			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/style/style-changed-preload.js"
+																			"url": "http://localhost:8080/common/style/style-changed-preload.js"
 																		}
 																	],
 																	"hotkeys": [
@@ -586,7 +586,7 @@
 																		"width": false,
 																		"height": false
 																	},
-																	"initialUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/common/views/contact/participant-history/index.html",
+																	"initialUrl": "http://localhost:8080/common/views/contact/participant-history/index.html",
 																	"processAffinity": "x",
 																	"zoomLevel": 0
 																},

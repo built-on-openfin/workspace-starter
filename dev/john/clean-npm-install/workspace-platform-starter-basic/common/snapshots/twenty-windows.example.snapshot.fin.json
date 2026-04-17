@@ -158,7 +158,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -254,7 +254,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -268,7 +268,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -351,7 +351,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 201,
 			"center": false,
@@ -950,7 +950,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -964,7 +964,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -1060,7 +1060,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -1074,7 +1074,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -1157,7 +1157,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 201,
 			"center": false,
@@ -1756,7 +1756,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -1770,7 +1770,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -1866,7 +1866,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -1880,7 +1880,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -1963,7 +1963,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 201,
 			"center": false,
@@ -2562,7 +2562,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -2576,7 +2576,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -2672,7 +2672,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -2686,7 +2686,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -2769,7 +2769,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 200,
 			"center": false,
@@ -3368,7 +3368,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -3382,7 +3382,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -3478,7 +3478,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -3492,7 +3492,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -3575,7 +3575,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 200,
 			"center": false,
@@ -4174,7 +4174,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -4188,7 +4188,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -4284,7 +4284,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -4298,7 +4298,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -4381,7 +4381,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 201,
 			"center": false,
@@ -4980,7 +4980,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -4994,7 +4994,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -5090,7 +5090,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -5104,7 +5104,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -5187,7 +5187,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 200,
 			"center": false,
@@ -5786,7 +5786,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -5800,7 +5800,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -5896,7 +5896,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -5910,7 +5910,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -5993,7 +5993,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 201,
 			"center": false,
@@ -6592,7 +6592,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -6606,7 +6606,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -6702,7 +6702,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -6716,7 +6716,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -6799,7 +6799,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 201,
 			"center": false,
@@ -7401,7 +7401,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -7415,7 +7415,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -7511,7 +7511,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -7525,7 +7525,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -7608,7 +7608,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 201,
 			"center": false,
@@ -8207,7 +8207,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -8221,7 +8221,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -8317,7 +8317,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -8331,7 +8331,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -8414,7 +8414,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 137,
 			"width": 201,
 			"center": false,
@@ -9013,7 +9013,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -9027,7 +9027,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -9123,7 +9123,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -9137,7 +9137,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -9220,7 +9220,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 133,
 			"width": 201,
 			"center": false,
@@ -9819,7 +9819,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -9833,7 +9833,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -9929,7 +9929,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -9943,7 +9943,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -10026,7 +10026,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 200,
 			"center": false,
@@ -10625,7 +10625,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -10639,7 +10639,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -10735,7 +10735,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -10749,7 +10749,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -10832,7 +10832,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 201,
 			"center": false,
@@ -11431,7 +11431,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -11445,7 +11445,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -11541,7 +11541,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -11555,7 +11555,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -11638,7 +11638,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 200,
 			"center": false,
@@ -12237,7 +12237,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -12251,7 +12251,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -12347,7 +12347,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -12361,7 +12361,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -12444,7 +12444,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 200,
 			"center": false,
@@ -13043,7 +13043,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -13057,7 +13057,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -13153,7 +13153,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -13167,7 +13167,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -13250,7 +13250,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 201,
 			"width": 201,
 			"center": false,
@@ -13849,7 +13849,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -13863,7 +13863,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -13959,7 +13959,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -13973,7 +13973,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -14056,7 +14056,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 201,
 			"center": false,
@@ -14655,7 +14655,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -14669,7 +14669,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -14765,7 +14765,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -14779,7 +14779,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -14862,7 +14862,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 200,
 			"center": false,
@@ -15461,7 +15461,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -15475,7 +15475,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": 200,
 			"maxWidth": 200,
 			"maximizable": true,
@@ -15571,7 +15571,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -15585,7 +15585,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "workspace-platform-start-basic",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -15668,7 +15668,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 200,
 			"width": 201,
 			"center": false,
@@ -16267,7 +16267,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/workspace-platform-starter-basic/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,

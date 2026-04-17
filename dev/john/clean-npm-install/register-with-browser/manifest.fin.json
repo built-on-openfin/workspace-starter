@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "launch-browser-from-window",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-browser/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-browser/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"commands": [
 			{
@@ -34,10 +34,10 @@
 	"customSettings": {
 		"browserIconSize": "default",
 		"launchBarWindowSettings": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-browser/html/launch-bar.html",
+			"url": "http://localhost:8080/html/launch-bar.html",
 			"name": "launch-bar",
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/register-with-browser/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"defaultHeight": 470,
 			"defaultWidth": 340,
 			"defaultCentered": true,

@@ -16,7 +16,7 @@
 		"defaultWidth": 850,
 		"defaultHeight": 700,
 		"saveWindowState": false,
-		"preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/integrate-with-snap/js/snap.preload.bundle.js" }],
+		"preloadScripts": [{ "url": "http://localhost:8080/js/snap.preload.bundle.js" }],
 		"permissions": {
 			"System": {
 				"launchExternalProcess": true,
@@ -27,7 +27,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/integrate-with-snap/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Integrate With Snap Classic - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},

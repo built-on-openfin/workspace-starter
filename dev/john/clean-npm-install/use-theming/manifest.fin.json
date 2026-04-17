@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "use-theming",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/use-theming/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/use-theming/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -53,7 +53,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/john/clean-npm-install/use-theming/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Use Theming - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
