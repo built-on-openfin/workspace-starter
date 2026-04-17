@@ -8,12 +8,12 @@
 		"manifest": {
 			"alias": "winform-interop-example",
 			"version": "4.0.0",
-			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/common/assets/native-interop-example.zip",
+			"src": "http://localhost:8080/common/assets/native-interop-example.zip",
 			"target": "OpenFin.Interop.Win.Sample.exe"
 		},
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/common/images/native/icon-winform-interop.png"
+				"src": "http://localhost:8080/common/images/native/icon-winform-interop.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -22,7 +22,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/common/images/previews/native/openfin-winform-interop.png"
+				"src": "http://localhost:8080/common/images/previews/native/openfin-winform-interop.png"
 			}
 		],
 		"tags": ["native", "appasset", "dock", "developer"]
@@ -36,7 +36,7 @@
 		"manifest": "notepad.exe",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/common/images/native/icon-notepad.png"
+				"src": "http://localhost:8080/common/images/native/icon-notepad.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -45,7 +45,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/support-context-and-intents/common/images/previews/native/microsoft-notepad-native.png"
+				"src": "http://localhost:8080/common/images/previews/native/microsoft-notepad-native.png"
 			}
 		],
 		"tags": ["native", "dock"]

@@ -8,9 +8,9 @@
 	"platform": {
 		"name": "default-workspace-platform",
 		"uuid": "workspace-platform-starter",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"appLogsTimezone": "utc",
 		"enableAppLogging": false,
@@ -74,7 +74,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Default HERE Core UI Platform - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -93,10 +93,10 @@
 			"autoShow": ["dock", "home"]
 		},
 		"platformProvider": {
-			"rootUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter",
+			"rootUrl": "http://localhost:8080",
 			"interop": {
 				"intentResolver": {
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/windows/intents/instance-picker.html",
+					"url": "http://localhost:8080/common/windows/intents/instance-picker.html",
 					"height": 715,
 					"width": 665,
 					"fdc3InteropApi": "2.0"
@@ -109,7 +109,7 @@
 					"description": "If you can not find an application to support your action please check the instances associated with this entry to see if it satisfies your need.",
 					"icons": [
 						{
-							"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico"
+							"src": "http://localhost:8080/favicon.ico"
 						}
 					],
 					"publisher": "Multiple",
@@ -170,11 +170,11 @@
 				"modules": [
 					{
 						"id": "default-wps-interop",
-						"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+						"icon": "http://localhost:8080/favicon.ico",
 						"title": "HERE Core UI Platform Starter Interop Broker",
 						"description": "This is the implementation included in HERE Core UI Platform starter but it is now exposed as a module to allow for easy replacement.",
 						"enabled": true,
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/interop-override/wps-interop-override.bundle.js",
+						"url": "http://localhost:8080/js/modules/interop-override/wps-interop-override.bundle.js",
 						"data": {
 							"loggerName": "WpsInteropOverride"
 						}
@@ -183,7 +183,7 @@
 			}
 		},
 		"appProvider": {
-			"endpointIds": ["https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/apps-info.json"],
+			"endpointIds": ["http://localhost:8080/common/apps-info.json"],
 			"cacheDurationInSeconds": 10,
 			"cacheDurationInMinutes": 0,
 			"manifestTypes": [
@@ -209,19 +209,19 @@
 					"title": "Local Storage",
 					"enabled": true,
 					"id": "local-storage",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/endpoint/local-storage.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/local-storage.bundle.js"
 				},
 				{
 					"title": "Favorite Local Storage",
 					"enabled": true,
 					"id": "favorite-local-storage",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/endpoint/favorite-local-storage.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/favorite-local-storage.bundle.js"
 				},
 				{
 					"title": "Inline Apps",
 					"enabled": true,
 					"id": "inline-apps",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/endpoint/inline-apps.bundle.js"
+					"url": "http://localhost:8080/js/modules/endpoint/inline-apps.bundle.js"
 				}
 			],
 			"endpoints": [
@@ -344,7 +344,7 @@
 					"title": {
 						"type": "view-title"
 					},
-					"favicon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico"
+					"favicon": "http://localhost:8080/favicon.ico"
 				}
 			},
 			"defaultViewOptions": {
@@ -368,7 +368,7 @@
 				{
 					"id": "default",
 					"label": "Default",
-					"logoUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"logoUrl": "http://localhost:8080/favicon.ico",
 					"default": "dark",
 					"palettes": {
 						"light": {
@@ -438,39 +438,39 @@
 		"homeProvider": {
 			"id": "workspace-platform-starter",
 			"title": "HERE Core UI Platform Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
 			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
 			"title": "HERE Core UI Platform Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico"
+			"icon": "http://localhost:8080/favicon.ico"
 		},
 		"dockProvider": {
 			"id": "workspace-platform-starter",
 			"title": "HERE Core UI Platform Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"entries": []
 		},
 		"notificationProvider": {
 			"id": "workspace-platform-starter",
 			"title": "HERE Core UI Platform Starter",
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico"
+			"icon": "http://localhost:8080/favicon.ico"
 		},
 		"integrationProvider": {
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"isManagementEnabled": false,
 			"command": "integrations",
 			"commandDescription": "Allows the management of integrations for this platform. You can decide whether enabled integrations should be included when a query is entered.",
 			"modules": [
 				{
 					"id": "apps",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Apps",
 					"description": "Search Applications",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/integrations/apps.bundle.js",
+					"url": "http://localhost:8080/js/modules/integrations/apps.bundle.js",
 					"data": {
 						"manifestTypeMapping": {
 							"view": {
@@ -535,40 +535,40 @@
 				},
 				{
 					"id": "workspaces",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Workspaces",
 					"description": "Manage workspaces",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/integrations/workspaces.bundle.js",
+					"url": "http://localhost:8080/js/modules/integrations/workspaces.bundle.js",
 					"data": {
 						"favoritesEnabled": false,
 						"images": {
-							"workspace": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/workspace.svg"
+							"workspace": "http://localhost:8080/common/icons/{theme}/{scheme}/workspace.svg"
 						}
 					}
 				},
 				{
 					"id": "pages",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Pages",
 					"description": "Manage Pages",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/integrations/pages.bundle.js",
+					"url": "http://localhost:8080/js/modules/integrations/pages.bundle.js",
 					"data": {
 						"favoritesEnabled": false,
 						"images": {
-							"page": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/page.svg"
+							"page": "http://localhost:8080/common/icons/{theme}/{scheme}/page.svg"
 						}
 					}
 				},
 				{
 					"id": "about",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "About",
 					"description": "Provides information about this platform.",
 					"enabled": true,
 					"excludeFromSourceFilter": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/about.bundle.js",
+					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
 					"data": {}
 				}
 			]
@@ -579,7 +579,7 @@
 					"enabled": true,
 					"id": "interop",
 					"title": "Init Options Interop",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/init-options/interop.bundle.js",
+					"url": "http://localhost:8080/js/modules/init-options/interop.bundle.js",
 					"data": {
 						"supportedActions": ["raise-intent", "share-context"]
 					}
@@ -588,7 +588,7 @@
 					"enabled": true,
 					"id": "launch-app",
 					"title": "Init Options Launch App",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/init-options/launch-app.bundle.js",
+					"url": "http://localhost:8080/js/modules/init-options/launch-app.bundle.js",
 					"data": {
 						"supportedActions": ["launch-app"],
 						"supportedManifestTypes": [
@@ -605,7 +605,7 @@
 					"enabled": true,
 					"id": "show-page",
 					"title": "Init Options Show Page",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/pages.bundle.js",
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js",
 					"data": {
 						"supportedActions": ["show-page"]
 					}
@@ -614,7 +614,7 @@
 					"enabled": true,
 					"id": "launch-workspace",
 					"title": "Init Options Launch Workspace",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/init-options/launch-workspace.bundle.js",
+					"url": "http://localhost:8080/js/modules/init-options/launch-workspace.bundle.js",
 					"data": {
 						"supportedActions": ["launch-workspace"]
 					}
@@ -627,7 +627,7 @@
 					"enabled": true,
 					"id": "console",
 					"title": "Console Logger",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/log/console.bundle.js"
+					"url": "http://localhost:8080/js/modules/log/console.bundle.js"
 				}
 			]
 		},
@@ -637,17 +637,17 @@
 					"enabled": true,
 					"id": "developer-actions",
 					"title": "Developer Actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/developer.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js"
 				},
 				{
 					"enabled": true,
 					"id": "about-actions",
 					"title": "About Actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/about.bundle.js",
+					"url": "http://localhost:8080/js/modules/composite/about.bundle.js",
 					"data": {
 						"windowOptions": {
 							"name": "about",
-							"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/windows/version/about.html",
+							"url": "http://localhost:8080/common/windows/version/about.html",
 							"defaultCentered": true,
 							"showTaskbarIcon": false,
 							"autoShow": true,
@@ -663,37 +663,37 @@
 					"enabled": true,
 					"id": "page-actions",
 					"title": "Page Actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/pages.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js"
 				},
 				{
 					"enabled": true,
 					"id": "window-actions",
 					"title": "Window Actions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/windows.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
 				},
 				{
 					"id": "favorites-menu",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Favorites Menu",
 					"description": "Favorites Menu",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/actions/favorites-menu.bundle.js"
+					"url": "http://localhost:8080/js/modules/actions/favorites-menu.bundle.js"
 				},
 				{
 					"id": "default-workspace",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Default Workspace",
 					"description": "Allows the setting of a default workspace and whether or not it should be set when an active workspace is switched.",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js"
 				},
 				{
 					"id": "window-platform",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Window Platform Actions",
 					"description": "Window Platform Actions",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/actions/window-platform.bundle.js"
+					"url": "http://localhost:8080/js/modules/actions/window-platform.bundle.js"
 				}
 			]
 		},
@@ -703,7 +703,7 @@
 					"enabled": true,
 					"id": "about-conditions",
 					"title": "About Conditions",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/about.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/about.bundle.js"
 				}
 			]
 		},
@@ -759,7 +759,7 @@
 					"enabled": true,
 					"id": "analytics.console",
 					"title": "Console Analytics",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/analytics/console.bundle.js",
+					"url": "http://localhost:8080/js/modules/analytics/console.bundle.js",
 					"data": {
 						"eventLogLevel": "info"
 					}
@@ -773,7 +773,7 @@
 			},
 			"versionWindow": {
 				"name": "versioning",
-				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/windows/version/version.html",
+				"url": "http://localhost:8080/windows/version/version.html",
 				"defaultCentered": true,
 				"showTaskbarIcon": false,
 				"autoShow": true,
@@ -788,45 +788,45 @@
 			"versionCheckIntervalInSeconds": 30
 		},
 		"menusProvider": {
-			"popupHtml": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/popups/menu/index.html",
+			"popupHtml": "http://localhost:8080/common/popups/menu/index.html",
 			"modules": [
 				{
 					"enabled": true,
 					"id": "developer-menus",
 					"title": "Developer Menus",
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/developer.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/developer.bundle.js"
 				},
 				{
 					"id": "about",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "About",
 					"description": "Provides information about this platform.",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/about.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/about.bundle.js"
 				},
 				{
 					"id": "pages",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Pages",
 					"description": "Provides additional menu options for pages.",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/pages.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/pages.bundle.js"
 				},
 				{
 					"id": "windows",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Windows",
 					"description": "Provides additional menu options for windows.",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/windows.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/windows.bundle.js"
 				},
 				{
 					"id": "default-workspace",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "default workspace menu options",
 					"description": "set your default default workspace",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js"
 				}
 			]
 		},
@@ -837,16 +837,16 @@
 			"modules": [
 				{
 					"id": "openid-connect",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "OpenId Connect",
 					"description": "OpenId Connect",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/auth/openid-connect.bundle.js",
+					"url": "http://localhost:8080/js/modules/auth/openid-connect.bundle.js",
 					"data": {
 						"providerUrl": "",
 						"clientId": "",
-						"loginRedirectUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/oidc_login.html",
-						"logoutRedirectUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/oidc_logout.html",
+						"loginRedirectUrl": "http://localhost:8080/oidc_login.html",
+						"logoutRedirectUrl": "http://localhost:8080/oidc_logout.html",
 						"checkSessionValidityInSeconds": 30
 					}
 				}
@@ -857,12 +857,12 @@
 			"menuEntries": []
 		},
 		"splashScreenProvider": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/platform/splash.html"
+			"url": "http://localhost:8080/platform/splash.html"
 		},
 		"favoriteProvider": {
 			"enabled": false,
-			"favoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/favorite.svg",
-			"unfavoriteIcon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/unfavorite.svg",
+			"favoriteIcon": "http://localhost:8080/common/icons/{theme}/{scheme}/favorite.svg",
+			"unfavoriteIcon": "http://localhost:8080/common/icons/{theme}/{scheme}/unfavorite.svg",
 			"favoriteCommand": "/fav",
 			"supportedFavoriteTypes": ["workspace", "page", "app"]
 		},
@@ -870,11 +870,11 @@
 			"modules": [
 				{
 					"id": "default-workspace",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "default workspace management",
 					"description": "set and apply your default workspace.",
 					"enabled": true,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/composite/default-workspace.bundle.js"
+					"url": "http://localhost:8080/js/modules/composite/default-workspace.bundle.js"
 				}
 			]
 		},
@@ -893,10 +893,10 @@
 			"modules": [
 				{
 					"id": "view-position-content-creation",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "View Position Content Creation",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/content-creation/view-position.bundle.js",
+					"url": "http://localhost:8080/js/modules/content-creation/view-position.bundle.js",
 					"data": {
 						"rules": []
 					}
@@ -908,40 +908,40 @@
 			"modules": [
 				{
 					"id": "pages-share",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Pages Share",
 					"description": "Pages Share",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/share/pages.bundle.js",
+					"url": "http://localhost:8080/js/modules/share/pages.bundle.js",
 					"data": {
 						"getEndpointId": "share-get",
 						"setEndpointId": "share-set",
 						"images": {
-							"error": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/error.svg",
-							"success": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/success.svg"
+							"error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+							"success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
 						}
 					}
 				},
 				{
 					"id": "workspaces-share",
-					"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/favicon.ico",
+					"icon": "http://localhost:8080/favicon.ico",
 					"title": "Workspaces Share",
 					"description": "Workspaces Share",
 					"enabled": false,
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/js/modules/share/workspaces.bundle.js",
+					"url": "http://localhost:8080/js/modules/share/workspaces.bundle.js",
 					"data": {
 						"getEndpointId": "share-get",
 						"setEndpointId": "share-set",
 						"images": {
-							"error": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/error.svg",
-							"success": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/icons/{theme}/{scheme}/success.svg"
+							"error": "http://localhost:8080/common/icons/{theme}/{scheme}/error.svg",
+							"success": "http://localhost:8080/common/icons/{theme}/{scheme}/success.svg"
 						}
 					}
 				}
 			]
 		},
 		"dialogProvider": {
-			"dialogHtml": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/popups/dialog/index.html"
+			"dialogHtml": "http://localhost:8080/common/popups/dialog/index.html"
 		}
 	}
 }

@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-servicenow",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
 			"System": {
@@ -23,7 +23,7 @@
 	"shortcut": {
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"name": "Integrate With ServiceNow - v23.0.0",
 		"target": ["desktop", "start-menu"]
 	},
@@ -39,14 +39,14 @@
 			"clientId": "",
 			"enableLibLogging": true,
 			"images": {
-				"servicenow": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/apps/servicenow.svg",
-				"contact": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/types/contact.svg",
-				"account": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/types/account.svg",
-				"case": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/types/case.svg",
-				"task": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/types/task.svg",
-				"incident": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/types/incident.svg",
-				"call": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/icons/call.svg",
-				"email": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-servicenow/images/icons/email.svg"
+				"servicenow": "http://localhost:8080/images/apps/servicenow.svg",
+				"contact": "http://localhost:8080/images/types/contact.svg",
+				"account": "http://localhost:8080/images/types/account.svg",
+				"case": "http://localhost:8080/images/types/case.svg",
+				"task": "http://localhost:8080/images/types/task.svg",
+				"incident": "http://localhost:8080/images/types/incident.svg",
+				"call": "http://localhost:8080/images/icons/call.svg",
+				"email": "http://localhost:8080/images/icons/email.svg"
 			}
 		}
 	}

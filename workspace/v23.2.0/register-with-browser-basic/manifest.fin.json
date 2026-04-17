@@ -7,9 +7,9 @@
 	},
 	"platform": {
 		"uuid": "register-with-browser-basic",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser-basic/favicon.ico",
+		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-browser-basic/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": false
 	},
 	"shortcut": {

@@ -1425,7 +1425,7 @@
 					"type": "number"
 				},
 				"dialogHtml": {
-					"description": "The location of the HTML to use for dialog page.\ndefaults to https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/popups/dialog/index.html",
+					"description": "The location of the HTML to use for dialog page.\ndefaults to http://localhost:8080/common/popups/dialog/index.html",
 					"type": "string"
 				}
 			},
@@ -3069,7 +3069,7 @@
 					"type": "array"
 				},
 				"popupHtml": {
-					"description": "The location of the HTML to use for custom popup page.\ndefaults to https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/popups/menu/index.html",
+					"description": "The location of the HTML to use for custom popup page.\ndefaults to http://localhost:8080/common/popups/menu/index.html",
 					"type": "string"
 				},
 				"popupMenuStyle": {

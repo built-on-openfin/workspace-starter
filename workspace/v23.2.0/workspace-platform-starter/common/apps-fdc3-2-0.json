@@ -158,7 +158,7 @@
 							},
 							"options": {
 								"type": "view",
-								"host": { "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/windows/platform/platform-window.html" }
+								"host": { "url": "http://localhost:8080/windows/platform/platform-window.html" }
 							}
 						}
 					}
@@ -181,7 +181,7 @@
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/fdc3-workbench-2-0.png"
+					"src": "http://localhost:8080/common/images/previews/fdc3-workbench-2-0.png"
 				}
 			],
 			"contactEmail": "fdc3@finos.org,",
@@ -192,7 +192,7 @@
 			"hostManifests": {
 				"HERE": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
+					"details": "http://localhost:8080/common/views/fdc3/workbench/fdc3-workbench-2-0.view.fin.json"
 				}
 			},
 			"localizedVersions": {
@@ -257,7 +257,7 @@
 			"hostManifests": {
 				"HERE": {
 					"type": "view",
-					"details": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/vendor/adaptable/adaptable-fdc3-demo.view.fin.json"
+					"details": "http://localhost:8080/common/views/vendor/adaptable/adaptable-fdc3-demo.view.fin.json"
 				}
 			},
 			"interop": {

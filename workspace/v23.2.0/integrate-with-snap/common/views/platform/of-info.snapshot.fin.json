@@ -107,7 +107,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": -1,
 			"maxWidth": -1,
 			"maximizable": true,
@@ -204,7 +204,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -218,7 +218,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "integrate-with-snap",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -298,7 +298,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 588,
 			"width": 506,
 			"center": false,
@@ -377,7 +377,7 @@
 										"zoom": true
 									},
 									"zoomLevel": 0,
-									"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+									"url": "http://localhost:8080/common/views/platform/of-info/index.html",
 									"contextMenuOptions": {
 										"enabled": true,
 										"template": [
@@ -398,11 +398,11 @@
 									"downloadShelf": {
 										"enabled": true
 									},
-									"manifestUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
+									"manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 									"name": "internal-generated-view-86f211a6-dbd9-417a-a376-8c36be8dfdbd",
 									"preloadScripts": [
 										{
-											"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/style/style-changed-preload.js"
+											"url": "http://localhost:8080/common/style/style-changed-preload.js"
 										}
 									],
 									"hotkeys": [
@@ -482,7 +482,7 @@
 									},
 									"componentName": "view",
 									"uuid": "integrate-with-snap",
-									"initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+									"initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
 									"processAffinity": "integrate-with-snap"
 								},
 								"isClosable": true,
@@ -564,7 +564,7 @@
 												"zoom": true
 											},
 											"zoomLevel": 0,
-											"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+											"url": "http://localhost:8080/common/views/platform/of-info/index.html",
 											"contextMenuOptions": {
 												"enabled": true,
 												"template": [
@@ -585,11 +585,11 @@
 											"downloadShelf": {
 												"enabled": true
 											},
-											"manifestUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
+											"manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 											"name": "internal-generated-view-86f211a6-dbd9-417a-a376-8c36be8dfdbd",
 											"preloadScripts": [
 												{
-													"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/style/style-changed-preload.js"
+													"url": "http://localhost:8080/common/style/style-changed-preload.js"
 												}
 											],
 											"hotkeys": [
@@ -669,7 +669,7 @@
 											},
 											"componentName": "view",
 											"uuid": "integrate-with-snap",
-											"initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+											"initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
 											"processAffinity": "integrate-with-snap"
 										},
 										"isClosable": true,
@@ -761,7 +761,7 @@
 													"zoom": true
 												},
 												"zoomLevel": 0,
-												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+												"url": "http://localhost:8080/common/views/platform/of-info/index.html",
 												"contextMenuOptions": {
 													"enabled": true,
 													"template": [
@@ -782,11 +782,11 @@
 												"downloadShelf": {
 													"enabled": true
 												},
-												"manifestUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
+												"manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 												"name": "internal-generated-view-86f211a6-dbd9-417a-a376-8c36be8dfdbd",
 												"preloadScripts": [
 													{
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/style/style-changed-preload.js"
+														"url": "http://localhost:8080/common/style/style-changed-preload.js"
 													}
 												],
 												"hotkeys": [
@@ -866,7 +866,7 @@
 												},
 												"componentName": "view",
 												"uuid": "integrate-with-snap",
-												"initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+												"initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
 												"processAffinity": "integrate-with-snap"
 											},
 											"isClosable": true,
@@ -889,7 +889,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,
@@ -920,7 +920,7 @@
 		{
 			"alwaysOnTop": false,
 			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/favicon.ico",
+			"icon": "http://localhost:8080/favicon.ico",
 			"maxHeight": -1,
 			"maxWidth": -1,
 			"maximizable": true,
@@ -1017,7 +1017,7 @@
 				},
 				"v2Api": true,
 				"showFavicons": true,
-				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.15/icons/defaultFavicon.svg"
+				"defaultFaviconUrl": "https://workspace.openfin.co/workspace/23.2.16/icons/defaultFavicon.svg"
 			},
 			"includeInSnapshots": true,
 			"resizable": true,
@@ -1031,7 +1031,7 @@
 			"state": "normal",
 			"taskbarIcon": "",
 			"taskbarIconGroup": "integrate-with-snap",
-			"url": "https://workspace.openfin.co/workspace/23.2.15/browser/",
+			"url": "https://workspace.openfin.co/workspace/23.2.16/browser/",
 			"waitForPageLoad": false,
 			"backgroundColor": "#1E1F23",
 			"fdc3InteropApi": "",
@@ -1111,7 +1111,7 @@
 				}
 			},
 			"autoplayPolicy": "no-user-gesture-required",
-			"title": "workspace.openfin.co/workspace/23.2.15/browser/",
+			"title": "workspace.openfin.co/workspace/23.2.16/browser/",
 			"height": 588,
 			"width": 487,
 			"center": false,
@@ -1190,7 +1190,7 @@
 										"zoom": true
 									},
 									"zoomLevel": 0,
-									"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+									"url": "http://localhost:8080/common/views/platform/of-info/index.html",
 									"contextMenuOptions": {
 										"enabled": true,
 										"template": [
@@ -1211,11 +1211,11 @@
 									"downloadShelf": {
 										"enabled": true
 									},
-									"manifestUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
+									"manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 									"name": "internal-generated-view-5eef237b-9a51-456b-a600-82dcbc5858f8",
 									"preloadScripts": [
 										{
-											"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/style/style-changed-preload.js"
+											"url": "http://localhost:8080/common/style/style-changed-preload.js"
 										}
 									],
 									"hotkeys": [
@@ -1295,7 +1295,7 @@
 									},
 									"componentName": "view",
 									"uuid": "integrate-with-snap",
-									"initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+									"initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
 									"processAffinity": "integrate-with-snap"
 								},
 								"isClosable": true,
@@ -1377,7 +1377,7 @@
 												"zoom": true
 											},
 											"zoomLevel": 0,
-											"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+											"url": "http://localhost:8080/common/views/platform/of-info/index.html",
 											"contextMenuOptions": {
 												"enabled": true,
 												"template": [
@@ -1398,11 +1398,11 @@
 											"downloadShelf": {
 												"enabled": true
 											},
-											"manifestUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
+											"manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 											"name": "internal-generated-view-5eef237b-9a51-456b-a600-82dcbc5858f8",
 											"preloadScripts": [
 												{
-													"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/style/style-changed-preload.js"
+													"url": "http://localhost:8080/common/style/style-changed-preload.js"
 												}
 											],
 											"hotkeys": [
@@ -1482,7 +1482,7 @@
 											},
 											"componentName": "view",
 											"uuid": "integrate-with-snap",
-											"initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+											"initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
 											"processAffinity": "integrate-with-snap"
 										},
 										"isClosable": true,
@@ -1574,7 +1574,7 @@
 													"zoom": true
 												},
 												"zoomLevel": 0,
-												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+												"url": "http://localhost:8080/common/views/platform/of-info/index.html",
 												"contextMenuOptions": {
 													"enabled": true,
 													"template": [
@@ -1595,11 +1595,11 @@
 												"downloadShelf": {
 													"enabled": true
 												},
-												"manifestUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info.view.fin.json",
+												"manifestUrl": "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 												"name": "internal-generated-view-5eef237b-9a51-456b-a600-82dcbc5858f8",
 												"preloadScripts": [
 													{
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/style/style-changed-preload.js"
+														"url": "http://localhost:8080/common/style/style-changed-preload.js"
 													}
 												],
 												"hotkeys": [
@@ -1679,7 +1679,7 @@
 												},
 												"componentName": "view",
 												"uuid": "integrate-with-snap",
-												"initialUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/common/views/platform/of-info/index.html",
+												"initialUrl": "http://localhost:8080/common/views/platform/of-info/index.html",
 												"processAffinity": "integrate-with-snap"
 											},
 											"isClosable": true,
@@ -1702,7 +1702,7 @@
 						"panels": []
 					}
 				],
-				"favicon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap/favicon.ico",
+				"favicon": "http://localhost:8080/favicon.ico",
 				"_internalDeferShowOptions": {
 					"setAsForeground": true,
 					"deferShowEnabled": true,

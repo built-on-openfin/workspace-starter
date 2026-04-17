@@ -8,9 +8,9 @@
 	"platform": {
 		"uuid": "test-workspace-platform-starter",
 		"name": "Test HERE Core UI Platform Starter",
-		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/favicon-32x32.png",
+		"icon": "http://localhost:8080/common/favicon-32x32.png",
 		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/platform/provider.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"appLogsTimezone": "utc",
 		"enableAppLogging": false,
@@ -78,7 +78,7 @@
 					"type": "fetch",
 					"options": {
 						"method": "GET",
-						"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/settings.json"
+						"url": "http://localhost:8080/settings.json"
 					}
 				}
 			]

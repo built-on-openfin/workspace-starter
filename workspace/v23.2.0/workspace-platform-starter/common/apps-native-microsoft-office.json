@@ -10,7 +10,7 @@
 		"manifestType": "inline-external",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/ms/apps/outlook-mail.svg"
+				"src": "http://localhost:8080/common/images/ms/apps/outlook-mail.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -43,7 +43,7 @@
 		"manifestType": "inline-external",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/ms/apps/word.svg"
+				"src": "http://localhost:8080/common/images/ms/apps/word.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -77,7 +77,7 @@
 		"manifestType": "inline-external",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/ms/apps/excel.svg"
+				"src": "http://localhost:8080/common/images/ms/apps/excel.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -110,7 +110,7 @@
 		"manifestType": "inline-external",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/ms/apps/powerpoint.svg"
+				"src": "http://localhost:8080/common/images/ms/apps/powerpoint.svg"
 			}
 		],
 		"contactEmail": "contact@example.com",

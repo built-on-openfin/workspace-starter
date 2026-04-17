@@ -5,10 +5,10 @@
 		"title": "Manager Portal",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/manager-portal.snapshot.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-portal.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/favicon-32x32.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -17,7 +17,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/page-manager-portal.png"
+				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
 			}
 		],
 		"tags": ["page", "HERE", "manager", "fcd3"]
@@ -28,10 +28,10 @@
 		"title": "Manager Portal (Fixed Views)",
 		"manifestType": "snapshot",
 		"description": "Provides a portal for a manager with fixed panels",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/manager-portal-fixed.snapshot.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-portal-fixed.snapshot.fin.json",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/favicon-32x32.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -40,7 +40,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/page-manager-portal.png"
+				"src": "http://localhost:8080/common/images/previews/page-manager-portal.png"
 			}
 		],
 		"tags": ["page", "HERE", "manager", "fcd3"]
@@ -50,11 +50,11 @@
 		"name": "my-team",
 		"title": "My Team",
 		"description": "View my team.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/my-team.view.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/my-team.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/favicon-32x32.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -63,7 +63,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-my-team.jpeg"
+				"src": "http://localhost:8080/common/images/previews/manager/preview-manager-portal-my-team.jpeg"
 			}
 		],
 		"tags": ["view", "manager", "fcd3"]
@@ -73,11 +73,11 @@
 		"name": "annual-leave",
 		"title": "Annual Leave",
 		"description": "View the annual leave for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/annual-leave.view.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/annual-leave.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/annual-leave/favicon.ico"
+				"src": "http://localhost:8080/common/views/manager-portal/annual-leave/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -86,7 +86,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-annual-leave.jpeg"
+				"src": "http://localhost:8080/common/images/previews/manager/preview-manager-portal-annual-leave.jpeg"
 			}
 		],
 		"tags": ["view", "manager", "fcd3"]
@@ -96,11 +96,11 @@
 		"name": "manager-paths",
 		"title": "Manager Paths",
 		"description": "View the manager paths for a team member.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/manager-paths.view.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/manager-paths.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/manager-paths/favicon.ico"
+				"src": "http://localhost:8080/common/views/manager-portal/manager-paths/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -109,7 +109,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-manager-paths.jpeg"
+				"src": "http://localhost:8080/common/images/previews/manager/preview-manager-portal-manager-paths.jpeg"
 			}
 		],
 		"tags": ["view", "manager", "fcd3"]
@@ -119,11 +119,11 @@
 		"name": "company-comms",
 		"title": "Company Comms",
 		"description": "View the communications for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/company-comms.view.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/company-comms.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/company-comms/favicon.ico"
+				"src": "http://localhost:8080/common/views/manager-portal/company-comms/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -132,7 +132,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-company-comms.jpeg"
+				"src": "http://localhost:8080/common/images/previews/manager/preview-manager-portal-company-comms.jpeg"
 			}
 		],
 		"tags": ["view", "manager", "fcd3"]
@@ -142,11 +142,11 @@
 		"name": "company-cal",
 		"title": "Company Calendar",
 		"description": "View the calendar for the company.",
-		"manifest": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/company-cal.view.fin.json",
+		"manifest": "http://localhost:8080/common/views/manager-portal/company-cal.view.fin.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/manager-portal/company-cal/favicon.ico"
+				"src": "http://localhost:8080/common/views/manager-portal/company-cal/favicon.ico"
 			}
 		],
 		"contactEmail": "contact@example.com",
@@ -155,7 +155,7 @@
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-company-calendar.jpeg"
+				"src": "http://localhost:8080/common/images/previews/manager/preview-manager-portal-company-calendar.jpeg"
 			}
 		],
 		"tags": ["view", "manager", "fcd3"]

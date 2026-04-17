@@ -5,21 +5,21 @@
 		"title": "Example Notification Service App",
 		"description": "This is an example app built to work with an example lifecycle module called example-notification-service.",
 		"manifest": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/views/modules/lifecycle/example-notification-service/index.html",
+			"url": "http://localhost:8080/common/views/modules/lifecycle/example-notification-service/index.html",
 			"fdc3InteropApi": "2.0",
 			"interop": {
 				"currentContextGroup": "green"
 			},
 			"preloadScripts": [
 				{
-					"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/style/style-changed-preload.js"
+					"url": "http://localhost:8080/common/style/style-changed-preload.js"
 				}
 			]
 		},
 		"manifestType": "inline-view",
 		"icons": [
 			{
-				"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/workspace-platform-starter/common/images/favicon-32x32.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"instanceMode": "multi",
