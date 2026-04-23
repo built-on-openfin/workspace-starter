@@ -1,4 +1,5 @@
 import * as Snap from "@openfin/snap-sdk";
+import { downloadAppAsset } from "./app-asset";
 
 const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
 
@@ -14,6 +15,12 @@ let chkHideTaskBarEntry: HTMLInputElement | null;
 let chkCustomTaskBarIcon: HTMLInputElement | null;
 let chkGroupWithPlatformTaskbarGroup: HTMLInputElement | null;
 let chkDisableRuntimeHeartbeating: HTMLInputElement | null;
+let chkCustomSnapAppAssetPath: HTMLInputElement | null;
+let txtPrimaryUrl: HTMLInputElement | null;
+let txtFallbackUrl: HTMLInputElement | null;
+let fieldPrimaryUrl: HTMLElement | null;
+let fieldFallbackUrl: HTMLElement | null;
+let rowCustomSnapAppAssetPath: HTMLElement | null;
 
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
@@ -65,6 +72,12 @@ async function initializeDOM(): Promise<void> {
 
 	chkAutoHideClientTaskbarIcons = document.querySelector<HTMLInputElement>("#chkAutoHideClientTaskbarIcons");
 	chkDisableRuntimeHeartbeating = document.querySelector<HTMLInputElement>("#chkDisableRuntimeHeartbeating");
+	chkCustomSnapAppAssetPath = document.querySelector<HTMLInputElement>("#chkCustomSnapAppAssetPath");
+	txtPrimaryUrl = document.querySelector<HTMLInputElement>("#txtPrimaryUrl");
+	txtFallbackUrl = document.querySelector<HTMLInputElement>("#txtFallbackUrl");
+	fieldPrimaryUrl = document.querySelector<HTMLElement>("#fieldPrimaryUrl");
+	fieldFallbackUrl = document.querySelector<HTMLElement>("#fieldFallbackUrl");
+	rowCustomSnapAppAssetPath = document.querySelector<HTMLElement>("#rowCustomSnapAppAssetPath");
 
 	btnStart = document.querySelector<HTMLButtonElement>("#btnStart");
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
@@ -98,6 +111,12 @@ async function initializeDOM(): Promise<void> {
 		chkGroupWithPlatformTaskbarGroup &&
 		chkAutoHideClientTaskbarIcons &&
 		chkDisableRuntimeHeartbeating &&
+		chkCustomSnapAppAssetPath &&
+		txtPrimaryUrl &&
+		txtFallbackUrl &&
+		fieldPrimaryUrl &&
+		fieldFallbackUrl &&
+		rowCustomSnapAppAssetPath &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
@@ -112,8 +131,21 @@ async function initializeDOM(): Promise<void> {
 		btnClearLog &&
 		btnShowHideDebugWindow
 	) {
+		chkCustomSnapAppAssetPath.addEventListener("change", () => {
+			const display = chkCustomSnapAppAssetPath?.checked ? "" : "none";
+			if (fieldPrimaryUrl) {
+				fieldPrimaryUrl.style.display = display;
+			}
+			if (fieldFallbackUrl) {
+				fieldFallbackUrl.style.display = display;
+			}
+		});
 		const app = await fin.Application.getCurrent();
 		const manifest = await app.getManifest();
+
+		if (manifest.appAssets?.some((asset: { alias?: string }) => asset.alias === "openfin-snap")) {
+			rowCustomSnapAppAssetPath.style.display = "none";
+		}
 
 		if (manifest.appAssets?.[0]?.src === "SNAP_ASSET_URL") {
 			logError(
@@ -172,6 +204,27 @@ async function initializeDOM(): Promise<void> {
 						defaultResizingBehavior: selResize?.value as Snap.ResizingBehavior,
 						theme: selTheme?.value as "snap-original" | "snap-light1" | "snap-dark1"
 					};
+
+					if (chkCustomSnapAppAssetPath?.checked) {
+						const primaryUrl = txtPrimaryUrl?.value ?? "";
+						const fallbackUrl = txtFallbackUrl?.value;
+						const assetDownloaded = await downloadAppAsset(
+							{ src: primaryUrl, alias: "openfin-snap", version: "1.5.0", target: "OpenFinSnap.exe" },
+							{
+								fallbackUrl,
+								logger: console,
+								assetDownloadProgress: (progress: number, src: string, alias: string) => {
+									console.log(`Download progress for alias '${alias}' from '${src}': ${progress}%`);
+								}
+							}
+						);
+						if (!assetDownloaded) {
+							logError("Failed to download the custom Snap app asset. Please check the provided URLs.");
+							serverState = "stopped";
+							return;
+						}
+					}
+
 					await server.start(options);
 
 					if (chkShowDebugWindow?.checked) {
