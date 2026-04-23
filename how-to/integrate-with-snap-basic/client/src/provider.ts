@@ -1,8 +1,11 @@
+import type { OpenFin } from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
 import { doesAppAssetExist, downloadAppAsset } from "./app-asset";
-import { OpenFin } from "@openfin/core";
 
 const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
+const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.5.0/snap.zip";
+const snapVersion = "1.5.0";
+const snapAlias = "openfin-snap";
 
 // The DOM elements
 let chkShowDebugWindow: HTMLInputElement | null;
@@ -54,19 +57,19 @@ let server: Snap.SnapServer | undefined;
  * Custom logger that implements the Logger interface using logInformation and logError functions
  */
 const customLogger = {
-	info: (message: unknown, ...optionalParams: unknown[]) => {
+	info: (message: unknown, ...optionalParams: unknown[]): void => {
 		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
 	},
-	error: (message: unknown, ...optionalParams: unknown[]) => {
+	error: (message: unknown, ...optionalParams: unknown[]): void => {
 		logError(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
 	},
-	warn: (message: unknown, ...optionalParams: unknown[]) => {
+	warn: (message: unknown, ...optionalParams: unknown[]): void => {
 		logError(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
 	},
-	trace: (message: unknown, ...optionalParams: unknown[]) => {
+	trace: (message: unknown, ...optionalParams: unknown[]): void => {
 		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
 	},
-	debug: (message: unknown, ...optionalParams: unknown[]) => {
+	debug: (message: unknown, ...optionalParams: unknown[]): void => {
 		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
 	}
 };
@@ -153,6 +156,8 @@ async function initializeDOM(): Promise<void> {
 		btnClearLog &&
 		btnShowHideDebugWindow
 	) {
+		txtPrimaryUrl.value = "https://exampleofbadurl.com/snap.zip";
+		txtFallbackUrl.value = snapDefaultUrl;
 		chkCustomSnapAppAssetPath.addEventListener("change", () => {
 			const display = chkCustomSnapAppAssetPath?.checked ? "" : "none";
 			if (fieldPrimaryUrl) {
@@ -428,11 +433,14 @@ async function initializeDOM(): Promise<void> {
  */
 function hashUrl(url: string): string {
 	let hash = 5381;
+	const maxSafeHash = 4_294_967_291;
 	for (let i = 0; i < url.length; i++) {
-		hash = ((hash << 5) + hash) ^ url.charCodeAt(i);
-		hash = hash >>> 0;
+		const codePoint = url.charCodeAt(i);
+		const multipliedHash = hash * 33;
+		hash = (multipliedHash + codePoint) % maxSafeHash;
 	}
-	return hash.toString(16).padStart(8, "0");
+	const hashHex = Math.floor(hash).toString(16);
+	return hashHex.padStart(8, "0");
 }
 
 /**
@@ -654,9 +662,6 @@ async function launchWindowOptionsApp(): Promise<void> {
  * @returns A boolean indicating whether the snap app asset was successfully fetched from either URL.
  */
 async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promise<boolean> {
-	const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.5.0/snap.zip";
-	const snapVersion = "1.5.0";
-	const snapAlias = "openfin-snap";
 	const snapAssetInfo: OpenFin.AppAssetInfo = {
 		alias: snapAlias,
 		src: snapDefaultUrl,
@@ -664,19 +669,14 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 		target: "OpenFinSnap.exe"
 	};
 	// before trying custom urls check to see if you already have snap
-	let snapDownloadedAssetInfo: OpenFin.AppAssetInfo | undefined = await doesAppAssetExist(
+	const snapDownloadedAssetInfo: OpenFin.AppAssetInfo | undefined = await doesAppAssetExist(
 		snapAssetInfo.alias,
 		snapAssetInfo.version
 	);
 
 	if (snapDownloadedAssetInfo) {
 		logInformation(
-			"We have a snap asset that matches the alias and version. It has the following details: alias: " +
-				snapDownloadedAssetInfo.alias +
-				", version: " +
-				snapDownloadedAssetInfo.version +
-				", src: " +
-				snapDownloadedAssetInfo.src
+			`We have a snap asset that matches the alias and version. It has the following details: alias: ${snapDownloadedAssetInfo.alias}, version: ${snapDownloadedAssetInfo.version}, src: ${snapDownloadedAssetInfo.src}`
 		);
 		return true;
 	}
@@ -684,19 +684,20 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 	// SNAP downloads a specific alias + version combination.
 	// The runtime does not allow a retry of the same app asset if the only thing that has changed is the url.
 	// Since we have no snap version we want to validate our primary url.
-	logInformation("Validating the primary asset url for the snap asset: " + primaryUrl);
-	snapAssetInfo.alias = snapAlias + "-validate-download"; // use a different alias for the validation download so that we can have different versions if needed without conflict with the actual snap asset alias
+	logInformation(`Validating the primary asset url for the snap asset: ${primaryUrl}`);
+	snapAssetInfo.alias = `${snapAlias}-validate-download`; // use a different alias for the validation download so that we can have different versions if needed without conflict with the actual snap asset alias
 
 	// Update asset info to target primary url
 	snapAssetInfo.src = primaryUrl; // update the src to the primary url for the validation download
 	snapAssetInfo.version = hashUrl(primaryUrl); // use the url hash as the version for the validation download so that if the url changes we will attempt to download again, but if the url is the same we will not attempt to download again since we have already validated it
 
 	const validatedAppAssetPrimaryUrl = await fetchAppAsset(snapAssetInfo);
-	let validatedAssetUrl: string | undefined = undefined;
+	let validatedAssetUrl: string | undefined;
 
 	if (validatedAppAssetPrimaryUrl === undefined) {
 		if (fallbackUrl) {
 			// validate fallback url
+			logInformation(`Validating the fallback asset url for the snap asset: ${fallbackUrl}`);
 			snapAssetInfo.src = fallbackUrl; // update the src to the fallback url for the validation download
 			snapAssetInfo.version = hashUrl(fallbackUrl); // use the url hash as the version for the validation download so that if the url changes we will attempt to download again, but if the url is the same we will not attempt to download again since we have already validated it
 			const validatedAppAssetFallbackUrl = await fetchAppAsset(snapAssetInfo);
@@ -711,9 +712,7 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 
 	if (validatedAssetUrl) {
 		logInformation(
-			"Successfully validated the url for the snap asset: " +
-				validatedAssetUrl +
-				". Downloading snap asset with the validated url."
+			`Successfully validated the url for the snap asset: ${validatedAssetUrl}. Downloading snap asset with the validated url.`
 		);
 		// reset the snapAssetInfo to be used for the actual snap asset download with the intended alias and version
 		snapAssetInfo.version = snapVersion; // update the version to the intended snap version for the actual snap asset download
@@ -721,15 +720,19 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 		snapAssetInfo.src = validatedAssetUrl; // if the primary url was valid use it, if not and the fallback url was valid use it
 		const validatedAppAssetValidatedUrl = await fetchAppAsset(snapAssetInfo);
 		if (validatedAppAssetValidatedUrl) {
-			logInformation("Successfully downloaded the snap asset with the validated url: " + validatedAssetUrl);
+			logInformation(`Successfully downloaded the snap asset with the validated url: ${validatedAssetUrl}`);
 			return true;
-		} else {
-			logError("Failed to download the snap asset with the validated url: " + validatedAssetUrl);
 		}
+		logError(`Failed to download the snap asset with the validated url: ${validatedAssetUrl}`);
 	}
 	return false;
 }
 
+/**
+ * Download and return app asset info for the provided app asset definition.
+ * @param appAssetInfo The app asset definition to download.
+ * @returns The app asset info if downloaded or found, otherwise undefined.
+ */
 async function fetchAppAsset(appAssetInfo: OpenFin.AppAssetInfo): Promise<OpenFin.AppAssetInfo | undefined> {
 	const validatedAppAsset = await downloadAppAsset(appAssetInfo, {
 		logger: customLogger,

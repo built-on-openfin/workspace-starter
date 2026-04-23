@@ -57,35 +57,34 @@ export async function downloadAppAsset(
 ): Promise<OpenFin.AppAssetInfo | undefined> {
 	const src = appAssetDefinition.src;
 	const logger = options?.logger;
-	let fetchedOrExistingAppAsset: OpenFin.AppAssetInfo | undefined = undefined;
 	if (!isStringValue(src)) {
 		logger?.error("Cannot initialize App Asset Download without src being defined");
-		return fetchedOrExistingAppAsset;
+		return undefined;
 	}
 
 	if (!appAssetDefinition.src.startsWith("http")) {
 		logger?.error(
 			"Please provide a valid URL for the app asset src. Only HTTP and HTTPS protocols are supported. With https preferred for security reasons."
 		);
-		return fetchedOrExistingAppAsset;
+		return undefined;
 	}
 
 	const alias = appAssetDefinition.alias;
 	if (!isStringValue(alias)) {
 		logger?.error("Cannot initialize App Asset Download without alias being defined");
-		return fetchedOrExistingAppAsset;
+		return undefined;
 	}
 
 	const target = appAssetDefinition.target;
 	if (!isStringValue(target)) {
 		logger?.error("Cannot initialize App Asset Download without target being defined");
-		return fetchedOrExistingAppAsset;
+		return undefined;
 	}
 
 	const version = appAssetDefinition.version;
 	if (!isStringValue(version)) {
 		logger?.error("Cannot initialize App Asset Download without version being defined");
-		return fetchedOrExistingAppAsset;
+		return undefined;
 	}
 
 	const targetAssetDefinition: OpenFin.AppAssetInfo = {
@@ -109,14 +108,14 @@ export async function downloadAppAsset(
 
 	if (!hasDownloadAppAssets) {
 		logger?.warn("The platform does not have the capability or permission to download app assets.");
-		return fetchedOrExistingAppAsset;
+		return undefined;
 	}
 
-	fetchedOrExistingAppAsset = await downloadAppAssetDefinition(targetAssetDefinition, options);
-	return fetchedOrExistingAppAsset;
+	return downloadAppAssetDefinition(targetAssetDefinition, options);
 }
 
 /**
+ * Check if an app asset exists and optionally validate version and source URL.
  * @param alias The alias you want to check for
  * @param version The version you want to check for (optional)
  * @param src The source URL you want to check for (optional)
@@ -136,7 +135,7 @@ export async function doesAppAssetExist(
 			return undefined;
 		}
 		return appAssetInfo;
-	} catch (err) {
+	} catch {
 		// asset does not exist or url does not match, return undefined
 	}
 	return undefined;
@@ -157,7 +156,7 @@ async function downloadAppAssetDefinition(
 		assetDownloadProgress?: (progress: number, src: string, alias: string) => void;
 	}
 ): Promise<OpenFin.AppAssetInfo | undefined> {
-	let fetchedOrExistingAppAsset: OpenFin.AppAssetInfo | undefined = undefined;
+	let fetchedOrExistingAppAsset: OpenFin.AppAssetInfo | undefined;
 	try {
 		await fin.System.downloadAsset(appAssetDefinition, (progress) => {
 			const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
