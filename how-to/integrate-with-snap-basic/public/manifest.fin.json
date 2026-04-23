@@ -7,6 +7,7 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",
+		"name": "integrate-with-snap-basic",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"defaultHeight": 800,

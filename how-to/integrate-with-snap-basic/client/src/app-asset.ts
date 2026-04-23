@@ -42,75 +42,104 @@ interface Logger {
 
 /**
  * For functionality that requires an app asset, this function will attempt to fetch the app asset from the passed definition.
- * If the src is not available or blocked it will try to use a fallback URL. If both fail, it will return false.
  * @param appAssetDefinition The definition of the app asset to fetch.
- * @param options An object containing the fallback URL to use if fetching from the src fails, and a logger to log any errors that occur during the process.
- * @param options.fallbackUrl - A URL to use to fetch the app asset if the original src is not available or blocked.
+ * @param options An object containing a logger to log any info or errors that occur during the process and a function to capture progress.
  * @param options.logger - A logger to log any errors that occur during the fetching of the app asset.
  * @param options.assetDownloadProgress - A callback function to report the progress of the asset download.
- * @returns A promise that resolves to true if the app asset was successfully fetched, or false if both attempts failed.
+ * @returns A promise that resolves to the app asset info if the app asset was successfully fetched, or undefined if both attempts failed.
  */
 export async function downloadAppAsset(
 	appAssetDefinition: OpenFin.AppAssetInfo,
 	options?: {
-		fallbackUrl?: string;
 		logger?: Logger;
 		assetDownloadProgress?: (progress: number, src: string, alias: string) => void;
 	}
-): Promise<boolean> {
+): Promise<OpenFin.AppAssetInfo | undefined> {
 	const src = appAssetDefinition.src;
 	const logger = options?.logger;
-	let hasFetchedAsset = false;
+	let fetchedOrExistingAppAsset: OpenFin.AppAssetInfo | undefined = undefined;
 	if (!isStringValue(src)) {
 		logger?.error("Cannot initialize App Asset Download without src being defined");
-		return hasFetchedAsset;
+		return fetchedOrExistingAppAsset;
 	}
 
 	if (!appAssetDefinition.src.startsWith("http")) {
 		logger?.error(
 			"Please provide a valid URL for the app asset src. Only HTTP and HTTPS protocols are supported. With https preferred for security reasons."
 		);
-		return hasFetchedAsset;
+		return fetchedOrExistingAppAsset;
 	}
 
 	const alias = appAssetDefinition.alias;
 	if (!isStringValue(alias)) {
 		logger?.error("Cannot initialize App Asset Download without alias being defined");
-		return hasFetchedAsset;
+		return fetchedOrExistingAppAsset;
 	}
 
 	const target = appAssetDefinition.target;
 	if (!isStringValue(target)) {
 		logger?.error("Cannot initialize App Asset Download without target being defined");
-		return hasFetchedAsset;
+		return fetchedOrExistingAppAsset;
 	}
 
 	const version = appAssetDefinition.version;
 	if (!isStringValue(version)) {
 		logger?.error("Cannot initialize App Asset Download without version being defined");
-		return hasFetchedAsset;
+		return fetchedOrExistingAppAsset;
+	}
+
+	const targetAssetDefinition: OpenFin.AppAssetInfo = {
+		alias,
+		src,
+		target,
+		version,
+		mandatory: appAssetDefinition.mandatory,
+		args: appAssetDefinition.args
+	};
+
+	const appAssetInfo = await doesAppAssetExist(targetAssetDefinition.alias, targetAssetDefinition.version);
+	if (appAssetInfo) {
+		options?.logger?.info(
+			`App asset with alias ${targetAssetDefinition.alias} version ${targetAssetDefinition.version} and src ${targetAssetDefinition.src} already exists. No need to download.`
+		);
+		return appAssetInfo;
 	}
 
 	const hasDownloadAppAssets = await getCanDownloadAppAssets(logger);
 
 	if (!hasDownloadAppAssets) {
 		logger?.warn("The platform does not have the capability or permission to download app assets.");
-		return hasFetchedAsset;
+		return fetchedOrExistingAppAsset;
 	}
 
-	hasFetchedAsset = await downloadAppAssetDefinition(appAssetDefinition, options);
-	if (!hasFetchedAsset && isStringValue(options?.fallbackUrl)) {
-		if (options.fallbackUrl.startsWith("http")) {
-			logger?.warn(`Attempting to fetch app asset from fallback URL ${options.fallbackUrl}`);
-			const fallbackAppAssetDefinition = { ...appAssetDefinition, src: options.fallbackUrl };
-			hasFetchedAsset = await downloadAppAssetDefinition(fallbackAppAssetDefinition, options);
-		} else {
-			logger?.error(
-				"The provided fallback URL is invalid. Please provide a valid URL for the fallback. Only HTTP and HTTPS protocols are supported. With https preferred for security reasons."
-			);
+	fetchedOrExistingAppAsset = await downloadAppAssetDefinition(targetAssetDefinition, options);
+	return fetchedOrExistingAppAsset;
+}
+
+/**
+ * @param alias The alias you want to check for
+ * @param version The version you want to check for (optional)
+ * @param src The source URL you want to check for (optional)
+ * @returns The app asset info if it exists, otherwise undefined
+ */
+export async function doesAppAssetExist(
+	alias: string,
+	version?: string,
+	src?: string
+): Promise<OpenFin.AppAssetInfo | undefined> {
+	try {
+		const appAssetInfo = await fin.System.getAppAssetInfo({ alias });
+		if (version && appAssetInfo.version !== version) {
+			return undefined;
 		}
+		if (src && appAssetInfo.src !== src) {
+			return undefined;
+		}
+		return appAssetInfo;
+	} catch (err) {
+		// asset does not exist or url does not match, return undefined
 	}
-	return hasFetchedAsset;
+	return undefined;
 }
 
 /**
@@ -119,7 +148,7 @@ export async function downloadAppAsset(
  * @param options An object containing a logger to log any errors that occur during the process, and a callback function to report the progress of the asset download.
  * @param options.logger - A logger to log any errors that occur during the downloading of the app asset.
  * @param options.assetDownloadProgress - A callback function to report the progress of the asset download.
- * @returns A promise that resolves to true if the app asset was successfully downloaded, or false if an error occurred during the download.
+ * @returns A promise that resolves to the app asset info if the app asset was successfully downloaded, or undefined if an error occurred during the download.
  */
 async function downloadAppAssetDefinition(
 	appAssetDefinition: OpenFin.AppAssetInfo,
@@ -127,8 +156,8 @@ async function downloadAppAssetDefinition(
 		logger?: Logger;
 		assetDownloadProgress?: (progress: number, src: string, alias: string) => void;
 	}
-): Promise<boolean> {
-	let hasFetchedAsset = false;
+): Promise<OpenFin.AppAssetInfo | undefined> {
+	let fetchedOrExistingAppAsset: OpenFin.AppAssetInfo | undefined = undefined;
 	try {
 		await fin.System.downloadAsset(appAssetDefinition, (progress) => {
 			const downloadedPercent = Math.floor((progress.downloadedBytes / progress.totalBytes) * 100);
@@ -139,11 +168,16 @@ async function downloadAppAssetDefinition(
 				`Downloaded ${downloadedPercent}% of app asset with alias ${appAssetDefinition.alias} and version ${appAssetDefinition.version} and url ${appAssetDefinition.src}`
 			);
 		});
-		hasFetchedAsset = true;
+		// extra confirmation using the approach  used to validate the existence of an asset.
+		fetchedOrExistingAppAsset = await doesAppAssetExist(
+			appAssetDefinition.alias,
+			appAssetDefinition.version,
+			appAssetDefinition.src
+		);
 	} catch (err) {
-		options?.logger?.error("Unable to fetch App Asset", formatError(err));
+		options?.logger?.error(`Unable to fetch App Asset ${formatError(err)}`);
 	}
-	return hasFetchedAsset;
+	return fetchedOrExistingAppAsset;
 }
 
 /**
@@ -158,7 +192,7 @@ export async function getCanDownloadAppAssets(logger?: Logger): Promise<boolean>
 			await fin.System.queryPermissionForCurrentContext("System.downloadAsset");
 		canDownloadAppAssets = canDownloadAppAssetsResponse?.granted;
 	} catch (error) {
-		logger?.error("Error while querying for System.downloadAsset permission", error);
+		logger?.error(`Error while querying for System.downloadAsset permission ${formatError(error)}`);
 		canDownloadAppAssets = false;
 	}
 	return canDownloadAppAssets;
