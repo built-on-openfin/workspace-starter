@@ -7,6 +7,7 @@
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",
+		"name": "integrate-with-snap-basic",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-snap-basic/favicon.ico",
 		"autoShow": true,
 		"defaultHeight": 800,
