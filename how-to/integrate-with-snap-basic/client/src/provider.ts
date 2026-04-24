@@ -672,7 +672,8 @@ async function validateAppAssetSource(
 		alias: snapAlias,
 		src: snapDefaultUrl,
 		version: snapVersion,
-		target: snapTarget
+		target: snapTarget,
+		mandatory: false
 	};
 	// before trying custom urls check to see if you already have snap
 	const snapDownloadedAssetInfo: OpenFin.AppAssetInfo | undefined = await doesAppAssetExist(
