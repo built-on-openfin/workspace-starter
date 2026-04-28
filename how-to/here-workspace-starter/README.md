@@ -1,12 +1,8 @@
 # HERE Workspace Starter — Enterprise Browser POC
 
-> **Enterprise Browser demo (proof of concept)**
->
-> This folder in **workspace-starter** is set up to demonstrate the Enterprise Browser UI, including tabbed browser windows, the platform shell, and related workspace behavior. It provides a runnable sample so clients can explore the Enterprise Browser experience.
->
-> The full **Workspace Starter** project is large and has a steep learning curve; this sample reduces configuration and setup to the minimum needed for an opinionated Enterprise Browser experience.
->
-> This sample is not intended for long-term maintenance. It is provided for evaluation and POC purposes only. For ongoing product guidance, please refer to your HERE engagement and the maintained **workspace-starter** / Core UI documentation.
+ This folder in **workspace-starter** is set up to demonstrate the Enterprise Browser UI, including tabbed browser windows, the platform shell, and related workspace behavior, in a workspace-starter context. It provides a runnable sample so clients can explore the Enterprise Browser experience.
+
+This sample is experimental and subject to change. It is provided for early evaluation purposes. For ongoing product guidance, please refer to your HERE engagement and the maintained **workspace-starter** / Core UI documentation.
 
 ## How To
 
