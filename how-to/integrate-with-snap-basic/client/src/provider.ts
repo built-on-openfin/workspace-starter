@@ -1,11 +1,13 @@
 import type { OpenFin } from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
+import type { ServerOptions } from "@openfin/snap-sdk";
 import { doesAppAssetExist, downloadAppAsset } from "./app-asset";
 
 const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
 const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.5.0/snap.zip";
 const snapVersion = "1.5.0";
 const snapAlias = "openfin-snap";
+const snapTarget = "OpenFinSnap.exe";
 
 // The DOM elements
 let chkShowDebugWindow: HTMLInputElement | null;
@@ -214,7 +216,7 @@ async function initializeDOM(): Promise<void> {
 						}
 					}
 
-					const options = {
+					const options: ServerOptions = {
 						showDebug: chkShowDebugWindow?.checked,
 						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
 						keyToStick: keyToSnap,
@@ -236,13 +238,14 @@ async function initializeDOM(): Promise<void> {
 						const primaryUrl = txtPrimaryUrl?.value ?? "";
 						const fallbackUrl = txtFallbackUrl?.value;
 
-						const successfullyFetchedAppAsset = await prefetchAppAsset(primaryUrl, fallbackUrl);
-						if (!successfullyFetchedAppAsset) {
+						const validatedAppAsset = await validateAppAssetSource(primaryUrl, fallbackUrl);
+						if (!validatedAppAsset.success) {
 							logError(
 								"Failed to fetch the app asset from both primary and fallback URLs. Cannot start the Snap server with custom app asset path."
 							);
 							return;
 						}
+						options.customSnapAssetSource = validatedAppAsset.validatedUrl;
 					}
 
 					await server.start(options);
@@ -656,17 +659,21 @@ async function launchWindowOptionsApp(): Promise<void> {
 }
 
 /**
- * Prefetches the snap app asset from the provided primary and fallback URLs to ensure it is cached before starting the Snap server.
- * @param primaryUrl The primary URL to fetch the snap app asset from.
- * @param fallbackUrl An optional fallback URL to fetch the snap app asset from if the primary URL fails.
- * @returns A boolean indicating whether the snap app asset was successfully fetched from either URL.
+ * Validates the snap app asset from the provided primary and fallback URLs to ensure it is available before starting the Snap server.
+ * @param primaryUrl The primary URL to validate the snap app asset from.
+ * @param fallbackUrl An optional fallback URL to validate the snap app asset from if the primary URL fails.
+ * @returns An object indicating whether the validation was successful, the validated URL if successful, and whether the fallback URL was used.
  */
-async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promise<boolean> {
+async function validateAppAssetSource(
+	primaryUrl: string,
+	fallbackUrl?: string
+): Promise<{ success: boolean; validatedUrl?: string; isFallbackUrl?: boolean }> {
 	const snapAssetInfo: OpenFin.AppAssetInfo = {
 		alias: snapAlias,
 		src: snapDefaultUrl,
 		version: snapVersion,
-		target: "OpenFinSnap.exe"
+		target: snapTarget,
+		mandatory: false
 	};
 	// before trying custom urls check to see if you already have snap
 	const snapDownloadedAssetInfo: OpenFin.AppAssetInfo | undefined = await doesAppAssetExist(
@@ -678,7 +685,11 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 		logInformation(
 			`We have a snap asset that matches the alias and version. It has the following details: alias: ${snapDownloadedAssetInfo.alias}, version: ${snapDownloadedAssetInfo.version}, src: ${snapDownloadedAssetInfo.src}`
 		);
-		return true;
+		return {
+			success: true,
+			validatedUrl: snapDownloadedAssetInfo.src,
+			isFallbackUrl: snapDownloadedAssetInfo.src === fallbackUrl
+		};
 	}
 
 	// SNAP downloads a specific alias + version combination.
@@ -686,6 +697,8 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 	// Since we have no snap version we want to validate our primary url.
 	logInformation(`Validating the primary asset url for the snap asset: ${primaryUrl}`);
 	snapAssetInfo.alias = `${snapAlias}-validate-download`; // use a different alias for the validation download so that we can have different versions if needed without conflict with the actual snap asset alias
+
+	snapAssetInfo.target = "NoOp"; // We don't want to actually run the snap asset during validation since we just want to check if the url is valid and the asset can be downloaded, so use a NoOp target that will not do anything if it is run for any reason during the validation process
 
 	// Update asset info to target primary url
 	snapAssetInfo.src = primaryUrl; // update the src to the primary url for the validation download
@@ -712,20 +725,15 @@ async function prefetchAppAsset(primaryUrl: string, fallbackUrl?: string): Promi
 
 	if (validatedAssetUrl) {
 		logInformation(
-			`Successfully validated the url for the snap asset: ${validatedAssetUrl}. Downloading snap asset with the validated url.`
+			`Successfully validated the url for the snap asset: ${validatedAssetUrl}. This url will be passed to Snap Options through the customSnapAssetSource setting.`
 		);
-		// reset the snapAssetInfo to be used for the actual snap asset download with the intended alias and version
-		snapAssetInfo.version = snapVersion; // update the version to the intended snap version for the actual snap asset download
-		snapAssetInfo.alias = snapAlias; // update the alias to the intended snap alias for the actual snap asset download
-		snapAssetInfo.src = validatedAssetUrl; // if the primary url was valid use it, if not and the fallback url was valid use it
-		const validatedAppAssetValidatedUrl = await fetchAppAsset(snapAssetInfo);
-		if (validatedAppAssetValidatedUrl) {
-			logInformation(`Successfully downloaded the snap asset with the validated url: ${validatedAssetUrl}`);
-			return true;
-		}
-		logError(`Failed to download the snap asset with the validated url: ${validatedAssetUrl}`);
+		return {
+			success: true,
+			validatedUrl: validatedAssetUrl,
+			isFallbackUrl: validatedAssetUrl === fallbackUrl
+		};
 	}
-	return false;
+	return { success: false };
 }
 
 /**
