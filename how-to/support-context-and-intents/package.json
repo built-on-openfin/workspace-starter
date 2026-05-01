@@ -21,13 +21,13 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/cloud-interop": "0.43.113",
-		"@openfin/workspace": "23.0.20",
-		"@openfin/workspace-platform": "23.0.20"
+		"@openfin/cloud-interop": "0.43.117",
+		"@openfin/workspace": "23.0.21",
+		"@openfin/workspace-platform": "23.0.21"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.101.2",
-		"@openfin/node-adapter": "43.101.2",
+		"@openfin/core": "43.102.2",
+		"@openfin/node-adapter": "43.102.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
@@ -39,7 +39,7 @@
 		"eslint-plugin-simple-import-sort": "12.0.0",
 		"eslint-plugin-unicorn": "51.0.1",
 		"eslint-plugin-unused-imports": "3.1.0",
-		"markdownlint-cli": "0.39.0",
+		"markdownlint-cli": "0.48.0",
 		"prettier": "3.2.5",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",
