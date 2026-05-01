@@ -16,7 +16,7 @@
     "validate": "node ./scripts/workspaces.mjs validate",
     "list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
     "update-packages": "npx --yes npm-check-updates --upgrade --deep -x chromedriver,chai,fkill*,node-emoji,@openfin/core,@openfin/node-adapter,@openfin/workspace,@openfin/workspace-platform,eslint-plugin-import",
-    "remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
+    "remove-packages": "node ./scripts/clean.mjs node_modules package-lock.json",
     "common-update": "node ./scripts/common-update.mjs"
   },
   "workspaces": [
