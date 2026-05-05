@@ -4,8 +4,8 @@ import type { ServerOptions } from "@openfin/snap-sdk";
 import { doesAppAssetExist, downloadAppAsset } from "./app-asset";
 
 const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
-const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.5.0/snap.zip";
-const snapVersion = "1.5.0";
+const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.6.0/snap.zip";
+const snapVersion = "1.6.0";
 const snapAlias = "openfin-snap";
 const snapTarget = "OpenFinSnap.exe";
 
