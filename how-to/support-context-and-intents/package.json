@@ -22,8 +22,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/cloud-interop": "0.43.117",
-		"@openfin/workspace": "23.0.21",
-		"@openfin/workspace-platform": "23.0.21"
+		"@openfin/workspace": "23.0.22",
+		"@openfin/workspace-platform": "23.0.22"
 	},
 	"devDependencies": {
 		"@openfin/core": "43.102.2",
