@@ -24,8 +24,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@openfin/openid-connect": "^1.0.0",
-		"@openfin/workspace": "23.2.16",
-		"@openfin/workspace-platform": "23.2.16",
+		"@openfin/workspace": "23.2.17",
+		"@openfin/workspace-platform": "23.2.17",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
