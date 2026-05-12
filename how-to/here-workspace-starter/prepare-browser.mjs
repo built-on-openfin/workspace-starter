@@ -13,7 +13,8 @@ if (!existsSync(enterpriseApiPath)) {
 	);
 }
 
-const enterprisePath = resolve(import.meta.dirname, "public/platform/enterprise");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const enterprisePath = resolve(__dirname, "public/platform/enterprise");
 if (existsSync(enterprisePath)) {
 	rmSync(enterprisePath, { recursive: true });
 }
