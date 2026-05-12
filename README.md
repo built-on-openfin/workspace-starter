@@ -2,7 +2,7 @@
 
 > **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes. Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
-## HERE Core UI v23.0.0 (Beta)
+## HERE Core UI v23.0.0
 
 > **_:information_source: HERE Core UI:_** When running a Beta Version of HERE Core UI on Windows please remember to make use of the npm run dos command when running a sample (which sets up a local desktop owner settings file pointing to the Beta). Please ensure any Corporate Desktop Settings path (if set) is restored after your testing.
 
@@ -12,7 +12,7 @@ The HERE Core UI is a full-featured work environment designed to improve the way
 
 ## What version does this branch cover?
 
-This branch covers version **v23.0.0** of HERE Core UI (there are versioned branches for other releases). [Click here to visit the release notes.](https://cdn.openfin.co/versions/?product=UI%20Components#23.0.20)
+This branch covers version **v23.0.0** of HERE Core UI (there are versioned branches for other releases). [Click here to visit the release notes.](https://cdn.openfin.co/versions/?product=UI%20Components#23.0.22)
 
 ## Before you get started
 

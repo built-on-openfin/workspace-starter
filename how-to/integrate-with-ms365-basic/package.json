@@ -22,12 +22,12 @@
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.40.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "23.0.20",
-		"@openfin/workspace-platform": "23.0.20"
+		"@openfin/workspace": "23.0.22",
+		"@openfin/workspace-platform": "23.0.22"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.101.2",
-		"@openfin/node-adapter": "43.101.2",
+		"@openfin/core": "43.102.2",
+		"@openfin/node-adapter": "43.102.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
