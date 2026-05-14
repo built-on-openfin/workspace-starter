@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-dock",
-	"version": "23.0.0",
+	"version": "24.0.0",
 	"description": "HERE Core UI -- Register with dock",
 	"main": "index.js",
 	"scripts": {
@@ -20,13 +20,13 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "23.2.17",
-		"@openfin/workspace-platform": "23.2.17",
+		"@openfin/workspace": "24.0.13",
+		"@openfin/workspace-platform": "24.0.13",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.102.2",
-		"@openfin/node-adapter": "43.102.2",
+		"@openfin/core": "44.101.1",
+		"@openfin/node-adapter": "44.101.1",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
