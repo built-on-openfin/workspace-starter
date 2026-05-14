@@ -3,13 +3,13 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.102.2"
+		"version": "44.146.101.1"
 	},
 	"appAssets": [
 		{
 			"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/register-with-dock3-basic/assets/workspace_platform.zip",
 			"alias": "self-hosted-workspace-platform",
-			"version": "23.0.0",
+			"version": "24.0.0",
 			"target": "workspace.asar"
 		}
 	],
