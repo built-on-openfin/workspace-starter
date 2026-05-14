@@ -2,7 +2,7 @@
 	{
 		"appId": "here-workspace-starter",
 		"name": "here-workspace-starter",
-		"title": "HERE Core UI Platform Starter Platform",
+		"title": "HERE Supertabs Starter",
 		"description": "The platform that is currently running.",
 		"manifest": {
 			"url": "http://localhost:8080/platform/provider.html"
