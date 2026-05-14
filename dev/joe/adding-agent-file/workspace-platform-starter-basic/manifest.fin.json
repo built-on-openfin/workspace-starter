@@ -1,0 +1,301 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "43.142.102.2"
+	},
+	"platform": {
+		"uuid": "workspace-platform-start-basic",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"interopBrokerConfiguration": {
+			"contextGroups": [
+				{
+					"id": "fdc3.channel.1",
+					"displayMetadata": {
+						"name": "Channel 1",
+						"color": "red",
+						"glyph": "1"
+					}
+				},
+				{
+					"id": "fdc3.channel.2",
+					"displayMetadata": {
+						"name": "Channel 2",
+						"color": "orange",
+						"glyph": "2"
+					}
+				},
+				{
+					"id": "fdc3.channel.3",
+					"displayMetadata": {
+						"name": "Channel 3",
+						"color": "yellow",
+						"glyph": "3"
+					}
+				},
+				{
+					"id": "fdc3.channel.4",
+					"displayMetadata": {
+						"name": "Channel 4",
+						"color": "green",
+						"glyph": "4"
+					}
+				},
+				{
+					"id": "fdc3.channel.5",
+					"displayMetadata": {
+						"name": "Channel 5",
+						"color": "cyan",
+						"glyph": "5"
+					}
+				},
+				{
+					"id": "fdc3.channel.6",
+					"displayMetadata": {
+						"name": "Channel 6",
+						"color": "blue",
+						"glyph": "6"
+					}
+				},
+				{
+					"id": "fdc3.channel.7",
+					"displayMetadata": {
+						"name": "Channel 7",
+						"color": "magenta",
+						"glyph": "7"
+					}
+				},
+				{
+					"id": "fdc3.channel.8",
+					"displayMetadata": {
+						"name": "Channel 8",
+						"color": "purple",
+						"glyph": "8"
+					}
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "findInPage.show",
+				"keys": "CommandOrControl+f"
+			}
+		]
+	},
+	"shortcut": {
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/favicon.ico",
+		"name": "HERE Core UI Platform Starter Basic - v23.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter Basic- Client",
+		"email": "support@here.io",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/platform/new-tab/new-tab.html",
+		"newTabUrl": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/platform/new-tab/new-tab.html",
+		"appsUrl": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/apps.json",
+		"apps": [
+			{
+				"appId": "call-app",
+				"name": "call-app",
+				"title": "Call Application",
+				"description": "Start a call.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/contact/call-app.view.fin.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [
+					{
+						"name": "StartCall",
+						"displayName": "Start a Call",
+						"contexts": ["fdc3.contact"]
+					},
+					{
+						"name": "OpenApp",
+						"displayName": "Open App",
+						"contexts": ["fdc3.contact"]
+					}
+				],
+				"images": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/previews/contact/call-app.png"
+					}
+				],
+				"tags": ["view", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "participant-selection",
+				"name": "participant-selection",
+				"title": "Participant Selection",
+				"description": "Select a participant.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/contact/participant-selection.view.fin.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [],
+				"images": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/previews/contact/participant-selection.png"
+					}
+				],
+				"tags": ["view", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "participant-history",
+				"name": "participant-history",
+				"title": "Participant History",
+				"description": "View participant history.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/contact/participant-history.view.fin.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [
+					{
+						"name": "ViewContact",
+						"displayName": "View Contact",
+						"contexts": ["fdc3.contact"]
+					}
+				],
+				"images": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/previews/contact/participant-history.png"
+					}
+				],
+				"tags": ["view", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "investments-and-models",
+				"name": "investments-and-models",
+				"title": "Investments and Models",
+				"description": "View investments and models.",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/contact/investments-and-models.view.fin.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [
+					{
+						"name": "ViewContact",
+						"displayName": "View Contact",
+						"contexts": ["fdc3.contact"]
+					}
+				],
+				"images": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/previews/contact/investments-and-models.png"
+					}
+				],
+				"tags": ["view", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "participant-summary-view",
+				"name": "participant-summary-view",
+				"title": "Participant Summary",
+				"description": "View summary of the participant",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/contact/participant-summary.view.fin.json",
+				"manifestType": "view",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [
+					{
+						"name": "ViewContact",
+						"displayName": "View Contact",
+						"contexts": ["fdc3.contact"]
+					}
+				],
+				"images": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/previews/contact/participant-summary-view.png"
+					}
+				],
+				"tags": ["view", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "client-overview",
+				"name": "client-overview",
+				"title": "Client Overview",
+				"manifestType": "snapshot",
+				"description": "Provides a summary of the current client",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/snapshots/contact-overview.snapshot.fin.json",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [
+					{
+						"name": "ViewContact",
+						"displayName": "View Contact",
+						"contexts": ["fdc3.contact"]
+					}
+				],
+				"images": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/previews/contact/client-overview.png"
+					}
+				],
+				"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
+			},
+			{
+				"appId": "new-page-url",
+				"name": "new-page-url",
+				"title": "New Page",
+				"manifestType": "view",
+				"description": "Search Google or open a url",
+				"manifest": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/views/platform/new-tab.view.fin.json",
+				"icons": [
+					{
+						"src": "https://built-on-openfin.github.io/workspace-starter/dev/joe/adding-agent-file/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
+				],
+				"contactEmail": "contact@example.com",
+				"supportEmail": "support@example.com",
+				"publisher": "HERE",
+				"intents": [],
+				"images": [],
+				"tags": ["page", "HERE"]
+			}
+		]
+	}
+}
