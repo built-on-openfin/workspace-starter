@@ -148,7 +148,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/li/saas-4345/v44/here-workspace-starter/favicon.ico",
-		"name": "HERE Core UI Platform Starter - v23.0.0",
+		"name": "HERE Core UI Supertabs - v24.0.0",
 		"target": [
 			"desktop",
 			"start-menu"
