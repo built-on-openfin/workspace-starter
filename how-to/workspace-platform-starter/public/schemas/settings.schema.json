@@ -772,6 +772,10 @@
                     "description": "When true, disables the ability to drag pages out of a window. False by default.",
                     "type": "boolean"
                 },
+                "tabSearchButton": {
+                    "$ref": "#/definitions/TabSearchButtonOptions",
+                    "description": "Controls whether tab-search chevron buttons are shown for page tabs and view tabs.\n\nBy default, both locations are disabled unless explicitly enabled."
+                },
                 "title": {
                     "anyOf": [
                         {
@@ -3807,6 +3811,10 @@
                     "description": "True if the page is locked.",
                     "type": "boolean"
                 },
+                "isPublished": {
+                    "description": "For published page, supertab icon will show the --color-shared-icon-accent border. default to false when published by admin",
+                    "type": "boolean"
+                },
                 "isReadOnly": {
                     "description": "True if the page is read only. In this state, the page is locked and cannot be unlocked.",
                     "type": "boolean"
@@ -5167,6 +5175,32 @@
                 "image",
                 "tags",
                 "title"
+            ],
+            "type": "object"
+        },
+        "TabSearchButtonOptions": {
+            "additionalProperties": false,
+            "description": "Configures where tab-search chevron buttons should be shown in a browser window.",
+            "properties": {
+                "pageTabs": {
+                    "$ref": "#/definitions/TabSearchLocationOptions"
+                },
+                "viewTabs": {
+                    "$ref": "#/definitions/TabSearchLocationOptions"
+                }
+            },
+            "type": "object"
+        },
+        "TabSearchLocationOptions": {
+            "additionalProperties": false,
+            "description": "Enables or disables the tab-search chevron button for a specific tab location.",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "enabled"
             ],
             "type": "object"
         },
