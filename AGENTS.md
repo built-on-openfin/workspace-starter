@@ -29,7 +29,7 @@ This codebase is in a branding transition. You will encounter both naming conven
 
 | Property | Value |
 |---|---|
-| Branch `main` targets | HERE Core UI **v23.0.0** (Beta) |
+| Branch `main` targets | HERE Core UI **v23.0.0** |
 | Root `package.json` version | `23.0.0` |
 | TypeScript version | `5.9.3` |
 | Required Node.js | **20+** |
@@ -179,14 +179,14 @@ Every HERE Core UI application follows this lifecycle:
 
 ### FDC3 and Interop
 
-OpenFin is a major contributor to the FDC3 standard. Key concepts:
+OpenFin is a major contributor to the FDC3 standard. There are multiple versions supported (v1.2 and v2.0). Key concepts:
 
 - **Context** — Typed data objects shared between apps (e.g., `fdc3.instrument`, `fdc3.contact`).
 - **Intents** — Named actions that apps can raise and handle (e.g., `ViewChart`, `ViewContact`).
 - **Channels** — Named conduits for context sharing. Apps join channels to participate in context flows.
 - **Interop Broker** — The platform's central hub for routing context and intents between apps.
 
-The `support-context-and-intents` example is the primary reference for this.
+The `support-context-and-intents` example is the primary reference for this, but only supports v1.2 at this time. `workspace-platform-starter` supports v2.0.
 
 ### App Definitions
 
@@ -297,7 +297,7 @@ await initPlatform({
 
 ## Platform-Specific Constraints
 
-- **Windows vs Mac**: The full HERE Core UI runtime is production-supported on Windows. Mac works for development but has limitations. Snap SDK examples are **Windows only**.
+- **Windows vs Mac**: The full HERE Core UI runtime is production-supported on Windows and Mac. Snap SDK examples are **Windows only**.
 - **Headless Platform**: The platform provider is a headless app by default (`autoShow: false`). To debug it, set `platform.autoShow` to `true` in the manifest, or use the HERE Process Manager.
 - **CDN Components**: Workspace UI components (Home, Store, Dock, Browser, etc.) are prebuilt and loaded from a CDN at runtime. The version loaded depends on Desktop Owner Settings. API version mismatches between your code and CDN components cause subtle bugs — always verify with the RVM log.
 - **Local Dev Server**: Every example runs a local HTTP server (typically on port 8080) that serves static assets and the manifest. The platform loads content from this server.
