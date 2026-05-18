@@ -1,5 +1,3 @@
-/*! For license information please see openfin.ms365.js.LICENSE.txt */
-
 /**
  * @license React
  * react.production.js

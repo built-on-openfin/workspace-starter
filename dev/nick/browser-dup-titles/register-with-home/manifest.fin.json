@@ -3,11 +3,10 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.102.2"
+		"version": "44.146.101.1"
 	},
 	"platform": {
 		"uuid": "register-with-home",
-		"name": "Register With Home - v23.0.0",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-home/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-home/platform/provider.html",
@@ -37,7 +36,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-home/favicon.ico",
-		"name": "Register With Home - v23.0.0",
+		"name": "Register With Home - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

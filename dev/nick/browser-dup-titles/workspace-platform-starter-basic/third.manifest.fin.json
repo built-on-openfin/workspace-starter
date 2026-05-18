@@ -6,7 +6,8 @@
 		"version": "44.146.101.1"
 	},
 	"platform": {
-		"uuid": "workspace-platform-start-basic",
+		"name": "HERE Core UI Platform Starter Basic Third",
+		"uuid": "workspace-platform-start-basic-third",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter-basic/favicon.ico",
 		"autoShow": false,
 		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter-basic/platform/provider.html",
@@ -90,12 +91,12 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter-basic/favicon.ico",
-		"name": "HERE Core UI Platform Starter Basic - v24.0.0",
+		"name": "HERE Core UI Platform Starter Basic - v24.0.0 - Third",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
 		"company": "HERE",
-		"product": "Workspace Starter - HERE Core UI Platform Starter Basic- Client",
+		"product": "Workspace Starter - HERE Core UI Platform Starter Basic- Client - Third",
 		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
@@ -299,12 +300,20 @@
 		],
 		"theme": [
 			{
-				"label": "Default",
-				"default": "dark",
-				"palette": {
-					"brandPrimary": "#0A76D3",
-					"brandSecondary": "#383A40",
-					"backgroundPrimary": "#1E1F23"
+				"label": "Custom Theme",
+				"seed": {
+					"brand.base.dark": "#140611",
+					"brand.accent.dark": "#FFD6D2",
+					"brand.base.light": "#FFFFFF",
+					"brand.accent.light": "#641E55"
+				},
+				"overrides": {
+					"light": {
+						"icon.symbol": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					},
+					"dark": {
+						"icon.symbol": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter-basic/common/images/favicon-32x32.png"
+					}
 				}
 			}
 		]

@@ -107,6 +107,20 @@
 					<input type="checkbox" id="chkDisableRuntimeHeartbeating" />
 				</fieldset>
 			</div>
+			<div id="rowCustomSnapAppAssetPath" class="row gap10 middle">
+				<fieldset class="row">
+					<label for="chkCustomSnapAppAssetPath">Enable Custom Snap App Asset Url</label>
+					<input type="checkbox" id="chkCustomSnapAppAssetPath" />
+				</fieldset>
+				<fieldset class="row" id="fieldPrimaryUrl" style="display: none">
+					<label for="txtPrimaryUrl">Primary Url</label>
+					<input type="text" id="txtPrimaryUrl" />
+				</fieldset>
+				<fieldset class="row" id="fieldFallbackUrl" style="display: none">
+					<label for="txtFallbackUrl">Fallback Url</label>
+					<input type="text" id="txtFallbackUrl" />
+				</fieldset>
+			</div>
 			<hr />
 			<div class="row gap10">
 				<button id="btnNativeTestApp">Open Native Test App</button>
