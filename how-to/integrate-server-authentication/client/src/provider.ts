@@ -28,18 +28,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					favicon: PLATFORM_ICON
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		]
+		}
 	});
 }
 
