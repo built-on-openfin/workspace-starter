@@ -62,13 +62,6 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: templateHelpers.DEFAULT_PALETTES.dark
-			}
-		],
 		// Override the interop so that we can handle intent messages from Salesforce
 		interopOverride
 	});
