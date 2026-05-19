@@ -20,12 +20,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 	);
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(
-		settings.platformSettings,
-		settings.customSettings ?? {},
-		settings.customSettings?.theme
-	);
+	// Provide default icons for the browser windows
+	await initializeWorkspacePlatform(settings.platformSettings, settings.customSettings ?? {});
 });
 
 /**
@@ -65,7 +61,6 @@ async function initializeWorkspacePlatform(
 				}
 			}
 		},
-		theme,
 		customActions: {
 			"launch-app": async (e): Promise<void> => {
 				if (

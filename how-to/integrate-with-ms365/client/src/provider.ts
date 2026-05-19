@@ -66,14 +66,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					favicon: PLATFORM_ICON
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palettes: templateHelpers.DEFAULT_PALETTES
-			}
-		]
+		}
 	});
 }
 

@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	const customSettings = await getManifestCustomSettings();
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform(customSettings);
 
 	// If we have launch bar settings then open the window
@@ -62,17 +62,6 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Get the custom action used the launched windows.
 		customActions: getCustomActions(),
 		// Implement an override of some of the platform callback methods.
