@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await initializeDom();
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform();
 
 	await initializeNotifications();
@@ -61,41 +61,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					favicon: PLATFORM_ICON
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palettes: {
-					dark: {
-						brandPrimary: "#0A76D3",
-						brandSecondary: "#383A40",
-						backgroundPrimary: "#1E1F23"
-					},
-					light: {
-						brandPrimary: "#0A76D3",
-						brandSecondary: "#1E1F23",
-						backgroundPrimary: "#FAFBFE",
-						// Demonstrate changing the link color for notifications
-						linkDefault: "#FF0000",
-						linkHover: "#00FF00"
-					}
-				},
-				notificationIndicatorColors: {
-					// This custom indicator color will be used in the Notification with Custom Indicator
-					"custom-indicator": {
-						dark: {
-							background: "#FF0000",
-							foreground: "#FFFFDD"
-						},
-						light: {
-							background: "#FF0000",
-							foreground: "#FFFFDD"
-						}
-					}
-				}
-			}
-		]
+		}
 	});
 }
 
