@@ -24,41 +24,51 @@ import {
 	type WorkspacePlatformModule,
 	SUPPORTED_LANGUAGES
 } from "@openfin/workspace-platform";
+import { launchBrowserScenario } from "./browser-scenarios";
+import { getBrowserExampleLaunchParamsFromApp } from "./launch-params";
 import type { CustomSettings } from "./shapes";
 
+const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+
+let manifestCustomSettings: CustomSettings = {};
+
 window.addEventListener("DOMContentLoaded", async () => {
-	// When the platform api is ready we bootstrap the platform.
-	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
-
-	// Load the settings from the manifest
-	const customSettings = await getManifestCustomSettings();
-
-	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(customSettings);
-
-	// If we have launch bar settings then open the window
-	// The content is from launch-bar.html and is driven by launch-bar.ts
-	if (customSettings.launchBarWindowSettings) {
-		await fin.Window.create(customSettings.launchBarWindowSettings);
+	const launchParams = await getBrowserExampleLaunchParamsFromApp();
+	if (!launchParams) {
+		console.error("Runtime platform started without launch parameters; quitting.");
+		await fin.Platform.getCurrentSync().quit();
+		return;
 	}
+
+	const platform = fin.Platform.getCurrentSync();
+	await platform.once("platform-api-ready", async () => {
+		await initializeWorkspaceComponents();
+		await launchBrowserScenario(launchParams.scenarioId);
+	});
+
+	manifestCustomSettings = await getManifestCustomSettings();
+	await initializeWorkspacePlatform(manifestCustomSettings, launchParams.allowDuplicatePageTitles);
 });
 
 /**
- * Initialize the HERE Core UI Platform.
+ * Initialize the HERE Core UI Platform for a single browser example run.
  * @param customSettings The custom settings from the manifest.
+ * @param allowDuplicatePageTitles Whether duplicate page titles are allowed for this run.
  */
-async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing HERE Core UI Platform");
+async function initializeWorkspacePlatform(
+	customSettings: CustomSettings,
+	allowDuplicatePageTitles: boolean
+): Promise<void> {
+	console.log("Initializing HERE Core UI Platform (runtime)", { allowDuplicatePageTitles });
 	await init({
 		browser: {
+			allowDuplicatePageTitles,
 			browserIconSize: customSettings.browserIconSize,
 			defaultWindowOptions: {
-				icon: customSettings.launchBarWindowSettings?.icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: customSettings.launchBarWindowSettings?.icon
+					favicon: PLATFORM_ICON
 				}
 			}
 		},
@@ -84,9 +94,8 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
  * Bring the platform to life.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
-	console.log("Initializing the HERE Core UI Components");
+	console.log("Initializing the HERE Core UI Components (runtime)");
 
-	// When the platform requests to be close we deregister from home and quit
 	const providerWindow = fin.Window.getCurrentSync();
 	await providerWindow.once("close-requested", async () => {
 		await fin.Platform.getCurrentSync().quit();

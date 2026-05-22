@@ -2,7 +2,7 @@ const path = require('path');
 /*  */
 module.exports = [
 	{
-		entry: './client/src/provider.ts',
+		entry: './client/src/launcher.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -17,12 +17,12 @@ module.exports = [
 			extensions: ['.tsx', '.ts', '.js']
 		},
 		output: {
-			filename: 'provider.bundle.js',
+			filename: 'launcher.bundle.js',
 			path: path.resolve(__dirname, '..', 'public', 'js')
 		}
 	},
 	{
-		entry: './client/src/launchbar.ts',
+		entry: './client/src/runtime-provider.ts',
 		devtool: 'inline-source-map',
 		module: {
 			rules: [
@@ -37,7 +37,7 @@ module.exports = [
 			extensions: ['.tsx', '.ts', '.js']
 		},
 		output: {
-			filename: 'launchbar.bundle.js',
+			filename: 'runtime-provider.bundle.js',
 			path: path.resolve(__dirname, '..', 'public', 'js')
 		}
 	},

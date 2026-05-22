@@ -4,18 +4,26 @@
 
 # Register With Browser
 
-HERE Core UI empowers you to take advantage of our browser component by using our HERE Core UI Platform SDK to control the behavior of the HERE Browser independent of the Home and Storefront components. This example shows how to do a few basic things such as:
+HERE Core UI empowers you to take advantage of our browser component by using our HERE Core UI Platform SDK to control the behavior of the HERE Browser independent of the Home and Storefront components. This example uses **two platforms**:
+
+1. **Launcher** (`manifest.fin.json`) — control panel only: scenario dropdown, **Allow Duplicate Page Titles**, **Launch Browser**, **Close Example**, and **Quit Launcher**.
+2. **Runtime** (`runtime.manifest.fin.json`) — started via `fin.Application.startFromManifest` when you launch; each run gets a fresh `init({ allowDuplicatePageTitles })` from `userAppConfigArgs`, then opens the selected browser scenario immediately.
+
+From the launcher window, select a scenario and click **Launch Browser** to try:
 
 1. Launch a browser window.
 2. Launch a browser window that doesn't require saving unless changes have been applied.
-3. Launch a browser in a maximized state
+3. Launch a browser in a maximized state.
 4. Launch a browser window with a custom toolbar.
 5. Launch a page with no page tab.
 6. Launch a browser window with multiple pages.
 7. Launch a single locked page.
 8. Launch a browser window with fixed views.
-9. Get all the pages for all open browser windows.
-10. Quit the running platform.
+9. Launch a browser window to explore duplicate page titles (two pages start with the same intended title).
+
+Use the **Allow Duplicate Page Titles** checkbox before each launch; the runtime platform reads it once at startup via `userAppConfigArgs`. On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To demo disallowed behavior, click **Close Example**, uncheck the box, and launch again — each launch starts a new runtime with the updated setting.
+
+**Close Example** shuts down only the browser runtime; **Quit Launcher** exits the control panel app.
 
 This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
@@ -62,17 +70,15 @@ npm run client
 npm run build
 ```
 
-### Note About The App
-
-This is a headless application. If you wish to debug it then you can update the [manifest file](public/manifest.fin.json) and set platform.autoShow to **true**. Otherwise you can use Process Manager (which is included in your list of apps).
-
 ### How this example works
 
 ```shell
 npm run client
 ```
 
-1. The client command will launch a window with the options object `customSettings.launchBarWindowSettings` set in the `public/manifest.fin.json` file. The window creation for the launch bar containing the buttons is invoked in `client/src/provider.ts`. The provider also configures the platform and registers a lot of the actions used by the browser windows.
+1. The client command opens the launcher (`public/platform/launcher.html`, `client/src/launcher.ts`) — no `WorkspacePlatform.init()` there.
+2. **Launch Browser** writes `userAppConfigArgs` and starts `runtime.manifest.fin.json`.
+3. The runtime provider (`client/src/runtime-provider.ts`) calls `init({ allowDuplicatePageTitles })`, then auto-runs the scenario from `client/src/browser-scenarios.ts` when the platform API is ready.
 
 ![Register With Browser](./assets/register-with-browser.gif)
 

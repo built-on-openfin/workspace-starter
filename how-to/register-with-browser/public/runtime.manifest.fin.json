@@ -1,0 +1,23 @@
+{
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "44.146.101.1"
+	},
+	"platform": {
+		"uuid": "register-with-browser-runtime",
+		"icon": "http://localhost:8080/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "http://localhost:8080/platform/runtime-provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"commands": [
+			{
+				"command": "findInPage.show",
+				"keys": "CommandOrControl+f"
+			}
+		]
+	},
+	"customSettings": {
+		"browserIconSize": "default"
+	}
+}

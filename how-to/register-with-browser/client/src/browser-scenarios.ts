@@ -11,88 +11,27 @@ import {
 	type PageWithUpdatableRuntimeAttribs,
 	type ToolbarOptions
 } from "@openfin/workspace-platform";
+/** Identifiers for each browser launch scenario. */
+export type BrowserScenarioId =
+	| "default"
+	| "no-save"
+	| "maximized"
+	| "custom-toolbar"
+	| "no-page-tab"
+	| "multi-page"
+	| "locked-page"
+	| "fixed-views"
+	| "duplicate-page-titles";
 
-document.addEventListener("DOMContentLoaded", async () => {
-	// create browser window with view
-	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
-	if (createBrowserWinBtn) {
-		createBrowserWinBtn.addEventListener("click", async () => createBrowserWindow());
-	}
-
-	// create browser window with no save requirement
-	const createBrowserWinNoSaveBtn = document.querySelector("#launch-browser-window-no-save");
-	if (createBrowserWinNoSaveBtn) {
-		createBrowserWinNoSaveBtn.addEventListener("click", createBrowserWindowWithoutRequiringSave);
-	}
-
-	// create browser window maximized
-	const createBrowserMaximized = document.querySelector("#launch-browser-window-maximized");
-	if (createBrowserMaximized) {
-		createBrowserMaximized.addEventListener("click", createBrowserWindowMaximized);
-	}
-
-	// create browser window with custom save page button
-	const customToolbarBtn = document.querySelector("#launch-browser-window-with-custom-btn");
-	if (customToolbarBtn) {
-		customToolbarBtn.addEventListener("click", createCustomToolbarWindow);
-	}
-
-	// create browser window with single page and no tab
-	const singlePageBrowserWinNoTabBtn = document.querySelector("#launch-nopagetab-browser-window");
-	if (singlePageBrowserWinNoTabBtn) {
-		singlePageBrowserWinNoTabBtn.addEventListener("click", createSinglePageNoTabWindow);
-	}
-
-	// create browser window with multiple pages
-	const multiPageBrowserWinBtn = document.querySelector("#launch-multipage-browser-window");
-	if (multiPageBrowserWinBtn) {
-		multiPageBrowserWinBtn.addEventListener("click", createMultiPageWindow);
-	}
-
-	// create browser window with fixed views
-	const fixedViews = document.querySelector("#launch-fixed-views");
-	if (fixedViews) {
-		fixedViews.addEventListener("click", createWindowWithFixedViews);
-	}
-
-	// get all browser pages
-	const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
-	if (getBrowserPagesBtn) {
-		getBrowserPagesBtn.addEventListener("click", async () => {
-			await (fin.me as OpenFin.Window).showDeveloperTools();
-			const platform = getCurrentSync();
-			const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
-			if (lastFocusedWindow) {
-				const pages = await platform.Browser.getAllAttachedPages();
-				const lastFocusedWindowIdentity = await platform.Browser.getLastFocusedWindow();
-				if (lastFocusedWindowIdentity) {
-					const { uuid, name } = lastFocusedWindowIdentity;
-					const wrappedBrowserWindow = platform.Browser.wrapSync({ uuid, name });
-					const lastBrowserWindowPages = await wrappedBrowserWindow.getPages();
-					const unsavedPages = lastBrowserWindowPages.filter((page) => page.hasUnsavedChanges);
-					console.dir({ message: "All PAGES", pages });
-					console.dir({ message: "UNSAVED PAGES", unsavedPages });
-					console.dir({ message: "LAST FOCUSED WINDOW", wrappedBrowserWindow });
-				}
-			}
-		});
-	}
-
-	// Create browser window with fixed views
-	const singleLockedPage = document.querySelector("#launch-single-locked-page");
-	if (singleLockedPage) {
-		singleLockedPage.addEventListener("click", createWindowWithLockedPage);
-	}
-
-	// quit launcher / browser
-	const quitBtn = document.querySelector("#quit");
-	if (quitBtn) {
-		quitBtn.addEventListener("click", async () => {
-			const platform = getCurrentSync();
-			await platform.quit();
-		});
-	}
-});
+/** A browser window scenario that can be launched from the provider UI. */
+export interface BrowserScenario {
+	/** Scenario id used as the select option value. */
+	id: BrowserScenarioId;
+	/** Human-readable label shown in the scenario dropdown. */
+	label: string;
+	/** Creates a browser window for this scenario. */
+	launch: () => Promise<BrowserWindowModule>;
+}
 
 /**
  * Create a browser window.
@@ -365,6 +304,86 @@ async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
 }
 
 /**
+ * Create a window with two pages intended to share the same title.
+ * The platform may still suffix the second tab on create (e.g. "Shared Page Title (1)").
+ * Rename a tab after launch to match the other and observe allowDuplicatePageTitles behavior.
+ * @returns The created browser window.
+ */
+async function createDuplicatePageTitlesWindow(): Promise<BrowserWindowModule> {
+	const sharedTitle = "Shared Page Title";
+	const page1: Page = await createPageWithLayout(sharedTitle, createDefaultPageLayout());
+	const page2: Page = await createPageWithLayout(sharedTitle, createDefaultPageLayout());
+	const pages: Page[] = [page1, page2];
+
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: { pages }
+	};
+
+	const platform = getCurrentSync();
+	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+	await createdBrowserWin.getPages();
+	return createdBrowserWin;
+}
+
+export const BROWSER_SCENARIOS: BrowserScenario[] = [
+	{ id: "default", label: "Launch Browser Window", launch: async () => createBrowserWindow() },
+	{
+		id: "no-save",
+		label: "Launch Browser Window (No Save Required)",
+		launch: createBrowserWindowWithoutRequiringSave
+	},
+	{ id: "maximized", label: "Launch Browser Maximized", launch: createBrowserWindowMaximized },
+	{
+		id: "custom-toolbar",
+		label: "Launch Browser With Custom Toolbar",
+		launch: createCustomToolbarWindow
+	},
+	{ id: "no-page-tab", label: "Launch Page With No Tab", launch: createSinglePageNoTabWindow },
+	{ id: "multi-page", label: "Launch Multiple Pages", launch: createMultiPageWindow },
+	{ id: "locked-page", label: "Launch Single Locked Page", launch: createWindowWithLockedPage },
+	{ id: "fixed-views", label: "Launch Browser with Fixed Views", launch: createWindowWithFixedViews },
+	{
+		id: "duplicate-page-titles",
+		label: "Launch Browser With Duplicate Page Titles",
+		launch: createDuplicatePageTitlesWindow
+	}
+];
+
+/**
+ * Launch a browser window for the given scenario id.
+ * @param scenarioId The scenario to launch.
+ * @returns The created browser window.
+ */
+export async function launchBrowserScenario(scenarioId: BrowserScenarioId): Promise<BrowserWindowModule> {
+	const scenario = BROWSER_SCENARIOS.find((s) => s.id === scenarioId);
+	if (!scenario) {
+		throw new Error(`Unknown browser scenario: ${scenarioId}`);
+	}
+	return scenario.launch();
+}
+
+/**
+ * Log all attached pages and unsaved pages for the last focused browser window.
+ */
+export async function logAllBrowserPages(): Promise<void> {
+	const platform = getCurrentSync();
+	const lastFocusedWindow = await platform.Browser.getLastFocusedWindow();
+	if (lastFocusedWindow) {
+		const pages = await platform.Browser.getAllAttachedPages();
+		const lastFocusedWindowIdentity = await platform.Browser.getLastFocusedWindow();
+		if (lastFocusedWindowIdentity) {
+			const { uuid, name } = lastFocusedWindowIdentity;
+			const wrappedBrowserWindow = platform.Browser.wrapSync({ uuid, name });
+			const lastBrowserWindowPages = await wrappedBrowserWindow.getPages();
+			const unsavedPages = lastBrowserWindowPages.filter((page) => page.hasUnsavedChanges);
+			console.dir({ message: "All PAGES", pages });
+			console.dir({ message: "UNSAVED PAGES", unsavedPages });
+			console.dir({ message: "LAST FOCUSED WINDOW", wrappedBrowserWindow });
+		}
+	}
+}
+
+/**
  * Create a page with a specific layout.
  * @param title The title of the page.
  * @param layout The layout for the page.
@@ -431,9 +450,6 @@ function randomUUID(): string {
 		// eslint-disable-next-line no-restricted-syntax
 		return window.crypto.randomUUID();
 	}
-	// Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
-	// we are still using window.crypto.getRandomValues which is always available
-	// https://stackoverflow.com/a/2117523/2800218
 	/**
 	 * Get random hex value.
 	 * @param c The number to base the random value on.
