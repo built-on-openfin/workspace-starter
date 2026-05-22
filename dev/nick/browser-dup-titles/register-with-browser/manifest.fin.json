@@ -6,10 +6,10 @@
 		"version": "44.146.101.1"
 	},
 	"platform": {
-		"uuid": "launch-browser-from-window",
+		"uuid": "register-with-browser-launcher",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-browser/favicon.ico",
-		"autoShow": false,
-		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-browser/platform/provider.html",
+		"autoShow": true,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-browser/platform/launcher.html",
 		"preventQuitOnLastWindowClosed": true,
 		"commands": [
 			{
@@ -32,22 +32,6 @@
 		"forwardErrorReports": true
 	},
 	"customSettings": {
-		"browserIconSize": "default",
-		"launchBarWindowSettings": {
-			"url": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-browser/html/launch-bar.html",
-			"name": "launch-bar",
-			"frame": false,
-			"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/register-with-browser/favicon.ico",
-			"defaultHeight": 470,
-			"defaultWidth": 340,
-			"defaultCentered": true,
-			"saveWindowState": false,
-			"resizable": false,
-			"alwaysOnTop": true,
-			"cornerRounding": {
-				"height": 10,
-				"width": 10
-			}
-		}
+		"browserIconSize": "default"
 	}
 }
