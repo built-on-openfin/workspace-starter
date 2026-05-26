@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	const app = await fin.Application.getCurrent();
 	const manifest = await app.getManifest();
 	let workspaceAsar: { alias: string } | undefined;
@@ -67,17 +67,6 @@ async function initializeWorkspacePlatform(workspaceAsar?: { alias: string }): P
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		workspaceAsar
 	});
 }

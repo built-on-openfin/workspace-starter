@@ -47,7 +47,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -398,7 +398,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -579,7 +579,7 @@
                 "globalMenu": {
                     "description": "This setting lets you customize the default workspace browser main menu and specify your own.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
+                        "$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
                     },
                     "type": "array"
                 },
@@ -631,7 +631,7 @@
                 "pageMenu": {
                     "description": "This setting lets you customize the page right click context menu and add your own entries.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
+                        "$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
                     },
                     "type": "array"
                 },
@@ -653,7 +653,7 @@
                 "viewMenu": {
                     "description": "This setting lets you customize the view right click context menu and add your own entries.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
+                        "$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
                     },
                     "type": "array"
                 },
@@ -771,6 +771,10 @@
                 "preventPageDragOut": {
                     "description": "When true, disables the ability to drag pages out of a window. False by default.",
                     "type": "boolean"
+                },
+                "tabSearchButton": {
+                    "$ref": "#/definitions/TabSearchButtonOptions",
+                    "description": "Controls whether tab-search chevron buttons are shown for page tabs and view tabs.\n\nBy default, both locations are disabled unless explicitly enabled."
                 },
                 "title": {
                     "anyOf": [
@@ -1830,14 +1834,14 @@
                 "endpoints": {
                     "description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
                     "items": {
-                        "$ref": "#/definitions/EndpointDefinition<unknown>"
+                        "$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 },
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -2358,7 +2362,7 @@
                 "integrations": {
                     "description": "This is the old module list name, remove in future.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
+                        "$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -2369,7 +2373,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
+                        "$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -2730,7 +2734,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
+                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -2809,7 +2813,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
+                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -2888,7 +2892,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
+                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -2967,7 +2971,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
+                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -3024,7 +3028,7 @@
                 "submenu": {
                     "description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
                     "items": {
-                        "$ref": "#/definitions/MenuItemTemplate<unknown>"
+                        "$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -3192,7 +3196,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -3421,7 +3425,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -3435,7 +3439,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -3449,7 +3453,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -3463,7 +3467,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -3477,7 +3481,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -3491,7 +3495,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -3554,7 +3558,7 @@
                 "updatable": {
                     "description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
                     "items": {
-                        "$ref": "#/definitions/NativePreference<never>_1"
+                        "$ref": "#/definitions/NativePreference%3Cnever%3E_1"
                     },
                     "type": "array"
                 }
@@ -3671,6 +3675,9 @@
                 }
             },
             "type": "object"
+        },
+        "NotificationIndicatorColors": {
+            "$ref": "#/definitions/__type_63"
         },
         "NotificationIndicatorColorsWithScheme": {
             "$ref": "#/definitions/__type_64"
@@ -3802,6 +3809,10 @@
                 },
                 "isLocked": {
                     "description": "True if the page is locked.",
+                    "type": "boolean"
+                },
+                "isPublished": {
+                    "description": "For published page, supertab icon will show the --color-shared-icon-accent border. default to false when published by admin",
                     "type": "boolean"
                 },
                 "isReadOnly": {
@@ -4306,7 +4317,7 @@
                     "type": "string"
                 },
                 "notificationIndicatorColors": {
-                    "$ref": "#/definitions/Record_1",
+                    "$ref": "#/definitions/NotificationIndicatorColors",
                     "description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
                 },
                 "palette": {
@@ -4401,7 +4412,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -4448,7 +4459,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 },
@@ -4568,9 +4579,6 @@
         },
         "Record": {
             "$ref": "#/definitions/__type_21"
-        },
-        "Record_1": {
-            "$ref": "#/definitions/__type_63"
         },
         "Rectangle": {
             "$ref": "#/definitions/__type_33"
@@ -4729,7 +4737,7 @@
                 "modules": {
                     "description": "The list of modules.",
                     "items": {
-                        "$ref": "#/definitions/ModuleDefinition<unknown>"
+                        "$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
                     },
                     "type": "array"
                 }
@@ -5170,6 +5178,32 @@
             ],
             "type": "object"
         },
+        "TabSearchButtonOptions": {
+            "additionalProperties": false,
+            "description": "Configures where tab-search chevron buttons should be shown in a browser window.",
+            "properties": {
+                "pageTabs": {
+                    "$ref": "#/definitions/TabSearchLocationOptions"
+                },
+                "viewTabs": {
+                    "$ref": "#/definitions/TabSearchLocationOptions"
+                }
+            },
+            "type": "object"
+        },
+        "TabSearchLocationOptions": {
+            "additionalProperties": false,
+            "description": "Enables or disables the tab-search chevron button for a specific tab location.",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "enabled"
+            ],
+            "type": "object"
+        },
         "TaskBar": {
             "additionalProperties": false,
             "properties": {
@@ -5289,7 +5323,7 @@
                 "menuEntries": {
                     "description": "The menu entries to display.",
                     "items": {
-                        "$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
+                        "$ref": "#/definitions/MenuEntry%3CTrayMenuOptionType%3E"
                     },
                     "type": "array"
                 },
@@ -5312,19 +5346,19 @@
         "UpdatableLaunchPreferenceDefinition": {
             "anyOf": [
                 {
-                    "$ref": "#/definitions/WindowPreference<never>"
+                    "$ref": "#/definitions/WindowPreference%3Cnever%3E"
                 },
                 {
                     "$ref": "#/definitions/WindowPreferenceUrl"
                 },
                 {
-                    "$ref": "#/definitions/ViewPreference<never>"
+                    "$ref": "#/definitions/ViewPreference%3Cnever%3E"
                 },
                 {
                     "$ref": "#/definitions/ViewPreferenceUrl"
                 },
                 {
-                    "$ref": "#/definitions/NativePreference<never>"
+                    "$ref": "#/definitions/NativePreference%3Cnever%3E"
                 }
             ],
             "description": "A type that contains the available updatable launch preferences"
@@ -5450,7 +5484,7 @@
                                 "$ref": "#/definitions/ViewPreferenceUrl"
                             },
                             {
-                                "$ref": "#/definitions/ViewPreference<never>_1"
+                                "$ref": "#/definitions/ViewPreference%3Cnever%3E_1"
                             }
                         ]
                     },
@@ -5762,7 +5796,7 @@
                                 "$ref": "#/definitions/WindowPreferenceUrl"
                             },
                             {
-                                "$ref": "#/definitions/WindowPreference<never>_1"
+                                "$ref": "#/definitions/WindowPreference%3Cnever%3E_1"
                             }
                         ]
                     },
@@ -8489,7 +8523,7 @@
                 "rules": {
                     "description": "List of rules for creation of new content.",
                     "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
+                        "$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
                     },
                     "type": "array"
                 }

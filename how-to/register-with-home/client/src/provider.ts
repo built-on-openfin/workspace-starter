@@ -7,13 +7,13 @@ import type { CustomSettings } from "./shapes";
 window.addEventListener("DOMContentLoaded", async () => {
 	// Load the settings from the manifest
 	const customSettings = await getManifestCustomSettings();
-	console.log("Custom settings loaded from manifest:", customSettings);
+
 	// When the platform api is ready we bootstrap the platform.
 	const platform = fin.Platform.getCurrentSync();
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform(customSettings);
 });
 
@@ -32,18 +32,7 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 					favicon: customSettings.homeProvider?.icon
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		]
+		}
 	});
 }
 
@@ -73,7 +62,7 @@ async function initializeWorkspaceComponents(customSettings: CustomSettings): Pr
 async function getManifestCustomSettings(): Promise<CustomSettings> {
 	// Get the manifest for the current application
 	const app = await fin.Application.getCurrent();
-	console.log("Retrieving manifest for application:", app.identity.uuid);
+
 	// Extract the custom settings for this application
 	const manifest: OpenFin.Manifest & { customSettings?: CustomSettings } = await app.getManifest();
 	return manifest.customSettings ?? {};

@@ -59,7 +59,7 @@ export async function initializeDock3API(
 						// more complex data. For example, you could pass a "contentId" field
 						// that could be used to look up the entry in an app/content directory
 						// and determine how to launch it (e.g is it a native app, web content, etc).
-						if (payload.entry.itemData?.url) {
+						if (payload.entry.type === "item" && payload.entry.itemData?.url) {
 							await platform.createView({ url: payload.entry.itemData?.url });
 						} else {
 							console.error("No URL found for dock entry:", payload.entry);

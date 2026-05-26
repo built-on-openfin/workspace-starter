@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform();
 });
 
@@ -30,17 +30,6 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Override the platform interop so that we can handle intents
 		interopOverride
 	});

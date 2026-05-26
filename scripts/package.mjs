@@ -1,9 +1,16 @@
-const { execSync } = require('child_process');
-const fg = require('fast-glob');
-const fs = require('fs-extra');
-const replace = require('replace-in-file');
-const yargs = require('yargs');
-const packageJson = require('../package.json');
+import { execSync } from 'child_process';
+import fg from 'fast-glob';
+import fs from 'fs-extra';
+import { replaceInFileSync } from 'replace-in-file';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
 
 const DEFAULT_PORT = '8080';
 const DEFAULT_FOLDER = 'workspace-starter';
@@ -15,7 +22,7 @@ const URLBaseMap = new Map([
 	['aws', 'https://samples.openfin.co']
 ]);
 
-const args = yargs(process.argv.slice(2))
+const args = yargs(hideBin(process.argv))
 	.usage('$0 [args]')
 	.env(ENV_NAME)
 	.option('l', {
@@ -40,7 +47,8 @@ const args = yargs(process.argv.slice(2))
 		description: "Package for github in the 'public/' folder."
 	})
 	.help()
-	.alias('help', 'h').argv;
+	.alias('help', 'h')
+	.parseSync();
 
 /**
  * Package the items.
@@ -101,7 +109,7 @@ function packageItems(cliArgs) {
 				to: rootUrl
 			};
 
-			const results = replace.sync(options);
+			const results = replaceInFileSync(options);
 			console.log('Replacement results:', results);
 			console.log(`URLs replaced with: ${rootUrl}`);
 		} catch (error) {
