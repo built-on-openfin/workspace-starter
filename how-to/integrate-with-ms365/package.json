@@ -20,7 +20,7 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@finos/fdc3": "2.0.3",
+		"@finos/fdc3": "^2.0.3",
 		"@microsoft/microsoft-graph-types": "^2.40.0",
 		"@openfin/microsoft365": "1.0.1",
 		"@openfin/workspace": "24.0.13",
