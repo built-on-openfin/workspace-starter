@@ -32,7 +32,7 @@ let username: HTMLDivElement | null;
 // Wait for the DOM to finish loading
 window.addEventListener("DOMContentLoaded", async () => {
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform();
 
 	// Platform has loaded so initialize the DOM
@@ -53,18 +53,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					favicon: PLATFORM_ICON
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		]
+		}
 	});
 }
 

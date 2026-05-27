@@ -124,17 +124,6 @@ async function initializeWorkspacePlatform(
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Get the custom action used the launched windows.
 		customActions: getCustomActions(),
 		// Implement an override of some of the platform callback methods.
