@@ -60,14 +60,11 @@
 		"@openfin/workspace": "24.0.13",
 		"@openfin/workspace-platform": "24.0.13",
 		"csstype": "^3.1.3",
-		"express-rate-limit": "^8.1.0",
 		"@openfin/ai-context": "file:./openfin-ai-context-24.0.0.tgz",
 		"@openfin/ai-context-client": "file:./openfin-ai-context-client-24.0.0.tgz",
 		"@openfin/here-supertabs": "file:./openfin-here-supertabs-24.0.13.tgz"
 	},
 	"devDependencies": {
-		"@openfin/automation-cli": "^1.2.0",
-		"@openfin/automation-helpers": "^1.2.0",
 		"@openfin/core": "44.101.1",
 		"@openfin/node-adapter": "43.101.2",
 		"@types/cors": "^2.8.17",
@@ -86,6 +83,7 @@
 		"eslint-plugin-unicorn": "51.0.1",
 		"eslint-plugin-unused-imports": "3.1.0",
 		"express": "^4.18.3",
+		"express-rate-limit": "^8.1.0",
 		"fast-glob": "^3.3.2",
 		"markdownlint-cli": "0.48.0",
 		"prettier": "3.2.5",
