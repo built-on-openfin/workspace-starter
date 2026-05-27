@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<title>Register With Browser - Launcher</title>
+		<title>Register With Browser</title>
 		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../common/style/app.css" />
-		<script src="../js/launcher.bundle.js"></script>
+		<script src="../js/provider.bundle.js"></script>
 	</head>
 	<body class="col fill gap20">
 		<header class="row spread middle">
@@ -22,10 +22,11 @@
 		</header>
 		<main class="col fill gap20 scroll-vertical">
 			<p>
-				Select a browser scenario and options below, then click Launch Browser. Each launch starts a separate
-				runtime platform with those settings and opens the browser immediately.
+				Select a browser scenario and options below, then click Initialize Platform. After initialization, use
+				Launch Browser to open the selected scenario. Set Allow Duplicate Page Titles before initializing (it
+				is locked while initialized). Use Restart Demo to restart without initializing so you can change
+				settings and initialize again.
 			</p>
-			<p>Use Close Example to stop the browser run without closing this launcher.</p>
 			<div class="col gap10">
 				<fieldset class="col gap10">
 					<label for="scenario">Browser scenario</label>
@@ -37,9 +38,10 @@
 				</fieldset>
 				<p id="duplicate-titles-hint" class="tag" hidden></p>
 				<div class="row gap10">
-					<button id="launch">Launch Browser</button>
-					<button id="close-example" disabled>Close Example</button>
-					<button id="quit">Quit Launcher</button>
+					<button id="initialize-platform">Initialize Platform</button>
+					<button id="restart-demo" disabled>Restart Demo</button>
+					<button id="launch" disabled>Launch Browser</button>
+					<button id="quit">Quit</button>
 				</div>
 			</div>
 		</main>

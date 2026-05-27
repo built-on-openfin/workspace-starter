@@ -4,12 +4,14 @@
 
 # Register With Browser
 
-HERE Core UI empowers you to take advantage of our browser component by using our HERE Core UI Platform SDK to control the behavior of the HERE Browser independent of the Home and Storefront components. This example uses **two platforms**:
+HERE Core UI empowers you to take advantage of our browser component by using our HERE Core UI Platform SDK to control the behavior of the HERE Browser independent of the Home and Storefront components. The control window (`public/platform/provider.html`) loads **without** calling `WorkspacePlatform.init()`. Configure a scenario and settings, then use the lifecycle buttons:
 
-1. **Launcher** (`manifest.fin.json`) — control panel only: scenario dropdown, **Allow Duplicate Page Titles**, **Launch Browser**, **Close Example**, and **Quit Launcher**.
-2. **Runtime** (`runtime.manifest.fin.json`) — started via `fin.Application.startFromManifest` when you launch; each run gets a fresh `init({ allowDuplicatePageTitles })` from `userAppConfigArgs`, then opens the selected browser scenario immediately.
+1. **Initialize Platform** — calls `init({ allowDuplicatePageTitles, ... })` using the current checkbox value.
+2. **Launch Browser** — runs the selected scenario from `client/src/browser-scenarios.ts` (enabled after initialize).
+3. **Restart Demo** — restarts the application without initializing the platform so you can change settings (including Allow Duplicate Page Titles) and click **Initialize Platform** again.
+4. **Quit** — exits the application (works before or after initialize).
 
-From the launcher window, select a scenario and click **Launch Browser** to try:
+Scenarios you can try:
 
 1. Launch a browser window.
 2. Launch a browser window that doesn't require saving unless changes have been applied.
@@ -21,9 +23,7 @@ From the launcher window, select a scenario and click **Launch Browser** to try:
 8. Launch a browser window with fixed views.
 9. Launch a browser window to explore duplicate page titles (two pages start with the same intended title).
 
-Use the **Allow Duplicate Page Titles** checkbox before each launch; the runtime platform reads it once at startup via `userAppConfigArgs`. On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To demo disallowed behavior, click **Close Example**, uncheck the box, and launch again — each launch starts a new runtime with the updated setting.
-
-**Close Example** shuts down only the browser runtime; **Quit Launcher** exits the control panel app.
+Set **Allow Duplicate Page Titles** before **Initialize Platform** (the checkbox is disabled while the platform is initialized). On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, initialize, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To try a different setting, click **Restart Demo**, change the checkbox, and **Initialize Platform** again.
 
 This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
@@ -76,9 +76,10 @@ npm run build
 npm run client
 ```
 
-1. The client command opens the launcher (`public/platform/launcher.html`, `client/src/launcher.ts`) — no `WorkspacePlatform.init()` there.
-2. **Launch Browser** writes `userAppConfigArgs` and starts `runtime.manifest.fin.json`.
-3. The runtime provider (`client/src/runtime-provider.ts`) calls `init({ allowDuplicatePageTitles })`, then auto-runs the scenario from `client/src/browser-scenarios.ts` when the platform API is ready.
+1. The client command opens the provider window (`public/platform/provider.html`, `client/src/provider.ts`) with scenario and settings only.
+2. **Initialize Platform** bootstraps the HERE Core UI Platform SDK with `allowDuplicatePageTitles` from the checkbox.
+3. **Launch Browser** creates the selected browser window; scenario can be changed between launches without restarting.
+4. **Restart Demo** closes browser windows, calls `Application.restart()`, and on load restores the control panel in an uninitialized state (checkbox value is restored from **`localStorage`** so you can adjust it before initializing again).
 
 ![Register With Browser](./assets/register-with-browser.gif)
 

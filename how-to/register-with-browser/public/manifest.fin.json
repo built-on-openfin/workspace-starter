@@ -6,10 +6,10 @@
 		"version": "44.146.101.1"
 	},
 	"platform": {
-		"uuid": "register-with-browser-launcher",
+		"uuid": "launch-browser-from-window",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
-		"providerUrl": "http://localhost:8080/platform/launcher.html",
+		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"commands": [
 			{
