@@ -350,7 +350,7 @@ export class ExampleIntegrationsProvider implements IntegrationModule<ExampleInt
 				data: {
 					imageButtonTextId: "Image Based Button",
 					imageSrcId:
-						"https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/here-workspace-starter/common/images/ms/apps/outlook-calendar.svg",
+						"https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/here-workspace-starter/common/images/ms/apps/outlook-calendar.svg",
 					textContent: "This is text content",
 					imageContent: "https://cdn.openfin.co/workspace/23.0.20/icons/defaultFavicon.svg",
 					listContent: [
