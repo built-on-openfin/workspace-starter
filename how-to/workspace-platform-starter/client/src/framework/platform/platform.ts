@@ -96,20 +96,6 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 
 	await endpointProvider.init(customSettings?.endpointProvider, helpers);
 
-	await platformSplashProvider.updateProgress("Versioning");
-
-	const runtimeVersion = await fin.System.getVersion();
-
-	await versionProvider.init(customSettings?.versionProvider, endpointProvider);
-	versionProvider.setVersion("runtime", runtimeVersion);
-	try {
-		const rvmInfo = await fin.System.getRvmInfo();
-		versionProvider.setVersion("rvm", rvmInfo.version);
-	} catch {
-		logger.warn("RVM version information unavailable.");
-	}
-	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
-
 	await platformSplashProvider.updateProgress("Connections");
 	await connectionProvider.init(customSettings?.connectionProvider);
 
@@ -137,6 +123,24 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 
 	await platformSplashProvider.updateProgress("Lifecycles");
 	await lifecycleProvider.init(customSettings?.lifecycleProvider, helpers);
+
+	await platformSplashProvider.updateProgress("Versioning");
+
+	const runtimeVersion = await fin.System.getVersion();
+
+	await versionProvider.init(
+		customSettings?.versionProvider,
+		endpointProvider,
+		lifecycleProvider.subscribeLifecycleEvent
+	);
+	versionProvider.setVersion("runtime", runtimeVersion);
+	try {
+		const rvmInfo = await fin.System.getRvmInfo();
+		versionProvider.setVersion("rvm", rvmInfo.version);
+	} catch {
+		logger.warn("RVM version information unavailable.");
+	}
+	versionProvider.setVersion("platformClient", PLATFORM_VERSION);
 
 	const shareOptions = customSettings?.shareProvider ?? {};
 	shareOptions.enabled ??= true;

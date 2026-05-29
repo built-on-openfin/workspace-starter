@@ -81,6 +81,10 @@ export interface VersionProviderOptions {
 	 * interval to see if an update of your application is available.
 	 */
 	versionCheckIntervalInSeconds?: number;
+	/**
+	 * If you want the platform to support the GetVersion intent then you can set this to true. This will allow the platform to return the version information when the GetVersion intent is fired.
+	 */
+	supportGetVersionIntent?: boolean;
 }
 /**
  * What is the current version information of a platform, it's valid versioning criteria and what if anything has failed

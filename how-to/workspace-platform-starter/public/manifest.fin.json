@@ -230,6 +230,22 @@
 						}
 					},
 					{
+						"id": "intent-short-circuit",
+						"icon": "http://localhost:8080/favicon.ico",
+						"title": "Intent Short Circuit",
+						"description": "Intent Short Circuit",
+						"enabled": true,
+						"url": "http://localhost:8080/js/modules/interop-override/intent-short-circuit.bundle.js",
+						"data": {
+							"intentMappings": [
+								{
+									"intentName": "GetVersion",
+									"appId": "workspace-platform-starter"
+								}
+							]
+						}
+					},
+					{
 						"id": "default-wps-interop",
 						"icon": "http://localhost:8080/favicon.ico",
 						"title": "HERE Core UI Platform Starter Interop Broker",
@@ -1663,6 +1679,7 @@
 		},
 		"versionProvider": {
 			"appVersion": "1.0.0",
+			"supportGetVersionIntent": true,
 			"minVersion": {
 				"workspace": "19.0.0"
 			},
