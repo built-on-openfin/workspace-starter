@@ -5422,6 +5422,10 @@
                     "$ref": "#/definitions/MinimumVersion",
                     "description": "You can specify if the platform should stop initializing if the version is less than any of the specified minimum\nversions"
                 },
+                "supportGetVersionIntent": {
+                    "description": "If you want the platform to support the GetVersion intent then you can set this to true. This will allow the platform to return the version information when the GetVersion intent is fired.",
+                    "type": "boolean"
+                },
                 "versionCheckIntervalInSeconds": {
                     "description": "If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an\ninterval to see if an update of your application is available.",
                     "type": "number"
