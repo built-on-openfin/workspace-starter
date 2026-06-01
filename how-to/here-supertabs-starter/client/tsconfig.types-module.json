@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"emitDeclarationOnly": true,
+		"declaration": true,
+		"declarationDir": "./types/module/shapes",
+		"rootDir": "./src/framework/shapes/"
+	},
+	"include": ["./src/framework/shapes/index.ts"]
+}
