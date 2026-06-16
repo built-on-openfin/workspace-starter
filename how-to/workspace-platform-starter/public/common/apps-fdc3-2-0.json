@@ -12,7 +12,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.2.0/common/favicon-32x32.png"
+					"src": "http://localhost:8080/common/images/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
@@ -94,7 +94,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.2.0/common/favicon-32x32.png"
+					"src": "http://localhost:8080/common/images/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
@@ -129,7 +129,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.2.0/common/favicon-32x32.png"
+					"src": "http://localhost:8080/common/images/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
