@@ -205,6 +205,7 @@ export class AIContextProvider {
 				contextProviders: DEFAULT_CONTEXT_PROVIDERS
 			};
 			this._logger?.info("getAIContext: getting AI context", { windowId, pageState: pageState.pageId });
+			// eslint-disable-next-line @typescript-eslint/return-await
 			return await this._getAIContext(options);
 		} catch (err) {
 			this._logger?.warn("AIContextProvider getAIContext failed", err);

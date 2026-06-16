@@ -1,9 +1,6 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
-import {
-	OPEN_ERROR as OpenError,
-	RESOLVE_ERROR as ResolveError
-} from "here-workspace-starter/fdc3/errors";
+import { OPEN_ERROR as OpenError, RESOLVE_ERROR as ResolveError } from "here-workspace-starter/fdc3/errors";
 import type {
 	IntentRegistrationEntry,
 	ContextRegistrationEntry,

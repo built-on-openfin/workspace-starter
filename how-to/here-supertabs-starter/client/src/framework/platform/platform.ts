@@ -173,7 +173,7 @@ async function setupPlatform(manifestSettings: CustomSettings | undefined): Prom
 	await AIContextProvider.get().initialize({
 		getPlatform: () => workspace.getCurrentSync() as unknown as WorkspacePlatformModule,
 		logger,
-		enabled: aiEnabled		// TODO: Uncomment this to implement your own business logic
+		enabled: aiEnabled // TODO: Uncomment this to implement your own business logic
 		// isAIContextPermitted: async (url: string) => {
 		// 	// Use this hook to capture any business logic that is outside of Domain Settings. For example,
 		// 	// if you have an admin console that controls which views are opted in and they aren't controlled

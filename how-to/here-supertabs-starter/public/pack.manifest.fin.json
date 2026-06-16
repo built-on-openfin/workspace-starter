@@ -440,9 +440,7 @@
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
-			"queryAgainst": [
-				"title"
-			]
+			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "here-workspace-starter",

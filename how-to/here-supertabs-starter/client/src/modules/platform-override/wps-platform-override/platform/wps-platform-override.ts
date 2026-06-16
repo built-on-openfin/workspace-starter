@@ -28,10 +28,7 @@ import type {
 } from "@openfin/workspace-platform";
 import type { DockProviderConfigWithIdentity } from "@openfin/workspace-platform/client-api/src";
 import { AIContextProvider } from "here-workspace-starter/ai-context";
-import type {
-	AnalyticsClient,
-	PlatformAnalyticsEvent
-} from "here-workspace-starter/shapes/analytics-shapes";
+import type { AnalyticsClient, PlatformAnalyticsEvent } from "here-workspace-starter/shapes/analytics-shapes";
 import type { UnsavedPagePromptStrategy } from "here-workspace-starter/shapes/browser-shapes";
 import type { PlatformConnectionClient } from "here-workspace-starter/shapes/connection-shapes";
 import type { EndpointClient } from "here-workspace-starter/shapes/endpoint-shapes";

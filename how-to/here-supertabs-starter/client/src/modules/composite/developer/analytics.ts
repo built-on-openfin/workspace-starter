@@ -1,8 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type {
-	AnalyticsModule,
-	PlatformAnalyticsEvent
-} from "here-workspace-starter/shapes/analytics-shapes";
+import type { AnalyticsModule, PlatformAnalyticsEvent } from "here-workspace-starter/shapes/analytics-shapes";
 import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
 import { isEmpty } from "here-workspace-starter/utils";

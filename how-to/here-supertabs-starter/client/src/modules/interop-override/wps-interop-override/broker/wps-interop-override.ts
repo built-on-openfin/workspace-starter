@@ -9,10 +9,7 @@ import type OpenFin from "@openfin/core";
 
 import { mapToAppMetaData as mapTo12AppMetaData } from "here-workspace-starter/fdc3/1.2/mapper";
 import { mapToAppMetaData as mapTo20AppMetaData } from "here-workspace-starter/fdc3/2.0/mapper";
-import {
-	OPEN_ERROR as OpenError,
-	RESOLVE_ERROR as ResolveError
-} from "here-workspace-starter/fdc3/errors";
+import { OPEN_ERROR as OpenError, RESOLVE_ERROR as ResolveError } from "here-workspace-starter/fdc3/errors";
 import { MANIFEST_TYPES } from "here-workspace-starter/manifest-types";
 import type { ConnectionClient, EndpointClient } from "here-workspace-starter/shapes";
 import type {

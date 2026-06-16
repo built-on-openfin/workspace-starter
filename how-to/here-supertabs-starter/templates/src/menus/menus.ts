@@ -1,11 +1,6 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
-import type {
-	MenuEntry,
-	Menus,
-	RelatedMenuId,
-	MenuType
-} from "here-workspace-starter/shapes/menu-shapes";
+import type { MenuEntry, Menus, RelatedMenuId, MenuType } from "here-workspace-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
 import type { ExampleMenusProviderOptions } from "./shapes";
 

@@ -1,11 +1,6 @@
 import type { WorkspacePlatformModule } from "@openfin/workspace-platform";
 import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
-import type {
-	MenuEntry,
-	MenuType,
-	Menus,
-	RelatedMenuId
-} from "here-workspace-starter/shapes/menu-shapes";
+import type { MenuEntry, MenuType, Menus, RelatedMenuId } from "here-workspace-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
 import { isEmpty } from "here-workspace-starter/utils";
 import { getAllUserWindows } from "./helper";

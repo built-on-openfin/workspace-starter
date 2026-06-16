@@ -2,11 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { Workspace } from "@openfin/workspace-platform";
 import type { Logger, LoggerCreator } from "here-workspace-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "here-workspace-starter/shapes/module-shapes";
-import type {
-	Share,
-	ShareConfirmationOptions,
-	ShareEntry
-} from "here-workspace-starter/shapes/share-shapes";
+import type { Share, ShareConfirmationOptions, ShareEntry } from "here-workspace-starter/shapes/share-shapes";
 import { isEmpty } from "here-workspace-starter/utils";
 import { loadShareRequest, saveShareRequest } from "../common/share-common";
 import type { WorkspacesShareEntryPayload, WorkspacesShareProviderOptions } from "./shapes";
