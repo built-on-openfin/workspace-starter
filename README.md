@@ -12,7 +12,7 @@ The HERE Core UI is a full-featured work environment designed to improve the way
 
 ## What version does this branch cover?
 
-This branch covers version **v23.2.0** of HERE Core UI (there are versioned branches for other releases). [Click here to visit the release notes.](https://cdn.openfin.co/versions/?product=UI%20Components#23.2.17)
+This branch covers version **v23.2.0** of HERE Core UI (there are versioned branches for other releases). [Click here to visit the release notes.](https://cdn.openfin.co/versions/?product=UI%20Components#23.2.20)
 
 ## Before you get started
 
