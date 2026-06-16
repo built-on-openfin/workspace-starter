@@ -440,9 +440,7 @@
 			"title": "HERE Core UI Platform Starter",
 			"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/here-supertabs-starter/favicon.ico",
 			"queryMinLength": 3,
-			"queryAgainst": [
-				"title"
-			]
+			"queryAgainst": ["title"]
 		},
 		"storefrontProvider": {
 			"id": "here-workspace-starter",
