@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.102.2"
+		"version": "43.142.104.1"
 	},
 	"platform": {
 		"uuid": "integrate-with-salesforce",
@@ -24,7 +24,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do in relation to Salesforce.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/integrate-with-salesforce/favicon.ico",
-		"name": "Integrate With Salesforce - v23.0.0",
+		"name": "Integrate With Salesforce - v23.2.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
