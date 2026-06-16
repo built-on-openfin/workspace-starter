@@ -15,7 +15,7 @@ It builds on the same module-based architecture as [workspace-platform-starter](
 
 ![Here Supertab Window](./docs/assets/here-window-example.png)
 
-> **Note:** This preview targets the upcoming HERE Core UI 24 release. It is experimental and subject to change. For ongoing product guidance, please refer to your HERE engagement and the maintained workspace-starter / Core UI documentation.
+> **_:warning: Preview:_** This starter is **experimental and subject to change**. APIs, configuration, and behavior may evolve before general availability. For ongoing product guidance, please refer to your HERE engagement and the maintained workspace-starter / Core UI documentation.
 
 ## Getting Started
 
