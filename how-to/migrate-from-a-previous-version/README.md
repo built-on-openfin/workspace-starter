@@ -39,7 +39,7 @@
 
 v15 introduces a number of new features:
 
-- Download Manager (Beta)
+- Download Manager
 - Browser Windows and Platform Windows Can Coexist in a HERE Core UI Platform
 - New Registration Method for Notification Center -> You must now call register in order for the notification center to startup if it isn't already running.
 
