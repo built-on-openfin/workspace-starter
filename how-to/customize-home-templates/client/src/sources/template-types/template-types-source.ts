@@ -214,7 +214,7 @@ export class TemplateTypesSource {
 					},
 					data: {
 						textContent: "This is text content",
-						imageContent: "https://cdn.openfin.co/workspace/23.2.20/icons/defaultFavicon.svg",
+						imageContent: "https://cdn.openfin.co/workspace/23.2.23/icons/defaultFavicon.svg",
 						listContent: [
 							["Label 1", "Value 1"],
 							["Label 2", "Value 2"]
