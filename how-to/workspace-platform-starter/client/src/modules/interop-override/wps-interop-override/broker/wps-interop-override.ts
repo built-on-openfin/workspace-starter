@@ -209,8 +209,8 @@ export async function getConstructorOverride(
 					return;
 				}
 				return super.invokeContextHandler(clientIdentity, handlerId, {
-					...passedContext,
-					contextMetadata
+					contextMetadata, // If contextMetadata has been passed it will override our entry in case it was set by another interop override
+					...passedContext
 				} as unknown as OpenFin.Context);
 			}
 
@@ -575,8 +575,8 @@ export async function getConstructorOverride(
 				return super.invokeIntentHandler(clientIdentity, handlerId, {
 					...intent,
 					context: {
-						...passedContext,
-						contextMetadata
+						contextMetadata, // If contextMetadata has been passed it will override our entry in case it was set by another interop override
+						...passedContext
 					} as unknown as OpenFin.Context
 				});
 			}

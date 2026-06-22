@@ -10,6 +10,7 @@
 - Enabled Snap (this will run on windows).
 - Added an example of a externally hosted wpf click once application that supports intents.
 - Added more logging for snap and the default interop broker.
+- Updated appMetaData logic to not override appMetaData if it is already available. This supports over interopbroker overrides being able to pass appMetaData that they have determined and not having it replaced by our wps interop override.
 
 ## v22.0.0
 
