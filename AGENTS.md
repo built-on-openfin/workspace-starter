@@ -29,8 +29,8 @@ This codebase is in a branding transition. You will encounter both naming conven
 
 | Property | Value |
 |---|---|
-| Branch `main` targets | HERE Core UI **v23.0.0** |
-| Root `package.json` version | `23.0.0` |
+| Branch `main` targets | HERE Core UI **v23.2.0** |
+| Root `package.json` version | `23.2.23` |
 | TypeScript version | `5.9.3` |
 | Required Node.js | **20+** |
 | Required RVM (Windows) | **7+** |
@@ -38,7 +38,7 @@ This codebase is in a branding transition. You will encounter both naming conven
 
 ### Key npm Packages (OpenFin Ecosystem)
 
-These are the core packages that examples depend on. When generating code, pin to versions compatible with v23.0.0:
+These are the core packages that examples depend on. When generating code, pin to versions compatible with v23.2.0:
 
 | Package | Purpose |
 |---|---|
@@ -46,7 +46,7 @@ These are the core packages that examples depend on. When generating code, pin t
 | `@openfin/workspace-platform` | APIs for creating your own Workspace Platform (includes Dock3, Browser) |
 | `@openfin/core` | Core OpenFin container APIs |
 | `@openfin/node-adapter` | Node.js adapter for OpenFin (used in build tooling; `43.102.2` in root) |
-| `@openfin/snap-sdk` | Native application snapping/docking (Windows only, beta) |
+| `@openfin/snap-sdk` | Native application snapping/docking (Windows only) |
 | `@openfin/automation-cli` | CLI for automation testing in HERE environments |
 | `@openfin/automation-helpers` | Helper methods for interacting with HERE components in tests |
 
@@ -97,12 +97,6 @@ workspace-starter/
 │   ├── integrate-with-excel/             # Excel integration
 │   ├── integrate-with-bloomberg-basic/   # Bloomberg (intents and context)
 │   ├── integrate-with-rss/               # RSS feed integration (custom)
-│   ├── automation-testing/               # Automation testing examples
-│   │   ├── register-with-home-js/
-│   │   ├── register-with-home-ts/
-│   │   ├── register-with-store-js/
-│   │   ├── selenium/
-│   │   └── wdio/
 │   ├── migrate-from-a-previous-version/  # Migration guide (not runnable code)
 │   └── hints-and-tips/                   # Collection of tips (not runnable code)
 ├── scripts/                       # Build and packaging scripts
@@ -309,7 +303,7 @@ await initPlatform({
 1. **Version mismatch**: If workspace components behave unexpectedly, check `%localappdata%/OpenFin/log/rvm.log` (Windows) for `apiVersion` vs `componentVersion` alignment.
 2. **npm install from root**: Always run `npm install` from the repository root, not from individual example directories. The repo uses npm workspaces.
 3. **Open in VS Code from root**: Open the entire `workspace-starter` folder, not a sub-example. This gives you JSON intellisense on manifests and app definitions.
-4. **Beta DOS command**: When running v23.0.0 Beta on Windows, use `npm run dos` to set up the Desktop Owner Settings pointing to the Beta CDN. Restore your previous DOS path after testing.
+4. **DOS command**: When running v23.2.0 on Windows, use `npm run dos` to set up the Desktop Owner Settings pointing to the CDN. Restore your previous DOS path after testing.
 5. **Port conflicts**: Multiple examples use port 8080 by default. Only run one at a time, or update the port in the example's server configuration.
 6. **`manifestType` matters**: The `manifestType` field in app definitions controls how the app is launched. Using the wrong type (e.g., `"view"` when it should be `"snapshot"`) causes silent failures.
 
