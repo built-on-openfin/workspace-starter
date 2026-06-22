@@ -55,6 +55,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		fixedViews.addEventListener("click", createWindowWithFixedViews);
 	}
 
+	// launch with accessibility options
+	const accessibilityBtn = document.querySelector("#launch-accessibility");
+	if (accessibilityBtn) {
+		accessibilityBtn.addEventListener("click", createBrowserWithAccessibilityOptions);
+	}
+
 	// get all browser pages
 	const getBrowserPagesBtn = document.querySelector("#get-browser-pages");
 	if (getBrowserPagesBtn) {
@@ -357,6 +363,41 @@ async function createWindowWithFixedViews(): Promise<BrowserWindowModule> {
 
 	const options: BrowserCreateWindowRequest = {
 		workspacePlatform: { pages }
+	};
+
+	const platform = getCurrentSync();
+	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+	return createdBrowserWin;
+}
+
+/**
+ * Creates a browser window with accessibility options for the browser tabs.
+ * @returns A promise that resolves to the created browser window module.
+ */
+async function createBrowserWithAccessibilityOptions(): Promise<BrowserWindowModule> {
+	const page: Page = await createPageWithLayout("Untitled Page", createDefaultPageLayout());
+	const pages: Page[] = [page];
+
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: {
+			pages,
+			accessibilityOptions: {
+				viewTabOptions: {
+					//
+					// arrowNavigation defines which tab elements are navigable using keyboard arrow keys
+					arrowNavigation: [
+						"inactive-tab",
+						"active-tab",
+						"active-tab-close-button",
+						"inactive-tab-close-button",
+						"add-tab-button"
+					],
+					//
+					// tabNavigation defines which tab elements are navigable using the Tab key
+					tabNavigation: ["active-tab", "add-tab-button"]
+				}
+			}
+		}
 	};
 
 	const platform = getCurrentSync();
