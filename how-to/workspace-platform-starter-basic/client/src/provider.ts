@@ -1,6 +1,6 @@
 import type OpenFin from "@openfin/core";
 import { Dock, Home, Storefront, type App } from "@openfin/workspace";
-import { CustomActionCallerType, init } from "@openfin/workspace-platform";
+import { CustomActionCallerType, type CustomThemes, init } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 import { register as registerDock } from "./dock";
 import { register as registerHome } from "./home";
@@ -30,10 +30,12 @@ window.addEventListener("DOMContentLoaded", async () => {
  * @param browserSettings The custom settings from the manifest.
  * @param browserSettings.newPageUrl A new page url to load when the browser is opened.
  * @param browserSettings.newTabUrl A new view url to load when the browser is opened.
+ * @param theme The theme settings from the manifest.
  */
 async function initializeWorkspacePlatform(
 	platformSettings: PlatformSettings,
-	browserSettings: { newPageUrl?: string; newTabUrl?: string }
+	browserSettings: { newPageUrl?: string; newTabUrl?: string },
+	theme?: CustomThemes
 ): Promise<void> {
 	console.log("Initializing HERE Core UI Platform");
 	let newPageUrl: string | undefined;
@@ -45,6 +47,7 @@ async function initializeWorkspacePlatform(
 	if (browserSettings?.newTabUrl !== undefined && browserSettings?.newTabUrl !== "") {
 		newTabUrl = browserSettings.newTabUrl;
 	}
+	console.log("Passing the following theme to the workspace platform init function:", theme);
 
 	await init({
 		browser: {

@@ -1,5 +1,3 @@
-import type OpenFin from "@openfin/core";
-import type { CustomPaletteSet } from "@openfin/workspace-platform";
 import {
 	BrowserButtonType,
 	ColorSchemeOptionType,
@@ -9,10 +7,8 @@ import {
 	type CustomActionsMap,
 	type ToolbarButton
 } from "@openfin/workspace-platform";
-import { DEFAULT_PALETTES } from "./default-palettes";
 
 let currentColorScheme: Omit<ColorSchemeOptionType, "system">;
-let currentPalette: CustomPaletteSet;
 
 /**
  * Initialize the color scheme based on the platform settings.
@@ -40,36 +36,15 @@ export async function setColorScheme(schemeType: ColorSchemeOptionType): Promise
 		finalScheme = schemeType;
 	}
 
-	// Get the current platform theme, always the first one
-	const platform = getCurrentSync();
-	const theme = await platform.Theme.getThemes();
-	let palette: CustomPaletteSet;
-
-	if (Array.isArray(theme) && theme.length > 0) {
-		const selectedTheme = theme[0];
-		if ("palette" in selectedTheme) {
-			palette = selectedTheme.palette;
-		} else if ("palettes" in selectedTheme) {
-			palette = selectedTheme.palettes[finalScheme as "light" | "dark"];
-		} else {
-			palette = DEFAULT_PALETTES[finalScheme as "light" | "dark"];
-		}
-	} else {
-		palette = DEFAULT_PALETTES[finalScheme as "light" | "dark"];
-	}
-
-	// Store the current scheme and palette
+	// Store the current scheme
 	currentColorScheme = finalScheme;
-	currentPalette = palette;
 
 	// Notify any components using the theming
 	await notifyColorScheme();
 }
 
 /**
- * Update the toolbar icons of the any browser windows and notify any
- * other views that have the style preload script so that they can update
- * their color schemes.
+ * Update toolbar buttons on all browser windows.
  */
 async function notifyColorScheme(): Promise<void> {
 	const platform = getCurrentSync();
@@ -79,14 +54,6 @@ async function notifyColorScheme(): Promise<void> {
 	for (const browserWindow of browserWindows) {
 		await browserWindow.replaceToolbarOptions({ buttons: [getThemeButton()] });
 	}
-
-	// Broadcast a platform theme update so that views can change their colors.
-	const appSessionContextGroup = await fin.me.interop.joinSessionContextGroup("platform/events");
-	await appSessionContextGroup.setContext({
-		type: "platform.theme",
-		schemeType: currentColorScheme,
-		palette: currentPalette
-	} as OpenFin.Context);
 }
 
 /**
@@ -112,19 +79,26 @@ export function getThemeActions(): CustomActionsMap {
 	return {
 		"change-theme": async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.CustomButton) {
-				const platform = getCurrentSync();
-
-				// Set the color scheme for the platform, this will eventually
-				// propagate back through the setSelectedScheme platform
-				// override which will notify components to update
-				if (currentColorScheme === ColorSchemeOptionType.Light) {
-					await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Dark);
-				} else {
-					await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Light);
-				}
+				await toggleTheme();
 			}
 		}
 	};
+}
+
+/**
+ * Toggle the selected scheme between light and dark.
+ */
+export async function toggleTheme(): Promise<void> {
+	const platform = getCurrentSync();
+
+	// Set the color scheme for the platform, this will eventually
+	// propagate back through the setSelectedScheme platform
+	// override which will notify components to update.
+	if (currentColorScheme === ColorSchemeOptionType.Light) {
+		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Dark);
+	} else {
+		await platform.Theme.setSelectedScheme(ColorSchemeOptionType.Light);
+	}
 }
 
 /**
