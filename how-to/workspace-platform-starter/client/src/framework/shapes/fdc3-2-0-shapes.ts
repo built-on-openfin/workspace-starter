@@ -139,7 +139,7 @@ export interface HostManifests {
 	/**
 	 * The HERE settings for this FDC3 2.0 App Definition
 	 */
-	OpenFin: {
+	HERE: {
 		/**
 		 * this is the manifest type id used by HERE and specified if root type is defined as other.
 		 */
