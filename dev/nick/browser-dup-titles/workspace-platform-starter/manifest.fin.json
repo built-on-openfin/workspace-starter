@@ -230,6 +230,22 @@
 						}
 					},
 					{
+						"id": "intent-short-circuit",
+						"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter/favicon.ico",
+						"title": "Intent Short Circuit",
+						"description": "Intent Short Circuit",
+						"enabled": true,
+						"url": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter/js/modules/interop-override/intent-short-circuit.bundle.js",
+						"data": {
+							"intentMappings": [
+								{
+									"intentName": "GetVersion",
+									"appId": "workspace-platform-starter"
+								}
+							]
+						}
+					},
+					{
 						"id": "default-wps-interop",
 						"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/browser-dup-titles/workspace-platform-starter/favicon.ico",
 						"title": "HERE Core UI Platform Starter Interop Broker",
@@ -1663,6 +1679,7 @@
 		},
 		"versionProvider": {
 			"appVersion": "1.0.0",
+			"supportGetVersionIntent": true,
 			"minVersion": {
 				"workspace": "19.0.0"
 			},
