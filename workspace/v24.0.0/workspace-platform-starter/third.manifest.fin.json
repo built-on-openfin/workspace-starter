@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=workspace-platform-starter-for-fdc3",
-		"version": "44.146.101.1"
+		"version": "44.146.101.5"
 	},
 	"platform": {
 		"name": "HERE Core UI Platform Starter FDC3",
