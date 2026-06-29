@@ -31,7 +31,7 @@
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
-		"@openfin/node-adapter": "44.101.5",
+		"@openfin/node-adapter": "44.101.4",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
