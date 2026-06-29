@@ -120,7 +120,11 @@ async function initializeWorkspacePlatform(
 				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: PLATFORM_ICON
+					favicon: PLATFORM_ICON,
+					tabSearchButton: {
+						pageTabs: { enabled: true },
+						viewTabs: { enabled: true }
+					}
 				}
 			}
 		},

@@ -21,7 +21,8 @@ export type BrowserScenarioId =
 	| "multi-page"
 	| "locked-page"
 	| "fixed-views"
-	| "duplicate-page-titles";
+	| "duplicate-page-titles"
+	| "pinned-pages";
 
 /** A browser window scenario that can be launched from the provider UI. */
 export interface BrowserScenario {
@@ -325,6 +326,40 @@ async function createDuplicatePageTitlesWindow(): Promise<BrowserWindowModule> {
 	return createdBrowserWin;
 }
 
+/**
+ * Create a window with platform-pinned, user-pinned, and regular page tabs.
+ * @returns The created browser window.
+ */
+async function createPinnedPagesWindow(): Promise<BrowserWindowModule> {
+	const platformPinTitles = ["Platform Pin: Dashboard", "Platform Pin: Analytics", "Platform Pin: Settings"];
+	const userPinTitles = ["User Pin: Research", "User Pin: Notes", "User Pin: Watchlist"];
+
+	const platformPages: Page[] = await Promise.all(
+		platformPinTitles.map(async (title) => {
+			const page = await createPageWithLayout(title, createDefaultPageLayout(), false);
+			return { pinned: "platform", ...page };
+		})
+	);
+
+	const userPages: Page[] = await Promise.all(
+		userPinTitles.map(async (title) => {
+			const page = await createPageWithLayout(title, createDefaultPageLayout(), false);
+			return { pinned: "user", ...page };
+		})
+	);
+
+	const regularPage = await createPageWithLayout("Regular Page", createDefaultPageLayout(), false);
+	const pages: Page[] = [...platformPages, ...userPages, regularPage];
+
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: { pages }
+	};
+
+	const platform = getCurrentSync();
+	const createdBrowserWin: BrowserWindowModule = await platform.Browser.createWindow(options);
+	return createdBrowserWin;
+}
+
 export const BROWSER_SCENARIOS: BrowserScenario[] = [
 	{ id: "default", label: "Launch Browser Window", launch: async () => createBrowserWindow() },
 	{
@@ -346,6 +381,11 @@ export const BROWSER_SCENARIOS: BrowserScenario[] = [
 		id: "duplicate-page-titles",
 		label: "Launch Browser With Duplicate Page Titles",
 		launch: createDuplicatePageTitlesWindow
+	},
+	{
+		id: "pinned-pages",
+		label: "Launch Browser With Pinned Pages",
+		launch: createPinnedPagesWindow
 	}
 ];
 
