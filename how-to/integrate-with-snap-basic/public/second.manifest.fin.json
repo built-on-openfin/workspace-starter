@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--enable-mesh --security-realm=integrate-with-snap-basic-with-asset",
-		"version": "44.146.101.1"
+		"version": "44.146.101.5"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic-with-asset",
@@ -47,9 +47,9 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://cdn.openfin.co/release/snap/1.6.0/snap.zip",
+			"src": "https://cdn.openfin.co/release/snap/1.6.1/snap.zip",
 			"alias": "openfin-snap",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"target": "OpenFinSnap.exe",
 			"mandatory": false
 		},

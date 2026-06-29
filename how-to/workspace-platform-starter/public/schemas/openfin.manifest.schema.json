@@ -4655,6 +4655,11 @@
 					},
 					"type": "array"
 				},
+				"method": {
+					"description": "HTTP method used to upload the log archive.\nAccepted values are `'POST'` and `'PUT'` (case-insensitive; values are normalised to uppercase before validation).\n- `POST` sends a multipart `FormData` request (current behaviour).\n- `PUT` sends the raw zip binary with an explicit `Content-Length` and no `Content-Type` header,\n  suitable for endpoints that expect a raw body (e.g. pre-signed upload URLs).",
+					"enum": ["POST", "PUT"],
+					"type": "string"
+				},
 				"sizeLimit": {
 					"description": "Max file size limit in Megabytes for the logs archive.",
 					"type": "number"
