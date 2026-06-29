@@ -1,5 +1,5 @@
 {
-	"name": "here-workspace-starter",
+	"name": "here-supertabs-starter",
 	"version": "24.0.0",
 	"description": "This npm package contains an opinionated implementation of a HERE Core UI Platform. It shows you the type of patterns available to a HERE Core UI Platform developer.",
 	"scripts": {
