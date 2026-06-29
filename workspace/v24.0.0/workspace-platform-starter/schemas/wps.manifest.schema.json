@@ -658,6 +658,10 @@
 					"$ref": "#/definitions/AccessibilityOptions",
 					"description": "Accessibility options for the browser window.\nThese options override the default accessibility options set at the platform or browser initialization level."
 				},
+				"disableFindInPage": {
+					"description": "When true, disables the find in page feature for the window.\nThe find in page view will not be created and no find in page logic will run.\nThis option must be set at window creation time and cannot be changed dynamically.\nFalse by default.",
+					"type": "boolean"
+				},
 				"disableMultiplePages": {
 					"description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
 					"type": "boolean"
