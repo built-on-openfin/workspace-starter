@@ -658,6 +658,10 @@
 					"$ref": "#/definitions/AccessibilityOptions",
 					"description": "Accessibility options for the browser window.\nThese options override the default accessibility options set at the platform or browser initialization level."
 				},
+				"disableFindInPage": {
+					"description": "When true, disables the find in page feature for the window.\nThe find in page view will not be created and no find in page logic will run.\nThis option must be set at window creation time and cannot be changed dynamically.\nFalse by default.",
+					"type": "boolean"
+				},
 				"disableMultiplePages": {
 					"description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
 					"type": "boolean"
@@ -3678,6 +3682,10 @@
 					},
 					"type": "array"
 				},
+				"pinned": {
+					"$ref": "#/definitions/PagePinnedState",
+					"description": "Pinned state: `'platform'` (developer-locked), `'user'` (end-user pinned), or omitted (normal)."
+				},
 				"title": {
 					"description": "A UI friendly title for the page.",
 					"type": "string"
@@ -3814,6 +3822,11 @@
 			"required": ["machineId"],
 			"type": "object"
 		},
+		"PagePinnedState": {
+			"description": "The pinned state of a page tab. `'platform'` = developer-locked; `'user'` = end-user pinned.",
+			"enum": ["platform", "user"],
+			"type": "string"
+		},
 		"PageTabContextMenuOptionType": {
 			"description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
 			"enum": [
@@ -3823,6 +3836,8 @@
 				"Save",
 				"Save As",
 				"New Page",
+				"Pin",
+				"Unpin",
 				"Delete Page",
 				"SaveWorkspaceAs",
 				"Refresh",
@@ -9102,7 +9117,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -10859,6 +10874,11 @@
 						"type": "string"
 					},
 					"type": "array"
+				},
+				"method": {
+					"description": "HTTP method used to upload the log archive.\nAccepted values are `'POST'` and `'PUT'` (case-insensitive; values are normalised to uppercase before validation).\n- `POST` sends a multipart `FormData` request (current behaviour).\n- `PUT` sends the raw zip binary with an explicit `Content-Length` and no `Content-Type` header,\n  suitable for endpoints that expect a raw body (e.g. pre-signed upload URLs).",
+					"enum": ["POST", "PUT"],
+					"type": "string"
 				},
 				"sizeLimit": {
 					"description": "Max file size limit in Megabytes for the logs archive.",
