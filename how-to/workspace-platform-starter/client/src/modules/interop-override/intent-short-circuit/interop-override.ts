@@ -1,4 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
+import type { ImplementationMetadata } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type {
 	PlatformInteropOverride,
@@ -104,7 +105,28 @@ export class IntentShortCircuit implements PlatformInteropOverride<IntentShortCi
 								`The platform or one of the modules running inside of it is the target of the intent ${intent.name}. As it is already running we don't need to go through the app launch process.`
 							);
 
-							await super.setIntentTarget(intent, fin.me.identity);
+							// we want to ensure that the target gets the correct app id and instance id as metadata as we are skipping the intent resolution flow
+							const requestAppMetadata = (await super.fdc3HandleGetInfo(
+								{ fdc3Version: "2.0" },
+								clientIdentity
+							)) as ImplementationMetadata;
+							const requestAppId = requestAppMetadata.appMetadata?.appId;
+							const requestAppInstanceId =
+								requestAppMetadata.appMetadata?.instanceId ?? clientIdentity.endpointId;
+							const context = intent.context;
+							const updatedIntent = {
+								...intent,
+								context: {
+									contextMetadata: {
+										source: {
+											appId: requestAppId,
+											instanceId: requestAppInstanceId
+										}
+									},
+									...context // if an interop broker is using the context metadata, it will be preserved
+								}
+							};
+							await super.setIntentTarget(updatedIntent as OpenFin.Intent, fin.me.identity);
 							return {
 								source: { appId: fin.me.identity.uuid },
 								intent: intent.name
