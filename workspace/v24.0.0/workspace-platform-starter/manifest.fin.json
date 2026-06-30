@@ -530,6 +530,14 @@
 					"newPageUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/workspace-platform-starter/common/views/platform/new-tab/new-tab.html",
 					"navigationButtons": {
 						"enabled": true
+					},
+					"tabSearchButton": {
+						"pageTabs": {
+							"enabled": true
+						},
+						"viewTabs": {
+							"enabled": true
+						}
 					}
 				}
 			},
