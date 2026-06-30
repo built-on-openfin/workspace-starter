@@ -530,6 +530,14 @@
 					"newPageUrl": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
 					"navigationButtons": {
 						"enabled": true
+					},
+					"tabSearchButton": {
+						"pageTabs": {
+							"enabled": true
+						},
+						"viewTabs": {
+							"enabled": true
+						}
 					}
 				}
 			},

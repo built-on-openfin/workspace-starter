@@ -70,7 +70,8 @@ export async function init(
 	if (options?.supportGetVersionIntent && subscribeToLifecycleEvent) {
 		subscribeToLifecycleEvent("after-bootstrap", async () => {
 			const fdc3 = fin.me.interop.getFDC3Sync("2.0");
-			await fdc3.addIntentListener("GetVersion", async () => {
+			await fdc3.addIntentListener("GetVersion", async (x, y) => {
+				logger.info("GetVersion Intent Request Received with Context: ", x, " and Metadata: ", y);
 				const info = await getVersionInfo();
 				return { type: "platform.version", version: info } as OpenFin.Context;
 			});
