@@ -26,8 +26,8 @@
 	"dependencies": {
 		"@openfin/bloomberg": "^2.0.0",
 		"@openfin/core": "44.101.5",
-		"@openfin/workspace": "24.0.18",
-		"@openfin/workspace-platform": "24.0.18",
+		"@openfin/workspace": "24.0.19",
+		"@openfin/workspace-platform": "24.0.19",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {

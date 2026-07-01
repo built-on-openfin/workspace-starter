@@ -22,8 +22,8 @@
 	"dependencies": {
 		"@microsoft/microsoft-graph-types": "^2.40.0",
 		"@openfin/microsoft365": "1.0.1",
-		"@openfin/workspace": "24.0.18",
-		"@openfin/workspace-platform": "24.0.18",
+		"@openfin/workspace": "24.0.19",
+		"@openfin/workspace-platform": "24.0.19",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
