@@ -4,20 +4,20 @@
 		"name": "interop-broadcast-view",
 		"title": "Context using Interop API",
 		"description": "This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/interop-api/context/interop-broadcast-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/interop-api/context/interop-broadcast-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-context-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/images/previews/view-context-interop-api.png"
 			}
 		],
 		"tags": ["view", "interop", "tools"]
@@ -27,16 +27,16 @@
 		"name": "interop-intent-view",
 		"title": "Intents using Interop API",
 		"description": "This is an example of firing and listening to intents using the interop api and seeing a code sample of how to do it. Multiple instances can be launched.",
-		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/interop-api/intent/interop-intent-multi-view.json",
+		"manifest": "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/interop-api/intent/interop-intent-multi-view.json",
 		"manifestType": "view",
 		"icons": [
 			{
-				"src": "http://localhost:8080/common/images/icon-blue.png"
+				"src": "http://localhost:8080/common/images/favicon-32x32.png"
 			}
 		],
 		"contactEmail": "contact@example.com",
 		"supportEmail": "support@example.com",
-		"publisher": "OpenFin",
+		"publisher": "HERE",
 		"intents": [
 			{
 				"name": "StartCall",
@@ -87,9 +87,9 @@
 		],
 		"images": [
 			{
-				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-intents-interop-api.png"
+				"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/images/previews/view-intents-interop-api.png"
 			}
 		],
-		"tags": ["view", "interop", "intent", "openfin", "tools"]
+		"tags": ["view", "interop", "intent", "HERE", "tools"]
 	}
 ]

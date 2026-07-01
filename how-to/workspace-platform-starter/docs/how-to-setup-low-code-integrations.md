@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Setup Low Code Integrations?
 
-Workspace now includes support for low code workflows from version 13.1+ of OpenFin Workspace. Examples of how easy it is to enable these low code integrations can be found in [integrate-with-ms365-low-code](../integrate-with-ms365-low-code/) and [integrate-with-ms365-low-code-basic](../integrate-with-ms365-low-code-basic/) and in this example platform we have made it purely config based. For more information about Low Code Integrations please see [Working with OpenFin's Microsoft Low Code Integration](https://developers.openfin.co/of-docs/docs/microflows-microsoft).
+Workspace now includes support for low code workflows from version 13.1+ of HERE Core UI. Examples of how easy it is to enable these low code integrations can be found in [integrate-with-ms365-low-code](../integrate-with-ms365-low-code/) and [integrate-with-ms365-low-code-basic](../integrate-with-ms365-low-code-basic/) and in this example platform we have made it purely config based. For more information about Low Code Integrations please see [Working with OpenFin's Microsoft Low Code Integration](https://developers.openfin.co/of-docs/docs/microflows-microsoft).
 
 ![Low Code Integration Enabled](./assets/low-code-integrations.png)
 

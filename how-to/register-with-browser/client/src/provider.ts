@@ -24,55 +24,110 @@ import {
 	type WorkspacePlatformModule,
 	SUPPORTED_LANGUAGES
 } from "@openfin/workspace-platform";
+import { BROWSER_SCENARIOS, launchBrowserScenario, type BrowserScenarioId } from "./browser-scenarios";
 import type { CustomSettings } from "./shapes";
 
+const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
+
+/**
+ * Restores the duplicate-titles checkbox after Restart Demo; does not auto-initialize the platform.
+ */
+const STORAGE_KEY_RESTART_DEMO_ALLOW_DUP = "register-with-browser.restartDemoAllowDupTitles";
+
+let manifestCustomSettings: CustomSettings = {};
+let isPlatformInitialized = false;
+
+/**
+ * Read whether duplicate page titles are allowed from the control panel checkbox.
+ * @returns True when the allow duplicate page titles checkbox is checked.
+ */
+function getAllowDuplicatePageTitlesFromDOM(): boolean {
+	return document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles")?.checked ?? false;
+}
+
+/**
+ * Align the duplicate-titles checkbox after Restart Demo (restore from localStorage).
+ * @param allowed Whether duplicate titles are allowed for the upcoming init.
+ */
+function syncAllowDuplicateCheckboxFromString(allowed: boolean): void {
+	const scenarioSelect = document.querySelector<HTMLSelectElement>("#scenario");
+	const allowDuplicatePageTitlesCheckbox =
+		document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles");
+	const duplicateTitlesHint = document.querySelector<HTMLParagraphElement>("#duplicate-titles-hint");
+	if (allowDuplicatePageTitlesCheckbox) {
+		allowDuplicatePageTitlesCheckbox.checked = allowed;
+	}
+	if (scenarioSelect && allowDuplicatePageTitlesCheckbox && duplicateTitlesHint) {
+		updateDuplicatePageTitlesHintTextOnly(
+			scenarioSelect,
+			allowDuplicatePageTitlesCheckbox,
+			duplicateTitlesHint
+		);
+	}
+}
+
+/**
+ * Initialize the workspace platform from the control panel.
+ */
+async function handleInitializePlatformClick(): Promise<void> {
+	const allowDup = getAllowDuplicatePageTitlesFromDOM();
+	await initializeWorkspacePlatform(manifestCustomSettings, allowDup);
+	isPlatformInitialized = true;
+	setControlState("initialized");
+}
+
+/**
+ * Drop session markers so Quit starts a cold session next time.
+ */
+function clearWorkspaceSessionMarkers(): void {
+	localStorage.removeItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP);
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
-	// When the platform api is ready we bootstrap the platform.
-	const platform = fin.Platform.getCurrentSync();
-	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
+	const providerWindow = fin.Window.getCurrentSync();
+	await providerWindow.once("close-requested", async () => {
+		await quit();
+	});
 
-	// Load the settings from the manifest
-	const customSettings = await getManifestCustomSettings();
+	manifestCustomSettings = await getManifestCustomSettings();
 
-	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
-	await initializeWorkspacePlatform(customSettings);
+	const restartDemoAllowDup = localStorage.getItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP);
 
-	// If we have launch bar settings then open the window
-	// The content is from launch-bar.html and is driven by launch-bar.ts
-	if (customSettings.launchBarWindowSettings) {
-		await fin.Window.create(customSettings.launchBarWindowSettings);
+	await initializeDOM();
+
+	if (restartDemoAllowDup !== null) {
+		localStorage.removeItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP);
+		syncAllowDuplicateCheckboxFromString(restartDemoAllowDup === "true");
 	}
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform with an explicit duplicate-title flag.
+ * The Workspace SDK snapshots browser config inside init(); a getter is not reliably re-read later.
  * @param customSettings The custom settings from the manifest.
+ * @param allowDuplicatePageTitles Whether duplicate page titles are allowed for this workspace session.
  */
-async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing workspace platform");
+async function initializeWorkspacePlatform(
+	customSettings: CustomSettings,
+	allowDuplicatePageTitles: boolean
+): Promise<void> {
+	console.log("Initializing HERE Core UI Platform", { allowDuplicatePageTitles });
 	await init({
 		browser: {
+			allowDuplicatePageTitles,
 			browserIconSize: customSettings.browserIconSize,
 			defaultWindowOptions: {
-				icon: customSettings.launchBarWindowSettings?.icon,
+				icon: PLATFORM_ICON,
 				workspacePlatform: {
 					pages: [],
-					favicon: customSettings.launchBarWindowSettings?.icon
+					favicon: PLATFORM_ICON,
+					tabSearchButton: {
+						pageTabs: { enabled: true },
+						viewTabs: { enabled: true }
+					}
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Get the custom action used the launched windows.
 		customActions: getCustomActions(),
 		// Implement an override of some of the platform callback methods.
@@ -81,16 +136,193 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 }
 
 /**
- * Bring the platform to life.
+ * Initialize the control panel UI (no WorkspacePlatform.init on load).
  */
-async function initializeWorkspaceComponents(): Promise<void> {
-	console.log("Initializing the workspace components");
+async function initializeDOM(): Promise<void> {
+	const scenarioSelect = document.querySelector<HTMLSelectElement>("#scenario");
+	const initializePlatformButton = document.querySelector<HTMLButtonElement>("#initialize-platform");
+	const restartDemoButton = document.querySelector<HTMLButtonElement>("#restart-demo");
+	const launchButton = document.querySelector<HTMLButtonElement>("#launch");
+	const quitButton = document.querySelector<HTMLButtonElement>("#quit");
+	const allowDuplicatePageTitlesCheckbox =
+		document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles");
+	const duplicateTitlesHint = document.querySelector<HTMLParagraphElement>("#duplicate-titles-hint");
 
-	// When the platform requests to be close we deregister from home and quit
-	const providerWindow = fin.Window.getCurrentSync();
-	await providerWindow.once("close-requested", async () => {
+	if (scenarioSelect && initializePlatformButton && restartDemoButton && launchButton && quitButton) {
+		for (const scenario of BROWSER_SCENARIOS) {
+			const option = document.createElement("option");
+			option.value = scenario.id;
+			option.textContent = scenario.label;
+			scenarioSelect.append(option);
+		}
+
+		scenarioSelect.addEventListener("change", () => {
+			updateDuplicatePageTitlesHint(
+				scenarioSelect,
+				allowDuplicatePageTitlesCheckbox,
+				duplicateTitlesHint,
+				"scenario-change"
+			);
+		});
+		allowDuplicatePageTitlesCheckbox?.addEventListener("change", () => {
+			updateDuplicatePageTitlesHintTextOnly(
+				scenarioSelect,
+				allowDuplicatePageTitlesCheckbox,
+				duplicateTitlesHint
+			);
+		});
+		updateDuplicatePageTitlesHint(
+			scenarioSelect,
+			allowDuplicatePageTitlesCheckbox,
+			duplicateTitlesHint,
+			"init-dom"
+		);
+
+		initializePlatformButton.addEventListener("click", async () => {
+			await handleInitializePlatformClick();
+		});
+
+		restartDemoButton.addEventListener("click", async () => {
+			await restartDemo();
+		});
+
+		launchButton.addEventListener("click", async () => {
+			const scenarioId = scenarioSelect.value as BrowserScenarioId;
+			await launchBrowserScenario(scenarioId);
+		});
+
+		quitButton.addEventListener("click", async () => {
+			await quit();
+		});
+
+		setControlState("uninitialized");
+	}
+}
+
+/**
+ * The control panel state.
+ */
+type ControlState = "uninitialized" | "initialized";
+
+/**
+ * Enable or disable controls based on platform initialization state.
+ * @param state Whether the workspace platform has been initialized.
+ */
+function setControlState(state: ControlState): void {
+	const initializePlatformButton = document.querySelector<HTMLButtonElement>("#initialize-platform");
+	const restartDemoButton = document.querySelector<HTMLButtonElement>("#restart-demo");
+	const launchButton = document.querySelector<HTMLButtonElement>("#launch");
+	const quitButton = document.querySelector<HTMLButtonElement>("#quit");
+	const scenarioSelect = document.querySelector<HTMLSelectElement>("#scenario");
+	const allowDuplicatePageTitlesCheckbox =
+		document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles");
+
+	const initialized = state === "initialized";
+
+	if (initializePlatformButton && restartDemoButton && launchButton && quitButton && scenarioSelect) {
+		initializePlatformButton.disabled = initialized;
+		restartDemoButton.disabled = !initialized;
+		launchButton.disabled = !initialized;
+		quitButton.disabled = false;
+		scenarioSelect.disabled = false;
+		if (allowDuplicatePageTitlesCheckbox) {
+			allowDuplicatePageTitlesCheckbox.disabled = initialized;
+		}
+	}
+}
+
+/**
+ * Restart the application and return to uninitialized control state so settings can be changed before init.
+ */
+async function restartDemo(): Promise<void> {
+	if (!isPlatformInitialized) {
+		return;
+	}
+	const allowDup = getAllowDuplicatePageTitlesFromDOM();
+	localStorage.setItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP, allowDup ? "true" : "false");
+	const platform = getCurrentSync();
+	const browserWindows = await platform.Browser.getAllWindows();
+	await Promise.all(browserWindows.map(async (browserWindow) => browserWindow.openfinWindow.close()));
+	const app = await fin.Application.getCurrent();
+	await app.restart();
+}
+
+/**
+ * Exit the application, closing browsers and the platform when initialized.
+ */
+async function quit(): Promise<void> {
+	clearWorkspaceSessionMarkers();
+	if (isPlatformInitialized) {
+		const platform = getCurrentSync();
+		const browserWindows = await platform.Browser.getAllWindows();
+		await Promise.all(browserWindows.map(async (browserWindow) => browserWindow.openfinWindow.close()));
 		await fin.Platform.getCurrentSync().quit();
-	});
+	} else {
+		const app = await fin.Application.getCurrent();
+		await app.quit();
+	}
+}
+
+const DUPLICATE_TITLES_HINT_ALLOWED =
+	"Enable Allow Duplicate Page Titles before initializing the platform. On launch, the second tab may still show a suffix such as (1) — that is expected. " +
+	"To see duplicate titles in action: after the browser opens, rename one page tab to match the other (for example, both Shared Page Title). " +
+	"The platform will accept the duplicate name when the checkbox is enabled.";
+
+const DUPLICATE_TITLES_HINT_DISALLOWED =
+	"With Allow Duplicate Page Titles unchecked, initialize the platform then launch the browser and try renaming one page tab to match the other. " +
+	"The platform will reject the duplicate or append a suffix such as (1). " +
+	"Use Restart Demo, enable the checkbox, and initialize again to allow matching titles.";
+
+/**
+ * Update only the hint text from the current checkbox state (never changes the checkbox).
+ * @param scenarioSelect The scenario dropdown.
+ * @param allowDuplicatePageTitlesCheckbox The allow duplicate titles checkbox.
+ * @param duplicateTitlesHint The hint paragraph for the duplicate titles scenario.
+ */
+function updateDuplicatePageTitlesHintTextOnly(
+	scenarioSelect: HTMLSelectElement,
+	allowDuplicatePageTitlesCheckbox: HTMLInputElement | null,
+	duplicateTitlesHint: HTMLParagraphElement | null
+): void {
+	const isDuplicateTitlesScenario = scenarioSelect.value === "duplicate-page-titles";
+	if (duplicateTitlesHint) {
+		duplicateTitlesHint.classList.remove("error");
+		duplicateTitlesHint.hidden = !isDuplicateTitlesScenario;
+		if (isDuplicateTitlesScenario) {
+			duplicateTitlesHint.textContent = allowDuplicatePageTitlesCheckbox?.checked
+				? DUPLICATE_TITLES_HINT_ALLOWED
+				: DUPLICATE_TITLES_HINT_DISALLOWED;
+		}
+	}
+}
+
+/**
+ * Update hint when the scenario changes. Defaults the checkbox only when entering the demo scenario.
+ * @param scenarioSelect The scenario dropdown.
+ * @param allowDuplicatePageTitlesCheckbox The allow duplicate titles checkbox.
+ * @param duplicateTitlesHint The hint paragraph for the duplicate titles scenario.
+ * @param trigger What triggered this update.
+ */
+function updateDuplicatePageTitlesHint(
+	scenarioSelect: HTMLSelectElement,
+	allowDuplicatePageTitlesCheckbox: HTMLInputElement | null,
+	duplicateTitlesHint: HTMLParagraphElement | null,
+	trigger: "scenario-change" | "init-dom"
+): void {
+	const isDuplicateTitlesScenario = scenarioSelect.value === "duplicate-page-titles";
+	if (
+		allowDuplicatePageTitlesCheckbox &&
+		isDuplicateTitlesScenario &&
+		trigger === "scenario-change" &&
+		!isPlatformInitialized
+	) {
+		allowDuplicatePageTitlesCheckbox.checked = true;
+	}
+	updateDuplicatePageTitlesHintTextOnly(
+		scenarioSelect,
+		allowDuplicatePageTitlesCheckbox,
+		duplicateTitlesHint
+	);
 }
 
 /**
@@ -289,7 +521,7 @@ async function showPopup(
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
  * @returns The overridden class.
  */
 function overrideCallback(

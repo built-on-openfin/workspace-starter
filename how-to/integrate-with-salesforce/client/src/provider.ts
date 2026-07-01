@@ -47,10 +47,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	await init({
 		browser: {
@@ -62,20 +62,13 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: templateHelpers.DEFAULT_PALETTES.dark
-			}
-		],
 		// Override the interop so that we can handle intent messages from Salesforce
 		interopOverride
 	});
 }
 
 /**
- * Initialize workspace components.
+ * Initialize HERE Core UI Components.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
 	let lastResponse: HomeSearchListenerResponse;
@@ -191,7 +184,7 @@ function interopOverride(InteropBroker: OpenFin.Constructor<OpenFin.InteropBroke
 						const platform = getCurrentSync();
 						await platform.createView({
 							name: "fdc3-intent-view",
-							url: "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
+							url: "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
 							fdc3InteropApi: "2.0",
 							interop: {
 								currentContextGroup: "green"

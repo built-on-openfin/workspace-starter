@@ -40,7 +40,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-server-authentication/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -70,7 +70,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-bloomberg-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -101,7 +101,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-excel/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"style/app.css",
 					"style/style-changed-preload.js",
 					"views/platform/of-info.view.fin.json",
@@ -167,7 +167,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-ms365-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -312,7 +312,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-salesforce-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -367,7 +367,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-servicenow-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -397,7 +397,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-snap-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -427,7 +427,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-snap/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json", "views/window-options/window.options.builder.view.fin.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json", "views/window-options/window.options.builder.view.fin.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -457,7 +457,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/integrate-with-openid-connect/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -517,7 +517,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/register-with-dock/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "views/platform/new-tab/**/*", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "views/platform/new-tab/**/*", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -547,7 +547,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/register-with-dock-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -577,7 +577,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/register-with-dock3-basic/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -609,7 +609,7 @@
 				"destFolder": "how-to/register-with-home/public/common",
 				"files": [
 					"assets/native-interop-example.zip",
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"images/native/icon-notepad.png",
 					"images/native/icon-winform-interop.png",
 					"images/previews/contact/**/*",
@@ -655,7 +655,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/register-with-home-basic/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"snapshots/developer.snapshot.fin.json",
 					"style/app.css",
 					"style/style-changed-preload.js",
@@ -693,7 +693,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/register-with-platform-windows/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"style/app.css",
 					"style/style-changed-preload.js",
 					"views/platform/of-info.view.fin.json",
@@ -732,7 +732,7 @@
 				"destFolder": "how-to/register-with-store/public/common",
 				"files": [
 					"assets/native-interop-example.zip",
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"images/native/icon-notepad.png",
 					"images/native/icon-winform-interop.png",
 					"images/store/superhero-unsplash.jpg",
@@ -785,7 +785,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/register-with-store-basic/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"images/store/superhero-unsplash.jpg",
 					"images/store/coding-1-unsplash.jpg",
 					"images/store/coding-2-unsplash.jpg",
@@ -832,7 +832,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/support-context-and-intents/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"snapshots/contact-overview.snapshot.fin.json",
 					"style/app.css",
 					"style/style-changed-preload.js",
@@ -877,7 +877,7 @@
 			{
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/use-notifications/public/common",
-				"files": ["images/icon-blue.png", "style/app.css", "dos.json"]
+				"files": ["images/favicon-32x32.png", "style/app.css", "dos.json"]
 			},
 			{
 				"srcFolder": "how-to/workspace-platform-starter/scripts",
@@ -910,7 +910,7 @@
 				"files": [
 					"icons/default/dark/theme.svg",
 					"icons/default/light/theme.svg",
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"images/style/test-image.webp",
 					"style/app.css",
 					"style/style-changed-preload.js",
@@ -950,7 +950,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/use-theming-basic/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"images/style/test-image.webp",
 					"style/app.css",
 					"style/style-changed-preload.js",
@@ -990,7 +990,7 @@
 				"srcFolder": "how-to/workspace-platform-starter/public/common",
 				"destFolder": "how-to/workspace-platform-starter-basic/public/common",
 				"files": [
-					"images/icon-blue.png",
+					"images/favicon-32x32.png",
 					"images/previews/of-info.png",
 					"images/previews/contact/**/*",
 					"snapshots/contact-overview.snapshot.fin.json",

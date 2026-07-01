@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -80,7 +80,7 @@ The event details that are passed to the handler contains all the relevant infor
 
 ## window.open features
 
-If you use the `features` property of a `window.open` call this value is also passed to the handler, so you can include your own custom features to display the content differently when in an OpenFin environment, those features would be ignored by a browser.
+If you use the `features` property of a `window.open` call this value is also passed to the handler, so you can include your own custom features to display the content differently when in an HERE environment, those features would be ignored by a browser.
 
 e.g.
 

@@ -1,0 +1,67 @@
+{
+	"mode": "compatible",
+	"modes": {
+		"compatible": {
+			"_description": "This is just a comment. It will not be used. If status is an empty object the service will return what it is passed. It will replace the sent object with any settings you specify.",
+			"status": {}
+		},
+		"incompatibleMessage": {
+			"_description": "Similar to above. Specify what you want to override. This will also be passed as customData on the window options.",
+			"status": {
+				"minFail": ["workspace"],
+				"minVersion": { "workspace": "99.9.9" }
+			},
+			"windowOptions": {
+				"name": "versioning",
+				"url": "http://localhost:8080/windows/version/version.html",
+				"defaultCentered": true,
+				"showTaskbarIcon": false,
+				"autoShow": true,
+				"minimizable": false,
+				"maximizable": false,
+				"defaultHeight": 481,
+				"defaultWidth": 760,
+				"saveWindowState": false,
+				"includeInSnapshots": false,
+				"customData": {}
+			}
+		},
+		"incompatibleManifest": {
+			"_description": "Similar to above. Specify what you want to override. This will also be passed as customData on the window options.",
+			"status": {
+				"minFail": ["workspace"],
+				"minVersion": { "workspace": "99.9.9" }
+			},
+			"windowOptions": {
+				"name": "manifest",
+				"url": "http://localhost:8080/windows/version/manifest.html",
+				"autoShow": false,
+				"customData": {
+					"manifest": "http://localhost:8080/second.manifest.fin.json",
+					"launcherUrl": "http://localhost:8080/common/windows/manifest-launcher/index.html"
+				}
+			}
+		},
+		"upgrade": {
+			"_description": "Similar to above. For upgrades you wish to specify that app is invalid.",
+			"status": {
+				"minFail": ["app"],
+				"minVersion": { "app": "99.9.9" }
+			},
+			"windowOptions": {
+				"name": "restart",
+				"url": "http://localhost:8080/windows/version/upgrade.html",
+				"defaultCentered": true,
+				"showTaskbarIcon": false,
+				"autoShow": true,
+				"minimizable": false,
+				"maximizable": false,
+				"defaultHeight": 310,
+				"defaultWidth": 400,
+				"saveWindowState": false,
+				"includeInSnapshots": false,
+				"customData": {}
+			}
+		}
+	}
+}

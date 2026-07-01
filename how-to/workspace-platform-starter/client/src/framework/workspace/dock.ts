@@ -590,7 +590,7 @@ async function addEntryAsAction(
  * @param entry The entry details.
  * @param iconFolder The folder for icons.
  * @param colorSchemeMode The color scheme
- * @param platform The workspace platform for checking conditions.
+ * @param platform The HERE Core UI Platform for checking conditions.
  * @returns The dock entry
  */
 async function addEntriesAsDropdown(

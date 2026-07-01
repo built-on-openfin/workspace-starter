@@ -658,6 +658,10 @@
 					"$ref": "#/definitions/AccessibilityOptions",
 					"description": "Accessibility options for the browser window.\nThese options override the default accessibility options set at the platform or browser initialization level."
 				},
+				"disableFindInPage": {
+					"description": "When true, disables the find in page feature for the window.\nThe find in page view will not be created and no find in page logic will run.\nThis option must be set at window creation time and cannot be changed dynamically.\nFalse by default.",
+					"type": "boolean"
+				},
 				"disableMultiplePages": {
 					"description": "Remove the Page UI and only allow a single page in the browser window.\nMust be set to true for this behavior.  If this is not set to false,\nthen an empty `pages` option will be populated with a single page.",
 					"type": "boolean"
@@ -754,6 +758,10 @@
 				"preventPageDragOut": {
 					"description": "When true, disables the ability to drag pages out of a window. False by default.",
 					"type": "boolean"
+				},
+				"tabSearchButton": {
+					"$ref": "#/definitions/TabSearchButtonOptions",
+					"description": "Controls whether tab-search chevron buttons are shown for page tabs and view tabs.\n\nBy default, both locations are disabled unless explicitly enabled."
 				},
 				"title": {
 					"anyOf": [
@@ -2166,6 +2174,37 @@
 			"required": ["src"],
 			"type": "object"
 		},
+		"IndependentStrategy": {
+			"additionalProperties": false,
+			"description": "An independent application launch and window discovery strategy for capturing top-level windows\nbelonging to external applications that are launched independently of Snap, or optionally launching\nsuch applications if needed.\n\nThis strategy supports integration with applications outside the OpenFin ecosystem,\nincluding those launched via methods such as click-once or shell execution.",
+			"properties": {
+				"alwaysLaunchNewInstance": {
+					"description": "If true, always launch a new application instance even if one or more instances exist.\nIf false, only hook existing instances. Defaults to false.",
+					"type": "boolean"
+				},
+				"matchClassRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window class against. If not provided, any window class will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"matchNameRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window caption against. If not provided, any window caption will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
+				"timeoutMs": {
+					"description": "The timeout period milliseconds after which the window search will be abandoned",
+					"type": "number"
+				},
+				"type": {
+					"const": "independent",
+					"type": "string"
+				}
+			},
+			"required": ["timeoutMs", "type"],
+			"type": "object"
+		},
 		"InitOptionsProviderOptions": {
 			"$ref": "#/definitions/ModuleList",
 			"description": "List of modules."
@@ -2365,6 +2404,9 @@
 				},
 				{
 					"$ref": "#/definitions/CombinedStrategy"
+				},
+				{
+					"$ref": "#/definitions/IndependentStrategy"
 				}
 			]
 		},
@@ -3493,6 +3535,9 @@
 			},
 			"type": "object"
 		},
+		"NotificationIndicatorColors": {
+			"$ref": "#/definitions/__type_63"
+		},
 		"NotificationIndicatorColorsWithScheme": {
 			"$ref": "#/definitions/__type_64"
 		},
@@ -3614,6 +3659,10 @@
 					"description": "True if the page is locked.",
 					"type": "boolean"
 				},
+				"isPublished": {
+					"description": "For published page, supertab icon will show the --color-shared-icon-accent border. default to false when published by admin",
+					"type": "boolean"
+				},
 				"isReadOnly": {
 					"description": "True if the page is read only. In this state, the page is locked and cannot be unlocked.",
 					"type": "boolean"
@@ -3632,6 +3681,10 @@
 						"$ref": "#/definitions/PanelConfig"
 					},
 					"type": "array"
+				},
+				"pinned": {
+					"$ref": "#/definitions/PagePinnedState",
+					"description": "Pinned state: `'platform'` (developer-locked), `'user'` (end-user pinned), or omitted (normal)."
 				},
 				"title": {
 					"description": "A UI friendly title for the page.",
@@ -3769,6 +3822,11 @@
 			"required": ["machineId"],
 			"type": "object"
 		},
+		"PagePinnedState": {
+			"description": "The pinned state of a page tab. `'platform'` = developer-locked; `'user'` = end-user pinned.",
+			"enum": ["platform", "user"],
+			"type": "string"
+		},
 		"PageTabContextMenuOptionType": {
 			"description": "Types of page tab context menu options, including pre-defined ones.\nUser-defined context menu items should use the value `Custom`",
 			"enum": [
@@ -3778,6 +3836,8 @@
 				"Save",
 				"Save As",
 				"New Page",
+				"Pin",
+				"Unpin",
 				"Delete Page",
 				"SaveWorkspaceAs",
 				"Refresh",
@@ -3968,7 +4028,7 @@
 				},
 				"interop": {
 					"$ref": "#/definitions/PlatformAppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This\nmetadata serves multiple purposes:\n- It supports intent resolution by an HERE Platform/ interop agent, by\ndeclaring what intents an app listens for.\n- It may be used, for example in an app catalog UI, to find apps that\n'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with\nuser channels, app channels, and intents, for use by other app\ndevelopers and desktop assemblers."
 				},
 				"launchPreference": {
 					"$ref": "#/definitions/LaunchPreference",
@@ -4092,7 +4152,7 @@
 					"type": "string"
 				},
 				"notificationIndicatorColors": {
-					"$ref": "#/definitions/Record_1",
+					"$ref": "#/definitions/NotificationIndicatorColors",
 					"description": "NOTE: Only used in Notifications\n\nUsed for providing color overrides of notification indicators or defining custom colors that clients could target."
 				},
 				"palette": {
@@ -4585,14 +4645,14 @@
 				},
 				"workspaceAsar": {
 					"additionalProperties": false,
-					"description": "Are you self hosting the workspace platform UI and related assets (workspace 20.1+).",
+					"description": "Are you self hosting the HERE Core UI Platform UI and related assets (workspace 20.1+).",
 					"properties": {
 						"alias": {
-							"description": "The alias that you have used when defining the app asset in your manifest that has the workspace platform zip that is provided in the",
+							"description": "The alias that you have used when defining the app asset in your manifest that has the HERE Core UI Platform zip that is provided in the",
 							"type": "string"
 						},
 						"enabled": {
-							"description": "This is a Workspace Platform Starter specific setting. Default is true if an alias is specified.",
+							"description": "This is a HERE Core UI Platform Starter specific setting. Default is true if an alias is specified.",
 							"type": "boolean"
 						}
 					},
@@ -4689,9 +4749,6 @@
 		"Record": {
 			"$ref": "#/definitions/__type_21"
 		},
-		"Record_1": {
-			"$ref": "#/definitions/__type_63"
-		},
 		"Rectangle": {
 			"$ref": "#/definitions/__type_33"
 		},
@@ -4731,6 +4788,10 @@
 					"description": "If true, Snap will try to hide the taskbar icons of windows that are snapped together, and re-show the icons when windows are unsnapped.",
 					"type": "boolean"
 				},
+				"blockOverlapGroupSnapping": {
+					"description": "If true, snapping two window groups together is blocked when the resulting snap position\nwould cause any windows in the groups to overlap each other. This prevents visually obscured\nlayouts when group-snapping. Defaults to false, meaning overlapping group snaps are allowed.",
+					"type": "boolean"
+				},
 				"blurEffectPerformanceThreshold": {
 					"description": "This is respected only if the disableBlurDropPreview option is not set. This threshold (in milliseconds) relates to the time taken to render a blur effect.\nSnap will do a check at start up to measure this performance and automatically disable the blur effect if this threshold time is exceeded.\nIf not provided, the performance check will use a default threshold.",
 					"type": "number"
@@ -4766,6 +4827,11 @@
 				"hideTaskbarEntry": {
 					"description": "If true, snapped window groups will not be shown in the taskbar.",
 					"type": "boolean"
+				},
+				"keyToGroupStick": {
+					"description": "If provided, this specifies that a key must be held to stick window groups together.\nIf no value is provided, then snapping window groups will be allowed without any key being held.",
+					"enum": ["ctrl", "shift"],
+					"type": "string"
 				},
 				"keyToStick": {
 					"description": "If provided, this specifies that a key must be held to stick windows together.\nThe value can be a boolean or a string. If true, the default keyToStick key will be used (CTRL).\nIf no value, or false, is provided, then snapping will be allowed without any key being held.",
@@ -5242,6 +5308,30 @@
 		"StructuredContentPermissions": {
 			"$ref": "#/definitions/__type_77"
 		},
+		"TabSearchButtonOptions": {
+			"additionalProperties": false,
+			"description": "Configures where tab-search chevron buttons should be shown in a browser window.",
+			"properties": {
+				"pageTabs": {
+					"$ref": "#/definitions/TabSearchLocationOptions"
+				},
+				"viewTabs": {
+					"$ref": "#/definitions/TabSearchLocationOptions"
+				}
+			},
+			"type": "object"
+		},
+		"TabSearchLocationOptions": {
+			"additionalProperties": false,
+			"description": "Enables or disables the tab-search chevron button for a specific tab location.",
+			"properties": {
+				"enabled": {
+					"type": "boolean"
+				}
+			},
+			"required": ["enabled"],
+			"type": "object"
+		},
 		"TaskBar": {
 			"additionalProperties": false,
 			"properties": {
@@ -5470,7 +5560,7 @@
 					"type": "string"
 				},
 				"workspace": {
-					"description": "The version of the workspace components this platform is currently connected to",
+					"description": "The version of the HERE Core UI Components this platform is currently connected to",
 					"type": "string"
 				},
 				"workspaceClient": {
@@ -5478,7 +5568,7 @@
 					"type": "string"
 				},
 				"workspacePlatformClient": {
-					"description": "The version of the workspace platform client code",
+					"description": "The version of the HERE Core UI Platform client code",
 					"type": "string"
 				}
 			},
@@ -5503,6 +5593,10 @@
 				"minVersion": {
 					"$ref": "#/definitions/MinimumVersion",
 					"description": "You can specify if the platform should stop initializing if the version is less than any of the specified minimum\nversions"
+				},
+				"supportGetVersionIntent": {
+					"description": "If you want the platform to support the GetVersion intent then you can set this to true. This will allow the platform to return the version information when the GetVersion intent is fired.",
+					"type": "boolean"
 				},
 				"versionCheckIntervalInSeconds": {
 					"description": "If an endpoint is specified and an interval is specified then you want the platform to call this endpoint on an\ninterval to see if an update of your application is available.",
@@ -5692,7 +5786,7 @@
 		},
 		"WPSManifest": {
 			"additionalProperties": false,
-			"description": "A wrapper around the OpenFin manifest that adds custom settings.",
+			"description": "A wrapper around the HERE manifest that adds custom settings.",
 			"properties": {
 				"appAssets": {
 					"items": {
@@ -5721,7 +5815,7 @@
 				},
 				"customSettings": {
 					"$ref": "#/definitions/CustomSettings",
-					"description": "Custom settings for the workspace platform."
+					"description": "Custom settings for the HERE Core UI Platform."
 				},
 				"devtools_port": {
 					"type": "number"
@@ -9023,7 +9117,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -10780,6 +10874,11 @@
 						"type": "string"
 					},
 					"type": "array"
+				},
+				"method": {
+					"description": "HTTP method used to upload the log archive.\nAccepted values are `'POST'` and `'PUT'` (case-insensitive; values are normalised to uppercase before validation).\n- `POST` sends a multipart `FormData` request (current behaviour).\n- `PUT` sends the raw zip binary with an explicit `Content-Length` and no `Content-Type` header,\n  suitable for endpoints that expect a raw body (e.g. pre-signed upload URLs).",
+					"enum": ["POST", "PUT"],
+					"type": "string"
 				},
 				"sizeLimit": {
 					"description": "Max file size limit in Megabytes for the logs archive.",

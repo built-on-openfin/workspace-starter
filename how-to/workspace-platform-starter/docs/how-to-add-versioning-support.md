@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -12,7 +12,7 @@ Through configuration you can add the version of your application e.g. 1.0.0. Ad
 - platformClient (the platform code configured through the manifest/settings)
 - workspacePlatformClient (the version of the @openfin/workspace-platform npm package)
 - workspaceClient (the version of the @openfin/workspace npm package)
-- workspace (the version of the OpenFin Workspace Components your platform has registered against)
+- workspace (the version of the HERE Core UI Components your platform has registered against)
 - notificationCenter (the version of the Notification Center that is running)
 - runtime
 - rvm
@@ -127,7 +127,7 @@ The logic starts from the major version and works down but stops on the first vi
 
 The Version Window is the window to show when a validation check fails. If it is specified then it means your intention is that the platform should stop initializing, any registrations against Workspace should be undone and the Version Window should be presented to the user.
 
-The settings here are your standard OpenFin Window Options. We pass additional data to the window through customData:
+The settings here are your standard HERE Window Options. We pass additional data to the window through customData:
 
 ```typescript
 export interface VersionWindowCustomData {

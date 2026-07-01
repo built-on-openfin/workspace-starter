@@ -1,12 +1,12 @@
-![OpenFin Workspace Example Application -- Using Theming](../../assets/OpenFin-Workspace-Starter.png)
+![HERE Core UI Example Application -- Using Theming](../../assets/HERO-STARTER-HERE-CORE-UI.png)
 
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 # Use Theming
 
-OpenFin Theming allows you to style the workspace components with your own branding.
+HERE Theming allows you to style the HERE Core UI Components with your own branding.
 
-This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
 The example shows how you can override the default palette without a custom one.
 
@@ -15,7 +15,7 @@ The example shows how you can override the default palette without a custom one.
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Use Theming](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.0.0%2Fuse-theming%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Use Theming](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fuse-theming%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -25,11 +25,11 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of HERE Core UI to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
+   (**WARNING**: This script kills all open HERE processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```shell
 npm run dos
@@ -47,89 +47,58 @@ npm run start
 npm run client
 ```
 
-5. The palette can be provided from the command line, this is demonstrated by closing the application and running the alternate version which will show using the light theme.
+5. A theme payload can be provided from the command line. This is demonstrated by closing the application and running the alternate version:
 
 ```shell
 npm run secondclient
 ```
 
-The `secondclient` passes the action `apply-theme` and a `payload` to the command line, the payload is a base64 encoded version of the data i.e.
+The `secondclient` passes action `apply-theme` and `payload` to the command line. The payload is base64-encoded JSON, for example:
 
-`http://localhost:8080/manifest.fin.json?$$action=apply-theme&$$payload=eyJwYWxldHRlIjp7ImkUHJpbWFyeSI6IiM1MDRD.....G93U3RvcmUiOnRydWUsInNob3dZXIiOnRydWV9fQ==`
+`http://localhost:8080/manifest.fin.json?$$action=apply-theme&$$payload=eyJzZWVkIjp7ImJyYW5kLmJhc2UuZGFyayI6IiMxNDA2MTEifS4uLn0=`
 
-You could produce a similar encoding for your palette by doing the following:
+You could produce a similar encoding for your theming by doing the following:
+(`options` is optional; if omitted, all components are shown by default):
 
 ```js
 btoa(
   JSON.stringify({
-    palettes: {
-      light: {
-        brandPrimary: '#0A76D3',
-        brandSecondary: '#1E1F23',
-        backgroundPrimary: '#FAFBFE',
-        background1: '#FFFFFF',
-        background2: '#FAFBFE',
-        background3: '#F3F5F8',
-        background4: '#ECEEF1',
-        background5: '#DDDFE4',
-        background6: '#C9CBD2',
-        statusSuccess: '#35C759',
-        statusWarning: '#F48F00',
-        statusCritical: '#BE1D1F',
-        statusActive: '#0498FB',
-        inputBackground: '#ECEEF1',
-        inputColor: '#1E1F23',
-        inputPlaceholder: '#383A40',
-        inputDisabled: '#7D808A',
-        inputFocused: '#C9CBD2',
-        textDefault: '#1E1F23',
-        textHelp: '#2F3136',
-        textInactive: '#7D808A',
-        contentBackground1: '#0A76D3',
-        contentBackground2: '#000000',
-        contentBackground3: '#000000',
-        contentBackground4: '#000000',
-        contentBackground5: '#000000',
-        linkDefault: '#6CADE5',
-        linkHover: '#0A76D3'
-      },
+    seed: {
+      'brand.base.dark': '#140611',
+      'brand.accent.dark': '#FFD6D2',
+      'brand.base.light': '#FFFFFF',
+      'brand.accent.light': '#641E55'
+    },
+    overrides: {
       dark: {
-        brandPrimary: '#0A76D3',
-        brandSecondary: '#383A40',
-        backgroundPrimary: '#1E1F23',
-        background1: '#111214',
-        background2: '#1E1F23',
-        background3: '#24262B',
-        background4: '#2F3136',
-        background5: '#383A40',
-        background6: '#53565F',
-        statusSuccess: '#35C759',
-        statusWarning: '#F48F00',
-        statusCritical: '#BE1D1F',
-        statusActive: '#0498FB',
-        inputBackground: '#53565F',
-        inputColor: '#FFFFFF',
-        inputPlaceholder: '#C9CBD2',
-        inputDisabled: '#7D808A',
-        inputFocused: '#C9CBD2',
-        textDefault: '#FFFFFF',
-        textHelp: '#C9CBD2',
-        textInactive: '#7D808A',
-        contentBackground1: '#0A76D3',
-        contentBackground2: '#000000',
-        contentBackground3: '#000000',
-        contentBackground4: '#000000',
-        contentBackground5: '#000000',
-        linkDefault: '#6CADE5',
-        linkHover: '#0A76D3'
+        'icon.symbol': 'http://localhost:8080/common/images/favicon-32x32.png',
+        'color.role.background.1': '#1a1a1a',
+        'color.role.background.2': '#252525',
+        'color.role.accent.base': '#4da6ff',
+        'color.role.accent.hover': '#80bfff',
+        'color.role.status.success': '#34d058',
+        'color.role.status.warning': '#ffdf5d',
+        'color.role.status.critical': '#f85149',
+        'color.role.border.neutral': '#333333'
+      },
+      light: {
+        'icon.symbol': 'http://localhost:8080/common/images/favicon-32x32.png',
+        'color.role.background.1': '#fafafa',
+        'color.role.background.2': '#f5f5f5',
+        'color.role.accent.base': '#0066cc',
+        'color.role.accent.hover': '#0052a3',
+        'color.role.status.success': '#28a745',
+        'color.role.status.warning': '#ffc107',
+        'color.role.status.critical': '#dc3545',
+        'color.role.border.neutral': '#e0e0e0'
       }
     },
     options: {
-      showHome: true,
-      showStore: true,
-      showDock: true,
-      showNotifications: true,
-      showBrowser: true
+      home: true,
+      store: true,
+      dock: true,
+      notifications: true,
+      browser: true
     }
   })
 );
@@ -137,10 +106,6 @@ btoa(
 
 Which outputs:
 
-```shell
-eyJwYWxldHRlcyI6eyJsaWdodCI6eyJicmFuZFByaW1hcnkiOiIjMEE3NkQzIiwiYnJhbmRTZWNvbmRhcnkiOiIjMUUxRjIzIiwiYmFja2dyb3VuZFByaW1hcnkiOiIjRkFGQkZFIiwiYmFja2dyb3VuZDEiOiIjRkZGRkZGIiwiYmFja2dyb3VuZDIiOiIjRkFGQkZFIiwiYmFja2dyb3VuZDMiOiIjRjNGNUY4IiwiYmFja2dyb3VuZDQiOiIjRUNFRUYxIiwiYmFja2dyb3VuZDUiOiIjRERERkU0IiwiYmFja2dyb3VuZDYiOiIjQzlDQkQyIiwic3RhdHVzU3VjY2VzcyI6IiMzNUM3NTkiLCJzdGF0dXNXYXJuaW5nIjoiI0Y0OEYwMCIsInN0YXR1c0NyaXRpY2FsIjoiI0JFMUQxRiIsInN0YXR1c0FjdGl2ZSI6IiMwNDk4RkIiLCJpbnB1dEJhY2tncm91bmQiOiIjRUNFRUYxIiwiaW5wdXRDb2xvciI6IiMxRTFGMjMiLCJpbnB1dFBsYWNlaG9sZGVyIjoiIzM4M0E0MCIsImlucHV0RGlzYWJsZWQiOiIjN0Q4MDhBIiwiaW5wdXRGb2N1c2VkIjoiI0M5Q0JEMiIsInRleHREZWZhdWx0IjoiIzFFMUYyMyIsInRleHRIZWxwIjoiIzJGMzEzNiIsInRleHRJbmFjdGl2ZSI6IiM3RDgwOEEiLCJjb250ZW50QmFja2dyb3VuZDEiOiIjMEE3NkQzIiwiY29udGVudEJhY2tncm91bmQyIjoiIzAwMDAwMCIsImNvbnRlbnRCYWNrZ3JvdW5kMyI6IiMwMDAwMDAiLCJjb250ZW50QmFja2dyb3VuZDQiOiIjMDAwMDAwIiwiY29udGVudEJhY2tncm91bmQ1IjoiIzAwMDAwMCJ9LCJkYXJrIjp7ImJyYW5kUHJpbWFyeSI6IiMwQTc2RDMiLCJicmFuZFNlY29uZGFyeSI6IiMzODNBNDAiLCJiYWNrZ3JvdW5kUHJpbWFyeSI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kMSI6IiMxMTEyMTQiLCJiYWNrZ3JvdW5kMiI6IiMxRTFGMjMiLCJiYWNrZ3JvdW5kMyI6IiMyNDI2MkIiLCJiYWNrZ3JvdW5kNCI6IiMyRjMxMzYiLCJiYWNrZ3JvdW5kNSI6IiMzODNBNDAiLCJiYWNrZ3JvdW5kNiI6IiM1MzU2NUYiLCJzdGF0dXNTdWNjZXNzIjoiIzM1Qzc1OSIsInN0YXR1c1dhcm5pbmciOiIjRjQ4RjAwIiwic3RhdHVzQ3JpdGljYWwiOiIjQkUxRDFGIiwic3RhdHVzQWN0aXZlIjoiIzA0OThGQiIsImlucHV0QmFja2dyb3VuZCI6IiM1MzU2NUYiLCJpbnB1dENvbG9yIjoiI0ZGRkZGRiIsImlucHV0UGxhY2Vob2xkZXIiOiIjQzlDQkQyIiwiaW5wdXREaXNhYmxlZCI6IiM3RDgwOEEiLCJpbnB1dEZvY3VzZWQiOiIjQzlDQkQyIiwidGV4dERlZmF1bHQiOiIjRkZGRkZGIiwidGV4dEhlbHAiOiIjQzlDQkQyIiwidGV4dEluYWN0aXZlIjoiIzdEODA4QSIsImNvbnRlbnRCYWNrZ3JvdW5kMSI6IiMwQTc2RDMiLCJjb250ZW50QmFja2dyb3VuZDIiOiIjMDAwMDAwIiwiY29udGVudEJhY2tncm91bmQzIjoiIzAwMDAwMCIsImNvbnRlbnRCYWNrZ3JvdW5kNCI6IiMwMDAwMDAiLCJjb250ZW50QmFja2dyb3VuZDUiOiIjMDAwMDAwIn19LCJvcHRpb25zIjp7InNob3dIb21lIjp0cnVlLCJzaG93U3RvcmUiOnRydWUsInNob3dEb2NrIjp0cnVlLCJzaG93Tm90aWZpY2F0aW9ucyI6dHJ1ZSwic2hvd0Jyb3dzZXIiOnRydWV9fQ==
+```text
+eyJzZWVkIjp7ImJyYW5kLmJhc2UuZGFyayI6IiMxNDA2MTEiLCJicmFuZC5hY2NlbnQuZGFyayI6IiNGRkQ2RDIiLCJicmFuZC5iYXNlLmxpZ2h0IjoiI0ZGRkZGRiIsImJyYW5kLmFjY2VudC5saWdodCI6IiM2NDFFNTUifSwib3ZlcnJpZGVzIjp7ImRhcmsiOnsiaWNvbi5zeW1ib2wiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvY29tbW9uL2ltYWdlcy9mYXZpY29uLTMyeDMyLnBuZyIsImNvbG9yLnJvbGUuYmFja2dyb3VuZC4xIjoiIzFhMWExYSIsImNvbG9yLnJvbGUuYmFja2dyb3VuZC4yIjoiIzI1MjUyNSIsImNvbG9yLnJvbGUuYWNjZW50LmJhc2UiOiIjNGRhNmZmIiwiY29sb3Iucm9sZS5hY2NlbnQuaG92ZXIiOiIjODBiZmZmIiwiY29sb3Iucm9sZS5zdGF0dXMuc3VjY2VzcyI6IiMzNGQwNTgiLCJjb2xvci5yb2xlLnN0YXR1cy53YXJuaW5nIjoiI2ZmZGY1ZCIsImNvbG9yLnJvbGUuc3RhdHVzLmNyaXRpY2FsIjoiI2Y4NTE0OSIsImNvbG9yLnJvbGUuYm9yZGVyLm5ldXRyYWwiOiIjMzMzMzMzIn0sImxpZ2h0Ijp7Imljb24uc3ltYm9sIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2NvbW1vbi9pbWFnZXMvZmF2aWNvbi0zMngzMi5wbmciLCJjb2xvci5yb2xlLmJhY2tncm91bmQuMSI6IiNmYWZhZmEiLCJjb2xvci5yb2xlLmJhY2tncm91bmQuMiI6IiNmNWY1ZjUiLCJjb2xvci5yb2xlLmFjY2VudC5iYXNlIjoiIzAwNjZjYyIsImNvbG9yLnJvbGUuYWNjZW50LmhvdmVyIjoiIzAwNTJhMyIsImNvbG9yLnJvbGUuc3RhdHVzLnN1Y2Nlc3MiOiIjMjhhNzQ1IiwiY29sb3Iucm9sZS5zdGF0dXMud2FybmluZyI6IiNmZmMxMDciLCJjb2xvci5yb2xlLnN0YXR1cy5jcml0aWNhbCI6IiNkYzM1NDUiLCJjb2xvci5yb2xlLmJvcmRlci5uZXV0cmFsIjoiI2UwZTBlMCJ9fSwib3B0aW9ucyI6eyJob21lIjp0cnVlLCJzdG9yZSI6dHJ1ZSwiZG9jayI6dHJ1ZSwibm90aWZpY2F0aW9ucyI6dHJ1ZSwiYnJvd3NlciI6dHJ1ZX19
 ```
-
----
-
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

@@ -48,14 +48,14 @@ export interface AppDefinition {
 	lang?: string;
 
 	/**
-	 * Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or
+	 * Holds Icons used for the application, This icon could be used for entries in the HERE Core UI HOME, DOCK or
 	 * STORE Components
 	 */
 	icons?: AppIcon[];
 
 	/**
 	 * Array of images to show the user when they are looking at app description. Each image can have an optional
-	 * description/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be
+	 * description/tooltip. These images could be used in the HERE Core UI STORE and HOME components or it could be
 	 * used by an Intent Resolver to provide a visual queue as to the application that will handle the intent.
 	 */
 	screenshots?: Screenshot[];
@@ -88,7 +88,7 @@ export interface AppDefinition {
 
 	/**
 	 * The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be
-	 * duplicated or overridden by details provided in the hostManifests OpenFin object.
+	 * duplicated or overridden by details provided in the hostManifests HERE object.
 	 */
 	details: WebAppDetails | NativeAppDetails | OnlineNativeAppDetails | CitrixAppDetails | OtherAppDetails;
 
@@ -110,7 +110,7 @@ export interface AppDefinition {
 
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:
-	 * - It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens
+	 * - It supports intent resolution by an HERE Platform/ interop agent, by declaring what intents an app listens
 	 * for.
 	 * - It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.
 	 * - It provides a standard location to document how the app interacts with user channels, app channels, and
@@ -137,11 +137,11 @@ export interface AppDefinition {
  */
 export interface HostManifests {
 	/**
-	 * The OpenFin settings for this FDC3 2.0 App Definition
+	 * The HERE settings for this FDC3 2.0 App Definition
 	 */
-	OpenFin: {
+	HERE: {
 		/**
-		 * this is the manifest type id used by OpenFin and specified if root type is defined as other.
+		 * this is the manifest type id used by HERE and specified if root type is defined as other.
 		 */
 		type?: string;
 
@@ -271,7 +271,7 @@ export interface CitrixAppDetails {
 }
 
 /**
- * Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section
+ * Use an empty object here and fill in the details object in the HERE definition in the hostManifests section
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface OtherAppDetails {}

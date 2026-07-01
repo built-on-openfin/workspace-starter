@@ -52,113 +52,112 @@ export function getAppLabel(manifestType?: string): string {
 }
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP: PlatformApp = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
-	description: "Display information about the OpenFin environment",
+	description: "Display information about the HERE environment",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin", "versions"]
+	tags: ["view", "HERE", "versions"]
 };
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP_SNAPSHOT: PlatformApp = {
 	appId: "openfin-information-snapshot",
 	title: "OpenFin Information Snapshot",
-	description: "Display information about the OpenFin environment as a snapped collection of two windows.",
+	description: "Display information about the HERE environment as a snapped collection of two windows.",
 	manifest: "http://localhost:8080/common/views/platform/of-info.snapshot.fin.json",
 	manifestType: "snapshot",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["snapshot", "openfin", "versions"]
+	tags: ["snapshot", "HERE", "versions"]
 };
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT_WITH_SNAPID: PlatformApp = {
 	appId: "openfin-information-snapshot-classic-snapid",
 	title: "OpenFin Information Classic Snapshot With Snap Id",
 	description:
-		"Display information about the OpenFin environment as a snapped collection of classic windows using the snapId to link them.",
+		"Display information about the HERE environment as a snapped collection of classic windows using the snapId to link them.",
 	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot-snapclientid.fin.json",
 	manifestType: "snapshot",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["snapshot", "openfin", "versions"]
+	tags: ["snapshot", "HERE", "versions"]
 };
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP_CLASSIC_SNAPSHOT: PlatformApp = {
 	appId: "openfin-information-classic-snapshot",
 	title: "OpenFin Information Classic Snapshot",
-	description:
-		"Display information about the OpenFin environment as a snapped collection of classic windows.",
+	description: "Display information about the HERE environment as a snapped collection of classic windows.",
 	manifest: "http://localhost:8080/common/views/platform/of-info-classic.snapshot.fin.json",
 	manifestType: "snapshot",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["snapshot", "openfin", "versions"]
+	tags: ["snapshot", "HERE", "versions"]
 };
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_WINDOW_APP: PlatformApp = {
 	appId: "openfin-window-options-builder",
@@ -168,15 +167,15 @@ const OPENFIN_WINDOW_APP: PlatformApp = {
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [],
-	tags: ["view", "openfin", "developer-tools"]
+	tags: ["view", "HERE", "developer-tools"]
 };
 
 /**
@@ -200,15 +199,15 @@ const SNAP_NATIVE_TEST_APP: PlatformApp = {
 	manifestType: "inline-appasset",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [],
-	tags: ["app", "native", "openfin"]
+	tags: ["app", "native", "HERE"]
 };
 
 /**

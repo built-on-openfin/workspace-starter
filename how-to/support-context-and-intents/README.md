@@ -1,6 +1,6 @@
-![OpenFin Workspace Example Application -- Adding your application to OpenFin Workspace (Home, Browser & Store)](../../assets/OpenFin-Workspace-Starter.png)
+![HERE Core UI Example Application -- Adding your application to HERE Core UI (Home, Browser & Store)](../../assets/HERO-STARTER-HERE-CORE-UI.png)
 
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 # Support Context and Intents
 
@@ -8,19 +8,19 @@ This sample covers:
 
 - Supporting Interop/FDC3 Context messages
 - Supporting Interop/FDC3 Intents
-- Optionally supporting OpenFin Cloud Interop for context sharing: <https://www.npmjs.com/package/@openfin/cloud-interop>
+- Optionally supporting HERE Cloud Interop for context sharing: <https://www.npmjs.com/package/@openfin/cloud-interop>
 - Using a golden data source (in [apps](./public/common/) apps\*.json) to drive the apps that show up in Home and in intent resolution
 - Customization through config (in the [manifest.fin.json](public/manifest.fin.json) file)
 
-This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
 ## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
-- Launch the Second Github hosted version of this sample to see how OpenFin Workspace can support multiple workspace platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fsupport-context-and-intents%2Fmanifest.fin.json)
+- Launch the Second Github hosted version of this sample to see how HERE Core UI can support multiple HERE Core UI Platforms with their own branding: [Github Workspace Starter Second Support Context And Intents Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fsupport-context-and-intents%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -30,11 +30,11 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of HERE Core UI to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
+   (**WARNING**: This script kills all open HERE processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```shell
 npm run dos
@@ -46,13 +46,13 @@ npm run dos
 npm start
 ```
 
-4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your HERE Core UI Platform (this starts Workspace if it isn't already running).
 
 ```shell
 npm run client
 ```
 
-If you want to see a second workspace platform run alongside the first you can fire up a copy using the following command:
+If you want to see a second HERE Core UI Platform run alongside the first you can fire up a copy using the following command:
 
 ```shell
 npm run secondclient
@@ -61,7 +61,7 @@ npm run secondclient
 This runs the same code with slightly different settings to show a different theme: [second.manifest.fin.json](public/second.manifest.fin.json)
 
 5. Type any character into the search box to show the default list of applications.
-   The [apps](./public/common/) apps\*.json are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the Workspace Platform app and passed to Home via our API).
+   The [apps](./public/common/) apps\*.json are displayed as described in their respective files. (OpenFin Home does not read this REST endpoint directly. It is read by the HERE Core UI Platform app and passed to Home via our API).
 
 6. To launch your store launch the Home UI and use / to show a list of the available commands and select Store. Storefront will be shown and your store will be listed.
    The [apps](./public/common/) apps\*.json are displayed as described in their respective files alongside a Storefront configuration setting defined in your [manifest](public/manifest.fin.json).
@@ -72,7 +72,7 @@ This runs the same code with slightly different settings to show a different the
 npm run build
 ```
 
-8. If you wish to test Cloud Interop so that you can launch the two platforms and see them communicating via the cloud then please contact your OpenFin sales account manager to get your connection information. Once you have that you can update the cloudInteropProvider settings in the [manifest](public/manifest.fin.json) and/or [second.manifest.fin.json](public/second.manifest.fin.json). Once enabled you will be able to share context across user channels between platforms regardless of whether they are running on the same machine or not.
+8. If you wish to test Cloud Interop so that you can launch the two platforms and see them communicating via the cloud then please contact your HERE sales account manager to get your connection information. Once you have that you can update the cloudInteropProvider settings in the [manifest](public/manifest.fin.json) and/or [second.manifest.fin.json](public/second.manifest.fin.json). Once enabled you will be able to share context across user channels between platforms regardless of whether they are running on the same machine or not.
 
 ## How it works
 
@@ -86,8 +86,8 @@ The Server in this example provides two sets of content over HTTP GET.
 
 The [list of applications](../public/common/) apps\*.json contains a number of examples:
 
-- Load views into OpenFin Browser
-- Launch an OpenFin application using its manifest file
+- Load views into HERE Browser
+- Launch an HERE application using its manifest file
 - Launch a native application
 - Launch through an intent: a view (single instance and multi instance) and a page (single instance and multi instance)
 
@@ -140,5 +140,3 @@ To run this sample:
 ![Intents Preload](workspace-support-context-intents-preload.gif)
 
 ---
-
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

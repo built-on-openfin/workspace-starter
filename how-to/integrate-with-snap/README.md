@@ -1,12 +1,12 @@
-![OpenFin Workspace Example Application -- Integrating with Snap](../../assets/OpenFin-Workspace-Starter.png)
+![HERE Core UI Example Application -- Integrating with Snap](../../assets/HERO-STARTER-HERE-CORE-UI.png)
 
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 # Integrate with Snap
 
 > This example is **Windows** only, it will not run on a **Mac**.
 
-OpenFin Workspace empowers you to use our Snap tools, to enable layouts which include native applications.
+HERE Core UI empowers you to use our Snap tools, to enable layouts which include native applications.
 
 This example demonstrates saving and restoring native applications as part of a workspace.
 
@@ -14,7 +14,7 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 
 > The **@openfin/snap-sdk**. The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
 
-- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv23.0.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
+- [Live Launch Classic Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fintegrate-with-snap%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
@@ -24,11 +24,11 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
+2. Optional (if you wish to pin the version of HERE Core UI to version 23.0.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
-   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
+   (**WARNING**: This script kills all open HERE processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
 
 ```shell
 npm run dos
@@ -40,7 +40,7 @@ npm run dos
 npm run start
 ```
 
-4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Start Your HERE Core UI Platform (this starts Workspace if it isn't already running).
 
 ```shell
 npm run client
@@ -82,7 +82,7 @@ const MY_APP: PlatformApp = {
  manifestType: "view",
  icons: [
   {
-   src: "http://localhost:8080/common/images/icon-blue.png"
+   src: "http://localhost:8080/common/images/favicon-32x32.png"
   }
  ],
  contactEmail: "contact@example.com",
@@ -156,19 +156,19 @@ You can change this to the debug version by updating the preloadScript to the fo
 If you just want to test Snap within your own manifest by using a hosted preload script then you can add the following to the "startup_app" or "platform" definition in your manifest:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/integrate-with-snap/js/snap.preload.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/integrate-with-snap/js/snap.preload.bundle.js" }],
 ```
 
 If you want the debug version with the debug window automatically showing then you can reference this preload script:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/integrate-with-snap/js/snap.preload.debug.bundle.js" }],
 ```
 
 If you want the channel version with the a channel name of `${fin.me.identity.uuid}-snap-layout` as the name that has two functions getLayout and applyLayout (if you want to quickly validate including snap data in state without having to modify your project to reference the SnapSDK npm package) then you can reference this preload script:
 
 ```json
-  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v23.0.0/integrate-with-snap/js/snap.preload.channel.bundle.js" }],
+  "preloadScripts": [{ "url": "https://built-on-openfin.github.io/workspace-starter/workspace/v24.0.0/integrate-with-snap/js/snap.preload.channel.bundle.js" }],
 ```
 
 To reference the channel you can do the following in your main page or platform provider:
@@ -278,5 +278,3 @@ npm run secondclient
 ```
 
 ---
-
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)

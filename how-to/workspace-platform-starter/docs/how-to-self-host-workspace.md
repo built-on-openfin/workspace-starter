@@ -1,17 +1,17 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
-# How to self host Workspace Components?
+# How to self host HERE Core UI Components?
 
 Self-hosting means serving the HTML, CSS, JavaScript and related files for a particular Component/UI from your own servers instead of of the Here domain: workspace.openfin.co.
 
 The two pieces that can be self hosted are:
 
 - Notification Center
-- Workspace Platform - (the Browser UI and related files)
+- HERE Core UI Platform - (the Browser UI and related files)
 
-This document covers how to enable self hosting when using the workspace platform starter (this can be used as a guide for your own implementation of a Workspace Platform and can complement the official documentation on our developer site).
+This document covers how to enable self hosting when using the HERE Core UI Platform starter (this can be used as a guide for your own implementation of a HERE Core UI Platform and can complement the official documentation on our developer site).
 
 In all cases please ensure you are licensed to use self-hosting in production.
 
@@ -19,7 +19,7 @@ In all cases please ensure you are licensed to use self-hosting in production.
 
 Fetch the notification center files from our cdn and create your own notification manifest and host them on your own server as detailed here <https://developers.openfin.co/of-docs/docs/register-notifications#host-on-your-cdn-optional>.
 
-Update your Workspace Platform Starter settings. Update the notificationProvider setting to add notificationsCustomManifest. This will specify your notification center uuid and the url for that manifest:
+Update your HERE Core UI Platform Starter settings. Update the notificationProvider setting to add notificationsCustomManifest. This will specify your notification center uuid and the url for that manifest:
 
 ```json
 {
@@ -33,7 +33,7 @@ Update your Workspace Platform Starter settings. Update the notificationProvider
 }
 ```
 
-## Self Hosted Workspace Platform Browser & Related Files
+## Self Hosted HERE Core UI Platform Browser & Related Files
 
 This option is currently only available on Windows.
 
@@ -74,7 +74,7 @@ To ensure the Browser UI files are ready for when your platform has finished boo
   {
    "src": "http://localhost:8080/common/assets/workspace_platform.zip",
    "alias": "self-hosted-workspace-platform",
-   "version": "23.0.0",
+   "version": "24.0.0",
    "target": "workspace.asar"
   }
  ]
@@ -89,9 +89,9 @@ The **version** number should reflect the version number of the @openfin/workspa
 
 The **target** has to be **workspace.asar** as that is the file contained within the workspace_platform.zip file.
 
-### A new setting in the platformProvider section of your Workspace Platform Starter configuration has been added
+### A new setting in the platformProvider section of your HERE Core UI Platform Starter configuration has been added
 
-We have extended the Workspace Platform Starter PlatformProvider Settings type so that you can specify a workspaceAsar and whether or not it should be enabled (to let you easily test self-hosting by setting a boolean flag).
+We have extended the HERE Core UI Platform Starter PlatformProvider Settings type so that you can specify a workspaceAsar and whether or not it should be enabled (to let you easily test self-hosting by setting a boolean flag).
 
 The alias must match the alias of the appAsset you have specified.
 
@@ -111,9 +111,9 @@ The alias must match the alias of the appAsset you have specified.
 }
 ```
 
-**Set enabled to true if you wish to test the self-hosting option while running Workspace Platform Starter locally.**
+**Set enabled to true if you wish to test the self-hosting option while running HERE Core UI Platform Starter locally.**
 
-In code ([client/src/framework/platform/platform.ts](../client/src/framework/platform/platform.ts)) this workspaceAsar setting is specified if enabled (the enabled flag is a Workspace Platform Starter customization).
+In code ([client/src/framework/platform/platform.ts](../client/src/framework/platform/platform.ts)) this workspaceAsar setting is specified if enabled (the enabled flag is a HERE Core UI Platform Starter customization).
 
 ```js
 await workspacePlatformInit({
@@ -121,8 +121,8 @@ await workspacePlatformInit({
 });
 ```
 
-### Outside of Workspace Platform Starter
+### Outside of HERE Core UI Platform Starter
 
-If you are looking at adding self-hosting to your own platform then you would still need the serveAsset permission, an appAsset definition and you will need to pass a workspaceAsar object with the alias when you initialize the workspace platform.
+If you are looking at adding self-hosting to your own platform then you would still need the serveAsset permission, an appAsset definition and you will need to pass a workspaceAsar object with the alias when you initialize the HERE Core UI Platform.
 
 [<- Back to Table Of Contents](../README.md)

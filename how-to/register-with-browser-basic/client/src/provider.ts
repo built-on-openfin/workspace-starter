@@ -12,12 +12,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param workspaceAsar The entry representing an app asset with the workspace browser settings.
  * @param workspaceAsar.alias the alias of the app asset.
  */
 async function initializeWorkspacePlatform(workspaceAsar?: { alias: string }): Promise<void> {
-	console.log(`Initializing workspace platform with asar: ${workspaceAsar?.alias ?? "none"}`);
+	console.log(`Initializing HERE Core UI Platform with asar: ${workspaceAsar?.alias ?? "none"}`);
 	await init({
 		browser: {
 			defaultWindowOptions: {

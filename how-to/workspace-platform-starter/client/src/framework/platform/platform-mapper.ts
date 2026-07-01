@@ -34,7 +34,7 @@ type BrowserWindowKeys =
 	| "enableBeforeUnload";
 
 /**
- * All the workspace platform keys.
+ * All the HERE Core UI Platform keys.
  */
 type WorkspacePlatformKeys =
 	| "pages"
@@ -417,7 +417,7 @@ function platformWorkspaceWindowToStorage(
 	removeProp<BrowserSnapshotWindow, BrowserWindowKeys>(window, "experimental");
 
 	if (window.workspacePlatform) {
-		// If this is a workspace platform then remove the layout prop from the window
+		// If this is a HERE Core UI Platform then remove the layout prop from the window
 		// to avoid duplication
 		removeProp<BrowserSnapshotWindow, BrowserWindowKeys>(window, "layout");
 

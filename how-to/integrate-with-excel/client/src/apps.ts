@@ -11,29 +11,29 @@ export function getApps(): App[] {
 }
 
 /**
- * App definition to use for demonstration which show OpenFin environment information.
+ * App definition to use for demonstration which show HERE environment information.
  */
 const OPENFIN_INFORMATION_APP: App = {
 	appId: "openfin-information",
 	title: "OpenFin Information",
-	description: "Display information about the OpenFin environment",
+	description: "Display information about the HERE environment",
 	manifest: "http://localhost:8080/common/views/platform/of-info.view.fin.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
 			src: "http://localhost:8080/common/images/previews/of-info.png"
 		}
 	],
-	tags: ["view", "openfin", "versions"]
+	tags: ["view", "HERE", "versions"]
 };
 
 /**
@@ -45,20 +45,20 @@ const FDC3_BROADCAST: App = {
 	description:
 		"This is an example view used to demonstrate the broadcasting and listening of passed context objects using the fdc3 api.",
 	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
+		"https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/fdc3/context/fdc3-broadcast-view.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-context-fdc3.png"
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/images/previews/view-context-fdc3.png"
 		}
 	],
 	tags: ["view", "fdc3", "tools"]
@@ -73,20 +73,20 @@ const INTEROP_BROADCAST: App = {
 	description:
 		"This is an example of setting and listening to context using the interop api and seeing a code sample of how to do it.",
 	manifest:
-		"https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/interop-api/context/interop-broadcast-view.json",
+		"https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/interop-api/context/interop-broadcast-view.json",
 	manifestType: "view",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [
 		{
-			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/images/previews/view-context-interop-api.png"
+			src: "https://built-on-openfin.github.io/dev-extensions/extensions/v24.0.0/interop/images/previews/view-context-interop-api.png"
 		}
 	],
 	tags: ["view", "interop", "tools"]
@@ -104,12 +104,12 @@ const EXCEL_WINDOW: App = {
 	manifestType: "window",
 	icons: [
 		{
-			src: "http://localhost:8080/common/images/icon-blue.png"
+			src: "http://localhost:8080/common/images/favicon-32x32.png"
 		}
 	],
 	contactEmail: "contact@example.com",
 	supportEmail: "support@example.com",
-	publisher: "OpenFin",
+	publisher: "HERE",
 	intents: [],
 	images: [],
 	tags: ["window", "excel", "tools"]

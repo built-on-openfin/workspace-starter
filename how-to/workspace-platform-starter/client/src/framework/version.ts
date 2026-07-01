@@ -1,6 +1,8 @@
 import type OpenFin from "@openfin/core";
+import type { subscribeLifecycleEvent } from "./lifecycle";
 import { createLogger } from "./logger-provider";
 import type { EndpointProvider } from "./shapes/endpoint-shapes";
+
 import type {
 	MaximumVersion,
 	MinimumVersion,
@@ -34,10 +36,12 @@ const logger = createLogger("VersionProvider");
  * Initialize the Version Provider.
  * @param options The options that guide how this version provider behaves
  * @param initEndpointProvider The provider that allows the setting and retrieval of data without needing to know about the implementation
+ * @param subscribeToLifecycleEvent The function to subscribe to the lifecycle event
  */
 export async function init(
 	options?: VersionProviderOptions,
-	initEndpointProvider?: EndpointProvider
+	initEndpointProvider?: EndpointProvider,
+	subscribeToLifecycleEvent?: typeof subscribeLifecycleEvent
 ): Promise<void> {
 	if (isEmpty(options)) {
 		logger.info("Version provider options not passed");
@@ -63,6 +67,16 @@ export async function init(
 		logger.info("Initialized with the following settings", options);
 	}
 	endpointProvider = initEndpointProvider;
+	if (options?.supportGetVersionIntent && subscribeToLifecycleEvent) {
+		subscribeToLifecycleEvent("after-bootstrap", async () => {
+			const fdc3 = fin.me.interop.getFDC3Sync("2.0");
+			await fdc3.addIntentListener("GetVersion", async (x, y) => {
+				logger.info("GetVersion Intent Request Received with Context: ", x, " and Metadata: ", y);
+				const info = await getVersionInfo();
+				return { type: "platform.version", version: info } as OpenFin.Context;
+			});
+		});
+	}
 }
 
 /**
@@ -132,7 +146,7 @@ export function setVersion(versionType: VersionType, versionNumber: string): voi
 			break;
 		}
 		case "workspacePlatformClient": {
-			versionLabel = "Workspace Platform Client Version";
+			versionLabel = "HERE Core UI Platform Client Version";
 			setVersionNumber = isEmpty(versionInfo.workspacePlatformClient);
 			if (setVersionNumber) {
 				versionInfo.workspacePlatformClient = versionNumber;

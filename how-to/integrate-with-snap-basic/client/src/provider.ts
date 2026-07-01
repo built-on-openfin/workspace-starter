@@ -1,6 +1,13 @@
+import type { OpenFin } from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
+import type { ServerOptions } from "@openfin/snap-sdk";
+import { doesAppAssetExist, downloadAppAsset } from "./app-asset";
 
 const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
+const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.6.1/snap.zip";
+const snapVersion = "1.6.1";
+const snapAlias = "openfin-snap";
+const snapTarget = "OpenFinSnap.exe";
 
 // The DOM elements
 let chkShowDebugWindow: HTMLInputElement | null;
@@ -14,6 +21,12 @@ let chkHideTaskBarEntry: HTMLInputElement | null;
 let chkCustomTaskBarIcon: HTMLInputElement | null;
 let chkGroupWithPlatformTaskbarGroup: HTMLInputElement | null;
 let chkDisableRuntimeHeartbeating: HTMLInputElement | null;
+let chkCustomSnapAppAssetPath: HTMLInputElement | null;
+let txtPrimaryUrl: HTMLInputElement | null;
+let txtFallbackUrl: HTMLInputElement | null;
+let fieldPrimaryUrl: HTMLElement | null;
+let fieldFallbackUrl: HTMLElement | null;
+let rowCustomSnapAppAssetPath: HTMLElement | null;
 
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
@@ -42,6 +55,27 @@ let isWindowOpen = false;
 let isWindowAttached = false;
 let server: Snap.SnapServer | undefined;
 
+/**
+ * Custom logger that implements the Logger interface using logInformation and logError functions
+ */
+const customLogger = {
+	info: (message: unknown, ...optionalParams: unknown[]): void => {
+		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	error: (message: unknown, ...optionalParams: unknown[]): void => {
+		logError(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	warn: (message: unknown, ...optionalParams: unknown[]): void => {
+		logError(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	trace: (message: unknown, ...optionalParams: unknown[]): void => {
+		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	debug: (message: unknown, ...optionalParams: unknown[]): void => {
+		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	}
+};
+
 // Wait for the DOM to finish loading
 window.addEventListener("DOMContentLoaded", async () => {
 	// Platform has loaded so initialize the DOM
@@ -65,6 +99,12 @@ async function initializeDOM(): Promise<void> {
 
 	chkAutoHideClientTaskbarIcons = document.querySelector<HTMLInputElement>("#chkAutoHideClientTaskbarIcons");
 	chkDisableRuntimeHeartbeating = document.querySelector<HTMLInputElement>("#chkDisableRuntimeHeartbeating");
+	chkCustomSnapAppAssetPath = document.querySelector<HTMLInputElement>("#chkCustomSnapAppAssetPath");
+	txtPrimaryUrl = document.querySelector<HTMLInputElement>("#txtPrimaryUrl");
+	txtFallbackUrl = document.querySelector<HTMLInputElement>("#txtFallbackUrl");
+	fieldPrimaryUrl = document.querySelector<HTMLElement>("#fieldPrimaryUrl");
+	fieldFallbackUrl = document.querySelector<HTMLElement>("#fieldFallbackUrl");
+	rowCustomSnapAppAssetPath = document.querySelector<HTMLElement>("#rowCustomSnapAppAssetPath");
 
 	btnStart = document.querySelector<HTMLButtonElement>("#btnStart");
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
@@ -98,6 +138,12 @@ async function initializeDOM(): Promise<void> {
 		chkGroupWithPlatformTaskbarGroup &&
 		chkAutoHideClientTaskbarIcons &&
 		chkDisableRuntimeHeartbeating &&
+		chkCustomSnapAppAssetPath &&
+		txtPrimaryUrl &&
+		txtFallbackUrl &&
+		fieldPrimaryUrl &&
+		fieldFallbackUrl &&
+		rowCustomSnapAppAssetPath &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
@@ -112,12 +158,27 @@ async function initializeDOM(): Promise<void> {
 		btnClearLog &&
 		btnShowHideDebugWindow
 	) {
+		txtPrimaryUrl.value = "https://exampleofbadurl.com/snap.zip";
+		txtFallbackUrl.value = snapDefaultUrl;
+		chkCustomSnapAppAssetPath.addEventListener("change", () => {
+			const display = chkCustomSnapAppAssetPath?.checked ? "" : "none";
+			if (fieldPrimaryUrl) {
+				fieldPrimaryUrl.style.display = display;
+			}
+			if (fieldFallbackUrl) {
+				fieldFallbackUrl.style.display = display;
+			}
+		});
 		const app = await fin.Application.getCurrent();
 		const manifest = await app.getManifest();
 
+		if (manifest.appAssets?.some((asset: { alias?: string }) => asset.alias === "openfin-snap")) {
+			rowCustomSnapAppAssetPath.style.display = "none";
+		}
+
 		if (manifest.appAssets?.[0]?.src === "SNAP_ASSET_URL") {
 			logError(
-				"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
+				"Please request the SNAP_ASSET_URL from HERE and update manifest.fin.json before running the sample"
 			);
 			updateServerStatus();
 			chkShowDebugWindow.disabled = true;
@@ -155,7 +216,7 @@ async function initializeDOM(): Promise<void> {
 						}
 					}
 
-					const options = {
+					const options: ServerOptions = {
 						showDebug: chkShowDebugWindow?.checked,
 						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
 						keyToStick: keyToSnap,
@@ -172,6 +233,21 @@ async function initializeDOM(): Promise<void> {
 						defaultResizingBehavior: selResize?.value as Snap.ResizingBehavior,
 						theme: selTheme?.value as "snap-original" | "snap-light1" | "snap-dark1"
 					};
+
+					if (chkCustomSnapAppAssetPath?.checked) {
+						const primaryUrl = txtPrimaryUrl?.value ?? "";
+						const fallbackUrl = txtFallbackUrl?.value;
+
+						const validatedAppAsset = await validateAppAssetSource(primaryUrl, fallbackUrl);
+						if (!validatedAppAsset.success) {
+							logError(
+								"Failed to fetch the app asset from both primary and fallback URLs. Cannot start the Snap server with custom app asset path."
+							);
+							return;
+						}
+						options.customSnapAssetSource = validatedAppAsset.validatedUrl;
+					}
+
 					await server.start(options);
 
 					if (chkShowDebugWindow?.checked) {
@@ -351,6 +427,23 @@ async function initializeDOM(): Promise<void> {
 			updateServerStatus();
 		}
 	}
+}
+
+/**
+ * Generate a short hash string from a URL to use as a version identifier.
+ * @param url The URL to hash.
+ * @returns A hex string hash of the URL.
+ */
+function hashUrl(url: string): string {
+	let hash = 5381;
+	const maxSafeHash = 4_294_967_291;
+	for (let i = 0; i < url.length; i++) {
+		const codePoint = url.charCodeAt(i);
+		const multipliedHash = hash * 33;
+		hash = (multipliedHash + codePoint) % maxSafeHash;
+	}
+	const hashHex = Math.floor(hash).toString(16);
+	return hashHex.padStart(8, "0");
 }
 
 /**
@@ -563,4 +656,98 @@ async function launchWindowOptionsApp(): Promise<void> {
 			url: "https://built-on-openfin.github.io/container-starter/main/use-window-options/html/app.html"
 		});
 	}
+}
+
+/**
+ * Validates the snap app asset from the provided primary and fallback URLs to ensure it is available before starting the Snap server.
+ * @param primaryUrl The primary URL to validate the snap app asset from.
+ * @param fallbackUrl An optional fallback URL to validate the snap app asset from if the primary URL fails.
+ * @returns An object indicating whether the validation was successful, the validated URL if successful, and whether the fallback URL was used.
+ */
+async function validateAppAssetSource(
+	primaryUrl: string,
+	fallbackUrl?: string
+): Promise<{ success: boolean; validatedUrl?: string; isFallbackUrl?: boolean }> {
+	const snapAssetInfo: OpenFin.AppAssetInfo = {
+		alias: snapAlias,
+		src: snapDefaultUrl,
+		version: snapVersion,
+		target: snapTarget,
+		mandatory: false
+	};
+	// before trying custom urls check to see if you already have snap
+	const snapDownloadedAssetInfo: OpenFin.AppAssetInfo | undefined = await doesAppAssetExist(
+		snapAssetInfo.alias,
+		snapAssetInfo.version
+	);
+
+	if (snapDownloadedAssetInfo) {
+		logInformation(
+			`We have a snap asset that matches the alias and version. It has the following details: alias: ${snapDownloadedAssetInfo.alias}, version: ${snapDownloadedAssetInfo.version}, src: ${snapDownloadedAssetInfo.src}`
+		);
+		return {
+			success: true,
+			validatedUrl: snapDownloadedAssetInfo.src,
+			isFallbackUrl: snapDownloadedAssetInfo.src === fallbackUrl
+		};
+	}
+
+	// SNAP downloads a specific alias + version combination.
+	// The runtime does not allow a retry of the same app asset if the only thing that has changed is the url.
+	// Since we have no snap version we want to validate our primary url.
+	logInformation(`Validating the primary asset url for the snap asset: ${primaryUrl}`);
+	snapAssetInfo.alias = `${snapAlias}-validate-download`; // use a different alias for the validation download so that we can have different versions if needed without conflict with the actual snap asset alias
+
+	snapAssetInfo.target = "NoOp"; // We don't want to actually run the snap asset during validation since we just want to check if the url is valid and the asset can be downloaded, so use a NoOp target that will not do anything if it is run for any reason during the validation process
+
+	// Update asset info to target primary url
+	snapAssetInfo.src = primaryUrl; // update the src to the primary url for the validation download
+	snapAssetInfo.version = hashUrl(primaryUrl); // use the url hash as the version for the validation download so that if the url changes we will attempt to download again, but if the url is the same we will not attempt to download again since we have already validated it
+
+	const validatedAppAssetPrimaryUrl = await fetchAppAsset(snapAssetInfo);
+	let validatedAssetUrl: string | undefined;
+
+	if (validatedAppAssetPrimaryUrl === undefined) {
+		if (fallbackUrl) {
+			// validate fallback url
+			logInformation(`Validating the fallback asset url for the snap asset: ${fallbackUrl}`);
+			snapAssetInfo.src = fallbackUrl; // update the src to the fallback url for the validation download
+			snapAssetInfo.version = hashUrl(fallbackUrl); // use the url hash as the version for the validation download so that if the url changes we will attempt to download again, but if the url is the same we will not attempt to download again since we have already validated it
+			const validatedAppAssetFallbackUrl = await fetchAppAsset(snapAssetInfo);
+
+			if (validatedAppAssetFallbackUrl) {
+				validatedAssetUrl = fallbackUrl;
+			}
+		}
+	} else {
+		validatedAssetUrl = primaryUrl;
+	}
+
+	if (validatedAssetUrl) {
+		logInformation(
+			`Successfully validated the url for the snap asset: ${validatedAssetUrl}. This url will be passed to Snap Options through the customSnapAssetSource setting.`
+		);
+		return {
+			success: true,
+			validatedUrl: validatedAssetUrl,
+			isFallbackUrl: validatedAssetUrl === fallbackUrl
+		};
+	}
+	return { success: false };
+}
+
+/**
+ * Download and return app asset info for the provided app asset definition.
+ * @param appAssetInfo The app asset definition to download.
+ * @returns The app asset info if downloaded or found, otherwise undefined.
+ */
+async function fetchAppAsset(appAssetInfo: OpenFin.AppAssetInfo): Promise<OpenFin.AppAssetInfo | undefined> {
+	const validatedAppAsset = await downloadAppAsset(appAssetInfo, {
+		logger: customLogger,
+		assetDownloadProgress: (progress: number, src: string, alias: string) => {
+			// showing a difference as the download App Asset also logs the download progress using logInformation and logError through the custom logger.
+			console.log(`Download progress for alias '${alias}' from '${src}': ${progress}%`);
+		}
+	});
+	return validatedAppAsset;
 }

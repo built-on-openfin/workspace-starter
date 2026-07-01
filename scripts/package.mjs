@@ -1,0 +1,122 @@
+import { execSync } from 'child_process';
+import fg from 'fast-glob';
+import fs from 'fs-extra';
+import { replaceInFileSync } from 'replace-in-file';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
+
+const DEFAULT_PORT = '8080';
+const DEFAULT_FOLDER = 'workspace-starter';
+const DEFAULT_PATH = 'workspace';
+const ENV_NAME = 'PKG_HOWTOS';
+
+const URLBaseMap = new Map([
+	['github', 'https://built-on-openfin.github.io'],
+	['aws', 'https://samples.openfin.co']
+]);
+
+const args = yargs(hideBin(process.argv))
+	.usage('$0 [args]')
+	.env(ENV_NAME)
+	.option('l', {
+		alias: 'location',
+		choices: Array.from(URLBaseMap.keys()),
+		default: 'github',
+		type: 'string',
+		description: 'Publish location for which the package(s) should be adapted.'
+	})
+	.option('p', {
+		alias: 'path',
+		default: '',
+		type: 'string',
+		description: `Path under which the ${ENV_NAME.replace(
+			'PKG_',
+			''
+		).toLowerCase()} should be placed in the publish location.`
+	})
+	.options('legacy', {
+		default: false,
+		type: 'boolean',
+		description: "Package for github in the 'public/' folder."
+	})
+	.help()
+	.alias('help', 'h')
+	.parseSync();
+
+/**
+ * Package the items.
+ * @param cliArgs The CLI arguments.
+ */
+function packageItems(cliArgs) {
+	let publishDir = `public-${cliArgs.location}`;
+
+	if (cliArgs.legacy) {
+		publishDir = 'public';
+		cliArgs.location = 'github';
+		cliArgs.l = cliArgs.location;
+	}
+
+	const baseURL = URLBaseMap.get(cliArgs.location);
+	let hostFolder = cliArgs.path || `${DEFAULT_PATH}/v${packageJson.version}`;
+
+	if (packageJson.packageCustomFolder !== undefined && packageJson.packageCustomFolder !== '') {
+		hostFolder = packageJson.packageCustomFolder;
+	}
+
+	// Make a publish location specific copy to allow multiple package runs
+	// for different locations.
+	fs.rmSync(publishDir, { recursive: true, force: true });
+
+	let workspaces = fg.sync(packageJson.workspaces, { onlyDirectories: true });
+	if (packageJson.packageExclude) {
+		workspaces = workspaces.filter((item) => !packageJson.packageExclude.includes(item));
+	}
+
+	for (const workspace of workspaces) {
+		let item = workspace.split('/')[1];
+
+		if (cliArgs.legacy) {
+			execSync('npm run build-client', {
+				cwd: workspace,
+				stdio: 'inherit'
+			});
+		}
+
+		const sourceDir = [workspace, 'public'].join('/');
+		let targetDir;
+
+		if (fs.existsSync(sourceDir)) {
+			const parts = sourceDir.split('/');
+			if (parts.length === 4) {
+				item += `-${parts[2]}`;
+			}
+			targetDir = [publishDir, item].join('/');
+			fs.copySync(sourceDir, targetDir);
+		}
+
+		try {
+			const rootUrl = [baseURL, DEFAULT_FOLDER, hostFolder, item].filter(Boolean).join('/');
+			const options = {
+				files: [`${targetDir}/**/*.json`, `${targetDir}/**/*.js`, `${targetDir}/**/*.html`],
+				from: new RegExp(`http://localhost:${DEFAULT_PORT}`, 'g'),
+				to: rootUrl
+			};
+
+			const results = replaceInFileSync(options);
+			console.log('Replacement results:', results);
+			console.log(`URLs replaced with: ${rootUrl}`);
+		} catch (error) {
+			console.error('Error occurred:', error);
+		}
+	}
+	console.log(`Packages prepared for publishing in: ${publishDir}/`);
+}
+
+packageItems(args);

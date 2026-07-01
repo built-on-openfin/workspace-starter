@@ -1,5 +1,5 @@
 {
-	"$ref": "#/definitions/Partial%3COmit%3CManifest%2C%22assetsUrl%22%7C%22services%22%3E%3E",
+	"$ref": "#/definitions/Partial<Omit<Manifest,\"assetsUrl\"|\"services\">>",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"definitions": {
 		"Anchor": {
@@ -324,7 +324,7 @@
 		},
 		"Partial<Omit<Manifest,\"assetsUrl\"|\"services\">>": {
 			"additionalProperties": false,
-			"description": "A type alias for the OpenFin manifest.",
+			"description": "A type alias for the HERE manifest.",
 			"properties": {
 				"appAssets": {
 					"items": {
@@ -2188,7 +2188,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -4654,6 +4654,11 @@
 						"type": "string"
 					},
 					"type": "array"
+				},
+				"method": {
+					"description": "HTTP method used to upload the log archive.\nAccepted values are `'POST'` and `'PUT'` (case-insensitive; values are normalised to uppercase before validation).\n- `POST` sends a multipart `FormData` request (current behaviour).\n- `PUT` sends the raw zip binary with an explicit `Content-Length` and no `Content-Type` header,\n  suitable for endpoints that expect a raw body (e.g. pre-signed upload URLs).",
+					"enum": ["POST", "PUT"],
+					"type": "string"
 				},
 				"sizeLimit": {
 					"description": "Max file size limit in Megabytes for the logs archive.",

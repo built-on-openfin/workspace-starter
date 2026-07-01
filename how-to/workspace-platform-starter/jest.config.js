@@ -8,6 +8,7 @@ module.exports = {
 	},
 	verbose: true,
 	collectCoverage: true,
+	coverageProvider: 'v8',
 	coverageReporters: ['text-summary'],
 	setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 	roots: ['<rootDir>/test']

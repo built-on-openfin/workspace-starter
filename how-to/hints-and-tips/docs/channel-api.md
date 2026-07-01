@@ -1,14 +1,14 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
-# [Channel API](https://developers.openfin.co/of-docs/docs/channels)
+# [Channel API](https://resources.here.io/docs/core/container/interop/channels/)
 
-OpenFin’s Channel API on the InterApplicationBus (IAB) provides optionality for secure desktop messaging between your application and other OpenFin applications. The Channel API is used when building the equivalent of an SDK to expose functionality/data to other applications or other views/windows within your application. See [Channel API Documentation](https://developers.openfin.co/of-docs/docs/channels) or [Channel API SDK Documentation](https://developer.openfin.co/docs/javascript/stable/InterApplicationBus.Channel.html).
+OpenFin’s Channel API on the InterApplicationBus (IAB) provides optionality for secure desktop messaging between your application and other HERE applications. The Channel API is used when building the equivalent of an SDK to expose functionality/data to other applications or other views/windows within your application. See [Channel API Documentation](https://resources.here.io/docs/core/container/interop/channels/) or [Channel API SDK Documentation](https://developer.openfin.co/docs/javascript/stable/InterApplicationBus.Channel.html).
 
 ## Naming a Channel
 
-When naming a channel you should ensure that it will be unique. If it is something common e.g. "data" then you may come across conflicts where other OpenFin applications have also called their channel "data".
+When naming a channel you should ensure that it will be unique. If it is something common e.g. "data" then you may come across conflicts where other HERE applications have also called their channel "data".
 
 ### Suggestion
 

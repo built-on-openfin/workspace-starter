@@ -2,11 +2,12 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "--enable-mesh --security-realm=integrate-with-snap-basic",
-		"version": "43.142.101.1"
+		"arguments": "--enable-mesh --security-realm=integrate-with-snap-basic-with-asset",
+		"version": "44.146.101.5"
 	},
 	"platform": {
-		"uuid": "integrate-with-snap-basic",
+		"uuid": "integrate-with-snap-basic-with-asset",
+		"name": "integrate-with-snap-basic-with-asset",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
@@ -32,23 +33,23 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with Snap - Basic - v23.0.0",
+		"name": "Integrate with Snap - Basic - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Integrate with Snap - Basic - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"appAssets": [
 		{
-			"src": "https://cdn.openfin.co/release/snap/1.3.4/snap.zip",
+			"src": "https://cdn.openfin.co/release/snap/1.6.1/snap.zip",
 			"alias": "openfin-snap",
-			"version": "1.3.4",
+			"version": "1.6.1",
 			"target": "OpenFinSnap.exe",
 			"mandatory": false
 		},

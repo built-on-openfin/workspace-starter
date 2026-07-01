@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -12,7 +12,7 @@ You have a number of choices when choosing how you define your apps.
 
 ## Platform App Definition
 
-The Platform App definition for a workspace platform is based on the FDC3 1.2 App definition with some additional extensions (such as tags, private, autostart, and instanceMode). It is the structure used internally.
+The Platform App definition for a HERE Core UI Platform is based on the FDC3 1.2 App definition with some additional extensions (such as tags, private, autostart, and instanceMode). It is the structure used internally.
 
 Workspace platform starter includes a number of example app.json files in the public/common folder e.g. [common apps](../public/common/apps.json). We also give you an empty applications array for you to add your own apps: [public/apps.json](../public/apps.json). The workspace starter platform will pull in all listed directories and merge them together.
 
@@ -38,7 +38,7 @@ An app exists within an array that is returned as part of request.
     ],
     "contactEmail": "contact@example.com",
     "supportEmail": "support@example.com",
-    "publisher": "OpenFin",
+    "publisher": "HERE",
     "intents": [
       {
         "name": "ViewContact",
@@ -99,7 +99,7 @@ An application can specify that it supports being launched to support certain wo
 
 There are a number of intents supported by the FDC3 standard (ViewContact and ViewInstrument are shown in the example above) but you can also define custom intents for your organization. If your app meta data specifies that it supports an intent then it should listen for that intent and react to it. We cover more in the [How To Add Intent Support To Your App](./how-to-add-intent-support-to-your-app.md).
 
-If a second application raises an intent then the workspace platform will check to see if any applications support the workflow. If only one app entry supports it then the platform will launch it. If there is more than one option then it will present the list of options to the end user. You can customize the UI presented to the user and we will cover that in the [How To Configure FDC3 Intents Page](./how-to-configure-fdc3-intents.md).
+If a second application raises an intent then the HERE Core UI Platform will check to see if any applications support the workflow. If only one app entry supports it then the platform will launch it. If there is more than one option then it will present the list of options to the end user. You can customize the UI presented to the user and we will cover that in the [How To Configure FDC3 Intents Page](./how-to-configure-fdc3-intents.md).
 
 ## How To Create An App Definition
 
@@ -113,7 +113,7 @@ If you launch the default instance of workspace-platform-starter either locally 
 
 ![App Definition Builder](./assets/app-definition-builder.png)
 
-> **_:information_source: Manifest Types:_** If you use App Definition builder it will offer you a drop down of the manifest types supported (otherwise please see the list of supported manifest types below). If you are defining a view (url to load into browser) or a window (without the OpenFin Browser chrome) then there is the option of embedding the settings when you specify the manifest property. These would either be [Window Options](https://developer.openfin.co/docs/javascript/stable/Window.html#~options) or [View Options](https://developer.openfin.co/docs/javascript/stable/View.html#~options). If you are simply using window or view then the manifest setting should point to a url that provides the settings in JSON format.
+> **_:information_source: Manifest Types:_** If you use App Definition builder it will offer you a drop down of the manifest types supported (otherwise please see the list of supported manifest types below). If you are defining a view (url to load into browser) or a window (without the HERE Browser chrome) then there is the option of embedding the settings when you specify the manifest property. These would either be [Window Options](https://developer.openfin.co/docs/javascript/stable/Window.html#~options) or [View Options](https://developer.openfin.co/docs/javascript/stable/View.html#~options). If you are simply using window or view then the manifest setting should point to a url that provides the settings in JSON format.
 
 ### Manifest Types
 
@@ -216,12 +216,12 @@ The endpoint module is called **inline-apps** and it lets you specify an array o
                         "manifestType": "inline-view",
                         "icons": [
                             {
-                            "src": "http://localhost:8080/common/images/icon-blue.png"
+                            "src": "http://localhost:8080/common/images/favicon-32x32.png"
                             }
                         ],
                         "contactEmail": "contact@example.com",
                         "supportEmail": "support@example.com",
-                        "publisher": "OpenFin",
+                        "publisher": "HERE",
                         "intents": [],
                         "images": [],
                         "tags": ["inline-app-example", "view"]
@@ -242,7 +242,7 @@ In the above example we would have the following app endpointId definition:
         },
 ```
 
-The inline-apps endpoint module can be seen [here](../client/src/modules/endpoint/inline-apps/endpoint.ts).
+The inline-apps endpoint module can be seen [right here](../client/src/modules/endpoint/inline-apps/endpoint.ts).
 
 ## Where Are Apps Used?
 

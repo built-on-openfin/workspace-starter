@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.101.1"
+		"version": "44.146.101.5"
 	},
 	"platform": {
 		"uuid": "workspace-platform-start-basic",
@@ -87,16 +87,16 @@
 		]
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Workspace Platform Starter Basic - v23.0.0",
+		"name": "HERE Core UI Platform Starter Basic - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
-		"product": "Workspace Starter - Workspace Platform Starter Basic- Client",
-		"email": "support@openfin.co",
+		"company": "HERE",
+		"product": "Workspace Starter - HERE Core UI Platform Starter Basic- Client",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"customSettings": {
@@ -113,12 +113,12 @@
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [
 					{
 						"name": "StartCall",
@@ -147,12 +147,12 @@
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [],
 				"images": [
 					{
@@ -170,12 +170,12 @@
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [
 					{
 						"name": "ViewContact",
@@ -199,12 +199,12 @@
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [
 					{
 						"name": "ViewContact",
@@ -228,12 +228,12 @@
 				"manifestType": "view",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [
 					{
 						"name": "ViewContact",
@@ -257,12 +257,12 @@
 				"manifest": "http://localhost:8080/common/snapshots/contact-overview.snapshot.fin.json",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [
 					{
 						"name": "ViewContact",
@@ -275,7 +275,7 @@
 						"src": "http://localhost:8080/common/images/previews/contact/client-overview.png"
 					}
 				],
-				"tags": ["page", "openfin", "client", "interop", "fdc3", "contact"]
+				"tags": ["page", "HERE", "client", "interop", "fdc3", "contact"]
 			},
 			{
 				"appId": "new-page-url",
@@ -286,15 +286,26 @@
 				"manifest": "http://localhost:8080/common/views/platform/new-tab.view.fin.json",
 				"icons": [
 					{
-						"src": "http://localhost:8080/common/images/icon-blue.png"
+						"src": "http://localhost:8080/common/images/favicon-32x32.png"
 					}
 				],
 				"contactEmail": "contact@example.com",
 				"supportEmail": "support@example.com",
-				"publisher": "OpenFin",
+				"publisher": "HERE",
 				"intents": [],
 				"images": [],
-				"tags": ["page", "openfin"]
+				"tags": ["page", "HERE"]
+			}
+		],
+		"theme": [
+			{
+				"label": "Default",
+				"default": "dark",
+				"palette": {
+					"brandPrimary": "#0A76D3",
+					"brandSecondary": "#383A40",
+					"backgroundPrimary": "#1E1F23"
+				}
 			}
 		]
 	}

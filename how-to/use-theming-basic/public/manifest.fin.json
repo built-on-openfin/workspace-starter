@@ -2,27 +2,28 @@
 	"devtools_port": 9090,
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
-		"arguments": "",
-		"version": "43.142.101.1"
+		"arguments": "--security-realm=use-theming-basic --enable-mesh --v=1",
+		"version": "44.146.101.5"
 	},
 	"platform": {
+		"name": "Use Theming Basic",
 		"uuid": "use-theming-basic",
 		"icon": "http://localhost:8080/favicon.ico",
-		"autoShow": false,
+		"autoShow": true,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Use Theming - Basic - v23.0.0",
+		"name": "Use Theming - Basic - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Use Theming Basic - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	}
 }

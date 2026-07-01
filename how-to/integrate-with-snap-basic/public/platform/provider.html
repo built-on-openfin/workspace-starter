@@ -18,7 +18,7 @@
 				<h1 class="tag">Demonstrates integrating with Snap.</h1>
 			</div>
 			<div class="row middle gap20">
-				<image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+				<image src="../common/images/favicon-32x32.png" alt="HERE" height="32px"></image>
 			</div>
 		</header>
 		<main class="col fill gap10 scroll-vertical">
@@ -105,6 +105,20 @@
 				<fieldset class="row">
 					<label for="chkDisableRuntimeHeartbeating">Disable Runtime Heartbeating</label>
 					<input type="checkbox" id="chkDisableRuntimeHeartbeating" />
+				</fieldset>
+			</div>
+			<div id="rowCustomSnapAppAssetPath" class="row gap10 middle">
+				<fieldset class="row">
+					<label for="chkCustomSnapAppAssetPath">Enable Custom Snap App Asset Url</label>
+					<input type="checkbox" id="chkCustomSnapAppAssetPath" />
+				</fieldset>
+				<fieldset class="row" id="fieldPrimaryUrl" style="display: none">
+					<label for="txtPrimaryUrl">Primary Url</label>
+					<input type="text" id="txtPrimaryUrl" />
+				</fieldset>
+				<fieldset class="row" id="fieldFallbackUrl" style="display: none">
+					<label for="txtFallbackUrl">Fallback Url</label>
+					<input type="text" id="txtFallbackUrl" />
 				</fieldset>
 			</div>
 			<hr />

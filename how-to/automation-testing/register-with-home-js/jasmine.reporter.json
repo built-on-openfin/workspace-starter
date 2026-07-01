@@ -1,7 +1,0 @@
-{
-	"reporter": "Reporter",
-	"module": "jasmine-pretty-html-reporter",
-	"options": {
-		"path": "./reports/jasmine"
-	}
-}

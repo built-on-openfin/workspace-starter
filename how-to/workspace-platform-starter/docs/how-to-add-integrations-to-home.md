@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -185,7 +185,7 @@ For further information on customizing the home template see [Home To Customize 
 
 ## Available Home Integrations
 
-We have a number of integrations we have built to allow you to configure workspace platform starter to your needs.
+We have a number of integrations we have built to allow you to configure HERE Core UI Platform starter to your needs.
 
 - [Apps integration](../client/src/modules/integrations/apps/integration.ts) - an apps module that fetches the available public applications (apps marked as private should not be displayed) that you can configured in your appsProvider, displays them via a dynamic templates and allows text filtering (home input) and tag filtering.
 

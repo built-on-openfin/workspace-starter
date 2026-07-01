@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	const app = await fin.Application.getCurrent();
 	const manifest = await app.getManifest();
 	let workspaceAsar: { alias: string } | undefined;
@@ -51,12 +51,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param workspaceAsar The entry representing an app asset with the workspace browser settings.
  * @param workspaceAsar.alias the alias of the app asset.
  */
 async function initializeWorkspacePlatform(workspaceAsar?: { alias: string }): Promise<void> {
-	console.log(`Initializing workspace platform with asar: ${workspaceAsar?.alias ?? "none"}`);
+	console.log(`Initializing HERE Core UI Platform with asar: ${workspaceAsar?.alias ?? "none"}`);
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -67,23 +67,12 @@ async function initializeWorkspacePlatform(workspaceAsar?: { alias: string }): P
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		workspaceAsar
 	});
 }
 
 /**
- * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ * Initialize minimal HERE Core UI Components for home/store so that the buttons show on dock.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
 	await Home.register({

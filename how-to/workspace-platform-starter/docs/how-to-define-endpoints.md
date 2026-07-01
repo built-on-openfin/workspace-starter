@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -8,7 +8,7 @@ An endpoint is a term we use where your code/business logic wants to do somethin
 
 E.g.:
 
-- I want to execute an action where I pass a request and just get a boolean saying it was successful or not (I don't need a response). An endpoint could be calling a rest endpoint, local storage or something that uses the OpenFin Message Bus ( [Channel API](https://developers.openfin.co/of-docs/docs/channels) for example).
+- I want to execute an action where I pass a request and just get a boolean saying it was successful or not (I don't need a response). An endpoint could be calling a rest endpoint, local storage or something that uses the HERE Message Bus ( [Channel API](https://resources.here.io/docs/core/container/interop/channels/) for example).
 - I want to execute a request and get a response back. I don't care how that request is executed or where the response comes from. My main focus is I pass you a request type and I get a response type back.
 - I want to execute a request and get a stream of data back. I don't care how that request is executed or where the stream of data comes from. My main focus is I pass you a request type and I get back one or more responses.
 
@@ -144,9 +144,9 @@ Endpoints can be defined as:
 
 - platform settings - if you specify an endpoint called **platform-settings** then the platform will call it to fetch the settings it should use. See [How To Apply Entitlements](./how-to-apply-entitlements.md)
 - app sources - see [How To Define Apps](./how-to-define-apps.md)
-- workspaces source - see [How To Workspace Platform Starter Management](./how-to-workspace-platform-starter-management.md)
+- workspaces source - see [How To HERE Core UI Platform Starter Management](./how-to-workspace-platform-starter-management.md)
 - page source - see [How To Customize Browser Page Management](./how-to-customize-browser-page-management.md)
-- share source - see [How To Workspace Platform Starter And Browser Sharing](./how-to-workspace-platform-starter-browser-page-sharing.md)
+- share source - see [How To HERE Core UI Platform Starter And Browser Sharing](./how-to-workspace-platform-starter-browser-page-sharing.md)
 - integration preferences source with integration management - see [How To Customize Home](./how-to-customize-home.md)
 - connection to your platform verification - see [How To Manage Connections To Your Platform](./how-to-manage-connections-to-your-platform.md)
 - an app launch handler - if the **manifestType** of an app is **endpoint** then we will check the endpoints array for the endpoint specified in the manifest property. See - [What Manifest Types Are Supported](./what-manifest-types-are-supported.md)
@@ -157,7 +157,7 @@ Endpoints can be defined as:
 
 ## How to use an Endpoint from a Module?
 
-Endpoint modules are a nice way of exposing functionality in a loosely coupled way. Endpoints are used by Workspace Platform Starter as a way of configuring where data comes from or goes to. This lets us easily configure where workspaces or pages are saved to for example or where applications come from.
+Endpoint modules are a nice way of exposing functionality in a loosely coupled way. Endpoints are used by HERE Core UI Platform Starter as a way of configuring where data comes from or goes to. This lets us easily configure where workspaces or pages are saved to for example or where applications come from.
 
 There are offer types of module (see [How to add a module](./how-to-add-a-module.md)) and sometimes a platform owner (or other teams) may wish to create an endpoint module to be used by other modules (e.g. a lifeCycle module). We like to offer the platform owner the option of providing modules the option of getting an endpoint client. The endpoint client can then be allowed to access all or a specific set of endpoints. Endpoint client access is off by default and if enabled a platform owner will still need to specify if modules can access all endpoints "\*" (not recommended) or specific endpoints.
 

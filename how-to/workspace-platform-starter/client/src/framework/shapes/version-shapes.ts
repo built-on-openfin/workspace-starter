@@ -15,7 +15,7 @@ export interface VersionInfo {
 	platformClient?: string;
 
 	/**
-	 * The version of the workspace platform client code
+	 * The version of the HERE Core UI Platform client code
 	 */
 	workspacePlatformClient?: string;
 
@@ -25,7 +25,7 @@ export interface VersionInfo {
 	workspaceClient?: string;
 
 	/**
-	 * The version of the workspace components this platform is currently connected to
+	 * The version of the HERE Core UI Components this platform is currently connected to
 	 */
 	workspace?: string;
 
@@ -95,6 +95,11 @@ export interface VersionProviderOptions {
 	 * interval to see if an update of your application is available.
 	 */
 	versionCheckIntervalInSeconds?: number;
+
+	/**
+	 * If you want the platform to support the GetVersion intent then you can set this to true. This will allow the platform to return the version information when the GetVersion intent is fired.
+	 */
+	supportGetVersionIntent?: boolean;
 }
 
 /**

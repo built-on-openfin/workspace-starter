@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Extend Your Platform With Query Strings
 
-The OpenFin platform can accept parameters when launching through deeplinks, for more information on this feature see the main documentation here [Deep linking](https://developers.openfin.co/of-docs/docs/deep-linking)
+The HERE platform can accept parameters when launching through deeplinks, for more information on this feature see the main documentation here [Deep linking](https://resources.here.io/docs/core/develop/deep-linking/)
 
 In short when you start a fin/fins link you can pass parameters as part of the launch `fins://mydomain.com/path-to-manifest/app.json?$$parameter1=value1&$$parameter2=value2`
 

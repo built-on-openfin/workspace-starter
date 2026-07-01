@@ -19,16 +19,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform(customSettings);
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	const defaultBroker = createInteropOverride(customSettings);
 	const interopOverride: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [defaultBroker];
@@ -54,17 +54,6 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Use an override for the platform interop to handle the context and intents
 		interopOverride
 	});
