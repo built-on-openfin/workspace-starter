@@ -14,9 +14,9 @@ import {
 	Dock as Dock3,
 	type LaunchDockEntryPayload,
 	type BookmarkDockEntryPayload,
-	CustomActionPayload,
+	type CustomActionPayload,
 	CustomActionCallerType,
-	Dock3Button
+	type Dock3Button
 } from "@openfin/workspace-platform";
 import type {
 	DockProviderConfigWithIdentity,
@@ -110,46 +110,50 @@ export async function register(
 						 * @param payload content being launched
 						 */
 						public async launchEntry(payload: LaunchDockEntryPayload): Promise<void> {
-							console.log("Launching Dock Entry:", payload);
-							if (payload.entry.itemData.action) {
-								try {
-									// we need the x and y co-ordinates in case the action needs used the info when running against dock1 actions that should still work in dock3
-									const dockWindow = await fin.Window.wrap(dockWindowIdentity);
-									const coordinates = (await dockWindow.executeJavaScript(`
-  (function() {
-    const button = document.querySelector('[title="${payload.entry.label}"]');
-    if (button) {
-      const rect = button.getBoundingClientRect();
-      return {
-        x: rect.left,
-        y: rect.top,
-        width: rect.width,
-        height: rect.height,
-        screenX: window.screenX + rect.left,
-        screenY: window.screenY + rect.top
-      };
-    }
-    return null;
-  })()
-`)) as {
-										x: number;
-										y: number;
-										width: number;
-										height: number;
-										screenX: number;
-										screenY: number;
-									} | null;
-									logger.info("Dock button coordinates:", coordinates);
-									const customActionPayload: CustomActionPayload = {
-										callerType: CustomActionCallerType.CustomButton,
-										windowIdentity: dockWindowIdentity,
-										customData: payload.entry.itemData.action.customData,
-										x: coordinates?.x ?? 100,
-										y: coordinates?.y ?? 25
-									};
-									await callAction(payload.entry.itemData.action.id, customActionPayload);
-								} catch (error) {
-									logger.error("Error launching action from dock entry:", payload, error);
+							logger.info("Launching Dock Entry:", payload);
+							if (payload.entry.type === "item") {
+								if (payload.entry.itemData.action) {
+									try {
+										// we need the x and y co-ordinates in case the action needs used the info when running against dock1 actions that should still work in dock3
+										const dockWindow = await fin.Window.wrap(dockWindowIdentity);
+										const coordinates = (await dockWindow.executeJavaScript(`
+											(function() {
+												const button = document.querySelector('[title="${payload.entry.label}"]');
+												if (button) {
+													const rect = button.getBoundingClientRect();
+													return {
+														x: rect.left,
+														y: rect.top,
+														width: rect.width,
+														height: rect.height,
+														screenX: window.screenX + rect.left,
+														screenY: window.screenY + rect.top
+													};
+												}
+												return null;
+											})()
+										`)) as {
+											x: number;
+											y: number;
+											width: number;
+											height: number;
+											screenX: number;
+											screenY: number;
+										} | null;
+										logger.info("Dock button coordinates:", coordinates);
+										const customActionPayload: CustomActionPayload = {
+											callerType: CustomActionCallerType.CustomButton,
+											windowIdentity: dockWindowIdentity,
+											customData: payload.entry.itemData.action.customData,
+											x: coordinates?.x ?? 100,
+											y: coordinates?.y ?? 25
+										};
+										await callAction(payload.entry.itemData.action.id, customActionPayload);
+									} catch (error) {
+										logger.error("Error launching action from dock entry:", payload, error);
+									}
+								} else {
+									logger.error("No action found for dock entry:", payload);
 								}
 							}
 						}
@@ -161,15 +165,15 @@ export async function register(
 						 * @returns void
 						 */
 						public async moreMenuCustomOptionClicked(payload: MoreMenuCustomOptionPayload): Promise<void> {
-							console.log("Dock3Panel::moreMenuCustomOptionClicked", payload);
+							logger.info("Dock3Panel::moreMenuCustomOptionClicked", payload);
 							const customActionPayload: CustomActionPayload = {
-										callerType: CustomActionCallerType.CustomButton,
-										windowIdentity: dockWindowIdentity,
-										customData: payload.customData,
-										x: 100,
-										y: 25
-									};
-									await callAction(payload.action, customActionPayload);
+								callerType: CustomActionCallerType.CustomButton,
+								windowIdentity: dockWindowIdentity,
+								customData: payload.customData,
+								x: 100,
+								y: 25
+							};
+							await callAction(payload.action, customActionPayload);
 						}
 
 						/**
@@ -178,48 +182,7 @@ export async function register(
 						 * @param payload content being bookmarked
 						 */
 						public async bookmarkContentMenuEntry(payload: BookmarkDockEntryPayload): Promise<void> {
-							console.log("Bookmarking Dock Entry:", payload.entry);
-
-							// Update the config to mark the entry as bookmarked
-							const currentConfig = this.config;
-							const entryId = payload.entry.id;
-
-							/**
-							 * Helper function to update content menu entries.
-							 * @param entries - array of content menu entries
-							 * @returns updated array with bookmarked entries
-							 */
-							function updateContentMenuEntry(entries: ContentMenuEntry[]): ContentMenuEntry[] {
-								return entries.map((entry) => {
-									if (entry.id === entryId) {
-										return { ...entry, bookmarked: true };
-									}
-									if (entry.type === "folder") {
-										return { ...entry, children: updateContentMenuEntry(entry.children) };
-									}
-									return entry;
-								});
-							}
-
-							// Update content menu entries
-							if (currentConfig.contentMenu) {
-								const updatedContentMenu = updateContentMenuEntry(currentConfig.contentMenu);
-								currentConfig.contentMenu = updatedContentMenu;
-							}
-
-							// Update favorites if the entry exists there
-							if (currentConfig.favorites) {
-								const updatedFavorites = currentConfig.favorites.map((favorite) => {
-									if (favorite.id === entryId) {
-										return { ...favorite, bookmarked: true };
-									}
-									return favorite;
-								});
-								currentConfig.favorites = updatedFavorites;
-							}
-
-							// Update the dock3 provider's config
-							await this.updateConfig(currentConfig);
+							logger.info("Bookmarking Not currently supported in WPS. This will be ignored.", payload.entry);
 						}
 					}
 			});
@@ -368,7 +331,13 @@ async function buildButtons(): Promise<DockButton[]> {
 	return [];
 }
 
-function buildSchemeIcon(schemeMode: string, iconUrl :string): string | { dark: string; light: string } {
+/**
+ * Build a themed icon definition for the given icon url, swapping in the light/dark variant path as required.
+ * @param schemeMode The current color scheme mode (light or dark).
+ * @param iconUrl The icon url to build the themed icon definition from.
+ * @returns The icon url, or an object containing the dark and light variants if the url is theme specific.
+ */
+function buildSchemeIcon(schemeMode: string, iconUrl: string): string | { dark: string; light: string } {
 	if (iconUrl?.includes(`/${schemeMode}/`)) {
 		let darkIcon: string = iconUrl;
 		let lightIcon: string = iconUrl;
@@ -392,32 +361,32 @@ function buildSchemeIcon(schemeMode: string, iconUrl :string): string | { dark: 
  * @returns Array of ContentMenuEntry items
  */
 function mapOptionsToContentMenu(options: Dock.DockButton["options"]): ContentMenuEntry[] {
-	if(isEmpty(options)) {
+	if (isEmpty(options)) {
 		return [];
 	}
-    return options.map((option) => {
-        // Check if this option has nested children
-        if (option.options && Array.isArray(option.options) && option.options.length > 0) {
-            // Create a folder entry with children
-            return {
-                type: "folder",
-                id: (option as unknown as { id: string })?.id ?? randomUUID(), // Generate a unique ID
-                label: option.tooltip,
-                children: mapOptionsToContentMenu(option.options) // Recursively map children
-            } as ContentMenuEntry;
-        }
+	return options.map((option) => {
+		// Check if this option has nested children
+		if (option.options && Array.isArray(option.options) && option.options.length > 0) {
+			// Create a folder entry with children
+			return {
+				type: "folder",
+				id: (option as unknown as { id: string })?.id ?? randomUUID(), // Generate a unique ID
+				label: option.tooltip,
+				children: mapOptionsToContentMenu(option.options) // Recursively map children
+			} as ContentMenuEntry;
+		}
 
-        // Create a simple content menu entry
-        return {
-            type: "item",
-            id: (option as unknown as { id: string })?.id ?? randomUUID(),
-            label: option.tooltip,
-            icon: option.iconUrl,
-            itemData: {
-                action: option.action
-            }
-        } as ContentMenuEntry;
-    });
+		// Create a simple content menu entry
+		return {
+			type: "item",
+			id: (option as unknown as { id: string })?.id ?? randomUUID(),
+			label: option.tooltip,
+			icon: option.iconUrl,
+			itemData: {
+				action: option.action
+			}
+		} as ContentMenuEntry;
+	});
 }
 
 /**
@@ -433,7 +402,8 @@ async function buildDock3ButtonEntries(
 	const schemeMode = await getCurrentColorSchemeMode();
 
 	for (const button of dockv1Buttons) {
-		if (button.type === DockButtonNames.ActionButton) {
+		const buttonType = button.type;
+		if (buttonType === DockButtonNames.ActionButton) {
 			const favButton: DockEntry = {
 				id: button.id ?? button.action.id,
 				type: "item",
@@ -442,30 +412,30 @@ async function buildDock3ButtonEntries(
 				icon: buildSchemeIcon(schemeMode, button.iconUrl ?? "")
 			};
 			favorites.push(favButton);
-		} else if (button.type === DockButtonNames.DropdownButton || isEmpty(button.type)) {
-			if(button.options && button.options.length > 0) {
+		} else if (buttonType === DockButtonNames.DropdownButton || isEmpty(buttonType)) {
+			if (button.options && button.options.length > 0) {
 				const folderItem: ContentMenuEntry = {
-                type: "folder",
-                id: button.id ?? randomUUID(), // Generate a unique ID
-                label: button.tooltip,
-                children: mapOptionsToContentMenu(button.options) // Recursively map children
-            } as ContentMenuEntry;
+					type: "folder",
+					id: button.id ?? randomUUID(), // Generate a unique ID
+					label: button.tooltip,
+					children: mapOptionsToContentMenu(button.options) // Recursively map children
+				} as ContentMenuEntry;
 				contentMenu.push(folderItem);
 			} else {
 				const rootItem: ContentMenuEntry = {
-							type: "item",
-							id: button.id ?? randomUUID(),
-							label: button.tooltip,
-							icon: buildSchemeIcon(schemeMode, button.iconUrl ?? ""),
-							itemData: { action: button?.action },
-							bookmarked: false
-						};
+					type: "item",
+					id: button.id ?? randomUUID(),
+					label: button.tooltip,
+					icon: buildSchemeIcon(schemeMode, button.iconUrl ?? ""),
+					itemData: { action: button?.action },
+					bookmarked: false
+				};
 				contentMenu.push(rootItem);
 			}
 		}
 	}
-	console.log("Dock3 Buttons - Favorites:", favorites);
-	console.log("Dock3 Buttons - Content Menu:", contentMenu);
+	logger.info("Dock3 Buttons - Favorites:", favorites);
+	logger.info("Dock3 Buttons - Content Menu:", contentMenu);
 	return {
 		favorites,
 		contentMenu

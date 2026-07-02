@@ -1065,19 +1065,19 @@
 				}
 			},
 			"dock3UIConfig": {
-						"contentMenu": {
-							"enableBookmarking": true
-						},
-						"moreMenu": {
-							"moreMenuCustomOption": {
-								"label": "Help",
-								"options": [
-									{ "tooltip": "Upload Logs", "action": "launch-log-uploader" },
-									{ "tooltip": "About", "action": "launch-about-page" }
-								]
-							}
-						}
-					},
+				"contentMenu": {
+					"enableBookmarking": true
+				},
+				"moreMenu": {
+					"moreMenuCustomOption": {
+						"label": "Help",
+						"options": [
+							{ "tooltip": "Upload Logs", "action": "launch-log-uploader" },
+							{ "tooltip": "About", "action": "launch-about-page" }
+						]
+					}
+				}
+			},
 			"entries": [
 				{
 					"id": "workspaces",

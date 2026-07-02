@@ -2,15 +2,14 @@ import type {
 	CustomActionPayload,
 	CustomActionsMap,
 	Page,
-	Workspace,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import type { PopupMenuEntry } from "workspace-platform-starter/shapes";
 import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
 import type { CustomMenuProviderSettings } from "./shapes";
-import { PopupMenuEntry } from "workspace-platform-starter/shapes";
 
 /**
  * Implementation for the custom menu actions provider.
@@ -91,22 +90,22 @@ export class CustomMenuProvider implements Actions<CustomMenuProviderSettings> {
 		actionMap["workspaces-menu"] = async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers) {
 				const workspaces: { title: string; workspaceId: string }[] =
-				await platform.Storage.getWorkspacesMetadata();
+					await platform.Storage.getWorkspacesMetadata();
 				const currentWorkspace = await platform.getCurrentWorkspace();
 				const existingWorkspace = workspaces.filter((w) => w.workspaceId === currentWorkspace?.workspaceId);
 				const menuClient = await this._helpers.getMenuClient();
 				const popupMenuStyle = this._settings?.popupMenuStyle ?? menuClient.getPopupMenuStyle();
 
 				const entries = workspaces
-						.map((p) => ({
-							label: p.title,
-							data: p.workspaceId,
-							icon: this._settings?.images.workspace,
-							type: "checkbox",
-							checked: currentWorkspace?.workspaceId === p.workspaceId,
-							enabled: currentWorkspace?.workspaceId !== p.workspaceId
-						}))
-						.sort((a, b) => a.label.localeCompare(b.label));
+					.map((p) => ({
+						label: p.title,
+						data: p.workspaceId,
+						icon: this._settings?.images.workspace,
+						type: "checkbox",
+						checked: currentWorkspace?.workspaceId === p.workspaceId,
+						enabled: currentWorkspace?.workspaceId !== p.workspaceId
+					}))
+					.sort((a, b) => a.label.localeCompare(b.label));
 				// add an entry to the front of the list to allow users to reset the current workspace
 				if (!isEmpty(existingWorkspace) && workspaces.length > 0) {
 					entries.unshift({
@@ -132,7 +131,7 @@ export class CustomMenuProvider implements Actions<CustomMenuProviderSettings> {
 					this._logger?.info("Menu dismissed");
 				} else if (this._helpers?.launchWorkspace) {
 					this._logger?.info("Menu clicked", result);
-					if(result === "" && !isEmpty(currentWorkspace)) {
+					if (result === "" && !isEmpty(currentWorkspace)) {
 						await platform.restoreLastSavedWorkspace();
 					} else {
 						await this._helpers.launchWorkspace(result, this._logger);
