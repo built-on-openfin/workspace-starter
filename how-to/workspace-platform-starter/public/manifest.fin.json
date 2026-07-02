@@ -1066,15 +1066,12 @@
 			},
 			"dock3UIConfig": {
 				"contentMenu": {
-					"enableBookmarking": true
+					"enableBookmarking": false
 				},
 				"moreMenu": {
 					"moreMenuCustomOption": {
 						"label": "Help",
-						"options": [
-							{ "tooltip": "Upload Logs", "action": "launch-log-uploader" },
-							{ "tooltip": "About", "action": "launch-about-page" }
-						]
+						"options": [{ "tooltip": "About", "action": "show-about" }]
 					}
 				}
 			},

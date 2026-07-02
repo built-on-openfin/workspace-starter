@@ -16,7 +16,9 @@ import {
 	type BookmarkDockEntryPayload,
 	type CustomActionPayload,
 	CustomActionCallerType,
-	type Dock3Button
+	type Dock3Button,
+	type Dock3Config,
+	type Dock3Provider
 } from "@openfin/workspace-platform";
 import type {
 	DockProviderConfigWithIdentity,
@@ -60,6 +62,8 @@ const DOCK_ENDPOINT_ID_SET = "dock-set";
 
 let registration: DockProvider | undefined;
 let registrationInfo: DockProviderRegistration | undefined;
+let dock3Provider: Dock3Provider | undefined;
+let dock3RegistrationMetaInfo: DockProviderRegistration | undefined;
 let dockProviderOptions: DockProviderOptions | undefined;
 const usedConditions: Set<string> = new Set<string>();
 let registeredBootstrapOptions: BootstrapOptions | undefined;
@@ -78,7 +82,7 @@ export async function register(
 	options: DockProviderOptions | undefined,
 	bootstrapOptions?: BootstrapOptions
 ): Promise<DockProviderRegistration | undefined> {
-	if (!registrationInfo && options) {
+	if (isEmpty(registrationInfo) && isEmpty(dock3Provider) && options) {
 		dockProviderOptions = options;
 		registeredBootstrapOptions = bootstrapOptions;
 
@@ -86,9 +90,12 @@ export async function register(
 			logger.info("The v3 dock has been selected.");
 			// get the current button definitions taking into account visibility
 			const allDockV1Buttons = await buildButtons();
+			// Keep a reference to the built v1 buttons so that they can be used when mapping
+			// between the v1 and v3 storage shapes (see loadConfig/saveConfig below).
+			registeredButtons = allDockV1Buttons;
 			const mapToV3Buttons = await buildDock3ButtonEntries(allDockV1Buttons);
 			const dockWindowIdentity = { name: "dock3", uuid: fin.me.uuid };
-			await Dock3.init({
+			dock3Provider = await Dock3.init({
 				config: {
 					title: dockProviderOptions.title,
 					icon: dockProviderOptions.icon,
@@ -178,14 +185,96 @@ export async function register(
 
 						/**
 						 * Override for dock3 bookmark content function.
-						 * This function should be customized to best match the needs of the application.
+						 * Bookmarking is not supported in this version of Workspace Platform Starter and is
+						 * intentionally ignored. The `dock3UIConfig.contentMenu.enableBookmarking` setting can be
+						 * enabled but will have no effect until a future release adds first class support.
 						 * @param payload content being bookmarked
 						 */
 						public async bookmarkContentMenuEntry(payload: BookmarkDockEntryPayload): Promise<void> {
 							logger.info("Bookmarking Not currently supported in WPS. This will be ignored.", payload.entry);
 						}
+
+						/**
+						 * Override for dock3 load config.
+						 * Dock3 stores its config independently of dock1 by default (browser storage). To keep the
+						 * dock configuration consistent (and to allow a config to be carried over when a platform
+						 * switches between dockType "1" and "3") we reuse the same custom storage endpoints as dock1
+						 * when they are configured, mapping the stored v1 button order onto the v3 favorites and
+						 * content menu. When no endpoint is configured we fall back to the default dock3 storage.
+						 * @returns The loaded dock3 config.
+						 */
+						public async loadConfig(): Promise<Dock3Config> {
+							if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_GET)) {
+								logger.info("Requesting dock3 config from custom storage");
+								const availableButtons = objectClone(registeredButtons ?? []);
+								const stored = await requestStoredDockConfig(
+									dockProviderOptions?.id ?? fin.me.identity.uuid,
+									availableButtons
+								);
+
+								// The order the buttons are in the stored config is the order we want to
+								// display them, so map that order onto the current v3 favorites/content menu.
+								if (!isEmpty(stored) && Array.isArray(stored.buttons)) {
+									const orderedIds = stored.buttons
+										.map((button) => button.id)
+										.filter((id): id is string => isStringValue(id));
+									const mappedConfig: Dock3Config = {
+										...this.config,
+										favorites: orderByIds(this.config.favorites ?? [], orderedIds),
+										contentMenu: orderByIds(this.config.contentMenu ?? [], orderedIds)
+									};
+									this.config = mappedConfig;
+									return mappedConfig;
+								}
+								return this.config;
+							}
+
+							logger.info("Requesting dock3 config from default storage");
+							return super.loadConfig();
+						}
+
+						/**
+						 * Override for dock3 save config.
+						 * When a custom storage endpoint is configured we convert the v3 favorites/content menu order
+						 * back into the flat v1 button shape and persist it via the same endpoint dock1 uses, so the
+						 * two dock types share a single stored representation. When no endpoint is configured we fall
+						 * back to the default dock3 storage.
+						 * @param options The save config options.
+						 * @param options.config The new dock3 config to persist.
+						 */
+						public async saveConfig({ config }: { config: Dock3Config }): Promise<void> {
+							if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
+								logger.info("Storing dock3 config in custom storage");
+								const v1Config = buildV1ConfigFromDock3(config);
+								const success = await sendDockConfigToEndpoint(v1Config);
+								if (success) {
+									logger.info(`Saved dock3 config with id: ${v1Config.id} to custom storage`);
+								} else {
+									logger.info(`Unable to save dock3 config with id: ${v1Config.id} to custom storage`);
+								}
+							} else {
+								logger.info("Storing dock3 config in default storage");
+								await super.saveConfig({ config });
+							}
+						}
 					}
 			});
+
+			// Dock3 is part of @openfin/workspace-platform (bundled, not loaded from the CDN) so it does
+			// not return version metadata the way Dock.register does. We synthesize a registration result
+			// so the bootstrapper treats dock3 as a registered component (registering connection actions
+			// etc.). Platform client versions continue to be tracked separately by the version provider.
+			dock3RegistrationMetaInfo = {
+				clientAPIVersion: "",
+				workspaceVersion: "",
+				updateDockProviderConfig: async (): Promise<void> => {
+					await refreshDock3();
+				}
+			};
+
+			// Keep the dock3 favorites/content menu in sync with theme, apps and condition changes,
+			// mirroring the behavior of the dock1 registration below.
+			subscribeToUpdates(refreshDock3);
 		} else {
 			const buttons = await buildButtons();
 			logger.info("Dock register about to be called.");
@@ -198,24 +287,51 @@ export async function register(
 				logger.info("Version:", registrationInfo);
 				logger.info("Dock provider initialized");
 
-				themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refreshDock());
-				appsChangedSubscriptionId = subscribeLifecycleEvent("apps-changed", async () => refreshDock());
-				conditionChangedSubscriptionId = subscribeLifecycleEvent<ConditionChangedLifecyclePayload>(
-					"condition-changed",
-					async (_, payload) => {
-						if (usedConditions.size > 0) {
-							const conditionId = payload?.conditionId;
-							if (isEmpty(conditionId) || usedConditions.has(conditionId)) {
-								await refreshDock();
-							}
-						}
-					}
-				);
+				subscribeToUpdates(refreshDock);
 			}
 		}
 	}
 
-	return registrationInfo;
+	return registrationInfo ?? dock3RegistrationMetaInfo;
+}
+
+/**
+ * Subscribe to the lifecycle events that should cause the dock to be refreshed.
+ * The provided refresh function is called when the theme, apps or a used condition changes.
+ * @param refresh The refresh function to call (dock1 or dock3 specific).
+ */
+function subscribeToUpdates(refresh: () => Promise<void>): void {
+	themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refresh());
+	appsChangedSubscriptionId = subscribeLifecycleEvent("apps-changed", async () => refresh());
+	conditionChangedSubscriptionId = subscribeLifecycleEvent<ConditionChangedLifecyclePayload>(
+		"condition-changed",
+		async (_, payload) => {
+			if (usedConditions.size > 0) {
+				const conditionId = payload?.conditionId;
+				if (isEmpty(conditionId) || usedConditions.has(conditionId)) {
+					await refresh();
+				}
+			}
+		}
+	);
+}
+
+/**
+ * Unsubscribe from all of the lifecycle events that the dock listens to.
+ */
+function unsubscribeFromUpdates(): void {
+	if (themeChangedSubscriptionId) {
+		unsubscribeLifecycleEvent(themeChangedSubscriptionId, "theme-changed");
+		themeChangedSubscriptionId = undefined;
+	}
+	if (appsChangedSubscriptionId) {
+		unsubscribeLifecycleEvent(appsChangedSubscriptionId, "apps-changed");
+		appsChangedSubscriptionId = undefined;
+	}
+	if (conditionChangedSubscriptionId) {
+		unsubscribeLifecycleEvent(conditionChangedSubscriptionId, "condition-changed");
+		conditionChangedSubscriptionId = undefined;
+	}
 }
 
 /**
@@ -223,25 +339,27 @@ export async function register(
  * @returns Nothing.
  */
 export async function deregister(): Promise<void> {
-	if (registrationInfo) {
-		if (themeChangedSubscriptionId) {
-			unsubscribeLifecycleEvent(themeChangedSubscriptionId, "theme-changed");
-		}
-		themeChangedSubscriptionId = undefined;
-		if (appsChangedSubscriptionId) {
-			unsubscribeLifecycleEvent(appsChangedSubscriptionId, "apps-changed");
-		}
-		conditionChangedSubscriptionId = undefined;
-		if (conditionChangedSubscriptionId) {
-			unsubscribeLifecycleEvent(conditionChangedSubscriptionId, "condition-changed");
-		}
-		appsChangedSubscriptionId = undefined;
-		registrationInfo = undefined;
-		dockProviderOptions = undefined;
-		logger.info("Dock deregister about to be called.");
-		return Dock.deregister();
+	if (isEmpty(registrationInfo) && isEmpty(dock3Provider)) {
+		logger.warn("Unable to deregister dock as there is an indication it was never registered");
+		return;
 	}
-	logger.warn("Unable to deregister dock as there is an indication it was never registered");
+
+	unsubscribeFromUpdates();
+
+	if (!isEmpty(dock3Provider)) {
+		const provider = dock3Provider;
+		dock3Provider = undefined;
+		dock3RegistrationMetaInfo = undefined;
+		dockProviderOptions = undefined;
+		logger.info("Dock3 shutdown about to be called.");
+		await provider.shutdown();
+		return;
+	}
+
+	registrationInfo = undefined;
+	dockProviderOptions = undefined;
+	logger.info("Dock deregister about to be called.");
+	return Dock.deregister();
 }
 
 /**
@@ -754,6 +872,14 @@ async function addEntriesByAppTag(
  */
 export async function show(): Promise<void> {
 	logger.info("Dock show called.");
+	if (!isEmpty(dock3Provider)) {
+		// Dock3 has no explicit show, it is auto shown when initialized. Use the underlying
+		// window so the show-dock connection action and the autoShow bootstrap option keep working.
+		const dockWindow = dock3Provider.getWindowSync();
+		await dockWindow.show();
+		await dockWindow.focus();
+		return;
+	}
 	return Dock.show();
 }
 
@@ -763,6 +889,9 @@ export async function show(): Promise<void> {
  */
 export async function minimize(): Promise<void> {
 	logger.info("Dock minimize called.");
+	if (!isEmpty(dock3Provider)) {
+		return dock3Provider.getWindowSync().minimize();
+	}
 	return Dock.minimize();
 }
 
@@ -787,21 +916,7 @@ export async function loadConfig(
 		// the availableButtons are passed in the request for config so that the endpoint
 		// knows all the buttons available and can perform a sorting operation like
 		// we do for the default storage case
-		logger.info("Requesting dock config from custom storage");
-		const dockResponse = await endpointProvider.requestResponse<
-			EndpointDockGetRequest,
-			EndpointDockGetResponse
-		>(DOCK_ENDPOINT_ID_GET, {
-			platform: fin.me.identity.uuid,
-			id,
-			availableButtons
-		});
-		if (dockResponse) {
-			logger.info("Returning dock config from custom storage");
-			config = dockResponse.config;
-		} else {
-			logger.warn("No response getting dock config from custom storage");
-		}
+		config = await requestStoredDockConfig(id, availableButtons);
 	} else {
 		logger.info("Requesting dock config from default storage");
 		config = await defaultStorage(id);
@@ -894,17 +1009,7 @@ export async function saveConfig(
 
 	if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
 		logger.info("Storing dock config in custom storage");
-		const versionInfo = await getVersionInfo();
-		const success = await endpointProvider.action<EndpointDockSetRequest>(DOCK_ENDPOINT_ID_SET, {
-			platform: fin.me.identity.uuid,
-			metaData: {
-				version: {
-					workspacePlatformClient: versionInfo.workspacePlatformClient,
-					platformClient: versionInfo.platformClient
-				}
-			},
-			config
-		});
+		const success = await sendDockConfigToEndpoint(config);
 		if (success) {
 			logger.info(`Saved dock config with id: ${config.id} to custom storage`);
 		} else {
@@ -914,6 +1019,110 @@ export async function saveConfig(
 		logger.info("Storing dock config in default storage");
 		await defaultStorage(config);
 	}
+}
+
+/**
+ * Request the stored dock config from the custom get endpoint.
+ * The available buttons are passed so that the endpoint knows all the buttons available and can
+ * perform any sorting/reconciliation operation. This is shared between the dock1 and dock3 paths.
+ * @param id The id of the dock provider to get.
+ * @param availableButtons The buttons that are available based on the current configuration.
+ * @returns The stored dock config, or undefined if there was no response.
+ */
+async function requestStoredDockConfig(
+	id: string,
+	availableButtons: DockButton[]
+): Promise<DockProviderConfigWithIdentity | undefined> {
+	logger.info("Requesting dock config from custom storage");
+	const dockResponse = await endpointProvider.requestResponse<
+		EndpointDockGetRequest,
+		EndpointDockGetResponse
+	>(DOCK_ENDPOINT_ID_GET, {
+		platform: fin.me.identity.uuid,
+		id,
+		availableButtons
+	});
+	if (dockResponse) {
+		logger.info("Returning dock config from custom storage");
+		return dockResponse.config;
+	}
+	logger.warn("No response getting dock config from custom storage");
+}
+
+/**
+ * Send a dock config to the custom set endpoint.
+ * This is shared between the dock1 and dock3 paths so that both dock types persist to the same
+ * storage location using the same v1 config shape.
+ * @param config The dock config to persist.
+ * @returns True if the config was saved.
+ */
+async function sendDockConfigToEndpoint(config: DockProviderConfigWithIdentity): Promise<boolean> {
+	const versionInfo = await getVersionInfo();
+	return endpointProvider.action<EndpointDockSetRequest>(DOCK_ENDPOINT_ID_SET, {
+		platform: fin.me.identity.uuid,
+		metaData: {
+			version: {
+				workspacePlatformClient: versionInfo.workspacePlatformClient,
+				platformClient: versionInfo.platformClient
+			}
+		},
+		config
+	});
+}
+
+/**
+ * Order a list of entries (dock buttons, favorites or content menu items) by a list of ids.
+ * Entries whose id is present in the ordered id list are placed first in that order, any remaining
+ * entries (including those without an id or an unrecognized id) are appended, preserving their
+ * relative order. Used to map the flat v1 button order onto the v3 favorites/content menu.
+ * @param entries The entries to order.
+ * @param orderedIds The ordered list of ids.
+ * @returns The ordered entries.
+ */
+function orderByIds<T extends { id?: string }>(entries: T[], orderedIds: string[]): T[] {
+	const indexById = new Map<string, number>();
+	for (let i = 0; i < orderedIds.length; i++) {
+		indexById.set(orderedIds[i], i);
+	}
+
+	const known: { entry: T; index: number }[] = [];
+	const unknown: T[] = [];
+
+	for (const entry of entries) {
+		const index = isStringValue(entry.id) ? indexById.get(entry.id) : undefined;
+		if (isEmpty(index)) {
+			unknown.push(entry);
+		} else {
+			known.push({ entry, index });
+		}
+	}
+
+	known.sort((a, b) => a.index - b.index);
+
+	return [...known.map((k) => k.entry), ...unknown];
+}
+
+/**
+ * Convert a dock3 config into the flat v1 dock config shape so that it can be persisted using the
+ * same storage endpoint as dock1. The favorites and content menu order is flattened into an ordered
+ * list of button ids which is then applied to the built v1 buttons.
+ * @param config The dock3 config to convert.
+ * @returns The v1 dock config with identity.
+ */
+function buildV1ConfigFromDock3(config: Dock3Config): DockProviderConfigWithIdentity {
+	const orderedIds: string[] = [
+		...(config.favorites ?? []).map((entry) => entry.id),
+		...(config.contentMenu ?? []).map((entry) => entry.id)
+	].filter((id): id is string => isStringValue(id));
+
+	const orderedButtons = orderByIds(objectClone(registeredButtons ?? []), orderedIds);
+
+	return {
+		id: dockProviderOptions?.id ?? fin.me.identity.uuid,
+		title: dockProviderOptions?.title ?? "",
+		icon: dockProviderOptions?.icon ?? "",
+		buttons: orderedButtons as PlatformDockButton[]
+	};
 }
 
 /**
@@ -927,6 +1136,46 @@ async function refreshDock(): Promise<void> {
 			const dockProvider = await buildDockProvider(newButtons);
 			if (dockProvider) {
 				await registrationInfo.updateDockProviderConfig(dockProvider);
+			}
+		}
+	}
+}
+
+/**
+ * Refresh the dock3 favorites/content menu because the color scheme, apps or conditions have changed.
+ * The existing order of the favorites/content menu is preserved (so that any user rearrangement is
+ * not lost) while the entries themselves (icons, added/removed entries) are rebuilt from config.
+ */
+async function refreshDock3(): Promise<void> {
+	if (!isEmpty(dock3Provider)) {
+		const newButtons = await buildButtons();
+
+		if (JSON.stringify(newButtons) !== JSON.stringify(registeredButtons)) {
+			registeredButtons = newButtons;
+			const mapped = await buildDock3ButtonEntries(newButtons);
+			const currentConfig = dock3Provider.config;
+
+			// Preserve the current display order (which may reflect user rearrangement) while
+			// swapping in the freshly built entries.
+			const currentFavoriteIds = (currentConfig.favorites ?? [])
+				.map((entry) => entry.id)
+				.filter((id): id is string => isStringValue(id));
+			const currentContentMenuIds = (currentConfig.contentMenu ?? [])
+				.map((entry) => entry.id)
+				.filter((id): id is string => isStringValue(id));
+
+			const newFavorites = orderByIds(mapped.favorites ?? [], currentFavoriteIds);
+			const newContentMenu = orderByIds(mapped.contentMenu ?? [], currentContentMenuIds);
+
+			if (
+				JSON.stringify(newFavorites) !== JSON.stringify(currentConfig.favorites) ||
+				JSON.stringify(newContentMenu) !== JSON.stringify(currentConfig.contentMenu)
+			) {
+				await dock3Provider.updateConfig({
+					...currentConfig,
+					favorites: newFavorites,
+					contentMenu: newContentMenu
+				});
 			}
 		}
 	}
