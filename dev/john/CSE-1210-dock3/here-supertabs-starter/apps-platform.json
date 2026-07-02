@@ -1,0 +1,41 @@
+[
+	{
+		"appId": "here-workspace-starter",
+		"name": "here-workspace-starter",
+		"title": "HERE Supertabs Starter",
+		"description": "The platform that is currently running.",
+		"manifest": {
+			"url": "https://built-on-openfin.github.io/workspace-starter/dev/john/CSE-1210-dock3/here-supertabs-starter/platform/provider.html"
+		},
+		"manifestType": "inline-window",
+		"icons": [
+			{
+				"src": "https://built-on-openfin.github.io/workspace-starter/dev/john/CSE-1210-dock3/here-supertabs-starter/common/images/favicon-32x32.png"
+			}
+		],
+		"instanceMode": "single",
+		"private": true,
+		"contactEmail": "contact@example.com",
+		"supportEmail": "support@example.com",
+		"publisher": "HERE",
+		"intents": [
+			{
+				"name": "CreateNotification",
+				"displayName": "Create Notification",
+				"contexts": ["openfin.notificationoptions"]
+			},
+			{
+				"name": "UpdateNotification",
+				"displayName": "Update Notification",
+				"contexts": ["openfin.updatablenotificationoptions"]
+			},
+			{
+				"name": "ClearNotification",
+				"displayName": "Clear Notification",
+				"contexts": ["openfin.notification"]
+			}
+		],
+		"images": [],
+		"tags": ["platform"]
+	}
+]
