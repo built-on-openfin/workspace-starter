@@ -1083,12 +1083,12 @@
 					"action": {
 						"id": "workspaces-menu"
 					},
-					"visible": true
+					"visible": false
 				},
 				{
 					"id": "dock-apps",
 					"display": "individual",
-					"tags": ["dock", "fdc3"]
+					"tags": ["dock"]
 				},
 				{
 					"id": "fdc3-apps",

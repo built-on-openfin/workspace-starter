@@ -123,7 +123,7 @@ export async function register(
 									try {
 										// we need the x and y co-ordinates in case the action needs used the info when running against dock1 actions that should still work in dock3
 										const dockWindow = await fin.Window.wrap(dockWindowIdentity);
-										const coordinates = (await dockWindow.executeJavaScript(`
+										let coordinates = (await dockWindow.executeJavaScript(`
 											(function() {
 												const button = document.querySelector('[title="${payload.entry.label}"]');
 												if (button) {
@@ -147,13 +147,24 @@ export async function register(
 											screenX: number;
 											screenY: number;
 										} | null;
+
+										if (coordinates === null) {
+											coordinates = {
+												x: 400,
+												y: 25,
+												width: 0,
+												height: 0,
+												screenX: 0,
+												screenY: 0
+											};
+										}
 										logger.info("Dock button coordinates:", coordinates);
 										const customActionPayload: CustomActionPayload = {
 											callerType: CustomActionCallerType.CustomButton,
 											windowIdentity: dockWindowIdentity,
 											customData: payload.entry.itemData.action.customData,
-											x: coordinates?.x ?? 100,
-											y: coordinates?.y ?? 25
+											x: coordinates?.x,
+											y: coordinates?.y
 										};
 										await callAction(payload.entry.itemData.action.id, customActionPayload);
 									} catch (error) {
