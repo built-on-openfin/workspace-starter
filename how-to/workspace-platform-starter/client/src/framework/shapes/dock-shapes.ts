@@ -1,5 +1,6 @@
-import type { DockProviderConfigWithIdentity } from "@openfin/workspace";
+import type { DockProviderConfigWithIdentity, DockProviderRegistration } from "@openfin/workspace";
 import type { DockAllowedWindowOptions, Dock3Config } from "@openfin/workspace-platform";
+import type { BootstrapOptions } from "./bootstrap-shapes";
 import type { PopupMenuStyles } from "./menu-shapes";
 
 /**
@@ -197,4 +198,39 @@ export interface DockClient {
 		config: DockProviderConfigWithIdentity,
 		defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
 	): Promise<void>;
+}
+
+/**
+ * Common interface implemented by each dock version (v1 and v3), so that the facade in `dock.ts` can
+ * delegate to whichever implementation is selected by `dockType` without needing to know its internals.
+ */
+export interface DockImplementation {
+	/**
+	 * Register the dock component.
+	 * @param options The dock provider options.
+	 * @param bootstrapOptions The bootstrap options.
+	 * @returns The meta info from the registration.
+	 */
+	register(
+		options: DockProviderOptions,
+		bootstrapOptions: BootstrapOptions | undefined
+	): Promise<DockProviderRegistration | undefined>;
+
+	/**
+	 * Deregister the dock component.
+	 * @returns Nothing.
+	 */
+	deregister(): Promise<void>;
+
+	/**
+	 * Show the dock component.
+	 * @returns Nothing.
+	 */
+	show(): Promise<void>;
+
+	/**
+	 * Minimize the dock component.
+	 * @returns Nothing.
+	 */
+	minimize(): Promise<void>;
 }

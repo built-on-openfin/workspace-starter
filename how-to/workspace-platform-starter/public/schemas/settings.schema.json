@@ -2044,6 +2044,7 @@
                     "description": "Which workspace related icons should be hidden from the dock",
                     "properties": {
                         "hideContentButton": {
+                            "description": "Hides the content menu button. Only applicable when `dockType` is \"3\", the v1 dock has no\nequivalent button and this setting is ignored.",
                             "type": "boolean"
                         },
                         "hideHomeButton": {
