@@ -99,7 +99,7 @@ export async function register(
 				config: {
 					title: dockProviderOptions.title,
 					icon: dockProviderOptions.icon,
-					defaultDockButtons: buildWorkspaceButtons(),
+					defaultDockButtons: buildWorkspaceButtons(undefined, true),
 					uiConfig: dockProviderOptions.dock3UIConfig,
 					favorites: objectClone(mapToV3Buttons.favorites),
 					contentMenu: objectClone(mapToV3Buttons.contentMenu)
@@ -383,9 +383,16 @@ async function buildDockProvider(buttons: DockButton[]): Promise<DockProvider | 
 /**
  * Build the workspace buttons based on config.
  * @param previousOrder The previous order of workspace buttons.
+ * @param includeDock3OnlyButtons Whether to include buttons that are only understood by the v3 dock
+ * (e.g. "contentMenu"). The v1 dock's `workspaceComponents` type only supports
+ * `switchWorkspace | home | notifications | store`, so including a v3 only button in that list causes
+ * the v1 dock UI to throw when it tries to render a component it has no definition for.
  * @returns The list of workspace buttons.
  */
-function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): Dock3Button[] {
+function buildWorkspaceButtons(
+	previousOrder: WorkspaceButton[] = [],
+	includeDock3OnlyButtons = false
+): Dock3Button[] {
 	const workspaceButtonsSet = new Set<Dock3Button>();
 
 	if (!(dockProviderOptions?.workspaceComponents?.hideWorkspacesButton ?? false)) {
@@ -409,7 +416,7 @@ function buildWorkspaceButtons(previousOrder: WorkspaceButton[] = []): Dock3Butt
 	) {
 		workspaceButtonsSet.add("store");
 	}
-	if (!(dockProviderOptions?.workspaceComponents?.hideContentButton ?? false)) {
+	if (includeDock3OnlyButtons && !(dockProviderOptions?.workspaceComponents?.hideContentButton ?? false)) {
 		workspaceButtonsSet.add("contentMenu");
 	}
 

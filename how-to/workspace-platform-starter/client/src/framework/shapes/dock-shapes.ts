@@ -29,6 +29,10 @@ export interface DockProviderOptions {
 		hideWorkspacesButton?: boolean;
 		hideNotificationsButton?: boolean;
 		hideStorefrontButton?: boolean;
+		/**
+		 * Hides the content menu button. Only applicable when `dockType` is "3", the v1 dock has no
+		 * equivalent button and this setting is ignored.
+		 */
 		hideContentButton?: boolean;
 	};
 
