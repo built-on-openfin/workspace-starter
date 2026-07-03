@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import {
 	Dock,
 	DockButtonNames,
@@ -62,7 +63,7 @@ const DOCK_ENDPOINT_ID_SET = "dock-set";
 
 let registration: DockProvider | undefined;
 let registrationInfo: DockProviderRegistration | undefined;
-let dock3Provider: Dock3Provider | undefined;
+let initializedDock3Provider: Dock3Provider | undefined;
 let dock3RegistrationMetaInfo: DockProviderRegistration | undefined;
 let dockProviderOptions: DockProviderOptions | undefined;
 const usedConditions: Set<string> = new Set<string>();
@@ -82,7 +83,7 @@ export async function register(
 	options: DockProviderOptions | undefined,
 	bootstrapOptions?: BootstrapOptions
 ): Promise<DockProviderRegistration | undefined> {
-	if (isEmpty(registrationInfo) && isEmpty(dock3Provider) && options) {
+	if (isEmpty(registrationInfo) && isEmpty(initializedDock3Provider) && options) {
 		dockProviderOptions = options;
 		registeredBootstrapOptions = bootstrapOptions;
 
@@ -94,8 +95,7 @@ export async function register(
 			// between the v1 and v3 storage shapes (see loadConfig/saveConfig below).
 			registeredButtons = allDockV1Buttons;
 			const mapToV3Buttons = await buildDock3ButtonEntries(allDockV1Buttons);
-			const dockWindowIdentity = { name: "dock3", uuid: fin.me.uuid };
-			dock3Provider = await Dock3.init({
+			const dock3Provider = await Dock3.init({
 				config: {
 					title: dockProviderOptions.title,
 					icon: dockProviderOptions.icon,
@@ -121,50 +121,14 @@ export async function register(
 							if (payload.entry.type === "item") {
 								if (payload.entry.itemData.action) {
 									try {
-										// we need the x and y co-ordinates in case the action needs used the info when running against dock1 actions that should still work in dock3
-										const dockWindow = await fin.Window.wrap(dockWindowIdentity);
-										let coordinates = (await dockWindow.executeJavaScript(`
-											(function() {
-												const button = document.querySelector('[title="${payload.entry.label}"]');
-												if (button) {
-													const rect = button.getBoundingClientRect();
-													return {
-														x: rect.left,
-														y: rect.top,
-														width: rect.width,
-														height: rect.height,
-														screenX: window.screenX + rect.left,
-														screenY: window.screenY + rect.top
-													};
-												}
-												return null;
-											})()
-										`)) as {
-											x: number;
-											y: number;
-											width: number;
-											height: number;
-											screenX: number;
-											screenY: number;
-										} | null;
-
-										if (coordinates === null) {
-											coordinates = {
-												x: 400,
-												y: 25,
-												width: 0,
-												height: 0,
-												screenX: 0,
-												screenY: 0
-											};
-										}
-										logger.info("Dock button coordinates:", coordinates);
+										const positionInfo = await getActionPositionInfo(dock3Provider);
+										const { windowIdentity, coordinates } = positionInfo;
 										const customActionPayload: CustomActionPayload = {
 											callerType: CustomActionCallerType.CustomButton,
-											windowIdentity: dockWindowIdentity,
+											windowIdentity,
 											customData: payload.entry.itemData.action.customData,
-											x: coordinates?.x,
-											y: coordinates?.y
+											x: coordinates.x,
+											y: coordinates.y
 										};
 										await callAction(payload.entry.itemData.action.id, customActionPayload);
 									} catch (error) {
@@ -184,12 +148,13 @@ export async function register(
 						 */
 						public async moreMenuCustomOptionClicked(payload: MoreMenuCustomOptionPayload): Promise<void> {
 							logger.info("Dock3Panel::moreMenuCustomOptionClicked", payload);
+							const { windowIdentity, coordinates } = await getActionPositionInfo(dock3Provider);
 							const customActionPayload: CustomActionPayload = {
 								callerType: CustomActionCallerType.CustomButton,
-								windowIdentity: dockWindowIdentity,
+								windowIdentity,
 								customData: payload.customData,
-								x: 100,
-								y: 25
+								x: coordinates.x,
+								y: coordinates.y
 							};
 							await callAction(payload.action, customActionPayload);
 						}
@@ -270,6 +235,7 @@ export async function register(
 						}
 					}
 			});
+			initializedDock3Provider = dock3Provider;
 
 			// Dock3 is part of @openfin/workspace-platform (bundled, not loaded from the CDN) so it does
 			// not return version metadata the way Dock.register does. We synthesize a registration result
@@ -350,16 +316,16 @@ function unsubscribeFromUpdates(): void {
  * @returns Nothing.
  */
 export async function deregister(): Promise<void> {
-	if (isEmpty(registrationInfo) && isEmpty(dock3Provider)) {
+	if (isEmpty(registrationInfo) && isEmpty(initializedDock3Provider)) {
 		logger.warn("Unable to deregister dock as there is an indication it was never registered");
 		return;
 	}
 
 	unsubscribeFromUpdates();
 
-	if (!isEmpty(dock3Provider)) {
-		const provider = dock3Provider;
-		dock3Provider = undefined;
+	if (!isEmpty(initializedDock3Provider)) {
+		const provider = initializedDock3Provider;
+		initializedDock3Provider = undefined;
 		dock3RegistrationMetaInfo = undefined;
 		dockProviderOptions = undefined;
 		logger.info("Dock3 shutdown about to be called.");
@@ -371,6 +337,25 @@ export async function deregister(): Promise<void> {
 	dockProviderOptions = undefined;
 	logger.info("Dock deregister about to be called.");
 	return Dock.deregister();
+}
+
+/**
+ * When a dock action is triggered, we need to know the window identity and the coordinates of the mouse in relation to the dock window.
+ * @param dockProvider The dock provider.
+ * @returns The window identity and the coordinates of the mouse in relation to the dock window.
+ */
+async function getActionPositionInfo(
+	dockProvider: Dock3Provider
+): Promise<{ windowIdentity: OpenFin.Identity; coordinates: { x: number; y: number } }> {
+	const dockWindow = dockProvider.getWindowSync();
+	const [mousePosition, dockBounds] = await Promise.all([
+		fin.System.getMousePosition(),
+		dockWindow.getBounds()
+	]);
+	return {
+		windowIdentity: dockWindow.identity,
+		coordinates: { x: mousePosition.left - dockBounds.left, y: mousePosition.top - dockBounds.top }
+	};
 }
 
 /**
@@ -883,10 +868,10 @@ async function addEntriesByAppTag(
  */
 export async function show(): Promise<void> {
 	logger.info("Dock show called.");
-	if (!isEmpty(dock3Provider)) {
+	if (!isEmpty(initializedDock3Provider)) {
 		// Dock3 has no explicit show, it is auto shown when initialized. Use the underlying
 		// window so the show-dock connection action and the autoShow bootstrap option keep working.
-		const dockWindow = dock3Provider.getWindowSync();
+		const dockWindow = initializedDock3Provider.getWindowSync();
 		await dockWindow.show();
 		await dockWindow.focus();
 		return;
@@ -900,8 +885,8 @@ export async function show(): Promise<void> {
  */
 export async function minimize(): Promise<void> {
 	logger.info("Dock minimize called.");
-	if (!isEmpty(dock3Provider)) {
-		return dock3Provider.getWindowSync().minimize();
+	if (!isEmpty(initializedDock3Provider)) {
+		return initializedDock3Provider.getWindowSync().minimize();
 	}
 	return Dock.minimize();
 }
@@ -1158,13 +1143,13 @@ async function refreshDock(): Promise<void> {
  * not lost) while the entries themselves (icons, added/removed entries) are rebuilt from config.
  */
 async function refreshDock3(): Promise<void> {
-	if (!isEmpty(dock3Provider)) {
+	if (!isEmpty(initializedDock3Provider)) {
 		const newButtons = await buildButtons();
 
 		if (JSON.stringify(newButtons) !== JSON.stringify(registeredButtons)) {
 			registeredButtons = newButtons;
 			const mapped = await buildDock3ButtonEntries(newButtons);
-			const currentConfig = dock3Provider.config;
+			const currentConfig = initializedDock3Provider.config;
 
 			// Preserve the current display order (which may reflect user rearrangement) while
 			// swapping in the freshly built entries.
@@ -1182,7 +1167,7 @@ async function refreshDock3(): Promise<void> {
 				JSON.stringify(newFavorites) !== JSON.stringify(currentConfig.favorites) ||
 				JSON.stringify(newContentMenu) !== JSON.stringify(currentConfig.contentMenu)
 			) {
-				await dock3Provider.updateConfig({
+				await initializedDock3Provider.updateConfig({
 					...currentConfig,
 					favorites: newFavorites,
 					contentMenu: newContentMenu
