@@ -72,7 +72,7 @@ For a more detailed look at how each component is used please see the individual
 
 - [Register with Home](../register-with-home/)
 - [Register with Store](../register-with-store/)
-- [Register with Dock](../register-with-dock/)
+- [Register with Dock](../register-with-dock/) (this example's dock is backed by Dock 3, see [Register with Dock3 Basic](../register-with-dock3-basic/) for a deeper look at the Dock 3 API)
 - [Register with Notifications](../register-with-notifications/)
 
 ### Note About This Example
