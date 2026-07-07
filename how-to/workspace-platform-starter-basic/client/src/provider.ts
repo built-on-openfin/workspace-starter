@@ -1,10 +1,9 @@
 import type OpenFin from "@openfin/core";
-import { Dock, Home, Storefront, type App } from "@openfin/workspace";
-import { CustomActionCallerType, type CustomThemes, init } from "@openfin/workspace-platform";
+import { Home, Storefront, type App } from "@openfin/workspace";
+import { type CustomThemes, init } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 import { register as registerDock } from "./dock";
 import { register as registerHome } from "./home";
-import { launchApp } from "./launch";
 import { register as registerNotifications } from "./notifications";
 import type { CustomSettings, PlatformSettings } from "./shapes";
 import { register as registerStore } from "./store";
@@ -60,16 +59,6 @@ async function initializeWorkspacePlatform(
 					newTabUrl
 				}
 			}
-		},
-		customActions: {
-			"launch-app": async (e): Promise<void> => {
-				if (
-					e.callerType === CustomActionCallerType.CustomButton ||
-					e.callerType === CustomActionCallerType.CustomDropdownItem
-				) {
-					await launchApp(e.customData as App);
-				}
-			}
 		}
 	});
 }
@@ -113,7 +102,7 @@ async function initializeWorkspaceComponents(
 	await registerStore(platformSettings, apps);
 
 	// Register with dock
-	await registerDock(platformSettings, apps);
+	const dockProvider = await registerDock(platformSettings, apps);
 
 	// Register with notifications
 	await registerNotifications(platformSettings);
@@ -123,7 +112,7 @@ async function initializeWorkspaceComponents(
 	await providerWindow.once("close-requested", async () => {
 		await Home.deregister(platformSettings.id);
 		await Storefront.deregister(platformSettings.id);
-		await Dock.deregister();
+		await dockProvider?.shutdown();
 		await Notifications.deregister(platformSettings.id);
 		await fin.Platform.getCurrentSync().quit();
 	});

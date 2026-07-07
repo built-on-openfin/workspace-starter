@@ -43,6 +43,6 @@
 				"src": "http://localhost:8080/common/images/previews/tools/openfin-process-manager.png"
 			}
 		],
-		"tags": ["hero", "manifest", "tools"]
+		"tags": ["hero", "manifest", "tools", "dock"]
 	}
 ]

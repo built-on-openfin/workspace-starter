@@ -88,7 +88,7 @@
             "$ref": "#/definitions/__type_3"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_65"
+            "$ref": "#/definitions/__type_66"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -381,6 +381,27 @@
             "type": "array"
         },
         "Array_2": {
+            "items": {
+                "enum": [
+                    "bottom",
+                    "top"
+                ],
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "Array_3": {
+            "items": {
+                "enum": [
+                    "inspect",
+                    "snapToBottom",
+                    "snapToTop"
+                ],
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "Array_4": {
             "description": "List of extended custom themes.",
             "items": {
                 "$ref": "#/definitions/PlatformCustomTheme"
@@ -416,6 +437,139 @@
                 "user-gesture-required"
             ],
             "type": "string"
+        },
+        "BaseCustomDropdownConfig": {
+            "additionalProperties": false,
+            "description": "Base Configuration for a custom dropdown",
+            "properties": {
+                "disabled": {
+                    "description": "Disable custom button true or false",
+                    "type": "boolean"
+                },
+                "iconUrl": {
+                    "description": "icon URL for icon image",
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/BaseCustomDropdownItems",
+                    "description": "Dropdown options"
+                },
+                "parentHover": {
+                    "type": "boolean"
+                },
+                "tooltip": {
+                    "description": "Button name text when hovered over",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "options",
+                "tooltip"
+            ],
+            "type": "object"
+        },
+        "BaseCustomDropdownItem.Action": {},
+        "BaseCustomDropdownItem<any>": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "$ref": "#/definitions/BaseCustomDropdownItem.Action",
+                    "description": "icon URL for icon image"
+                },
+                "checked": {
+                    "description": "Is this dropdown item checked? Any value other than undefined will decorate the dropdown option as a checkbox option.",
+                    "type": "boolean"
+                },
+                "disabled": {
+                    "description": "Disable custom button true or false",
+                    "type": "boolean"
+                },
+                "iconUrl": {
+                    "description": "icon URL for icon image",
+                    "type": "string"
+                },
+                "options": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BaseCustomDropdownConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "parentHover": {
+                    "type": "boolean"
+                },
+                "separator": {
+                    "type": "boolean"
+                },
+                "tooltip": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "BaseCustomDropdownItem<any>_1": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "$ref": "#/definitions/BaseCustomDropdownItem.Action",
+                    "description": "icon URL for icon image"
+                },
+                "checked": {
+                    "description": "Is this dropdown item checked? Any value other than undefined will decorate the dropdown option as a checkbox option.",
+                    "type": "boolean"
+                },
+                "disabled": {
+                    "description": "Disable custom button true or false",
+                    "type": "boolean"
+                },
+                "iconUrl": {
+                    "description": "icon URL for icon image",
+                    "type": "string"
+                },
+                "options": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/BaseCustomDropdownConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "parentHover": {
+                    "type": "boolean"
+                },
+                "separator": {
+                    "type": "boolean"
+                },
+                "tooltip": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "BaseCustomDropdownItems": {
+            "anyOf": [
+                {
+                    "items": {
+                        "$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E_1"
+                    },
+                    "type": "array"
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object"
+                }
+            ]
         },
         "BlockedContentCreationRule": {
             "additionalProperties": false,
@@ -880,7 +1034,7 @@
             "type": "object"
         },
         "CertificationInfo": {
-            "$ref": "#/definitions/__type_58"
+            "$ref": "#/definitions/__type_59"
         },
         "ChromiumPolicies": {
             "$ref": "#/definitions/__type_14"
@@ -1038,7 +1192,7 @@
             "$ref": "#/definitions/__type_16"
         },
         "ContextGroupStates": {
-            "$ref": "#/definitions/__type_55"
+            "$ref": "#/definitions/__type_56"
         },
         "ContextMenuOptions": {
             "$ref": "#/definitions/__type_9"
@@ -1410,7 +1564,7 @@
         },
         "Data": {},
         "DeepPartial": {
-            "$ref": "#/definitions/__type_46"
+            "$ref": "#/definitions/__type_47"
         },
         "DelayStrategy": {
             "additionalProperties": false,
@@ -1470,7 +1624,72 @@
             "type": "object"
         },
         "DipScaleRects": {
-            "$ref": "#/definitions/__type_52"
+            "$ref": "#/definitions/__type_53"
+        },
+        "DockAllowedWindowOptions": {
+            "additionalProperties": false,
+            "properties": {
+                "contextMenuOptions": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "template": {
+                            "$ref": "#/definitions/Array_3"
+                        }
+                    },
+                    "type": "object"
+                },
+                "defaultCentered": {
+                    "description": "Centers the window in the primary monitor. This option overrides `defaultLeft` and `defaultTop`. When `saveWindowState` is `true`,\nthis value will be ignored for subsequent launches in favor of the cached value.\n\n**NOTE:** On macOS _defaultCenter_ is somewhat above center vertically.",
+                    "type": "boolean"
+                },
+                "defaultLeft": {
+                    "default": 100,
+                    "description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+                    "type": "number"
+                },
+                "defaultTop": {
+                    "default": 100,
+                    "description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+                    "type": "number"
+                },
+                "experimental": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "snapZone": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "locationPreference": {
+                                    "$ref": "#/definitions/Array_2"
+                                },
+                                "threshold": {
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "enabled"
+                            ],
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "saveWindowState": {
+                    "default": true,
+                    "description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
+                    "type": "boolean"
+                },
+                "taskbarIconGroup": {
+                    "description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
+                    "type": "string"
+                }
+            },
+            "type": "object"
         },
         "DockButtonAction": {
             "additionalProperties": false,
@@ -1697,6 +1916,106 @@
                     "description": "Disallow rearrangement of dock icons by setting this flag.",
                     "type": "boolean"
                 },
+                "dock3UIConfig": {
+                    "additionalProperties": false,
+                    "description": "UI Configuration Options supported by Dock 3.0",
+                    "properties": {
+                        "contentMenu": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "enableBookmarking": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "hideDragHandle": {
+                            "description": "By default drag handle is visible. Set this to true to hide the drag handle",
+                            "type": "boolean"
+                        },
+                        "manageWorkspaces": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "newWindow": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "behavior": {
+                                            "const": "view",
+                                            "type": "string"
+                                        },
+                                        "viewOptions": {
+                                            "$ref": "#/definitions/PlatformViewCreationOptions"
+                                        }
+                                    },
+                                    "required": [
+                                        "behavior",
+                                        "viewOptions"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "moreMenu": {
+                            "additionalProperties": false,
+                            "description": "Configuration for the dock more menu component.",
+                            "properties": {
+                                "moreMenuCustomOption": {
+                                    "additionalProperties": false,
+                                    "description": "Custom menu option to display in the dock more menu.\nConfiguration for customizable menu items that will appear in the dock context menu.",
+                                    "properties": {
+                                        "label": {
+                                            "type": "string"
+                                        },
+                                        "options": {
+                                            "items": {
+                                                "$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "required": [
+                                        "label",
+                                        "options"
+                                    ],
+                                    "type": "object"
+                                },
+                                "quitPlatform": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "hidePlatformTitle": {
+                                            "description": "By default the quit button will contain platform title in its label. Set this to true to hide the platform title.",
+                                            "type": "boolean"
+                                        },
+                                        "skipDialog": {
+                                            "description": "By default the quit button will show a quit confirmation dialog. Set this to true to skip the quit confirmation dialog.",
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "providerIconContentMenu": {
+                            "description": "By default provider icon is just a drag region. Set this to true to convert it to content menu dropdown button.",
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "dock3WindowOptions": {
+                    "$ref": "#/definitions/DockAllowedWindowOptions",
+                    "description": "If using dock type 3 this allows you to specify additional options for the dock window."
+                },
+                "dockType": {
+                    "description": "The type of the dock to target. The v1 version is the original dock that is provided as part of the",
+                    "enum": [
+                        "1",
+                        "3"
+                    ],
+                    "type": "string"
+                },
                 "entries": {
                     "description": "What apps, actions or drop downs should be made available via the dock.",
                     "items": {
@@ -1724,6 +2043,10 @@
                     "additionalProperties": false,
                     "description": "Which workspace related icons should be hidden from the dock",
                     "properties": {
+                        "hideContentButton": {
+                            "description": "Hides the content menu button. Only applicable when `dockType` is \"3\", the v1 dock has no\nequivalent button and this setting is ignored.",
+                            "type": "boolean"
+                        },
                         "hideHomeButton": {
                             "type": "boolean"
                         },
@@ -2212,7 +2535,7 @@
             "$ref": "#/definitions/__type_4"
         },
         "Identity_4_1": {
-            "$ref": "#/definitions/__type_47"
+            "$ref": "#/definitions/__type_48"
         },
         "Image": {
             "additionalProperties": false,
@@ -2429,7 +2752,7 @@
             "$ref": "#/definitions/__type_12"
         },
         "LaunchExternalProcessListener": {
-            "$ref": "#/definitions/__type_57"
+            "$ref": "#/definitions/__type_58"
         },
         "LaunchPreference": {
             "additionalProperties": false,
@@ -3527,10 +3850,10 @@
             "type": "string"
         },
         "MonitorDetails": {
-            "$ref": "#/definitions/__type_54"
+            "$ref": "#/definitions/__type_55"
         },
         "MonitorInfo": {
-            "$ref": "#/definitions/__type_50"
+            "$ref": "#/definitions/__type_51"
         },
         "NativeLaunchOptions": {
             "additionalProperties": false,
@@ -3681,10 +4004,10 @@
             "type": "object"
         },
         "NotificationIndicatorColors": {
-            "$ref": "#/definitions/__type_63"
+            "$ref": "#/definitions/__type_64"
         },
         "NotificationIndicatorColorsWithScheme": {
-            "$ref": "#/definitions/__type_64"
+            "$ref": "#/definitions/__type_65"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -3719,7 +4042,7 @@
             "type": "object"
         },
         "NotificationsCustomManifestOptions": {
-            "$ref": "#/definitions/__type_48"
+            "$ref": "#/definitions/__type_49"
         },
         "O": {},
         "Omit": {
@@ -4103,22 +4426,22 @@
             "$ref": "#/definitions/__type_34"
         },
         "Partial_13": {
-            "$ref": "#/definitions/__type_49"
+            "$ref": "#/definitions/__type_50"
         },
         "Partial_14": {
-            "$ref": "#/definitions/__type_56"
+            "$ref": "#/definitions/__type_57"
         },
         "Partial_15": {
-            "$ref": "#/definitions/__type_59"
-        },
-        "Partial_16": {
             "$ref": "#/definitions/__type_60"
         },
-        "Partial_17": {
+        "Partial_16": {
             "$ref": "#/definitions/__type_61"
         },
-        "Partial_18": {
+        "Partial_17": {
             "$ref": "#/definitions/__type_62"
+        },
+        "Partial_18": {
+            "$ref": "#/definitions/__type_63"
         },
         "Partial_2": {
             "$ref": "#/definitions/__type_6"
@@ -4405,7 +4728,7 @@
             "type": "object"
         },
         "PlatformCustomThemes": {
-            "$ref": "#/definitions/Array_2"
+            "$ref": "#/definitions/Array_4"
         },
         "PlatformInteropBrokerOptions": {
             "additionalProperties": false,
@@ -4509,8 +4832,11 @@
             ],
             "type": "object"
         },
+        "PlatformViewCreationOptions": {
+            "$ref": "#/definitions/__type_46"
+        },
         "Point": {
-            "$ref": "#/definitions/__type_51"
+            "$ref": "#/definitions/__type_52"
         },
         "PolicyOptions": {
             "description": "When set to `disable`, disables the policy\nWhen set to `defer-to-group-policy`, respects Group Policy settings",
@@ -4602,7 +4928,7 @@
             "$ref": "#/definitions/__type_33"
         },
         "RectangleByEdgePositions": {
-            "$ref": "#/definitions/__type_53"
+            "$ref": "#/definitions/__type_54"
         },
         "ResizeRegion": {
             "$ref": "#/definitions/__type_11"
@@ -8397,6 +8723,273 @@
         "__type_46": {
             "additionalProperties": false,
             "properties": {
+                "_internalWorkspaceData": {},
+                "accelerator": {
+                    "$ref": "#/definitions/Partial_4",
+                    "description": "Enable keyboard shortcuts for devtools, zoom, reload, and reload ignoring cache."
+                },
+                "api": {
+                    "$ref": "#/definitions/ApiSettings",
+                    "description": "Configurations for API injection."
+                },
+                "appLogLevel": {
+                    "$ref": "#/definitions/AppLogLevel",
+                    "description": "Specifies the AppLogLevel for the specified View. See {@link AppLogLevel} for more information."
+                },
+                "autoResize": {
+                    "$ref": "#/definitions/AutoResizeOptions"
+                },
+                "autoplayPolicy": {
+                    "$ref": "#/definitions/AutoplayPolicyOptions",
+                    "description": "Autoplay policy to apply to content in the window, can be\n`no-user-gesture-required`, `user-gesture-required`,\n`document-user-activation-required`. Defaults to `no-user-gesture-required`."
+                },
+                "backgroundColor": {
+                    "description": "The view’s _backfill_ color as a hexadecimal value. Not to be confused with the content background color\n(`document.body.style.backgroundColor`),\nthis color briefly fills a view’s (a) content area before its content is loaded as well as (b) newly exposed\nareas when growing a view. Setting\nthis value to the anticipated content background color can help improve user experience.\nDefault is white.",
+                    "type": "string"
+                },
+                "bounds": {
+                    "$ref": "#/definitions/Bounds",
+                    "description": "Initial bounds given relative to the window."
+                },
+                "chromiumPolicies": {
+                    "$ref": "#/definitions/ChromiumPolicies",
+                    "description": "{@inheritDoc ChromiumPolicies}"
+                },
+                "closeBehavior": {
+                    "description": "**Platforms Only.**\nDetermines what happens when a view is closed in a platform window.\nSupersedes the deprecated `detachOnClose`.\nIf not set, detaults to `destroy` if `detachOnClose` is false (default), or `detach` if `detachOnClose` is true.\nWhile this option is not updateable, it may change at runtime if `detachOnClose` is updated.\n'hide' hides the view on the platform window that closed it.\n'detach' behaves like 'detachOnClose': true. It attaches the closed view to the platform provider.\n'destroy' is the default behavior as long as 'detachOnClose' is not set. It destroys the view.",
+                    "enum": [
+                        "destroy",
+                        "detach",
+                        "hide"
+                    ],
+                    "type": "string"
+                },
+                "contentCreation": {
+                    "$ref": "#/definitions/ContentCreationOptions",
+                    "description": "Configures how new content (e,g, from `window.open` or a link) is opened."
+                },
+                "contentNavigation": {
+                    "$ref": "#/definitions/ContentNavigation",
+                    "description": "Restrict navigation to URLs that match an allowed pattern.\nIn the lack of an allowlist, navigation to URLs that match a denylisted pattern would be prohibited.\nSee [here](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns) for more details."
+                },
+                "contentRedirect": {
+                    "$ref": "#/definitions/ContentRedirect"
+                },
+                "contextMenu": {
+                    "default": true,
+                    "type": "boolean"
+                },
+                "contextMenuOptions": {
+                    "$ref": "#/definitions/ContextMenuOptions",
+                    "description": "Configure the context menu when right-clicking on a window."
+                },
+                "contextMenuSettings": {
+                    "$ref": "#/definitions/ContextMenuSettings"
+                },
+                "customContext": {
+                    "description": "A field that the user can use to attach serializable data that will be saved when {@link Platform#getSnapshot Platform.getSnapshot}\nis called.  If a window in a Platform is trying to update or retrieve its own context, it can use the\n{@link Platform#setWindowContext Platform.setWindowContext} and {@link Platform#getWindowContext Platform.getWindowContext} calls.\n_When omitted, _inherits_ from the parent application._\nAs opposed to customData, this is meant for frequent updates and sharing with other contexts. For usage example, see {@link MutableWindowOptionscustomContext Example}."
+                },
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "customRequestHeaders": {
+                    "description": "Custom headers for requests sent by the view.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "Custom headers for requests sent by the window.",
+                        "properties": {
+                            "headers": {
+                                "description": "Headers for requests sent by window; {key: value} results\nin a header of `key=value`.",
+                                "items": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "description": "Object representing headers and their values, where the\nobject key is the name of header and value key is the value of the header",
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "urlPatterns": {
+                                "description": "The URL patterns for which the headers will be applied.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "headers",
+                            "urlPatterns"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "detachOnClose": {
+                    "default": false,
+                    "type": "boolean"
+                },
+                "disableAppRegion": {
+                    "default": false,
+                    "type": "boolean"
+                },
+                "downloadShelf": {
+                    "additionalProperties": false,
+                    "description": "Controls interaction of the view with its parent window's download shelf.",
+                    "properties": {
+                        "enabled": {
+                            "description": "Whether downloads in this view trigger opening the download shelf on its parent BrowserWindow.",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "enabled"
+                    ],
+                    "type": "object"
+                },
+                "enableBeforeUnload": {
+                    "default": false,
+                    "description": "When set to `true`, any `beforeunload` handler set on Views will fire.",
+                    "type": "boolean"
+                },
+                "excludeOptions": {
+                    "$ref": "#/definitions/ExcludeOptions",
+                    "description": "Control which options to ignore when creating a Platform View."
+                },
+                "experimental": {},
+                "fdc3InteropApi": {
+                    "type": "string"
+                },
+                "hotkeys": {
+                    "description": "Defines the hotkeys that will be emitted as a `hotkey` event on the view. For usage example, see {@link MutableWindowOptionshotkeys Example}.\nWithin Platform, OpenFin also implements a set of pre-defined actions called\n{@link https://developers.openfin.co/docs/platform-api#section-5-3-using-keyboard-commands keyboard commands}\nthat can be assigned to a specific hotkey in the platform manifest.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A hotkey binding.",
+                        "properties": {
+                            "keys": {
+                                "description": "The key combination of the hotkey, i.e. \"Ctrl+T\".",
+                                "type": "string"
+                            },
+                            "phase": {
+                                "default": "'capture'",
+                                "description": "Controls the event phase at which the hotkey is triggered.\n\n- `'capture'`: The hotkey fires **before** the event is sent to the renderer/page.\nThis is the only phase where the `preventDefault` property is effective.\n\n- `'bubble'`: The hotkey fires **after** the page has processed the key event.\nThis behaves exactly like a standard JavaScript event listener attached to the window:\n1. If the page calls `event.preventDefault()` (on either **keydown** or **keyup**), this hotkey will **not** fire.\n2. If the hotkey is browser-reserved (e.g. `Ctrl+Tab` to switch tabs for which keyup/keydown do not fire in a web browser), that action takes precedence and this hotkey will **not** fire.",
+                                "enum": [
+                                    "bubble",
+                                    "capture"
+                                ],
+                                "type": "string"
+                            },
+                            "preventDefault": {
+                                "default": false,
+                                "description": "Determines if the event should continue to the renderer.\n\n- `true`: The event is consumed immediately. It will **never** reach the renderer/page.\n- `false`: The event is sent to the renderer after this hotkey executes.",
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "keys"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "ignoreChildFrameName": {
+                    "description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
+                    "type": "boolean"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "isClosable": {
+                    "default": true,
+                    "description": "**Platforms Only.** If false, the view will be persistent and can't be closed through\neither UI or `Platform.closeView`. Note that the view will still be closed if the host window is closed or\nif the view isn't part of the new layout when running `Layout.replace`.",
+                    "type": "boolean"
+                },
+                "manifestUrl": {
+                    "description": "**Platforms Only.** Url to a manifest that contains View Options. Properties other than manifestUrl can still be used\nbut the properties in the manifest will take precedence if there is any collision.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of the view.",
+                    "type": "string"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/Partial_6",
+                    "description": "API permissions for code running in the view."
+                },
+                "preloadScripts": {
+                    "description": "Scripts that run before page load.  When omitted, inherits from the parent application.",
+                    "items": {
+                        "additionalProperties": false,
+                        "description": "A script that is run before page load.",
+                        "properties": {
+                            "mandatory": {
+                                "default": false,
+                                "description": "Fail to load the window if this preload script fails",
+                                "type": "boolean"
+                            },
+                            "state": {
+                                "description": "Preload script execution state.",
+                                "enum": [
+                                    "failed",
+                                    "load-failed",
+                                    "load-started",
+                                    "load-succeeded",
+                                    "succeeded"
+                                ],
+                                "type": "string"
+                            },
+                            "url": {
+                                "description": "The URL from which the script was loaded.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "url"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "preventDragOut": {
+                    "default": false,
+                    "description": "**Platforms Only.** If true, the tab of the view can't be dragged out of its host window.",
+                    "type": "boolean"
+                },
+                "processAffinity": {
+                    "description": "String tag that attempts to group like-tagged renderers together. Will only be used if pages are on the same origin.",
+                    "type": "string"
+                },
+                "target": {
+                    "$ref": "#/definitions/Identity_4",
+                    "description": "The identity of the window this view should be attached to."
+                },
+                "throttling": {
+                    "$ref": "#/definitions/ViewThrottling",
+                    "default": "'enabled'",
+                    "description": "{@inheritDoc ViewThrottling}"
+                },
+                "title": {
+                    "description": "Defaults to `name`.",
+                    "type": "string"
+                },
+                "titlePriority": {
+                    "$ref": "#/definitions/ViewTitlePriority",
+                    "description": "Controls order of title precedence:\n'options': viewOptions.title (componentState), document.title, viewOptions.url\n'document': document.title, viewOptions.title(componentState), viewOptions.url (default behavior)"
+                },
+                "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
+                    "type": "string"
+                },
+                "zoomLevel": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "__type_47": {
+            "additionalProperties": false,
+            "properties": {
                 "clientAPIVersion": {
                     "description": "version of client SDK,  set by the API",
                     "type": "string"
@@ -8460,7 +9053,7 @@
             },
             "type": "object"
         },
-        "__type_47": {
+        "__type_48": {
             "additionalProperties": false,
             "properties": {
                 "name": {
@@ -8474,7 +9067,7 @@
             },
             "type": "object"
         },
-        "__type_48": {
+        "__type_49": {
             "additionalProperties": false,
             "description": "Options for using privately hosted notification service.",
             "properties": {
@@ -8493,7 +9086,24 @@
             ],
             "type": "object"
         },
-        "__type_49": {
+        "__type_5": {
+            "additionalProperties": false,
+            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
+            "properties": {
+                "rules": {
+                    "description": "List of rules for creation of new content.",
+                    "items": {
+                        "$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "rules"
+            ],
+            "type": "object"
+        },
+        "__type_50": {
             "additionalProperties": false,
             "properties": {
                 "interopSnapshotDetails": {
@@ -8538,24 +9148,7 @@
             },
             "type": "object"
         },
-        "__type_5": {
-            "additionalProperties": false,
-            "description": "Configures how new content (e,g, from `window.open` or a link) is opened.",
-            "properties": {
-                "rules": {
-                    "description": "List of rules for creation of new content.",
-                    "items": {
-                        "$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "rules"
-            ],
-            "type": "object"
-        },
-        "__type_50": {
+        "__type_51": {
             "additionalProperties": false,
             "properties": {
                 "deviceScaleFactor": {
@@ -8652,7 +9245,7 @@
             ],
             "type": "object"
         },
-        "__type_51": {
+        "__type_52": {
             "additionalProperties": false,
             "properties": {
                 "x": {
@@ -8670,7 +9263,7 @@
             ],
             "type": "object"
         },
-        "__type_52": {
+        "__type_53": {
             "additionalProperties": false,
             "properties": {
                 "dipRect": {
@@ -8686,7 +9279,7 @@
             ],
             "type": "object"
         },
-        "__type_53": {
+        "__type_54": {
             "additionalProperties": false,
             "properties": {
                 "bottom": {
@@ -8710,7 +9303,7 @@
             ],
             "type": "object"
         },
-        "__type_54": {
+        "__type_55": {
             "additionalProperties": false,
             "properties": {
                 "available": {
@@ -8768,7 +9361,7 @@
             ],
             "type": "object"
         },
-        "__type_55": {
+        "__type_56": {
             "additionalProperties": {
                 "additionalProperties": {
                     "additionalProperties": false,
@@ -8799,7 +9392,7 @@
             },
             "type": "object"
         },
-        "__type_56": {
+        "__type_57": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
@@ -8836,11 +9429,11 @@
             },
             "type": "object"
         },
-        "__type_57": {
+        "__type_58": {
             "additionalProperties": false,
             "type": "object"
         },
-        "__type_58": {
+        "__type_59": {
             "additionalProperties": false,
             "properties": {
                 "publickey": {
@@ -8857,36 +9450,6 @@
                 },
                 "trusted": {
                     "type": "boolean"
-                }
-            },
-            "type": "object"
-        },
-        "__type_59": {
-            "additionalProperties": false,
-            "properties": {
-                "alias": {
-                    "description": "The name of the asset",
-                    "type": "string"
-                },
-                "args": {
-                    "description": "The default command line arguments for the aforementioned target.",
-                    "type": "string"
-                },
-                "mandatory": {
-                    "description": "When set to true, the app will fail to load if the asset cannot be downloaded.\nWhen set to false, the app will continue to load if the asset cannot be downloaded. (Default: true)",
-                    "type": "boolean"
-                },
-                "src": {
-                    "description": "The URL to a zip file containing the package files (executables, dlls, etc…)",
-                    "type": "string"
-                },
-                "target": {
-                    "description": "Specify default executable to launch. This option can be overridden in launchExternalProcess",
-                    "type": "string"
-                },
-                "version": {
-                    "description": "The version of the package",
-                    "type": "string"
                 }
             },
             "type": "object"
@@ -9319,6 +9882,36 @@
         "__type_60": {
             "additionalProperties": false,
             "properties": {
+                "alias": {
+                    "description": "The name of the asset",
+                    "type": "string"
+                },
+                "args": {
+                    "description": "The default command line arguments for the aforementioned target.",
+                    "type": "string"
+                },
+                "mandatory": {
+                    "description": "When set to true, the app will fail to load if the asset cannot be downloaded.\nWhen set to false, the app will continue to load if the asset cannot be downloaded. (Default: true)",
+                    "type": "boolean"
+                },
+                "src": {
+                    "description": "The URL to a zip file containing the package files (executables, dlls, etc…)",
+                    "type": "string"
+                },
+                "target": {
+                    "description": "Specify default executable to launch. This option can be overridden in launchExternalProcess",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "The version of the package",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "__type_61": {
+            "additionalProperties": false,
+            "properties": {
                 "height": {
                     "type": "number"
                 },
@@ -9330,23 +9923,6 @@
                 },
                 "width": {
                     "type": "number"
-                }
-            },
-            "type": "object"
-        },
-        "__type_61": {
-            "additionalProperties": false,
-            "properties": {
-                "customData": {
-                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
-                },
-                "interop": {
-                    "$ref": "#/definitions/InteropConfig"
-                },
-                "url": {
-                    "default": "about:blank",
-                    "description": "The URL of the window",
-                    "type": "string"
                 }
             },
             "type": "object"
@@ -9370,6 +9946,19 @@
         },
         "__type_63": {
             "additionalProperties": false,
+            "properties": {
+                "customData": {
+                    "description": "A field that the user can attach serializable data to be ferried around with the window options.\n_When omitted, _inherits_ from the parent application._"
+                },
+                "interop": {
+                    "$ref": "#/definitions/InteropConfig"
+                },
+                "url": {
+                    "default": "about:blank",
+                    "description": "The URL of the window",
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "__type_64": {
@@ -9377,6 +9966,10 @@
             "type": "object"
         },
         "__type_65": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_66": {
             "additionalProperties": false,
             "properties": {
                 "alias": {

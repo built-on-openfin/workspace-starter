@@ -842,7 +842,7 @@
 					"palettes": {
 						"light": {
 							"brandPrimary": "#0A76D3",
-							"brandSecondary": "#1E1F23",
+							"brandSecondary": "#ECEEF1",
 							"backgroundPrimary": "#FAFBFE",
 							"background1": "#FFFFFF",
 							"background2": "#FAFBFE",
@@ -1053,7 +1053,27 @@
 				"hideHomeButton": false,
 				"hideWorkspacesButton": false,
 				"hideNotificationsButton": false,
-				"hideStorefrontButton": false
+				"hideStorefrontButton": false,
+				"hideContentButton": false
+			},
+			"dockType": "3",
+			"dock3WindowOptions": {
+				"experimental": {
+					"snapZone": {
+						"enabled": true
+					}
+				}
+			},
+			"dock3UIConfig": {
+				"contentMenu": {
+					"enableBookmarking": false
+				},
+				"moreMenu": {
+					"moreMenuCustomOption": {
+						"label": "Help",
+						"options": [{ "tooltip": "About", "action": "show-about" }]
+					}
+				}
 			},
 			"entries": [
 				{
