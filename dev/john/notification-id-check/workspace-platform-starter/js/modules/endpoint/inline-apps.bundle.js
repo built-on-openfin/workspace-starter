@@ -1,0 +1,2 @@
+const e={endpoint:new class{async initialize(e,n,o){this._logger=n("InlineAppModuleEndpoint"),this._logger.info("Was passed the following options",e.data)}async requestResponse(e,n){if("module"!==e.type)return this._logger?.warn(`We only expect endpoints of type module. Unable to action request/response for: ${e.id}`),[];const o=e?.options?.apps??[];return this._logger?.info(`Returning ${o.length} app entries from the inline apps endpoint with id: ${e.id}`),o}}};export{e as entryPoints};
+//# sourceMappingURL=inline-apps.bundle.js.map
