@@ -292,85 +292,207 @@ async function initializeDom(): Promise<void> {
 	}
 }
 
+// How long to keep dedup tracking around after a notification's closed event has been handled.
+const NOTIFICATION_EVENT_CLEANUP_GRACE_MS = 30 * 1000;
+
+// Keep track of which notification ids have already had a given event type handled, so that we
+// don't react twice to the same notification.
+const handledNotificationEventIds = new Map<string, Set<string>>();
+
+/**
+ * Determine whether a given event type has already been handled for a notification id, and if
+ * not, record that it now has been.
+ * @param eventType The type of event, used as a namespace so the same notification id can be
+ * tracked independently per event type (e.g. a notification can legitimately be created and
+ * then later closed - those are different events for the same id).
+ * @param notificationId The id of the notification the event relates to.
+ * @returns True if this event has already been handled for the notification and should be
+ * skipped, false if this is the first time and it should be processed.
+ */
+function hasAlreadyHandledNotificationEvent(eventType: string, notificationId: string): boolean {
+	let handledIds = handledNotificationEventIds.get(eventType);
+	if (!handledIds) {
+		handledIds = new Set<string>();
+		handledNotificationEventIds.set(eventType, handledIds);
+	}
+
+	if (handledIds.has(notificationId)) {
+		return true;
+	}
+
+	handledIds.add(notificationId);
+	return false;
+}
+
+/**
+ * Stop tracking a notification across all event types, once we know no further events are
+ * expected for it (i.e. shortly after it has closed).
+ * @param notificationId The id of the notification to stop tracking.
+ */
+function clearHandledNotificationEvents(notificationId: string): void {
+	for (const handledIds of handledNotificationEventIds.values()) {
+		handledIds.delete(notificationId);
+	}
+}
+
+/**
+ * Handle a new notification being created.
+ * @param event The notification created event.
+ */
+function onNotificationCreated(event: Notifications.NotificationCreatedEvent): void {
+	if (hasAlreadyHandledNotificationEvent("notification-created", event.notification.id)) {
+		loggingAddEntry(`Duplicate created event ignored for notification: ${event.notification.id}`);
+		return;
+	}
+
+	loggingAddEntry(`Created: ${event.notification.id}`);
+}
+
+/**
+ * Handle a notification being closed.
+ * @param event The notification closed event.
+ */
+function onNotificationClosed(event: Notifications.NotificationClosedEvent): void {
+	if (hasAlreadyHandledNotificationEvent("notification-closed", event.notification.id)) {
+		loggingAddEntry(`Duplicate closed event ignored for notification: ${event.notification.id}`);
+		return;
+	}
+
+	loggingAddEntry(`Closed: ${event.notification.id}`);
+
+	if (updatableNotifications[event.notification.id]) {
+		delete updatableNotifications[event.notification.id];
+		if (Object.keys(updatableNotifications).length === 0) {
+			window.clearInterval(updatableNotificationTimer);
+			updatableNotificationTimer = undefined;
+		}
+	}
+
+	if (countdownNotifications[event.notification.id]) {
+		delete countdownNotifications[event.notification.id];
+		if (Object.keys(countdownNotifications).length === 0) {
+			window.clearInterval(countdownTimer);
+			countdownTimer = undefined;
+		}
+	}
+
+	if (cancelReminderNotifications[event.notification.id]) {
+		delete cancelReminderNotifications[event.notification.id];
+		if (Object.keys(cancelReminderNotifications).length === 0) {
+			window.clearInterval(cancelReminderTimer);
+			cancelReminderTimer = undefined;
+		}
+	}
+
+	// Wait a short while before releasing dedup tracking for this notification, in case a
+	// duplicate closed event for it is still in flight and arrives shortly after this one.
+	window.setTimeout(() => {
+		clearHandledNotificationEvents(event.notification.id);
+	}, NOTIFICATION_EVENT_CLEANUP_GRACE_MS);
+}
+
+/**
+ * Handle a notification action being triggered.
+ * @param event The notification action event.
+ */
+async function onNotificationAction(event: Notifications.NotificationActionEvent): Promise<void> {
+	if (hasAlreadyHandledNotificationEvent("notification-action", event.notification.id)) {
+		loggingAddEntry(`Duplicate action event ignored for notification: ${event.notification.id}`);
+		return;
+	}
+
+	if (event?.result?.actionId === "open-web-site") {
+		await fin.System.openUrlWithBrowser(event?.result?.url as string);
+	} else if (event?.result?.BODY_CLICK === "dismiss_event") {
+		if (event.notification?.customData?.action) {
+			loggingAddEntry(
+				`\tData: ${event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"}`
+			);
+		} else {
+			loggingAddEntry("\tNo action");
+		}
+		loggingAddEntry("\tBody click dismiss");
+	} else {
+		loggingAddEntry(
+			`\tData: ${event?.result?.customData ? JSON.stringify(event.result.customData) : "None"}`
+		);
+		loggingAddEntry(`\tTask: ${event?.result?.task ?? "None"}`);
+		loggingAddEntry(`Action: ${event.notification.id}`);
+	}
+
+	console.log(event);
+}
+
+/**
+ * Handle a notification toast being dismissed.
+ * @param event The notification toast dismissed event.
+ */
+function onNotificationToastDismissed(event: Notifications.NotificationToastDismissedEvent): void {
+	if (hasAlreadyHandledNotificationEvent("notification-toast-dismissed", event.notification.id)) {
+		loggingAddEntry(`Duplicate toast dismissed event ignored for notification: ${event.notification.id}`);
+		return;
+	}
+
+	loggingAddEntry(`Toast Dismissed: ${event.notification.id}`);
+}
+
+/**
+ * Handle a notification form being submitted.
+ * @param event The notification form submitted event.
+ */
+function onNotificationFormSubmitted(event: Notifications.NotificationFormSubmittedEvent): void {
+	if (hasAlreadyHandledNotificationEvent("notification-form-submitted", event.notification.id)) {
+		loggingAddEntry(`Duplicate form submitted event ignored for notification: ${event.notification.id}`);
+		return;
+	}
+
+	loggingAddEntry(`\tData: ${event?.form ? JSON.stringify(event.form) : "None"}`);
+	loggingAddEntry(`Form: ${event.notification.id}`);
+	console.log(event);
+}
+
+/**
+ * Handle the notifications count changing.
+ * @param event The notifications count changed event.
+ */
+function onNotificationsCountChanged(event: Notifications.NotificationsCountChanged): void {
+	showNotificationCount(event.count);
+}
+
+/**
+ * Handle the notification sound setting being toggled.
+ * @param event The notification sound toggled event.
+ */
+function onNotificationSoundToggled(event: Notifications.ToggleNotificationSound): void {
+	loggingAddEntry(`Sound Enabled: ${event.notificationSoundEnabled}`);
+}
+
+/**
+ * Add all the notification center event listeners.
+ */
+async function addNotificationEventListeners(): Promise<void> {
+	await Notifications.addEventListener("notification-created", onNotificationCreated);
+	await Notifications.addEventListener("notification-closed", onNotificationClosed);
+	await Notifications.addEventListener("notification-action", onNotificationAction);
+	await Notifications.addEventListener("notification-toast-dismissed", onNotificationToastDismissed);
+	await Notifications.addEventListener("notification-form-submitted", onNotificationFormSubmitted);
+	await Notifications.addEventListener("notifications-count-changed", onNotificationsCountChanged);
+	await Notifications.addEventListener("notification-sound-toggled", onNotificationSoundToggled);
+}
+
 /**
  * Initialize the listeners for the events from the notification center.
+ *
+ * Note: the notification center client SDK automatically re-subscribes any still-registered
+ * event listeners with the service whenever the underlying connection drops and reconnects, so
+ * the listeners only need to be added once here. That automatic re-subscription is not
+ * coordinated with anything our own code does, and can end up leaving more than one
+ * subscription registered with the service - so rather than trying to win that race by calling
+ * `addEventListener`/`removeEventListener` again ourselves on every connection change, each
+ * handler above guards against handling the same notification event more than once instead.
  */
 async function initializeListeners(): Promise<void> {
-	// Listen for new notifications being created
-	await Notifications.addEventListener("notification-created", (event) => {
-		loggingAddEntry(`Created: ${event.notification.id}`);
-	});
-
-	await Notifications.addEventListener("notification-closed", (event) => {
-		loggingAddEntry(`Closed: ${event.notification.id}`);
-
-		if (updatableNotifications[event.notification.id]) {
-			delete updatableNotifications[event.notification.id];
-			if (Object.keys(updatableNotifications).length === 0) {
-				window.clearInterval(updatableNotificationTimer);
-				updatableNotificationTimer = undefined;
-			}
-		}
-
-		if (countdownNotifications[event.notification.id]) {
-			delete countdownNotifications[event.notification.id];
-			if (Object.keys(countdownNotifications).length === 0) {
-				window.clearInterval(countdownTimer);
-				countdownTimer = undefined;
-			}
-		}
-
-		if (cancelReminderNotifications[event.notification.id]) {
-			delete cancelReminderNotifications[event.notification.id];
-			if (Object.keys(cancelReminderNotifications).length === 0) {
-				window.clearInterval(cancelReminderTimer);
-				cancelReminderTimer = undefined;
-			}
-		}
-	});
-
-	await Notifications.addEventListener("notification-action", async (event) => {
-		if (event?.result?.actionId === "open-web-site") {
-			await fin.System.openUrlWithBrowser(event?.result?.url as string);
-		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
-			if (event.notification?.customData?.action) {
-				loggingAddEntry(
-					`\tData: ${
-						event?.notification?.customData ? JSON.stringify(event.notification.customData) : "None"
-					}`
-				);
-			} else {
-				loggingAddEntry("\tNo action");
-			}
-			loggingAddEntry("\tBody click dismiss");
-		} else {
-			loggingAddEntry(
-				`\tData: ${event?.result?.customData ? JSON.stringify(event.result.customData) : "None"}`
-			);
-			loggingAddEntry(`\tTask: ${event?.result?.task ?? "None"}`);
-			loggingAddEntry(`Action: ${event.notification.id}`);
-		}
-
-		console.log(event);
-	});
-
-	await Notifications.addEventListener("notification-toast-dismissed", (event) => {
-		loggingAddEntry(`Toast Dismissed: ${event.notification.id}`);
-	});
-
-	await Notifications.addEventListener("notification-form-submitted", (event) => {
-		loggingAddEntry(`\tData: ${event?.form ? JSON.stringify(event.form) : "None"}`);
-		loggingAddEntry(`Form: ${event.notification.id}`);
-		console.log(event);
-	});
-
-	await Notifications.addEventListener("notifications-count-changed", (event) => {
-		showNotificationCount(event.count);
-	});
-
-	await Notifications.addEventListener("notification-sound-toggled", (event) => {
-		loggingAddEntry(`Sound Enabled: ${event.notificationSoundEnabled}`);
-	});
+	await addNotificationEventListeners();
 
 	addConnectionChangedEventListener((status) => {
 		if (status.connected !== connected) {
