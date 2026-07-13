@@ -1,0 +1,23 @@
+{
+	"name": "@openfin/automation-test",
+	"version": "2.0.0",
+	"description": "HERE automation tests using the CLI with Vitest",
+	"private": true,
+	"scripts": {
+		"build": "echo Nothing to build",
+		"build-lint": "eslint tests",
+		"dist": "echo Nothing to dist",
+		"test": "here-automation ./tests/**/*.spec.ts --testRetryCount 2",
+		"test-remote": "MANIFEST_URL=https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/manifest.fin.json here-automation ./tests/**/*.spec.ts --testRetryCount 2",
+		"test-offline": "here-automation http://localhost:8080/manifest.fin.json ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --testRetryCount 2"
+	},
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"devDependencies": {
+		"@openfin/automation-cli": "~2.0.0-alpha.0",
+		"@openfin/automation-helpers": "~2.0.0-alpha.0",
+		"@typescript-eslint/eslint-plugin": "8.62.0",
+		"@typescript-eslint/parser": "8.62.0",
+		"eslint": "9.39.4",
+		"eslint-config-prettier": "^9.1.0"
+	}
+}

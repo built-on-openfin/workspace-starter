@@ -1,0 +1,26 @@
+{
+	"name": "@openfin/automation-test-wdio",
+	"version": "2.0.0",
+	"description": "HERE Automation Tests using WDIO",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "echo Nothing to build",
+		"dist": "echo Nothing to dist",
+		"test": "wdio run wdio.conf.mjs",
+		"test-remote": "MANIFEST_URL=https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/manifest.fin.json wdio run wdio.conf.mjs",
+		"kill": "fkill -f -s OpenFin.exe OpenFinRVM.exe chromedriver.exe OpenFin OpenFinRVM chromedriver"
+	},
+	"devDependencies": {
+		"@openfin/automation-core": "~2.0.0-alpha.0",
+		"@openfin/automation-helpers": "~2.0.0-alpha.0",
+		"@wdio/cli": "9.29.0",
+		"@wdio/local-runner": "9.29.0",
+		"@wdio/mocha-framework": "9.29.0",
+		"@wdio/spec-reporter": "9.29.0",
+		"chai": "5.1.2",
+		"chromedriver": "134.0.1",
+		"fkill": "9.0.0",
+		"fkill-cli": "8.0.0"
+	}
+}

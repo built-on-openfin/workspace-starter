@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Playwright artifacts
+test-results/
+playwright-report/
+reports/
+screenshots/
+.here-automation-cache/
+
+# HERE automation artifacts
+storage/
+chromedriver/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+.idea/
+*.pem
+
+# Debug logs
+npm-debug.log*

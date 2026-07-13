@@ -1,0 +1,74 @@
+import { OpenFinHome } from "@openfin/automation-helpers";
+import { expect } from "chai";
+
+/**
+ * Driving the Workspace Home component entirely through the OpenFinHome helper.
+ * Fixture-specific values (result ids, filter ids) are asserted so this doubles
+ * as real verification. No selectors or DOM appear anywhere in this file.
+ */
+describe("Home", () => {
+	before(async () => {
+		expect(await OpenFinHome.show(90000)).to.equal(true);
+	});
+
+	after(async () => {
+		await OpenFinHome.hide();
+	});
+
+	it("returns the expected results for a search", async () => {
+		await OpenFinHome.search("interop");
+		expect(await OpenFinHome.searchResultIds()).to.deep.equal([
+			"interop-broadcast-view",
+			"interop-intent-view",
+			"winform-interop-example"
+		]);
+	});
+
+	it("can select a result by index", async () => {
+		await OpenFinHome.searchResultByIndex(1, "select");
+		expect(await OpenFinHome.searchResultSelectedId()).to.equal("interop-intent-view");
+	});
+
+	it("can select a result by id and read its content", async () => {
+		await OpenFinHome.searchResultById("interop-intent-view", "select");
+		expect(await OpenFinHome.searchResultSelectedItem()).to.contain("Intents using Interop API");
+		expect(await OpenFinHome.searchResultSelectedDetails()).to.contain(
+			"This is an example of firing and listening to intents using the interop api"
+		);
+	});
+
+	it("exposes the filter categories", async () => {
+		await OpenFinHome.filtersOpen();
+		expect(await OpenFinHome.filtersIds()).to.deep.equal([
+			"appasset",
+			"developer",
+			"dock",
+			"intent",
+			"interop",
+			"native",
+			"openfin",
+			"tools",
+			"view"
+		]);
+	});
+
+	it("can toggle a filter by id", async () => {
+		expect(await OpenFinHome.filtersByIdGet("view")).to.equal(false);
+		await OpenFinHome.filtersByIdSet("view", true);
+		expect(await OpenFinHome.filtersByIdGet("view")).to.equal(true);
+		await OpenFinHome.filtersClose(true);
+	});
+
+	it("can clear the search", async () => {
+		// Clearing the search box does not empty the result list — Home falls back to
+		// showing its full unfiltered catalog (all four fixture results, in registration
+		// order), the same behaviour you'd see opening Home with no search term typed.
+		await OpenFinHome.searchClear();
+		expect(await OpenFinHome.searchResultIds()).to.deep.equal([
+			"view1",
+			"interop-broadcast-view",
+			"interop-intent-view",
+			"winform-interop-example"
+		]);
+	});
+});

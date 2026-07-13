@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# HERE automation artifacts
+storage/
+chromedriver/
+reports/
+screenshots/
+.here-automation-cache/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+.idea/
+*.pem
+
+# Debug logs
+npm-debug.log*
