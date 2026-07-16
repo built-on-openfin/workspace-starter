@@ -139,50 +139,60 @@ export interface HostManifests {
 	/**
 	 * The HERE settings for this FDC3 2.0 App Definition
 	 */
-	HERE: {
+	HERE?: HostManifestSettings;
+
+	/**
+	 * The HERE settings for this FDC3 2.0 App Definition. Please move to use HERE instead of OpenFin as this will be deprecated in the future.
+	 */
+	OpenFin?: HostManifestSettings;
+}
+
+/**
+ * Definition for host manifest settings.
+ */
+export interface HostManifestSettings {
+	/**
+	 * this is the manifest type id used by HERE and specified if root type is defined as other.
+	 */
+	type?: string;
+
+	/**
+	 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
+	 * using an inline type or extending the details from the root.
+	 */
+	details?: unknown;
+
+	/**
+	 * An area for config related to this app for the platform hosting it. This isn't specific to the app
+	 * manifest but how the platform can manage the app.
+	 */
+	config?: {
 		/**
-		 * this is the manifest type id used by HERE and specified if root type is defined as other.
+		 * does the application wish to be automatically started when the platform is initialized. Default
+		 * behavior is false.
 		 */
-		type?: string;
+		autostart?: boolean;
 
 		/**
-		 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
-		 * using an inline type or extending the details from the root.
+		 * Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it
+		 * is intended to be a background window that acts as an intent handler)
 		 */
-		details?: unknown;
+		private?: boolean;
 
 		/**
-		 * An area for config related to this app for the platform hosting it. This isn't specific to the app
-		 * manifest but how the platform can manage the app.
+		 * This only applies to web views/windows. Default is multi instance. Should we aim to only launch one
+		 * instance of this application and only show the app even if the intent resolver ui supports instances
+		 * of apps. If multi should we support multiple instances and let the user decide whether to launch a
+		 * new instance or pick an existing one from the intent picker? If new it means the intent picker will
+		 * not show the option to pick an instance because the app owner wants a new instance every time. And if
+		 * an intent is raised and just the id of the app is specified it will always launch a new instance
 		 */
-		config?: {
-			/**
-			 * does the application wish to be automatically started when the platform is initialized. Default
-			 * behavior is false.
-			 */
-			autostart?: boolean;
+		instanceMode?: "multi" | "single" | "new";
 
-			/**
-			 * Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it
-			 * is intended to be a background window that acts as an intent handler)
-			 */
-			private?: boolean;
-
-			/**
-			 * This only applies to web views/windows. Default is multi instance. Should we aim to only launch one
-			 * instance of this application and only show the app even if the intent resolver ui supports instances
-			 * of apps. If multi should we support multiple instances and let the user decide whether to launch a
-			 * new instance or pick an existing one from the intent picker? If new it means the intent picker will
-			 * not show the option to pick an instance because the app owner wants a new instance every time. And if
-			 * an intent is raised and just the id of the app is specified it will always launch a new instance
-			 */
-			instanceMode?: "multi" | "single" | "new";
-
-			/**
-			 * Contains additional information related to the launch of an application.
-			 */
-			launchPreference?: LaunchPreference;
-		};
+		/**
+		 * Contains additional information related to the launch of an application.
+		 */
+		launchPreference?: LaunchPreference;
 	};
 }
 

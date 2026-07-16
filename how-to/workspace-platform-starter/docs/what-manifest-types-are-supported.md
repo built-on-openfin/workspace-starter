@@ -10,7 +10,7 @@ You have a number of choices when choosing how you define your apps.
 - [FDC3 1.2 App Definition](./how-to-define-apps-fdc3-1-2.md)
 - [FDC3 2.0 App Definition](./how-to-define-apps-fdc3-2-0.md)
 
-The type of app can be defined by manifestType (for Platform Apps and FDC 1.2 Apps) and type (for FDC 2.0 which has a number of defined types but you can use type **other** for using our manifest type definitions in the hostManifests.OpenFin.type definition).
+The type of app can be defined by manifestType (for Platform Apps and FDC 1.2 Apps) and type (for FDC 2.0 which has a number of defined types but you can use type **other** for using our manifest type definitions in the hostManifests.HERE.type definition, see [FDC3 2.0 App Definition](./how-to-define-apps-fdc3-2-0.md) for details on hostManifests.HERE and its deprecated hostManifests.OpenFin fallback).
 
 # Manifest Types
 
