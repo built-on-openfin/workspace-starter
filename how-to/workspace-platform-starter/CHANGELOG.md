@@ -11,6 +11,7 @@
 - Added an example of a externally hosted wpf click once application that supports intents.
 - Added more logging for snap and the default interop broker.
 - Updated appMetaData logic to not override appMetaData if it is already available. This supports over interopbroker overrides being able to pass appMetaData that they have determined and not having it replaced by our wps interop override.
+- Moved from primarily supporting hostManifest.OpenFin to hostManifest.HERE in the FDC3 2.0 App Directory structure [FDC3 2.0 App Directory](./docs/how-to-define-apps-fdc3-2-0.md). The old OpenFin setting is supported if present and the HERE entry isn't.
 
 ## v22.0.0
 
