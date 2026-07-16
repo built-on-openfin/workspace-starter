@@ -19,6 +19,7 @@ import { isEmpty, isObject } from "../../utils";
  * @returns The platform app.
  */
 export function mapToPlatformApp(app: AppDefinition): PlatformApp {
+	const hostManifest = app.hostManifests?.HERE ?? app.hostManifests?.OpenFin;
 	const platformApp: PlatformApp = {
 		appId: app.appId,
 		name: app.name ?? app.appId,
@@ -26,7 +27,7 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		manifestType: mapManifestTypeFromFDC3(app),
 		manifest: getManifestFromFDC3(app) as string,
 		description: app.description,
-		instanceMode: app?.hostManifests?.HERE?.config?.instanceMode,
+		instanceMode: hostManifest?.config?.instanceMode,
 		intents: mapIntentsFromFDC3(app.interop),
 		interop: app.interop,
 		customConfig: app.customConfig,
@@ -37,9 +38,9 @@ export function mapToPlatformApp(app: AppDefinition): PlatformApp {
 		supportEmail: app.supportEmail,
 		icons: app.icons ?? [],
 		images: app.screenshots,
-		private: app?.hostManifests?.HERE?.config?.private,
-		autostart: app?.hostManifests?.HERE?.config?.autostart,
-		launchPreference: app?.hostManifests?.HERE?.config?.launchPreference
+		private: hostManifest?.config?.private,
+		autostart: hostManifest?.config?.autostart,
+		launchPreference: hostManifest?.config?.launchPreference
 	};
 	return platformApp;
 }
@@ -167,7 +168,7 @@ function mapManifestTypeFromFDC3(app: AppDefinition): string {
 			break;
 		}
 		case "other": {
-			manifestType = app.hostManifests?.HERE?.type ?? "";
+			manifestType = app.hostManifests?.HERE?.type ?? app.hostManifests?.OpenFin?.type ?? "";
 			break;
 		}
 		default: {
@@ -215,7 +216,7 @@ function getManifestFromFDC3(app: AppDefinition): string | unknown {
 	switch (app.type) {
 		case "web": {
 			if (!isEmpty(app?.details)) {
-				const hostDetails = app.hostManifests?.HERE?.details;
+				const hostDetails = app.hostManifests?.HERE?.details ?? app.hostManifests?.OpenFin?.details;
 				if (isObject(hostDetails)) {
 					manifest = {
 						url: (app?.details as WebAppDetails).url,
@@ -245,7 +246,7 @@ function getManifestFromFDC3(app: AppDefinition): string | unknown {
 			break;
 		}
 		case "other": {
-			manifest = app.hostManifests?.HERE?.details;
+			manifest = app.hostManifests?.HERE?.details ?? app.hostManifests?.OpenFin?.details;
 			break;
 		}
 		default: {
