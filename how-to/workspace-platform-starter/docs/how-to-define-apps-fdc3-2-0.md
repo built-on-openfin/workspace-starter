@@ -84,19 +84,23 @@ We include an example of this in the public folder of workspace-platform-starter
 }
 ```
 
+## Host Manifests
+
+Use `hostManifests.HERE` for platform-specific launch settings. `hostManifests.OpenFin` is deprecated but still supported: if `HERE` is not specified, the platform falls back to `OpenFin` so that existing app directories continue to work without changes. If both are specified, `HERE` takes precedence.
+
 The following fields are mandatory:
 
 - appId - helps identify the application in platform
 - title - used to identify the app when searching or browsing
 - type - there are a number of fdc3 2.0 official types like: web, native, other.
-- details - An object with details related to type. These settings can be extended by specifying them in the hostManifests.OpenFin.details setting. For web we take the url from the root details object and then take any additional settings from hostManifests.OpenFin. It maps in the following way:
+- details - An object with details related to type. These settings can be extended by specifying them in the hostManifests.HERE.details setting. For web we take the url from the root details object and then take any additional settings from hostManifests.HERE. It maps in the following way:
 
 ## type to ManifestType mapping
 
-- web -> inline-view (url from details and the rest of the view settings can be set through hostManifests.OpenFin.details)
+- web -> inline-view (url from details and the rest of the view settings can be set through hostManifests.HERE.details)
 - native -> inline-external (path and arguments are defined in the root details object as per the spec)
 - onlineNative -> desktop-browser (url taken from the root details object)
-- other -> you should set the details at the root as an empty object. You can then set manifest type through hostManifests.OpenFin.type and the details for each manifest type through hostManifests.OpenFin.details.
+- other -> you should set the details at the root as an empty object. You can then set manifest type through hostManifests.HERE.type and the details for each manifest type through hostManifests.HERE.details.
 
 ## Manifest Types
 
@@ -109,23 +113,27 @@ The following field is custom to this platform and is optional:
 - instanceMode - default mode is multi. Value can be "single"|"multi"|"new" (new means a new instance will be created if an intent is raised and the app specified but no instance id even if there are existing instances. The intent picker will also not show instances as the app provider has indicated they want to just launch a new instance).
 - launchPreference - Please see [how to define app launch preference](./how-to-define-app-launch-preference.md)
 
-These settings are expressed by setting the config values of hostManifests.OpenFin.config:
+These settings are expressed by setting the config values of hostManifests.HERE.config (hostManifests.OpenFin.config is supported as a deprecated fallback if hostManifests.HERE is not specified):
 
 ```json
-"config": {
-    "private": false,
-    "autoStart": false,
-    "instanceMode": "multi",
-    "launchPreference": {
-      "bounds": {
-        "height": 500,
-        "width": 500
-      },
-      "defaultCentered": false,
-      "options": {
+"hostManifests": {
+  "HERE": {
+    "config": {
+      "private": false,
+      "autoStart": false,
+      "instanceMode": "multi",
+      "launchPreference": {
+        "bounds": {
+          "height": 500,
+          "width": 500
+        },
+        "defaultCentered": false,
+        "options": {
 
+        }
       }
     }
+  }
 }
 ```
 
