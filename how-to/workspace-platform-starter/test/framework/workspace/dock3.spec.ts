@@ -265,7 +265,13 @@ describe("dock3", () => {
 
 		it("should build the registered buttons and subscribe to lifecycle updates", async () => {
 			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
-			const buttons: DockButton[] = [{ id: "a", type: DockButtonNames.ActionButton, tooltip: "A", action: { id: "x" } } as DockButton];
+			const button: DockButton = {
+				id: "a",
+				type: DockButtonNames.ActionButton,
+				tooltip: "A",
+				action: { id: "x" }
+			} as DockButton;
+			const buttons: DockButton[] = [button];
 			dockSharedMock.buildButtons.mockResolvedValue(buttons);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 
@@ -302,7 +308,12 @@ describe("dock3", () => {
 			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			const { providerInstance } = await registerDock3(
+				dock3,
+				workspacePlatformMock,
+				options,
+				createMockWindow()
+			);
 			const shutdownSpy = jest.spyOn(providerInstance, "shutdown");
 
 			await dock3.deregister();
@@ -352,7 +363,12 @@ describe("dock3", () => {
 			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			const { providerInstance } = await registerDock3(
+				dock3,
+				workspacePlatformMock,
+				options,
+				createMockWindow()
+			);
 			providerInstance.config = {
 				...providerInstance.config,
 				favorites: [{ id: "fav-a" }],
@@ -370,7 +386,9 @@ describe("dock3", () => {
 			});
 			const reorderedFavorites = [{ id: "reordered-fav" }];
 			const reorderedContentMenu = [{ id: "reordered-menu" }];
-			dockSharedMock.orderByIds.mockReturnValueOnce(reorderedFavorites).mockReturnValueOnce(reorderedContentMenu);
+			dockSharedMock.orderByIds
+				.mockReturnValueOnce(reorderedFavorites)
+				.mockReturnValueOnce(reorderedContentMenu);
 
 			const result = await providerInstance.loadConfig();
 
@@ -385,7 +403,12 @@ describe("dock3", () => {
 			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			const { providerInstance } = await registerDock3(
+				dock3,
+				workspacePlatformMock,
+				options,
+				createMockWindow()
+			);
 			const superLoadConfigSpy = jest.spyOn(MockBaseProvider.prototype, "loadConfig");
 			endpointMock.hasEndpoint.mockReturnValue(false);
 
@@ -402,7 +425,12 @@ describe("dock3", () => {
 			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			const { providerInstance } = await registerDock3(
+				dock3,
+				workspacePlatformMock,
+				options,
+				createMockWindow()
+			);
 
 			endpointMock.hasEndpoint.mockReturnValue(true);
 			dockSharedMock.getRegisteredButtons.mockReturnValue([{ id: "a" }, { id: "b" }]);
@@ -433,7 +461,12 @@ describe("dock3", () => {
 			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			const { providerInstance } = await registerDock3(
+				dock3,
+				workspacePlatformMock,
+				options,
+				createMockWindow()
+			);
 			const superSaveConfigSpy = jest.spyOn(MockBaseProvider.prototype, "saveConfig");
 			endpointMock.hasEndpoint.mockReturnValue(false);
 
@@ -477,7 +510,10 @@ describe("dock3", () => {
 			const mockWindow = createMockWindow();
 			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, mockWindow);
 
-			await providerInstance.moreMenuCustomOptionClicked({ action: "more-action", customData: { foo: "bar" } });
+			await providerInstance.moreMenuCustomOptionClicked({
+				action: "more-action",
+				customData: { foo: "bar" }
+			});
 
 			expect(actionsMock.callAction).toHaveBeenCalledWith(
 				"more-action",
@@ -493,7 +529,12 @@ describe("dock3", () => {
 			const { dock3, workspacePlatformMock, actionsMock, dockSharedMock } = loadDock3();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			const { providerInstance } = await registerDock3(
+				dock3,
+				workspacePlatformMock,
+				options,
+				createMockWindow()
+			);
 
 			await expect(
 				providerInstance.bookmarkContentMenuEntry({ entry: { id: "a" } })

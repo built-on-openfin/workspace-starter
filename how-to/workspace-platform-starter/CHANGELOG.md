@@ -12,7 +12,7 @@
 - Updated dock documentation: [how to customize dock](./docs/how-to-customize-dock.md).
 - Updated browser documentation: [how to customize browser](./docs/how-to-customize-browser.md) to provide more details around configuring Navigation Buttons (back, forward, reload)
 
-## v23.0.0
+## v23.2.0
 
 - Update to latest version of npm packages.
 - Update to the latest version of snap to latest supported version
@@ -23,6 +23,7 @@
 - Added an example of a externally hosted wpf click once application that supports intents.
 - Added more logging for snap and the default interop broker.
 - Updated to snap 1.5.
+- Moved from primarily supporting hostManifest.OpenFin to hostManifest.HERE in the FDC3 2.0 App Directory structure [FDC3 2.0 App Directory](./docs/how-to-define-apps-fdc3-2-0.md). The old OpenFin setting is supported if present and the HERE entry isn't.
 
 ## v22.0.0
 

@@ -7,7 +7,10 @@ jest.mock("@openfin/workspace-platform", () => ({
 	getCurrentSync: jest.fn()
 }));
 
-import type { DockImplementation, DockProviderOptions } from "../../../client/src/framework/shapes/dock-shapes";
+import type {
+	DockImplementation,
+	DockProviderOptions
+} from "../../../client/src/framework/shapes/dock-shapes";
 import type * as DockModule from "../../../client/src/framework/workspace/dock";
 
 const DOCK1_MODULE_PATH = "../../../client/src/framework/workspace/dock1";
