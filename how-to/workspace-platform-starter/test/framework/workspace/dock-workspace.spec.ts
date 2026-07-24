@@ -45,7 +45,7 @@ const ENDPOINT_MODULE_PATH = "../../../client/src/framework/endpoint";
 const DOCK_SHARED_MODULE_PATH = "../../../client/src/framework/workspace/dock-shared";
 
 /**
- * dock-workspace.ts has module-level singleton state (`registration`/`registrationInfo`), so every
+ * `dock-workspace.ts` has module-level singleton state (`registration`/`registrationInfo`), so every
  * test needs a fresh module instance and fresh mocks.
  * @returns The freshly loaded dock-workspace module along with its mocked dependencies.
  */

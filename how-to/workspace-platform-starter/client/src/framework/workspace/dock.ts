@@ -32,8 +32,7 @@ export async function register(
 	bootstrapOptions?: BootstrapOptions
 ): Promise<DockProviderRegistration | undefined> {
 	if (isEmpty(activeImplementation) && options) {
-		const implementation: DockImplementation =
-			options.dockType === "platform" ? dockPlatform : dockWorkspace;
+		const implementation: DockImplementation = options.dockType === "platform" ? dockPlatform : dockWorkspace;
 
 		registrationInfo = await implementation.register(options, bootstrapOptions);
 		activeImplementation = implementation;

@@ -29,9 +29,9 @@ import { isEmpty, isStringValue, randomUUID } from "../utils";
 /**
  * Store logic shared by the store implementations (store-workspace.ts and store-platform.ts). The
  * building of navigation, landing pages, footers, favorites and the validation of the configuration is
- * identical regardless of whether the store is registered through @openfin/workspace (Storefront) or
- * @openfin/workspace-platform (StorefrontVpw), so it lives here and both implementations build their
- * provider from `buildStorefrontProvider`.
+ * identical regardless of whether the store is registered through @openfin/workspace (Storefront)
+ * or @openfin/workspace-platform (StorefrontVpw), so it lives here and both implementations build
+ * their provider from `buildStorefrontProvider`.
  */
 
 /**
@@ -83,7 +83,7 @@ export function buildStorefrontProvider(
 		getLandingPage: async () => getLandingPage(),
 		getFooter: async () => getFooter(),
 		getApps: async () => addButtons(await getApps({ private: false })),
-		launchApp: async (app) => {
+		launchApp: async (app): Promise<void> => {
 			// this request has come from the store.
 			await launch(app as PlatformApp, undefined, getIdentity());
 		}

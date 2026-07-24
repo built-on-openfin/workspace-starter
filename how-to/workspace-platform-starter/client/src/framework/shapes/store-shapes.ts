@@ -127,9 +127,9 @@ export interface StorefrontProviderOptions {
 	favoritesEnabled?: boolean;
 
 	/**
-	 * The type of store to target. The "workspace" version is the original store that is provided as part of the
-	 * @openfin/workspace package. The "platform" version is the new platform specific store (StorefrontVpw) that is
-	 * registered through @openfin/workspace-platform. The default is "workspace".
+	 * The type of store to target. The "workspace" version is the original store that is provided as part
+	 * of the @openfin/workspace package. The "platform" version is the new platform specific store
+	 * (StorefrontVpw) that is registered through @openfin/workspace-platform. The default is "workspace".
 	 */
 	storefrontType?: "workspace" | "platform";
 

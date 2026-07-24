@@ -20,9 +20,9 @@ import { isEmpty } from "../utils";
 
 /**
  * Search logic shared by the home implementations (home-workspace.ts and home-platform.ts). The search
- * handling is identical regardless of whether home is registered through @openfin/workspace (Home) or
- * @openfin/workspace-platform (HomeVpw), so it lives here and both implementations build their provider
- * from `buildHomeProvider`.
+ * handling is identical regardless of whether home is registered through @openfin/workspace (Home)
+ * or @openfin/workspace-platform (HomeVpw), so it lives here and both implementations build their
+ * provider from `buildHomeProvider`.
  */
 
 const HOME_SOURCE_FILTERS = "sources";

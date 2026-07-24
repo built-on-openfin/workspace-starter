@@ -158,7 +158,7 @@ type CustomProviderInstance = MockBaseProvider & {
 };
 
 /**
- * dock-platform.ts has module-level singleton state
+ * `dock-platform.ts` has module-level singleton state
  * (`initializedDock3Provider`/`dock3RegistrationMetaInfo`), so every test needs a fresh module
  * instance and fresh mocks.
  * @returns The freshly loaded dock-platform module along with its mocked dependencies.
