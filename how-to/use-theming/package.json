@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--use-theming",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Use Theming",
 	"main": "index.js",
 	"scripts": {

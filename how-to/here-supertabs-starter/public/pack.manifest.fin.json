@@ -75,7 +75,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Default HERE Core UI Platform - v24.0.0",
+		"name": "Default HERE Core UI Platform - v45.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

@@ -65,7 +65,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/common/favicon-32x32.png",
-		"name": "HERE Core UI Platform Starter - v24.0.0 - FDC3 Workspace",
+		"name": "HERE Core UI Platform Starter - v45.0.0 - FDC3 Workspace",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

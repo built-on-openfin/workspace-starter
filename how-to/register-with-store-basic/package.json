@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-store-basic",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Register with store basic",
 	"main": "index.js",
 	"scripts": {

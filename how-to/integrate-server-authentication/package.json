@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-server-authentication",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Integrate with Server Authentication",
 	"main": "index.js",
 	"scripts": {

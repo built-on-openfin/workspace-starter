@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--workspace-platform-starter-basic",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- HERE Core UI Platform Starter Basic",
 	"main": "index.js",
 	"scripts": {

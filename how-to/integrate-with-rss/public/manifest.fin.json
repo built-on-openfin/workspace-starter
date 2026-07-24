@@ -34,7 +34,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with RSS - v24.0.0",
+		"name": "Integrate with RSS - v45.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"customSettings": {

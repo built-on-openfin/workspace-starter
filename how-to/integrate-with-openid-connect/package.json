@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-openid-connect",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Integrate with OpenId Connect",
 	"main": "index.js",
 	"scripts": {

@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-ms365-low-code",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Integrate with Microsoft 365 Low Code",
 	"main": "index.js",
 	"scripts": {

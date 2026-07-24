@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--support-context-and-intents",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI Example Application -- Adding intent support to a HERE Core UI Platform",
 	"main": "index.js",
 	"scripts": {

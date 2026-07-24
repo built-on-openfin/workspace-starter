@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--register-with-browser",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Register with browser",
 	"main": "index.js",
 	"scripts": {
