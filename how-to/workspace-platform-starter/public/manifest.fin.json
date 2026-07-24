@@ -906,6 +906,7 @@
 		},
 		"homeProvider": {
 			"id": "workspace-platform-starter",
+			"homeType": "platform",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
@@ -913,6 +914,7 @@
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
+			"storefrontType": "platform",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"landingPage": {

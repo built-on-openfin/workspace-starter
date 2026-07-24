@@ -88,7 +88,7 @@
             "$ref": "#/definitions/__type_3"
         },
         "AppAssetInfo": {
-            "$ref": "#/definitions/__type_66"
+            "$ref": "#/definitions/__type_67"
         },
         "AppEndpointOptions": {
             "anyOf": [
@@ -1092,7 +1092,7 @@
                     "type": "array"
                 },
                 "identity": {
-                    "$ref": "#/definitions/Identity_4",
+                    "$ref": "#/definitions/Identity_4_1",
                     "description": "The identity uuid of the incoming connection or * as a wildcard. We currently do not restrict down to the name\nlevel so it can be blank or omitted."
                 },
                 "validatePayload": {
@@ -2403,6 +2403,14 @@
                     "description": "A flag to indicate this provider will not be displayed as a command.",
                     "type": "boolean"
                 },
+                "homeType": {
+                    "description": "The type of home to target. The \"workspace\" version is the original home that is provided as part of the",
+                    "enum": [
+                        "platform",
+                        "workspace"
+                    ],
+                    "type": "string"
+                },
                 "icon": {
                     "description": "An icon that a UI can display for the Search Provider.",
                     "type": "string"
@@ -2532,9 +2540,31 @@
             "type": "object"
         },
         "Identity_4": {
-            "$ref": "#/definitions/__type_4"
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/Identity_4_1",
+                    "description": "Unique identifier for a window, view or iframe."
+                },
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "layoutName": {
+                            "description": "The name of the layout in a given window.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "layoutName"
+                    ],
+                    "type": "object"
+                }
+            ],
+            "description": "Unique identifier for a window, view or iframe."
         },
         "Identity_4_1": {
+            "$ref": "#/definitions/__type_4"
+        },
+        "Identity_4_2": {
             "$ref": "#/definitions/__type_48"
         },
         "Image": {
@@ -4004,10 +4034,10 @@
             "type": "object"
         },
         "NotificationIndicatorColors": {
-            "$ref": "#/definitions/__type_64"
+            "$ref": "#/definitions/__type_65"
         },
         "NotificationIndicatorColorsWithScheme": {
-            "$ref": "#/definitions/__type_65"
+            "$ref": "#/definitions/__type_66"
         },
         "NotificationProviderOptions": {
             "additionalProperties": false,
@@ -4789,7 +4819,8 @@
                     "description": "The language settings for the platform",
                     "properties": {
                         "initialLanguage": {
-                            "description": "The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE"
+                            "description": "The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE",
+                            "type": "string"
                         }
                     },
                     "required": [
@@ -5233,6 +5264,9 @@
             ],
             "type": "object"
         },
+        "StorefrontAllowedWindowOptions": {
+            "$ref": "#/definitions/__type_64"
+        },
         "StorefrontFooter": {
             "additionalProperties": false,
             "properties": {
@@ -5418,6 +5452,18 @@
                         "$ref": "#/definitions/StoreButtonConfig"
                     },
                     "type": "array"
+                },
+                "storefrontType": {
+                    "description": "The type of store to target. The \"workspace\" version is the original store that is provided as part of the",
+                    "enum": [
+                        "platform",
+                        "workspace"
+                    ],
+                    "type": "string"
+                },
+                "storefrontWindowOptions": {
+                    "$ref": "#/definitions/StorefrontAllowedWindowOptions",
+                    "description": "If using storefront type \"platform\" this allows you to specify additional options for the store window."
                 },
                 "title": {
                     "description": "The title for the store which will show up in the store dropdown",
@@ -5936,6 +5982,8 @@
                 "Print",
                 "PrintAll",
                 "PrintScreen",
+                "TranslatePage",
+                "RevertTranslation",
                 "Custom"
             ],
             "type": "string"
@@ -6349,6 +6397,30 @@
                     "description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
                     "type": "boolean"
                 },
+                "chromeBrowser": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "normal",
+                                        "popup"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
+                },
                 "chromiumPolicies": {
                     "$ref": "#/definitions/ChromiumPolicies",
                     "description": "{@inheritDoc ChromiumPolicies}"
@@ -6469,8 +6541,6 @@
                     "type": "string"
                 },
                 "frame": {
-                    "default": true,
-                    "description": "Show the window's frame.",
                     "type": "boolean"
                 },
                 "height": {
@@ -6572,7 +6642,7 @@
                     "type": "boolean"
                 },
                 "modalParentIdentity": {
-                    "$ref": "#/definitions/Identity_4",
+                    "$ref": "#/definitions/Identity_4_1",
                     "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
                 },
                 "name": {
@@ -8077,7 +8147,7 @@
                     "type": "string"
                 },
                 "target": {
-                    "$ref": "#/definitions/Identity_4",
+                    "$ref": "#/definitions/Identity_4_1",
                     "description": "The identity of the window this view should be attached to."
                 },
                 "throttling": {
@@ -8960,7 +9030,7 @@
                     "type": "string"
                 },
                 "target": {
-                    "$ref": "#/definitions/Identity_4",
+                    "$ref": "#/definitions/Identity_4_1",
                     "description": "The identity of the window this view should be attached to."
                 },
                 "throttling": {
@@ -9019,7 +9089,7 @@
                     "type": "string"
                 },
                 "identity": {
-                    "$ref": "#/definitions/Identity_4_1",
+                    "$ref": "#/definitions/Identity_4_2",
                     "description": "The OpenFin identity that registered this search provider."
                 },
                 "inputLandingPlaceholder": {
@@ -9504,6 +9574,30 @@
                     "description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
                     "type": "boolean"
                 },
+                "chromeBrowser": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": false,
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "normal",
+                                        "popup"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
+                },
                 "chromiumPolicies": {
                     "$ref": "#/definitions/ChromiumPolicies",
                     "description": "{@inheritDoc ChromiumPolicies}"
@@ -9624,8 +9718,6 @@
                     "type": "string"
                 },
                 "frame": {
-                    "default": true,
-                    "description": "Show the window's frame.",
                     "type": "boolean"
                 },
                 "height": {
@@ -9727,7 +9819,7 @@
                     "type": "boolean"
                 },
                 "modalParentIdentity": {
-                    "$ref": "#/definitions/Identity_4",
+                    "$ref": "#/definitions/Identity_4_1",
                     "description": "Parent identity of a modal window. It will create a modal child window when this option is set."
                 },
                 "name": {
@@ -9963,6 +10055,37 @@
         },
         "__type_64": {
             "additionalProperties": false,
+            "properties": {
+                "defaultHeight": {
+                    "default": 500,
+                    "description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
+                    "type": "number"
+                },
+                "defaultLeft": {
+                    "default": 100,
+                    "description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+                    "type": "number"
+                },
+                "defaultTop": {
+                    "default": 100,
+                    "description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+                    "type": "number"
+                },
+                "defaultWidth": {
+                    "default": 800,
+                    "description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+                    "type": "number"
+                },
+                "saveWindowState": {
+                    "default": true,
+                    "description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
+                    "type": "boolean"
+                },
+                "taskbarIconGroup": {
+                    "description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
+                    "type": "string"
+                }
+            },
             "type": "object"
         },
         "__type_65": {
@@ -9970,6 +10093,10 @@
             "type": "object"
         },
         "__type_66": {
+            "additionalProperties": false,
+            "type": "object"
+        },
+        "__type_67": {
             "additionalProperties": false,
             "properties": {
                 "alias": {
