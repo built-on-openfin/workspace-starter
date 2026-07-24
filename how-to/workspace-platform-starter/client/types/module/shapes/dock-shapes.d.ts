@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { DockProviderConfigWithIdentity, DockProviderRegistration } from "@openfin/workspace";
 import type { DockAllowedWindowOptions, Dock3Config } from "@openfin/workspace-platform";
 import type { BootstrapOptions } from "./bootstrap-shapes";
@@ -206,4 +207,9 @@ export interface DockImplementation {
 	 * @returns Nothing.
 	 */
 	minimize(): Promise<void>;
+	/**
+	 * Get the identity of the dock window for this implementation.
+	 * @returns The identity of the dock window, or undefined if the dock provider is not initialized.
+	 */
+	getIdentity(): OpenFin.Identity | undefined;
 }

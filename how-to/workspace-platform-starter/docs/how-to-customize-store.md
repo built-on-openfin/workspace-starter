@@ -206,20 +206,20 @@ There are two implementations of the store available:
 - **Workspace** - the original store provided as part of the `@openfin/workspace` package. This is the default.
 - **Platform** - the newer platform specific store (StorefrontVpw) which is registered through `@openfin/workspace-platform`.
 
-You select which store to target using the `storefrontType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`):
+You select which store to target using the `storeType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`):
 
 ```json
 "storefrontProvider": {
-    "storefrontType": "platform"
+    "storeType": "platform"
 }
 ```
 
-If using the platform version you can also specify additional options for the store window using `storefrontWindowOptions`:
+If using the platform version you can also specify additional options for the store window using `storeWindowOptions`:
 
 ```json
 "storefrontProvider": {
-    "storefrontType": "platform",
-    "storefrontWindowOptions": {
+    "storeType": "platform",
+    "storeWindowOptions": {
         "defaultWidth": 900,
         "defaultHeight": 700
     }

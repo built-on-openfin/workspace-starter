@@ -68,7 +68,7 @@ There are two implementations of the dock available:
 - **Workspace dock** (`dockType: "workspace"`) - the original dock provided as part of the `@openfin/workspace` package. This is the default.
 - **Platform dock** (`dockType: "platform"`) - the latest version of the dock (Dock 3) which is platform specific and registered through `@openfin/workspace-platform`.
 
-You select which dock to target using the `dockType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`). This matches the `homeType` and `storefrontType` naming convention used by the Home and Store components:
+You select which dock to target using the `dockType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`). This matches the `homeType` and `storeType` naming convention used by the Home and Store components:
 
 ```json
 "dockProvider": {

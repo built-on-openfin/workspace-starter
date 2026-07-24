@@ -265,6 +265,25 @@
 					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
+				"chromeBrowser": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"enum": ["normal", "popup"],
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
+				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
 					"description": "{@inheritDoc ChromiumPolicies}"
@@ -382,8 +401,6 @@
 					"type": "string"
 				},
 				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -892,6 +909,25 @@
 					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
+				"chromeBrowser": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"enum": ["normal", "popup"],
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
+				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
 					"description": "{@inheritDoc ChromiumPolicies}"
@@ -1009,8 +1045,6 @@
 					"type": "string"
 				},
 				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {

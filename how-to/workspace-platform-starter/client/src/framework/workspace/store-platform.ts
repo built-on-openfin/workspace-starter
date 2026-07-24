@@ -44,7 +44,7 @@ export async function register(
 	if (isStorefrontConfigurationValid()) {
 		try {
 			registrationInfo = await StorefrontVpw.register(provider, {
-				windowOptions: options.storefrontWindowOptions
+				windowOptions: options.storeWindowOptions
 			});
 			subscribeToFavoriteChanges(registrationInfo as unknown as StorefrontButtonUpdater);
 			logger.info("Version:", registrationInfo);

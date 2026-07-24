@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { HomeRegistration, SearchProviderInfo } from "@openfin/workspace";
 /**
  * HomeProvider Options
@@ -7,9 +8,9 @@ export type HomeProviderOptions = Omit<
 	"identity" | "dispatchFocusEvents" | "clientAPIVersion"
 > & {
 	/**
-	 * The type of home to target. The "workspace" version is the original home that is provided as part of the
-	 * @openfin/workspace package. The "platform" version is the new platform specific home (HomeVpw) that is
-	 * registered through @openfin/workspace-platform. The default is "workspace".
+	 * The type of home to target. The "workspace" version is the original home that is provided as part
+	 * of the @openfin/workspace package. The "platform" version is the new platform specific home
+	 * (HomeVpw) that is registered through @openfin/workspace-platform. The default is "workspace".
 	 */
 	homeType?: "workspace" | "platform";
 	/**
@@ -63,4 +64,9 @@ export interface HomeImplementation {
 	 * @returns Nothing.
 	 */
 	hide(): Promise<void>;
+	/**
+	 * Get the identity of the home window for this implementation.
+	 * @returns The identity of the home window.
+	 */
+	getIdentity(): OpenFin.Identity;
 }

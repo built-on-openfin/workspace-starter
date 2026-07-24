@@ -45,7 +45,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -413,7 +413,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -486,7 +486,7 @@
 								"$ref": "#/definitions/BaseCustomDropdownConfig"
 							},
 							{
-								"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+								"$ref": "#/definitions/BaseCustomDropdownItem<any>"
 							}
 						]
 					},
@@ -530,7 +530,7 @@
 								"$ref": "#/definitions/BaseCustomDropdownConfig"
 							},
 							{
-								"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+								"$ref": "#/definitions/BaseCustomDropdownItem<any>"
 							}
 						]
 					},
@@ -552,7 +552,7 @@
 			"anyOf": [
 				{
 					"items": {
-						"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E_1"
+						"$ref": "#/definitions/BaseCustomDropdownItem<any>_1"
 					},
 					"type": "array"
 				},
@@ -710,7 +710,7 @@
 				"globalMenu": {
 					"description": "This setting lets you customize the default workspace browser main menu and specify your own.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -762,7 +762,7 @@
 				"pageMenu": {
 					"description": "This setting lets you customize the page right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -784,7 +784,7 @@
 				"viewMenu": {
 					"description": "This setting lets you customize the view right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -1928,7 +1928,7 @@
 										},
 										"options": {
 											"items": {
-												"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+												"$ref": "#/definitions/BaseCustomDropdownItem<any>"
 											},
 											"type": "array"
 										}
@@ -2112,14 +2112,14 @@
 				"endpoints": {
 					"description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
 					"items": {
-						"$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/EndpointDefinition<unknown>"
 					},
 					"type": "array"
 				},
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -2327,7 +2327,7 @@
 					"type": "boolean"
 				},
 				"homeType": {
-					"description": "The type of home to target. The \"workspace\" version is the original home that is provided as part of the",
+					"description": "The type of home to target. The \"workspace\" version is the original home that is provided as part\nof the",
 					"enum": ["platform", "workspace"],
 					"type": "string"
 				},
@@ -2620,7 +2620,7 @@
 				"integrations": {
 					"description": "This is the old module list name, remove in future.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -2631,7 +2631,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -2817,6 +2817,10 @@
 			"$ref": "#/definitions/ModuleList_4",
 			"description": "List of modules."
 		},
+		"Locale": {
+			"description": "An ISO language code accepted by the Workspace Platform.\n\n**Built-in languages** (supported out of the box):\n- `en-US` — English (default)\n- `de-DE` — German\n- `ja-JP` — Japanese\n- `ko-KR` — Korean\n- `ru-RU` — Russian\n- `zh-CN` — Chinese (Simplified)\n- `zh-Hant` — Chinese (Traditional)\n\n**Adding custom languages** via `translationOverridesUrl`:\n\nSupply a `translationOverridesUrl` in your Desktop Owner Settings (DOS) or application manifest\npointing to a `translation-override.json` file. Any language code defined in that file will be\naccepted at runtime in addition to the built-in list above.\n\nExample `translation-override.json`:\n```json\n{\n  \"x.x.x\": {\n    \"es-ES\": {\n      \"global.save\": \"Guardar\",\n      \"contextMenu.newWindow\": \"Nueva ventana\"\n    }\n  }\n}\n```\n\nThe `translationOverridesUrl` can be configured in two ways:\n\n_Via Desktop Owner Settings_ (`dos.json` on macOS, registry on Windows):\n```json\n{\n    \"desktopSettings\": {\n        \"systemApps\": {\n            \"workspace\": {\n                \"customConfig\": {\n                    \"translationOverridesUrl\": \"https://example.com/translation-override.json\"\n                }\n            }\n        }\n    }\n}\n```\n\n_Via the application manifest_ (under `platform.workspace`):\n```json\n{\n  \"platform\": {\n    \"workspace\": {\n      \"translationOverridesUrl\": \"https://example.com/translation-override.json\"\n    }\n  }\n}\n```",
+			"type": "string"
+		},
 		"LockUnlockPageConfig": {
 			"$ref": "#/definitions/__type_39"
 		},
@@ -2992,7 +2996,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3064,7 +3068,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3136,7 +3140,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3208,7 +3212,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3254,7 +3258,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3399,7 +3403,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -3614,7 +3618,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3628,7 +3632,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3642,7 +3646,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3656,7 +3660,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3670,7 +3674,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3684,7 +3688,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3752,7 +3756,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference%3Cnever%3E_1"
+						"$ref": "#/definitions/NativePreference<never>_1"
 					},
 					"type": "array"
 				}
@@ -4560,7 +4564,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -4948,8 +4952,8 @@
 					"description": "The language settings for the platform",
 					"properties": {
 						"initialLanguage": {
-							"description": "The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE",
-							"type": "string"
+							"$ref": "#/definitions/Locale",
+							"description": "The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE"
 						}
 					},
 					"required": ["initialLanguage"],
@@ -4958,7 +4962,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -5208,7 +5212,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -5549,14 +5553,14 @@
 					},
 					"type": "array"
 				},
-				"storefrontType": {
-					"description": "The type of store to target. The \"workspace\" version is the original store that is provided as part of the",
+				"storeType": {
+					"description": "The type of store to target. The \"workspace\" version is the original store that is provided as part\nof the",
 					"enum": ["platform", "workspace"],
 					"type": "string"
 				},
-				"storefrontWindowOptions": {
+				"storeWindowOptions": {
 					"$ref": "#/definitions/StorefrontAllowedWindowOptions",
-					"description": "If using storefront type \"platform\" this allows you to specify additional options for the store window."
+					"description": "If using store type \"platform\" this allows you to specify additional options for the store window."
 				},
 				"title": {
 					"description": "The title for the store which will show up in the store dropdown",
@@ -5837,7 +5841,7 @@
 				"menuEntries": {
 					"description": "The menu entries to display.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CTrayMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -5856,19 +5860,19 @@
 		"UpdatableLaunchPreferenceDefinition": {
 			"anyOf": [
 				{
-					"$ref": "#/definitions/WindowPreference%3Cnever%3E"
+					"$ref": "#/definitions/WindowPreference<never>"
 				},
 				{
 					"$ref": "#/definitions/WindowPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/ViewPreference%3Cnever%3E"
+					"$ref": "#/definitions/ViewPreference<never>"
 				},
 				{
 					"$ref": "#/definitions/ViewPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/NativePreference%3Cnever%3E"
+					"$ref": "#/definitions/NativePreference<never>"
 				}
 			],
 			"description": "A type that contains the available updatable launch preferences"
@@ -5995,7 +5999,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference%3Cnever%3E_1"
+								"$ref": "#/definitions/ViewPreference<never>_1"
 							}
 						]
 					},
@@ -6474,7 +6478,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference%3Cnever%3E_1"
+								"$ref": "#/definitions/WindowPreference<never>_1"
 							}
 						]
 					},
@@ -9711,7 +9715,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}

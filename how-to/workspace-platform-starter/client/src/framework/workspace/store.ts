@@ -8,7 +8,7 @@ import * as storeWorkspace from "./store-workspace";
 
 /**
  * Facade for the store component. Delegates to the workspace (store-workspace.ts) or platform
- * (store-platform.ts) implementation based on `storefrontProviderOptions.storefrontType`, so callers
+ * (store-platform.ts) implementation based on `storefrontProviderOptions.storeType`, so callers
  * (bootstrapper.ts) don't need to know which store version is active. See store-shared.ts for the logic
  * shared by both implementations.
  */
@@ -28,9 +28,9 @@ export async function register(
 ): Promise<RegistrationMetaInfo | undefined> {
 	if (isEmpty(activeImplementation) && !isEmpty(options)) {
 		const implementation: StorefrontImplementation =
-			options.storefrontType === "platform" ? storePlatform : storeWorkspace;
+			options.storeType === "platform" ? storePlatform : storeWorkspace;
 
-		logger.info(`Registering the '${options.storefrontType ?? "workspace"}' store implementation.`);
+		logger.info(`Registering the '${options.storeType ?? "workspace"}' store implementation.`);
 		registrationInfo = await implementation.register(options);
 		if (!isEmpty(registrationInfo)) {
 			activeImplementation = implementation;

@@ -131,17 +131,17 @@ export interface StorefrontProviderOptions {
 	 * of the @openfin/workspace package. The "platform" version is the new platform specific store
 	 * (StorefrontVpw) that is registered through @openfin/workspace-platform. The default is "workspace".
 	 */
-	storefrontType?: "workspace" | "platform";
+	storeType?: "workspace" | "platform";
 
 	/**
-	 * If using storefront type "platform" this allows you to specify additional options for the store window.
+	 * If using store type "platform" this allows you to specify additional options for the store window.
 	 */
-	storefrontWindowOptions?: StorefrontAllowedWindowOptions;
+	storeWindowOptions?: StorefrontAllowedWindowOptions;
 }
 
 /**
  * Common interface implemented by each store version (workspace and platform), so that the facade in
- * `store.ts` can delegate to whichever implementation is selected by `storefrontType` without needing to
+ * `store.ts` can delegate to whichever implementation is selected by `storeType` without needing to
  * know its internals. See store-shared.ts for the logic shared by both implementations.
  */
 export interface StorefrontImplementation {
