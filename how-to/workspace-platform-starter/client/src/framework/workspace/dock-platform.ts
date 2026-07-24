@@ -40,11 +40,12 @@ import {
 } from "./dock-shared";
 
 /**
- * The v3 dock implementation, registered through the `@openfin/workspace-platform` package.
- * Implements the `DockImplementation` interface (see dock-shapes.ts) so that dock.ts can delegate to it.
+ * The platform dock implementation (Dock 3), registered through the `@openfin/workspace-platform`
+ * package. Implements the `DockImplementation` interface (see dock-shapes.ts) so that dock.ts can
+ * delegate to it.
  */
 
-const logger = createLogger("Dock3");
+const logger = createLogger("DockPlatform");
 
 let initializedDock3Provider: Dock3Provider | undefined;
 let dock3RegistrationMetaInfo: DockProviderRegistration | undefined;
@@ -62,23 +63,23 @@ export async function register(
 	setDockProviderOptions(options);
 	setRegisteredBootstrapOptions(bootstrapOptions);
 
-	logger.info("The v3 dock has been selected.");
+	logger.info("The platform dock has been selected.");
 	// get the current button definitions taking into account visibility
-	const allDockV1Buttons = await buildButtons();
-	// Keep a reference to the built v1 buttons so that they can be used when mapping
-	// between the v1 and v3 storage shapes (see loadConfig/saveConfig below).
-	setRegisteredButtons(allDockV1Buttons);
-	const mapToV3Buttons = await buildDock3ButtonEntries(allDockV1Buttons);
+	const allWorkspaceButtons = await buildButtons();
+	// Keep a reference to the built workspace-shape buttons so that they can be used when mapping
+	// between the workspace and platform (Dock 3) storage shapes (see loadConfig/saveConfig below).
+	setRegisteredButtons(allWorkspaceButtons);
+	const mappedButtons = await buildDock3ButtonEntries(allWorkspaceButtons);
 	const dock3Provider = await Dock3.init({
 		config: {
 			title: options.title,
 			icon: options.icon,
 			defaultDockButtons: buildWorkspaceButtons(undefined, true),
-			uiConfig: options.dock3UIConfig,
-			favorites: objectClone(mapToV3Buttons.favorites),
-			contentMenu: objectClone(mapToV3Buttons.contentMenu)
+			uiConfig: options.dockUIConfig,
+			favorites: objectClone(mappedButtons.favorites),
+			contentMenu: objectClone(mappedButtons.contentMenu)
 		},
-		windowOptions: options.dock3WindowOptions,
+		windowOptions: options.dockWindowOptions,
 		override: (Base) =>
 			/**
 			 * Custom provider overrides for Dock3
@@ -86,7 +87,7 @@ export async function register(
 			 */
 			class CustomProvider extends Base {
 				/**
-				 * Override for dock3 launch app function.
+				 * Override for dock launch app function.
 				 * This function should be customized to best match the needs of the application.
 				 * @param payload content being launched
 				 */
@@ -115,7 +116,7 @@ export async function register(
 				}
 
 				/**
-				 * Override for dock3 more menu custom option clicked.
+				 * Override for dock more menu custom option clicked.
 				 * This function should be customized to best match the needs of the application.
 				 * @param payload payload for more menu custom option clicked
 				 * @returns void
@@ -134,9 +135,9 @@ export async function register(
 				}
 
 				/**
-				 * Override for dock3 bookmark content function.
+				 * Override for dock bookmark content function.
 				 * Bookmarking is not supported in this version of Workspace Platform Starter and is
-				 * intentionally ignored. The `dock3UIConfig.contentMenu.enableBookmarking` setting can be
+				 * intentionally ignored. The `dockUIConfig.contentMenu.enableBookmarking` setting can be
 				 * enabled but will have no effect until a future release adds first class support.
 				 * @param payload content being bookmarked
 				 */
@@ -145,17 +146,18 @@ export async function register(
 				}
 
 				/**
-				 * Override for dock3 load config.
-				 * Dock3 stores its config independently of dock1 by default (browser storage). To keep the
-				 * dock configuration consistent (and to allow a config to be carried over when a platform
-				 * switches between dockType "1" and "3") we reuse the same custom storage endpoints as dock1
-				 * when they are configured, mapping the stored v1 button order onto the v3 favorites and
-				 * content menu. When no endpoint is configured we fall back to the default dock3 storage.
-				 * @returns The loaded dock3 config.
+				 * Override for dock load config.
+				 * The platform dock stores its config independently of the workspace dock by default (browser
+				 * storage). To keep the dock configuration consistent (and to allow a config to be carried over
+				 * when a platform switches between dockType "workspace" and "platform") we reuse the same custom
+				 * storage endpoints as the workspace dock when they are configured, mapping the stored workspace
+				 * button order onto the platform favorites and content menu. When no endpoint is configured we
+				 * fall back to the default platform dock storage.
+				 * @returns The loaded dock config.
 				 */
 				public async loadConfig(): Promise<Dock3Config> {
 					if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_GET)) {
-						logger.info("Requesting dock3 config from custom storage");
+						logger.info("Requesting platform dock config from custom storage");
 						const availableButtons = objectClone(getRegisteredButtons() ?? []);
 						const stored = await requestStoredDockConfig(
 							getDockProviderOptions()?.id ?? fin.me.identity.uuid,
@@ -163,7 +165,7 @@ export async function register(
 						);
 
 						// The order the buttons are in the stored config is the order we want to
-						// display them, so map that order onto the current v3 favorites/content menu.
+						// display them, so map that order onto the current platform favorites/content menu.
 						if (!isEmpty(stored) && Array.isArray(stored.buttons)) {
 							const orderedIds = stored.buttons
 								.map((button) => button.id)
@@ -179,31 +181,33 @@ export async function register(
 						return this.config;
 					}
 
-					logger.info("Requesting dock3 config from default storage");
+					logger.info("Requesting platform dock config from default storage");
 					return super.loadConfig();
 				}
 
 				/**
-				 * Override for dock3 save config.
-				 * When a custom storage endpoint is configured we convert the v3 favorites/content menu order
-				 * back into the flat v1 button shape and persist it via the same endpoint dock1 uses, so the
-				 * two dock types share a single stored representation. When no endpoint is configured we fall
-				 * back to the default dock3 storage.
+				 * Override for dock save config.
+				 * When a custom storage endpoint is configured we convert the platform favorites/content menu
+				 * order back into the flat workspace button shape and persist it via the same endpoint the
+				 * workspace dock uses, so the two dock types share a single stored representation. When no
+				 * endpoint is configured we fall back to the default platform dock storage.
 				 * @param options The save config options.
-				 * @param options.config The new dock3 config to persist.
+				 * @param options.config The new dock config to persist.
 				 */
 				public async saveConfig({ config }: { config: Dock3Config }): Promise<void> {
 					if (endpointProvider.hasEndpoint(DOCK_ENDPOINT_ID_SET)) {
-						logger.info("Storing dock3 config in custom storage");
-						const v1Config = buildV1ConfigFromDock3(config);
-						const success = await sendDockConfigToEndpoint(v1Config);
+						logger.info("Storing platform dock config in custom storage");
+						const workspaceConfig = buildWorkspaceConfigFromDock3(config);
+						const success = await sendDockConfigToEndpoint(workspaceConfig);
 						if (success) {
-							logger.info(`Saved dock3 config with id: ${v1Config.id} to custom storage`);
+							logger.info(`Saved platform dock config with id: ${workspaceConfig.id} to custom storage`);
 						} else {
-							logger.info(`Unable to save dock3 config with id: ${v1Config.id} to custom storage`);
+							logger.info(
+								`Unable to save platform dock config with id: ${workspaceConfig.id} to custom storage`
+							);
 						}
 					} else {
-						logger.info("Storing dock3 config in default storage");
+						logger.info("Storing platform dock config in default storage");
 						await super.saveConfig({ config });
 					}
 				}
@@ -213,8 +217,8 @@ export async function register(
 
 	// Dock3 is part of @openfin/workspace-platform (bundled, not loaded from the CDN) so it does
 	// not return version metadata the way Dock.register does. We synthesize a registration result
-	// so the bootstrapper treats dock3 as a registered component (registering connection actions
-	// etc.). Platform client versions continue to be tracked separately by the version provider.
+	// so the bootstrapper treats the platform dock as a registered component (registering connection
+	// actions etc.). Platform client versions continue to be tracked separately by the version provider.
 	dock3RegistrationMetaInfo = {
 		clientAPIVersion: "",
 		workspaceVersion: "",
@@ -223,8 +227,8 @@ export async function register(
 		}
 	};
 
-	// Keep the dock3 favorites/content menu in sync with theme, apps and condition changes,
-	// mirroring the behavior of the dock1 registration below.
+	// Keep the platform dock favorites/content menu in sync with theme, apps and condition changes,
+	// mirroring the behavior of the workspace dock registration.
 	subscribeToUpdates(refreshDock3);
 
 	return dock3RegistrationMetaInfo;
@@ -242,7 +246,7 @@ export async function deregister(): Promise<void> {
 		initializedDock3Provider = undefined;
 		dock3RegistrationMetaInfo = undefined;
 		setDockProviderOptions(undefined);
-		logger.info("Dock3 shutdown about to be called.");
+		logger.info("Platform dock shutdown about to be called.");
 		await provider.shutdown();
 	}
 }
@@ -254,7 +258,7 @@ export async function deregister(): Promise<void> {
 export async function show(): Promise<void> {
 	logger.info("Dock show called.");
 	if (!isEmpty(initializedDock3Provider)) {
-		// Dock3 has no explicit show, it is auto shown when initialized. Use the underlying
+		// The platform dock has no explicit show, it is auto shown when initialized. Use the underlying
 		// window so the show-dock connection action and the autoShow bootstrap option keep working.
 		const dockWindow = initializedDock3Provider.getWindowSync();
 		await dockWindow.show();
@@ -351,18 +355,18 @@ function mapOptionsToContentMenu(options: DockButton["options"]): ContentMenuEnt
 }
 
 /**
- * Build the Dock3 button entries from Dock v1 buttons.
- * @param dockv1Buttons The Dock v1 buttons.
+ * Build the Dock3 button entries from the workspace-shape dock buttons.
+ * @param workspaceButtons The workspace-shape dock buttons.
  * @returns The Dock3 button entries.
  */
 async function buildDock3ButtonEntries(
-	dockv1Buttons: DockButton[]
+	workspaceButtons: DockButton[]
 ): Promise<{ favorites?: DockEntry[]; contentMenu?: ContentMenuEntry[] }> {
 	const favorites: DockEntry[] = [];
 	const contentMenu: ContentMenuEntry[] = [];
 	const schemeMode = await getCurrentColorSchemeMode();
 
-	for (const button of dockv1Buttons) {
+	for (const button of workspaceButtons) {
 		const buttonType = button.type;
 		if (buttonType === DockButtonNames.ActionButton) {
 			const favButton: DockEntry = {
@@ -395,8 +399,8 @@ async function buildDock3ButtonEntries(
 			}
 		}
 	}
-	logger.info("Dock3 Buttons - Favorites:", favorites);
-	logger.info("Dock3 Buttons - Content Menu:", contentMenu);
+	logger.info("Dock Buttons - Favorites:", favorites);
+	logger.info("Dock Buttons - Content Menu:", contentMenu);
 	return {
 		favorites,
 		contentMenu
@@ -404,9 +408,10 @@ async function buildDock3ButtonEntries(
 }
 
 /**
- * Refresh the dock3 favorites/content menu because the color scheme, apps or conditions have changed.
- * The existing order of the favorites/content menu is preserved (so that any user rearrangement is
- * not lost) while the entries themselves (icons, added/removed entries) are rebuilt from config.
+ * Refresh the platform dock favorites/content menu because the color scheme, apps or conditions have
+ * changed. The existing order of the favorites/content menu is preserved (so that any user
+ * rearrangement is not lost) while the entries themselves (icons, added/removed entries) are rebuilt
+ * from config.
  */
 async function refreshDock3(): Promise<void> {
 	if (!isEmpty(initializedDock3Provider)) {
@@ -444,13 +449,14 @@ async function refreshDock3(): Promise<void> {
 }
 
 /**
- * Convert a dock3 config into the flat v1 dock config shape so that it can be persisted using the
- * same storage endpoint as dock1. The favorites and content menu order is flattened into an ordered
- * list of button ids which is then applied to the built v1 buttons.
- * @param config The dock3 config to convert.
- * @returns The v1 dock config with identity.
+ * Convert a platform dock (Dock 3) config into the flat workspace dock config shape so that it can be
+ * persisted using the same storage endpoint as the workspace dock. The favorites and content menu
+ * order is flattened into an ordered list of button ids which is then applied to the built workspace
+ * buttons.
+ * @param config The platform dock config to convert.
+ * @returns The workspace dock config with identity.
  */
-function buildV1ConfigFromDock3(config: Dock3Config): DockProviderConfigWithIdentity {
+function buildWorkspaceConfigFromDock3(config: Dock3Config): DockProviderConfigWithIdentity {
 	const orderedIds: string[] = [
 		...(config.favorites ?? []).map((entry) => entry.id),
 		...(config.contentMenu ?? []).map((entry) => entry.id)

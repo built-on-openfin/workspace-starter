@@ -3,16 +3,17 @@ import { createLogger } from "../logger-provider";
 import type { BootstrapOptions } from "../shapes/bootstrap-shapes";
 import type { DockImplementation, DockProviderOptions } from "../shapes/dock-shapes";
 import { isEmpty } from "../utils";
-import * as dock1 from "./dock1";
-import * as dock3 from "./dock3";
+import * as dockPlatform from "./dock-platform";
+import * as dockWorkspace from "./dock-workspace";
 
 /**
- * Facade for the dock component. Delegates to the v1 (dock1.ts) or v3 (dock3.ts) implementation
- * based on `dockProviderOptions.dockType`, so callers (bootstrapper.ts, platform.ts) don't need to
- * know which dock version is active. See dock-shared.ts for the logic shared by both implementations.
+ * Facade for the dock component. Delegates to the workspace (dock-workspace.ts) or platform
+ * (dock-platform.ts) implementation based on `dockProviderOptions.dockType`, so callers
+ * (bootstrapper.ts, platform.ts) don't need to know which dock version is active. See dock-shared.ts
+ * for the logic shared by both implementations.
  */
 
-export { loadConfig, saveConfig } from "./dock1";
+export { loadConfig, saveConfig } from "./dock-workspace";
 
 const logger = createLogger("Dock");
 
@@ -30,7 +31,8 @@ export async function register(
 	bootstrapOptions?: BootstrapOptions
 ): Promise<DockProviderRegistration | undefined> {
 	if (isEmpty(activeImplementation) && options) {
-		const implementation: DockImplementation = options.dockType === "3" ? dock3 : dock1;
+		const implementation: DockImplementation =
+			options.dockType === "platform" ? dockPlatform : dockWorkspace;
 
 		registrationInfo = await implementation.register(options, bootstrapOptions);
 		activeImplementation = implementation;

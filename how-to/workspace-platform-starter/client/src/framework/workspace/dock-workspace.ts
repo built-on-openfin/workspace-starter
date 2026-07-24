@@ -31,11 +31,11 @@ import {
 } from "./dock-shared";
 
 /**
- * The v1 dock implementation, provided as part of the `@openfin/workspace` package. Implements the
+ * The workspace dock implementation, provided as part of the `@openfin/workspace` package. Implements the
  * `DockImplementation` interface (see dock-shapes.ts) so that dock.ts can delegate to it.
  */
 
-const logger = createLogger("Dock1");
+const logger = createLogger("DockWorkspace");
 
 let registration: DockProvider | undefined;
 let registrationInfo: DockProviderRegistration | undefined;

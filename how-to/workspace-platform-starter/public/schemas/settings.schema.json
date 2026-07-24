@@ -1916,9 +1916,17 @@
                     "description": "Disallow rearrangement of dock icons by setting this flag.",
                     "type": "boolean"
                 },
-                "dock3UIConfig": {
+                "dockType": {
+                    "description": "The type of the dock to target. The \"workspace\" version is the original dock that is provided as part of the",
+                    "enum": [
+                        "platform",
+                        "workspace"
+                    ],
+                    "type": "string"
+                },
+                "dockUIConfig": {
                     "additionalProperties": false,
-                    "description": "UI Configuration Options supported by Dock 3.0",
+                    "description": "UI Configuration Options supported by the platform dock (Dock 3.0).",
                     "properties": {
                         "contentMenu": {
                             "additionalProperties": false,
@@ -2004,17 +2012,9 @@
                     },
                     "type": "object"
                 },
-                "dock3WindowOptions": {
+                "dockWindowOptions": {
                     "$ref": "#/definitions/DockAllowedWindowOptions",
-                    "description": "If using dock type 3 this allows you to specify additional options for the dock window."
-                },
-                "dockType": {
-                    "description": "The type of the dock to target. The v1 version is the original dock that is provided as part of the",
-                    "enum": [
-                        "1",
-                        "3"
-                    ],
-                    "type": "string"
+                    "description": "If using dock type \"platform\" this allows you to specify additional options for the dock window."
                 },
                 "entries": {
                     "description": "What apps, actions or drop downs should be made available via the dock.",
@@ -2044,7 +2044,7 @@
                     "description": "Which workspace related icons should be hidden from the dock",
                     "properties": {
                         "hideContentButton": {
-                            "description": "Hides the content menu button. Only applicable when `dockType` is \"3\", the v1 dock has no\nequivalent button and this setting is ignored.",
+                            "description": "Hides the content menu button. Only applicable when `dockType` is \"platform\", the workspace dock\nhas no equivalent button and this setting is ignored.",
                             "type": "boolean"
                         },
                         "hideHomeButton": {
