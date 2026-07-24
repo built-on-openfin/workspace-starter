@@ -1,0 +1,37 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "44.146.101.5"
+	},
+	"platform": {
+		"uuid": "launch-browser-from-window",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v45.0.0/register-with-browser/favicon.ico",
+		"autoShow": true,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v45.0.0/register-with-browser/platform/provider.html",
+		"preventQuitOnLastWindowClosed": true,
+		"commands": [
+			{
+				"command": "findInPage.show",
+				"keys": "CommandOrControl+f"
+			}
+		]
+	},
+	"shortcut": {
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
+		"icon": "https://www.openfin.co/favicon.ico",
+		"name": "Launch Browser Windows - v24.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "HERE",
+		"product": "Workspace Starter - Register With Browser - Client",
+		"email": "support@here.io",
+		"forwardErrorReports": true
+	},
+	"customSettings": {
+		"browserIconSize": "default"
+	}
+}
