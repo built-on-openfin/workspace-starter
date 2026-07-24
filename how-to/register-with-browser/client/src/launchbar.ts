@@ -90,6 +90,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		singleLockedPage.addEventListener("click", createWindowWithLockedPage);
 	}
 
+	// create window with hideOnClose
+	const hideOnCloseBtn = document.querySelector("#launch-hide-on-close");
+	if (hideOnCloseBtn) {
+		hideOnCloseBtn.addEventListener("click", createHideOnCloseWindow);
+	}
+
 	// quit launcher / browser
 	const quitBtn = document.querySelector("#quit");
 	if (quitBtn) {
@@ -461,6 +467,28 @@ function createDefaultPageLayout(): PageLayout {
 			}
 		]
 	};
+}
+
+/**
+ * Create a window with hideOnClose enabled.
+ * Closing the window hides it; launching again shows the same instance.
+ */
+async function createHideOnCloseWindow(): Promise<void> {
+	const identity = { uuid: fin.me.uuid, name: "hide-on-close-example" };
+
+	try {
+		const existing = fin.Window.wrapSync(identity);
+		await existing.getInfo();
+		await existing.show();
+		await existing.setAsForeground();
+		return;
+	} catch {
+		// Window does not exist yet; create it from the window manifest.
+	}
+
+	const response = await fetch("http://localhost:8080/windows/hide-on-close.window.fin.json");
+	const options = (await response.json()) as OpenFin.WindowOptions;
+	await fin.Window.create(options);
 }
 
 /**

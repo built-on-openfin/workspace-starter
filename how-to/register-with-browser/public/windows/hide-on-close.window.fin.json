@@ -1,0 +1,10 @@
+{
+	"name": "hide-on-close-example",
+	"url": "http://localhost:8080/html/hide-on-close.html",
+	"defaultWidth": 480,
+	"defaultHeight": 320,
+	"defaultCentered": true,
+	"autoShow": true,
+	"frame": true,
+	"hideOnClose": true
+}
