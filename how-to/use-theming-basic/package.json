@@ -20,13 +20,13 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "24.0.19",
-		"@openfin/workspace-platform": "24.0.19",
+		"@openfin/workspace": "45.1.11",
+		"@openfin/workspace-platform": "45.1.11",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
-		"@openfin/core": "44.101.5",
-		"@openfin/node-adapter": "44.101.5",
+		"@openfin/core": "45.100.107",
+		"@openfin/node-adapter": "45.100.107",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
