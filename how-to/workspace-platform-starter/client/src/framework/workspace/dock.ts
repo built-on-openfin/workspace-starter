@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { DockProviderRegistration } from "@openfin/workspace";
 import { createLogger } from "../logger-provider";
 import type { BootstrapOptions } from "../shapes/bootstrap-shapes";
@@ -77,4 +78,12 @@ export async function minimize(): Promise<void> {
 		return activeImplementation.minimize();
 	}
 	logger.warn("Unable to minimize dock as there is an indication it was never registered");
+}
+
+/**
+ * Get the identity of the dock window for the active implementation.
+ * @returns The identity of the dock window, or undefined if the dock was never registered.
+ */
+export function getIdentity(): OpenFin.Identity | undefined {
+	return activeImplementation?.getIdentity();
 }

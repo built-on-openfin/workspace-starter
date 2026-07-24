@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import { Home, type HomeRegistration } from "@openfin/workspace";
 import { createLogger } from "../logger-provider";
 import type { HomeProviderOptions } from "../shapes/home-shapes";
@@ -18,10 +19,18 @@ const logger = createLogger("HomeWorkspace");
  */
 export async function register(options: HomeProviderOptions): Promise<HomeRegistration | undefined> {
 	logger.info("Registering home using the @openfin/workspace implementation.");
-	const registrationInfo = await Home.register(buildHomeProvider(options));
+	const registrationInfo = await Home.register(buildHomeProvider(options, getIdentity));
 	logger.info("Version:", registrationInfo);
 	logger.info("Home provider initialized");
 	return registrationInfo;
+}
+
+/**
+ * Get the identity of the workspace home window.
+ * @returns The identity of the home window.
+ */
+export function getIdentity(): OpenFin.Identity {
+	return { uuid: "openfin-workspace", name: "openfin-home" };
 }
 
 /**

@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type {
 	StorefrontFooter,
 	Image,
@@ -168,6 +169,12 @@ export interface StorefrontImplementation {
 	 * @returns Nothing.
 	 */
 	hide(): Promise<void>;
+
+	/**
+	 * Get the identity of the store window for this implementation.
+	 * @returns The identity of the store window.
+	 */
+	getIdentity(): OpenFin.Identity;
 }
 
 /**

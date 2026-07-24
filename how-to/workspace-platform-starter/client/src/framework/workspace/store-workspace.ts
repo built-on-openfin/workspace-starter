@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import { Storefront, type RegistrationMetaInfo, type StoreRegistration } from "@openfin/workspace";
 import { createLogger } from "../logger-provider";
 import type { StorefrontProviderOptions } from "../shapes/store-shapes";
@@ -29,7 +30,7 @@ export async function register(
 	options: StorefrontProviderOptions
 ): Promise<RegistrationMetaInfo | undefined> {
 	logger.info("Initializing the storefront provider using the @openfin/workspace implementation");
-	const provider = buildStorefrontProvider(options);
+	const provider = buildStorefrontProvider(options, getIdentity);
 
 	if (isStorefrontConfigurationValid()) {
 		try {
@@ -43,6 +44,14 @@ export async function register(
 	}
 
 	return registrationInfo;
+}
+
+/**
+ * Get the identity of the workspace store window.
+ * @returns The identity of the store window.
+ */
+export function getIdentity(): OpenFin.Identity {
+	return { uuid: "openfin-workspace", name: "openfin-storefront" };
 }
 
 /**

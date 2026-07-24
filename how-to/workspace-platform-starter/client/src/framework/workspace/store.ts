@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { RegistrationMetaInfo } from "@openfin/workspace";
 import { createLogger } from "../logger-provider";
 import type { StorefrontImplementation, StorefrontProviderOptions } from "../shapes/store-shapes";
@@ -77,4 +78,12 @@ export async function hide(): Promise<void> {
 		return activeImplementation.hide();
 	}
 	logger.warn("Unable to hide store as there is an indication it was never registered");
+}
+
+/**
+ * Get the identity of the store window for the active implementation.
+ * @returns The identity of the store window, or undefined if the store was never registered.
+ */
+export function getIdentity(): OpenFin.Identity | undefined {
+	return activeImplementation?.getIdentity();
 }

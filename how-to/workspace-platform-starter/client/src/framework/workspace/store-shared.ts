@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import {
 	StorefrontTemplate,
 	type StoreButtonConfig,
@@ -24,7 +25,6 @@ import type {
 	StorefrontSettingsNavigationItem
 } from "../shapes/store-shapes";
 import { isEmpty, isStringValue, randomUUID } from "../utils";
-import { getStoreIdentity } from "./identity";
 
 /**
  * Store logic shared by the store implementations (store-workspace.ts and store-platform.ts). The
@@ -67,9 +67,13 @@ export function getStoreProviderOptions(): StorefrontProviderOptions | undefined
 /**
  * Build the storefront provider object shared by both store implementations.
  * @param options The options for the store provider.
+ * @param getIdentity Resolver for the identity of the store window used by the active implementation.
  * @returns The storefront provider to register.
  */
-export function buildStorefrontProvider(options: StorefrontProviderOptions): StorefrontProvider {
+export function buildStorefrontProvider(
+	options: StorefrontProviderOptions,
+	getIdentity: () => OpenFin.Identity
+): StorefrontProvider {
 	storeProviderOptions = options;
 	return {
 		id: options.id,
@@ -81,7 +85,7 @@ export function buildStorefrontProvider(options: StorefrontProviderOptions): Sto
 		getApps: async () => addButtons(await getApps({ private: false })),
 		launchApp: async (app) => {
 			// this request has come from the store.
-			await launch(app as PlatformApp, undefined, getStoreIdentity());
+			await launch(app as PlatformApp, undefined, getIdentity());
 		}
 	};
 }

@@ -278,6 +278,17 @@ export async function minimize(): Promise<void> {
 }
 
 /**
+ * Get the identity of the platform (Dock 3) dock window.
+ * @returns The identity of the dock window, or undefined if the dock provider is not initialized.
+ */
+export function getIdentity(): OpenFin.Identity | undefined {
+	if (isEmpty(initializedDock3Provider)) {
+		return undefined;
+	}
+	return initializedDock3Provider.getWindowSync().identity;
+}
+
+/**
  * When a dock action is triggered, we need to know the window identity and the coordinates of the mouse in relation to the dock window.
  * @param dockProvider The dock provider.
  * @returns The window identity and the coordinates of the mouse in relation to the dock window.

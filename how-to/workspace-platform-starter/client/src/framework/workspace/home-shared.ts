@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import {
 	CLITemplate,
 	type CLIFilter,
@@ -30,6 +31,7 @@ const HOME_SOURCE_DEFAULT_FILTER_LABEL = "Source";
 const logger = createLogger("Home");
 
 let homeProviderOptions: HomeProviderOptions | undefined;
+let getHomeWindowIdentity: (() => OpenFin.Identity) | undefined;
 let lastResponse: HomeSearchListenerResponse;
 let debounceTimerId: number | undefined;
 let lastQueryId: string | undefined;
@@ -45,10 +47,15 @@ export function getHomeProviderOptions(): HomeProviderOptions | undefined {
 /**
  * Build the home provider object shared by both home implementations.
  * @param options The options for the home provider.
+ * @param getIdentity Resolver for the identity of the home window used by the active implementation.
  * @returns The home provider to register.
  */
-export function buildHomeProvider(options: HomeProviderOptions): HomeProvider {
+export function buildHomeProvider(
+	options: HomeProviderOptions,
+	getIdentity: () => OpenFin.Identity
+): HomeProvider {
 	homeProviderOptions = options;
+	getHomeWindowIdentity = getIdentity;
 	return {
 		...options,
 		onUserInput,
@@ -62,6 +69,7 @@ export function buildHomeProvider(options: HomeProviderOptions): HomeProvider {
  */
 export function resetHomeState(): void {
 	homeProviderOptions = undefined;
+	getHomeWindowIdentity = undefined;
 }
 
 /**
@@ -263,7 +271,7 @@ async function onUserInput(
  */
 async function onSelection(result: HomeDispatchedSearchResult): Promise<void> {
 	if (!isEmpty(result.data)) {
-		const handled = await itemSelection(result, lastResponse);
+		const handled = await itemSelection(result, lastResponse, getHomeWindowIdentity?.());
 
 		if (result.action.trigger === "user-action") {
 			if (handled) {

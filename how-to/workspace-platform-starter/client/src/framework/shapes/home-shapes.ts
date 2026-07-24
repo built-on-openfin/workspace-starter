@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { HomeRegistration, SearchProviderInfo } from "@openfin/workspace";
 
 /**
@@ -72,4 +73,10 @@ export interface HomeImplementation {
 	 * @returns Nothing.
 	 */
 	hide(): Promise<void>;
+
+	/**
+	 * Get the identity of the home window for this implementation.
+	 * @returns The identity of the home window.
+	 */
+	getIdentity(): OpenFin.Identity;
 }

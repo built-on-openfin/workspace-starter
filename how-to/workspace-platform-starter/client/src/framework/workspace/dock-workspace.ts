@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import {
 	Dock,
 	type DockButton,
@@ -99,6 +100,14 @@ export async function show(): Promise<void> {
 export async function minimize(): Promise<void> {
 	logger.info("Dock minimize called.");
 	return Dock.minimize();
+}
+
+/**
+ * Get the identity of the workspace dock window.
+ * @returns The identity of the dock window.
+ */
+export function getIdentity(): OpenFin.Identity {
+	return { uuid: "openfin-workspace", name: "openfin-dock" };
 }
 
 /**

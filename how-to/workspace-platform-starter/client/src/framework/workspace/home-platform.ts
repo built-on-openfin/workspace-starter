@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { HomeRegistration } from "@openfin/workspace";
 import { HomeVpw } from "@openfin/workspace-platform";
 import { createLogger } from "../logger-provider";
@@ -21,7 +22,7 @@ const logger = createLogger("HomePlatform");
 export async function register(options: HomeProviderOptions): Promise<HomeRegistration | undefined> {
 	logger.info("Registering home using the @openfin/workspace-platform (HomeVpw) implementation.");
 	// The provider shape is shared with the workspace implementation (same underlying client-api shapes).
-	const provider = buildHomeProvider(options) as Parameters<typeof HomeVpw.register>[0];
+	const provider = buildHomeProvider(options, getIdentity) as Parameters<typeof HomeVpw.register>[0];
 	const registrationInfo = await HomeVpw.register(provider);
 
 	// HomeVpw is bundled in @openfin/workspace-platform (it is not loaded from the CDN) so it reports the
@@ -41,6 +42,14 @@ export async function register(options: HomeProviderOptions): Promise<HomeRegist
 	logger.info("Version:", platformRegistration);
 	logger.info("Home provider initialized");
 	return platformRegistration;
+}
+
+/**
+ * Get the identity of the platform (HomeVpw) home window.
+ * @returns The identity of the home window.
+ */
+export function getIdentity(): OpenFin.Identity {
+	return { uuid: fin.me.identity.uuid, name: HomeVpw.HOME_VPW_WINDOW_NAME };
 }
 
 /**

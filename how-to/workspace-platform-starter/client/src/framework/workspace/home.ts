@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { HomeRegistration } from "@openfin/workspace";
 import { createLogger } from "../logger-provider";
 import type { HomeImplementation, HomeProviderOptions } from "../shapes/home-shapes";
@@ -82,4 +83,12 @@ export async function hide(): Promise<void> {
 		return activeImplementation.hide();
 	}
 	logger.warn("Unable to hide home as there is an indication it was never registered");
+}
+
+/**
+ * Get the identity of the home window for the active implementation.
+ * @returns The identity of the home window, or undefined if home was never registered.
+ */
+export function getIdentity(): OpenFin.Identity | undefined {
+	return activeImplementation?.getIdentity();
 }

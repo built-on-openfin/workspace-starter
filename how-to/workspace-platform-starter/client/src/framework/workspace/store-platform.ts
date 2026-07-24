@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { RegistrationMetaInfo } from "@openfin/workspace";
 import { StorefrontVpw } from "@openfin/workspace-platform";
 import { createLogger } from "../logger-provider";
@@ -36,7 +37,9 @@ export async function register(
 		"Initializing the storefront provider using the @openfin/workspace-platform (StorefrontVpw) implementation"
 	);
 	// The provider shape is shared with the workspace implementation (same underlying client-api shapes).
-	const provider = buildStorefrontProvider(options) as Parameters<typeof StorefrontVpw.register>[0];
+	const provider = buildStorefrontProvider(options, getIdentity) as Parameters<
+		typeof StorefrontVpw.register
+	>[0];
 
 	if (isStorefrontConfigurationValid()) {
 		try {
@@ -52,6 +55,14 @@ export async function register(
 	}
 
 	return registrationInfo;
+}
+
+/**
+ * Get the identity of the platform (StorefrontVpw) store window.
+ * @returns The identity of the store window.
+ */
+export function getIdentity(): OpenFin.Identity {
+	return { uuid: fin.me.identity.uuid, name: StorefrontVpw.STOREFRONT_VPW_WINDOW_NAME };
 }
 
 /**
