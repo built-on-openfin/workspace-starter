@@ -906,6 +906,7 @@
 		},
 		"homeProvider": {
 			"id": "workspace-platform-starter",
+			"homeType": "platform",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"queryMinLength": 3,
@@ -913,6 +914,7 @@
 		},
 		"storefrontProvider": {
 			"id": "workspace-platform-starter",
+			"storeType": "platform",
 			"title": "HERE Core UI Platform Starter",
 			"icon": "http://localhost:8080/favicon.ico",
 			"landingPage": {
@@ -1056,15 +1058,15 @@
 				"hideStorefrontButton": false,
 				"hideContentButton": false
 			},
-			"dockType": "3",
-			"dock3WindowOptions": {
+			"dockType": "platform",
+			"dockWindowOptions": {
 				"experimental": {
 					"snapZone": {
 						"enabled": true
 					}
 				}
 			},
-			"dock3UIConfig": {
+			"dockUIConfig": {
 				"contentMenu": {
 					"enableBookmarking": false
 				},

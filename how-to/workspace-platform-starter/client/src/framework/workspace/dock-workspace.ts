@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import {
 	Dock,
 	type DockButton,
@@ -31,11 +32,11 @@ import {
 } from "./dock-shared";
 
 /**
- * The v1 dock implementation, provided as part of the `@openfin/workspace` package. Implements the
+ * The workspace dock implementation, provided as part of the `@openfin/workspace` package. Implements the
  * `DockImplementation` interface (see dock-shapes.ts) so that dock.ts can delegate to it.
  */
 
-const logger = createLogger("Dock1");
+const logger = createLogger("DockWorkspace");
 
 let registration: DockProvider | undefined;
 let registrationInfo: DockProviderRegistration | undefined;
@@ -99,6 +100,14 @@ export async function show(): Promise<void> {
 export async function minimize(): Promise<void> {
 	logger.info("Dock minimize called.");
 	return Dock.minimize();
+}
+
+/**
+ * Get the identity of the workspace dock window.
+ * @returns The identity of the dock window.
+ */
+export function getIdentity(): OpenFin.Identity {
+	return { uuid: "openfin-workspace", name: "openfin-dock" };
 }
 
 /**

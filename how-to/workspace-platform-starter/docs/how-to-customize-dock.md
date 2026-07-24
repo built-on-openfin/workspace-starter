@@ -61,50 +61,50 @@ By default the items on the dock can be rearranged, to disable this options use 
 
 The elements shown on the dock are configured in the `entries` property.
 
-## Dock Versions (Dock 1 and Dock 3)
+## Dock Versions (Workspace and Platform)
 
 There are two implementations of the dock available:
 
-- **Dock 1** - the original dock provided as part of the `@openfin/workspace` package. This is the default.
-- **Dock 3** - the latest version of the dock which is platform specific and registered through `@openfin/workspace-platform`.
+- **Workspace dock** (`dockType: "workspace"`) - the original dock provided as part of the `@openfin/workspace` package. This is the default.
+- **Platform dock** (`dockType: "platform"`) - the latest version of the dock (Dock 3) which is platform specific and registered through `@openfin/workspace-platform`.
 
-You select which dock to target using the `dockType` property (`"1"` or `"3"`, defaulting to `"1"`):
+You select which dock to target using the `dockType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`). This matches the `homeType` and `storeType` naming convention used by the Home and Store components:
 
 ```json
 "dockProvider": {
-    "dockType": "3"
+    "dockType": "platform"
 }
 ```
 
-Workspace Platform Starter uses a single `entries` configuration (see [Entries](#entries)) for both dock versions. When Dock 3 is selected, those entries are mapped to Dock 3's model:
+Workspace Platform Starter uses a single `entries` configuration (see [Entries](#entries)) for both dock versions. When the platform dock is selected, those entries are mapped to the platform dock's model:
 
-- Action based entries (single buttons) become Dock 3 **favorites** (shown on the bar).
-- Dropdown/menu entries become Dock 3 **content menu** entries.
+- Action based entries (single buttons) become platform dock **favorites** (shown on the bar).
+- Dropdown/menu entries become platform dock **content menu** entries.
 
-Actions and custom actions continue to work the same way as Dock 1, so your existing configuration and custom actions are reused.
+Actions and custom actions continue to work the same way as the workspace dock, so your existing configuration and custom actions are reused.
 
-### Dock 3 window options
+### Platform dock window options
 
-Dock 3 runs in its own window. You can specify additional window options via `dock3WindowOptions`, for example to control positioning or enable the experimental snap zone:
+The platform dock runs in its own window. You can specify additional window options via `dockWindowOptions`, for example to control positioning or enable the experimental snap zone:
 
 ```json
 "dockProvider": {
-    "dockType": "3",
-    "dock3WindowOptions": {
+    "dockType": "platform",
+    "dockWindowOptions": {
         "defaultCentered": true,
         "saveWindowState": false
     }
 }
 ```
 
-### Dock 3 UI configuration
+### Platform dock UI configuration
 
-Dock 3 exposes some additional UI configuration through `dock3UIConfig`:
+The platform dock exposes some additional UI configuration through `dockUIConfig`:
 
 ```json
 "dockProvider": {
-    "dockType": "3",
-    "dock3UIConfig": {
+    "dockType": "platform",
+    "dockUIConfig": {
         "providerIconContentMenu": true,
         "contentMenu": {
             "enableBookmarking": true
@@ -113,13 +113,13 @@ Dock 3 exposes some additional UI configuration through `dock3UIConfig`:
 }
 ```
 
-> **_:warning: Bookmarking not supported in this version:_** The `dock3UIConfig.contentMenu.enableBookmarking` option can be set, but bookmarking is **not currently supported** in this version of Workspace Platform Starter and the setting will be ignored. There is currently no way to determine whether a content menu entry is a favorite, no way to hide folders from being bookmarked, and bookmarking is not meaningful for entries that are not launched. This requires further design and will be addressed in a future release.
+> **_:warning: Bookmarking not supported in this version:_** The `dockUIConfig.contentMenu.enableBookmarking` option can be set, but bookmarking is **not currently supported** in this version of Workspace Platform Starter and the setting will be ignored. There is currently no way to determine whether a content menu entry is a favorite, no way to hide folders from being bookmarked, and bookmarking is not meaningful for entries that are not launched. This requires further design and will be addressed in a future release.
 
-### Dock 3 persistence
+### Platform dock persistence
 
-Like Dock 1, Dock 3 will persist the user's dock configuration (for example the order of favorites and content menu entries). To keep the two dock versions consistent, Dock 3 reuses the **same** `dock-get` and `dock-set` storage endpoints as Dock 1 (see [Persistence](#persistence)) when they are configured. When no endpoint is configured, Dock 3 falls back to its own default (browser) storage.
+Like the workspace dock, the platform dock will persist the user's dock configuration (for example the order of favorites and content menu entries). To keep the two dock versions consistent, the platform dock reuses the **same** `dock-get` and `dock-set` storage endpoints as the workspace dock (see [Persistence](#persistence)) when they are configured. When no endpoint is configured, the platform dock falls back to its own default (browser) storage.
 
-Because the two dock versions store their configuration using the same v1 shape, the stored button order is mapped between the flat Dock 1 button list and the Dock 3 favorites/content menu on load and save. This means that if you switch a platform between `dockType: "1"` and `dockType: "3"`, the previously saved ordering is applied to the buttons that are available in the newly selected dock version.
+Because the two dock versions store their configuration using the same workspace shape, the stored button order is mapped between the flat workspace dock button list and the platform dock favorites/content menu on load and save. This means that if you switch a platform between `dockType: "workspace"` and `dockType: "platform"`, the previously saved ordering is applied to the buttons that are available in the newly selected dock version.
 
 ## Entries
 
@@ -274,11 +274,14 @@ The dock persists the user's configuration (such as the order of the buttons) so
 
 By default this uses the platform's built in storage. If you wish to store the dock configuration in your own location you can provide `dock-get` and `dock-set` endpoints (see [How To Define Endpoints](./how-to-define-endpoints.md)). If you provide your own endpoints you must handle the adding/removing/ordering of buttons based on the available buttons that are passed in the request.
 
-Both Dock 1 and Dock 3 use these same endpoints (and the same stored configuration shape), which allows a saved configuration to be carried over if you switch a platform between `dockType: "1"` and `dockType: "3"` (see [Dock Versions](#dock-versions-dock-1-and-dock-3)).
+Both the workspace dock and the platform dock use these same endpoints (and the same stored configuration shape), which allows a saved configuration to be carried over if you switch a platform between `dockType: "workspace"` and `dockType: "platform"` (see [Dock Versions](#dock-versions-workspace-and-platform)).
 
 ## Source Reference
 
-- [dock.ts](../client/src/framework/workspace/dock.ts)
+- [dock.ts](../client/src/framework/workspace/dock.ts) - the facade that delegates to the selected dock version based on `dockType`.
+- [dock-workspace.ts](../client/src/framework/workspace/dock-workspace.ts) - the workspace dock implementation (`dockType: "workspace"`, `@openfin/workspace`).
+- [dock-platform.ts](../client/src/framework/workspace/dock-platform.ts) - the platform dock implementation (`dockType: "platform"`, Dock 3 from `@openfin/workspace-platform`).
+- [dock-shared.ts](../client/src/framework/workspace/dock-shared.ts) - the logic shared between the two dock implementations.
 - [actions.ts](../client/src/framework/actions.ts)
 
 [<- Back to Table Of Contents](../README.md)

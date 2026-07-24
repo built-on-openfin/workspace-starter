@@ -51,6 +51,7 @@
     "yargs": "17.7.2"
   },
   "overrides": {
+    "eslint-module-utils": "2.7.4",
     "glob": "^13.0.0",
     "test-exclude": "^8.0.0",
     "rimraf": "^6.0.0",

@@ -35,7 +35,7 @@ export interface PlatformProviderOptions extends ModuleList {
 		/**
 		 * The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE
 		 */
-		initialLanguage: Locale | string;
+		initialLanguage: Locale;
 	};
 
 	/**
