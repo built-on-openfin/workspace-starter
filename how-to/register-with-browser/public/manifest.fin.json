@@ -38,10 +38,11 @@
 			"name": "launch-bar",
 			"frame": false,
 			"icon": "http://localhost:8080/favicon.ico",
-			"defaultHeight": 470,
+			"defaultHeight": 680,
 			"defaultWidth": 340,
 			"defaultCentered": true,
 			"saveWindowState": false,
+			"includeInSnapshots": false,
 			"resizable": false,
 			"alwaysOnTop": true,
 			"cornerRounding": {

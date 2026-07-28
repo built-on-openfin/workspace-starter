@@ -13,6 +13,9 @@ import {
 } from "@openfin/workspace-platform";
 
 document.addEventListener("DOMContentLoaded", async () => {
+	// Restore any status persisted across workspace apply / window reload.
+	restoreHideOnCloseStatusFromStorage();
+
 	// create browser window with view
 	const createBrowserWinBtn = document.querySelector("#launch-browser-window");
 	if (createBrowserWinBtn) {
@@ -94,6 +97,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const hideOnCloseBtn = document.querySelector("#launch-hide-on-close");
 	if (hideOnCloseBtn) {
 		hideOnCloseBtn.addEventListener("click", createHideOnCloseWindow);
+	}
+
+	// dump platform snapshot focused on the hideOnClose window
+	const dumpSnapshotBtn = document.querySelector("#dump-hide-on-close-snapshot");
+	if (dumpSnapshotBtn) {
+		dumpSnapshotBtn.addEventListener("click", dumpHideOnCloseSnapshot);
+	}
+
+	// save workspace while the hideOnClose window may be hidden
+	const saveWorkspaceBtn = document.querySelector("#save-hide-on-close-workspace");
+	if (saveWorkspaceBtn) {
+		saveWorkspaceBtn.addEventListener("click", saveHideOnCloseWorkspace);
+	}
+
+	// restore previously saved workspace
+	const restoreWorkspaceBtn = document.querySelector("#restore-hide-on-close-workspace");
+	if (restoreWorkspaceBtn) {
+		restoreWorkspaceBtn.addEventListener("click", restoreHideOnCloseWorkspace);
 	}
 
 	// quit launcher / browser
@@ -470,25 +491,243 @@ function createDefaultPageLayout(): PageLayout {
 }
 
 /**
- * Create a window with hideOnClose enabled.
+ * Identity used for the hideOnClose repro window.
+ */
+const HIDE_ON_CLOSE_WINDOW_NAME = "hide-on-close-example";
+
+/**
+ * Workspace id used for the hideOnClose save/restore repro.
+ */
+const HIDE_ON_CLOSE_WORKSPACE_ID = "hide-on-close-workspace-repro";
+
+/**
+ * Window options manifest used by the hideOnClose repro.
+ */
+const HIDE_ON_CLOSE_WINDOW_MANIFEST_URL =
+	"http://localhost:8080/windows/hide-on-close.window.fin.json";
+
+/**
+ * localStorage key for hideOnClose status (survives launch-bar reload during applyWorkspace).
+ */
+const HIDE_ON_CLOSE_STATUS_KEY = "hide-on-close-repro-status";
+
+/**
+ * Show status on the launch bar so results survive workspace switch / DevTools closing.
+ * @param message The status text to display.
+ */
+function setHideOnCloseStatus(message: string): void {
+	try {
+		window.localStorage.setItem(HIDE_ON_CLOSE_STATUS_KEY, message);
+	} catch {
+		// Ignore storage failures (private mode, etc.).
+	}
+	const statusEl = document.querySelector("#hide-on-close-status");
+	if (statusEl) {
+		statusEl.textContent = message;
+	}
+	console.log(message);
+}
+
+/**
+ * Restore status text after the launch bar reloads (common during applyWorkspace).
+ */
+function restoreHideOnCloseStatusFromStorage(): void {
+	try {
+		const saved = window.localStorage.getItem(HIDE_ON_CLOSE_STATUS_KEY);
+		if (saved) {
+			const statusEl = document.querySelector("#hide-on-close-status");
+			if (statusEl) {
+				statusEl.textContent = saved;
+			}
+		}
+	} catch {
+		// Ignore storage failures.
+	}
+}
+
+/**
+ * Read live visibility for the hideOnClose repro window.
+ * @returns Whether the window is showing, or undefined if it does not exist.
+ */
+async function getHideOnCloseLiveIsShowing(): Promise<boolean | undefined> {
+	try {
+		const liveWindow = fin.Window.wrapSync({ uuid: fin.me.uuid, name: HIDE_ON_CLOSE_WINDOW_NAME });
+		return await liveWindow.isShowing();
+	} catch {
+		return undefined;
+	}
+}
+
+/**
+ * Create a platform window with hideOnClose enabled.
  * Closing the window hides it; launching again shows the same instance.
+ * Uses platform.createWindow so the window is included in snapshots/workspaces.
  */
 async function createHideOnCloseWindow(): Promise<void> {
-	const identity = { uuid: fin.me.uuid, name: "hide-on-close-example" };
+	const platform = getCurrentSync();
+	const identity = { uuid: fin.me.uuid, name: HIDE_ON_CLOSE_WINDOW_NAME };
 
 	try {
 		const existing = fin.Window.wrapSync(identity);
 		await existing.getInfo();
 		await existing.show();
 		await existing.setAsForeground();
+		setHideOnCloseStatus("Hide On Close window already existed; showed it again.");
 		return;
 	} catch {
 		// Window does not exist yet; create it from the window manifest.
 	}
 
-	const response = await fetch("http://localhost:8080/windows/hide-on-close.window.fin.json");
-	const options = (await response.json()) as OpenFin.WindowOptions;
-	await fin.Window.create(options);
+	const response = await fetch(HIDE_ON_CLOSE_WINDOW_MANIFEST_URL);
+	const options = (await response.json()) as OpenFin.PlatformWindowCreationOptions;
+	await platform.createWindow(options);
+	setHideOnCloseStatus("Created Hide On Close window.\nClose it with X, then use steps 2-4.");
+}
+
+/**
+ * Dump the platform snapshot and live isShowing state for the hideOnClose window.
+ * Use after closing (hiding) the window to inspect whether snapshot metadata captures hidden vs visible.
+ */
+async function dumpHideOnCloseSnapshot(): Promise<void> {
+	try {
+		const platform = getCurrentSync();
+		const snapshot = await platform.getSnapshot();
+
+		const windows = snapshot.windows ?? [];
+		const hideOnCloseWindow = windows.find(
+			(win) => (win as OpenFin.WindowOptions).name === HIDE_ON_CLOSE_WINDOW_NAME
+		);
+		const liveIsShowing = await getHideOnCloseLiveIsShowing();
+
+		const summary = {
+			message: "HIDE ON CLOSE SNAPSHOT DUMP",
+			liveIsShowing,
+			windowFoundInSnapshot: hideOnCloseWindow !== undefined,
+			hideOnCloseWindowOptions: hideOnCloseWindow,
+			state: (hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.state,
+			autoShow: (hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.autoShow,
+			hideOnClose: (hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.hideOnClose,
+			includeInSnapshots: (hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.includeInSnapshots,
+			allWindowNames: windows.map((win) => (win as OpenFin.WindowOptions).name)
+		};
+
+		setHideOnCloseStatus(
+			[
+				"SNAPSHOT DUMP",
+				`liveIsShowing: ${String(liveIsShowing)}`,
+				`inSnapshot: ${String(hideOnCloseWindow !== undefined)}`,
+				`state: ${String((hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.state)}`,
+				`autoShow: ${String((hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.autoShow)}`
+			].join("\n")
+		);
+		console.dir(summary);
+		console.dir({ message: "FULL SNAPSHOT", snapshot });
+	} catch (error) {
+		setHideOnCloseStatus(`SNAPSHOT DUMP FAILED\n${String(error)}`);
+	}
+}
+
+/**
+ * Save the current desktop as a workspace (call after hiding the hideOnClose window).
+ */
+async function saveHideOnCloseWorkspace(): Promise<void> {
+	try {
+		const platform = getCurrentSync();
+		const snapshot = await platform.getSnapshot();
+		const currentWorkspace = await platform.getCurrentWorkspace();
+		const liveIsShowing = await getHideOnCloseLiveIsShowing();
+
+		const workspace = {
+			workspaceId: HIDE_ON_CLOSE_WORKSPACE_ID,
+			title: "Hide On Close Repro",
+			metadata: currentWorkspace?.metadata,
+			snapshot
+		};
+
+		await platform.Storage.saveWorkspace(workspace);
+
+		const hideOnCloseWindow = (snapshot.windows ?? []).find(
+			(win) => (win as OpenFin.WindowOptions).name === HIDE_ON_CLOSE_WINDOW_NAME
+		);
+
+		setHideOnCloseStatus(
+			[
+				"WORKSPACE SAVED",
+				`workspaceId: ${HIDE_ON_CLOSE_WORKSPACE_ID}`,
+				`liveIsShowing at save: ${String(liveIsShowing)}`,
+				`snapshot state: ${String((hideOnCloseWindow as OpenFin.WindowOptions | undefined)?.state)}`,
+				"Next: show the window again (step 1), then Restore (step 4)."
+			].join("\n")
+		);
+		console.dir({
+			message: "SAVED HIDE ON CLOSE WORKSPACE",
+			workspaceId: workspace.workspaceId,
+			liveIsShowing,
+			hideOnCloseWindow
+		});
+	} catch (error) {
+		setHideOnCloseStatus(`WORKSPACE SAVE FAILED\n${String(error)}`);
+	}
+}
+
+/**
+ * Restore the previously saved hideOnClose workspace and report resulting visibility on the launch bar.
+ * Status is written to localStorage first because applyWorkspace can reload the launch bar.
+ */
+async function restoreHideOnCloseWorkspace(): Promise<void> {
+	try {
+		const platform = getCurrentSync();
+		const workspace = await platform.Storage.getWorkspace(HIDE_ON_CLOSE_WORKSPACE_ID);
+
+		if (!workspace) {
+			setHideOnCloseStatus(
+				`No saved workspace "${HIDE_ON_CLOSE_WORKSPACE_ID}". Run Save Workspace (step 3) first.`
+			);
+			return;
+		}
+
+		setHideOnCloseStatus("Restoring workspace… (launch bar may reload; status will return).");
+
+		const applied = await platform.applyWorkspace(workspace, {
+			skipPrompt: true,
+			applySnapshotOptions: {
+				closeExistingWindows: false,
+				closeSnapshotWindows: true,
+				skipOutOfBoundsCheck: true
+			}
+		});
+
+		// Give the runtime a moment to finish applying windows after the workspace-switched UI.
+		await new Promise((resolve) => {
+			setTimeout(resolve, 750);
+		});
+
+		const liveIsShowing = await getHideOnCloseLiveIsShowing();
+		const verdict =
+			liveIsShowing === false
+				? "LIKELY FIXED: restored while hidden"
+				: liveIsShowing === true
+					? "LIKELY BUG: restored visible (saved while hidden?)"
+					: "Window missing after restore";
+
+		setHideOnCloseStatus(
+			[
+				"WORKSPACE RESTORED",
+				`applied: ${String(applied)}`,
+				`liveIsShowing: ${String(liveIsShowing)}`,
+				verdict
+			].join("\n")
+		);
+
+		console.dir({
+			message: "RESTORED HIDE ON CLOSE WORKSPACE",
+			applied,
+			liveIsShowing,
+			verdict
+		});
+	} catch (error) {
+		setHideOnCloseStatus(`WORKSPACE RESTORE FAILED\n${String(error)}`);
+	}
 }
 
 /**
