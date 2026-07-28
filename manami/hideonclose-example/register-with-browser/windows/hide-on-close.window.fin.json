@@ -6,5 +6,6 @@
 	"defaultCentered": true,
 	"autoShow": true,
 	"frame": true,
-	"hideOnClose": true
+	"hideOnClose": true,
+	"includeInSnapshots": true
 }

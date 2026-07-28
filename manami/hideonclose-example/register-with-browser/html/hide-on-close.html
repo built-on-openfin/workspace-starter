@@ -16,8 +16,12 @@
 		</header>
 		<main class="col fill gap10">
 			<p>
-				This window is configured with <code>hideOnClose: true</code>. Closing it hides the window
-				instead of destroying it.
+				Configured with <code>hideOnClose: true</code> and <code>includeInSnapshots: true</code>. Closing
+				hides this window instead of destroying it.
+			</p>
+			<p>
+				Repro from the launch bar: Launch → close (X) → Dump Snapshot → Save Workspace → Restore
+				Workspace. Check DevTools / Process Manager for whether hidden vs visible was persisted.
 			</p>
 		</main>
 	</body>
