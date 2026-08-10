@@ -33,6 +33,11 @@
 				"name": "ClearNotification",
 				"displayName": "Clear Notification",
 				"contexts": ["openfin.notification"]
+			},
+			{
+				"name": "GetVersion",
+				"displayName": "Get Version Information",
+				"contexts": ["fdc3.nothing"]
 			}
 		],
 		"images": [],

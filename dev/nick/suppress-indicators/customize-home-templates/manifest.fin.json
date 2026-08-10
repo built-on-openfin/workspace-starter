@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.104.1"
+		"version": "44.146.101.5"
 	},
 	"platform": {
 		"uuid": "customize-home-templates",
@@ -34,7 +34,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/suppress-indicators/customize-home-templates/favicon.ico",
-		"name": "Customize Home Templates - v23.2.0",
+		"name": "Customize Home Templates - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

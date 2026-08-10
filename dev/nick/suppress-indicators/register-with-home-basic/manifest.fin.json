@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.104.1"
+		"version": "44.146.101.5"
 	},
 	"platform": {
 		"uuid": "register-with-home-basic",
@@ -16,7 +16,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/suppress-indicators/register-with-home-basic/favicon.ico",
-		"name": "Register With Home - Basic - v23.2.0",
+		"name": "Register With Home - Basic - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
