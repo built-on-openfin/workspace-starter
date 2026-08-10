@@ -23,9 +23,9 @@
 		<main class="col fill gap20 scroll-vertical">
 			<p>
 				Select a browser scenario and options below, then click Initialize Platform. After initialization, use
-				Launch Browser to open the selected scenario. Set Allow Duplicate Page Titles before initializing (it
-				is locked while initialized). Use Restart Demo to restart without initializing so you can change
-				settings and initialize again.
+				Launch Browser to open the selected scenario. Set init options (Allow Duplicate Page Titles and
+				suppress workspace indicators) before initializing — they are locked while initialized. Use Restart
+				Demo to restart without initializing so you can change settings and initialize again.
 			</p>
 			<div class="col gap10">
 				<fieldset class="col gap10">
@@ -37,6 +37,19 @@
 					<label for="allowDuplicatePageTitles">Allow Duplicate Page Titles</label>
 				</fieldset>
 				<p id="duplicate-titles-hint" class="tag" hidden></p>
+				<fieldset class="row">
+					<input type="checkbox" id="suppressWorkspaceSwitched" />
+					<label for="suppressWorkspaceSwitched">Suppress Workspace Switched Indicator</label>
+				</fieldset>
+				<fieldset class="row">
+					<input type="checkbox" id="suppressWorkspaceSaved" />
+					<label for="suppressWorkspaceSaved">Suppress Workspace Saved Indicator</label>
+				</fieldset>
+				<p id="workspace-indicators-hint" class="tag">
+					Set suppress flags before Initialize Platform. After Launch Browser, use the browser main menu Save
+					Workspace / Switch Workspace to compare with and without suppression. Save-as and rename still show
+					success indicators when Suppress Workspace Saved is enabled.
+				</p>
 				<div class="row gap10">
 					<button id="initialize-platform">Initialize Platform</button>
 					<button id="restart-demo" disabled>Restart Demo</button>

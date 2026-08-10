@@ -6,9 +6,9 @@
 
 HERE Core UI empowers you to take advantage of our browser component by using our HERE Core UI Platform SDK to control the behavior of the HERE Browser independent of the Home and Storefront components. The control window (`public/platform/provider.html`) loads **without** calling `WorkspacePlatform.init()`. Configure a scenario and settings, then use the lifecycle buttons:
 
-1. **Initialize Platform** — calls `init({ allowDuplicatePageTitles, ... })` using the current checkbox value.
+1. **Initialize Platform** — calls `init({ allowDuplicatePageTitles, indicators, ... })` using the current checkbox values.
 2. **Launch Browser** — runs the selected scenario from `client/src/browser-scenarios.ts` (enabled after initialize).
-3. **Restart Demo** — restarts the application without initializing the platform so you can change settings (including Allow Duplicate Page Titles) and click **Initialize Platform** again.
+3. **Restart Demo** — restarts the application without initializing the platform so you can change settings (including Allow Duplicate Page Titles and suppress workspace indicator flags) and click **Initialize Platform** again.
 4. **Quit** — exits the application (works before or after initialize).
 
 Scenarios you can try:
@@ -27,6 +27,18 @@ Scenarios you can try:
 Set **Allow Duplicate Page Titles** before **Initialize Platform** (the checkbox is disabled while the platform is initialized). On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, initialize, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To try a different setting, click **Restart Demo**, change the checkbox, and **Initialize Platform** again.
 
 To try pinned tabs: initialize the platform, select **Launch Browser With Pinned Pages**, and click **Launch Browser**. The window opens with three developer-locked platform pins (`pinned: "platform"`), three user pins (`pinned: "user"`) that can be unpinned from the tab context menu, and one regular unpinned tab for comparison.
+
+## Suppress workspace indicators (24.0+)
+
+`BrowserInitConfig.indicators` is an opt-in platform setting (defaults remain unchanged: indicators are shown). Set these checkboxes **before** **Initialize Platform** (they are locked while initialized):
+
+- **Suppress Workspace Switched Indicator** — `suppressWorkspaceSwitched`
+- **Suppress Workspace Saved Indicator** — `suppressWorkspaceSaved` (regular save only; save-as and rename still show success indicators)
+
+To compare behavior:
+
+1. Leave both unchecked → **Initialize Platform** → **Launch Browser** → use the browser main menu **Save Workspace** (expect “Workspace Saved”) and **Switch Workspace** after at least one workspace exists (expect “Workspace Switched”).
+2. **Restart Demo** → enable one or both suppress checkboxes → **Initialize Platform** → **Launch Browser** → repeat Save / Switch Workspace → the corresponding success indicators are suppressed.
 
 This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
@@ -80,9 +92,9 @@ npm run client
 ```
 
 1. The client command opens the provider window (`public/platform/provider.html`, `client/src/provider.ts`) with scenario and settings only.
-2. **Initialize Platform** bootstraps the HERE Core UI Platform SDK with `allowDuplicatePageTitles` from the checkbox.
+2. **Initialize Platform** bootstraps the HERE Core UI Platform SDK with `allowDuplicatePageTitles` and `browser.indicators` from the checkboxes.
 3. **Launch Browser** creates the selected browser window; scenario can be changed between launches without restarting.
-4. **Restart Demo** closes browser windows, calls `Application.restart()`, and on load restores the control panel in an uninitialized state (checkbox value is restored from **`localStorage`** so you can adjust it before initializing again).
+4. **Restart Demo** closes browser windows, calls `Application.restart()`, and on load restores the control panel in an uninitialized state (checkbox values are restored from **`localStorage`** so you can adjust them before initializing again).
 
 ![Register With Browser](./assets/register-with-browser.gif)
 
