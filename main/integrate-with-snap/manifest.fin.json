@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "43.142.104.1"
+		"version": "44.146.101.7"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap",
@@ -23,7 +23,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/main/integrate-with-snap/favicon.ico",
-		"name": "Integrate With Snap - v23.2.0",
+		"name": "Integrate With Snap - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {

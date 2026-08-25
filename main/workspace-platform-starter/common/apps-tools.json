@@ -43,6 +43,6 @@
 				"src": "https://built-on-openfin.github.io/workspace-starter/main/workspace-platform-starter/common/images/previews/tools/openfin-process-manager.png"
 			}
 		],
-		"tags": ["hero", "manifest", "tools"]
+		"tags": ["hero", "manifest", "tools", "dock"]
 	}
 ]
