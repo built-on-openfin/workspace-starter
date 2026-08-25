@@ -60,7 +60,7 @@ export async function initializeDock3API(
 						// that could be used to look up the entry in an app/content directory
 						// and determine how to launch it (e.g is it a native app, web content, etc).
 						if (payload.entry.type === "item" && payload.entry.itemData?.url) {
-							await platform.createView({ url: payload.entry.itemData.url });
+							await platform.createView({ url: payload.entry.itemData?.url });
 						} else {
 							console.error("No URL found for dock entry:", payload.entry);
 						}

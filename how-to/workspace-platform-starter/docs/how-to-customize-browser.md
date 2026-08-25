@@ -96,6 +96,93 @@ We now support adding defaultViewOptions to the browserProvider like you would i
 }
 ```
 
+## Navigation Controls
+
+Browser navigation controls (back, forward, and reload) are configured separately from the custom toolbar buttons described in [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md). You need **both** of the following:
+
+1. **Window-level** — show the navigation controls in the Browser toolbar.
+2. **View-level** — declare which navigation actions each view supports.
+
+Both settings are disabled by default.
+
+### Enable navigation controls for all Browser windows
+
+Set `navigationButtons.enabled` under `browserProvider.defaultWindowOptions.workspacePlatform`. The main [manifest.fin.json](../public/manifest.fin.json) enables this by default:
+
+```json
+"browserProvider": {
+    "defaultWindowOptions": {
+        "workspacePlatform": {
+            "navigationButtons": {
+                "enabled": true
+            }
+        }
+    }
+}
+```
+
+You can optionally disable the default keyboard shortcuts with `hotkeysDisabled: true`:
+
+```json
+"navigationButtons": {
+    "enabled": true,
+    "hotkeysDisabled": true
+}
+```
+
+### Enable navigation controls for all views
+
+Set `browserNavigationButtons` under `browserProvider.defaultViewOptions.workspacePlatform` so every view gets back, forward, and reload support:
+
+```json
+"browserProvider": {
+    "defaultViewOptions": {
+        "workspacePlatform": {
+            "browserNavigationButtons": {
+                "back": true,
+                "forward": true,
+                "reload": true
+            }
+        }
+    }
+}
+```
+
+At least one of `back`, `forward`, or `reload` must be set to `true`.
+
+### Enable navigation controls for a single app
+
+For one app only, add `workspacePlatform.browserNavigationButtons` to that app's view manifest (inline-view manifest, view manifest, or snapshot `viewOptions`). The **Navigate** app in [apps.json](../public/common/apps.json) demonstrates this:
+
+```json
+{
+  "appId": "openfin-search-navigate",
+  "manifestType": "inline-view",
+  "manifest": {
+    "url": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+    "workspacePlatform": {
+      "browserNavigationButtons": {
+        "back": true,
+        "forward": true,
+        "reload": true
+      }
+    }
+  }
+}
+```
+
+When using a standalone view manifest (for example `*.view.fin.json`), put the same `workspacePlatform.browserNavigationButtons` object on the view options root.
+
+### Summary
+
+| Scope               | Setting location                                         | Property                    |
+| ------------------- | -------------------------------------------------------- | --------------------------- |
+| All Browser windows | `browserProvider.defaultWindowOptions.workspacePlatform` | `navigationButtons.enabled` |
+| All views           | `browserProvider.defaultViewOptions.workspacePlatform`   | `browserNavigationButtons`  |
+| One app / view      | App manifest or view manifest `workspacePlatform`        | `browserNavigationButtons`  |
+
+If navigation controls do not appear, check that `navigationButtons.enabled` is `true` on the window **and** that the active view defines `browserNavigationButtons`.
+
 ## Menu And Buttons
 
 In addition to the window itself the menus and buttons can be customized, see [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md) and see [How To Customize Browser Menus](./how-to-customize-browser-menus.md).

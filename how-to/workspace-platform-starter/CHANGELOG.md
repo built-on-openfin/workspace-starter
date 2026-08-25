@@ -1,5 +1,17 @@
 # Changelog
 
+## v24.0.0
+
+- Updated snap to 1.6.1
+- Updated npm versions of workspace and dependencies
+- Added an interop override called example [intent-short-circuit](./client/src/modules/interop-override/intent-short-circuit/README.md) showing how you could short circuit the raise intent call if you wanted specific intents to go to specific apps. Added an intent registration to the Version.ts file so that the platform can support the intent GetVersion (it takes an fdc3.nothing object). The intent support is declared in the [public/apps-platform.json](./public/apps-platform.json) file. It is enabled via the Version setting supportGetVersionIntent which is set to true in the VersionProvider settings within [manifest.fin.json](./public/manifest.fin.json) file (but not in the other examples). This intent supports the getResult() call to get the actual version info of the platform. The intent-short-circuit module was added platformProvider.interop.modules array before the default wps-interop-override so that it can intercept intent requests.
+- Enabled the new options for finding open view/page tabs via browserProvider settings in the [manifest.fin.json](./public/manifest.fin.json) file.
+- Added experimental support for Dock 3. Enable it in `dockProvider` by setting `dockType` to `"3"` (Dock 1 remains the default; the main [manifest.fin.json](./public/manifest.fin.json) has Dock 3 enabled by default).
+- Dock 3 reuses the same `entries` configuration as Dock 1: action-based entries (single buttons) are mapped to Dock 3 **favorites** on the bar, and dropdown/menu entries are mapped to the Dock 3 **content menu**. Custom actions continue to work the same way as Dock 1.
+- Dock 3 persistence reuses the same `dock-get` and `dock-set` storage endpoints as Dock 1 when configured, so a saved configuration can be carried over when switching between `dockType: "1"` and `dockType: "3"`. This is experimental — please test, as the underlying shapes differ between the two dock versions.
+- Updated dock documentation: [how to customize dock](./docs/how-to-customize-dock.md).
+- Updated browser documentation: [how to customize browser](./docs/how-to-customize-browser.md) to provide more details around configuring Navigation Buttons (back, forward, reload)
+
 ## v23.2.0
 
 - Update to latest version of npm packages.
@@ -10,7 +22,7 @@
 - Enabled Snap (this will run on windows).
 - Added an example of a externally hosted wpf click once application that supports intents.
 - Added more logging for snap and the default interop broker.
-- Updated appMetaData logic to not override appMetaData if it is already available. This supports over interopbroker overrides being able to pass appMetaData that they have determined and not having it replaced by our wps interop override.
+- Updated to snap 1.5.
 - Moved from primarily supporting hostManifest.OpenFin to hostManifest.HERE in the FDC3 2.0 App Directory structure [FDC3 2.0 App Directory](./docs/how-to-define-apps-fdc3-2-0.md). The old OpenFin setting is supported if present and the HERE entry isn't.
 
 ## v22.0.0
@@ -120,7 +132,7 @@
 - Included an example of the the requestStream endpoint by implementing an example source of notification data in the [client/src/modules/endpoint/example-notification-source](./client/src/modules/endpoint/example-notification-source/endpoint.ts)
 - Added an example of a lifecycle module that handles notifications coming from the notification source as well as notifications that have been sent to it. This shows how you can standardize some types of notification actions: raise-intent, launch-app, broadcast (option to broadcast on an app channel or user channel). This is just an example showing how you could expose an API to your content using an SDK approach using the Channel API or intents. This is a basic example and there are many more things to consider but it is intended as an example for a discussion around options. Documentation for this module has been provided here: [client/src/modules/lifecycle/example-notification-handler/README.md](./client/src/modules/lifecycle/example-notification-handler/README.md)
 - Update the interop broker override module pattern so that it is now passed a PlatformInteropBrokerHelpers object instead of the standard ModuleHelpers object. There are no additional functions at the moment but getApps returns all apps (even private ones) for the interop broker as it needs access to everything in order to perform intent resolution.
-- Added example of supporting workspace and desktop browser (through openfin/core-web as part of HERE anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an HERE Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v23.2.0>).
+- Added example of supporting workspace and desktop browser (through openfin/core-web as part of HERE anywhere) to our contact and manager portal examples in public/common by importing the fin/fdc3 api if it is not available (will require being rendered in an HERE Web Layout: <https://github.com/built-on-openfin/web-starter/tree/web/v24.0.0>).
 - More efficient validation of appIds associated with views/windows for faster interop based actions. The appId validation in our wps module (modules directory) has extracted into its own file and tests to ensure it continues to behave as expected across future updates have been added to the test directory.
 - Module Helpers now provide a getAnalyticsClient (it is marked as optional and the result could be undefined so it leaves the option for it to be denied to a module or removed). This client supports a ModuleAnalytic event which will have a source of Module assigned to it (you can still specify type and use the data property to provide additional module specific information). This data will be passed to the analyticProviders that receive the Workspace Analytic events. See [How to Configure Analytics](./docs/how-to-configure-analytics.md).
 - Added a cloud interop override module so that you can easily test out OpenFin's cloud interop offering. See [How To Add Cloud Interop To Your Interop Broker](./docs/how-to-add-cloud-interop-to-your-interop-broker.md).

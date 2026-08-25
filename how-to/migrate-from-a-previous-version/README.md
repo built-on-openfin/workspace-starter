@@ -5,7 +5,7 @@
 
 ## Migrate from a previous version - From v19.1 to v19.2
 
-- [Please see the v19.2 Release Notes](https://developer.openfin.co/versions/?product=Workspace#23.2.23)
+- [Please see the v19.2 Release Notes](https://developer.openfin.co/versions/?product=Workspace#24.0.24)
 
 ## Migrate from a previous version - From v19 to v19.1
 
@@ -39,7 +39,7 @@
 
 v15 introduces a number of new features:
 
-- Download Manager
+- Download Manager (Beta)
 - Browser Windows and Platform Windows Can Coexist in a HERE Core UI Platform
 - New Registration Method for Notification Center -> You must now call register in order for the notification center to startup if it isn't already running.
 

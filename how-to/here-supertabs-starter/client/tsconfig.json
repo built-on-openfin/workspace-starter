@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"target": "es2021",
+		"module": "NodeNext",
+		"sourceMap": true,
+		"outDir": "build",
+		"skipLibCheck": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "nodenext",
+		"types": ["./types/fin"],
+		"paths": {
+			"here-workspace-starter/*": ["./src/framework/*"],
+			"here-workspace-starter/utils": ["./src/framework/utils"],
+			"~/*": ["./*"]
+		}
+	},
+	"include": ["./src/**/*.ts"]
+}

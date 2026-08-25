@@ -6,6 +6,8 @@
 
 The toolbar buttons on the browser window can be configured in the customize example.
 
+> **Note:** Browser back, forward, and reload controls are **not** configured through `toolbarButtons`. Those are Workspace Browser navigation controls and are configured separately — see [Navigation Controls](./how-to-customize-browser.md#navigation-controls) in [How To Customize Browser](./how-to-customize-browser.md).
+
 ![Browser Toolbar Buttons](./assets/browser-buttons.png)
 
 The list of buttons to display is configured in the manifest as an array.
