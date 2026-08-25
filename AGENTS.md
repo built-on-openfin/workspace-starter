@@ -78,6 +78,7 @@ workspace-starter/
 │   ├── register-with-browser/            # Browser component
 │   ├── register-with-browser-basic/      # Browser component (minimal)
 │   ├── use-notifications/                # Notification system
+│   ├── use-browser-translation/          # Browser page translation (Google API key)
 │   ├── use-theming-basic/                # Theming (basic)
 │   ├── use-theming/                      # Theming (advanced)
 │   ├── support-context-and-intents/      # FDC3 context sharing and intents
