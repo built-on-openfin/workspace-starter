@@ -39,7 +39,7 @@ async function init(excelSettings) {
             });
             interopClients[contextGroup.id] = contextClient;
         }
-        (0,_openfin_excel__WEBPACK_IMPORTED_MODULE_0__.enableLogging)();
+        ;(0,_openfin_excel__WEBPACK_IMPORTED_MODULE_0__.enableLogging)();
     }
 }
 /**
