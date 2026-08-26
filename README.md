@@ -2,7 +2,7 @@
 
 > **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes. Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
-## HERE Core UI v24.0.0 (Beta)
+## HERE Core UI v24.0.0
 
 > **_:information_source: HERE Core UI:_** When running a Beta Version of HERE Core UI on Windows please remember to make use of the npm run dos command when running a sample (which sets up a local desktop owner settings file pointing to the Beta). Please ensure any Corporate Desktop Settings path (if set) is restored after your testing.
 
