@@ -5,10 +5,9 @@ import type {
 	DockAllowedWindowOptions,
 	LaunchDockEntryPayload
 } from "@openfin/workspace-platform";
-
-import { Dock, getCurrentSync } from "@openfin/workspace-platform";
 import type { ContentMenuEntry } from "@openfin/workspace/client-api-platform/src/shapes";
 import type { MoreMenuCustomOptionPayload } from "@openfin/workspace/dock3/src/api/protocol";
+import { WorkspacePlatformLoader } from "./workspace-platform-loader";
 
 /**
  * Type consolidating all dock3 provider settings
@@ -28,12 +27,14 @@ export async function initializeDock3API(
 	config: Dock3Config
 ): Promise<Dock3Provider | undefined> {
 	try {
+		const { Dock: dockModule, getCurrentSync } = await WorkspacePlatformLoader.import();
+
 		const { skipSavedDockProviderConfig, ...windowOptions } = settings;
 
 		/**
 		 * initialize dock3 provider using settings and config params.
 		 */
-		return await Dock.init({
+		return await dockModule.init({
 			config,
 			windowOptions,
 			override: (Base) =>
@@ -94,11 +95,13 @@ export async function initializeDock3API(
 					 * This function should be customized to best match the needs of the application.
 					 * @param payload content being bookmarked
 					 */
-					public async bookmarkContentMenuEntry(payload: BookmarkDockEntryPayload): Promise<void> {
+					public async bookmarkContentMenuEntry(
+						payload: BookmarkDockEntryPayload
+					): Promise<void> {
 						console.log("Bookmarking Dock Entry:", payload.entry);
 
 						// Update the config to mark the entry as bookmarked
-						const currentConfig = this.config;
+						const currentConfig = (this as Dock3Provider).config;
 						const entryId = payload.entry.id;
 
 						/**
@@ -126,7 +129,7 @@ export async function initializeDock3API(
 
 						// Update favorites if the entry exists there
 						if (currentConfig.favorites) {
-							const updatedFavorites = currentConfig.favorites.map((favorite) => {
+							const updatedFavorites = currentConfig.favorites.map((favorite: ContentMenuEntry) => {
 								if (favorite.id === entryId) {
 									return { ...favorite, bookmarked: true };
 								}
@@ -136,7 +139,7 @@ export async function initializeDock3API(
 						}
 
 						// Update the dock3 provider's config
-						await this.updateConfig(currentConfig);
+						await (this as Dock3Provider).updateConfig(currentConfig);
 					}
 
 					/**
