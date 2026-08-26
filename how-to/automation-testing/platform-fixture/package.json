@@ -1,0 +1,24 @@
+{
+	"name": "@openfin/fixture-platform",
+	"version": "2.0.0",
+	"description": "Test fixture platform for running automation example tests",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"scripts": {
+		"start": "vite",
+		"start:static": "vite build && vite preview",
+		"build": "vite build",
+		"dist": "echo Nothing to dist",
+		"preview": "vite preview",
+		"launch": "open fin://localhost:8080/manifest.fin.json"
+	},
+	"dependencies": {
+		"@openfin/core": "43.104.1",
+		"@openfin/workspace": "23.2.23",
+		"@openfin/workspace-platform": "23.2.23"
+	},
+	"devDependencies": {
+		"@types/node": "^20.19.37",
+		"vite": "^6.0.11"
+	},
+	"private": true
+}

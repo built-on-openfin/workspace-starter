@@ -1,0 +1,21 @@
+{
+	"name": "@openfin/automation-test-playwright",
+	"version": "2.0.0",
+	"description": "HERE automation example using Playwright over CDP",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "echo Nothing to build",
+		"dist": "echo Nothing to dist",
+		"test": "playwright test",
+		"test-remote": "MANIFEST_URL=https://built-on-openfin.github.io/workspace-starter/workspace/v23.2.0/register-with-home/manifest.fin.json playwright test",
+		"test-ui": "playwright test --ui"
+	},
+	"devDependencies": {
+		"@openfin/automation-core": "~2.0.0-alpha.0",
+		"@openfin/automation-cdp": "~2.0.0-alpha.0",
+		"@openfin/automation-helpers": "~2.0.0-alpha.0",
+		"@openfin/automation-playwright": "~2.0.0-alpha.0",
+		"@playwright/test": "1.61.1"
+	}
+}

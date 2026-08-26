@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Generated bundles
+public/remote-test/provider.bundle.js
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+.idea/
+*.pem
+
+# Debug logs
+npm-debug.log*

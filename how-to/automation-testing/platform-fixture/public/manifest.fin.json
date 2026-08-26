@@ -1,0 +1,15 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "--remote-debugging-port=9222",
+		"version": "43.142.104.1"
+	},
+	"platform": {
+		"uuid": "fixture-platform",
+		"icon": "http://localhost:8080/favicon.ico",
+		"providerUrl": "http://localhost:8080/provider.html",
+		"autoShow": false,
+		"preventQuitOnLastWindowClosed": true
+	}
+}
