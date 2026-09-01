@@ -22,7 +22,7 @@ Before running the sample:
 
 1. A [HERE Core UI development environment](https://resources.here.io/docs/core/develop/).
 2. A Google Cloud project with the **Cloud Translation API** enabled and an API key (see below).
-3. HERE Core UI workspace **45.1.11+** (this example pins that version via optional DOS setup).
+3. HERE Core UI workspace **45.1.19+** (this example pins that version via optional DOS setup).
 
 ## Step 1: Create a Google API key
 

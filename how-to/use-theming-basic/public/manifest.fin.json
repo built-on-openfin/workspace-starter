@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "--security-realm=use-theming-basic --enable-mesh --v=1",
-		"version": "45.150.100.107"
+		"version": "45.150.100.113"
 	},
 	"platform": {
 		"name": "Use Theming Basic",

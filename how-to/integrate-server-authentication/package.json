@@ -22,8 +22,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "45.1.11",
-		"@openfin/workspace-platform": "45.1.11",
+		"@openfin/workspace": "45.1.19",
+		"@openfin/workspace-platform": "45.1.19",
 		"cookie-parser": "^1.4.6",
 		"csrf-csrf": "^4.0.3",
 		"express-rate-limit": "^8.1.0",
@@ -31,8 +31,8 @@
 		"xss": "^1.0.15"
 	},
 	"devDependencies": {
-		"@openfin/core": "45.100.107",
-		"@openfin/node-adapter": "45.100.107",
+		"@openfin/core": "45.100.113",
+		"@openfin/node-adapter": "45.100.113",
 		"@types/cookie-parser": "^1.4.7",
 		"@types/express": "^4.17.21",
 		"eslint": "8.57.1",
