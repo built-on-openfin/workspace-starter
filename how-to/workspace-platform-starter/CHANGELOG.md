@@ -2,7 +2,8 @@
 
 ## v24.0.0
 
-- Updated snap to 1.6.1
+- Updated snap to 1.6.4
+- Updated snap.ts logic to keep existing workspace snap support across browser windows and native apps when switching workspaces.
 - Updated npm versions of workspace and dependencies
 - Added an interop override called example [intent-short-circuit](./client/src/modules/interop-override/intent-short-circuit/README.md) showing how you could short circuit the raise intent call if you wanted specific intents to go to specific apps. Added an intent registration to the Version.ts file so that the platform can support the intent GetVersion (it takes an fdc3.nothing object). The intent support is declared in the [public/apps-platform.json](./public/apps-platform.json) file. It is enabled via the Version setting supportGetVersionIntent which is set to true in the VersionProvider settings within [manifest.fin.json](./public/manifest.fin.json) file (but not in the other examples). This intent supports the getResult() call to get the actual version info of the platform. The intent-short-circuit module was added platformProvider.interop.modules array before the default wps-interop-override so that it can intercept intent requests.
 - Enabled the new options for finding open view/page tabs via browserProvider settings in the [manifest.fin.json](./public/manifest.fin.json) file.
