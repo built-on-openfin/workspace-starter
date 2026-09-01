@@ -882,9 +882,9 @@
 			"enabled": false,
 			"id": "here-workspace-starter",
 			"serverAssetInfo": {
-				"src": "https://cdn.openfin.co/release/snap/1.0.0/snap.zip",
+				"src": "https://cdn.openfin.co/release/snap/1.6.4/snap.zip",
 				"alias": "openfin-snap",
-				"version": "1.0.0",
+				"version": "1.6.4",
 				"target": "OpenFinSnap.exe"
 			},
 			"showDebugWindow": false
