@@ -84,7 +84,7 @@ jobs:
           path: public-github/
 
       - name: Publish
-        uses: JamesIves/github-pages-deploy-action@4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # Target branch to deploy to
           folder: public-github # Source folder to deploy
@@ -110,7 +110,7 @@ jobs:
           target: public-aws/
 
       - name: Publish
-        uses: jakejarvis/s3-sync-action@master
+        uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
