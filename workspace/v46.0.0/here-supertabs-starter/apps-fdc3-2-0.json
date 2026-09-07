@@ -1,0 +1,4 @@
+{
+	"$schema": "./schemas/fdc3v2.0-appd.schema.json",
+	"applications": []
+}
