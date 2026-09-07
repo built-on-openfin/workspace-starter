@@ -284,10 +284,10 @@
 			"type": "string"
 		},
 		"LogUploadOptions": {
-			"$ref": "#/definitions/__type_58"
+			"$ref": "#/definitions/__type_59"
 		},
 		"LogUploaderUIOptions": {
-			"$ref": "#/definitions/__type_59"
+			"$ref": "#/definitions/__type_60"
 		},
 		"MonitorDetails": {
 			"$ref": "#/definitions/__type_39"
@@ -390,6 +390,49 @@
 					},
 					"required": ["hosts"],
 					"type": "object"
+				},
+				"extensions": {
+					"description": "Chromium extensions to install and enable for this application.",
+					"items": {
+						"additionalProperties": false,
+						"description": "Chromium extension entry in an application configuration.",
+						"properties": {
+							"id": {
+								"description": "Chromium extension ID.",
+								"type": "string"
+							},
+							"nonTabInjections": {
+								"description": "Rules declaring where this extension may inject content scripts into\nnon-tab surfaces (for example the AI Center). Omit or leave empty to keep\nthe extension restricted to browser tabs — identical to historic\nbehavior. A wildcard pattern in `match` grants blanket coverage.\n`matchOptions` behaves as it does for domain settings. Intended for\nsecurity extensions rather than extensions that add visible UI.",
+								"items": {
+									"additionalProperties": false,
+									"description": "Rule permitting a Chromium extension to inject content scripts into non-tab\nweb content whose URL matches the given patterns.\n\nMatch patterns use the same Chromium\n[match pattern](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns)\nsyntax as {@link DomainSettingsRule}. Omitting `matchOptions` uses the same\ndefault scheme-matching behavior as domain settings.",
+									"properties": {
+										"match": {
+											"description": "Array of [match patterns](https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns)\nspecifying the content locations where the extension may inject outside\nbrowser tabs. An empty array grants no permission. A wildcard grants\nblanket coverage of all content locations.",
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										"matchOptions": {
+											"$ref": "#/definitions/RuleMatchOptions",
+											"description": "Options to use when comparing URIs to the `match` patterns. Behaves as\n{@link DomainSettingsRule.matchOptions} / {@link RuleMatchOptions}."
+										}
+									},
+									"required": ["match"],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"serverURL": {
+								"description": "Extension server URL used to install the extension.",
+								"type": "string"
+							}
+						},
+						"required": ["id", "serverURL"],
+						"type": "object"
+					},
+					"type": "array"
 				},
 				"interopBrokerConfiguration": {
 					"$ref": "#/definitions/InteropBrokerOptions"
@@ -1106,6 +1149,9 @@
 			"enum": ["local", "utc"],
 			"type": "string"
 		},
+		"UrlRestoreSettings": {
+			"$ref": "#/definitions/__type_58"
+		},
 		"ViewContentCreationRule": {
 			"additionalProperties": false,
 			"description": "A rule prescribing content creation in a {@link OpenFin.View}.",
@@ -1132,6 +1178,10 @@
 			},
 			"required": ["behavior", "match"],
 			"type": "object"
+		},
+		"ViewTabIcon": {
+			"description": "Per-view tab icon. A URL, or the reserved sentinels `'hide'` / `'unset'`.\n\n`'hide'` and `'unset'` are not URLs. `''` is also unset (inherit) and is the default.",
+			"type": "string"
 		},
 		"ViewThrottling": {
 			"description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
@@ -1383,7 +1433,9 @@
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
 				},
-				"experimental": {},
+				"experimental": {
+					"description": "Experimental window options. These options are not yet stable and may change without notice.\n\nSupported properties:\n\n- **`layoutEngine`** `'v1' | 'v2'` — Selects the layout engine used to render\n  layouts in this window. `'v1'` is the legacy engine, `'v2'` is the modernized engine.\n  Defaults to `'v1'`.\n\n- **`showFavicons`** `boolean` — When `true`, displays favicon icons on layout tabs.\n\n- **`defaultFaviconUrl`** `string` — URL of a fallback favicon to display when a view does not\n  provide its own.\n\n- **`windowLogLevel`** `string` — Sets the log level for layout-related window logging\n  (e.g. `'verbose'`, `'warn'`, `'error'`).\n\n- **`enableLayoutCollapsing`** `boolean` — When `true`, enables the Golden Layout restacking\n  feature by preserving minimum item dimensions.\n\n- **`showViewsOnResize`** `{ enabled: boolean; delayMs?: number }` — Controls whether views\n  are shown during window resize operations. Deprecated in favor of\n  `viewVisibility.showViewsOnWindowResize`."
+				},
 				"fdc3InteropApi": {
 					"type": "string"
 				},
@@ -1806,7 +1858,9 @@
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
 				},
-				"experimental": {},
+				"experimental": {
+					"description": "Experimental window options. These options are not yet stable and may change without notice.\n\nSupported properties:\n\n- **`layoutEngine`** `'v1' | 'v2'` — Selects the layout engine used to render\n  layouts in this window. `'v1'` is the legacy engine, `'v2'` is the modernized engine.\n  Defaults to `'v1'`.\n\n- **`showFavicons`** `boolean` — When `true`, displays favicon icons on layout tabs.\n\n- **`defaultFaviconUrl`** `string` — URL of a fallback favicon to display when a view does not\n  provide its own.\n\n- **`windowLogLevel`** `string` — Sets the log level for layout-related window logging\n  (e.g. `'verbose'`, `'warn'`, `'error'`).\n\n- **`enableLayoutCollapsing`** `boolean` — When `true`, enables the Golden Layout restacking\n  feature by preserving minimum item dimensions.\n\n- **`showViewsOnResize`** `{ enabled: boolean; delayMs?: number }` — Controls whether views\n  are shown during window resize operations. Deprecated in favor of\n  `viewVisibility.showViewsOnWindowResize`."
+				},
 				"fdc3InteropApi": {
 					"type": "string"
 				},
@@ -2420,7 +2474,9 @@
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
 				},
-				"experimental": {},
+				"experimental": {
+					"description": "Experimental window options. These options are not yet stable and may change without notice.\n\nSupported properties:\n\n- **`layoutEngine`** `'v1' | 'v2'` — Selects the layout engine used to render\n  layouts in this window. `'v1'` is the legacy engine, `'v2'` is the modernized engine.\n  Defaults to `'v1'`.\n\n- **`showFavicons`** `boolean` — When `true`, displays favicon icons on layout tabs.\n\n- **`defaultFaviconUrl`** `string` — URL of a fallback favicon to display when a view does not\n  provide its own.\n\n- **`windowLogLevel`** `string` — Sets the log level for layout-related window logging\n  (e.g. `'verbose'`, `'warn'`, `'error'`).\n\n- **`enableLayoutCollapsing`** `boolean` — When `true`, enables the Golden Layout restacking\n  feature by preserving minimum item dimensions.\n\n- **`showViewsOnResize`** `{ enabled: boolean; delayMs?: number }` — Controls whether views\n  are shown during window resize operations. Deprecated in favor of\n  `viewVisibility.showViewsOnWindowResize`."
+				},
 				"fdc3InteropApi": {
 					"type": "string"
 				},
@@ -2864,6 +2920,9 @@
 			"additionalProperties": false,
 			"properties": {
 				"getFileDownloadLocation": {
+					"type": "boolean"
+				},
+				"getPerformanceStats": {
 					"type": "boolean"
 				},
 				"setFileDownloadLocation": {
@@ -3441,6 +3500,10 @@
 					},
 					"type": "array"
 				},
+				"icon": {
+					"$ref": "#/definitions/ViewTabIcon",
+					"description": "Per-view tab icon. Exception to `showFavicons` / `defaultFaviconUrl`.\n\nDistinct from Window `icon` (taskbar).\n\n- Omitted / `''` / `'unset'`: inherit — if `showFavicons`, page favicon then `defaultFaviconUrl`, else hide\n- URL string: always show that URL, even when `showFavicons` is false. Load failure uses `defaultFaviconUrl`\n- `'hide'`: always hide, even when `showFavicons` is true\n\nOn `updateOptions`, omitted keys are a no-op; set `'unset'` to return to inherit."
+				},
 				"ignoreChildFrameName": {
 					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
 					"type": "boolean"
@@ -3521,6 +3584,9 @@
 					"default": "about:blank",
 					"description": "The URL of the window",
 					"type": "string"
+				},
+				"workspacePlatform": {
+					"$ref": "#/definitions/WorkspacePlatformOptions"
 				},
 				"zoomLevel": {
 					"type": "number"
@@ -3985,7 +4051,9 @@
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
 				},
-				"experimental": {},
+				"experimental": {
+					"description": "Experimental window options. These options are not yet stable and may change without notice.\n\nSupported properties:\n\n- **`layoutEngine`** `'v1' | 'v2'` — Selects the layout engine used to render\n  layouts in this window. `'v1'` is the legacy engine, `'v2'` is the modernized engine.\n  Defaults to `'v1'`.\n\n- **`showFavicons`** `boolean` — When `true`, displays favicon icons on layout tabs.\n\n- **`defaultFaviconUrl`** `string` — URL of a fallback favicon to display when a view does not\n  provide its own.\n\n- **`windowLogLevel`** `string` — Sets the log level for layout-related window logging\n  (e.g. `'verbose'`, `'warn'`, `'error'`).\n\n- **`enableLayoutCollapsing`** `boolean` — When `true`, enables the Golden Layout restacking\n  feature by preserving minimum item dimensions.\n\n- **`showViewsOnResize`** `{ enabled: boolean; delayMs?: number }` — Controls whether views\n  are shown during window resize operations. Deprecated in favor of\n  `viewVisibility.showViewsOnWindowResize`."
+				},
 				"fdc3InteropApi": {
 					"type": "string"
 				},
@@ -4407,6 +4475,10 @@
 				"preloadScripts": {
 					"$ref": "#/definitions/DomainSettingsPreloadScripts",
 					"description": "{@inheritdoc DomainSettingsPreloadScripts}"
+				},
+				"urlRestore": {
+					"$ref": "#/definitions/UrlRestoreSettings",
+					"description": "When the live URL matches this rule, remap inbound\n{@link View.ViewModule.navigate View.navigate} / {@link Window.WindowModule.navigate Window.navigate}\nto {@link UrlRestoreSettings.url}."
 				}
 			},
 			"type": "object"
@@ -4713,6 +4785,18 @@
 		},
 		"__type_58": {
 			"additionalProperties": false,
+			"description": "Domain-settings policy that replaces a matched live URL with a configured start URI.",
+			"properties": {
+				"url": {
+					"description": "Absolute replacement URL. Full URL replace, not prefix rewrite.",
+					"type": "string"
+				}
+			},
+			"required": ["url"],
+			"type": "object"
+		},
+		"__type_59": {
+			"additionalProperties": false,
 			"properties": {
 				"endpoint": {
 					"description": "The URL where log files are to be uploaded.",
@@ -4748,7 +4832,22 @@
 			"required": ["endpoint"],
 			"type": "object"
 		},
-		"__type_59": {
+		"__type_6": {
+			"additionalProperties": false,
+			"description": "Information relevant to the Interop Broker.",
+			"properties": {
+				"currentContextGroup": {
+					"description": "Context Group ID for the client (for example, `fdc3.channel.4`).",
+					"type": "string"
+				},
+				"providerId": {
+					"description": "When provided, automatically connects the client to the specified provider uuid.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"__type_60": {
 			"additionalProperties": false,
 			"description": "Options for the Log Uploader UI.",
 			"properties": {
@@ -4778,21 +4877,6 @@
 				},
 				"websiteDescription": {
 					"description": "Description of the webpage where the user can find more information.",
-					"type": "string"
-				}
-			},
-			"type": "object"
-		},
-		"__type_6": {
-			"additionalProperties": false,
-			"description": "Information relevant to the Interop Broker.",
-			"properties": {
-				"currentContextGroup": {
-					"description": "Context Group for the client. (green, yellow, red, etc.).",
-					"type": "string"
-				},
-				"providerId": {
-					"description": "When provided, automatically connects the client to the specified provider uuid.",
 					"type": "string"
 				}
 			},

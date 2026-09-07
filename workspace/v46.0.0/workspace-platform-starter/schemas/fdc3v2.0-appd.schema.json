@@ -916,7 +916,7 @@
 			"description": "Information relevant to the Interop Broker.",
 			"properties": {
 				"currentContextGroup": {
-					"description": "Context Group for the client. (green, yellow, red, etc.).",
+					"description": "Context Group ID for the client (for example, `fdc3.channel.4`).",
 					"type": "string"
 				},
 				"providerId": {
