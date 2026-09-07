@@ -22,7 +22,7 @@ Scenarios you can try:
 7. Launch a single locked page.
 8. Launch a browser window with fixed views.
 9. Launch a browser window to explore duplicate page titles (two pages start with the same intended title).
-10. Launch a browser window with pinned pages (three platform pins, three user pins, and one regular tab). Requires HERE Core UI workspace **45.1.19+** (see [dos.json](public/common/dos.json) or run `npm run dos` to pin locally).
+10. Launch a browser window with pinned pages (three platform pins, three user pins, and one regular tab). Requires HERE Core UI workspace **46.0.8+** (see [dos.json](public/common/dos.json) or run `npm run dos` to pin locally).
 
 Set **Allow Duplicate Page Titles** before **Initialize Platform** (the checkbox is disabled while the platform is initialized). On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, initialize, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To try a different setting, click **Restart Demo**, change the checkbox, and **Initialize Platform** again.
 
@@ -35,7 +35,7 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Browser](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv45.0.0%2Fregister-with-browser%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Browser](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv46.0.0%2Fregister-with-browser%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -45,7 +45,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of HERE Core UI to version 45.1.19 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
+2. Optional (if you wish to pin the version of HERE Core UI to version 46.0.8 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 

@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "45.150.100.113"
+		"version": "46.153.100.76"
 	},
 	"platform": {
 		"uuid": "use-browser-translation",
@@ -16,7 +16,7 @@
 		"company": "HERE",
 		"description": "Demonstrate Browser page translation with foreign-language news sites.",
 		"icon": "https://www.openfin.co/favicon.ico",
-		"name": "Use Browser Translation - v45.0.0",
+		"name": "Use Browser Translation - v46.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
