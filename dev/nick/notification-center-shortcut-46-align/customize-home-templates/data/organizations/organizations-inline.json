@@ -1,0 +1,92 @@
+[
+	{
+		"id": "org00001",
+		"name": "Chad Ltd",
+		"type": "organization",
+		"departments": [
+			{
+				"id": "dep00001",
+				"name": "Support",
+				"type": "department",
+				"members": [
+					{
+						"id": "sup00001",
+						"name": "John Smith",
+						"type": "member",
+						"role": "Support Executive"
+					},
+					{
+						"id": "sup00002",
+						"name": "Bob Jones",
+						"type": "member",
+						"role": "Support Junior"
+					}
+				]
+			},
+			{
+				"id": "dep00002",
+				"name": "Sales",
+				"type": "department",
+				"members": [
+					{
+						"id": "sal00001",
+						"name": "Clare Thomas",
+						"type": "member",
+						"role": "Sales Executive"
+					},
+					{
+						"id": "sal00002",
+						"name": "Dan Chang",
+						"type": "member",
+						"role": "Sales Junior"
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": "org00002",
+		"name": "Dock Ltd",
+		"type": "organization",
+		"departments": [
+			{
+				"id": "dep00003",
+				"name": "Design",
+				"type": "department",
+				"members": [
+					{
+						"id": "des00001",
+						"name": "Tim Power",
+						"type": "member",
+						"role": "Design Executive"
+					},
+					{
+						"id": "des00002",
+						"name": "Cara Smithson",
+						"type": "member",
+						"role": "Design Junior"
+					}
+				]
+			},
+			{
+				"id": "dep00004",
+				"name": "Engineering",
+				"type": "department",
+				"members": [
+					{
+						"id": "eng00001",
+						"name": "Angela Potter",
+						"type": "member",
+						"role": "Engineering Executive"
+					},
+					{
+						"id": "eng00002",
+						"name": "Gary Gregson",
+						"type": "member",
+						"role": "Engineering Junior"
+					}
+				]
+			}
+		]
+	}
+]
