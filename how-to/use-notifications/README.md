@@ -16,9 +16,6 @@ Notification Center has a default keyboard shortcut for toggling the center. Thi
 
 - On startup the example calls `setDefaultPlatformShortcut("CmdOrCtrl+Shift+Y")`. Press that combination to toggle Notification Center.
 - **Set Custom Shortcut (CmdOrCtrl+Alt+N)** uses `setShortcut` to apply a user-priority override (the same effect as changing the shortcut in Notification Center Advanced Settings).
-- **Disable Keyboard Shortcut** / **Enable Keyboard Shortcut** use `setShortcutEnabled` to turn the hotkey off or back on without losing the configured combination.
-
-After Disable, the accelerator should no longer toggle Notification Center. Enable restores it.
 
 ## Running the Sample
 

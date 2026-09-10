@@ -255,22 +255,6 @@ async function initializeDom(): Promise<void> {
 		);
 	}
 
-	const btnNotificationCenterDisableShortcut = document.querySelector(
-		"#btnNotificationCenterDisableShortcut"
-	);
-	if (btnNotificationCenterDisableShortcut) {
-		btnNotificationCenterDisableShortcut.addEventListener("click", async () =>
-			setNotificationCenterShortcutEnabled(false)
-		);
-	}
-
-	const btnNotificationCenterEnableShortcut = document.querySelector("#btnNotificationCenterEnableShortcut");
-	if (btnNotificationCenterEnableShortcut) {
-		btnNotificationCenterEnableShortcut.addEventListener("click", async () =>
-			setNotificationCenterShortcutEnabled(true)
-		);
-	}
-
 	const btnNotificationWithIndicator = document.querySelector("#btnNotificationWithIndicator");
 	if (btnNotificationWithIndicator) {
 		btnNotificationWithIndicator.addEventListener("click", async () => showIndicatorNotification());
@@ -1212,19 +1196,6 @@ async function setNotificationCenterShortcut(shortcut: string): Promise<void> {
 		loggingAddEntry(`Notification Center shortcut set to: ${shortcut}`);
 	} catch (err) {
 		loggingAddEntry(`Error setting Notification Center shortcut: ${err}`);
-	}
-}
-
-/**
- * Enable or disable the Notification Center keyboard shortcut.
- * @param enabled Whether the shortcut should be enabled.
- */
-async function setNotificationCenterShortcutEnabled(enabled: boolean): Promise<void> {
-	try {
-		await Notifications.setShortcutEnabled(enabled);
-		loggingAddEntry(`Notification Center shortcut enabled: ${enabled}`);
-	} catch (err) {
-		loggingAddEntry(`Error updating Notification Center shortcut enabled state: ${err}`);
 	}
 }
 
