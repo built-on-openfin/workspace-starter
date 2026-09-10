@@ -7,8 +7,6 @@ const PLATFORM_ICON = "http://localhost:8080/images/icon-dot.png";
 const PLATFORM_TITLE = "Use Notifications";
 
 const NOTIFICATION_SOUND_URL = "http://localhost:8080/assets/notification.mp3";
-const DEFAULT_NOTIFICATION_CENTER_SHORTCUT = "CmdOrCtrl+Shift+Y";
-const CUSTOM_NOTIFICATION_CENTER_SHORTCUT = "CmdOrCtrl+Alt+N";
 
 // Keep track of persist-on-click notification click counts
 const persistOnClickNotifications: {
@@ -83,13 +81,6 @@ async function initializeNotifications(): Promise<void> {
 			title: PLATFORM_TITLE
 		}
 	});
-
-	try {
-		await Notifications.setDefaultPlatformShortcut(DEFAULT_NOTIFICATION_CENTER_SHORTCUT);
-		loggingAddEntry(`Default Notification Center shortcut set to: ${DEFAULT_NOTIFICATION_CENTER_SHORTCUT}`);
-	} catch (err) {
-		loggingAddEntry(`Error setting default Notification Center shortcut: ${err}`);
-	}
 
 	showNotificationCount(await Notifications.getNotificationsCount());
 
@@ -245,29 +236,6 @@ async function initializeDom(): Promise<void> {
 	if (btnNotificationCenterUserSettings) {
 		btnNotificationCenterUserSettings.addEventListener("click", async () =>
 			getNotificationCenterUserSettings()
-		);
-	}
-
-	const btnNotificationCenterSetShortcut = document.querySelector("#btnNotificationCenterSetShortcut");
-	if (btnNotificationCenterSetShortcut) {
-		btnNotificationCenterSetShortcut.addEventListener("click", async () =>
-			setNotificationCenterShortcut(CUSTOM_NOTIFICATION_CENTER_SHORTCUT)
-		);
-	}
-
-	const btnNotificationCenterDisableShortcut = document.querySelector(
-		"#btnNotificationCenterDisableShortcut"
-	);
-	if (btnNotificationCenterDisableShortcut) {
-		btnNotificationCenterDisableShortcut.addEventListener("click", async () =>
-			setNotificationCenterShortcutEnabled(false)
-		);
-	}
-
-	const btnNotificationCenterEnableShortcut = document.querySelector("#btnNotificationCenterEnableShortcut");
-	if (btnNotificationCenterEnableShortcut) {
-		btnNotificationCenterEnableShortcut.addEventListener("click", async () =>
-			setNotificationCenterShortcutEnabled(true)
 		);
 	}
 
@@ -1199,33 +1167,6 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
 async function getNotificationCenterUserSettings(): Promise<void> {
 	const status = await Notifications.getUserSettingStatus(Notifications.UserSettings.SOUND_ENABLED);
 	loggingAddEntry(`Sound Enabled: ${status}`);
-}
-
-/**
- * Set the Notification Center keyboard shortcut at user-level priority.
- * This is the programmatic equivalent of changing the shortcut in Notification Center Advanced Settings.
- * @param shortcut The accelerator to use, e.g. CmdOrCtrl+Alt+N.
- */
-async function setNotificationCenterShortcut(shortcut: string): Promise<void> {
-	try {
-		await Notifications.setShortcut(shortcut);
-		loggingAddEntry(`Notification Center shortcut set to: ${shortcut}`);
-	} catch (err) {
-		loggingAddEntry(`Error setting Notification Center shortcut: ${err}`);
-	}
-}
-
-/**
- * Enable or disable the Notification Center keyboard shortcut.
- * @param enabled Whether the shortcut should be enabled.
- */
-async function setNotificationCenterShortcutEnabled(enabled: boolean): Promise<void> {
-	try {
-		await Notifications.setShortcutEnabled(enabled);
-		loggingAddEntry(`Notification Center shortcut enabled: ${enabled}`);
-	} catch (err) {
-		loggingAddEntry(`Error updating Notification Center shortcut enabled state: ${err}`);
-	}
 }
 
 /**
