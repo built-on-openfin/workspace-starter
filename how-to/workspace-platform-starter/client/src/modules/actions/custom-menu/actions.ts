@@ -2,9 +2,9 @@ import type {
 	CustomActionPayload,
 	CustomActionsMap,
 	Page,
-	Workspace,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
+import type { PopupMenuEntry } from "workspace-platform-starter/shapes";
 import { CustomActionCallerType, type Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
@@ -89,21 +89,39 @@ export class CustomMenuProvider implements Actions<CustomMenuProviderSettings> {
 
 		actionMap["workspaces-menu"] = async (payload: CustomActionPayload): Promise<void> => {
 			if (payload.callerType === CustomActionCallerType.CustomButton && this._helpers) {
-				const workspaces: Workspace[] = await platform.Storage.getWorkspaces();
+				const workspaces: { title: string; workspaceId: string }[] =
+					await platform.Storage.getWorkspacesMetadata();
+				const currentWorkspace = await platform.getCurrentWorkspace();
+				const existingWorkspace = workspaces.filter((w) => w.workspaceId === currentWorkspace?.workspaceId);
 				const menuClient = await this._helpers.getMenuClient();
 				const popupMenuStyle = this._settings?.popupMenuStyle ?? menuClient.getPopupMenuStyle();
 
-				const result = await menuClient.showPopupMenu(
+				const entries = workspaces
+					.map((p) => ({
+						label: p.title,
+						data: p.workspaceId,
+						icon: this._settings?.images.workspace,
+						type: "checkbox",
+						checked: currentWorkspace?.workspaceId === p.workspaceId,
+						enabled: currentWorkspace?.workspaceId !== p.workspaceId
+					}))
+					.sort((a, b) => a.label.localeCompare(b.label));
+				// add an entry to the front of the list to allow users to reset the current workspace
+				if (!isEmpty(existingWorkspace) && workspaces.length > 0) {
+					entries.unshift({
+						label: "Restore to Last Saved Changes",
+						data: "",
+						icon: this._settings?.images.workspace,
+						type: "checkbox",
+						checked: false,
+						enabled: true
+					});
+				}
+				const result = await menuClient.showPopupMenu<string>(
 					{ x: payload.x, y: 48 },
 					payload.windowIdentity,
 					"There are no workspaces",
-					workspaces
-						.map((p) => ({
-							label: p.title,
-							data: p.workspaceId,
-							icon: this._settings?.images.workspace
-						}))
-						.sort((a, b) => a.label.localeCompare(b.label)),
+					entries as PopupMenuEntry<string>[],
 					{
 						popupMenuStyle
 					}
@@ -113,7 +131,11 @@ export class CustomMenuProvider implements Actions<CustomMenuProviderSettings> {
 					this._logger?.info("Menu dismissed");
 				} else if (this._helpers?.launchWorkspace) {
 					this._logger?.info("Menu clicked", result);
-					await this._helpers.launchWorkspace(result, this._logger);
+					if (result === "" && !isEmpty(currentWorkspace)) {
+						await platform.restoreLastSavedWorkspace();
+					} else {
+						await this._helpers.launchWorkspace(result, this._logger);
+					}
 				}
 			}
 		};

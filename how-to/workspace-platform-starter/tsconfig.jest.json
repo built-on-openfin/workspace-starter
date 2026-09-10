@@ -1,0 +1,8 @@
+{
+	"extends": "./client/tsconfig.json",
+	"compilerOptions": {
+		"rootDir": ".",
+		"types": ["./client/types/fin", "jest", "node"]
+	},
+	"include": ["./client/src/**/*.ts", "./test/**/*.ts"]
+}

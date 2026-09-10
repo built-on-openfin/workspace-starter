@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Customize Dock ?
 
-The dock component is one of the standard components of OpenFin workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/dock-overview).
+The dock component is one of the standard components of HERE workspace, for an in depth look at the component see [Dock Overview](https://developers.openfin.co/of-docs/docs/dock-overview).
 
 ![Dock](./assets/dock.png)
 
@@ -28,12 +28,12 @@ For more details on the bootstrapping process see [How To Customize The Bootstra
 
 All of the dock specific configuration options are stored in `dockProvider`
 
-As with the other workspace components you can set the `id`, `title` and `icon` used when the platform launches the dock e.g.
+As with the other HERE Core UI Components you can set the `id`, `title` and `icon` used when the platform launches the dock e.g.
 
 ```json
 "dockProvider": {
     "id": "workspace-platform-starter",
-    "title": "Workspace Platform Starter",
+    "title": "HERE Core UI Platform Starter",
     "icon": "http://localhost:8080/favicon.ico"
 }
 ```
@@ -60,6 +60,66 @@ By default the items on the dock can be rearranged, to disable this options use 
 ```
 
 The elements shown on the dock are configured in the `entries` property.
+
+## Dock Versions (Dock 1 and Dock 3)
+
+There are two implementations of the dock available:
+
+- **Dock 1** - the original dock provided as part of the `@openfin/workspace` package. This is the default.
+- **Dock 3** - the latest version of the dock which is platform specific and registered through `@openfin/workspace-platform`.
+
+You select which dock to target using the `dockType` property (`"1"` or `"3"`, defaulting to `"1"`):
+
+```json
+"dockProvider": {
+    "dockType": "3"
+}
+```
+
+Workspace Platform Starter uses a single `entries` configuration (see [Entries](#entries)) for both dock versions. When Dock 3 is selected, those entries are mapped to Dock 3's model:
+
+- Action based entries (single buttons) become Dock 3 **favorites** (shown on the bar).
+- Dropdown/menu entries become Dock 3 **content menu** entries.
+
+Actions and custom actions continue to work the same way as Dock 1, so your existing configuration and custom actions are reused.
+
+### Dock 3 window options
+
+Dock 3 runs in its own window. You can specify additional window options via `dock3WindowOptions`, for example to control positioning or enable the experimental snap zone:
+
+```json
+"dockProvider": {
+    "dockType": "3",
+    "dock3WindowOptions": {
+        "defaultCentered": true,
+        "saveWindowState": false
+    }
+}
+```
+
+### Dock 3 UI configuration
+
+Dock 3 exposes some additional UI configuration through `dock3UIConfig`:
+
+```json
+"dockProvider": {
+    "dockType": "3",
+    "dock3UIConfig": {
+        "providerIconContentMenu": true,
+        "contentMenu": {
+            "enableBookmarking": true
+        }
+    }
+}
+```
+
+> **_:warning: Bookmarking not supported in this version:_** The `dock3UIConfig.contentMenu.enableBookmarking` option can be set, but bookmarking is **not currently supported** in this version of Workspace Platform Starter and the setting will be ignored. There is currently no way to determine whether a content menu entry is a favorite, no way to hide folders from being bookmarked, and bookmarking is not meaningful for entries that are not launched. This requires further design and will be addressed in a future release.
+
+### Dock 3 persistence
+
+Like Dock 1, Dock 3 will persist the user's dock configuration (for example the order of favorites and content menu entries). To keep the two dock versions consistent, Dock 3 reuses the **same** `dock-get` and `dock-set` storage endpoints as Dock 1 (see [Persistence](#persistence)) when they are configured. When no endpoint is configured, Dock 3 falls back to its own default (browser) storage.
+
+Because the two dock versions store their configuration using the same v1 shape, the stored button order is mapped between the flat Dock 1 button list and the Dock 3 favorites/content menu on load and save. This means that if you switch a platform between `dockType: "1"` and `dockType: "3"`, the previously saved ordering is applied to the buttons that are available in the newly selected dock version.
 
 ## Entries
 
@@ -207,6 +267,14 @@ If you want to configure a drop down menu instead of a single button you can use
     ]
 }
 ```
+
+## Persistence
+
+The dock persists the user's configuration (such as the order of the buttons) so that it can be restored the next time the platform launches.
+
+By default this uses the platform's built in storage. If you wish to store the dock configuration in your own location you can provide `dock-get` and `dock-set` endpoints (see [How To Define Endpoints](./how-to-define-endpoints.md)). If you provide your own endpoints you must handle the adding/removing/ordering of buttons based on the available buttons that are passed in the request.
+
+Both Dock 1 and Dock 3 use these same endpoints (and the same stored configuration shape), which allows a saved configuration to be carried over if you switch a platform between `dockType: "1"` and `dockType: "3"` (see [Dock Versions](#dock-versions-dock-1-and-dock-3)).
 
 ## Source Reference
 

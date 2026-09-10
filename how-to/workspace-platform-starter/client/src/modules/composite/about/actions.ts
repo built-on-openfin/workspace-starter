@@ -4,11 +4,7 @@ import type {
 	CustomActionsMap,
 	WorkspacePlatformModule
 } from "@openfin/workspace-platform";
-import {
-	CustomActionCallerType,
-	type ActionHelpers,
-	type Actions
-} from "workspace-platform-starter/shapes/actions-shapes";
+import type { ActionHelpers, Actions } from "workspace-platform-starter/shapes/actions-shapes";
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
@@ -73,10 +69,7 @@ export class AboutActions implements Actions {
 		const actionMap: CustomActionsMap = {};
 
 		actionMap["show-about"] = async (payload: CustomActionPayload): Promise<void> => {
-			if (
-				payload.callerType === CustomActionCallerType.GlobalContextMenu &&
-				!isEmpty(this._sharedState?.aboutWindow)
-			) {
+			if (!isEmpty(this._sharedState?.aboutWindow)) {
 				const aboutWindow = fin.Window.wrapSync({
 					uuid: fin.me.identity.uuid,
 					name: this._sharedState.aboutWindow.name

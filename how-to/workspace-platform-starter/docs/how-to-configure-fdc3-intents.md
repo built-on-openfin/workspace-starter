@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To See Intents In Action
 
-If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [How To Setup Workspace Platform Starter](./how-to-setup-workspace-platform-starter.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Resolver UI:
+If you Live Launch (see [main page](../README.md)) or run either the first or second manifest locally (see [How To Setup HERE Core UI Platform Starter](./how-to-setup-workspace-platform-starter.md)) then you should be able to launch a view called **Participant Selection** from the Home UI and when that is launched you can click on one of the **Raise Intent** buttons. This should present you with an Intent Resolver UI:
 
 ## Default Instance Intent Resolver
 
@@ -14,9 +14,9 @@ If you Live Launch (see [main page](../README.md)) or run either the first or se
 
 ![Basic Intent Resolver](./assets/intent-resolver.png)
 
-# How To Configure Intents For Your Workspace Platform
+# How To Configure Intents For Your HERE Core UI Platform
 
-You can register applications (see [How To Define Apps](./how-to-define-apps.md)) that support specific intents. The platform will then check to see if any applications support a specific intent raised by applications (see [How To Add Intent Support To Your App](./how-to-add-intent-support-to-your-app.md)). When there is more than one application that supports an intent then workspace platform starter shows a UI so the user can make a selection.
+You can register applications (see [How To Define Apps](./how-to-define-apps.md)) that support specific intents. The platform will then check to see if any applications support a specific intent raised by applications (see [How To Add Intent Support To Your App](./how-to-add-intent-support-to-your-app.md)). When there is more than one application that supports an intent then HERE Core UI Platform starter shows a UI so the user can make a selection.
 
 You can override the window that is presented to the user and here is how:
 

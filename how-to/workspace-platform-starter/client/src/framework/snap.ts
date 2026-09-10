@@ -60,7 +60,7 @@ export async function init(options: SnapProviderOptions | undefined): Promise<vo
 
 			if (serverAssetInfo.src === "SNAP_ASSET_URL") {
 				logger.error(
-					"Please request the SNAP_ASSET_URL from OpenFin and update SnapProvider.serverAssetInfo.src before running the platform"
+					"Please request the SNAP_ASSET_URL from HERE and update SnapProvider.serverAssetInfo.src before running the platform"
 				);
 				return;
 			}
@@ -136,7 +136,7 @@ export function isEnabled(): boolean {
  * @param snapshot The snapshot to decorate.
  * @returns The decorated snapshot.
  */
-export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<OpenFin.Snapshot> {
+export async function decorateSnapshot(snapshot: Snap.SnapSnapshot): Promise<Snap.SnapSnapshot> {
 	try {
 		if (server) {
 			snapshot = await server.decorateSnapshot(snapshot);
@@ -154,18 +154,13 @@ export async function decorateSnapshot(snapshot: OpenFin.Snapshot): Promise<Open
 export async function prepareToApplyDecoratedSnapshot(): Promise<Snap.LayoutClient[]> {
 	try {
 		if (server) {
-			// Don't call prepareToApplySnapshot as this will unregister all the existing clients
-			// and we might want to re-use them, instead we will retain the native apps
-			// and set an empty layout
-			// await server.prepareToApplySnapshot();
-
 			const layout = await server.getLayout();
 			const appOnlyLayout: Snap.SnapLayout = {
 				clients: layout.clients.filter((c) => c.id.startsWith(NATIVE_APP_PREFIX)),
 				connections: [],
 				version: layout.version
 			};
-			await server.setLayout(appOnlyLayout);
+			await server.prepareToApplySnapshot();
 
 			return appOnlyLayout.clients;
 		}
@@ -341,18 +336,23 @@ export async function launchApp(
 			}
 
 			if (launch) {
-				await server.launch({
+				logger.info(
+					`Launching app with clientId ${clientId} using snap with path: ${path}, args: ${args}, and launchStrategy:`,
+					launchStrategy
+				);
+				const launchResult = await server.launch({
 					path,
 					clientId,
 					args,
 					strategy: launchStrategy
 				});
+				logger.info(`Launched app with clientId ${clientId} using snap with result:`, launchResult);
 			}
 
 			return clientId;
 		}
 	} catch (error) {
-		console.error("Failed to launch app.", formatError(error));
+		logger.error("Failed to launch app.", formatError(error));
 	}
 }
 

@@ -156,8 +156,15 @@ export class TreeQuerySource {
 	): Promise<HomeSearchResponse> {
 		let results: HomeSearchResult[] = [];
 
-		if (query.length > 0) {
-			const parts = query.split("/");
+		let pathQuery = "";
+		if (query.startsWith("/tree-query ")) {
+			pathQuery = query.slice("/tree-query ".length);
+		} else if (!query.startsWith("/tree-query")) {
+			pathQuery = query;
+		}
+
+		if (pathQuery.length > 0) {
+			const parts = pathQuery.split("/");
 
 			const queryOrg = new RegExp(parts[0], "i");
 			const matchingOrgs: EntityOrganization[] | undefined = this._orgData?.filter(

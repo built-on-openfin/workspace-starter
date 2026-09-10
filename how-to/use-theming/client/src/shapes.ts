@@ -1,4 +1,4 @@
-import type { CustomPaletteSet } from "@openfin/workspace-platform";
+import type { ThemeOverrideMap, ThemeSeedMap } from "./theme-override-types";
 
 /**
  * Options to decide which components to show on startup.
@@ -31,16 +31,16 @@ export interface ThemeDisplayOptions {
  */
 export interface ThemingPayload {
 	/**
-	 * Old style palette with single scheme.
+	 * Seed token values used for seed-first theme generation.
 	 */
-	palette?: Partial<CustomPaletteSet>;
+	seed?: ThemeSeedMap;
 
 	/**
-	 * New style palettes with light and dark.
+	 * Token overrides per scheme.
 	 */
-	palettes?: {
-		dark: Partial<CustomPaletteSet>;
-		light: Partial<CustomPaletteSet>;
+	overrides?: {
+		dark?: ThemeOverrideMap;
+		light?: ThemeOverrideMap;
 	};
 
 	/**

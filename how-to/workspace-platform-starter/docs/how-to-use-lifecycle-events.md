@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -66,7 +66,7 @@ The lifecycle events that are available to connect to are:
 - `auth-logged-in` - The event is fired after logging in. We would recommend using after-bootstrap if you are looking to perform actions (as this would work regardless of whether or not they would need to log in). Use this if you want to reverse changes that you may have set when the auth-session-expired event happened (e.g. maybe you hid a window until they have logged back in as an example).
 - `auth-session-expired` - The event is called when the auth provider you have configured believes that the session has expired. The platform will trigger the auth providers login action but you might want to perform additional platform specific steps (e.g. hide windows until after they have logged back in).
 - `auth-before-logged-out` - The event is called just before the user logs out. You might want to use this instead of before quit in case you need to call an authenticated service (e.g. save an audit entry or something).
-- `after-bootstrap` - This lifecycle event is fired when all the other components have been bootstrapped, in your manifest you could disable the autoShow for all workspace components and launch a specific view for your platform.
+- `after-bootstrap` - This lifecycle event is fired when all the other components have been bootstrapped, in your manifest you could disable the autoShow for all HERE Core UI Components and launch a specific view for your platform.
 - `before-quit` - The event is called before all the modules and components are torn down during the quit process, this allows your modules to perform any persistence or cleanup operations of their own.
 - `theme-changed` - The event is called when the theme is changed in the system, it is passed the `ThemeChangedLifecyclePayload` payload which contains the `schemeType` and the `palette`.
 - `workspace-changed` - The event is called when a workspace is added/updated/deleted, it is passed the `WorkspaceChangedLifecyclePayload` payload which contains the `action` and information about the workspace.
@@ -75,6 +75,7 @@ The lifecycle events that are available to connect to are:
 - `favorite-changed` - The event is called when a favorite is set/delete, it is passed the `FavoriteChangedLifecyclePayload` payload which contains the `action` and information about the favorite.
 - `condition-changed` - The event is called when a condition is changed, it is passed the `ConditionChangedLifecyclePayload` payload which contains `conditionId` of the condition that changed, if `conditionId` us undefined, a number of conditions might have changed.
 - `language-changed` - The event is called when a language is changed, it is passed the `LanguageChangedLifecyclePayload` payload which contains `locale` which is the locale that was selected.
+- `app-asset-download` - The event is called when an inline app asset is launched and we download the app asset dynamically. During each stage from it starting to in progress, completed or failed we pass the `AppAssetDownloadLifecyclePayload` payload with the details.
 
 ## Generate From Template
 
@@ -85,6 +86,26 @@ npm run generate-module lifecycle "My Lifecycle"
 ```
 
 This will generate the code in the modules/lifecycle folder, add an entry into webpack to build it, and add it to the manifest so that the module is loaded.
+
+## Listening to LifeCycle Events from other module types
+
+There are times where you may want to listen to specific lifecycle events from another module type. This is possible by using the helpers to listen to the event. The following is an example of listening for when an inline app asset app is triggering a download of the app asset dynamically. Please remember that this is being called as the app asset is downloading so do any work asynchronously and try not to delay the execution. We do not await the publication of the lifecycle event but it is still best practice to try to reduce any slow work when receiving a stream of events.
+
+```js
+import type { AppAssetDownloadLifecyclePayload } from "workspace-platform-starter/shapes/lifecycle-shapes";
+
+// an example of code being called in the initialize function of a module
+if (helpers.subscribeLifecycleEvent) {
+   await helpers.subscribeLifecycleEvent<AppAssetDownloadLifecyclePayload>(
+    "app-asset-download",
+    async (platform, payload) => {
+     this._logger?.info(
+      `App Asset Download Lifecycle Event Received for appId: ${payload?.appId}, alias: ${payload?.alias}, state: ${payload?.state}, downloadPercent: ${payload?.downloadPercent}`
+     );
+    }
+   );
+  }
+```
 
 ## Source Reference
 

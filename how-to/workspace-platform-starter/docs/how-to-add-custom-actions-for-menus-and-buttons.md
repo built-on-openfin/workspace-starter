@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Add Custom Actions For Menus And Buttons
 
-Actions are registered with the core workspace platform and can be triggered from menus, buttons etc.
+Actions are registered with the core HERE Core UI Platform and can be triggered from menus, buttons etc.
 
 You can implement actions by following the module pattern, see [How To Add A Module](./how-to-add-a-module.md).
 

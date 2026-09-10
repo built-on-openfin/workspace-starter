@@ -67,6 +67,21 @@ export class DeveloperMenus implements Menus {
 						type: "Custom",
 						customId: "developer-inspect"
 					}
+				},
+				{
+					include: true,
+					label: "Copy Window Snapshot",
+					data: {
+						type: "Custom",
+						action: {
+							id: "developer-get-snapshot"
+						}
+					},
+					position: {
+						operation: "after",
+						type: "Custom",
+						customId: "developer-inspect"
+					}
 				}
 			];
 		} else if (menuType === "page") {
@@ -78,6 +93,21 @@ export class DeveloperMenus implements Menus {
 						type: "Custom",
 						action: {
 							id: "developer-inspect"
+						}
+					},
+					position: {
+						operation: "before",
+						type: "Close"
+					},
+					separator: "after"
+				},
+				{
+					include: true,
+					label: "Copy Page Snapshot",
+					data: {
+						type: "Custom",
+						action: {
+							id: "developer-get-snapshot"
 						}
 					},
 					position: {

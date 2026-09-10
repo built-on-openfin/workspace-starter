@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -21,7 +21,7 @@ You don't need to reference an npm module for the API as we inject the API into 
 
 ## How Do I Open An App?
 
-### Workspace Platform Starter has two modes for supporting fdc3.open
+### HERE Core UI Platform Starter has two modes for supporting fdc3.open
 
 - [fdc3](https://fdc3.finos.org/docs/api/ref/DesktopAgent#open)
 - intent
@@ -30,7 +30,7 @@ You don't need to reference an npm module for the API as we inject the API into 
 
 The default mode is FDC3. This is the behavior specified by the [FDC3 spec](https://fdc3.finos.org/docs/api/ref/DesktopAgent#open) (an application that supports fdc3, exists in an app directory and optionally adds a context handler).
 
-There are options you can configure for the workspace platform starter's behavior when it comes to fdc3.open. This is configured in the platform provider in your customSettings.
+There are options you can configure for the HERE Core UI Platform starter's behavior when it comes to fdc3.open. This is configured in the platform provider in your customSettings.
 
 ```json
 "platformProvider": {
@@ -50,7 +50,7 @@ openOptions are optional and you can see here we have specified intent as the op
 
 #### INTENT OPEN STRATEGY
 
-'intent' is the original strategy the workspace platform starter had and was originally the default behavior.
+'intent' is the original strategy the HERE Core UI Platform starter had and was originally the default behavior.
 
 These are two quotes from the official FDC3 site with regards to FDC3 Open:
 
@@ -137,7 +137,7 @@ This would be done in your app definition. See [how to define an app](./how-to-d
 
 ##### Test Harnesses
 
-It is useful to be able to test your app against something. When you reference the common apps feed in your instance of workspace platform starter you get a number of useful utilities. We provide two entries related to intent raising in FDC3 (which can also be used to test fdc3.open support):
+It is useful to be able to test your app against something. When you reference the common apps feed in your instance of HERE Core UI Platform starter you get a number of useful utilities. We provide two entries related to intent raising in FDC3 (which can also be used to test fdc3.open support):
 
 ##### Intents Using FDC3
 
@@ -153,10 +153,10 @@ This is the FinOS test harness to show our compatibility. It doesn't have an fdc
 
 ### Conclusion
 
-Workspace Platform Starter is an example but we have shown how having control over your InteropBroker gives you options. We let you use the default FDC3 Open Approach or you can see an opinionated approach that supports the ease of use of fdc3.open but ties it to intents to make it an opt-in choice rather than a default as far as applications are concerned.
+HERE Core UI Platform Starter is an example but we have shown how having control over your InteropBroker gives you options. We let you use the default FDC3 Open Approach or you can see an opinionated approach that supports the ease of use of fdc3.open but ties it to intents to make it an opt-in choice rather than a default as far as applications are concerned.
 
 ## More Resources
 
-- Please use our OpenFin Website for more information related to FDC3 and interop: [OpenFin FDC3 support](https://developers.openfin.co/of-docs/docs/fdc3-support-in-openfin)
+- Please use our HERE Website for more information related to FDC3 and interop: [OpenFin FDC3 support](https://resources.here.io/docs/core/container/interop/fdc3/)
 
 [<- Back to Table Of Contents](../README.md)

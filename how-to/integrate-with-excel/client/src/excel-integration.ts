@@ -48,6 +48,11 @@ export class ExcelIntegration {
 	 * @returns The list of results and new filters.
 	 */
 	public async getSearchResults(query: string): Promise<HomeSearchResponse> {
+		// Validate that query is a string
+		if (typeof query !== "string") {
+			return { results: [] };
+		}
+
 		if (this._settings?.asset && query.length < 3) {
 			return { results: [this.createResult(this._settings.asset)] };
 		}

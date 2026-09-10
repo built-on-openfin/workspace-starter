@@ -1,6 +1,13 @@
+import type { OpenFin } from "@openfin/core";
 import * as Snap from "@openfin/snap-sdk";
+import type { ServerOptions } from "@openfin/snap-sdk";
+import { doesAppAssetExist, downloadAppAsset } from "./app-asset";
 
 const TEST_APP_WINDOW_ID = "snap-example-native-test-app-id";
+const snapDefaultUrl = "https://cdn.openfin.co/release/snap/1.6.1/snap.zip";
+const snapVersion = "1.6.1";
+const snapAlias = "openfin-snap";
+const snapTarget = "OpenFinSnap.exe";
 
 // The DOM elements
 let chkShowDebugWindow: HTMLInputElement | null;
@@ -14,11 +21,23 @@ let chkHideTaskBarEntry: HTMLInputElement | null;
 let chkCustomTaskBarIcon: HTMLInputElement | null;
 let chkGroupWithPlatformTaskbarGroup: HTMLInputElement | null;
 let chkDisableRuntimeHeartbeating: HTMLInputElement | null;
+let chkCustomSnapAppAssetPath: HTMLInputElement | null;
+let txtPrimaryUrl: HTMLInputElement | null;
+let txtFallbackUrl: HTMLInputElement | null;
+let fieldPrimaryUrl: HTMLElement | null;
+let fieldFallbackUrl: HTMLElement | null;
+let rowCustomSnapAppAssetPath: HTMLElement | null;
 
 let btnStart: HTMLButtonElement | null;
 let btnStop: HTMLButtonElement | null;
 let btnNativeTestApp: HTMLButtonElement | null;
+let btnWindowTestApp: HTMLButtonElement | null;
+let btnShowHideDebugWindow: HTMLButtonElement | null;
 let selAttachPosition: HTMLSelectElement | null;
+let selSnapKey: HTMLSelectElement | null;
+let selUnsnapKey: HTMLSelectElement | null;
+let selResize: HTMLSelectElement | null;
+let selTheme: HTMLSelectElement | null;
 let btnAttachToWindow: HTMLButtonElement | null;
 let btnDetachFromWindow: HTMLButtonElement | null;
 let btnMinimizeGroup: HTMLButtonElement | null;
@@ -29,11 +48,33 @@ let btnGetGroupsForCurrentWindow: HTMLButtonElement | null;
 let btnClearLog: HTMLButtonElement | null;
 let serverStatus: HTMLParagraphElement | null;
 let logging: HTMLPreElement | null;
+let debugWindowShown = false;
 
 let serverState: "starting" | "started" | "stopping" | "stopped" = "stopped";
 let isWindowOpen = false;
 let isWindowAttached = false;
 let server: Snap.SnapServer | undefined;
+
+/**
+ * Custom logger that implements the Logger interface using logInformation and logError functions
+ */
+const customLogger = {
+	info: (message: unknown, ...optionalParams: unknown[]): void => {
+		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	error: (message: unknown, ...optionalParams: unknown[]): void => {
+		logError(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	warn: (message: unknown, ...optionalParams: unknown[]): void => {
+		logError(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	trace: (message: unknown, ...optionalParams: unknown[]): void => {
+		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	},
+	debug: (message: unknown, ...optionalParams: unknown[]): void => {
+		logInformation(`${message}${optionalParams.length > 0 ? ` ${optionalParams.join(" ")}` : ""}`);
+	}
+};
 
 // Wait for the DOM to finish loading
 window.addEventListener("DOMContentLoaded", async () => {
@@ -58,12 +99,23 @@ async function initializeDOM(): Promise<void> {
 
 	chkAutoHideClientTaskbarIcons = document.querySelector<HTMLInputElement>("#chkAutoHideClientTaskbarIcons");
 	chkDisableRuntimeHeartbeating = document.querySelector<HTMLInputElement>("#chkDisableRuntimeHeartbeating");
+	chkCustomSnapAppAssetPath = document.querySelector<HTMLInputElement>("#chkCustomSnapAppAssetPath");
+	txtPrimaryUrl = document.querySelector<HTMLInputElement>("#txtPrimaryUrl");
+	txtFallbackUrl = document.querySelector<HTMLInputElement>("#txtFallbackUrl");
+	fieldPrimaryUrl = document.querySelector<HTMLElement>("#fieldPrimaryUrl");
+	fieldFallbackUrl = document.querySelector<HTMLElement>("#fieldFallbackUrl");
+	rowCustomSnapAppAssetPath = document.querySelector<HTMLElement>("#rowCustomSnapAppAssetPath");
 
 	btnStart = document.querySelector<HTMLButtonElement>("#btnStart");
 	btnStop = document.querySelector<HTMLButtonElement>("#btnStop");
 	serverStatus = document.querySelector<HTMLParagraphElement>("#serverStatus");
 	btnNativeTestApp = document.querySelector<HTMLButtonElement>("#btnNativeTestApp");
+	btnWindowTestApp = document.querySelector<HTMLButtonElement>("#btnWindowTestApp");
 	selAttachPosition = document.querySelector<HTMLSelectElement>("#selAttachPosition");
+	selSnapKey = document.querySelector<HTMLSelectElement>("#selKeyToSnap");
+	selUnsnapKey = document.querySelector<HTMLSelectElement>("#selKeyToUnsnap");
+	selResize = document.querySelector<HTMLSelectElement>("#selResizeBehaviour");
+	selTheme = document.querySelector<HTMLSelectElement>("#selTheme");
 	btnAttachToWindow = document.querySelector<HTMLButtonElement>("#btnAttachToWindow");
 	btnDetachFromWindow = document.querySelector<HTMLButtonElement>("#btnDetachFromWindow");
 	btnMinimizeGroup = document.querySelector<HTMLButtonElement>("#btnMinimizeGroup");
@@ -73,6 +125,7 @@ async function initializeDOM(): Promise<void> {
 	btnGetGroupsForCurrentWindow = document.querySelector<HTMLButtonElement>("#btnGetGroupsForCurrentWindow");
 	logging = document.querySelector<HTMLPreElement>("#logging");
 	btnClearLog = document.querySelector<HTMLButtonElement>("#btnClearLog");
+	btnShowHideDebugWindow = document.querySelector<HTMLButtonElement>("#btnShowHideDebugWindow");
 
 	if (
 		chkShowDebugWindow &&
@@ -85,6 +138,12 @@ async function initializeDOM(): Promise<void> {
 		chkGroupWithPlatformTaskbarGroup &&
 		chkAutoHideClientTaskbarIcons &&
 		chkDisableRuntimeHeartbeating &&
+		chkCustomSnapAppAssetPath &&
+		txtPrimaryUrl &&
+		txtFallbackUrl &&
+		fieldPrimaryUrl &&
+		fieldFallbackUrl &&
+		rowCustomSnapAppAssetPath &&
 		btnStart &&
 		btnStop &&
 		serverStatus &&
@@ -96,14 +155,30 @@ async function initializeDOM(): Promise<void> {
 		btnGetAttached &&
 		btnGetGroups &&
 		btnGetGroupsForCurrentWindow &&
-		btnClearLog
+		btnClearLog &&
+		btnShowHideDebugWindow
 	) {
+		txtPrimaryUrl.value = "https://exampleofbadurl.com/snap.zip";
+		txtFallbackUrl.value = snapDefaultUrl;
+		chkCustomSnapAppAssetPath.addEventListener("change", () => {
+			const display = chkCustomSnapAppAssetPath?.checked ? "" : "none";
+			if (fieldPrimaryUrl) {
+				fieldPrimaryUrl.style.display = display;
+			}
+			if (fieldFallbackUrl) {
+				fieldFallbackUrl.style.display = display;
+			}
+		});
 		const app = await fin.Application.getCurrent();
 		const manifest = await app.getManifest();
 
+		if (manifest.appAssets?.some((asset: { alias?: string }) => asset.alias === "openfin-snap")) {
+			rowCustomSnapAppAssetPath.style.display = "none";
+		}
+
 		if (manifest.appAssets?.[0]?.src === "SNAP_ASSET_URL") {
 			logError(
-				"Please request the SNAP_ASSET_URL from OpenFin and update manifest.fin.json before running the sample"
+				"Please request the SNAP_ASSET_URL from HERE and update manifest.fin.json before running the sample"
 			);
 			updateServerStatus();
 			chkShowDebugWindow.disabled = true;
@@ -120,10 +195,32 @@ async function initializeDOM(): Promise<void> {
 
 					logInformation(`Starting Snap Server with Id ${fin.me.identity.uuid}`);
 					server = new Snap.SnapServer(fin.me.identity.uuid);
-					const options = {
+					let keyToSnap: undefined | "ctrl" | "shift" | boolean;
+					let keyToUnsnap: undefined | "ctrl" | "shift";
+
+					if (chkCtrlToSnap?.checked) {
+						const snapKeyValue = selSnapKey?.value;
+						if (snapKeyValue === "ctrl") {
+							keyToSnap = "ctrl";
+						} else if (snapKeyValue === "shift") {
+							keyToSnap = "shift";
+						}
+					}
+
+					if (!chkDisableShiftToUnsnap?.checked) {
+						const keyToUnsnapValue = selUnsnapKey?.value;
+						if (keyToUnsnapValue === "ctrl") {
+							keyToUnsnap = "ctrl";
+						} else if (keyToUnsnapValue === "shift") {
+							keyToUnsnap = "shift";
+						}
+					}
+
+					const options: ServerOptions = {
 						showDebug: chkShowDebugWindow?.checked,
 						disableUserUnstick: chkDisableShiftToUnsnap?.checked,
-						keyToStick: chkCtrlToSnap?.checked,
+						keyToStick: keyToSnap,
+						keyToUnstick: keyToUnsnap,
 						disableGPUAcceleratedDragging: chkDisableGPUDragging?.checked,
 						disableBlurDropPreview: chkDisableBlurDrop?.checked,
 						hideTaskbarEntry: chkHideTaskBarEntry?.checked,
@@ -132,9 +229,33 @@ async function initializeDOM(): Promise<void> {
 							? `openfin_apps_group.${fin.me.identity.uuid}`
 							: undefined,
 						autoHideClientTaskbarIcons: chkAutoHideClientTaskbarIcons?.checked,
-						disableRuntimeHeartbeating: chkDisableRuntimeHeartbeating?.checked
+						disableRuntimeHeartbeating: chkDisableRuntimeHeartbeating?.checked,
+						defaultResizingBehavior: selResize?.value as Snap.ResizingBehavior,
+						theme: selTheme?.value as "snap-original" | "snap-light1" | "snap-dark1"
 					};
+
+					if (chkCustomSnapAppAssetPath?.checked) {
+						const primaryUrl = txtPrimaryUrl?.value ?? "";
+						const fallbackUrl = txtFallbackUrl?.value;
+
+						const validatedAppAsset = await validateAppAssetSource(primaryUrl, fallbackUrl);
+						if (!validatedAppAsset.success) {
+							logError(
+								"Failed to fetch the app asset from both primary and fallback URLs. Cannot start the Snap server with custom app asset path."
+							);
+							return;
+						}
+						options.customSnapAssetSource = validatedAppAsset.validatedUrl;
+					}
+
 					await server.start(options);
+
+					if (chkShowDebugWindow?.checked) {
+						debugWindowShown = true;
+					} else {
+						debugWindowShown = false;
+					}
+					await server.enableAutoWindowRegistration();
 
 					server.addEventListener("client-registered", (event: Snap.ClientRegisteredEvent) => {
 						logInformation(`Client Registered: ${JSON.stringify(event)}`);
@@ -235,6 +356,11 @@ async function initializeDOM(): Promise<void> {
 				updateWindowStatus();
 			});
 
+			btnWindowTestApp?.addEventListener("click", async () => {
+				await launchWindowOptionsApp();
+				updateWindowStatus();
+			});
+
 			btnAttachToWindow.addEventListener("click", async () => {
 				if (server && selAttachPosition) {
 					const value = selAttachPosition.value;
@@ -292,9 +418,32 @@ async function initializeDOM(): Promise<void> {
 					logInformation(`Group Id For Current Window: ${groupId}`);
 				}
 			});
+			btnShowHideDebugWindow.addEventListener("click", async () => {
+				if (server) {
+					debugWindowShown = !debugWindowShown;
+					await server.showDebugWindow(debugWindowShown);
+				}
+			});
 			updateServerStatus();
 		}
 	}
+}
+
+/**
+ * Generate a short hash string from a URL to use as a version identifier.
+ * @param url The URL to hash.
+ * @returns A hex string hash of the URL.
+ */
+function hashUrl(url: string): string {
+	let hash = 5381;
+	const maxSafeHash = 4_294_967_291;
+	for (let i = 0; i < url.length; i++) {
+		const codePoint = url.charCodeAt(i);
+		const multipliedHash = hash * 33;
+		hash = (multipliedHash + codePoint) % maxSafeHash;
+	}
+	const hashHex = Math.floor(hash).toString(16);
+	return hashHex.padStart(8, "0");
 }
 
 /**
@@ -331,7 +480,8 @@ function updateServerStatus(): void {
 		btnGetLayout &&
 		btnGetAttached &&
 		btnGetGroups &&
-		btnGetGroupsForCurrentWindow
+		btnGetGroupsForCurrentWindow &&
+		btnShowHideDebugWindow
 	) {
 		if (serverState === "starting" || serverState === "stopping") {
 			chkShowDebugWindow.disabled = true;
@@ -345,6 +495,7 @@ function updateServerStatus(): void {
 			btnGetAttached.disabled = true;
 			btnGetGroups.disabled = true;
 			btnGetGroupsForCurrentWindow.disabled = true;
+			btnShowHideDebugWindow.disabled = true;
 			serverStatus.textContent = `Snap Server is ${serverState}`;
 		} else if (serverState === "started") {
 			chkShowDebugWindow.disabled = true;
@@ -358,6 +509,7 @@ function updateServerStatus(): void {
 			btnGetAttached.disabled = false;
 			btnGetGroups.disabled = false;
 			btnGetGroupsForCurrentWindow.disabled = false;
+			btnShowHideDebugWindow.disabled = false;
 			serverStatus.textContent = "Snap Server is started";
 		} else {
 			chkShowDebugWindow.disabled = false;
@@ -371,6 +523,7 @@ function updateServerStatus(): void {
 			btnGetAttached.disabled = true;
 			btnGetGroups.disabled = true;
 			btnGetGroupsForCurrentWindow.disabled = true;
+			btnShowHideDebugWindow.disabled = true;
 			serverStatus.textContent = "Snap Server is stopped";
 		}
 	}
@@ -381,9 +534,17 @@ function updateServerStatus(): void {
  * Update the UI based on the window state.
  */
 function updateWindowStatus(): void {
-	if (btnNativeTestApp && selAttachPosition && btnAttachToWindow && btnDetachFromWindow && btnMinimizeGroup) {
+	if (
+		btnNativeTestApp &&
+		selAttachPosition &&
+		btnAttachToWindow &&
+		btnDetachFromWindow &&
+		btnMinimizeGroup &&
+		btnWindowTestApp
+	) {
 		if (serverState === "starting" || serverState === "stopping") {
 			btnNativeTestApp.disabled = true;
+			btnWindowTestApp.disabled = true;
 			selAttachPosition.disabled = true;
 			btnAttachToWindow.disabled = true;
 			btnDetachFromWindow.disabled = true;
@@ -396,6 +557,7 @@ function updateWindowStatus(): void {
 			btnMinimizeGroup.disabled = !isWindowAttached;
 		} else {
 			btnNativeTestApp.disabled = serverState === "stopped";
+			btnWindowTestApp.disabled = serverState === "stopped";
 			selAttachPosition.disabled = true;
 			btnAttachToWindow.disabled = true;
 			btnDetachFromWindow.disabled = true;
@@ -468,4 +630,124 @@ async function launchApp(
 	} catch (err) {
 		logError(formatError(err));
 	}
+}
+
+/**
+ * Launches a window that can be used to create child windows.
+ */
+async function launchWindowOptionsApp(): Promise<void> {
+	if (serverState !== "started") {
+		logError("Snap server is not started");
+		return;
+	}
+	const windowOptionsName = "window-options-app";
+	const optionsWindow = fin.Window.wrapSync({ uuid: fin.me.identity.uuid, name: windowOptionsName });
+
+	try {
+		await optionsWindow.getInfo();
+		await optionsWindow.bringToFront();
+	} catch {
+		// window does not exist, so create it
+		await fin.Window.create({
+			name: windowOptionsName,
+			autoShow: true,
+			defaultHeight: 600,
+			defaultWidth: 800,
+			url: "https://built-on-openfin.github.io/container-starter/main/use-window-options/html/app.html"
+		});
+	}
+}
+
+/**
+ * Validates the snap app asset from the provided primary and fallback URLs to ensure it is available before starting the Snap server.
+ * @param primaryUrl The primary URL to validate the snap app asset from.
+ * @param fallbackUrl An optional fallback URL to validate the snap app asset from if the primary URL fails.
+ * @returns An object indicating whether the validation was successful, the validated URL if successful, and whether the fallback URL was used.
+ */
+async function validateAppAssetSource(
+	primaryUrl: string,
+	fallbackUrl?: string
+): Promise<{ success: boolean; validatedUrl?: string; isFallbackUrl?: boolean }> {
+	const snapAssetInfo: OpenFin.AppAssetInfo = {
+		alias: snapAlias,
+		src: snapDefaultUrl,
+		version: snapVersion,
+		target: snapTarget,
+		mandatory: false
+	};
+	// before trying custom urls check to see if you already have snap
+	const snapDownloadedAssetInfo: OpenFin.AppAssetInfo | undefined = await doesAppAssetExist(
+		snapAssetInfo.alias,
+		snapAssetInfo.version
+	);
+
+	if (snapDownloadedAssetInfo) {
+		logInformation(
+			`We have a snap asset that matches the alias and version. It has the following details: alias: ${snapDownloadedAssetInfo.alias}, version: ${snapDownloadedAssetInfo.version}, src: ${snapDownloadedAssetInfo.src}`
+		);
+		return {
+			success: true,
+			validatedUrl: snapDownloadedAssetInfo.src,
+			isFallbackUrl: snapDownloadedAssetInfo.src === fallbackUrl
+		};
+	}
+
+	// SNAP downloads a specific alias + version combination.
+	// The runtime does not allow a retry of the same app asset if the only thing that has changed is the url.
+	// Since we have no snap version we want to validate our primary url.
+	logInformation(`Validating the primary asset url for the snap asset: ${primaryUrl}`);
+	snapAssetInfo.alias = `${snapAlias}-validate-download`; // use a different alias for the validation download so that we can have different versions if needed without conflict with the actual snap asset alias
+
+	snapAssetInfo.target = "NoOp"; // We don't want to actually run the snap asset during validation since we just want to check if the url is valid and the asset can be downloaded, so use a NoOp target that will not do anything if it is run for any reason during the validation process
+
+	// Update asset info to target primary url
+	snapAssetInfo.src = primaryUrl; // update the src to the primary url for the validation download
+	snapAssetInfo.version = hashUrl(primaryUrl); // use the url hash as the version for the validation download so that if the url changes we will attempt to download again, but if the url is the same we will not attempt to download again since we have already validated it
+
+	const validatedAppAssetPrimaryUrl = await fetchAppAsset(snapAssetInfo);
+	let validatedAssetUrl: string | undefined;
+
+	if (validatedAppAssetPrimaryUrl === undefined) {
+		if (fallbackUrl) {
+			// validate fallback url
+			logInformation(`Validating the fallback asset url for the snap asset: ${fallbackUrl}`);
+			snapAssetInfo.src = fallbackUrl; // update the src to the fallback url for the validation download
+			snapAssetInfo.version = hashUrl(fallbackUrl); // use the url hash as the version for the validation download so that if the url changes we will attempt to download again, but if the url is the same we will not attempt to download again since we have already validated it
+			const validatedAppAssetFallbackUrl = await fetchAppAsset(snapAssetInfo);
+
+			if (validatedAppAssetFallbackUrl) {
+				validatedAssetUrl = fallbackUrl;
+			}
+		}
+	} else {
+		validatedAssetUrl = primaryUrl;
+	}
+
+	if (validatedAssetUrl) {
+		logInformation(
+			`Successfully validated the url for the snap asset: ${validatedAssetUrl}. This url will be passed to Snap Options through the customSnapAssetSource setting.`
+		);
+		return {
+			success: true,
+			validatedUrl: validatedAssetUrl,
+			isFallbackUrl: validatedAssetUrl === fallbackUrl
+		};
+	}
+	return { success: false };
+}
+
+/**
+ * Download and return app asset info for the provided app asset definition.
+ * @param appAssetInfo The app asset definition to download.
+ * @returns The app asset info if downloaded or found, otherwise undefined.
+ */
+async function fetchAppAsset(appAssetInfo: OpenFin.AppAssetInfo): Promise<OpenFin.AppAssetInfo | undefined> {
+	const validatedAppAsset = await downloadAppAsset(appAssetInfo, {
+		logger: customLogger,
+		assetDownloadProgress: (progress: number, src: string, alias: string) => {
+			// showing a difference as the download App Asset also logs the download progress using logInformation and logError through the custom logger.
+			console.log(`Download progress for alias '${alias}' from '${src}': ${progress}%`);
+		}
+	});
+	return validatedAppAsset;
 }

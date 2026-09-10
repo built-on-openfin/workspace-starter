@@ -17,18 +17,18 @@ const NEW_TAB_URL = "http://localhost:8080/common/views/platform/new-tab/new-tab
 
 window.addEventListener("DOMContentLoaded", async () => {
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform();
 
-	// Initialize dummy workspace components so that the buttons show in the dock.
+	// Initialize dummy HERE Core UI Components so that the buttons show in the dock.
 	await initializeWorkspaceComponents();
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	await init({
 		browser: {
 			defaultWindowOptions: {
@@ -40,17 +40,6 @@ async function initializeWorkspacePlatform(): Promise<void> {
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Get the custom actions from the dock which will be triggered
 		// when the buttons are clicked
 		customActions: dockGetCustomActions(),
@@ -61,7 +50,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 }
 
 /**
- * Initialize minimal workspace components for home/store so that the buttons show on dock.
+ * Initialize minimal HERE Core UI Components for home/store so that the buttons show on dock.
  */
 async function initializeWorkspaceComponents(): Promise<void> {
 	// Dummy home which can be launched by the dock
@@ -94,7 +83,7 @@ async function initializeWorkspaceComponents(): Promise<void> {
 
 /**
  * Override methods in the platform.
- * @param WorkspacePlatformProvider The workspace platform class to extend.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
  * @returns The overridden class.
  */
 function overrideCallback(

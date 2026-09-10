@@ -1,9 +1,0 @@
-{
-	"reporter": "mochawesome",
-	"options": {
-		"reportDir": "./reports/mocha/",
-		"reportFilename": "report.html",
-		"html": true,
-		"json": false
-	}
-}

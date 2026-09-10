@@ -37,7 +37,10 @@ export async function register(
 			request: HomeSearchListenerRequest,
 			response: HomeSearchListenerResponse
 		): Promise<HomeSearchResponse> => {
-			const queryLower = request.query.toLowerCase();
+			let queryLower = "";
+			if (request.query && typeof request.query === "string") {
+				queryLower = request.query.toLowerCase();
+			}
 
 			// If the query starts with a / treat this as a help request
 			// so we don't have any additional entries to show

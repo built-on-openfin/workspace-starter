@@ -1,4 +1,4 @@
-name: Workspace Platform Starter - Unit Tests
+name: HERE Core UI Platform Starter - Unit Tests
 
 on:
   pull_request:
@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node 18
+      - name: Setup Node 24
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24
           registry-url: https://registry.npmjs.org
           scope: '@openfin'
 
@@ -32,6 +32,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
 
-      - name: Run Workspace Platform Starter Unit Tests
+      - name: Run HERE Core UI Platform Starter Unit Tests
         working-directory: ./how-to/workspace-platform-starter
         run: npm run test

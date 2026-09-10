@@ -1,8 +1,8 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../../../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
-A web browser allows the launching of links that do not start with http/https if they are supported e.g. mailto: etc. How can this be configured in an OpenFin application?
+A web browser allows the launching of links that do not start with http/https if they are supported e.g. mailto: etc. How can this be configured in an HERE application?
 
 ## Protocol Support
 
@@ -10,7 +10,7 @@ A web browser allows the launching of links that do not start with http/https if
 
 The first thing to consider is configuring your manifest's security to allow the use of protocols (in html anchor tags, window.open and fin.System.openUrlWithBrowser calls).
 
-See [API Security](https://developers.openfin.co/of-docs/docs/api-security) on our website.
+See [API Security](https://resources.here.io/docs/core/develop/security/api-security/) on our website.
 
 Security can be configured at 4 levels.
 
@@ -21,7 +21,7 @@ Security can be configured at 4 levels.
 
 ### Note about openExternal
 
-There are two ways of launching specific protocol links. Using the OpenFin API and using the webAPIs permission openExternal. It is generally better to have a specific list of protocols that you intentionally wish to support so for the most part we recommend using the **fin.System.openUrlWithBrowser** API to open protocol links and ensure that only the list of supported protocols are launched. openExternal is a way of letting the system handle the protocol request so it is convenient but you are no longer being explicit in what you want to support.
+There are two ways of launching specific protocol links. Using the HERE API and using the webAPIs permission openExternal. It is generally better to have a specific list of protocols that you intentionally wish to support so for the most part we recommend using the **fin.System.openUrlWithBrowser** API to open protocol links and ensure that only the list of supported protocols are launched. openExternal is a way of letting the system handle the protocol request so it is convenient but you are no longer being explicit in what you want to support.
 
 #### Platform Level
 

@@ -182,7 +182,7 @@ export class ExampleNotificationSourceProvider implements Endpoint<ExampleNotifi
 		endpointDefinition: EndpointDefinition,
 		request?: NotificationSourceEvents
 	): Promise<boolean> {
-		// this could post to a backend service so that the notification is picked up server side and then distributed to all connected clients (e.g. browser, OpenFin etc)
+		// this could post to a backend service so that the notification is picked up server side and then distributed to all connected clients (e.g. browser, HERE etc)
 		// for now we are simulating it by putting anything posted into a queue so that it will be picked up by the stream unless you specify an address to post to
 		// e.g. http://localhost:6060/api/messages
 		if (!isEmpty(request)) {

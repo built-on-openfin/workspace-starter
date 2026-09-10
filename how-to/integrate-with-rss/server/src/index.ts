@@ -4,6 +4,9 @@ import router from "./routes";
 
 const app = express();
 
+// Disable X-Powered-By header to hide Express framework information
+app.disable("x-powered-by");
+
 const mainPath = path.join(__dirname, "..", "..", "public");
 const commonPath = path.join(__dirname, "..", "..", "..", "common", "public");
 const port = 8080;

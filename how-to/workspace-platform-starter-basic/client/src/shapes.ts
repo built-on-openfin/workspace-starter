@@ -1,4 +1,5 @@
 import type { App } from "@openfin/workspace";
+import type { CustomThemes } from "@openfin/workspace-platform";
 
 /**
  * The custom settings stored in the manifest.fin.json.
@@ -23,6 +24,11 @@ export interface CustomSettings {
 	 * Should the browser show the plus sign and load a url.
 	 */
 	newTabUrl?: string;
+
+	/**
+	 * The default theme to use for the platform.
+	 */
+	theme?: CustomThemes;
 }
 
 /**

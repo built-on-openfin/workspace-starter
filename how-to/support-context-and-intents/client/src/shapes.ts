@@ -32,6 +32,11 @@ export interface PlatformProviderSettings {
 		height?: number;
 		width?: number;
 	};
+
+	/**
+	 * Should we allow local connections from outside of the platform? Default is false.
+	 */
+	allowExternalLocalConnections?: boolean;
 }
 
 /**

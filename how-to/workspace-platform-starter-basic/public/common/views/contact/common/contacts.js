@@ -91,7 +91,7 @@ async function getManifestCustomSettings() {
 			return manifest.customSettings ?? {};
 		}
 	} catch {
-		// not inside of an OpenFin container or there isn't app support.
+		// not inside of an HERE container or there isn't app support.
 	}
 	return {};
 }

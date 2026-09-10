@@ -14,7 +14,30 @@ const loaderRule = {
 	exclude: /node_modules/
 };
 
-const configs = [];
+const configs = [
+	{
+		entry: './client/src/modules/interop-override/intent-short-circuit/index.ts',
+		devtool: 'source-map',
+		module: {
+			rules: [loaderRule]
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
+			alias
+		},
+		externals: { fin: 'fin' },
+		output: {
+			filename: 'intent-short-circuit.bundle.js',
+			library: {
+				type: 'module'
+			},
+			path: path.resolve(__dirname, '..', 'public', 'js', 'modules', 'interop-override')
+		},
+		experiments: {
+			outputModule: true
+		}
+	}
+];
 
 module.exports =
 	process.env.WEBPACK_CONFIG_INDEX !== undefined ? configs[process.env.WEBPACK_CONFIG_INDEX] : configs;

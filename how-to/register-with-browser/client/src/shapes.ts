@@ -1,21 +1,11 @@
-import type OpenFin from "@openfin/core";
+import type { IconSize } from "@openfin/workspace-platform";
 
 /**
  * The custom settings stored in the manifest.fin.json
  */
 export interface CustomSettings {
 	/**
-	 * The settings for the launch bar window.
+	 * Browser icon size `large` or `default`
 	 */
-	launchBarWindowSettings?: LaunchBarWindowSettings;
-}
-
-/**
- * The settings for the launch bar window.
- */
-export interface LaunchBarWindowSettings extends OpenFin.WindowCreationOptions {
-	/**
-	 * The url of the launch bar.
-	 */
-	url: string;
+	browserIconSize?: IconSize;
 }

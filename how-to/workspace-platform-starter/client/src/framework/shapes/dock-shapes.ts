@@ -1,4 +1,6 @@
-import type { DockProviderConfigWithIdentity } from "@openfin/workspace";
+import type { DockProviderConfigWithIdentity, DockProviderRegistration } from "@openfin/workspace";
+import type { DockAllowedWindowOptions, Dock3Config } from "@openfin/workspace-platform";
+import type { BootstrapOptions } from "./bootstrap-shapes";
 import type { PopupMenuStyles } from "./menu-shapes";
 
 /**
@@ -28,6 +30,11 @@ export interface DockProviderOptions {
 		hideWorkspacesButton?: boolean;
 		hideNotificationsButton?: boolean;
 		hideStorefrontButton?: boolean;
+		/**
+		 * Hides the content menu button. Only applicable when `dockType` is "3", the v1 dock has no
+		 * equivalent button and this setting is ignored.
+		 */
+		hideContentButton?: boolean;
 	};
 
 	/**
@@ -44,6 +51,22 @@ export interface DockProviderOptions {
 	 * Configured a default for the popup menu style, defaults to platform.
 	 */
 	popupMenuStyle?: PopupMenuStyles;
+
+	/**
+	 * The type of the dock to target. The v1 version is the original dock that is provided as part of the @openfin/workspace package. The v3 version is the latest version of the dock and is platform specific and registered through @openfin/workspace-platform.
+	 * The v3 dock can also be self-hosted. The default is 1.
+	 */
+	dockType?: "1" | "3";
+
+	/**
+	 * If using dock type 3 this allows you to specify additional options for the dock window.
+	 */
+	dock3WindowOptions?: DockAllowedWindowOptions;
+
+	/**
+	 * UI Configuration Options supported by Dock 3.0
+	 */
+	dock3UIConfig?: Dock3Config["uiConfig"];
 }
 
 /**
@@ -175,4 +198,39 @@ export interface DockClient {
 		config: DockProviderConfigWithIdentity,
 		defaultStorage: (config: DockProviderConfigWithIdentity) => Promise<void>
 	): Promise<void>;
+}
+
+/**
+ * Common interface implemented by each dock version (v1 and v3), so that the facade in `dock.ts` can
+ * delegate to whichever implementation is selected by `dockType` without needing to know its internals.
+ */
+export interface DockImplementation {
+	/**
+	 * Register the dock component.
+	 * @param options The dock provider options.
+	 * @param bootstrapOptions The bootstrap options.
+	 * @returns The meta info from the registration.
+	 */
+	register(
+		options: DockProviderOptions,
+		bootstrapOptions: BootstrapOptions | undefined
+	): Promise<DockProviderRegistration | undefined>;
+
+	/**
+	 * Deregister the dock component.
+	 * @returns Nothing.
+	 */
+	deregister(): Promise<void>;
+
+	/**
+	 * Show the dock component.
+	 * @returns Nothing.
+	 */
+	show(): Promise<void>;
+
+	/**
+	 * Minimize the dock component.
+	 * @returns Nothing.
+	 */
+	minimize(): Promise<void>;
 }

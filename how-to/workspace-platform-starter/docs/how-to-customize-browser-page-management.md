@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -16,7 +16,7 @@ By default this json data is saved to [IndexedDB](https://developer.mozilla.org/
 
 ## What If I Want To Change Where This Information Is Stored?
 
-A workspace platform lets you override the platform implementation so you can come up with your own function implementations for the saving and fetching of pages. This is called a platform override and the workspace platform starter implementation exists here: [platform-override.ts](../client/src/framework/platform/platform-override.ts).
+A HERE Core UI Platform lets you override the platform implementation so you can come up with your own function implementations for the saving and fetching of pages. This is called a platform override and the HERE Core UI Platform starter implementation exists here: [platform-override.ts](../client/src/framework/platform/platform-override.ts).
 
 Instead of modifying this file directly we allow you to specify the destination and source of pages through config and the definition of [endpoints](./how-to-define-endpoints.md).
 
@@ -29,7 +29,7 @@ Endpoints support an action and request/response function (see [How To Defined E
 - page-set
 - page-remove
 
-If you provide endpoints with these ids then workspace platform starter will use them instead of the default indexedDB implementation.
+If you provide endpoints with these ids then HERE Core UI Platform starter will use them instead of the default indexedDB implementation.
 
 This frees you up to fetch and save your pages from/to anywhere in any way that works for you.
 
@@ -151,7 +151,7 @@ The endpoint storage maps the page data to simplify it, you can disable this map
 
 ## Can I Manage Pages From Home?
 
-We include support for doing page management from home in workspace platform starter. It is enabled by default as an integration provider.
+We include support for doing page management from home in HERE Core UI Platform starter. It is enabled by default as an integration provider.
 
 ![Home Page Management](./assets/home-page-management.png)
 
@@ -193,7 +193,7 @@ We provide an example of a module that extends the browser main menu with additi
 
 ### I See A Sharing Button, How Is That Configured?
 
-Please see [How To Workspace Platform Starter And Browser Page Sharing](./how-to-workspace-platform-starter-browser-page-sharing.md).
+Please see [How To HERE Core UI Platform Starter And Browser Page Sharing](./how-to-workspace-platform-starter-browser-page-sharing.md).
 
 ## Source Reference
 

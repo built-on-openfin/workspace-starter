@@ -48,14 +48,14 @@
 							"$ref": "#/definitions/OtherAppDetails"
 						}
 					],
-					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests OpenFin object."
+					"description": "The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be\nduplicated or overridden by details provided in the hostManifests HERE object."
 				},
 				"hostManifests": {
 					"$ref": "#/definitions/HostManifests",
 					"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details."
 				},
 				"icons": {
-					"description": "Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or\nSTORE Components",
+					"description": "Holds Icons used for the application, This icon could be used for entries in the HERE Core UI HOME, DOCK or\nSTORE Components",
 					"items": {
 						"$ref": "#/definitions/AppImage"
 					},
@@ -63,7 +63,7 @@
 				},
 				"interop": {
 					"$ref": "#/definitions/AppInterop",
-					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens\nfor.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and\nintents, for use by other app developers and desktop assemblers."
+					"description": "Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:\n- It supports intent resolution by an HERE Platform/ interop agent, by declaring what intents an app listens\nfor.\n- It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.\n- It provides a standard location to document how the app interacts with user channels, app channels, and\nintents, for use by other app developers and desktop assemblers."
 				},
 				"lang": {
 					"description": "A language tag that specifies the primary language of both the application and its entry, as defined by IETF RFC\n5646.",
@@ -92,7 +92,7 @@
 					"type": "string"
 				},
 				"screenshots": {
-					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional\ndescription/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be\nused by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
+					"description": "Array of images to show the user when they are looking at app description. Each image can have an optional\ndescription/tooltip. These images could be used in the HERE Core UI STORE and HOME components or it could be\nused by an Intent Resolver to provide a visual queue as to the application that will handle the intent.",
 					"items": {
 						"$ref": "#/definitions/Screenshot"
 					},
@@ -296,6 +296,9 @@
 					"description": "Whether to include windows that belong to processes descending from the parent. If false, only windows belonging\nto the launched process will be included.",
 					"type": "boolean"
 				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
 				"timeoutMs": {
 					"description": "Optional timeout period in milliseconds. If provided, the search will be abandoned after this timeout.\nIf not provided, the search will continue until either the `expectedWindowCount` is achieved (if provided),\nor for the lifetime of the application.",
 					"type": "number"
@@ -315,6 +318,9 @@
 				"delayMs": {
 					"description": "How to wait in milliseconds after process launch before looking for a window",
 					"type": "number"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
 				},
 				"type": {
 					"const": "delay",
@@ -402,50 +408,88 @@
 			},
 			"type": "object"
 		},
+		"HostManifestSettings": {
+			"additionalProperties": false,
+			"description": "Definition for host manifest settings.",
+			"properties": {
+				"config": {
+					"additionalProperties": false,
+					"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app\nmanifest but how the platform can manage the app.",
+					"properties": {
+						"autostart": {
+							"description": "does the application wish to be automatically started when the platform is initialized. Default\nbehavior is false.",
+							"type": "boolean"
+						},
+						"instanceMode": {
+							"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one\ninstance of this application and only show the app even if the intent resolver ui supports instances\nof apps. If multi should we support multiple instances and let the user decide whether to launch a\nnew instance or pick an existing one from the intent picker? If new it means the intent picker will\nnot show the option to pick an instance because the app owner wants a new instance every time. And if\nan intent is raised and just the id of the app is specified it will always launch a new instance",
+							"enum": ["multi", "new", "single"],
+							"type": "string"
+						},
+						"launchPreference": {
+							"$ref": "#/definitions/LaunchPreference",
+							"description": "Contains additional information related to the launch of an application."
+						},
+						"private": {
+							"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
+							"type": "boolean"
+						}
+					},
+					"type": "object"
+				},
+				"details": {
+					"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
+				},
+				"type": {
+					"description": "this is the manifest type id used by HERE and specified if root type is defined as other.",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
 		"HostManifests": {
 			"additionalProperties": false,
 			"description": "A mapping from host name to a host-specific application manifest object or URI from which that manifest can be\nretrieved. The manifest should provide details required to launch and use the application within the specified\nhost. The manifest MAY duplicate or override information provided in the details field. For web entries the url\nis fetched from the details but you would want to specify custom view manifest options (or point to a manifest)\nin the hostManifests.OpenFin.details setting. For Windows or Snapshots (other ways of rendering urls) please use\nthe type other and then specify the manifest type in the hostManifests.OpenFin.type setting along with the\nrelevant details.",
 			"properties": {
+				"HERE": {
+					"$ref": "#/definitions/HostManifestSettings",
+					"description": "The HERE settings for this FDC3 2.0 App Definition"
+				},
 				"OpenFin": {
-					"additionalProperties": false,
-					"description": "The OpenFin settings for this FDC3 2.0 App Definition",
-					"properties": {
-						"config": {
-							"additionalProperties": false,
-							"description": "An area for config related to this app for the platform hosting it. This isn't specific to the app\nmanifest but how the platform can manage the app.",
-							"properties": {
-								"autostart": {
-									"description": "does the application wish to be automatically started when the platform is initialized. Default\nbehavior is false.",
-									"type": "boolean"
-								},
-								"instanceMode": {
-									"description": "This only applies to web views/windows. Default is multi instance. Should we aim to only launch one\ninstance of this application and only show the app even if the intent resolver ui supports instances\nof apps. If multi should we support multiple instances and let the user decide whether to launch a\nnew instance or pick an existing one from the intent picker? If new it means the intent picker will\nnot show the option to pick an instance because the app owner wants a new instance every time. And if\nan intent is raised and just the id of the app is specified it will always launch a new instance",
-									"enum": ["multi", "new", "single"],
-									"type": "string"
-								},
-								"launchPreference": {
-									"$ref": "#/definitions/LaunchPreference",
-									"description": "Contains additional information related to the launch of an application."
-								},
-								"private": {
-									"description": "Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it\nis intended to be a background window that acts as an intent handler)",
-									"type": "boolean"
-								}
-							},
-							"type": "object"
-						},
-						"details": {
-							"description": "this can be a path to a manifest file specific to this type of it can be the manifest object itself if\nusing an inline type or extending the details from the root."
-						},
-						"type": {
-							"description": "this is the manifest type id used by OpenFin and specified if root type is defined as other.",
-							"type": "string"
-						}
-					},
-					"type": "object"
+					"$ref": "#/definitions/HostManifestSettings",
+					"description": "The HERE settings for this FDC3 2.0 App Definition. Please move to use HERE instead of OpenFin as this will be deprecated in the future."
 				}
 			},
-			"required": ["OpenFin"],
+			"type": "object"
+		},
+		"IndependentStrategy": {
+			"additionalProperties": false,
+			"description": "An independent application launch and window discovery strategy for capturing top-level windows\nbelonging to external applications that are launched independently of Snap, or optionally launching\nsuch applications if needed.\n\nThis strategy supports integration with applications outside the OpenFin ecosystem,\nincluding those launched via methods such as click-once or shell execution.",
+			"properties": {
+				"alwaysLaunchNewInstance": {
+					"description": "If true, always launch a new application instance even if one or more instances exist.\nIf false, only hook existing instances. Defaults to false.",
+					"type": "boolean"
+				},
+				"matchClassRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window class against. If not provided, any window class will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"matchNameRegex": {
+					"description": "An optional (Rust-evaluated) regular expression string to match the window caption against. If not provided, any window caption will match.\nN.B. if both `matchClassRegex` and `matchNameRegex` are provided, then windows will need to match BOTH the caption AND class regexes.",
+					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
+				"timeoutMs": {
+					"description": "The timeout period milliseconds after which the window search will be abandoned",
+					"type": "number"
+				},
+				"type": {
+					"const": "independent",
+					"type": "string"
+				}
+			},
+			"required": ["timeoutMs", "type"],
 			"type": "object"
 		},
 		"InteropConfig": {
@@ -493,6 +537,9 @@
 				},
 				{
 					"$ref": "#/definitions/CombinedStrategy"
+				},
+				{
+					"$ref": "#/definitions/IndependentStrategy"
 				}
 			]
 		},
@@ -581,7 +628,7 @@
 		},
 		"OtherAppDetails": {
 			"additionalProperties": false,
-			"description": "Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section",
+			"description": "Use an empty object here and fill in the details object in the HERE definition in the hostManifests section",
 			"type": "object"
 		},
 		"Partial": {
@@ -596,6 +643,10 @@
 		"Preference.T": {
 			"description": "A list of Web related constraints",
 			"enum": ["url-any", "url-domain", "url-none", "url-page"],
+			"type": "string"
+		},
+		"ResizingBehavior": {
+			"enum": ["default", "none", "sizeToFit"],
 			"type": "string"
 		},
 		"Screenshot": {
@@ -710,6 +761,9 @@
 					"description": "A (Rust-evaluated) regular expression string to match the window class against",
 					"type": "string"
 				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
+				},
 				"timeoutMs": {
 					"description": "The timeout period milliseconds after which the window search will be abandoned",
 					"type": "number"
@@ -729,6 +783,9 @@
 				"matchRegex": {
 					"description": "A (Rust-evaluated) regular expression string to match the window caption against",
 					"type": "string"
+				},
+				"resizingBehavior": {
+					"$ref": "#/definitions/ResizingBehavior"
 				},
 				"timeoutMs": {
 					"description": "The timeout period milliseconds after which the window search will be abandoned",
@@ -847,6 +904,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				}
 			},
@@ -877,6 +936,8 @@
 					"$ref": "#/definitions/InteropConfig"
 				},
 				"url": {
+					"default": "about:blank",
+					"description": "The URL of the window",
 					"type": "string"
 				}
 			},

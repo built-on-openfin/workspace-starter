@@ -3,12 +3,17 @@ import { PRIMARY_MONITOR_RECT, SECONDARY_MONITOR_RECT, TERTIARY_MONITOR_RECT } f
 
 Object.defineProperty(globalThis, "crypto", {
 	value: {
-		getRandomValues: (arr) => cryptoLib.randomBytes(arr.length)
+		getRandomValues: (arr: Uint8Array) => cryptoLib.randomBytes(arr.length)
 	}
 });
 
 Object.defineProperty(globalThis, "fin", {
 	value: {
+		me: {
+			identity: {
+				uuid: "test-platform"
+			}
+		},
 		System: {
 			getMonitorInfo: async () => ({
 				primaryMonitor: {
@@ -22,7 +27,8 @@ Object.defineProperty(globalThis, "fin", {
 						monitorRect: TERTIARY_MONITOR_RECT
 					}
 				]
-			})
+			}),
+			getMousePosition: async () => ({ left: 0, top: 0 })
 		}
 	}
 });

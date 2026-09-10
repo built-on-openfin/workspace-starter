@@ -209,8 +209,8 @@ export async function getConstructorOverride(
 					return;
 				}
 				return super.invokeContextHandler(clientIdentity, handlerId, {
-					...passedContext,
-					contextMetadata
+					contextMetadata, // If contextMetadata has been passed it will override our entry in case it was set by another interop override
+					...passedContext
 				} as unknown as OpenFin.Context);
 			}
 
@@ -575,8 +575,8 @@ export async function getConstructorOverride(
 				return super.invokeIntentHandler(clientIdentity, handlerId, {
 					...intent,
 					context: {
-						...passedContext,
-						contextMetadata
+						contextMetadata, // If contextMetadata has been passed it will override our entry in case it was set by another interop override
+						...passedContext
 					} as unknown as OpenFin.Context
 				});
 			}
@@ -970,8 +970,16 @@ export async function getConstructorOverride(
 				}
 
 				if (platformIdentities.length === 0) {
+					logger.info(`No existing instances found for app Id: ${app.appId}. Launching a new instance.`);
 					platformIdentities = await launch(app.appId, undefined, clientIdentity);
+					logger.info(
+						`Launch of app Id: ${app.appId} returned the following platform identities:`,
+						platformIdentities
+					);
 					if (!platformIdentities?.length) {
+						logger.warn(
+							`Launch of app Id: ${app.appId} did not return any platform identities. We expected at least one identity to be returned from a successful launch so we are returning an IntentDeliveryFailed error.`
+						);
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
 					existingInstance = false;
@@ -979,8 +987,16 @@ export async function getConstructorOverride(
 				const intentTimeout: number | undefined = options?.intentOptions?.intentTimeout;
 				// how many instances do we have?
 				if (platformIdentities.length === 1) {
+					logger.info(
+						`One instance found for app Id: ${app.appId}. Sending intent to that instance.`,
+						platformIdentities[0]
+					);
 					instanceId = await this.processSetIntentTarget(platformIdentities[0], intent, intentTimeout, false);
 				} else {
+					logger.info(
+						`Multiple instances found for app Id: ${app.appId}. Sending intent to all instances and letting the app decide which one should handle it.`,
+						platformIdentities
+					);
 					const intentSharing = platformIdentities.map(async (platformIdentity) =>
 						this.processSetIntentTarget(platformIdentity, intent, intentTimeout, true)
 					);
@@ -1006,6 +1022,10 @@ export async function getConstructorOverride(
 				}
 
 				if (existingInstance) {
+					logger.info(
+						`An existing instance of app Id: ${app.appId} was targeted. Attempting to bring the app to the front.`,
+						platformIdentities
+					);
 					for (const target of platformIdentities) {
 						try {
 							if (helpers.bringAppToFront) {
@@ -1020,11 +1040,16 @@ export async function getConstructorOverride(
 					}
 				}
 
-				return {
+				const response = {
 					source: { appId: app.appId, instanceId },
 					version: app.version,
 					intent: intent.name
 				};
+				logger.info(
+					"App has been launched with intent. Returning response from launchAppWithIntent:",
+					response
+				);
+				return response;
 			}
 
 			/**

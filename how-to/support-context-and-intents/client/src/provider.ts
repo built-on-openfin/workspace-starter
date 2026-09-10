@@ -6,7 +6,7 @@ import { getApps, launchApp } from "./apps";
 import { createInteropOverride } from "./interopbroker";
 import type { CustomSettings } from "./shapes";
 
-const PLATFORM_ID = "support-context-and-intents";
+const PLATFORM_ID = fin.me.identity.uuid;
 const PLATFORM_TITLE = "Support Context and Intents";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
@@ -19,16 +19,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents(customSettings));
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform(customSettings);
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param customSettings The custom settings from the manifest.
  */
 async function initializeWorkspacePlatform(customSettings: CustomSettings): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	const defaultBroker = createInteropOverride(customSettings);
 	const interopOverride: OpenFin.ConstructorOverride<OpenFin.InteropBroker>[] = [defaultBroker];
@@ -54,17 +54,6 @@ async function initializeWorkspacePlatform(customSettings: CustomSettings): Prom
 				}
 			}
 		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
 		// Use an override for the platform interop to handle the context and intents
 		interopOverride
 	});
@@ -86,7 +75,7 @@ async function initializeWorkspaceComponents(customSettings: CustomSettings): Pr
 			// Get the list of all the apps
 			let apps = await getApps(customSettings.appProvider);
 
-			if (request.query.length >= 3) {
+			if (request.query && typeof request.query === "string" && request.query.length >= 3) {
 				// Filter them by title if we have a query
 				apps = apps.filter((app) => app.title.toLowerCase().includes(request.query.toLowerCase()));
 			}

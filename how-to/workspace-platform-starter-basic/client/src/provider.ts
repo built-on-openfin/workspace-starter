@@ -1,10 +1,9 @@
 import type OpenFin from "@openfin/core";
-import { Dock, Home, Storefront, type App } from "@openfin/workspace";
-import { CustomActionCallerType, init } from "@openfin/workspace-platform";
+import { Home, Storefront, type App } from "@openfin/workspace";
+import { type CustomThemes, init } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 import { register as registerDock } from "./dock";
 import { register as registerHome } from "./home";
-import { launchApp } from "./launch";
 import { register as registerNotifications } from "./notifications";
 import type { CustomSettings, PlatformSettings } from "./shapes";
 import { register as registerStore } from "./store";
@@ -20,22 +19,24 @@ window.addEventListener("DOMContentLoaded", async () => {
 	);
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform(settings.platformSettings, settings.customSettings ?? {});
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  * @param platformSettings The platform settings from the manifest.
  * @param browserSettings The custom settings from the manifest.
  * @param browserSettings.newPageUrl A new page url to load when the browser is opened.
  * @param browserSettings.newTabUrl A new view url to load when the browser is opened.
+ * @param theme The theme settings from the manifest.
  */
 async function initializeWorkspacePlatform(
 	platformSettings: PlatformSettings,
-	browserSettings: { newPageUrl?: string; newTabUrl?: string }
+	browserSettings: { newPageUrl?: string; newTabUrl?: string },
+	theme?: CustomThemes
 ): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	let newPageUrl: string | undefined;
 	let newTabUrl: string | undefined;
 
@@ -45,6 +46,7 @@ async function initializeWorkspacePlatform(
 	if (browserSettings?.newTabUrl !== undefined && browserSettings?.newTabUrl !== "") {
 		newTabUrl = browserSettings.newTabUrl;
 	}
+	console.log("Passing the following theme to the workspace platform init function:", theme);
 
 	await init({
 		browser: {
@@ -55,27 +57,6 @@ async function initializeWorkspacePlatform(
 					favicon: platformSettings.icon,
 					newPageUrl,
 					newTabUrl
-				}
-			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		],
-		customActions: {
-			"launch-app": async (e): Promise<void> => {
-				if (
-					e.callerType === CustomActionCallerType.CustomButton ||
-					e.callerType === CustomActionCallerType.CustomDropdownItem
-				) {
-					await launchApp(e.customData as App);
 				}
 			}
 		}
@@ -121,7 +102,7 @@ async function initializeWorkspaceComponents(
 	await registerStore(platformSettings, apps);
 
 	// Register with dock
-	await registerDock(platformSettings, apps);
+	const dockProvider = await registerDock(platformSettings, apps);
 
 	// Register with notifications
 	await registerNotifications(platformSettings);
@@ -131,7 +112,7 @@ async function initializeWorkspaceComponents(
 	await providerWindow.once("close-requested", async () => {
 		await Home.deregister(platformSettings.id);
 		await Storefront.deregister(platformSettings.id);
-		await Dock.deregister();
+		await dockProvider?.shutdown();
 		await Notifications.deregister(platformSettings.id);
 		await fin.Platform.getCurrentSync().quit();
 	});

@@ -53,10 +53,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 
 	await init({
 		browser: {
@@ -67,19 +67,12 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					favicon: PLATFORM_ICON
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palettes: templateHelpers.DEFAULT_PALETTES
-			}
-		]
+		}
 	});
 }
 
 /**
- * Initialize workspace components.
+ * Initialize HERE Core UI Components.
  * @param apps The list of apps to return.
  */
 async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
@@ -140,7 +133,7 @@ async function initializeWorkspaceComponents(apps?: App[]): Promise<void> {
 			if (apps) {
 				// Get any apps
 				let appResults: App[] = apps.slice();
-				if (request.query.length >= 3) {
+				if (request.query && typeof request.query === "string" && request.query.length >= 3) {
 					appResults = appResults.filter((a) => a.title.toLowerCase().includes(request.query.toLowerCase()));
 				}
 

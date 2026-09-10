@@ -3,12 +3,15 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "40.130.101.1"
+		"version": "44.146.101.7"
 	},
 	"platform": {
 		"uuid": "integrate-with-snap-basic",
+		"name": "integrate-with-snap-basic",
 		"icon": "http://localhost:8080/favicon.ico",
 		"autoShow": true,
+		"defaultHeight": 800,
+		"defaultWidth": 800,
 		"providerUrl": "http://localhost:8080/platform/provider.html",
 		"preventQuitOnLastWindowClosed": true,
 		"permissions": {
@@ -19,16 +22,16 @@
 		}
 	},
 	"shortcut": {
-		"company": "OpenFin",
-		"description": "A way of showing examples of what OpenFin can do.",
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
 		"icon": "http://localhost:8080/favicon.ico",
-		"name": "Integrate with Snap - Basic - v20.1.0",
+		"name": "Integrate with Snap - Basic - v24.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
-		"company": "OpenFin",
+		"company": "HERE",
 		"product": "Workspace Starter - Integrate with Snap - Basic - Client",
-		"email": "support@openfin.co",
+		"email": "support@here.io",
 		"forwardErrorReports": true
 	},
 	"appAssets": [

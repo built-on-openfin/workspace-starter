@@ -1,5 +1,5 @@
 /**
- * Displays a view with information about the OpenFin runtime.
+ * Displays a view with information about the HERE runtime.
  */
 
 document.addEventListener('DOMContentLoaded', () => {

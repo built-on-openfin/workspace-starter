@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import type Snap from "@openfin/snap-sdk";
 import type { LaunchStrategy, ServerOptions } from "@openfin/snap-sdk";
 import type { App } from "@openfin/workspace";
 
@@ -6,6 +7,21 @@ import type { App } from "@openfin/workspace";
  * Extend the app definition to have more information.
  */
 export type PlatformApp = App | PlatformAppInlineAppAsset;
+
+/**
+ * Payload for applying a Snap snapshot.
+ */
+export interface ApplySnapSnapshotPayload {
+	/**
+	 * The Snap snapshot to apply.
+	 */
+	snapshot: Snap.SnapSnapshot;
+
+	/**
+	 * Options for applying the snapshot.
+	 */
+	options?: OpenFin.ApplySnapshotOptions;
+}
 
 /**
  * Extend the app definition for inline app assets.

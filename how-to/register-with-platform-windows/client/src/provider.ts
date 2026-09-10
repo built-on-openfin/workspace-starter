@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	await platform.once("platform-api-ready", async () => initializeWorkspaceComponents());
 
 	// The DOM is ready so initialize the platform
-	// Provide default icons and default theme for the browser windows
+	// Provide default icons for the browser windows
 	await initializeWorkspacePlatform();
 
 	// The apps that are launch from home will use the defaultWindowOptions
@@ -22,10 +22,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Initialize the workspace platform.
+ * Initialize the HERE Core UI Platform.
  */
 async function initializeWorkspacePlatform(): Promise<void> {
-	console.log("Initializing workspace platform");
+	console.log("Initializing HERE Core UI Platform");
 	await init({
 		browser: {
 			title: PLATFORM_TITLE,
@@ -36,18 +36,7 @@ async function initializeWorkspacePlatform(): Promise<void> {
 					favicon: PLATFORM_ICON
 				}
 			}
-		},
-		theme: [
-			{
-				label: "Default",
-				default: "dark",
-				palette: {
-					brandPrimary: "#0A76D3",
-					brandSecondary: "#383A40",
-					backgroundPrimary: "#1E1F23"
-				}
-			}
-		]
+		}
 	});
 }
 

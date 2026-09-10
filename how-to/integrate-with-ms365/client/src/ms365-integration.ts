@@ -959,9 +959,13 @@ export class Microsoft365Integration {
 					email: actionData.emails[0]
 				}
 			};
-			this._logger?.info("Share Contact", fdc3Contact);
-			await window.fdc3.raiseIntent("ViewContact", fdc3Contact as FDC3Context);
-			return true;
+			if (window.fdc3) {
+				this._logger?.info("Share Contact", fdc3Contact);
+				await window?.fdc3.raiseIntent("ViewContact", fdc3Contact as FDC3Context);
+				return true;
+			}
+			this._logger?.error("FDC3 API is not available so ViewContact cannot be raised.", fdc3Contact);
+			return false;
 		}
 
 		this._logger?.error("No contact information to share", actionData.emails);

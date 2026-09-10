@@ -48,14 +48,14 @@ export interface AppDefinition {
 	lang?: string;
 
 	/**
-	 * Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or
+	 * Holds Icons used for the application, This icon could be used for entries in the HERE Core UI HOME, DOCK or
 	 * STORE Components
 	 */
 	icons?: AppIcon[];
 
 	/**
 	 * Array of images to show the user when they are looking at app description. Each image can have an optional
-	 * description/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be
+	 * description/tooltip. These images could be used in the HERE Core UI STORE and HOME components or it could be
 	 * used by an Intent Resolver to provide a visual queue as to the application that will handle the intent.
 	 */
 	screenshots?: Screenshot[];
@@ -88,7 +88,7 @@ export interface AppDefinition {
 
 	/**
 	 * The type specific launch details of the application. These details are intended to be vendor-agnostic and MAY be
-	 * duplicated or overridden by details provided in the hostManifests OpenFin object.
+	 * duplicated or overridden by details provided in the hostManifests HERE object.
 	 */
 	details: WebAppDetails | NativeAppDetails | OnlineNativeAppDetails | CitrixAppDetails | OtherAppDetails;
 
@@ -110,7 +110,7 @@ export interface AppDefinition {
 
 	/**
 	 * Metadata that describes how the application uses FDC3/Interop APIs. This metadata serves multiple purposes:
-	 * - It supports intent resolution by an OpenFin Platform/ interop agent, by declaring what intents an app listens
+	 * - It supports intent resolution by an HERE Platform/ interop agent, by declaring what intents an app listens
 	 * for.
 	 * - It may be used, for example in an app catalog UI, to find apps that 'interoperate with' other apps.
 	 * - It provides a standard location to document how the app interacts with user channels, app channels, and
@@ -137,52 +137,62 @@ export interface AppDefinition {
  */
 export interface HostManifests {
 	/**
-	 * The OpenFin settings for this FDC3 2.0 App Definition
+	 * The HERE settings for this FDC3 2.0 App Definition
 	 */
-	OpenFin: {
+	HERE?: HostManifestSettings;
+
+	/**
+	 * The HERE settings for this FDC3 2.0 App Definition. Please move to use HERE instead of OpenFin as this will be deprecated in the future.
+	 */
+	OpenFin?: HostManifestSettings;
+}
+
+/**
+ * Definition for host manifest settings.
+ */
+export interface HostManifestSettings {
+	/**
+	 * this is the manifest type id used by HERE and specified if root type is defined as other.
+	 */
+	type?: string;
+
+	/**
+	 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
+	 * using an inline type or extending the details from the root.
+	 */
+	details?: unknown;
+
+	/**
+	 * An area for config related to this app for the platform hosting it. This isn't specific to the app
+	 * manifest but how the platform can manage the app.
+	 */
+	config?: {
 		/**
-		 * this is the manifest type id used by OpenFin and specified if root type is defined as other.
+		 * does the application wish to be automatically started when the platform is initialized. Default
+		 * behavior is false.
 		 */
-		type?: string;
+		autostart?: boolean;
 
 		/**
-		 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
-		 * using an inline type or extending the details from the root.
+		 * Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it
+		 * is intended to be a background window that acts as an intent handler)
 		 */
-		details?: unknown;
+		private?: boolean;
 
 		/**
-		 * An area for config related to this app for the platform hosting it. This isn't specific to the app
-		 * manifest but how the platform can manage the app.
+		 * This only applies to web views/windows. Default is multi instance. Should we aim to only launch one
+		 * instance of this application and only show the app even if the intent resolver ui supports instances
+		 * of apps. If multi should we support multiple instances and let the user decide whether to launch a
+		 * new instance or pick an existing one from the intent picker? If new it means the intent picker will
+		 * not show the option to pick an instance because the app owner wants a new instance every time. And if
+		 * an intent is raised and just the id of the app is specified it will always launch a new instance
 		 */
-		config?: {
-			/**
-			 * does the application wish to be automatically started when the platform is initialized. Default
-			 * behavior is false.
-			 */
-			autostart?: boolean;
+		instanceMode?: "multi" | "single" | "new";
 
-			/**
-			 * Should this app be private and not listed in any UI e.g. Workspace HOME, DOCK or STORE (useful if it
-			 * is intended to be a background window that acts as an intent handler)
-			 */
-			private?: boolean;
-
-			/**
-			 * This only applies to web views/windows. Default is multi instance. Should we aim to only launch one
-			 * instance of this application and only show the app even if the intent resolver ui supports instances
-			 * of apps. If multi should we support multiple instances and let the user decide whether to launch a
-			 * new instance or pick an existing one from the intent picker? If new it means the intent picker will
-			 * not show the option to pick an instance because the app owner wants a new instance every time. And if
-			 * an intent is raised and just the id of the app is specified it will always launch a new instance
-			 */
-			instanceMode?: "multi" | "single" | "new";
-
-			/**
-			 * Contains additional information related to the launch of an application.
-			 */
-			launchPreference?: LaunchPreference;
-		};
+		/**
+		 * Contains additional information related to the launch of an application.
+		 */
+		launchPreference?: LaunchPreference;
 	};
 }
 
@@ -271,7 +281,7 @@ export interface CitrixAppDetails {
 }
 
 /**
- * Use an empty object here and fill in the details object in the OpenFin definition in the hostManifests section
+ * Use an empty object here and fill in the details object in the HERE definition in the hostManifests section
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface OtherAppDetails {}

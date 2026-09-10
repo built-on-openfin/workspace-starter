@@ -1,0 +1,71 @@
+{
+	"manifestHost": "http://localhost:8080",
+	"contentPacks": [
+		{
+			"id": "platform",
+			"sourceRoot": "./public",
+			"sources": ["./platform/provider.html", "./js/provider.bundle.js", "./platform/splash.html"],
+			"dest": "./"
+		},
+		{
+			"id": "public",
+			"sourceRoot": "./public",
+			"sources": ["manifest-hosts.json"],
+			"dest": "./"
+		},
+		{
+			"id": "common",
+			"sourceRoot": "./public/common",
+			"sources": ["icons/**/*", "windows/intents/**/*"],
+			"dest": "./common"
+		},
+		{
+			"id": "schemas",
+			"sourceRoot": "./public/schemas",
+			"sources": ["**"],
+			"dest": "./schemas"
+		},
+		{
+			"id": "shell",
+			"sourceRoot": "./public",
+			"sources": ["./shell/shell.html", "./js/shell.bundle.js"],
+			"dest": "./",
+			"autoInclude": false
+		},
+		{
+			"id": "package",
+			"sourceRoot": "./",
+			"sources": [
+				"docs/**/*",
+				"README.md",
+				"LICENSE.md",
+				"CHANGELOG.md",
+				"client/types/*.*",
+				"client/types/module/**"
+			],
+			"dest": "../",
+			"autoInclude": false
+		},
+		{
+			"id": "of-info",
+			"sourceRoot": "./public/common",
+			"sources": ["views/platform/of-info.view.fin.json", "views/platform/of-info/**/*"],
+			"dest": "./common"
+		}
+	],
+	"replaceTypes": [".json", ".html", ".js"],
+	"tokens": {
+		"local": {
+			"MYKEY": "value"
+		}
+	},
+	"hosts": {
+		"local": [
+			"127.0.0.1",
+			"built-on-openfin.github.io",
+			"openfin.github.io",
+			"samples.openfin.co",
+			"cdn.openfin.co"
+		]
+	}
+}

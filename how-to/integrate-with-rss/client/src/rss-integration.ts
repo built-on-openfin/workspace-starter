@@ -216,7 +216,9 @@ export class RssIntegration {
 		const results = [];
 
 		if (query.length >= 3) {
-			const re = new RegExp(query, "gi");
+			// Sanitize the query to prevent ReDoS attacks by escaping regex special characters
+			const sanitizedQuery = query.replace(/[$()*+.?[\\\]^{|}]/g, "\\$&");
+			const re = new RegExp(sanitizedQuery, "gi");
 			const matches: {
 				feed: RssFeedCache;
 				entry: RssFeedCacheEntry;

@@ -56,16 +56,16 @@ export interface PlatformProviderOptions extends ModuleList {
 	disableStorageMapping?: boolean;
 
 	/**
-	 * Are you self hosting the workspace platform UI and related assets (workspace 20.1+).
+	 * Are you self hosting the HERE Core UI Platform UI and related assets (workspace 20.1+).
 	 */
 	workspaceAsar?: {
 		/**
-		 * The alias that you have used when defining the app asset in your manifest that has the workspace platform zip that is provided in the @openfin/workspace-platform package from version 20.1+.
+		 * The alias that you have used when defining the app asset in your manifest that has the HERE Core UI Platform zip that is provided in the @openfin/workspace-platform package from version 20.1+.
 		 */
 		alias: string;
 
 		/**
-		 * This is a Workspace Platform Starter specific setting. Default is true if an alias is specified.
+		 * This is a HERE Core UI Platform Starter specific setting. Default is true if an alias is specified.
 		 */
 		enabled?: boolean;
 	};

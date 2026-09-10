@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # How To Customize Browser
 
-The browser is the component of OF Workspace that displays your views, see [Browser Overview](https://developers.openfin.co/of-docs/docs/browser-sdk-overview) in the main developer docs for more details.
+The browser is the component of OF Workspace that displays your views, see [Browser Overview](https://resources.here.io/docs/core/hc-ui/browser/) in the main developer docs for more details.
 
 ![Browser](./assets/browser-window.png)
 
@@ -70,7 +70,7 @@ The theming for the browser window is configured in the platform using a pallett
 
 ## defaultWindowOptions
 
-We have extended the browser provider to support the same defaultWindowOptions as the workspace platform. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
+We have extended the browser provider to support the same defaultWindowOptions as the HERE Core UI Platform. This provides more flexibility when configuring your platform without having to rely on manifest based defaultWindowOptions.
 
 ## defaultPageOptions
 
@@ -95,6 +95,93 @@ We now support adding defaultViewOptions to the browserProvider like you would i
     }
 }
 ```
+
+## Navigation Controls
+
+Browser navigation controls (back, forward, and reload) are configured separately from the custom toolbar buttons described in [How To Customize Browser Buttons](./how-to-customize-browser-buttons.md). You need **both** of the following:
+
+1. **Window-level** — show the navigation controls in the Browser toolbar.
+2. **View-level** — declare which navigation actions each view supports.
+
+Both settings are disabled by default.
+
+### Enable navigation controls for all Browser windows
+
+Set `navigationButtons.enabled` under `browserProvider.defaultWindowOptions.workspacePlatform`. The main [manifest.fin.json](../public/manifest.fin.json) enables this by default:
+
+```json
+"browserProvider": {
+    "defaultWindowOptions": {
+        "workspacePlatform": {
+            "navigationButtons": {
+                "enabled": true
+            }
+        }
+    }
+}
+```
+
+You can optionally disable the default keyboard shortcuts with `hotkeysDisabled: true`:
+
+```json
+"navigationButtons": {
+    "enabled": true,
+    "hotkeysDisabled": true
+}
+```
+
+### Enable navigation controls for all views
+
+Set `browserNavigationButtons` under `browserProvider.defaultViewOptions.workspacePlatform` so every view gets back, forward, and reload support:
+
+```json
+"browserProvider": {
+    "defaultViewOptions": {
+        "workspacePlatform": {
+            "browserNavigationButtons": {
+                "back": true,
+                "forward": true,
+                "reload": true
+            }
+        }
+    }
+}
+```
+
+At least one of `back`, `forward`, or `reload` must be set to `true`.
+
+### Enable navigation controls for a single app
+
+For one app only, add `workspacePlatform.browserNavigationButtons` to that app's view manifest (inline-view manifest, view manifest, or snapshot `viewOptions`). The **Navigate** app in [apps.json](../public/common/apps.json) demonstrates this:
+
+```json
+{
+  "appId": "openfin-search-navigate",
+  "manifestType": "inline-view",
+  "manifest": {
+    "url": "http://localhost:8080/common/views/platform/new-tab/new-tab.html",
+    "workspacePlatform": {
+      "browserNavigationButtons": {
+        "back": true,
+        "forward": true,
+        "reload": true
+      }
+    }
+  }
+}
+```
+
+When using a standalone view manifest (for example `*.view.fin.json`), put the same `workspacePlatform.browserNavigationButtons` object on the view options root.
+
+### Summary
+
+| Scope               | Setting location                                         | Property                    |
+| ------------------- | -------------------------------------------------------- | --------------------------- |
+| All Browser windows | `browserProvider.defaultWindowOptions.workspacePlatform` | `navigationButtons.enabled` |
+| All views           | `browserProvider.defaultViewOptions.workspacePlatform`   | `browserNavigationButtons`  |
+| One app / view      | App manifest or view manifest `workspacePlatform`        | `browserNavigationButtons`  |
+
+If navigation controls do not appear, check that `navigationButtons.enabled` is `true` on the window **and** that the active view defines `browserNavigationButtons`.
 
 ## Menu And Buttons
 

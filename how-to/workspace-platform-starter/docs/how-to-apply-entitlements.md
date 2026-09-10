@@ -1,4 +1,4 @@
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE Core UI:_** [HERE Core UI](https://resources.here.io/docs/core/hc-ui/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](../LICENSE.MD)). Use of the HERE Core Container and HERE Core UI components is only granted pursuant to a license from HERE (see [manifest](../public/manifest.fin.json)). Please [**contact us**](https://www.here.io/contact) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
@@ -17,7 +17,7 @@ To return configuration related to a specific user then you need to ensure you h
 
 ## Configuring Dynamic Settings
 
-Workspace Platform Starter lets you add all the settings for a workspace platform in the customSettings section of a manifest (see [manifest.fin.json](../public/manifest.fin.json)). This makes it useful if you wish to experiment with options easily and if you don't need to return different settings by user/group.
+HERE Core UI Platform Starter lets you add all the settings for a HERE Core UI Platform in the customSettings section of a manifest (see [manifest.fin.json](../public/manifest.fin.json)). This makes it useful if you wish to experiment with options easily and if you don't need to return different settings by user/group.
 
 If you need to return different settings by user then you can have a cut down manifest (see [second.manifest.fin.json](../public/second.manifest.fin.json)) which only includes the authProvider definition and an endpointProvider definition (see [How To Define Endpoints](./how-to-define-endpoints.md)) that includes an endpoint for returning the settings (this will override the settings in the manifest and will be the settings returned to the other parts of the platform).
 
@@ -88,7 +88,7 @@ If you need to return different settings by user then you can have a cut down ma
 
 ## How the platform checks for settings
 
-The workspace platform starter settings service will check for an endpoint with an id of "**platform-settings**". Endpoints can have custom logic and can source data using it's preferred approach (rest calls, data from a websocket connection, data from local storage or even mock data).
+The HERE Core UI Platform starter settings service will check for an endpoint with an id of "**platform-settings**". Endpoints can have custom logic and can source data using it's preferred approach (rest calls, data from a websocket connection, data from local storage or even mock data).
 
 We have an example auth module that contains an auth provider and an endpoint provider. The purpose of this setup is to let you simulate server side filtering via the client side (so there is no server side logic dependency required in order to get an idea of how it could work). The auth module above has a customData setting that specifies a id to store the selected example user and a list of example users and associated role.
 

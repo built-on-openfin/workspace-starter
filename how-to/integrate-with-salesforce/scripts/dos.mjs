@@ -51,7 +51,7 @@ async function run() {
 			console.warn('DOS:', output.slice(valIndex + 6, valIndexEnd).trim());
 			console.warn();
 			console.warn('If you choose to overwrite this value, you will need to restore it later.');
-			console.warn('More Information: https://developers.openfin.co/of-docs/docs/desktop-owner-settings');
+			console.warn('More Information: https://resources.here.io/docs/core/manage/desktops/dos/');
 			console.warn();
 			console.warn(
 				'To cancel this process, press Ctrl + C (Windows) or Command + C (Mac) to exit, or any other key to continue'
