@@ -1,0 +1,42 @@
+{
+	"name": "automation-testing-platform-fixture",
+	"version": "24.0.0",
+	"description": "HERE Core UI -- Fixture platform for the automation testing examples",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"start": "vite",
+		"start:static": "vite build && vite preview",
+		"preview": "vite preview",
+		"launch": "open fin://localhost:8080/manifest.fin.json",
+		"prettier": "prettier --config .prettierrc --write .",
+		"prettier-check": "prettier --config .prettierrc --check .",
+		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
+		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
+	},
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@openfin/core": "44.101.7",
+		"@openfin/workspace": "24.0.24",
+		"@openfin/workspace-platform": "24.0.24"
+	},
+	"devDependencies": {
+		"@types/node": "^20.19.37",
+		"eslint": "8.57.1",
+		"eslint-config-airbnb": "19.0.4",
+		"eslint-config-airbnb-typescript": "18.0.0",
+		"eslint-config-prettier": "9.1.0",
+		"eslint-plugin-import": "2.26.0",
+		"eslint-plugin-jsdoc": "48.2.1",
+		"eslint-plugin-prettier": "5.1.3",
+		"eslint-plugin-promise": "6.1.1",
+		"eslint-plugin-simple-import-sort": "12.0.0",
+		"eslint-plugin-unicorn": "51.0.1",
+		"eslint-plugin-unused-imports": "3.1.0",
+		"markdownlint-cli": "^0.48.0",
+		"prettier": "3.2.5",
+		"typescript": "^5.4.2",
+		"vite": "^6.0.11"
+	}
+}

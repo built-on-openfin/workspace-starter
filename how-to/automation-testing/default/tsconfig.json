@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"target": "es2020",
+		"strict": true,
+		"module": "es2020",
+		"moduleResolution": "bundler",
+		"esModuleInterop": true,
+		"types": ["vitest/globals"]
+	}
+}
