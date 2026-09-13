@@ -1,0 +1,6 @@
+package-lock.json
+
+# HERE automation artifacts
+storage/
+reports/
+screenshots/

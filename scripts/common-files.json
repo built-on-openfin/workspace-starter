@@ -1020,5 +1020,35 @@
 				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
 			}
 		]
+	},
+	{
+		"name": "automation-testing/default",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/automation-testing/default",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc"]
+			}
+		]
+	},
+	{
+		"name": "automation-testing/wdio",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/automation-testing/wdio",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
+			}
+		]
+	},
+	{
+		"name": "automation-testing/platform-fixture",
+		"fileGroups": [
+			{
+				"srcFolder": "how-to/workspace-platform-starter",
+				"destFolder": "how-to/automation-testing/platform-fixture",
+				"files": [".eslintrc.js", ".markdownlint.json", ".prettierignore", ".prettierrc", "tsconfig.eslint.json"]
+			}
+		]
 	}
 ]
