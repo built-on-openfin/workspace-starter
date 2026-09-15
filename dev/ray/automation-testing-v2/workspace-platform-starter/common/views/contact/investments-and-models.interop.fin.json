@@ -1,0 +1,19 @@
+{
+	"intents": {
+		"listensFor": {
+			"ViewContact": {
+				"displayName": "View Contact Details",
+				"contexts": ["fdc3.contact"]
+			},
+			"ViewProfile": {
+				"displayName": "View Profile",
+				"contexts": ["fdc3.contact"]
+			}
+		}
+	},
+	"userChannels": {
+		"broadcasts": [],
+		"listensFor": ["fdc3.contact"]
+	},
+	"appChannels": []
+}
