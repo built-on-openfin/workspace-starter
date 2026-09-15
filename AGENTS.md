@@ -220,7 +220,7 @@ A JSON file that controls which version of workspace components are loaded from 
 → Look at the `integrate-with-*` examples. Basic versions show connection/query; full versions show Home integration with search and browse.
 
 ### "I need to test my platform"
-→ **`automation-testing/`** — Contains WebDriverIO, Selenium, and JS/TS test examples using `@openfin/automation-cli`.
+→ **`automation-testing/`** — Example suites using `@openfin/automation-cli` (Vitest) and WebdriverIO with `@openfin/automation-helpers`, run against a small fixture platform.
 
 ---
 
