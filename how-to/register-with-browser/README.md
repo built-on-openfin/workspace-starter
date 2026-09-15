@@ -23,10 +23,19 @@ Scenarios you can try:
 8. Launch a browser window with fixed views.
 9. Launch a browser window to explore duplicate page titles (two pages start with the same intended title).
 10. Launch a browser window with pinned pages (three platform pins, three user pins, and one regular tab). Requires HERE Core UI workspace **45.2.2+** (see [dos.json](public/common/dos.json) or run `npm run dos` to pin locally).
+11. Launch a browser window that customizes **view tab headers** (per-view icon, background/font colors, content-based tab width, and snapshot-safe tab controls). Requires HERE Core UI workspace **45.2.2+**.
 
 Set **Allow Duplicate Page Titles** before **Initialize Platform** (the checkbox is disabled while the platform is initialized). On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, initialize, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To try a different setting, click **Restart Demo**, change the checkbox, and **Initialize Platform** again.
 
 To try pinned tabs: initialize the platform, select **Launch Browser With Pinned Pages**, and click **Launch Browser**. The window opens with three developer-locked platform pins (`pinned: "platform"`), three user pins (`pinned: "user"`) that can be unpinned from the tab context menu, and one regular unpinned tab for comparison.
+
+To try view tab customization: initialize the platform, select **Launch Browser With View Tab Customization**, and click **Launch Browser**.
+
+- The first view tab always shows a platform favicon, dark chrome, and three controls (status before the title, print after the title, and a disabled example control before the favicon).
+- The second view tab hides its favicon (`icon: "hide"`), uses green chrome, and has a single status control. Tabs size to their chrome (`widthMode: "content"`) up to 200px.
+- Click an enabled control to run a `CustomActionCallerType.ViewTabControl` action. A popup appears, and the provider console logs the payload plus `Browser.getPageByViewIdentity` (page id and title). The disabled example control exists only to show the `disabled` state, so clicking it does nothing; set `disabled: false` in `client/src/browser-scenarios.ts` to see it dispatch like the others.
+
+Keyboard: arrow to a control and press Enter or Space to invoke it. That must not activate, tear out, or close the tab. Close stays hidden until you hover or keyboard-focus the tab.
 
 This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
