@@ -154,11 +154,6 @@ export async function decorateSnapshot(snapshot: Snap.SnapSnapshot): Promise<Sna
 export async function prepareToApplyDecoratedSnapshot(): Promise<Snap.LayoutClient[]> {
 	try {
 		if (server) {
-			// Don't call prepareToApplySnapshot as this will unregister all the existing clients
-			// and we might want to re-use them, instead we will retain the native apps
-			// and set an empty layout
-			// await server.prepareToApplySnapshot();
-
 			const layout = await server.getLayout();
 			const appOnlyLayout: Snap.SnapLayout = {
 				clients: layout.clients.filter((c) => c.id.startsWith(NATIVE_APP_PREFIX)),
@@ -166,6 +161,7 @@ export async function prepareToApplyDecoratedSnapshot(): Promise<Snap.LayoutClie
 				version: layout.version
 			};
 			await server.setLayout(appOnlyLayout);
+			await server.prepareToApplySnapshot();
 
 			return appOnlyLayout.clients;
 		}
