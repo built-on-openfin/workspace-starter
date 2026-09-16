@@ -45,7 +45,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -86,7 +86,7 @@
 			"$ref": "#/definitions/__type_3"
 		},
 		"AppAssetInfo": {
-			"$ref": "#/definitions/__type_66"
+			"$ref": "#/definitions/__type_67"
 		},
 		"AppEndpointOptions": {
 			"anyOf": [
@@ -413,7 +413,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -486,7 +486,7 @@
 								"$ref": "#/definitions/BaseCustomDropdownConfig"
 							},
 							{
-								"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+								"$ref": "#/definitions/BaseCustomDropdownItem<any>"
 							}
 						]
 					},
@@ -530,7 +530,7 @@
 								"$ref": "#/definitions/BaseCustomDropdownConfig"
 							},
 							{
-								"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+								"$ref": "#/definitions/BaseCustomDropdownItem<any>"
 							}
 						]
 					},
@@ -552,7 +552,7 @@
 			"anyOf": [
 				{
 					"items": {
-						"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E_1"
+						"$ref": "#/definitions/BaseCustomDropdownItem<any>_1"
 					},
 					"type": "array"
 				},
@@ -658,7 +658,7 @@
 			"type": "string"
 		},
 		"BrowserContentBehavior": {
-			"$ref": "#/definitions/__type_77"
+			"$ref": "#/definitions/__type_78"
 		},
 		"BrowserContentCreationRule": {
 			"additionalProperties": false,
@@ -710,7 +710,7 @@
 				"globalMenu": {
 					"description": "This setting lets you customize the default workspace browser main menu and specify your own.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CGlobalContextMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<GlobalContextMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -762,7 +762,7 @@
 				"pageMenu": {
 					"description": "This setting lets you customize the page right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CPageTabContextMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<PageTabContextMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -784,7 +784,7 @@
 				"viewMenu": {
 					"description": "This setting lets you customize the view right click context menu and add your own entries.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CViewTabMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<ViewTabMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -1004,7 +1004,7 @@
 			"$ref": "#/definitions/__type_14"
 		},
 		"ClipboardPermissions": {
-			"$ref": "#/definitions/__type_80"
+			"$ref": "#/definitions/__type_81"
 		},
 		"CombinedStrategy": {
 			"additionalProperties": false,
@@ -1057,7 +1057,7 @@
 					"type": "array"
 				},
 				"identity": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "The identity uuid of the incoming connection or * as a wildcard. We currently do not restrict down to the name\nlevel so it can be blank or omitted."
 				},
 				"validatePayload": {
@@ -1197,7 +1197,7 @@
 			"type": "object"
 		},
 		"CopyPermissions": {
-			"$ref": "#/definitions/__type_81"
+			"$ref": "#/definitions/__type_82"
 		},
 		"CustomActionSpecifier": {
 			"additionalProperties": false,
@@ -1543,7 +1543,7 @@
 			"$ref": "#/definitions/__type_47"
 		},
 		"DefaultDomainSettings": {
-			"$ref": "#/definitions/__type_72"
+			"$ref": "#/definitions/__type_73"
 		},
 		"DelayStrategy": {
 			"additionalProperties": false,
@@ -1600,7 +1600,7 @@
 			"$ref": "#/definitions/__type_53"
 		},
 		"DisplayMetadata": {
-			"$ref": "#/definitions/__type_70"
+			"$ref": "#/definitions/__type_71"
 		},
 		"DockAllowedWindowOptions": {
 			"additionalProperties": false,
@@ -1873,9 +1873,14 @@
 					"description": "Disallow rearrangement of dock icons by setting this flag.",
 					"type": "boolean"
 				},
-				"dock3UIConfig": {
+				"dockType": {
+					"description": "The type of the dock to target. The \"workspace\" version is the original dock that is provided as part of the",
+					"enum": ["platform", "workspace"],
+					"type": "string"
+				},
+				"dockUIConfig": {
 					"additionalProperties": false,
-					"description": "UI Configuration Options supported by Dock 3.0",
+					"description": "UI Configuration Options supported by the platform dock (Dock 3.0).",
 					"properties": {
 						"contentMenu": {
 							"additionalProperties": false,
@@ -1923,7 +1928,7 @@
 										},
 										"options": {
 											"items": {
-												"$ref": "#/definitions/BaseCustomDropdownItem%3Cany%3E"
+												"$ref": "#/definitions/BaseCustomDropdownItem<any>"
 											},
 											"type": "array"
 										}
@@ -1955,14 +1960,9 @@
 					},
 					"type": "object"
 				},
-				"dock3WindowOptions": {
+				"dockWindowOptions": {
 					"$ref": "#/definitions/DockAllowedWindowOptions",
-					"description": "If using dock type 3 this allows you to specify additional options for the dock window."
-				},
-				"dockType": {
-					"description": "The type of the dock to target. The v1 version is the original dock that is provided as part of the",
-					"enum": ["1", "3"],
-					"type": "string"
+					"description": "If using dock type \"platform\" this allows you to specify additional options for the dock window."
 				},
 				"entries": {
 					"description": "What apps, actions or drop downs should be made available via the dock.",
@@ -1992,7 +1992,7 @@
 					"description": "Which workspace related icons should be hidden from the dock",
 					"properties": {
 						"hideContentButton": {
-							"description": "Hides the content menu button. Only applicable when `dockType` is \"3\", the v1 dock has no\nequivalent button and this setting is ignored.",
+							"description": "Hides the content menu button. Only applicable when `dockType` is \"platform\", the workspace dock\nhas no equivalent button and this setting is ignored.",
 							"type": "boolean"
 						},
 						"hideHomeButton": {
@@ -2015,13 +2015,13 @@
 			"type": "object"
 		},
 		"DomainApiSettings": {
-			"$ref": "#/definitions/__type_75"
+			"$ref": "#/definitions/__type_76"
 		},
 		"DomainSettings": {
-			"$ref": "#/definitions/__type_72"
+			"$ref": "#/definitions/__type_73"
 		},
 		"DomainSettingsPreloadScripts": {
-			"$ref": "#/definitions/__type_79"
+			"$ref": "#/definitions/__type_80"
 		},
 		"DownloadBubbleOptions": {
 			"$ref": "#/definitions/__type_31"
@@ -2112,14 +2112,14 @@
 				"endpoints": {
 					"description": "An array of endpoint definitions that can either use the built in fetch support or load modules that provide\ndifferent implementations for executing actions or performing request/response actions",
 					"items": {
-						"$ref": "#/definitions/EndpointDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/EndpointDefinition<unknown>"
 					},
 					"type": "array"
 				},
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -2266,7 +2266,7 @@
 			"type": "string"
 		},
 		"FileDownloadSettings": {
-			"$ref": "#/definitions/__type_74"
+			"$ref": "#/definitions/__type_75"
 		},
 		"GetInfoOptions": {
 			"additionalProperties": false,
@@ -2325,6 +2325,11 @@
 				"hidden": {
 					"description": "A flag to indicate this provider will not be displayed as a command.",
 					"type": "boolean"
+				},
+				"homeType": {
+					"description": "The type of home to target. The \"workspace\" version is the original home that is provided as part\nof the",
+					"enum": ["platform", "workspace"],
+					"type": "string"
 				},
 				"icon": {
 					"description": "An icon that a UI can display for the Search Provider.",
@@ -2451,9 +2456,29 @@
 			"type": "object"
 		},
 		"Identity_4": {
-			"$ref": "#/definitions/__type_4"
+			"anyOf": [
+				{
+					"$ref": "#/definitions/Identity_4_1",
+					"description": "Unique identifier for a window, view or iframe."
+				},
+				{
+					"additionalProperties": false,
+					"properties": {
+						"layoutName": {
+							"description": "The name of the layout in a given window.",
+							"type": "string"
+						}
+					},
+					"required": ["layoutName"],
+					"type": "object"
+				}
+			],
+			"description": "Unique identifier for a window, view or iframe."
 		},
 		"Identity_4_1": {
+			"$ref": "#/definitions/__type_4"
+		},
+		"Identity_4_2": {
 			"$ref": "#/definitions/__type_48"
 		},
 		"Image": {
@@ -2595,7 +2620,7 @@
 				"integrations": {
 					"description": "This is the old module list name, remove in future.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -2606,7 +2631,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/IntegrationModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/IntegrationModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -2653,13 +2678,13 @@
 			"type": "object"
 		},
 		"InteropBrokerOptions": {
-			"$ref": "#/definitions/__type_69"
+			"$ref": "#/definitions/__type_70"
 		},
 		"InteropConfig": {
 			"$ref": "#/definitions/__type_12"
 		},
 		"InteropLoggingOptions": {
-			"$ref": "#/definitions/__type_71"
+			"$ref": "#/definitions/__type_72"
 		},
 		"LaunchExternalProcessListener": {
 			"$ref": "#/definitions/__type_58"
@@ -2792,6 +2817,10 @@
 			"$ref": "#/definitions/ModuleList_4",
 			"description": "List of modules."
 		},
+		"Locale": {
+			"description": "An ISO language code accepted by the Workspace Platform.\n\n**Built-in languages** (supported out of the box):\n- `en-US` — English (default)\n- `de-DE` — German\n- `ja-JP` — Japanese\n- `ko-KR` — Korean\n- `ru-RU` — Russian\n- `zh-CN` — Chinese (Simplified)\n- `zh-Hant` — Chinese (Traditional)\n\n**Adding custom languages** via `translationOverridesUrl`:\n\nSupply a `translationOverridesUrl` in your Desktop Owner Settings (DOS) or application manifest\npointing to a `translation-override.json` file. Any language code defined in that file will be\naccepted at runtime in addition to the built-in list above.\n\nExample `translation-override.json`:\n```json\n{\n  \"x.x.x\": {\n    \"es-ES\": {\n      \"global.save\": \"Guardar\",\n      \"contextMenu.newWindow\": \"Nueva ventana\"\n    }\n  }\n}\n```\n\nThe `translationOverridesUrl` can be configured in two ways:\n\n_Via Desktop Owner Settings_ (`dos.json` on macOS, registry on Windows):\n```json\n{\n    \"desktopSettings\": {\n        \"systemApps\": {\n            \"workspace\": {\n                \"customConfig\": {\n                    \"translationOverridesUrl\": \"https://example.com/translation-override.json\"\n                }\n            }\n        }\n    }\n}\n```\n\n_Via the application manifest_ (under `platform.workspace`):\n```json\n{\n  \"platform\": {\n    \"workspace\": {\n      \"translationOverridesUrl\": \"https://example.com/translation-override.json\"\n    }\n  }\n}\n```",
+			"type": "string"
+		},
 		"LockUnlockPageConfig": {
 			"$ref": "#/definitions/__type_39"
 		},
@@ -2801,10 +2830,10 @@
 			"type": "string"
 		},
 		"LogUploadOptions": {
-			"$ref": "#/definitions/__type_85"
+			"$ref": "#/definitions/__type_86"
 		},
 		"LogUploaderUIOptions": {
-			"$ref": "#/definitions/__type_86"
+			"$ref": "#/definitions/__type_87"
 		},
 		"LoggerProviderOptions": {
 			"$ref": "#/definitions/ModuleList_1",
@@ -2967,7 +2996,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3039,7 +3068,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3111,7 +3140,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3183,7 +3212,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3229,7 +3258,7 @@
 				"submenu": {
 					"description": "Should be specified for `submenu` type menu items. If `submenu` is specified,\nthe `type: 'submenu'` can be omitted.",
 					"items": {
-						"$ref": "#/definitions/MenuItemTemplate%3Cunknown%3E"
+						"$ref": "#/definitions/MenuItemTemplate<unknown>"
 					},
 					"type": "array"
 				},
@@ -3374,7 +3403,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -3589,7 +3618,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3603,7 +3632,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3617,7 +3646,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3631,7 +3660,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3645,7 +3674,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3659,7 +3688,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -3727,7 +3756,7 @@
 				"updatable": {
 					"description": "What can be specified when launching a native app. This is an array of named types to reflect the properties you are happy to be specified.\nBy default nothing can be set outside of the app definition when launching the app.",
 					"items": {
-						"$ref": "#/definitions/NativePreference%3Cnever%3E_1"
+						"$ref": "#/definitions/NativePreference<never>_1"
 					},
 					"type": "array"
 				}
@@ -3838,10 +3867,10 @@
 			"type": "object"
 		},
 		"NotificationIndicatorColors": {
-			"$ref": "#/definitions/__type_64"
+			"$ref": "#/definitions/__type_65"
 		},
 		"NotificationIndicatorColorsWithScheme": {
-			"$ref": "#/definitions/__type_65"
+			"$ref": "#/definitions/__type_66"
 		},
 		"NotificationProviderOptions": {
 			"additionalProperties": false,
@@ -4241,7 +4270,7 @@
 			"$ref": "#/definitions/__type_63"
 		},
 		"Partial_19": {
-			"$ref": "#/definitions/__type_68"
+			"$ref": "#/definitions/__type_69"
 		},
 		"Partial_2": {
 			"$ref": "#/definitions/__type_6"
@@ -4268,13 +4297,13 @@
 			"$ref": "#/definitions/__type_25"
 		},
 		"PastePermissions": {
-			"$ref": "#/definitions/__type_82"
+			"$ref": "#/definitions/__type_83"
 		},
 		"PerDomainSettings": {
-			"$ref": "#/definitions/__type_73"
+			"$ref": "#/definitions/__type_74"
 		},
 		"Permissions_2": {
-			"$ref": "#/definitions/__type_76"
+			"$ref": "#/definitions/__type_77"
 		},
 		"Pick": {
 			"$ref": "#/definitions/__type_41"
@@ -4535,7 +4564,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -4706,11 +4735,6 @@
 				"enableJumpList": {
 					"default": false,
 					"description": "Enables the use of the Jumplists API and the 'pin to taskbar' functionality.\nOnly relevant in Windows.",
-					"type": "boolean"
-				},
-				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"hideOnClose": {
@@ -4928,6 +4952,7 @@
 					"description": "The language settings for the platform",
 					"properties": {
 						"initialLanguage": {
+							"$ref": "#/definitions/Locale",
 							"description": "The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE"
 						}
 					},
@@ -4937,7 +4962,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				},
@@ -5038,10 +5063,10 @@
 			"type": "string"
 		},
 		"PrintPermission": {
-			"$ref": "#/definitions/__type_83"
+			"$ref": "#/definitions/__type_84"
 		},
 		"PrintPlaceholder": {
-			"$ref": "#/definitions/__type_84"
+			"$ref": "#/definitions/__type_85"
 		},
 		"ProcessAffinityStrategy": {
 			"description": "Strategy to assign views to process affinity by domain.\n\n`same`: views in the same domain will have the same process affinity.<br>\n`different`: views in the same domain will have different process affinities.",
@@ -5187,7 +5212,7 @@
 				"modules": {
 					"description": "The list of modules.",
 					"items": {
-						"$ref": "#/definitions/ModuleDefinition%3Cunknown%3E"
+						"$ref": "#/definitions/ModuleDefinition<unknown>"
 					},
 					"type": "array"
 				}
@@ -5278,7 +5303,7 @@
 			"type": "object"
 		},
 		"Snapshot": {
-			"$ref": "#/definitions/__type_67"
+			"$ref": "#/definitions/__type_68"
 		},
 		"SnapshotSourceConnection": {
 			"additionalProperties": false,
@@ -5361,6 +5386,9 @@
 			},
 			"required": ["action", "title"],
 			"type": "object"
+		},
+		"StorefrontAllowedWindowOptions": {
+			"$ref": "#/definitions/__type_64"
 		},
 		"StorefrontFooter": {
 			"additionalProperties": false,
@@ -5525,6 +5553,15 @@
 					},
 					"type": "array"
 				},
+				"storeType": {
+					"description": "The type of store to target. The \"workspace\" version is the original store that is provided as part\nof the",
+					"enum": ["platform", "workspace"],
+					"type": "string"
+				},
+				"storeWindowOptions": {
+					"$ref": "#/definitions/StorefrontAllowedWindowOptions",
+					"description": "If using store type \"platform\" this allows you to specify additional options for the store window."
+				},
 				"title": {
 					"description": "The title for the store which will show up in the store dropdown",
 					"type": "string"
@@ -5611,7 +5648,7 @@
 			"type": "object"
 		},
 		"StructuredContentPermissions": {
-			"$ref": "#/definitions/__type_78"
+			"$ref": "#/definitions/__type_79"
 		},
 		"TabSearchButtonOptions": {
 			"additionalProperties": false,
@@ -5804,7 +5841,7 @@
 				"menuEntries": {
 					"description": "The menu entries to display.",
 					"items": {
-						"$ref": "#/definitions/MenuEntry%3CTrayMenuOptionType%3E"
+						"$ref": "#/definitions/MenuEntry<TrayMenuOptionType>"
 					},
 					"type": "array"
 				},
@@ -5823,19 +5860,19 @@
 		"UpdatableLaunchPreferenceDefinition": {
 			"anyOf": [
 				{
-					"$ref": "#/definitions/WindowPreference%3Cnever%3E"
+					"$ref": "#/definitions/WindowPreference<never>"
 				},
 				{
 					"$ref": "#/definitions/WindowPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/ViewPreference%3Cnever%3E"
+					"$ref": "#/definitions/ViewPreference<never>"
 				},
 				{
 					"$ref": "#/definitions/ViewPreferenceUrl"
 				},
 				{
-					"$ref": "#/definitions/NativePreference%3Cnever%3E"
+					"$ref": "#/definitions/NativePreference<never>"
 				}
 			],
 			"description": "A type that contains the available updatable launch preferences"
@@ -5962,7 +5999,7 @@
 								"$ref": "#/definitions/ViewPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/ViewPreference%3Cnever%3E_1"
+								"$ref": "#/definitions/ViewPreference<never>_1"
 							}
 						]
 					},
@@ -6048,6 +6085,8 @@
 				"Print",
 				"PrintAll",
 				"PrintScreen",
+				"TranslatePage",
+				"RevertTranslation",
 				"Custom"
 			],
 			"type": "string"
@@ -6147,6 +6186,19 @@
 							"type": "number"
 						}
 					},
+					"type": "object"
+				},
+				"experimentalExtensionPolicyBlockedHosts": {
+					"additionalProperties": false,
+					"properties": {
+						"hosts": {
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					"required": ["hosts"],
 					"type": "object"
 				},
 				"interopBrokerConfiguration": {
@@ -6426,7 +6478,7 @@
 								"$ref": "#/definitions/WindowPreferenceUrl"
 							},
 							{
-								"$ref": "#/definitions/WindowPreference%3Cnever%3E_1"
+								"$ref": "#/definitions/WindowPreference<never>_1"
 							}
 						]
 					},
@@ -6489,6 +6541,25 @@
 					"default": false,
 					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
+				},
+				"chromeBrowser": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"enum": ["normal", "popup"],
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
 				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
@@ -6607,8 +6678,6 @@
 					"type": "string"
 				},
 				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -6705,7 +6774,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -6856,6 +6925,7 @@
 				"autoplayPolicy",
 				"backgroundColor",
 				"backgroundThrottling",
+				"chromeBrowser",
 				"chromiumPolicies",
 				"closeOnLastViewRemoved",
 				"contentCreation",
@@ -7087,6 +7157,25 @@
 					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
+				"chromeBrowser": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"enum": ["normal", "popup"],
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
+				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
 					"description": "{@inheritDoc ChromiumPolicies}"
@@ -7204,8 +7293,6 @@
 					"type": "string"
 				},
 				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -7302,7 +7389,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -8687,7 +8774,7 @@
 					"type": "string"
 				},
 				"target": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "The identity of the window this view should be attached to."
 				},
 				"throttling": {
@@ -9498,7 +9585,7 @@
 					"type": "string"
 				},
 				"target": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "The identity of the window this view should be attached to."
 				},
 				"throttling": {
@@ -9557,7 +9644,7 @@
 					"type": "string"
 				},
 				"identity": {
-					"$ref": "#/definitions/Identity_4_1",
+					"$ref": "#/definitions/Identity_4_2",
 					"description": "The OpenFin identity that registered this search provider."
 				},
 				"inputLandingPlaceholder": {
@@ -9628,7 +9715,7 @@
 				"rules": {
 					"description": "List of rules for creation of new content.",
 					"items": {
-						"$ref": "#/definitions/ContentCreationRule%3CContentCreationBehavior%3E"
+						"$ref": "#/definitions/ContentCreationRule<ContentCreationBehavior>"
 					},
 					"type": "array"
 				}
@@ -10006,6 +10093,25 @@
 					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
 				},
+				"chromeBrowser": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"enum": ["normal", "popup"],
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
+				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
 					"description": "{@inheritDoc ChromiumPolicies}"
@@ -10123,8 +10229,6 @@
 					"type": "string"
 				},
 				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -10221,7 +10325,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -10446,6 +10550,37 @@
 		},
 		"__type_64": {
 			"additionalProperties": false,
+			"properties": {
+				"defaultHeight": {
+					"default": 500,
+					"description": "The default height of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent launches\nin favor of the cached value.",
+					"type": "number"
+				},
+				"defaultLeft": {
+					"default": 100,
+					"description": "The default left position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+					"type": "number"
+				},
+				"defaultTop": {
+					"default": 100,
+					"description": "The default top position of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+					"type": "number"
+				},
+				"defaultWidth": {
+					"default": 800,
+					"description": "The default width of the window. When `saveWindowState` is `true`, this value will be ignored for subsequent\nlaunches in favor of the cached value.",
+					"type": "number"
+				},
+				"saveWindowState": {
+					"default": true,
+					"description": "Caches the location of the window.\n\nNote: this option is ignored in Platforms as it would cause inconsistent {@link Platform#applySnapshot applySnapshot} behavior.",
+					"type": "boolean"
+				},
+				"taskbarIconGroup": {
+					"description": "Specify a taskbar group for the window.\n_Can be shared across applications._\n\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._\n_If omitted, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\nSpecify a taskbar group for the window.\n_Can be shared across applications._\n_If omitted from a main window, defaults to app's uuid (`fin.Application.getCurrentSync().identity.uuid`)._\n_Use `platform.defaultWindowOptions.taskbarIconGroup` to set a default for platform applications._",
+					"type": "string"
+				}
+			},
 			"type": "object"
 		},
 		"__type_65": {
@@ -10453,6 +10588,10 @@
 			"type": "object"
 		},
 		"__type_66": {
+			"additionalProperties": false,
+			"type": "object"
+		},
+		"__type_67": {
 			"additionalProperties": false,
 			"properties": {
 				"alias": {
@@ -10483,7 +10622,7 @@
 			"required": ["alias", "src", "version"],
 			"type": "object"
 		},
-		"__type_67": {
+		"__type_68": {
 			"additionalProperties": false,
 			"properties": {
 				"interopSnapshotDetails": {
@@ -10523,7 +10662,7 @@
 			"required": ["windows"],
 			"type": "object"
 		},
-		"__type_68": {
+		"__type_69": {
 			"additionalProperties": false,
 			"properties": {
 				"_internalWorkspaceData": {},
@@ -10572,6 +10711,25 @@
 					"default": false,
 					"description": "Determines whether WebContents will throttle animations and timers when the page becomes backgrounded.\nThis also affects the Page Visibility API.\n\nWhen `true`, the page is throttled whether it is hidden or not.",
 					"type": "boolean"
+				},
+				"chromeBrowser": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"properties": {
+								"type": {
+									"enum": ["normal", "popup"],
+									"type": "string"
+								}
+							},
+							"required": ["type"],
+							"type": "object"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "Registers the window with Chromium as a `ChromeBrowser`, making it visible to\nChrome extensions via the `chrome.windows` API. The window must be created with\nthis option set; it cannot be flipped at runtime.\n\nPass `true` (equivalent to `{ type: 'normal' }`) to register as a normal tabbed\nchrome-browser host, or `{ type: 'popup' }` to register as a popup chrome-browser\nhost (no tab strip; the window's own content is the single tab) — the same\nregistration that `window.open` popups and extension popups receive internally."
 				},
 				"chromiumPolicies": {
 					"$ref": "#/definitions/ChromiumPolicies",
@@ -10690,8 +10848,6 @@
 					"type": "string"
 				},
 				"frame": {
-					"default": true,
-					"description": "Show the window's frame.",
 					"type": "boolean"
 				},
 				"height": {
@@ -10788,7 +10944,7 @@
 					"type": "boolean"
 				},
 				"modalParentIdentity": {
-					"$ref": "#/definitions/Identity_4",
+					"$ref": "#/definitions/Identity_4_1",
 					"description": "Parent identity of a modal window. It will create a modal child window when this option is set."
 				},
 				"name": {
@@ -10933,7 +11089,23 @@
 			},
 			"type": "object"
 		},
-		"__type_69": {
+		"__type_7": {
+			"additionalProperties": false,
+			"properties": {
+				"blue": {
+					"type": "number"
+				},
+				"green": {
+					"type": "number"
+				},
+				"red": {
+					"type": "number"
+				}
+			},
+			"required": ["blue", "green", "red"],
+			"type": "object"
+		},
+		"__type_70": {
 			"additionalProperties": false,
 			"properties": {
 				"contextGroups": {
@@ -10961,23 +11133,7 @@
 			},
 			"type": "object"
 		},
-		"__type_7": {
-			"additionalProperties": false,
-			"properties": {
-				"blue": {
-					"type": "number"
-				},
-				"green": {
-					"type": "number"
-				},
-				"red": {
-					"type": "number"
-				}
-			},
-			"required": ["blue", "green", "red"],
-			"type": "object"
-		},
-		"__type_70": {
+		"__type_71": {
 			"additionalProperties": false,
 			"description": "The display data for a context group.",
 			"properties": {
@@ -10996,7 +11152,7 @@
 			},
 			"type": "object"
 		},
-		"__type_71": {
+		"__type_72": {
 			"additionalProperties": false,
 			"properties": {
 				"afterAction": {
@@ -11025,7 +11181,7 @@
 			"required": ["afterAction", "beforeAction"],
 			"type": "object"
 		},
-		"__type_72": {
+		"__type_73": {
 			"additionalProperties": false,
 			"properties": {
 				"default": {
@@ -11067,7 +11223,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_73": {
+		"__type_74": {
 			"additionalProperties": false,
 			"properties": {
 				"api": {
@@ -11129,7 +11285,7 @@
 			},
 			"type": "object"
 		},
-		"__type_74": {
+		"__type_75": {
 			"additionalProperties": false,
 			"description": "Domain-conditional rules for file downloads.",
 			"properties": {
@@ -11159,7 +11315,7 @@
 			"required": ["rules"],
 			"type": "object"
 		},
-		"__type_75": {
+		"__type_76": {
 			"additionalProperties": false,
 			"properties": {
 				"fin": {
@@ -11174,7 +11330,7 @@
 			},
 			"type": "object"
 		},
-		"__type_76": {
+		"__type_77": {
 			"additionalProperties": false,
 			"properties": {
 				"Application": {
@@ -11214,7 +11370,7 @@
 			},
 			"type": "object"
 		},
-		"__type_77": {
+		"__type_78": {
 			"additionalProperties": false,
 			"description": "Opens matched URLs in the browser.",
 			"properties": {
@@ -11230,7 +11386,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_78": {
+		"__type_79": {
 			"additionalProperties": false,
 			"description": "Behavior when displaying content from matched URLs. Varies depending on type of navigation.",
 			"properties": {
@@ -11287,11 +11443,6 @@
 			},
 			"type": "object"
 		},
-		"__type_79": {
-			"additionalProperties": false,
-			"description": "Enables or disables specific preload scripts by URL.\n\nUses the script's full URL as the key and an object\nwith an `enabled` boolean property as the value.",
-			"type": "object"
-		},
 		"__type_8": {
 			"additionalProperties": false,
 			"properties": {
@@ -11313,6 +11464,11 @@
 		},
 		"__type_80": {
 			"additionalProperties": false,
+			"description": "Enables or disables specific preload scripts by URL.\n\nUses the script's full URL as the key and an object\nwith an `enabled` boolean property as the value.",
+			"type": "object"
+		},
+		"__type_81": {
+			"additionalProperties": false,
 			"description": "Clipboard Permissions",
 			"properties": {
 				"copy": {
@@ -11324,7 +11480,7 @@
 			},
 			"type": "object"
 		},
-		"__type_81": {
+		"__type_82": {
 			"additionalProperties": false,
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
@@ -11351,7 +11507,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_82": {
+		"__type_83": {
 			"additionalProperties": false,
 			"description": "Control copy operations for a matched URL.",
 			"properties": {
@@ -11365,7 +11521,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_83": {
+		"__type_84": {
 			"additionalProperties": false,
 			"description": "Control print operations for a matched URL.",
 			"properties": {
@@ -11382,7 +11538,7 @@
 			"required": ["behavior"],
 			"type": "object"
 		},
-		"__type_84": {
+		"__type_85": {
 			"additionalProperties": false,
 			"properties": {
 				"backgroundColor": {
@@ -11404,7 +11560,7 @@
 			},
 			"type": "object"
 		},
-		"__type_85": {
+		"__type_86": {
 			"additionalProperties": false,
 			"properties": {
 				"endpoint": {
@@ -11441,7 +11597,7 @@
 			"required": ["endpoint"],
 			"type": "object"
 		},
-		"__type_86": {
+		"__type_87": {
 			"additionalProperties": false,
 			"description": "Options for the Log Uploader UI.",
 			"properties": {

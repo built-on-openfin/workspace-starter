@@ -75,7 +75,7 @@
 		"company": "HERE",
 		"description": "A way of showing examples of what HERE can do.",
 		"icon": "https://built-on-openfin.github.io/workspace-starter/dev/nick/pinned-tabs-45.2/here-supertabs-starter/favicon.ico",
-		"name": "Default HERE Core UI Platform - v24.0.0",
+		"name": "Default HERE Core UI Platform - v45.0.0",
 		"target": ["desktop", "start-menu"]
 	},
 	"supportInformation": {
@@ -884,7 +884,7 @@
 			"serverAssetInfo": {
 				"src": "https://cdn.openfin.co/release/snap/1.6.4/snap.zip",
 				"alias": "openfin-snap",
-				"version": "1.6.4",
+				"version": "1.0.0",
 				"target": "OpenFinSnap.exe"
 			},
 			"showDebugWindow": false
