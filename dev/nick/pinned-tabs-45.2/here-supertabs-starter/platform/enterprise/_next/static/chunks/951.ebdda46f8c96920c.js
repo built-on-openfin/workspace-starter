@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[951],{7951:(e,i,n)=>{let a;n.d(i,{enableCrossOFWindowNavigation:()=>o});var t=n(2065),s=n(9122);async function o(e=[t.$h]){let i,{navigate:u}=await Promise.resolve().then(n.bind(n,2958));a=async(i,n)=>{e.some(e=>e===n.uuid)&&i.identity.name===t.vL&&i.identity.uuid===t.$h&&await u(i.route)};let r=(i=s.$p,`__cross_window_navigation__-${i.uuid}-${i.name}`);(await fin.InterApplicationBus.Channel.create(r)).register("navigate-window",a)}}}]);
+//# sourceMappingURL=951.ebdda46f8c96920c.js.map
