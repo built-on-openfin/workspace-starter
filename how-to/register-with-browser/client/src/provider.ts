@@ -456,8 +456,50 @@ function getCustomActions(): CustomActionsMap {
 				console.info("Debug Platform Called.");
 				await fin.System.showDeveloperTools(fin.me.identity);
 			}
+		},
+		"view-tab-status": async (payload: CustomActionPayload): Promise<void> => {
+			await handleViewTabControlAction("Status", payload);
+		},
+		"view-tab-print": async (payload: CustomActionPayload): Promise<void> => {
+			await handleViewTabControlAction("Print", payload);
+		},
+		// Registered so the control still works if you flip its `disabled` flag off while experimenting.
+		"view-tab-disabled-example": async (payload: CustomActionPayload): Promise<void> => {
+			await handleViewTabControlAction("Disabled example", payload);
 		}
 	};
+}
+
+/**
+ * Handle a click from a declarative view tab control.
+ * @param label Human-readable control name for logs and the popup.
+ * @param payload The custom action payload.
+ */
+async function handleViewTabControlAction(label: string, payload: CustomActionPayload): Promise<void> {
+	if (payload.callerType !== CustomActionCallerType.ViewTabControl) {
+		return;
+	}
+	const platform = getCurrentSync();
+	const pageInfo = await platform.Browser.getPageByViewIdentity(payload.viewIdentity);
+	console.info(`View tab control: ${label}`, {
+		payload,
+		pageId: pageInfo.page.pageId,
+		pageTitle: pageInfo.page.title,
+		windowIdentity: pageInfo.windowIdentity
+	});
+	await showPopup(
+		{ width: 440, height: 280 },
+		payload.windowIdentity,
+		`${label} control`,
+		`${label} invoked for view ${payload.viewIdentity.name} on page "${pageInfo.page.title}". Check the provider console for the ViewTabControl payload and page lookup.`,
+		[
+			{
+				id: "ok",
+				label: "OK",
+				default: true
+			}
+		]
+	);
 }
 
 /**
