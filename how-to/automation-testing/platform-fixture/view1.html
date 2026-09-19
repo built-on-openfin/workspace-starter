@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>View 1</title>
+		<style>
+			#demo-input {
+				font-size: 20px;
+			}
+			#demo-table td,
+			#demo-table th {
+				padding: 4px 12px;
+				text-align: left;
+			}
+		</style>
+	</head>
+	<body class="col fill gap20">
+		<h1 id="greeting">Automation Demo View 1</h1>
+		<label for="demo-input">Demo input</label>
+		<input id="demo-input" type="text" value="" />
+		<table id="demo-table">
+			<thead>
+				<tr>
+					<th>Symbol</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="demo-row-1">
+					<td>AAA</td>
+					<td>101.25</td>
+				</tr>
+				<tr id="demo-row-2">
+					<td>BBB</td>
+					<td>98.10</td>
+				</tr>
+			</tbody>
+		</table>
+		<script>
+			(() => {
+				// Mirrors the customer pattern: a right-click context menu implemented
+				// as an OpenFin popup window rather than DOM. Exposed as a global so a
+				// test can also open it directly with explicit PopupOptions.
+				const state = { calls: 0, options: undefined, result: undefined, error: undefined };
+				globalThis.popupState = state;
+
+				globalThis.showDemoPopup = (overrides) => {
+					const options = {
+						url: new URL('popup.html', globalThis.location.href).href,
+						width: 260,
+						height: 180,
+						x: 40,
+						y: 40,
+						...(overrides ?? {})
+					};
+
+					state.calls += 1;
+					state.options = options;
+					state.result = undefined;
+					state.error = undefined;
+
+					// Opening a popup dismisses any popup already open, and that
+					// older showPopupWindow promise settles *after* this reset. Tag
+					// each call so a stale dismissal cannot be mistaken for this
+					// popup's result.
+					const token = state.calls;
+
+					// showPopupWindow only settles once the popup is dismissed or
+					// dispatches a result, so it is deliberately not awaited.
+					fin.me.showPopupWindow(options).then(
+						(res) => {
+							if (token === state.calls) {
+								state.result = res;
+							}
+						},
+						(err) => {
+							if (token === state.calls) {
+								state.error = String(err);
+							}
+						}
+					);
+
+					return options;
+				};
+
+				document.getElementById('demo-table').addEventListener('contextmenu', (ev) => {
+					ev.preventDefault();
+					globalThis.showDemoPopup();
+				});
+			})();
+		</script>
+	</body>
+</html>

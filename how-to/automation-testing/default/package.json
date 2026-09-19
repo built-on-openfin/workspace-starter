@@ -1,0 +1,38 @@
+{
+	"name": "automation-testing-default",
+	"version": "24.0.0",
+	"description": "HERE Core UI -- Automation tests using the here-automation CLI",
+	"private": true,
+	"scripts": {
+		"build": "echo Nothing to build",
+		"test": "here-automation ./tests/**/*.spec.ts --testRetryCount 2",
+		"test-offline": "here-automation ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --testRetryCount 2",
+		"kill": "fkill -f -s OpenFin.exe OpenFinRVM.exe chromedriver.exe OpenFin OpenFinRVM chromedriver",
+		"prettier": "prettier --config .prettierrc --write .",
+		"prettier-check": "prettier --config .prettierrc --check .",
+		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
+		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
+	},
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"devDependencies": {
+		"@openfin/automation-cli": "^2.0.0-alpha.0",
+		"@openfin/automation-helpers": "^2.0.0-alpha.0",
+		"eslint": "8.57.1",
+		"eslint-config-airbnb": "19.0.4",
+		"eslint-config-airbnb-typescript": "18.0.0",
+		"eslint-config-prettier": "9.1.0",
+		"eslint-plugin-import": "2.26.0",
+		"eslint-plugin-jsdoc": "48.2.1",
+		"eslint-plugin-prettier": "5.1.3",
+		"eslint-plugin-promise": "6.1.1",
+		"eslint-plugin-simple-import-sort": "12.0.0",
+		"eslint-plugin-unicorn": "51.0.1",
+		"eslint-plugin-unused-imports": "3.1.0",
+		"fkill-cli": "8.0.0",
+		"markdownlint-cli": "^0.48.0",
+		"prettier": "3.2.5",
+		"typescript": "^5.4.2",
+		"vitest": "^5.0.0"
+	}
+}

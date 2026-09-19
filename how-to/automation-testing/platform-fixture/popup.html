@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Popup Menu</title>
+		<style>
+			body {
+				font-family: sans-serif;
+				margin: 0;
+				padding: 12px;
+			}
+			#popup-action {
+				font-size: 16px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 id="popup-heading">Popup Menu</h1>
+		<button id="popup-action" type="button">Choose</button>
+		<div id="popup-status">idle</div>
+		<script>
+			document.getElementById('popup-action').addEventListener('click', () => {
+				document.getElementById('popup-status').textContent = 'clicked';
+				// The caller receives this through the showPopupWindow() promise.
+				fin.me.dispatchPopupResult({ choice: 'row-action' });
+			});
+		</script>
+	</body>
+</html>
