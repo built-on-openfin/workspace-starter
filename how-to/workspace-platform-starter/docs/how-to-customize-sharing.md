@@ -237,7 +237,7 @@ The snapshot is a HERE Core UI Platform snapshot. MonitorInfo and Window details
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "45.150.100.116",
+                "runtimeVersion": "45.150.101.1",
                 "monitorInfo": { ... },
             "windows": [
                 { ... }
@@ -351,7 +351,7 @@ The snapshot is a HERE Core UI Platform snapshot. MonitorInfo and Window details
         "snapshot": {
             "snapshotDetails": {
                 "timestamp": "2022-09-21T19:16:59.461Z",
-                "runtimeVersion": "45.150.100.116",
+                "runtimeVersion": "45.150.101.1",
                 "monitorInfo": { ... },
             },
             "windows": [

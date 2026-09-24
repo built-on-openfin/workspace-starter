@@ -20,13 +20,13 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "45.2.2",
-		"@openfin/workspace-platform": "45.2.2",
+		"@openfin/workspace": "45.2.6",
+		"@openfin/workspace-platform": "45.2.6",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
-		"@openfin/core": "45.100.116",
-		"@openfin/node-adapter": "45.100.116",
+		"@openfin/core": "45.101.1",
+		"@openfin/node-adapter": "45.101.1",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
