@@ -1,0 +1,13 @@
+{
+	"intents": {
+		"raises": {
+			"ViewProfile": ["fdc3.contact"],
+			"ViewContact": ["fdc3.contact"]
+		}
+	},
+	"userChannels": {
+		"broadcasts": ["fdc3.contact"],
+		"listensFor": []
+	},
+	"appChannels": []
+}
