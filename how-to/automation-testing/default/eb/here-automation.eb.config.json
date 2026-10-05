@@ -1,0 +1,14 @@
+{
+	"versions": {
+		"runtime": "stable",
+		"workspace": "stable",
+		"notifications": "stable"
+	},
+	"cli": {
+		"devToolsPort": 9090,
+		"chromeDriverPort": 4444,
+		"testTimeout": 300,
+		"closeRuntime": "both",
+		"verbosity": "all"
+	}
+}

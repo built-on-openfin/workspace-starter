@@ -1,4 +1,4 @@
 {
 	"extends": "./tsconfig.json",
-	"include": ["tests", "automation-hooks.ts"]
+	"include": ["tests", "eb", "automation-hooks.ts"]
 }
