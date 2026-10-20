@@ -1,6 +1,7 @@
 package-lock.json
 
 # HERE automation artifacts
+eb/.env
 storage/
 offline-storage/
 reports/
