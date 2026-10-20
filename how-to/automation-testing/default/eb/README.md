@@ -9,7 +9,7 @@ The four steps share one browser session and run in order:
 1. Launch Enterprise Browser from a manifest URL.
 2. Sign in on the HERE ID page (email, then password).
 3. Open an allowlisted URL as a new tab in the existing browser window, confirm the driver can switch onto it, then close that tab.
-4. Log out, wait for the sign-in window to come back, and quit the app from inside so nothing is left running.
+4. Log out and confirm the runtime exits.
 
 Steps 1, the HERE ID form itself, and opening and closing a tab are ordinary helper and `fin` calls. Three other parts are workarounds for how this CLI attaches to a hidden platform, and for how Enterprise Browser logs out. Those are called out below. Copy the ordinary parts freely. Treat the workarounds as known limits of the current CLI, and expect them to change if the CLI is fixed.
 
@@ -52,19 +52,27 @@ That matches `Here SE-DEV` and `OpenFin Helper` as well as `OpenFin` / `chromedr
 
 **Launch.** The CLI starts the manifest, waits until a `provider.html` target exists, and holds a ChromeDriver session against the runtime's DevTools port. The spec then waits until some window has `fin`.
 
-**Sign-in.** HERE ID is a normal page. The first screen has an email field (a hidden password input is already in the DOM; the test ignores it). The test clicks Continue, then types the password and clicks Log in. The inputs are not inside a `<form>`, so pressing Enter does nothing.
+**Sign-in.** HERE ID is a normal page, but it stays hidden for about 2.5 seconds: the window is created at opacity 0, then the page calls `show()` and sets opacity to 1. The test watches that through the DevTools port and does not switch ChromeDriver onto the window until it is visible. Switching earlier replaces the document with `about:blank` (a white window) and the form is gone. Once it is visible, the first screen has an email field (a hidden password input is already in the DOM; the test ignores it). The test clicks Continue, then types the password and clicks Log in. The inputs are not inside a `<form>`, so pressing Enter does nothing.
 
 On success the same OpenFin window navigates to `/login/response?complete=true&success=true`. Enterprise Browser does not treat that navigation as "login finished" by itself. Its provider listens for `url-changed` on the login window, sees `success=true`, loads the user, and only then opens the browser. See the provider workaround below.
 
 **Tab.** From the provider window the test dispatches the platform's `addPage` action at the existing browser window (a page with one view), then `setActivePage`. A page's view is created when the tab is shown, and Enterprise Browser may rename the view, so the test polls that window's views until one is on `EB_VIEW_URL`. `WebDriver.waitForWindow` then switches onto it. Closing the tab dispatches `detachPagesFromWindow` (what the tab's close button does) and checks the view is gone.
 
-**Logout.** The test clicks the toolbar button `data-testid=enterprise-toolbar-global-menu-button`. On macOS that menu is a native menu, so the Logout item is not a DOM node and WebDriver cannot click it. The test then runs the menu item's own action, `logout-and-restart`. That saves the session, logs out of HERE ID, quits the runtime, and asks the RVM to relaunch the manifest. The new process shows the HERE ID window again. The test quits both Enterprise Browser and its notifications app from that window and waits until DevTools stops answering.
+**Logout.** The test clicks the toolbar button `data-testid=enterprise-toolbar-global-menu-button`. On macOS that menu is a native menu, so the Logout item is not a DOM node and WebDriver cannot click it. The test then runs the menu item's own action, `logout-and-restart`. That saves the session, logs out of HERE ID, and quits the runtime. The test waits until DevTools stops answering. It does not wait for the sign-in window to come back (see the logout workaround below).
 
 ## Workarounds
 
 These are the parts that are not "call the helper and assert." Each one is a response to a specific limit we hit. A client suite should keep them isolated, the way this example does, and drop them if a newer CLI removes the limit.
 
 None of them reflect a problem with using Enterprise Browser by hand. Launch the same manifest from a `fins://` link, sign in, and the browser opens; log out from the menu and the sign-in window returns. Each workaround exists because of something the test harness adds: a WebDriver attached to the runtime, a native menu the driver cannot reach, a process restart the driver cannot follow, or a helper that does not wait for a Promise. Each section below starts with what a person sees and then what the test sees.
+
+### The login window is transparent for the first few seconds, and switching onto it clears the page
+
+_Manually:_ the sign-in window appears, then the email field is there.
+
+_In the test:_ the same window opens white, and the email field never arrives.
+
+HERE ID creates that window at opacity 0 and only calls `show()` after 2.5 seconds. `WebDriver.getWindows()` (and therefore `OpenFinSystem.waitForReady` and `waitForWindow`) switches onto every window it lists. On a window that is not showing yet, that switch replaces the main frame with `about:blank`. The CLI attaches ChromeDriver before the first test, so this can happen before step 2 starts. Step 1 only polls the DevTools port. Step 2 reads `opacity` and `isShowing()` the same way, and switches ChromeDriver onto the window only after both say it is on screen. If the document is already `about:blank`, step 2 loads the window's original HERE ID URL again through DevTools before that switch.
 
 ### The hidden provider is replaced with `about:blank` when the driver attaches
 
@@ -82,17 +90,17 @@ Do not close the login window to "get past" login. Enterprise Browser treats tha
 
 If a future CLI stops navigating the provider, delete `restoreProviderPage()` and the call in step 2. Until then, a suite that signs in to Enterprise Browser needs this or an equivalent.
 
-### Logout replaces the runtime, and ChromeDriver stays on the old process
+### Logout ends the runtime, and the test does not wait for it to come back
 
-_Manually:_ choose Logout, the browser closes, and a moment later the sign-in window is back. Nothing looks like a restart.
+_Manually:_ choose Logout, the browser closes, and a moment later the sign-in window is back.
 
-_In the test:_ that restart is a new operating-system process. The driver was attached to the old one, so the test has to find the new login window another way.
+_In the test:_ the runtime exits and the sign-in window does not come back.
 
-`logout-and-restart` ends the runtime process. The RVM starts a new one with the same manifest and the same `--remote-debugging-port`. ChromeDriver is still attached to the process that just died. The next WebDriver call hangs, and the log shows `Unable to receive message from renderer`. That line is expected. It is not a failed assertion.
+`logout-and-restart` ends the runtime process and asks the RVM to start it again. ChromeDriver is still attached to the process that just died. The next WebDriver call hangs, and the log shows `Unable to receive message from renderer`. That line is expected. It is not a failed assertion.
 
-Step 4 sets a flag before it asserts, so `afterAll` does not touch WebDriver again. Waiting for the new login window and quitting are done with DevTools (`/json/list` on port 9090 and a short `Runtime.evaluate`), not with `@openfin/automation-helpers`.
+Under `here-automation` the RVM refuses the restart. The CLI launches the manifest as runtime `45.150.200.5`, but the installed Here SE-DEV app runs `45.150.102.3`, and the RVM log shows `The app ... was launched for 45.150.200.5 Runtime version where restart is scheduled for 45.150.102.3 Runtime version`, then `app is not registered for relaunch`. Setting `versions.runtime` in the config does not help, because the manifest's version wins. So step 4 only checks that the DevTools port on 9090 stops answering, which shows that logout ended the session.
 
-Letting the CLI's `closeRuntime: "both"` kill the relaunched process instead will close it, but the kill is a SIGKILL. Enterprise Browser then shows a dialog: renderer terminated, reason killed, exit code 9. That dialog is the test runner ending the process, not a crash during the test. Quitting from inside avoids it. `npm run kill` can still produce the same dialog if it is what ends the runtime.
+Step 4 sets a flag before it asserts, so `afterAll` does not touch WebDriver again.
 
 ### `executeAsync` does not wait for a Promise
 

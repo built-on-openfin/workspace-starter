@@ -171,7 +171,191 @@ export async function findPlatformWindow(timeoutMs = 60000): Promise<OpenFin.Ide
 }
 
 /**
+ * Wait until the runtime's DevTools port is answering and at least one page exists.
+ * This does not attach ChromeDriver to any window. Attaching to a hidden window
+ * replaces that window's document with about:blank.
+ * @param timeoutMs How long to wait.
+ * @returns True when a page target is listed.
+ */
+export async function waitForRuntime(timeoutMs: number): Promise<boolean> {
+	const start = Date.now();
+	do {
+		const targets = await devToolsTargets();
+		const pages = targets?.filter((target) => target.type === "page") ?? [];
+		if (pages.length > 0) {
+			console.log(`[eb] runtime is up, ${pages.length} page(s):`);
+			for (const page of pages) {
+				console.log(`  - ${page.url.split("?")[0]}`);
+			}
+			return true;
+		}
+		await new Promise((resolve) => setTimeout(resolve, 500));
+	} while (Date.now() - start < timeoutMs);
+	return false;
+}
+
+/**
+ * ChromeDriver's first attach can replace a still-hidden HERE ID document with
+ * about:blank. Reload the original auth URL through DevTools, which does not
+ * switch the driver onto the window.
+ * @param targets The current DevTools targets.
+ */
+async function restoreBlankedLogin(targets: DevToolsTarget[]): Promise<void> {
+	const blanks = targets.filter(
+		(target) => target.type === "page" && target.webSocketDebuggerUrl && target.url === "about:blank"
+	);
+	for (const blank of blanks) {
+		const history = await cdpCall(blank, "Page.getNavigationHistory", {});
+		const entries = Array.isArray(history?.entries)
+			? (history.entries as { id?: number; url?: string }[])
+			: [];
+		const auth = entries.find(
+			(entry) => entry.url && ebEnv.loginUrlPattern.test(entry.url) && entry.id !== undefined
+		);
+		if (auth?.url && auth.id !== undefined) {
+			console.log(`[eb] login document is about:blank, restoring ${auth.url.split("?")[0]}`);
+			await cdpCall(blank, "Page.navigateToHistoryEntry", { entryId: auth.id });
+			return;
+		}
+	}
+
+	const hosts = targets.filter(
+		(target) => target.type === "page" && target.webSocketDebuggerUrl && target.url.startsWith("http")
+	);
+	for (const host of hosts) {
+		const raw = await evaluateViaDevTools(
+			host,
+			`(() => {
+				const describe = async () => {
+					const pathOnly = (value) => {
+						try { const url = new URL(value); return url.origin + url.pathname; }
+						catch (err) { return String(value || "").split("?")[0]; }
+					};
+					try {
+						const win = fin.Window.wrapSync({ uuid: fin.me.identity.uuid, name: "platform-auth-login-window" });
+						const info = await win.getInfo();
+						const opts = await win.getOptions();
+						const infoUrl = info && info.url ? info.url : "";
+						const optsUrl = opts && opts.url ? opts.url : "";
+						if ((infoUrl === "about:blank" || infoUrl === "") && /auth(-[a-z0-9]+)?\\.openfin\\.co/i.test(optsUrl)) {
+							await win.navigate(optsUrl);
+							return "restored " + pathOnly(optsUrl);
+						}
+						return "info=" + pathOnly(infoUrl) + " opts=" + pathOnly(optsUrl);
+					} catch (err) {
+						return "error: " + (err && err.message ? err.message : String(err));
+					}
+				};
+				return describe();
+			})()`,
+			8000,
+			true
+		);
+		console.log(`[eb] login window lookup: ${raw}`);
+		if (!raw.startsWith("error:")) {
+			return;
+		}
+	}
+}
+
+/**
+ * HERE ID keeps the login window at opacity 0 and calls show() after 2.5s.
+ * WebDriver.switchTo during that interval replaces the document with about:blank,
+ * which is the white window. Read opacity through DevTools, which does not switch.
+ * @param timeoutMs How long to wait.
+ * @returns "visible" once the form is on screen, "blanked" if the driver cleared it, or "absent".
+ */
+export async function waitForVisibleLoginWindow(
+	timeoutMs: number
+): Promise<"visible" | "blanked" | "absent"> {
+	const start = Date.now();
+	let sawLogin = false;
+	let signedInSince: number | undefined;
+	let lastState = "";
+	let lastPages = "";
+	let restoredAt = 0;
+	do {
+		const targets = await devToolsTargets();
+		const pages =
+			targets?.filter((target) => target.type === "page").map((target) => target.url.split("?")[0]) ?? [];
+		const pageSignature = JSON.stringify(pages);
+		if (pageSignature !== lastPages) {
+			console.log(`[eb] pages while waiting for login: ${pages.join(" | ") || "(none)"}`);
+			lastPages = pageSignature;
+		}
+		const login = targets?.find(
+			(target) =>
+				target.type === "page" && ebEnv.loginUrlPattern.test(target.url) && target.webSocketDebuggerUrl
+		);
+		if (targets && login) {
+			sawLogin = true;
+			signedInSince = undefined;
+			const raw = await evaluateViaDevTools(
+				login,
+				`(() => {
+					const describe = async () => {
+						const email = document.querySelector("input[type='email'], input[name='username'], input[name='email']");
+						let opacity = null;
+						let showing = false;
+						try {
+							const win = fin.Window.getCurrentSync();
+							const opts = await win.getOptions();
+							opacity = typeof opts.opacity === "number" ? opts.opacity : null;
+							showing = await win.isShowing();
+						} catch (err) {
+							return "error: " + (err && err.message ? err.message : String(err));
+						}
+						return JSON.stringify({ opacity: opacity, showing: showing, hasEmail: !!email });
+					};
+					return describe();
+				})()`,
+				8000,
+				true
+			);
+			if (raw !== lastState) {
+				console.log(`[eb] login window: ${raw}`);
+				lastState = raw;
+			}
+			try {
+				const state = JSON.parse(raw) as { opacity: number | null; showing: boolean; hasEmail: boolean };
+				const opaque = state.opacity === null || state.opacity > 0.1;
+				if (state.showing && opaque && state.hasEmail) {
+					return "visible";
+				}
+			} catch {
+				// fin is not in the page yet, or the page was still booting.
+			}
+		} else if (targets && sawLogin) {
+			if (targets.some((target) => ebEnv.authSuccessUrlPattern.test(target.url))) {
+				return "visible";
+			}
+			console.log("[eb] HERE ID url disappeared before the window was shown");
+			for (const target of targets.filter((page) => page.type === "page")) {
+				console.log(`  - ${target.url.split("?")[0]}`);
+			}
+			return targets.some((target) => target.url === "about:blank") ? "blanked" : "absent";
+		} else if (
+			targets?.some(
+				(target) => target.type === "page" && /\/platform\/enterprise\/?(?:$|[#?])/.test(target.url)
+			)
+		) {
+			signedInSince ??= Date.now();
+			if (Date.now() - signedInSince > 5000) {
+				return "absent";
+			}
+		} else if (targets && Date.now() - restoredAt > 3000) {
+			restoredAt = Date.now();
+			await restoreBlankedLogin(targets);
+		}
+		await new Promise((resolve) => setTimeout(resolve, 400));
+	} while (Date.now() - start < timeoutMs);
+	return "absent";
+}
+
+/**
  * Wait for a HERE ID login window to appear and switch onto it.
+ * Call this only after `waitForVisibleLoginWindow` reports "visible". Switching
+ * earlier, while the window is still transparent, replaces the page with about:blank.
  * @param timeoutMs How long to wait.
  * @returns True if a login window is now the current window.
  */
@@ -765,41 +949,68 @@ async function devToolsTargets(): Promise<DevToolsTarget[] | undefined> {
 }
 
 /**
- * Logout makes the RVM relaunch Enterprise Browser as a brand new runtime
- * process. ChromeDriver stays attached to the dead one, so from here on the
- * test talks to the new process's DevTools port directly (the RVM passes
- * `--remote-debugging-port` through to the relaunch). Wait for its login window.
+ * Logout ends the runtime process. ChromeDriver stays attached to the dead
+ * process, so this watches the DevTools port directly instead of using WebDriver.
  * @param timeoutMs How long to wait.
- * @returns The login window target, or undefined.
+ * @returns True once the DevTools port stops answering.
  */
-export async function waitForRelaunchedLoginTarget(timeoutMs: number): Promise<DevToolsTarget | undefined> {
+export async function waitForRuntimeExit(timeoutMs: number): Promise<boolean> {
 	const start = Date.now();
-	let sawRuntimeGone = false;
 	do {
-		const targets = await devToolsTargets();
-		if (!targets) {
-			if (!sawRuntimeGone) {
-				console.log("[eb] DevTools port is down, waiting for the relaunched runtime");
-				sawRuntimeGone = true;
-			}
-		} else {
-			const login = targets.find(
-				(target) =>
-					target.type === "page" && ebEnv.loginUrlPattern.test(target.url) && target.webSocketDebuggerUrl
-			);
-			if (login && sawRuntimeGone) {
-				console.log(`[eb] relaunched runtime is up, login window: ${login.url.split("?")[0]}`);
-				return login;
-			}
-			if (login && Date.now() - start > 5000) {
-				// Port never dropped between the two processes; treat the login page as the new one.
-				console.log(`[eb] login window found: ${login.url.split("?")[0]}`);
-				return login;
-			}
+		if (!(await devToolsTargets())) {
+			console.log(`[eb] runtime exited after ${Date.now() - start}ms`);
+			return true;
 		}
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 	} while (Date.now() - start < timeoutMs);
-	return undefined;
+	return false;
+}
+
+/**
+ * Send one Chrome DevTools command without attaching ChromeDriver.
+ * @param target The page target.
+ * @param method The DevTools method.
+ * @param params The method parameters.
+ * @returns The result object, or undefined when the target does not answer.
+ */
+async function cdpCall(
+	target: DevToolsTarget,
+	method: string,
+	params: { [key: string]: unknown }
+): Promise<{ [key: string]: unknown } | undefined> {
+	if (!target.webSocketDebuggerUrl) {
+		return undefined;
+	}
+	const socket = new WebSocket(target.webSocketDebuggerUrl);
+	try {
+		await new Promise<void>((resolve, reject) => {
+			socket.addEventListener("open", () => resolve(), { once: true });
+			socket.addEventListener("error", () => reject(new Error("DevTools socket failed")), { once: true });
+		});
+		const reply = new Promise<{ [key: string]: unknown } | undefined>((resolve) => {
+			socket.addEventListener("message", (event) => {
+				const msg = JSON.parse(String(event.data)) as {
+					id?: number;
+					result?: { [key: string]: unknown };
+					error?: { message?: string };
+				};
+				if (msg.id === 1) {
+					resolve(msg.error ? { error: msg.error.message ?? "cdp error" } : msg.result);
+				}
+			});
+		});
+		socket.send(JSON.stringify({ id: 1, method, params }));
+		return await Promise.race([
+			reply,
+			new Promise<{ [key: string]: unknown }>((resolve) =>
+				setTimeout(() => resolve({ error: "timeout" }), 5000)
+			)
+		]);
+	} catch {
+		return undefined;
+	} finally {
+		socket.close();
+	}
 }
 
 /**
@@ -807,12 +1018,14 @@ export async function waitForRelaunchedLoginTarget(timeoutMs: number): Promise<D
  * @param target The page target.
  * @param expression The expression to run.
  * @param timeoutMs How long to wait for the answer.
+ * @param awaitPromise When true, wait for a returned Promise before reading the value.
  * @returns The result value, or a description of why there is none.
  */
 async function evaluateViaDevTools(
 	target: DevToolsTarget,
 	expression: string,
-	timeoutMs = 10000
+	timeoutMs = 10000,
+	awaitPromise = false
 ): Promise<string> {
 	if (!target.webSocketDebuggerUrl) {
 		return "target has no debugger url";
@@ -842,7 +1055,11 @@ async function evaluateViaDevTools(
 			});
 		});
 		socket.send(
-			JSON.stringify({ id: 1, method: "Runtime.evaluate", params: { expression, returnByValue: true } })
+			JSON.stringify({
+				id: 1,
+				method: "Runtime.evaluate",
+				params: { expression, returnByValue: true, awaitPromise }
+			})
 		);
 		return await Promise.race([
 			reply,
@@ -853,48 +1070,6 @@ async function evaluateViaDevTools(
 	} finally {
 		socket.close();
 	}
-}
-
-/**
- * Close Enterprise Browser from inside, so nothing is left for the CLI to kill.
- * Killing the runtime is what produced the "renderer killed, exit code 9" dialog
- * and the orphaned empty window. Quit both apps from the login window, then wait
- * for the runtime to exit; with no app registered for relaunch the RVM lets it go.
- * @param target The login window target in the relaunched runtime.
- * @param timeoutMs How long to wait for the runtime to exit.
- * @returns True if the DevTools port went away, meaning the runtime exited.
- */
-export async function quitEnterpriseBrowser(target: DevToolsTarget, timeoutMs = 30000): Promise<boolean> {
-	const result = await evaluateViaDevTools(
-		target,
-		`(() => {
-			const uuid = fin.me.identity.uuid;
-			fin.Application.wrapSync({ uuid: uuid + "-notifications" }).quit(true).catch(() => {});
-			fin.Application.getCurrentSync().quit(true).catch(() => {});
-			return "quit requested for " + uuid;
-		})()`
-	);
-	console.log(`[eb] quit Enterprise Browser: ${result}`);
-
-	const start = Date.now();
-	do {
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		const targets = await devToolsTargets();
-		if (!targets) {
-			console.log(`[eb] runtime exited after ${Date.now() - start}ms`);
-			return true;
-		}
-		const remaining = targets.filter((t) => t.type === "page" && /here\.io|openfin\.co/.test(t.url));
-		if (remaining.length === 0) {
-			console.log(`[eb] no Enterprise Browser pages left after ${Date.now() - start}ms (runtime still up)`);
-			return true;
-		}
-	} while (Date.now() - start < timeoutMs);
-	console.log("[eb] Enterprise Browser pages still open:");
-	for (const t of (await devToolsTargets()) ?? []) {
-		console.log(`  - ${t.type} title="${t.title}" url=${t.url}`);
-	}
-	return false;
 }
 
 /**

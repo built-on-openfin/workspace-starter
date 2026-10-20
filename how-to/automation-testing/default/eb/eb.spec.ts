@@ -1,4 +1,4 @@
-import { OpenFinSystem, WebDriver } from "@openfin/automation-helpers";
+import { WebDriver } from "@openfin/automation-helpers";
 import type OpenFin from "@openfin/core";
 import {
 	closeEbContent,
@@ -9,7 +9,6 @@ import {
 	closeTab,
 	logWindows,
 	openViewAsTab,
-	quitEnterpriseBrowser,
 	restoreProviderPage,
 	saveShot,
 	ebEnv,
@@ -17,7 +16,9 @@ import {
 	waitForAuthResult,
 	waitForLoginWindow,
 	waitForPostLoginWindow,
-	waitForRelaunchedLoginTarget
+	waitForRuntime,
+	waitForRuntimeExit,
+	waitForVisibleLoginWindow
 } from "./eb-helpers";
 
 /**
@@ -71,16 +72,21 @@ describe("Enterprise Browser", () => {
 	});
 
 	it("1. launches Enterprise Browser from the manifest", async () => {
-		expect(await OpenFinSystem.waitForReady(120000)).toBe(true);
-		const windows = await logWindows("after launch");
-		expect(windows.length).toBeGreaterThan(0);
-		await saveShot("01-launched");
+		// Do not call WebDriver here. HERE ID stays hidden for a few seconds, and
+		// switching onto it (which getWindows does) replaces the form with about:blank.
+		expect(await waitForRuntime(120000)).toBe(true);
 	});
 
 	it("2. logs into HERE ID", async () => {
-		const loginShown = await waitForLoginWindow(90000);
+		const loginState = await waitForVisibleLoginWindow(90000);
 
-		if (!loginShown) {
+		if (loginState === "blanked") {
+			throw new Error(
+				"HERE ID window became about:blank before it finished showing. Leave it alone until it is visible."
+			);
+		}
+
+		if (loginState !== "visible") {
 			// EB may have a persisted session; only accept that if the platform is actually up.
 			await logWindows("no login window");
 			platformWindow = await findPlatformWindow(30000);
@@ -89,6 +95,9 @@ describe("Enterprise Browser", () => {
 			return;
 		}
 
+		// The window is on screen now, so it is safe for ChromeDriver to switch onto it.
+		expect(await waitForLoginWindow(15000), "could not switch onto the visible HERE ID window").toBe(true);
+		await saveShot("01-launched");
 		await loginToHereId();
 
 		const auth = await waitForAuthResult(60000);
@@ -143,23 +152,17 @@ describe("Enterprise Browser", () => {
 		await logWindows("after closing the tab");
 	});
 
-	it("4. logs out from the menu, then closes Enterprise Browser at the login window", async () => {
+	it("4. logs out from the menu", async () => {
 		expect(platformWindow).toBeDefined();
 		await closeTestContent();
 
 		const how = await timed("logout", async () => logoutFromMenu());
-		// Logout relaunches EB as a new runtime process. ChromeDriver is attached to the
-		// old one and every call on it hangs from here, so the rest of this step uses
-		// the DevTools port directly and afterAll must not touch the driver.
+		// Logout ends the runtime process. ChromeDriver is attached to it and every call
+		// on it hangs from here, so afterAll must not touch the driver.
 		quit = true;
 		expect(how, "could not trigger logout from the menu or its action").not.toBe("failed");
 
-		const login = required(
-			await timed("wait for login window after logout", async () => waitForRelaunchedLoginTarget(90000)),
-			"the HERE ID login window did not come back after logout"
-		);
-
-		const exited = await timed("quit Enterprise Browser", async () => quitEnterpriseBrowser(login));
-		expect(exited, "Enterprise Browser did not exit after quit").toBe(true);
+		const exited = await timed("wait for runtime exit after logout", async () => waitForRuntimeExit(30000));
+		expect(exited, "Enterprise Browser was still running after logout").toBe(true);
 	});
 });
