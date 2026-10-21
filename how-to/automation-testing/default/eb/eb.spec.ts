@@ -103,13 +103,14 @@ describe("Enterprise Browser", () => {
 		const auth = await waitForAuthResult(60000);
 		expect(auth, "HERE ID never left the login page").toBeDefined();
 
-		// The provider page has been replaced by about:blank, so its login listener is
-		// gone. Reload that page now that the session cookie is set.
-		let launched = false;
+		// If the auth response page is still present, the provider page has been
+		// replaced by about:blank and its login listener is gone. Reload it now that
+		// the session cookie is set. When HERE ID closes first, EB may already have
+		// opened the browser, so wait for the post-login window in either case.
 		if (auth === "success-page") {
 			await restoreProviderPage();
-			launched = await waitForPostLoginWindow(60000);
 		}
+		const launched = await waitForPostLoginWindow(60000);
 		await logWindows("after login");
 		expect(launched, "auth succeeded but no splash or browser window opened").toBe(true);
 
