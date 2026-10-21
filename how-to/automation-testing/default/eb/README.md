@@ -21,9 +21,9 @@ From `how-to/automation-testing/default`, with the repo's dependencies installed
 npm run eb
 ```
 
-The same command is used on native Windows and macOS. `npm run eb` runs `eb/run.ts`, which reads `eb/.env` in Node and invokes the stock HERE Automation launcher without asking the shell to expand the test path. This is necessary because Command Prompt does not expand `eb/**/*.spec.ts`.
+The same command is used on native Windows and macOS. `npm run eb` runs `eb/run.ts`, which reads `eb/.env` in Node and invokes the HERE Automation launcher without asking the shell to expand the test path. This is necessary because Command Prompt does not expand `eb/**/*.spec.ts`.
 
-On Windows, install dependencies on that Windows machine and use a native x64 environment. The runner does not change the registry, hosts file, runtime arguments, GPU settings, profile directory, or RVM launch behavior. Administrator privileges are not expected.
+On Windows, the RVM ignores the launcher's `--runtime-arguments` flag, so DevTools never opens. For the duration of the run, `eb/run.ts` sets `HKCU\Software\OpenFin\RVM\runtimeArgs` to `--remote-debugging-port=9090` and restores the previous value afterward. That registry key is per user and does not require Administrator. The runner does not change hosts, GPU settings, the profile directory, or how the manifest is launched.
 
 | Variable                    | Required | Purpose                                                                                                                                             |
 | --------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -37,7 +37,7 @@ On Windows, install dependencies on that Windows machine and use a native x64 en
 
 `eb/here-automation.eb.config.json` sets the runtime, Workspace, and Notifications versions to `stable`, so this run does not pin the fixture suite's component versions. On macOS the CLI does not write Desktop Owner Settings anyway.
 
-If native Windows times out waiting for port 9090, first confirm that the OpenFin process has `--remote-debugging-port=9090` and that `http://127.0.0.1:9090/json/version` answers. Capture those results before adding launch workarounds; the runner intentionally preserves the normal application launch.
+If Windows still times out, the log includes whether `127.0.0.1:9090` is open and whether the browser process received `remote-debugging-port`. Those two lines are enough to tell a launch problem from a port that is open but not DevTools.
 
 Screenshots go to `reports/screenshots/` (`eb-01-launched`, `eb-02-logged-in`, `eb-03-google-tab`).
 
