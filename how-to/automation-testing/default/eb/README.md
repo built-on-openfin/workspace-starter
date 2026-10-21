@@ -15,16 +15,15 @@ Steps 1, the HERE ID form itself, and opening and closing a tab are ordinary hel
 
 ## Running
 
-From `how-to/automation-testing/default`, with the repo's dependencies installed from the workspace root:
+From `how-to/automation-testing/default`, with the repo's dependencies installed from the workspace root on that machine. `npm install` has to be run there: a `node_modules` folder copied from macOS does not contain the Windows installs of those packages. Create `eb/.env` (it is gitignored; do not commit it), then:
 
 ```shell
-set -a
-source eb/.env
-set +a
 npm run eb
 ```
 
-`eb/.env` is not read by the CLI or by Vitest. The variables have to be in the shell before `here-automation` starts. Do not commit that file.
+The same command is used on native Windows and macOS. `npm run eb` runs `eb/run.ts`, which reads `eb/.env` in Node and invokes the stock HERE Automation launcher without asking the shell to expand the test path. This is necessary because Command Prompt does not expand `eb/**/*.spec.ts`.
+
+On Windows, install dependencies on that Windows machine and use a native x64 environment. The runner does not change the registry, hosts file, runtime arguments, GPU settings, profile directory, or RVM launch behavior. Administrator privileges are not expected.
 
 | Variable                    | Required | Purpose                                                                                                                                             |
 | --------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -34,9 +33,11 @@ npm run eb
 | `EB_VIEW_URL`               | no       | Page to open in step 3. Default `https://www.google.com/`. The host must already be allowed for that Enterprise Browser (see below).                |
 | `EB_MENU_BUTTON_SELECTOR`   | no       | CSS selector for the top-right browser menu, if the built-in guess is wrong.                                                                        |
 | `HERE_ID_LOGIN_URL_PATTERN` | no       | Override for the IdP host. Default matches `auth*.openfin.co`.                                                                                      |
-| `EB_DEVTOOLS_PORT`          | no       | DevTools port of the runtime. Default `9090`, matching `here-automation.eb.config.json`.                                                            |
+| `EB_DEVTOOLS_PORT`          | no       | DevTools port used by the test helpers. Default `9090`, matching `here-automation.eb.config.json`.                                                  |
 
 `eb/here-automation.eb.config.json` sets the runtime, Workspace, and Notifications versions to `stable`, so this run does not pin the fixture suite's component versions. On macOS the CLI does not write Desktop Owner Settings anyway.
+
+If native Windows times out waiting for port 9090, first confirm that the OpenFin process has `--remote-debugging-port=9090` and that `http://127.0.0.1:9090/json/version` answers. Capture those results before adding launch workarounds; the runner intentionally preserves the normal application launch.
 
 Screenshots go to `reports/screenshots/` (`eb-01-launched`, `eb-02-logged-in`, `eb-03-google-tab`).
 

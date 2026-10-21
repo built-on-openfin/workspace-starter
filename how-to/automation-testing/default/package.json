@@ -7,7 +7,7 @@
 		"build": "echo Nothing to build",
 		"test": "here-automation ./tests/**/*.spec.ts --testRetryCount 2",
 		"test-offline": "here-automation ./tests/**/*.spec.ts --offline --storageFolder=./offline-storage --testRetryCount 2",
-		"eb": "here-automation ./eb/**/*.spec.ts --config ./eb/here-automation.eb.config.json",
+		"eb": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON ./eb/run.ts",
 		"kill": "fkill -f -s OpenFin.exe OpenFinRVM.exe chromedriver.exe OpenFin OpenFinRVM chromedriver; pkill -9 -f '[H]ere SE-DEV|[O]penFin Helper|[c]hromedriver' || true",
 		"prettier": "prettier --config .prettierrc --write .",
 		"prettier-check": "prettier --config .prettierrc --check .",
