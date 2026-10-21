@@ -21,9 +21,9 @@ From `how-to/automation-testing/default`, with the repo's dependencies installed
 npm run eb
 ```
 
-The same command is used on native Windows and macOS. `npm run eb` runs `eb/run.ts`, which reads `eb/.env` in Node and invokes the HERE Automation launcher without asking the shell to expand the test path. This is necessary because Command Prompt does not expand `eb/**/*.spec.ts`.
+The same command is used on native Windows and macOS. `npm run eb` runs `eb/run.ts`, which reads `eb/.env` in Node and invokes the stock HERE Automation launcher without asking the shell to expand the test path. This is necessary because Command Prompt does not expand `eb/**/*.spec.ts`.
 
-On Windows, the RVM ignores the launcher's `--runtime-arguments` flag, so DevTools never opens. For the duration of the run, `eb/run.ts` sets `HKCU\Software\OpenFin\RVM\runtimeArgs` to `--remote-debugging-port=9090` and restores the previous value afterward. That registry key is per user and does not require Administrator. The runner does not change hosts, GPU settings, the profile directory, or how the manifest is launched.
+On Windows, the tenant manifest must explicitly include the OpenFin manifest setting `"devtools_port": 9090` at its top level. Runtime 45 (Chromium 150) can show `--remote-debugging-port=9090` on the process while leaving the port closed when that setting is absent. The runner checks the remote manifest before launching and reports a clear error if the setting is missing or does not match the automation config. It does not change the registry, hosts file, runtime profile, or RVM launch behavior.
 
 | Variable                    | Required | Purpose                                                                                                                                             |
 | --------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -37,7 +37,7 @@ On Windows, the RVM ignores the launcher's `--runtime-arguments` flag, so DevToo
 
 `eb/here-automation.eb.config.json` sets the runtime, Workspace, and Notifications versions to `stable`, so this run does not pin the fixture suite's component versions. On macOS the CLI does not write Desktop Owner Settings anyway.
 
-If Windows still times out, the log includes whether `127.0.0.1:9090` is open and whether the browser process received `remote-debugging-port`. Those two lines are enough to tell a launch problem from a port that is open but not DevTools.
+If Windows still times out after the manifest reports `devtools_port=9090`, confirm that `http://127.0.0.1:9090/json/version` answers while the application is running.
 
 Screenshots go to `reports/screenshots/` (`eb-01-launched`, `eb-02-logged-in`, `eb-03-google-tab`).
 
