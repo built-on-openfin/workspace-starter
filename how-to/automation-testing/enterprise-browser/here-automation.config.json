@@ -1,0 +1,16 @@
+{
+	"cli": {
+		"attach": true,
+		"devToolsPort": 9090,
+		"chromeDriverPort": 4444,
+		"testTimeout": 120,
+		"verbosity": "all"
+	},
+	"platform": {
+		"manifestUrl": "https://your-environment.example.com/platform/api/platform.json"
+	},
+	"enterpriseBrowser": {
+		"tabUrl": "https://www.here.io/",
+		"launchTimeoutSeconds": 120
+	}
+}

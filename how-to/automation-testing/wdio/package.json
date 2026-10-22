@@ -15,7 +15,7 @@
 	},
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-helpers": "^2.0.0-alpha.2",
+		"@openfin/automation-helpers": "^2.0.0-alpha.3",
 		"@wdio/cli": "9.31.7",
 		"@wdio/local-runner": "9.31.7",
 		"@wdio/mocha-framework": "9.31.7",

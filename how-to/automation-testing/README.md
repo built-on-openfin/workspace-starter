@@ -8,11 +8,12 @@ against the real HERE runtime, using
 This folder is both a working example and the template for adding these tests to your own
 platform. Start by running the examples, then read [Using this in your project](#using-this-in-your-project).
 
-| Folder                                 | What it is                                                                                                                                                    |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [default](./default)                   | The suite to copy. TypeScript specs run by the `here-automation` CLI, which launches everything and runs them with [Vitest](https://vitest.dev/). Start here. |
-| [wdio](./wdio)                         | The same specs under a [WebdriverIO](https://webdriver.io/) runner you own. The reference if you already have a WebDriver-based framework.                    |
-| [platform-fixture](./platform-fixture) | A tiny HERE Core UI platform the examples run against, with fixed Home, Store, Dock and Notifications content so the assertions are stable.                   |
+| Folder                                     | What it is                                                                                                                                                         |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [default](./default)                       | The suite to copy. TypeScript specs run by the `here-automation` CLI, which launches everything and runs them with [Vitest](https://vitest.dev/). Start here.      |
+| [wdio](./wdio)                             | The same specs under a [WebdriverIO](https://webdriver.io/) runner you own. The reference if you already have a WebDriver-based framework.                         |
+| [platform-fixture](./platform-fixture)     | A tiny HERE Core UI platform the examples run against, with fixed Home, Store, Dock and Notifications content so the assertions are stable.                        |
+| [enterprise-browser](./enterprise-browser) | Tests that attach to a HERE Enterprise Browser you have already launched and signed in to, using the CLI's attach mode. Drives the browser's tabs and address bar. |
 
 Shared settings -- runtime, Workspace and Notifications versions, ports, and how to start
 the fixture -- live in [`here-automation.config.json`](./here-automation.config.json).
