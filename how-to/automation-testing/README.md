@@ -192,9 +192,9 @@ manifest is and how to serve it:
 ```json
 {
   "versions": {
-    "runtime": "44.146.101.7",
-    "workspace": "24.0.24",
-    "notifications": "2.15.3"
+    "runtime": "45.150.101.1",
+    "workspace": "45.2.6",
+    "notifications": "45.2.5"
   },
   "cli": {
     "devToolsPort": 9090,
@@ -231,7 +231,7 @@ touching the shared config:
 {
   "scripts": {
     "test": "here-automation ./tests/**/*.spec.ts --testRetryCount 2",
-    "test-hosted": "here-automation https://example.com/manifest.fin.json ./tests/**/*.spec.ts --workspace 24.0.24"
+    "test-hosted": "here-automation https://example.com/manifest.fin.json ./tests/**/*.spec.ts --workspace 45.2.6"
   }
 }
 ```

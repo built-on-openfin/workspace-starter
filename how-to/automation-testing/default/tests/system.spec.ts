@@ -32,4 +32,9 @@ describe("System", () => {
 		expect(await WebDriver.getTitle()).toBeDefined();
 		expect(await WebDriver.getUrl()).toBeDefined();
 	});
+
+	it("reports navigator.webdriver is true", async () => {
+		await WebDriver.waitForWindow("title", /.+/);
+		expect(await WebDriver.executeAsync<boolean>("navigator.webdriver")).toBe(true);
+	});
 });

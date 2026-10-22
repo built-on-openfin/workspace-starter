@@ -22,7 +22,8 @@ const {
 	isLocalUrl,
 	holdChromeDriverSession,
 	killProcessByImage,
-	isWindows
+	isWindows,
+	DEVTOOLS_HOST
 } = require('@openfin/automation-helpers');
 
 const storageFolder = './storage';
@@ -77,7 +78,7 @@ async function confirmDevToolsStable(port, windowMs) {
 	const end = Date.now() + windowMs;
 	while (Date.now() < end) {
 		try {
-			await fetchJson(`http://localhost:${port}/json/version`);
+			await fetchJson(`http://${DEVTOOLS_HOST}:${port}/json/version`);
 		} catch {
 			return false;
 		}
@@ -118,7 +119,7 @@ async function confirmDevToolsStable(port, windowMs) {
 async function sweepTargetsResponsive(port) {
 	let info;
 	try {
-		info = await fetchJson(`http://localhost:${port}/json/version`);
+		info = await fetchJson(`http://${DEVTOOLS_HOST}:${port}/json/version`);
 	} catch {
 		return false;
 	}
@@ -359,7 +360,7 @@ export const config = {
 			'wdio:maxInstances': 1,
 			browserName: 'chrome',
 			'goog:chromeOptions': {
-				debuggerAddress: `localhost:${devToolsPort}`
+				debuggerAddress: `${DEVTOOLS_HOST}:${devToolsPort}`
 			}
 		}
 	],
