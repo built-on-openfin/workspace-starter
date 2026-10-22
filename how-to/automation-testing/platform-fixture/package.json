@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-platform-fixture",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Fixture platform for the automation testing examples",
 	"private": true,
 	"scripts": {
@@ -17,9 +17,9 @@
 	},
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/core": "44.101.7",
-		"@openfin/workspace": "24.0.24",
-		"@openfin/workspace-platform": "24.0.24"
+		"@openfin/core": "45.101.1",
+		"@openfin/workspace": "45.2.6",
+		"@openfin/workspace-platform": "45.2.6"
 	},
 	"devDependencies": {
 		"@types/node": "^20.19.37",
@@ -37,6 +37,6 @@
 		"markdownlint-cli": "^0.48.0",
 		"prettier": "3.2.5",
 		"typescript": "^5.4.2",
-		"vite": "^6.0.11"
+		"vite": "^8.3.0"
 	}
 }

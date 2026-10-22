@@ -1,6 +1,6 @@
 {
 	"name": "automation-testing-default",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Automation tests using the here-automation CLI",
 	"private": true,
 	"scripts": {
@@ -16,8 +16,8 @@
 	},
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-cli": "^2.0.0-alpha.0",
-		"@openfin/automation-helpers": "^2.0.0-alpha.0",
+		"@openfin/automation-cli": "^2.0.0-alpha.2",
+		"@openfin/automation-helpers": "^2.0.0-alpha.2",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
