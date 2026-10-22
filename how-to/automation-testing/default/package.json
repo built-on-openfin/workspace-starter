@@ -16,8 +16,8 @@
 	},
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
-		"@openfin/automation-cli": "^2.0.0-alpha.2",
-		"@openfin/automation-helpers": "^2.0.0-alpha.2",
+		"@openfin/automation-cli": "^2.0.0-alpha.3",
+		"@openfin/automation-helpers": "^2.0.0-alpha.3",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
