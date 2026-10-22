@@ -1,0 +1,18 @@
+{
+	"versions": {
+		"runtime": "45.150.101.1",
+		"workspace": "45.2.6",
+		"notifications": "45.2.5"
+	},
+	"cli": {
+		"devToolsPort": 9090,
+		"chromeDriverPort": 4444,
+		"testTimeout": 120,
+		"closeRuntime": "both",
+		"verbosity": "all"
+	},
+	"platform": {
+		"manifestUrl": "http://localhost:8080/manifest.fin.json",
+		"preLaunch": "npm run start:static --prefix platform-fixture"
+	}
+}

@@ -1,0 +1,7 @@
+storage/
+.here-automation-cache/
+package-lock.json
+
+# HERE automation artifacts
+reports/
+screenshots/
