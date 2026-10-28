@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Themed Platform Window</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<style>
+			:root {
+				color-scheme: light;
+				--window-bg: #faFbfe;
+				--title-bg: #ffffff;
+				--text: #1e1f23;
+				--hover: #eceef1;
+			}
+			:root[data-scheme="dark"] {
+				color-scheme: dark;
+				--window-bg: #1e1f23;
+				--title-bg: #111214;
+				--text: #ffffff;
+				--hover: #383a40;
+			}
+			html,
+			body {
+				margin: 0;
+				height: 100%;
+				overflow: hidden;
+				font-family: sans-serif;
+				background: var(--window-bg);
+				color: var(--text);
+			}
+			#of-frame-main {
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+			}
+			#title-bar {
+				display: flex;
+				align-items: center;
+				height: 32px;
+				flex: none;
+				background: var(--title-bg);
+				color: var(--text);
+			}
+			#title {
+				flex: 1;
+				margin: 0;
+				padding-left: 12px;
+				color: var(--text);
+				font-size: 13px;
+				-webkit-app-region: drag;
+				line-height: 32px;
+			}
+			.button {
+				width: 40px;
+				height: 32px;
+				border: 0;
+				background: transparent;
+				color: var(--text);
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.button:hover {
+				background: var(--hover);
+			}
+			#close-button:hover {
+				background: #f31818;
+				color: #fff;
+			}
+			.button svg {
+				width: 16px;
+				height: 16px;
+				fill: none;
+				stroke: currentColor;
+				stroke-width: 2;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
+			#layout-container {
+				flex: 1;
+				min-height: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="of-frame-main">
+			<div id="title-bar">
+				<p id="title">Themed Platform Window</p>
+				<button class="button" id="theme-button" title="Toggle light/dark theme">
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M9 18h6M10 21h4" />
+						<path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z" />
+					</svg>
+				</button>
+				<button class="button" id="exit-button" title="Exit Platform">
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+						<path d="M16 17l5-5-5-5M21 12H9" />
+					</svg>
+				</button>
+				<button class="button" id="close-button" title="Close Window">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+				</button>
+			</div>
+			<div id="layout-container"></div>
+		</div>
+		<script>
+			const THEME_TOPIC = "notification-center-theming-scheme";
+			const TOGGLE_TOPIC = "notification-center-theming-toggle";
+			const REQUEST_TOPIC = "notification-center-theming-request";
+			const EXIT_TOPIC = "notification-center-theming-exit";
+
+			function applyScheme(scheme) {
+				document.documentElement.dataset.scheme = scheme === "dark" ? "dark" : "light";
+			}
+
+			window.addEventListener("DOMContentLoaded", async () => {
+				await fin.Platform.Layout.init({ containerId: "layout-container" });
+
+				document
+					.querySelector("#close-button")
+					.addEventListener("click", () => fin.Window.getCurrentSync().close());
+
+				// The provider owns the theme, it applies the change to the platform (and so the Notification Center)
+				document
+					.querySelector("#theme-button")
+					.addEventListener("click", () => fin.InterApplicationBus.publish(TOGGLE_TOPIC, {}));
+
+				// The provider tears down the Notification Center registration and quits the platform
+				document
+					.querySelector("#exit-button")
+					.addEventListener("click", () => fin.InterApplicationBus.publish(EXIT_TOPIC, {}));
+
+				await fin.InterApplicationBus.subscribe({ uuid: fin.me.uuid }, THEME_TOPIC, (message) =>
+					applyScheme(message.scheme)
+				);
+				fin.InterApplicationBus.publish(REQUEST_TOPIC, {});
+			});
+		</script>
+	</body>
+</html>
