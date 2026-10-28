@@ -21,3 +21,4 @@ how-to/workspace-platform-starter/public/common/snapshots/old-ten-windows.snapsh
 how-to/workspace-platform-starter-basic/public/common/snapshots/forty-windows.snapshot.fin.json
 .idea
 how-to/here-workspace-starter/public/platform/enterprise
+package-lock.json

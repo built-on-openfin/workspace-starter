@@ -1,0 +1,31 @@
+{
+	"arrowParens": "always",
+	"bracketSpacing": true,
+	"endOfLine": "lf",
+	"overrides": [
+		{
+			"files": ["*.html"],
+			"options": {
+				"htmlWhitespaceSensitivity": "ignore"
+			}
+		},
+		{
+			"files": ["*.ts"],
+			"options": {
+				"singleQuote": false
+			}
+		},
+		{
+			"files": ["*.md"],
+			"options": {
+				"tabWidth": 2,
+				"useTabs": false
+			}
+		}
+	],
+	"printWidth": 110,
+	"semi": true,
+	"singleQuote": true,
+	"trailingComma": "none",
+	"useTabs": true
+}
