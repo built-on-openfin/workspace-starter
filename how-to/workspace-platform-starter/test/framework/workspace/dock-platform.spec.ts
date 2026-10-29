@@ -1,7 +1,7 @@
 import { DockButtonNames, type DockButton } from "@openfin/workspace";
 import type { Dock3Config } from "@openfin/workspace-platform";
 import type { DockProviderOptions } from "../../../client/src/framework/shapes/dock-shapes";
-import type * as Dock3Module from "../../../client/src/framework/workspace/dock3";
+import type * as DockPlatformModule from "../../../client/src/framework/workspace/dock-platform";
 
 jest.mock("@openfin/workspace-platform", () => ({
 	Dock: { init: jest.fn() },
@@ -37,7 +37,7 @@ jest.mock("../../../client/src/framework/workspace/dock-shared", () => ({
 	unsubscribeFromUpdates: jest.fn()
 }));
 
-const DOCK3_MODULE_PATH = "../../../client/src/framework/workspace/dock3";
+const DOCK_PLATFORM_MODULE_PATH = "../../../client/src/framework/workspace/dock-platform";
 const WORKSPACE_PLATFORM_MODULE_PATH = "@openfin/workspace-platform";
 const ACTIONS_MODULE_PATH = "../../../client/src/framework/actions";
 const ENDPOINT_MODULE_PATH = "../../../client/src/framework/endpoint";
@@ -45,7 +45,7 @@ const THEMES_MODULE_PATH = "../../../client/src/framework/themes";
 const DOCK_SHARED_MODULE_PATH = "../../../client/src/framework/workspace/dock-shared";
 
 /**
- * A mocked dock3 window, as returned by `Dock3Provider.getWindowSync()`.
+ * A mocked platform dock window, as returned by `Dock3Provider.getWindowSync()`.
  */
 interface MockDockWindow {
 	/**
@@ -75,8 +75,8 @@ interface MockDockWindow {
 }
 
 /**
- * Create a mocked dock3 window.
- * @returns A mocked dock3 window.
+ * Create a mocked platform dock window.
+ * @returns A mocked platform dock window.
  */
 function createMockWindow(): MockDockWindow {
 	return {
@@ -84,14 +84,14 @@ function createMockWindow(): MockDockWindow {
 		focus: jest.fn().mockResolvedValue(undefined),
 		minimize: jest.fn().mockResolvedValue(undefined),
 		getBounds: jest.fn().mockResolvedValue({ left: 0, top: 0 }),
-		identity: { uuid: "platform", name: "dock3-window" }
+		identity: { uuid: "platform", name: "dock-window" }
 	};
 }
 
 /**
  * A minimal stand-in for the real Dock3 `Base` class that `Dock.init`'s `override` callback is
  * given. Provides just enough surface (config, getWindowSync, shutdown, updateConfig, loadConfig,
- * saveConfig) for the `CustomProvider` class defined in dock3.ts to extend and for `super.x()`
+ * saveConfig) for the `CustomProvider` class defined in dock-platform.ts to extend and for `super.x()`
  * calls to resolve to something observable.
  */
 class MockBaseProvider {
@@ -99,14 +99,14 @@ class MockBaseProvider {
 
 	/**
 	 * Create a mocked base provider.
-	 * @param config The initial dock3 config.
+	 * @param config The initial dock config.
 	 */
 	constructor(config: Dock3Config) {
 		this.config = config;
 	}
 
 	/**
-	 * Get the dock3 window synchronously.
+	 * Get the platform dock window synchronously.
 	 * @throws Always, unless stubbed per test via `jest.spyOn`.
 	 */
 	public getWindowSync(): MockDockWindow {
@@ -120,8 +120,8 @@ class MockBaseProvider {
 	public async shutdown(): Promise<void> {}
 
 	/**
-	 * Update the dock3 config.
-	 * @param config The new dock3 config.
+	 * Update the dock config.
+	 * @param config The new dock config.
 	 * @returns Nothing.
 	 */
 	public async updateConfig(config: Dock3Config): Promise<void> {
@@ -129,27 +129,27 @@ class MockBaseProvider {
 	}
 
 	/**
-	 * Load the dock3 config from the default (non-custom) storage.
-	 * @returns The current dock3 config.
+	 * Load the dock config from the default (non-custom) storage.
+	 * @returns The current dock config.
 	 */
 	public async loadConfig(): Promise<Dock3Config> {
 		return this.config;
 	}
 
 	/**
-	 * Save the dock3 config to the default (non-custom) storage.
+	 * Save the dock config to the default (non-custom) storage.
 	 * @param _options The save options.
-	 * @param _options.config The dock3 config to save.
+	 * @param _options.config The dock config to save.
 	 * @returns Nothing.
 	 */
 	public async saveConfig(_options: { config: Dock3Config }): Promise<void> {}
 }
 
 /**
- * The `CustomProvider` class defined inside dock3.ts extends `Base` with these additional
+ * The `CustomProvider` class defined inside dock-platform.ts extends `Base` with these additional
  * overrides. `override(MockBaseProvider)` returns that extended class, but TypeScript can't see
- * its shape statically since it's defined dynamically inside dock3.ts, so this type describes it
- * for the purposes of these tests.
+ * its shape statically since it's defined dynamically inside dock-platform.ts, so this type describes
+ * it for the purposes of these tests.
  */
 type CustomProviderInstance = MockBaseProvider & {
 	launchEntry: (payload: unknown) => Promise<void>;
@@ -158,12 +158,13 @@ type CustomProviderInstance = MockBaseProvider & {
 };
 
 /**
- * Dock3.ts has module-level singleton state (`initializedDock3Provider`/`dock3RegistrationMetaInfo`),
- * so every test needs a fresh module instance and fresh mocks.
- * @returns The freshly loaded dock3 module along with its mocked dependencies.
+ * `dock-platform.ts` has module-level singleton state
+ * (`initializedDock3Provider`/`dock3RegistrationMetaInfo`), so every test needs a fresh module
+ * instance and fresh mocks.
+ * @returns The freshly loaded dock-platform module along with its mocked dependencies.
  */
-function loadDock3(): {
-	dock3: typeof Dock3Module;
+function loadDockPlatform(): {
+	dockPlatform: typeof DockPlatformModule;
 	workspacePlatformMock: { Dock: { init: jest.Mock }; CustomActionCallerType: { CustomButton: string } };
 	actionsMock: { callAction: jest.Mock };
 	endpointMock: { hasEndpoint: jest.Mock };
@@ -186,14 +187,14 @@ function loadDock3(): {
 	jest.resetModules();
 
 	// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-	const dock3 = require(DOCK3_MODULE_PATH);
+	const dockPlatform = require(DOCK_PLATFORM_MODULE_PATH);
 	const workspacePlatformMock = jest.requireMock(WORKSPACE_PLATFORM_MODULE_PATH);
 	const actionsMock = jest.requireMock(ACTIONS_MODULE_PATH);
 	const endpointMock = jest.requireMock(ENDPOINT_MODULE_PATH);
 	const themesMock = jest.requireMock(THEMES_MODULE_PATH);
 	const dockSharedMock = jest.requireMock(DOCK_SHARED_MODULE_PATH);
 
-	return { dock3, workspacePlatformMock, actionsMock, endpointMock, themesMock, dockSharedMock };
+	return { dockPlatform, workspacePlatformMock, actionsMock, endpointMock, themesMock, dockSharedMock };
 }
 
 /**
@@ -202,18 +203,18 @@ function loadDock3(): {
 type DockOverrideFactory = (Base: typeof MockBaseProvider) => typeof MockBaseProvider;
 
 /**
- * Registers dock3, capturing the `CustomProvider` instance created via the `override` callback
- * passed to `Dock.init`, so tests can exercise its overridden methods directly.
- * @param dock3 The dock3 module under test.
+ * Registers the platform dock, capturing the `CustomProvider` instance created via the `override`
+ * callback passed to `Dock.init`, so tests can exercise its overridden methods directly.
+ * @param dockPlatform The dock-platform module under test.
  * @param workspacePlatformMock The mocked `@openfin/workspace-platform` module.
  * @param workspacePlatformMock.Dock The mocked `Dock` namespace.
  * @param workspacePlatformMock.Dock.init The mocked `Dock.init` function.
  * @param options The dock provider options to register with.
- * @param mockWindow The mocked dock3 window to return from `getWindowSync`.
+ * @param mockWindow The mocked platform dock window to return from `getWindowSync`.
  * @returns The `CustomProvider` instance created during registration.
  */
-async function registerDock3(
-	dock3: typeof Dock3Module,
+async function registerDockPlatform(
+	dockPlatform: typeof DockPlatformModule,
 	workspacePlatformMock: { Dock: { init: jest.Mock } },
 	options: DockProviderOptions,
 	mockWindow: MockDockWindow
@@ -229,12 +230,12 @@ async function registerDock3(
 		}
 	);
 
-	await dock3.register(options, undefined);
+	await dockPlatform.register(options, undefined);
 
 	return { providerInstance };
 }
 
-describe("dock3", () => {
+describe("dock-platform", () => {
 	const options: DockProviderOptions = { id: "dock", title: "Dock", icon: "icon.png" };
 
 	afterEach(() => {
@@ -242,14 +243,15 @@ describe("dock3", () => {
 	});
 
 	describe("register", () => {
-		it("should always request the dock3-only workspace buttons from buildWorkspaceButtons", async () => {
-			// Regression guard: dock3 must always ask for the v3-only buttons (e.g. "contentMenu"),
-			// the mirror image of the dock1 guard - dock1 must never ask for them.
-			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
+		it("should always request the platform-only workspace buttons from buildWorkspaceButtons", async () => {
+			// Regression guard: the platform dock must always ask for the platform-only buttons (e.g.
+			// "contentMenu"), the mirror image of the workspace dock guard - the workspace dock must never
+			// ask for them.
+			const { dockPlatform, workspacePlatformMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue(["switchWorkspace", "contentMenu"]);
 
-			await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			await registerDockPlatform(dockPlatform, workspacePlatformMock, options, createMockWindow());
 
 			expect(dockSharedMock.buildWorkspaceButtons).toHaveBeenCalledWith(undefined, true);
 			expect(workspacePlatformMock.Dock.init).toHaveBeenCalledWith(
@@ -264,7 +266,7 @@ describe("dock3", () => {
 		});
 
 		it("should build the registered buttons and subscribe to lifecycle updates", async () => {
-			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, dockSharedMock } = loadDockPlatform();
 			const button: DockButton = {
 				id: "a",
 				type: DockButtonNames.ActionButton,
@@ -275,14 +277,14 @@ describe("dock3", () => {
 			dockSharedMock.buildButtons.mockResolvedValue(buttons);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 
-			await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			await registerDockPlatform(dockPlatform, workspacePlatformMock, options, createMockWindow());
 
 			expect(dockSharedMock.setRegisteredButtons).toHaveBeenCalledWith(buttons);
 			expect(dockSharedMock.subscribeToUpdates).toHaveBeenCalledWith(expect.any(Function));
 		});
 
 		it("should map action buttons to favorites and other buttons to the content menu", async () => {
-			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, dockSharedMock } = loadDockPlatform();
 			const buttons: DockButton[] = [
 				{ id: "fav", type: DockButtonNames.ActionButton, tooltip: "Fav", action: { id: "x" } } as DockButton,
 				{ id: "menu", tooltip: "Menu", action: { id: "y" } } as DockButton
@@ -290,7 +292,7 @@ describe("dock3", () => {
 			dockSharedMock.buildButtons.mockResolvedValue(buttons);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 
-			await registerDock3(dock3, workspacePlatformMock, options, createMockWindow());
+			await registerDockPlatform(dockPlatform, workspacePlatformMock, options, createMockWindow());
 
 			expect(workspacePlatformMock.Dock.init).toHaveBeenCalledWith(
 				expect.objectContaining({
@@ -305,18 +307,18 @@ describe("dock3", () => {
 
 	describe("deregister", () => {
 		it("should unsubscribe from updates, clear the dock provider options and shut down the provider", async () => {
-			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(
-				dock3,
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
 				workspacePlatformMock,
 				options,
 				createMockWindow()
 			);
 			const shutdownSpy = jest.spyOn(providerInstance, "shutdown");
 
-			await dock3.deregister();
+			await dockPlatform.deregister();
 
 			expect(dockSharedMock.unsubscribeFromUpdates).toHaveBeenCalled();
 			expect(dockSharedMock.setDockProviderOptions).toHaveBeenCalledWith(undefined);
@@ -326,45 +328,45 @@ describe("dock3", () => {
 
 	describe("show/minimize", () => {
 		it("should not throw and should not touch a window before registration", async () => {
-			const { dock3 } = loadDock3();
+			const { dockPlatform } = loadDockPlatform();
 
-			await expect(dock3.show()).resolves.toBeUndefined();
-			await expect(dock3.minimize()).resolves.toBeUndefined();
+			await expect(dockPlatform.show()).resolves.toBeUndefined();
+			await expect(dockPlatform.minimize()).resolves.toBeUndefined();
 		});
 
 		it("show() should show and focus the dock window after registration", async () => {
-			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 			const mockWindow = createMockWindow();
-			await registerDock3(dock3, workspacePlatformMock, options, mockWindow);
+			await registerDockPlatform(dockPlatform, workspacePlatformMock, options, mockWindow);
 
-			await dock3.show();
+			await dockPlatform.show();
 
 			expect(mockWindow.show).toHaveBeenCalled();
 			expect(mockWindow.focus).toHaveBeenCalled();
 		});
 
 		it("minimize() should minimize the dock window after registration", async () => {
-			const { dock3, workspacePlatformMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 			const mockWindow = createMockWindow();
-			await registerDock3(dock3, workspacePlatformMock, options, mockWindow);
+			await registerDockPlatform(dockPlatform, workspacePlatformMock, options, mockWindow);
 
-			await dock3.minimize();
+			await dockPlatform.minimize();
 
 			expect(mockWindow.minimize).toHaveBeenCalled();
 		});
 	});
 
 	describe("CustomProvider.loadConfig", () => {
-		it("should map the stored v1 button order onto favorites/contentMenu when a get endpoint is configured", async () => {
-			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
+		it("should map the stored workspace button order onto favorites/contentMenu when a get endpoint is configured", async () => {
+			const { dockPlatform, workspacePlatformMock, endpointMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(
-				dock3,
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
 				workspacePlatformMock,
 				options,
 				createMockWindow()
@@ -399,12 +401,12 @@ describe("dock3", () => {
 			expect(result.contentMenu).toBe(reorderedContentMenu);
 		});
 
-		it("should fall back to the default dock3 storage when no get endpoint is configured", async () => {
-			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
+		it("should fall back to the default platform dock storage when no get endpoint is configured", async () => {
+			const { dockPlatform, workspacePlatformMock, endpointMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(
-				dock3,
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
 				workspacePlatformMock,
 				options,
 				createMockWindow()
@@ -421,12 +423,12 @@ describe("dock3", () => {
 	});
 
 	describe("CustomProvider.saveConfig", () => {
-		it("should convert to a v1 config and persist via the custom endpoint when configured", async () => {
-			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
+		it("should convert to a workspace config and persist via the custom endpoint when configured", async () => {
+			const { dockPlatform, workspacePlatformMock, endpointMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(
-				dock3,
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
 				workspacePlatformMock,
 				options,
 				createMockWindow()
@@ -457,12 +459,12 @@ describe("dock3", () => {
 			);
 		});
 
-		it("should fall back to the default dock3 storage when no set endpoint is configured", async () => {
-			const { dock3, workspacePlatformMock, endpointMock, dockSharedMock } = loadDock3();
+		it("should fall back to the default platform dock storage when no set endpoint is configured", async () => {
+			const { dockPlatform, workspacePlatformMock, endpointMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(
-				dock3,
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
 				workspacePlatformMock,
 				options,
 				createMockWindow()
@@ -480,11 +482,16 @@ describe("dock3", () => {
 
 	describe("CustomProvider action overrides", () => {
 		it("launchEntry() should call the action with the position info for the dock window", async () => {
-			const { dock3, workspacePlatformMock, actionsMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, actionsMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 			const mockWindow = createMockWindow();
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, mockWindow);
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
+				workspacePlatformMock,
+				options,
+				mockWindow
+			);
 
 			await providerInstance.launchEntry({
 				entry: {
@@ -504,11 +511,16 @@ describe("dock3", () => {
 		});
 
 		it("moreMenuCustomOptionClicked() should call the action with the position info for the dock window", async () => {
-			const { dock3, workspacePlatformMock, actionsMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, actionsMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
 			const mockWindow = createMockWindow();
-			const { providerInstance } = await registerDock3(dock3, workspacePlatformMock, options, mockWindow);
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
+				workspacePlatformMock,
+				options,
+				mockWindow
+			);
 
 			await providerInstance.moreMenuCustomOptionClicked({
 				action: "more-action",
@@ -526,11 +538,11 @@ describe("dock3", () => {
 		});
 
 		it("bookmarkContentMenuEntry() should not call any action (bookmarking is not supported)", async () => {
-			const { dock3, workspacePlatformMock, actionsMock, dockSharedMock } = loadDock3();
+			const { dockPlatform, workspacePlatformMock, actionsMock, dockSharedMock } = loadDockPlatform();
 			dockSharedMock.buildButtons.mockResolvedValue([]);
 			dockSharedMock.buildWorkspaceButtons.mockReturnValue([]);
-			const { providerInstance } = await registerDock3(
-				dock3,
+			const { providerInstance } = await registerDockPlatform(
+				dockPlatform,
 				workspacePlatformMock,
 				options,
 				createMockWindow()

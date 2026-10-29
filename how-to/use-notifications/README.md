@@ -10,12 +10,19 @@ This application you are about to install is a simple example of plugging in you
 
 The example is a simple view that shows launching, interacting and auditing notifications.
 
+## Notification Center shortcut
+
+Notification Center has a default keyboard shortcut for toggling the center. This example customizes that shortcut so it does not collide with another use of the same combination:
+
+- On startup the example calls `setDefaultPlatformShortcut("CmdOrCtrl+Shift+Y")`. Press that combination to toggle Notification Center.
+- **Set Custom Shortcut (CmdOrCtrl+Alt+N)** uses `setShortcut` to apply a user-priority override (the same effect as changing the shortcut in Notification Center Advanced Settings).
+
 ## Running the Sample
 
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Use Notifications](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fuse-notifications%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Use Notifications](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv45.0.0%2Fuse-notifications%2Fmanifest.fin.json)
 
 ## Getting Started
 

@@ -1,6 +1,6 @@
 {
   "name": "openfin-workspace-starter",
-  "version": "24.0.0",
+  "version": "45.0.0",
   "description": "HERE Core UI",
   "scripts": {
     "build": "node ./scripts/workspaces.mjs build",
@@ -44,19 +44,19 @@
   ],
   "license": "SEE LICENSE IN LICENSE.MD",
   "devDependencies": {
-    "@openfin/node-adapter": "44.101.7",
+    "@openfin/node-adapter": "45.102.10",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "replace-in-file": "8.4.0",
     "yargs": "17.7.2"
   },
   "overrides": {
+    "eslint-module-utils": "2.7.4",
     "glob": "^13.0.0",
     "test-exclude": "^8.0.0",
     "rimraf": "^6.0.0",
     "parse-bmfont-xml": {
       "xml2js": "0.5.0"
-    },
-    "eslint-module-utils": "2.7.3"
+    }
   }
 }

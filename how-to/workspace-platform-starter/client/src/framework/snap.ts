@@ -160,6 +160,7 @@ export async function prepareToApplyDecoratedSnapshot(): Promise<Snap.LayoutClie
 				connections: [],
 				version: layout.version
 			};
+			await server.setLayout(appOnlyLayout);
 			await server.prepareToApplySnapshot();
 
 			return appOnlyLayout.clients;

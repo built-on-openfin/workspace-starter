@@ -9,8 +9,14 @@ import {
 	type PageLayout,
 	type PageLayoutDetails,
 	type PageWithUpdatableRuntimeAttribs,
-	type ToolbarOptions
+	type ToolbarOptions,
+	type ViewTabControl
 } from "@openfin/workspace-platform";
+
+const LOCAL_FAVICON = "http://localhost:8080/favicon.ico";
+const ICON_ANNOUNCE = "http://localhost:8080/icons/announce.svg";
+const ICON_LOCK = "http://localhost:8080/icons/lock.svg";
+const ICON_PRINT = "http://localhost:8080/icons/print.svg";
 /** Identifiers for each browser launch scenario. */
 export type BrowserScenarioId =
 	| "default"
@@ -22,7 +28,8 @@ export type BrowserScenarioId =
 	| "locked-page"
 	| "fixed-views"
 	| "duplicate-page-titles"
-	| "pinned-pages";
+	| "pinned-pages"
+	| "view-tab-customization";
 
 /** A browser window scenario that can be launched from the provider UI. */
 export interface BrowserScenario {
@@ -360,6 +367,31 @@ async function createPinnedPagesWindow(): Promise<BrowserWindowModule> {
 	return createdBrowserWin;
 }
 
+/**
+ * Create a window that demonstrates per-view tab icons, colors, content width, and custom controls.
+ * @returns The created browser window.
+ */
+async function createViewTabCustomizationWindow(): Promise<BrowserWindowModule> {
+	const page: Page = await createPageWithLayout(
+		"View Tab Customization",
+		createViewTabCustomizationPageLayout(),
+		false
+	);
+	const options: BrowserCreateWindowRequest = {
+		workspacePlatform: {
+			pages: [page],
+			viewTabDimensions: {
+				widthMode: "content",
+				minWidth: "60px",
+				maxWidth: "200px"
+			}
+		}
+	};
+
+	const platform = getCurrentSync();
+	return platform.Browser.createWindow(options);
+}
+
 export const BROWSER_SCENARIOS: BrowserScenario[] = [
 	{ id: "default", label: "Launch Browser Window", launch: async () => createBrowserWindow() },
 	{
@@ -386,6 +418,11 @@ export const BROWSER_SCENARIOS: BrowserScenario[] = [
 		id: "pinned-pages",
 		label: "Launch Browser With Pinned Pages",
 		launch: createPinnedPagesWindow
+	},
+	{
+		id: "view-tab-customization",
+		label: "Launch Browser With View Tab Customization",
+		launch: createViewTabCustomizationWindow
 	}
 ];
 
@@ -473,6 +510,118 @@ function createDefaultPageLayout(): PageLayout {
 							uuid: fin.me.uuid,
 							name: `${randomUUID()}-v2`,
 							url: "https://openfin.co"
+						} as Partial<OpenFin.ViewOptions>
+					}
+				]
+			}
+		]
+	};
+}
+
+/**
+ * Create a page layout with contrasting per-view tab chrome.
+ * @returns The page layout used by the view tab customization scenario.
+ */
+function createViewTabCustomizationPageLayout(): PageLayout {
+	const viewAControls: ViewTabControl[] = [
+		{
+			tooltip: "Status",
+			iconUrl: ICON_ANNOUNCE,
+			action: {
+				id: "view-tab-status",
+				customData: { control: "status", appId: "examples" }
+			}
+		},
+		{
+			position: { relativeTo: "title", placement: "after" },
+			tooltip: "Print view",
+			iconUrl: ICON_PRINT,
+			action: {
+				id: "view-tab-print",
+				customData: { control: "print" }
+			}
+		},
+		{
+			position: { relativeTo: "favicon", placement: "before" },
+			tooltip: "Disabled control example",
+			iconUrl: ICON_LOCK,
+			disabled: true,
+			action: {
+				id: "view-tab-disabled-example",
+				customData: { control: "disabled-example" }
+			}
+		}
+	];
+	const viewBControls: ViewTabControl[] = [
+		{
+			position: { relativeTo: "title", placement: "before" },
+			tooltip: "Status",
+			iconUrl: ICON_ANNOUNCE,
+			action: {
+				id: "view-tab-status",
+				customData: { control: "status", appId: "openfin" }
+			}
+		}
+	];
+
+	return {
+		content: [
+			{
+				type: "stack",
+				content: [
+					{
+						type: "component",
+						componentName: "view",
+						title: "Marked Tab",
+						componentState: {
+							uuid: fin.me.uuid,
+							name: `${randomUUID()}-tab-a`,
+							url: "https://examples.com",
+							icon: LOCAL_FAVICON,
+							workspacePlatform: {
+								viewTab: {
+									backgroundColor: {
+										default: "#0f172a",
+										hover: "#1e293b",
+										active: "#334155",
+										focus: "#475569"
+									},
+									fontColor: {
+										default: "#cbd5e1",
+										hover: "#e2e8f0",
+										active: "#ffffff",
+										focus: "#ffffff"
+									},
+									controls: viewAControls
+								}
+							}
+						} as Partial<OpenFin.ViewOptions>
+					},
+					{
+						type: "component",
+						componentName: "view",
+						title: "Hidden Favicon",
+						componentState: {
+							uuid: fin.me.uuid,
+							name: `${randomUUID()}-tab-b`,
+							url: "https://openfin.co",
+							icon: "hide",
+							workspacePlatform: {
+								viewTab: {
+									backgroundColor: {
+										default: "#14532d",
+										hover: "#166534",
+										active: "#15803d",
+										focus: "#16a34a"
+									},
+									fontColor: {
+										default: "#dcfce7",
+										active: "#ffffff",
+										focus: "#ffffff"
+									},
+									controls: viewBControls
+								}
+							}
 						} as Partial<OpenFin.ViewOptions>
 					}
 				]

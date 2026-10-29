@@ -30,62 +30,32 @@ import type { CustomSettings } from "./shapes";
 const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 
 /**
- * Restores init-option checkboxes after Restart Demo; does not auto-initialize the platform.
+ * Restores the duplicate-titles checkbox after Restart Demo; does not auto-initialize the platform.
  */
-const STORAGE_KEY_RESTART_DEMO_INIT_OPTIONS = "register-with-browser.restartDemoInitOptions";
-
-/**
- * Init-time control panel options snapshotted by the Workspace SDK inside init().
- */
-interface BrowserInitOptionsFromDOM {
-	/** Whether duplicate page titles are allowed. */
-	allowDuplicatePageTitles: boolean;
-	/** Suppress the Workspace Switched success indicator. */
-	suppressWorkspaceSwitched: boolean;
-	/** Suppress the Workspace Saved success indicator (save only). */
-	suppressWorkspaceSaved: boolean;
-}
+const STORAGE_KEY_RESTART_DEMO_ALLOW_DUP = "register-with-browser.restartDemoAllowDupTitles";
 
 let manifestCustomSettings: CustomSettings = {};
 let isPlatformInitialized = false;
 
 /**
- * Read init-time browser options from the control panel checkboxes.
- * @returns The checkbox values for platform init.
+ * Read whether duplicate page titles are allowed from the control panel checkbox.
+ * @returns True when the allow duplicate page titles checkbox is checked.
  */
-function getBrowserInitOptionsFromDOM(): BrowserInitOptionsFromDOM {
-	return {
-		allowDuplicatePageTitles:
-			document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles")?.checked ?? false,
-		suppressWorkspaceSwitched:
-			document.querySelector<HTMLInputElement>("#suppressWorkspaceSwitched")?.checked ?? false,
-		suppressWorkspaceSaved:
-			document.querySelector<HTMLInputElement>("#suppressWorkspaceSaved")?.checked ?? false
-	};
+function getAllowDuplicatePageTitlesFromDOM(): boolean {
+	return document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles")?.checked ?? false;
 }
 
 /**
- * Align init-option checkboxes after Restart Demo (restore from localStorage).
- * @param options The options to restore for the upcoming init.
+ * Align the duplicate-titles checkbox after Restart Demo (restore from localStorage).
+ * @param allowed Whether duplicate titles are allowed for the upcoming init.
  */
-function syncInitOptionCheckboxesFromOptions(options: BrowserInitOptionsFromDOM): void {
+function syncAllowDuplicateCheckboxFromString(allowed: boolean): void {
 	const scenarioSelect = document.querySelector<HTMLSelectElement>("#scenario");
 	const allowDuplicatePageTitlesCheckbox =
 		document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles");
-	const suppressWorkspaceSwitchedCheckbox = document.querySelector<HTMLInputElement>(
-		"#suppressWorkspaceSwitched"
-	);
-	const suppressWorkspaceSavedCheckbox = document.querySelector<HTMLInputElement>("#suppressWorkspaceSaved");
 	const duplicateTitlesHint = document.querySelector<HTMLParagraphElement>("#duplicate-titles-hint");
-
 	if (allowDuplicatePageTitlesCheckbox) {
-		allowDuplicatePageTitlesCheckbox.checked = options.allowDuplicatePageTitles;
-	}
-	if (suppressWorkspaceSwitchedCheckbox) {
-		suppressWorkspaceSwitchedCheckbox.checked = options.suppressWorkspaceSwitched;
-	}
-	if (suppressWorkspaceSavedCheckbox) {
-		suppressWorkspaceSavedCheckbox.checked = options.suppressWorkspaceSaved;
+		allowDuplicatePageTitlesCheckbox.checked = allowed;
 	}
 	if (scenarioSelect && allowDuplicatePageTitlesCheckbox && duplicateTitlesHint) {
 		updateDuplicatePageTitlesHintTextOnly(
@@ -100,8 +70,8 @@ function syncInitOptionCheckboxesFromOptions(options: BrowserInitOptionsFromDOM)
  * Initialize the workspace platform from the control panel.
  */
 async function handleInitializePlatformClick(): Promise<void> {
-	const initOptions = getBrowserInitOptionsFromDOM();
-	await initializeWorkspacePlatform(manifestCustomSettings, initOptions);
+	const allowDup = getAllowDuplicatePageTitlesFromDOM();
+	await initializeWorkspacePlatform(manifestCustomSettings, allowDup);
 	isPlatformInitialized = true;
 	setControlState("initialized");
 }
@@ -110,41 +80,7 @@ async function handleInitializePlatformClick(): Promise<void> {
  * Drop session markers so Quit starts a cold session next time.
  */
 function clearWorkspaceSessionMarkers(): void {
-	localStorage.removeItem(STORAGE_KEY_RESTART_DEMO_INIT_OPTIONS);
-	// Remove legacy Restart Demo key used before indicator suppress options were added.
-	localStorage.removeItem("register-with-browser.restartDemoAllowDupTitles");
-}
-
-/**
- * Parse restart-demo init options from localStorage.
- * @param raw The raw localStorage value.
- * @returns Parsed options, or null when the value is missing or invalid.
- */
-function parseRestartDemoInitOptions(raw: string | null): BrowserInitOptionsFromDOM | null {
-	if (raw === null) {
-		return null;
-	}
-	try {
-		const parsed: unknown = JSON.parse(raw);
-		if (parsed !== null && typeof parsed === "object") {
-			const record = parsed as { [key: string]: unknown };
-			return {
-				allowDuplicatePageTitles: record.allowDuplicatePageTitles === true,
-				suppressWorkspaceSwitched: record.suppressWorkspaceSwitched === true,
-				suppressWorkspaceSaved: record.suppressWorkspaceSaved === true
-			};
-		}
-	} catch {
-		// Legacy Restart Demo stored only the duplicate-titles boolean as "true"/"false".
-		if (raw === "true" || raw === "false") {
-			return {
-				allowDuplicatePageTitles: raw === "true",
-				suppressWorkspaceSwitched: false,
-				suppressWorkspaceSaved: false
-			};
-		}
-	}
-	return null;
+	localStorage.removeItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP);
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -155,37 +91,30 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	manifestCustomSettings = await getManifestCustomSettings();
 
-	const restartDemoInitOptions =
-		parseRestartDemoInitOptions(localStorage.getItem(STORAGE_KEY_RESTART_DEMO_INIT_OPTIONS)) ??
-		parseRestartDemoInitOptions(localStorage.getItem("register-with-browser.restartDemoAllowDupTitles"));
+	const restartDemoAllowDup = localStorage.getItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP);
 
 	await initializeDOM();
 
-	if (restartDemoInitOptions !== null) {
-		localStorage.removeItem(STORAGE_KEY_RESTART_DEMO_INIT_OPTIONS);
-		localStorage.removeItem("register-with-browser.restartDemoAllowDupTitles");
-		syncInitOptionCheckboxesFromOptions(restartDemoInitOptions);
+	if (restartDemoAllowDup !== null) {
+		localStorage.removeItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP);
+		syncAllowDuplicateCheckboxFromString(restartDemoAllowDup === "true");
 	}
 });
 
 /**
- * Initialize the HERE Core UI Platform with explicit browser init options.
+ * Initialize the HERE Core UI Platform with an explicit duplicate-title flag.
  * The Workspace SDK snapshots browser config inside init(); a getter is not reliably re-read later.
  * @param customSettings The custom settings from the manifest.
- * @param initOptions Init-time browser options from the control panel.
+ * @param allowDuplicatePageTitles Whether duplicate page titles are allowed for this workspace session.
  */
 async function initializeWorkspacePlatform(
 	customSettings: CustomSettings,
-	initOptions: BrowserInitOptionsFromDOM
+	allowDuplicatePageTitles: boolean
 ): Promise<void> {
-	console.log("Initializing HERE Core UI Platform", initOptions);
+	console.log("Initializing HERE Core UI Platform", { allowDuplicatePageTitles });
 	await init({
 		browser: {
-			allowDuplicatePageTitles: initOptions.allowDuplicatePageTitles,
-			indicators: {
-				suppressWorkspaceSwitched: initOptions.suppressWorkspaceSwitched,
-				suppressWorkspaceSaved: initOptions.suppressWorkspaceSaved
-			},
+			allowDuplicatePageTitles,
 			browserIconSize: customSettings.browserIconSize,
 			defaultWindowOptions: {
 				icon: PLATFORM_ICON,
@@ -287,10 +216,6 @@ function setControlState(state: ControlState): void {
 	const scenarioSelect = document.querySelector<HTMLSelectElement>("#scenario");
 	const allowDuplicatePageTitlesCheckbox =
 		document.querySelector<HTMLInputElement>("#allowDuplicatePageTitles");
-	const suppressWorkspaceSwitchedCheckbox = document.querySelector<HTMLInputElement>(
-		"#suppressWorkspaceSwitched"
-	);
-	const suppressWorkspaceSavedCheckbox = document.querySelector<HTMLInputElement>("#suppressWorkspaceSaved");
 
 	const initialized = state === "initialized";
 
@@ -303,12 +228,6 @@ function setControlState(state: ControlState): void {
 		if (allowDuplicatePageTitlesCheckbox) {
 			allowDuplicatePageTitlesCheckbox.disabled = initialized;
 		}
-		if (suppressWorkspaceSwitchedCheckbox) {
-			suppressWorkspaceSwitchedCheckbox.disabled = initialized;
-		}
-		if (suppressWorkspaceSavedCheckbox) {
-			suppressWorkspaceSavedCheckbox.disabled = initialized;
-		}
 	}
 }
 
@@ -319,7 +238,8 @@ async function restartDemo(): Promise<void> {
 	if (!isPlatformInitialized) {
 		return;
 	}
-	localStorage.setItem(STORAGE_KEY_RESTART_DEMO_INIT_OPTIONS, JSON.stringify(getBrowserInitOptionsFromDOM()));
+	const allowDup = getAllowDuplicatePageTitlesFromDOM();
+	localStorage.setItem(STORAGE_KEY_RESTART_DEMO_ALLOW_DUP, allowDup ? "true" : "false");
 	const platform = getCurrentSync();
 	const browserWindows = await platform.Browser.getAllWindows();
 	await Promise.all(browserWindows.map(async (browserWindow) => browserWindow.openfinWindow.close()));
@@ -536,8 +456,50 @@ function getCustomActions(): CustomActionsMap {
 				console.info("Debug Platform Called.");
 				await fin.System.showDeveloperTools(fin.me.identity);
 			}
+		},
+		"view-tab-status": async (payload: CustomActionPayload): Promise<void> => {
+			await handleViewTabControlAction("Status", payload);
+		},
+		"view-tab-print": async (payload: CustomActionPayload): Promise<void> => {
+			await handleViewTabControlAction("Print", payload);
+		},
+		// Registered so the control still works if you flip its `disabled` flag off while experimenting.
+		"view-tab-disabled-example": async (payload: CustomActionPayload): Promise<void> => {
+			await handleViewTabControlAction("Disabled example", payload);
 		}
 	};
+}
+
+/**
+ * Handle a click from a declarative view tab control.
+ * @param label Human-readable control name for logs and the popup.
+ * @param payload The custom action payload.
+ */
+async function handleViewTabControlAction(label: string, payload: CustomActionPayload): Promise<void> {
+	if (payload.callerType !== CustomActionCallerType.ViewTabControl) {
+		return;
+	}
+	const platform = getCurrentSync();
+	const pageInfo = await platform.Browser.getPageByViewIdentity(payload.viewIdentity);
+	console.info(`View tab control: ${label}`, {
+		payload,
+		pageId: pageInfo.page.pageId,
+		pageTitle: pageInfo.page.title,
+		windowIdentity: pageInfo.windowIdentity
+	});
+	await showPopup(
+		{ width: 440, height: 280 },
+		payload.windowIdentity,
+		`${label} control`,
+		`${label} invoked for view ${payload.viewIdentity.name} on page "${pageInfo.page.title}". Check the provider console for the ViewTabControl payload and page lookup.`,
+		[
+			{
+				id: "ok",
+				label: "OK",
+				default: true
+			}
+		]
+	);
 }
 
 /**

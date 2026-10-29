@@ -7,6 +7,13 @@ const PLATFORM_ICON = "http://localhost:8080/images/icon-dot.png";
 const PLATFORM_TITLE = "Use Notifications";
 
 const NOTIFICATION_SOUND_URL = "http://localhost:8080/assets/notification.mp3";
+const DEFAULT_NOTIFICATION_CENTER_SHORTCUT = "CmdOrCtrl+Shift+Y";
+const CUSTOM_NOTIFICATION_CENTER_SHORTCUT = "CmdOrCtrl+Alt+N";
+
+// Keep track of persist-on-click notification click counts
+const persistOnClickNotifications: {
+	[id: string]: { clickCount: number };
+} = {};
 
 // Keep track of notifications we are updating
 const updatableNotifications: {
@@ -76,6 +83,13 @@ async function initializeNotifications(): Promise<void> {
 			title: PLATFORM_TITLE
 		}
 	});
+
+	try {
+		await Notifications.setDefaultPlatformShortcut(DEFAULT_NOTIFICATION_CENTER_SHORTCUT);
+		loggingAddEntry(`Default Notification Center shortcut set to: ${DEFAULT_NOTIFICATION_CENTER_SHORTCUT}`);
+	} catch (err) {
+		loggingAddEntry(`Error setting default Notification Center shortcut: ${err}`);
+	}
 
 	showNotificationCount(await Notifications.getNotificationsCount());
 
@@ -195,6 +209,11 @@ async function initializeDom(): Promise<void> {
 		btnNotificationActionable.addEventListener("click", async () => showActionableNotification());
 	}
 
+	const btnNotificationPersistOnClick = document.querySelector("#btnNotificationPersistOnClick");
+	if (btnNotificationPersistOnClick) {
+		btnNotificationPersistOnClick.addEventListener("click", async () => showPersistOnClickNotification());
+	}
+
 	const btnNotificationForm = document.querySelector("#btnNotificationForm");
 	if (btnNotificationForm) {
 		btnNotificationForm.addEventListener("click", async () => showFormNotification());
@@ -226,6 +245,13 @@ async function initializeDom(): Promise<void> {
 	if (btnNotificationCenterUserSettings) {
 		btnNotificationCenterUserSettings.addEventListener("click", async () =>
 			getNotificationCenterUserSettings()
+		);
+	}
+
+	const btnNotificationCenterSetShortcut = document.querySelector("#btnNotificationCenterSetShortcut");
+	if (btnNotificationCenterSetShortcut) {
+		btnNotificationCenterSetShortcut.addEventListener("click", async () =>
+			setNotificationCenterShortcut(CUSTOM_NOTIFICATION_CENTER_SHORTCUT)
 		);
 	}
 
@@ -327,11 +353,29 @@ async function initializeListeners(): Promise<void> {
 				cancelReminderTimer = undefined;
 			}
 		}
+
+		if (persistOnClickNotifications[event.notification.id]) {
+			delete persistOnClickNotifications[event.notification.id];
+		}
 	});
 
 	await Notifications.addEventListener("notification-action", async (event) => {
 		if (event?.result?.actionId === "open-web-site") {
 			await fin.System.openUrlWithBrowser(event?.result?.url as string);
+		} else if (event?.result?.task === "persist-action") {
+			const notificationId = event.notification.id;
+			const clickCount = persistOnClickNotifications[notificationId]
+				? ++persistOnClickNotifications[notificationId].clickCount
+				: 0;
+
+			loggingAddEntry(`Action: ${notificationId}`);
+			loggingAddEntry(`\tTask: ${event?.result?.task ?? "None"}`);
+			loggingAddEntry(
+				`\tData: ${event?.result?.customData ? JSON.stringify(event.result.customData) : "None"}`
+			);
+			if (clickCount > 0) {
+				loggingAddEntry(`\tPersist action (click ${clickCount}) — notification remains visible`);
+			}
 		} else if (event?.result?.BODY_CLICK === "dismiss_event") {
 			if (event.notification?.customData?.action) {
 				loggingAddEntry(
@@ -523,6 +567,53 @@ async function showActionableNotification(): Promise<void> {
 			}
 		]
 	};
+
+	codeShowExample(notification);
+	await Notifications.create(notification);
+}
+
+/**
+ * Buttons for the persist-on-click scenario.
+ * @returns The button configuration for persist-on-click notifications.
+ */
+function getPersistOnClickButtons(): Notifications.ButtonOptions[] {
+	return [
+		{
+			title: "Run Action",
+			type: "button",
+			cta: true,
+			persistOnClick: true,
+			onClick: {
+				task: "persist-action",
+				customData: {
+					message: "Action without dismiss"
+				}
+			}
+		},
+		{
+			title: "Dismiss",
+			type: "button"
+		}
+	];
+}
+
+/**
+ * Show a notification with a button that performs an action without dismissing.
+ */
+async function showPersistOnClickNotification(): Promise<void> {
+	const id = randomUUID();
+	const notification: Notifications.NotificationOptions = {
+		title: "Persist On Click Notification",
+		body: "Click Run Action to trigger an action without dismissing. Check the Logging panel for feedback. Use Dismiss or X to close.",
+		toast: "sticky",
+		category: "default",
+		template: "markdown",
+		id,
+		platform: PLATFORM_ID,
+		buttons: getPersistOnClickButtons()
+	};
+
+	persistOnClickNotifications[id] = { clickCount: 0 };
 
 	codeShowExample(notification);
 	await Notifications.create(notification);
@@ -1092,6 +1183,20 @@ async function showSoundNotification(notificationSoundUrl: string): Promise<void
 async function getNotificationCenterUserSettings(): Promise<void> {
 	const status = await Notifications.getUserSettingStatus(Notifications.UserSettings.SOUND_ENABLED);
 	loggingAddEntry(`Sound Enabled: ${status}`);
+}
+
+/**
+ * Set the Notification Center keyboard shortcut at user-level priority.
+ * This is the programmatic equivalent of changing the shortcut in Notification Center Advanced Settings.
+ * @param shortcut The accelerator to use, e.g. CmdOrCtrl+Alt+N.
+ */
+async function setNotificationCenterShortcut(shortcut: string): Promise<void> {
+	try {
+		await Notifications.setShortcut(shortcut);
+		loggingAddEntry(`Notification Center shortcut set to: ${shortcut}`);
+	} catch (err) {
+		loggingAddEntry(`Error setting Notification Center shortcut: ${err}`);
+	}
 }
 
 /**

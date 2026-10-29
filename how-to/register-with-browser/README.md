@@ -6,9 +6,9 @@
 
 HERE Core UI empowers you to take advantage of our browser component by using our HERE Core UI Platform SDK to control the behavior of the HERE Browser independent of the Home and Storefront components. The control window (`public/platform/provider.html`) loads **without** calling `WorkspacePlatform.init()`. Configure a scenario and settings, then use the lifecycle buttons:
 
-1. **Initialize Platform** — calls `init({ allowDuplicatePageTitles, indicators, ... })` using the current checkbox values.
+1. **Initialize Platform** — calls `init({ allowDuplicatePageTitles, ... })` using the current checkbox value.
 2. **Launch Browser** — runs the selected scenario from `client/src/browser-scenarios.ts` (enabled after initialize).
-3. **Restart Demo** — restarts the application without initializing the platform so you can change settings (including Allow Duplicate Page Titles and suppress workspace indicator flags) and click **Initialize Platform** again.
+3. **Restart Demo** — restarts the application without initializing the platform so you can change settings (including Allow Duplicate Page Titles) and click **Initialize Platform** again.
 4. **Quit** — exits the application (works before or after initialize).
 
 Scenarios you can try:
@@ -22,23 +22,20 @@ Scenarios you can try:
 7. Launch a single locked page.
 8. Launch a browser window with fixed views.
 9. Launch a browser window to explore duplicate page titles (two pages start with the same intended title).
-10. Launch a browser window with pinned pages (three platform pins, three user pins, and one regular tab). Requires HERE Core UI workspace **24.0.24+** (see [dos.json](public/common/dos.json) or run `npm run dos` to pin locally).
+10. Launch a browser window with pinned pages (three platform pins, three user pins, and one regular tab). Requires HERE Core UI workspace **45.2.11+** (see [dos.json](public/common/dos.json) or run `npm run dos` to pin locally).
+11. Launch a browser window that customizes **view tab headers** (per-view icon, background/font colors, content-based tab width, and snapshot-safe tab controls). Requires HERE Core UI workspace **45.2.11+**.
 
 Set **Allow Duplicate Page Titles** before **Initialize Platform** (the checkbox is disabled while the platform is initialized). On create, the second tab may still receive a suffix such as `(1)` even when the option is enabled — that is expected. To observe duplicate titles: enable the checkbox, initialize, launch the duplicate page titles scenario, then **rename one page tab** so it matches the other (for example, both `Shared Page Title`). To try a different setting, click **Restart Demo**, change the checkbox, and **Initialize Platform** again.
 
 To try pinned tabs: initialize the platform, select **Launch Browser With Pinned Pages**, and click **Launch Browser**. The window opens with three developer-locked platform pins (`pinned: "platform"`), three user pins (`pinned: "user"`) that can be unpinned from the tab context menu, and one regular unpinned tab for comparison.
 
-## Suppress workspace indicators (24.0+)
+To try view tab customization: initialize the platform, select **Launch Browser With View Tab Customization**, and click **Launch Browser**.
 
-`BrowserInitConfig.indicators` is an opt-in platform setting (defaults remain unchanged: indicators are shown). Set these checkboxes **before** **Initialize Platform** (they are locked while initialized):
+- The first view tab always shows a platform favicon, dark chrome, and three controls (status before the title, print after the title, and a disabled example control before the favicon).
+- The second view tab hides its favicon (`icon: "hide"`), uses green chrome, and has a single status control. Tabs size to their chrome (`widthMode: "content"`) up to 200px.
+- Click an enabled control to run a `CustomActionCallerType.ViewTabControl` action. A popup appears, and the provider console logs the payload plus `Browser.getPageByViewIdentity` (page id and title). The disabled example control exists only to show the `disabled` state, so clicking it does nothing; set `disabled: false` in `client/src/browser-scenarios.ts` to see it dispatch like the others.
 
-- **Suppress Workspace Switched Indicator** — `suppressWorkspaceSwitched`
-- **Suppress Workspace Saved Indicator** — `suppressWorkspaceSaved` (regular save only; save-as and rename still show success indicators)
-
-To compare behavior:
-
-1. Leave both unchecked → **Initialize Platform** → **Launch Browser** → use the browser main menu **Save Workspace** (expect “Workspace Saved”) and **Switch Workspace** after at least one workspace exists (expect “Workspace Switched”).
-2. **Restart Demo** → enable one or both suppress checkboxes → **Initialize Platform** → **Launch Browser** → repeat Save / Switch Workspace → the corresponding success indicators are suppressed.
+Keyboard: arrow to a control and press Enter or Space to invoke it. That must not activate, tear out, or close the tab. Close stays hidden until you hover or keyboard-focus the tab.
 
 This example assumes you have already [set up your development environment](https://resources.here.io/docs/core/develop/)
 
@@ -47,7 +44,7 @@ This example assumes you have already [set up your development environment](http
 To run this sample you can:
 
 - Clone this repo and follow the instructions below. This will let you customize the sample to learn more about our APIs.
-- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Browser](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fregister-with-browser%2Fmanifest.fin.json)
+- Launch the Github hosted version of this sample to interact with it by going to the following link: [Github Workspace Starter Register With Browser](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv45.0.0%2Fregister-with-browser%2Fmanifest.fin.json)
 
 ## Getting Started
 
@@ -57,7 +54,7 @@ To run this sample you can:
 npm run setup
 ```
 
-2. Optional (if you wish to pin the version of HERE Core UI to version 24.0.24 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
+2. Optional (if you wish to pin the version of HERE Core UI to version 45.2.11 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://resources.here.io/docs/core/manage/desktops/dos/).
    This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
    settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
 
@@ -92,9 +89,9 @@ npm run client
 ```
 
 1. The client command opens the provider window (`public/platform/provider.html`, `client/src/provider.ts`) with scenario and settings only.
-2. **Initialize Platform** bootstraps the HERE Core UI Platform SDK with `allowDuplicatePageTitles` and `browser.indicators` from the checkboxes.
+2. **Initialize Platform** bootstraps the HERE Core UI Platform SDK with `allowDuplicatePageTitles` from the checkbox.
 3. **Launch Browser** creates the selected browser window; scenario can be changed between launches without restarting.
-4. **Restart Demo** closes browser windows, calls `Application.restart()`, and on load restores the control panel in an uninitialized state (checkbox values are restored from **`localStorage`** so you can adjust them before initializing again).
+4. **Restart Demo** closes browser windows, calls `Application.restart()`, and on load restores the control panel in an uninitialized state (checkbox value is restored from **`localStorage`** so you can adjust it before initializing again).
 
 ![Register With Browser](./assets/register-with-browser.gif)
 

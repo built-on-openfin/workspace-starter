@@ -22,9 +22,9 @@ describe("dock-shared", () => {
 			setRegisteredBootstrapOptions(undefined);
 		});
 
-		it("should never include contentMenu when includeDock3OnlyButtons is omitted, even if hideContentButton is false", () => {
-			// This is the exact regression that broke dockType: "1" - dock1 must never ask for a
-			// v3-only button, regardless of the workspaceComponents configuration.
+		it("should never include contentMenu when includePlatformOnlyButtons is omitted, even if hideContentButton is false", () => {
+			// This is the exact regression that broke dockType: "workspace" - the workspace dock must never
+			// ask for a platform-only button, regardless of the workspaceComponents configuration.
 			setDockProviderOptions({
 				id: "dock",
 				title: "Dock",
@@ -37,7 +37,7 @@ describe("dock-shared", () => {
 			expect(buttons).not.toContain("contentMenu");
 		});
 
-		it("should never include contentMenu when includeDock3OnlyButtons is explicitly false", () => {
+		it("should never include contentMenu when includePlatformOnlyButtons is explicitly false", () => {
 			setDockProviderOptions({
 				id: "dock",
 				title: "Dock",
@@ -50,7 +50,7 @@ describe("dock-shared", () => {
 			expect(buttons).not.toContain("contentMenu");
 		});
 
-		it("should include contentMenu when includeDock3OnlyButtons is true and hideContentButton is false", () => {
+		it("should include contentMenu when includePlatformOnlyButtons is true and hideContentButton is false", () => {
 			setDockProviderOptions({
 				id: "dock",
 				title: "Dock",
@@ -63,7 +63,7 @@ describe("dock-shared", () => {
 			expect(buttons).toContain("contentMenu");
 		});
 
-		it("should exclude contentMenu when includeDock3OnlyButtons is true but hideContentButton is true", () => {
+		it("should exclude contentMenu when includePlatformOnlyButtons is true but hideContentButton is true", () => {
 			setDockProviderOptions({
 				id: "dock",
 				title: "Dock",

@@ -1,3 +1,4 @@
+import type { OpenFin } from "@openfin/core";
 import type { DockProviderConfigWithIdentity, DockProviderRegistration } from "@openfin/workspace";
 import type { DockAllowedWindowOptions, Dock3Config } from "@openfin/workspace-platform";
 import type { BootstrapOptions } from "./bootstrap-shapes";
@@ -31,8 +32,8 @@ export interface DockProviderOptions {
 		hideNotificationsButton?: boolean;
 		hideStorefrontButton?: boolean;
 		/**
-		 * Hides the content menu button. Only applicable when `dockType` is "3", the v1 dock has no
-		 * equivalent button and this setting is ignored.
+		 * Hides the content menu button. Only applicable when `dockType` is "platform", the workspace dock
+		 * has no equivalent button and this setting is ignored.
 		 */
 		hideContentButton?: boolean;
 	};
@@ -53,20 +54,20 @@ export interface DockProviderOptions {
 	popupMenuStyle?: PopupMenuStyles;
 
 	/**
-	 * The type of the dock to target. The v1 version is the original dock that is provided as part of the @openfin/workspace package. The v3 version is the latest version of the dock and is platform specific and registered through @openfin/workspace-platform.
-	 * The v3 dock can also be self-hosted. The default is 1.
+	 * The type of the dock to target. The "workspace" version is the original dock that is provided as part of the @openfin/workspace package. The "platform" version is the latest version of the dock (Dock 3) and is platform specific and registered through @openfin/workspace-platform.
+	 * The "platform" dock can also be self-hosted. The default is "workspace".
 	 */
-	dockType?: "1" | "3";
+	dockType?: "workspace" | "platform";
 
 	/**
-	 * If using dock type 3 this allows you to specify additional options for the dock window.
+	 * If using dock type "platform" this allows you to specify additional options for the dock window.
 	 */
-	dock3WindowOptions?: DockAllowedWindowOptions;
+	dockWindowOptions?: DockAllowedWindowOptions;
 
 	/**
-	 * UI Configuration Options supported by Dock 3.0
+	 * UI Configuration Options supported by the platform dock (Dock 3.0).
 	 */
-	dock3UIConfig?: Dock3Config["uiConfig"];
+	dockUIConfig?: Dock3Config["uiConfig"];
 }
 
 /**
@@ -201,8 +202,9 @@ export interface DockClient {
 }
 
 /**
- * Common interface implemented by each dock version (v1 and v3), so that the facade in `dock.ts` can
- * delegate to whichever implementation is selected by `dockType` without needing to know its internals.
+ * Common interface implemented by each dock version (workspace and platform), so that the facade in
+ * `dock.ts` can delegate to whichever implementation is selected by `dockType` without needing to know
+ * its internals.
  */
 export interface DockImplementation {
 	/**
@@ -233,4 +235,10 @@ export interface DockImplementation {
 	 * @returns Nothing.
 	 */
 	minimize(): Promise<void>;
+
+	/**
+	 * Get the identity of the dock window for this implementation.
+	 * @returns The identity of the dock window, or undefined if the dock provider is not initialized.
+	 */
+	getIdentity(): OpenFin.Identity | undefined;
 }

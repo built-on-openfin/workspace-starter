@@ -33,7 +33,7 @@ export interface PlatformProviderOptions extends ModuleList {
 		/**
 		 * The initial language to use. Built in browser support for en-US (default), ja-JP, zh-CN, zh-Hant, ko-KR, ru-RU, de-DE
 		 */
-		initialLanguage: Locale | string;
+		initialLanguage: Locale;
 	};
 	/**
 	 * This is optional and only needed if you are using shell mode where you wish to load a small module with just auth

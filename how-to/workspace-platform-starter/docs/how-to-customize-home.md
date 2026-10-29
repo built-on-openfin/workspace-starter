@@ -54,6 +54,25 @@ For example, to only show results after a minimum of 3 characters have been ente
 
 We also support all the other settings available when registering home through code. We do however keep **dispatchFocusEvents** set to true to ensure that integrations have the most flexibility (i.e. fetch data on focus).
 
+## Home Versions (Workspace and Platform)
+
+There are two implementations of home available:
+
+- **Workspace** - the original home provided as part of the `@openfin/workspace` package. This is the default.
+- **Platform** - the newer platform specific home (HomeVpw) which is registered through `@openfin/workspace-platform`.
+
+You select which home to target using the `homeType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`):
+
+```json
+"homeProvider": {
+    "homeType": "platform"
+}
+```
+
+The search logic (apps, commands and search integrations) is identical for both versions, so your existing `homeProvider` configuration and integrations are reused regardless of the selected version. The facade in [home.ts](../client/src/framework/workspace/home.ts) delegates to the workspace ([home-workspace.ts](../client/src/framework/workspace/home-workspace.ts)) or platform ([home-platform.ts](../client/src/framework/workspace/home-platform.ts)) implementation, with the shared search logic in [home-shared.ts](../client/src/framework/workspace/home-shared.ts).
+
+Because the platform version is bundled in `@openfin/workspace-platform` (it is not loaded from the CDN), it reports the platform (workspace-platform) version rather than a separate Workspace CDN version.
+
 ## Sources And Results
 
 The sources that provide the results for the home components fall into 3 categories, `apps`, `commands` and `search` results.
@@ -128,6 +147,9 @@ Both `command` and `dynamic` integrations can additionally provide help entries,
 
 ## Source Reference
 
-- [home.ts](../client/src/framework/workspace/home.ts)
+- [home.ts](../client/src/framework/workspace/home.ts) - Facade that delegates to the selected home version.
+- [home-workspace.ts](../client/src/framework/workspace/home-workspace.ts) - The `@openfin/workspace` home implementation.
+- [home-platform.ts](../client/src/framework/workspace/home-platform.ts) - The `@openfin/workspace-platform` (HomeVpw) home implementation.
+- [home-shared.ts](../client/src/framework/workspace/home-shared.ts) - Search logic shared by both home implementations.
 
 [<- Back to Table Of Contents](../README.md)

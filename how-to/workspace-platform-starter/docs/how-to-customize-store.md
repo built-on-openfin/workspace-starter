@@ -199,6 +199,37 @@ The approach that we have taken is that you define your landing page properties 
 | footer.text                                | The text to show in the footer                                                                                                                                                                                                                       |
 | footer.links                               | What links do you want to show in the footer (opens up using the default web browser.                                                                                                                                                                |
 
+## Store Versions (Workspace and Platform)
+
+There are two implementations of the store available:
+
+- **Workspace** - the original store provided as part of the `@openfin/workspace` package. This is the default.
+- **Platform** - the newer platform specific store (StorefrontVpw) which is registered through `@openfin/workspace-platform`.
+
+You select which store to target using the `storeType` property (`"workspace"` or `"platform"`, defaulting to `"workspace"`):
+
+```json
+"storefrontProvider": {
+    "storeType": "platform"
+}
+```
+
+If using the platform version you can also specify additional options for the store window using `storeWindowOptions`:
+
+```json
+"storefrontProvider": {
+    "storeType": "platform",
+    "storeWindowOptions": {
+        "defaultWidth": 900,
+        "defaultHeight": 700
+    }
+}
+```
+
+The store configuration (landing page, navigation, footer, favorites and buttons) is identical for both versions, so your existing `storefrontProvider` configuration is reused regardless of the selected version. The facade in [store.ts](../client/src/framework/workspace/store.ts) delegates to the workspace ([store-workspace.ts](../client/src/framework/workspace/store-workspace.ts)) or platform ([store-platform.ts](../client/src/framework/workspace/store-platform.ts)) implementation, with the shared logic in [store-shared.ts](../client/src/framework/workspace/store-shared.ts).
+
+Because the platform version is bundled in `@openfin/workspace-platform` (it is not loaded from the CDN), it reports the platform (workspace-platform) version rather than a separate Workspace CDN version.
+
 ## Where Does The Search Results In Store Come From?
 
 It comes from the list of all the [apps](./how-to-define-apps.md) that the user is [entitled](./how-to-apply-entitlements.md) to.
@@ -213,7 +244,10 @@ This is because the `id` represents the route that the user navigates to. So, if
 
 ## Source Reference
 
-- [store.ts](../client/src/framework/workspace/store.ts)
+- [store.ts](../client/src/framework/workspace/store.ts) - Facade that delegates to the selected store version.
+- [store-workspace.ts](../client/src/framework/workspace/store-workspace.ts) - The `@openfin/workspace` store implementation.
+- [store-platform.ts](../client/src/framework/workspace/store-platform.ts) - The `@openfin/workspace-platform` (StorefrontVpw) store implementation.
+- [store-shared.ts](../client/src/framework/workspace/store-shared.ts) - Logic shared by both store implementations.
 - [store-shapes.ts](../client/src/framework/shapes/store-shapes.ts) - Contains store related shapes.
 
 [<- Back to Table Of Contents](../README.md)

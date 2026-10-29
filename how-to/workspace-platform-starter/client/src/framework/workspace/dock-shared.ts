@@ -37,11 +37,11 @@ import { isEmpty, isStringValue } from "../utils";
 import { getVersionInfo } from "../version";
 
 /**
- * This module contains the logic that is shared between the v1 and v3 dock implementations
- * (dock1.ts and dock3.ts): building the canonical v1-shape button list from the `entries`
- * configuration, the workspace button visibility logic, the shared persistence helpers (so both
+ * This module contains the logic that is shared between the workspace and platform dock implementations
+ * (dock-workspace.ts and dock-platform.ts): building the canonical workspace-shape button list from the
+ * `entries` configuration, the workspace button visibility logic, the shared persistence helpers (so both
  * dock types can be backed by the same storage endpoints/shape) and the lifecycle subscriptions
- * that trigger a refresh. Only dock1.ts and dock3.ts should import from this module.
+ * that trigger a refresh. Only dock-workspace.ts and dock-platform.ts should import from this module.
  */
 
 const logger = createLogger("DockShared");
@@ -65,7 +65,8 @@ let appsChangedSubscriptionId: string | undefined;
 let conditionChangedSubscriptionId: string | undefined;
 
 /**
- * Get the dock provider options passed to register, shared between the v1 and v3 implementations.
+ * Get the dock provider options passed to register, shared between the workspace and platform
+ * implementations.
  * @returns The dock provider options.
  */
 export function getDockProviderOptions(): DockProviderOptions | undefined {
@@ -73,7 +74,7 @@ export function getDockProviderOptions(): DockProviderOptions | undefined {
 }
 
 /**
- * Set the dock provider options, shared between the v1 and v3 implementations.
+ * Set the dock provider options, shared between the workspace and platform implementations.
  * @param options The dock provider options.
  */
 export function setDockProviderOptions(options: DockProviderOptions | undefined): void {
@@ -81,7 +82,8 @@ export function setDockProviderOptions(options: DockProviderOptions | undefined)
 }
 
 /**
- * Get the bootstrap options passed to register, shared between the v1 and v3 implementations.
+ * Get the bootstrap options passed to register, shared between the workspace and platform
+ * implementations.
  * @returns The bootstrap options.
  */
 export function getRegisteredBootstrapOptions(): BootstrapOptions | undefined {
@@ -89,7 +91,7 @@ export function getRegisteredBootstrapOptions(): BootstrapOptions | undefined {
 }
 
 /**
- * Set the bootstrap options, shared between the v1 and v3 implementations.
+ * Set the bootstrap options, shared between the workspace and platform implementations.
  * @param bootstrapOptions The bootstrap options.
  */
 export function setRegisteredBootstrapOptions(bootstrapOptions: BootstrapOptions | undefined): void {
@@ -97,9 +99,9 @@ export function setRegisteredBootstrapOptions(bootstrapOptions: BootstrapOptions
 }
 
 /**
- * Get the canonical v1-shape button list. Both dock implementations use this as the persisted
- * representation of the dock's buttons, so that switching between `dockType` "1" and "3" preserves
- * the button order.
+ * Get the canonical workspace-shape button list. Both dock implementations use this as the persisted
+ * representation of the dock's buttons, so that switching between `dockType` "workspace" and "platform"
+ * preserves the button order.
  * @returns The registered buttons.
  */
 export function getRegisteredButtons(): DockButton[] {
@@ -107,7 +109,7 @@ export function getRegisteredButtons(): DockButton[] {
 }
 
 /**
- * Set the canonical v1-shape button list.
+ * Set the canonical workspace-shape button list.
  * @param buttons The buttons to register.
  */
 export function setRegisteredButtons(buttons: DockButton[]): void {
@@ -117,7 +119,7 @@ export function setRegisteredButtons(buttons: DockButton[]): void {
 /**
  * Subscribe to the lifecycle events that should cause the dock to be refreshed.
  * The provided refresh function is called when the theme, apps or a used condition changes.
- * @param refresh The refresh function to call (dock1 or dock3 specific).
+ * @param refresh The refresh function to call (workspace or platform dock specific).
  */
 export function subscribeToUpdates(refresh: () => Promise<void>): void {
 	themeChangedSubscriptionId = subscribeLifecycleEvent("theme-changed", async () => refresh());
@@ -156,7 +158,8 @@ export function unsubscribeFromUpdates(): void {
 /**
  * Request the stored dock config from the custom get endpoint.
  * The available buttons are passed so that the endpoint knows all the buttons available and can
- * perform any sorting/reconciliation operation. This is shared between the dock1 and dock3 paths.
+ * perform any sorting/reconciliation operation. This is shared between the workspace and platform dock
+ * paths.
  * @param id The id of the dock provider to get.
  * @param availableButtons The buttons that are available based on the current configuration.
  * @returns The stored dock config, or undefined if there was no response.
@@ -183,8 +186,8 @@ export async function requestStoredDockConfig(
 
 /**
  * Send a dock config to the custom set endpoint.
- * This is shared between the dock1 and dock3 paths so that both dock types persist to the same
- * storage location using the same v1 config shape.
+ * This is shared between the workspace and platform dock paths so that both dock types persist to the
+ * same storage location using the same workspace config shape.
  * @param config The dock config to persist.
  * @returns True if the config was saved.
  */
@@ -206,7 +209,7 @@ export async function sendDockConfigToEndpoint(config: DockProviderConfigWithIde
  * Order a list of entries (dock buttons, favorites or content menu items) by a list of ids.
  * Entries whose id is present in the ordered id list are placed first in that order, any remaining
  * entries (including those without an id or an unrecognized id) are appended, preserving their
- * relative order. Used to map the flat v1 button order onto the v3 favorites/content menu.
+ * relative order. Used to map the flat workspace button order onto the platform favorites/content menu.
  * @param entries The entries to order.
  * @param orderedIds The ordered list of ids.
  * @returns The ordered entries.
@@ -237,15 +240,15 @@ export function orderByIds<T extends { id?: string }>(entries: T[], orderedIds: 
 /**
  * Build the workspace buttons based on config.
  * @param previousOrder The previous order of workspace buttons.
- * @param includeDock3OnlyButtons Whether to include buttons that are only understood by the v3 dock
- * (e.g. "contentMenu"). The v1 dock's `workspaceComponents` type only supports
- * `switchWorkspace | home | notifications | store`, so including a v3 only button in that list causes
- * the v1 dock UI to throw when it tries to render a component it has no definition for.
+ * @param includePlatformOnlyButtons Whether to include buttons that are only understood by the platform
+ * dock (e.g. "contentMenu"). The workspace dock's `workspaceComponents` type only supports
+ * `switchWorkspace | home | notifications | store`, so including a platform only button in that list
+ * causes the workspace dock UI to throw when it tries to render a component it has no definition for.
  * @returns The list of workspace buttons.
  */
 export function buildWorkspaceButtons(
 	previousOrder: WorkspaceButton[] = [],
-	includeDock3OnlyButtons = false
+	includePlatformOnlyButtons = false
 ): Dock3Button[] {
 	const workspaceButtonsSet = new Set<Dock3Button>();
 
@@ -270,7 +273,7 @@ export function buildWorkspaceButtons(
 	) {
 		workspaceButtonsSet.add("store");
 	}
-	if (includeDock3OnlyButtons && !(dockProviderOptions?.workspaceComponents?.hideContentButton ?? false)) {
+	if (includePlatformOnlyButtons && !(dockProviderOptions?.workspaceComponents?.hideContentButton ?? false)) {
 		workspaceButtonsSet.add("contentMenu");
 	}
 

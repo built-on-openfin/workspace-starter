@@ -1,6 +1,6 @@
 {
 	"name": "openfin-workspace--integrate-with-salesforce",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "HERE Core UI -- Integrate with Salesforce",
 	"main": "index.js",
 	"scripts": {
@@ -25,13 +25,13 @@
 	"dependencies": {
 		"@openfin/salesforce": "2.3.0",
 		"@openfin/salesforce-lwc": "1.1.1",
-		"@openfin/workspace": "24.0.24",
-		"@openfin/workspace-platform": "24.0.24",
+		"@openfin/workspace": "45.2.11",
+		"@openfin/workspace-platform": "45.2.11",
 		"fast-xml-parser": "^5.5.9"
 	},
 	"devDependencies": {
-		"@openfin/core": "44.101.7",
-		"@openfin/node-adapter": "44.101.7",
+		"@openfin/core": "45.102.10",
+		"@openfin/node-adapter": "45.102.10",
 		"copy-webpack-plugin": "^14.0.0",
 		"eslint": "8.57.1",
 		"eslint-config-airbnb": "19.0.4",

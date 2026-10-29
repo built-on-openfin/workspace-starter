@@ -14,9 +14,9 @@ The package utilized by this example is [@openfin/snap-sdk](https://www.npmjs.co
 
 > The version of the Snap SDK is referenced in package.json and the app asset defined in manifest.fin.json.
 
-- [Live Launch Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fintegrate-with-snap-basic%2Fmanifest.fin.json)
+- [Live Launch Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv45.0.0%2Fintegrate-with-snap-basic%2Fmanifest.fin.json)
 
-- [Live Launch Second Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv24.0.0%2Fintegrate-with-snap-basic%2Fsecond.manifest.fin.json)
+- [Live Launch Second Example](https://start.openfin.co/?manifest=https%3A%2F%2Fbuilt-on-openfin.github.io%2Fworkspace-starter%2Fworkspace%2Fv45.0.0%2Fintegrate-with-snap-basic%2Fsecond.manifest.fin.json)
 
 ## Getting Started
 
