@@ -1,0 +1,95 @@
+{
+	"devtools_port": 9090,
+	"licenseKey": "openfin-demo-license-key",
+	"runtime": {
+		"arguments": "",
+		"version": "45.150.102.10"
+	},
+	"platform": {
+		"uuid": "use-notification-center-theming",
+		"icon": "https://built-on-openfin.github.io/workspace-starter/workspace/v45.0.0/use-notification-center-theming/favicon.ico",
+		"autoShow": false,
+		"providerUrl": "https://built-on-openfin.github.io/workspace-starter/workspace/v45.0.0/use-notification-center-theming/platform/provider.html",
+		"preventQuitOnLastWindowClosed": false
+	},
+	"shortcut": {
+		"company": "HERE",
+		"description": "A way of showing examples of what HERE can do.",
+		"icon": "https://www.openfin.co/favicon.ico",
+		"name": "Use Notification Center Theming - v24.0.0",
+		"target": ["desktop", "start-menu"]
+	},
+	"supportInformation": {
+		"company": "HERE",
+		"product": "Workspace Starter - Use Notification Center Theming - Client",
+		"email": "support@here.io",
+		"forwardErrorReports": true
+	},
+	"snapshot": {
+		"windows": [
+			{
+				"defaultWidth": 1200,
+				"defaultHeight": 900,
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v45.0.0/use-notification-center-theming/platform/window.html",
+				"workspacePlatform": {
+					"windowType": "platform"
+				},
+				"layout": {
+					"content": [
+						{
+							"type": "column",
+							"content": [
+								{
+									"type": "stack",
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://www.microsoft.com",
+												"componentName": "view",
+												"interop": {},
+												"workspacePlatform": {
+													"browserNavigationButtons": {
+														"back": true,
+														"forward": true,
+														"reload": true
+													}
+												}
+											},
+											"title": "Microsoft"
+										}
+									]
+								},
+								{
+									"type": "stack",
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://www.google.com",
+												"componentName": "view",
+												"interop": {},
+												"workspacePlatform": {
+													"browserNavigationButtons": {
+														"back": true,
+														"forward": true,
+														"reload": true
+													}
+												}
+											},
+											"title": "Google"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		]
+	}
+}
