@@ -396,7 +396,9 @@
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
 				},
-				"experimental": {},
+				"experimental": {
+					"description": "Experimental window options. These options are not yet stable and may change without notice.\n\nSupported properties:\n\n- **`layoutEngine`** `'v1' | 'v2'` — Selects the layout engine used to render\n  layouts in this window. `'v1'` is the legacy engine, `'v2'` is the modernized engine.\n  Defaults to `'v1'`.\n\n- **`showFavicons`** `boolean` — When `true`, displays favicon icons on layout tabs.\n\n- **`defaultFaviconUrl`** `string` — URL of a fallback favicon to display when a view does not\n  provide its own.\n\n- **`windowLogLevel`** `string` — Sets the log level for layout-related window logging\n  (e.g. `'verbose'`, `'warn'`, `'error'`).\n\n- **`enableLayoutCollapsing`** `boolean` — When `true`, enables the Golden Layout restacking\n  feature by preserving minimum item dimensions.\n\n- **`showViewsOnResize`** `{ enabled: boolean; delayMs?: number }` — Controls whether views\n  are shown during window resize operations. Deprecated in favor of\n  `viewVisibility.showViewsOnWindowResize`."
+				},
 				"fdc3InteropApi": {
 					"type": "string"
 				},
@@ -728,6 +730,10 @@
 			"required": ["behavior", "match"],
 			"type": "object"
 		},
+		"ViewTabIcon": {
+			"description": "Per-view tab icon. A URL, or the reserved sentinels `'hide'` / `'unset'`.\n\n`'hide'` and `'unset'` are not URLs. `''` is also unset (inherit) and is the default.",
+			"type": "string"
+		},
 		"ViewThrottling": {
 			"description": "View throttling state.\n\n* `enabled`: Both background throttling and scheduler throttling are true. It's fully throttled.\n* `scheduler-disabled`: background throttling is true, but scheduler throttling is disabled.",
 			"enum": ["enabled", "scheduler-disabled"],
@@ -1040,7 +1046,9 @@
 					"$ref": "#/definitions/ExcludeOptions",
 					"description": "Control which options to ignore when creating a Platform Window."
 				},
-				"experimental": {},
+				"experimental": {
+					"description": "Experimental window options. These options are not yet stable and may change without notice.\n\nSupported properties:\n\n- **`layoutEngine`** `'v1' | 'v2'` — Selects the layout engine used to render\n  layouts in this window. `'v1'` is the legacy engine, `'v2'` is the modernized engine.\n  Defaults to `'v1'`.\n\n- **`showFavicons`** `boolean` — When `true`, displays favicon icons on layout tabs.\n\n- **`defaultFaviconUrl`** `string` — URL of a fallback favicon to display when a view does not\n  provide its own.\n\n- **`windowLogLevel`** `string` — Sets the log level for layout-related window logging\n  (e.g. `'verbose'`, `'warn'`, `'error'`).\n\n- **`enableLayoutCollapsing`** `boolean` — When `true`, enables the Golden Layout restacking\n  feature by preserving minimum item dimensions.\n\n- **`showViewsOnResize`** `{ enabled: boolean; delayMs?: number }` — Controls whether views\n  are shown during window resize operations. Deprecated in favor of\n  `viewVisibility.showViewsOnWindowResize`."
+				},
 				"fdc3InteropApi": {
 					"type": "string"
 				},
@@ -1480,6 +1488,9 @@
 			"additionalProperties": false,
 			"properties": {
 				"getFileDownloadLocation": {
+					"type": "boolean"
+				},
+				"getPerformanceStats": {
 					"type": "boolean"
 				},
 				"setFileDownloadLocation": {
@@ -2058,6 +2069,10 @@
 					},
 					"type": "array"
 				},
+				"icon": {
+					"$ref": "#/definitions/ViewTabIcon",
+					"description": "Per-view tab icon. Exception to `showFavicons` / `defaultFaviconUrl`.\n\nDistinct from Window `icon` (taskbar).\n\n- Omitted / `''` / `'unset'`: inherit — if `showFavicons`, page favicon then `defaultFaviconUrl`, else hide\n- URL string: always show that URL, even when `showFavicons` is false. Load failure uses `defaultFaviconUrl`\n- `'hide'`: always hide, even when `showFavicons` is true\n\nOn `updateOptions`, omitted keys are a no-op; set `'unset'` to return to inherit."
+				},
 				"ignoreChildFrameName": {
 					"description": "Determines whether window.open calls from web contents should use the specified target name as provided, or automatically generate a unique name.\nWhen true, each call generates a new unique target name, ensuring a new window is always created.\nWhen false, the target name passed to window.open is respected.",
 					"type": "boolean"
@@ -2138,6 +2153,9 @@
 					"default": "about:blank",
 					"description": "The URL of the window",
 					"type": "string"
+				},
+				"workspacePlatform": {
+					"$ref": "#/definitions/WorkspacePlatformOptions"
 				},
 				"zoomLevel": {
 					"type": "number"
@@ -2235,7 +2253,7 @@
 			"description": "Information relevant to the Interop Broker.",
 			"properties": {
 				"currentContextGroup": {
-					"description": "Context Group for the client. (green, yellow, red, etc.).",
+					"description": "Context Group ID for the client (for example, `fdc3.channel.4`).",
 					"type": "string"
 				},
 				"providerId": {
