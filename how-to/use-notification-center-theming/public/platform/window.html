@@ -8,12 +8,12 @@
 		<style>
 			:root {
 				color-scheme: light;
-				--window-bg: #faFbfe;
+				--window-bg: #fafbfe;
 				--title-bg: #ffffff;
 				--text: #1e1f23;
 				--hover: #eceef1;
 			}
-			:root[data-scheme="dark"] {
+			:root[data-scheme='dark'] {
 				color-scheme: dark;
 				--window-bg: #1e1f23;
 				--title-bg: #111214;
@@ -107,31 +107,31 @@
 			<div id="layout-container"></div>
 		</div>
 		<script>
-			const THEME_TOPIC = "notification-center-theming-scheme";
-			const TOGGLE_TOPIC = "notification-center-theming-toggle";
-			const REQUEST_TOPIC = "notification-center-theming-request";
-			const EXIT_TOPIC = "notification-center-theming-exit";
+			const THEME_TOPIC = 'notification-center-theming-scheme';
+			const TOGGLE_TOPIC = 'notification-center-theming-toggle';
+			const REQUEST_TOPIC = 'notification-center-theming-request';
+			const EXIT_TOPIC = 'notification-center-theming-exit';
 
 			function applyScheme(scheme) {
-				document.documentElement.dataset.scheme = scheme === "dark" ? "dark" : "light";
+				document.documentElement.dataset.scheme = scheme === 'dark' ? 'dark' : 'light';
 			}
 
-			window.addEventListener("DOMContentLoaded", async () => {
-				await fin.Platform.Layout.init({ containerId: "layout-container" });
+			window.addEventListener('DOMContentLoaded', async () => {
+				await fin.Platform.Layout.init({ containerId: 'layout-container' });
 
 				document
-					.querySelector("#close-button")
-					.addEventListener("click", () => fin.Window.getCurrentSync().close());
+					.querySelector('#close-button')
+					.addEventListener('click', () => fin.Window.getCurrentSync().close());
 
 				// The provider owns the theme, it applies the change to the platform (and so the Notification Center)
 				document
-					.querySelector("#theme-button")
-					.addEventListener("click", () => fin.InterApplicationBus.publish(TOGGLE_TOPIC, {}));
+					.querySelector('#theme-button')
+					.addEventListener('click', () => fin.InterApplicationBus.publish(TOGGLE_TOPIC, {}));
 
 				// The provider tears down the Notification Center registration and quits the platform
 				document
-					.querySelector("#exit-button")
-					.addEventListener("click", () => fin.InterApplicationBus.publish(EXIT_TOPIC, {}));
+					.querySelector('#exit-button')
+					.addEventListener('click', () => fin.InterApplicationBus.publish(EXIT_TOPIC, {}));
 
 				await fin.InterApplicationBus.subscribe({ uuid: fin.me.uuid }, THEME_TOPIC, (message) =>
 					applyScheme(message.scheme)

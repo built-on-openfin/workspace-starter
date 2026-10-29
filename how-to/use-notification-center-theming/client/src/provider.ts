@@ -115,9 +115,13 @@ async function setupThemeToggle(): Promise<void> {
 	const platform = getCurrentSync();
 	const appIdentity = { uuid: fin.me.uuid };
 
-	const publishScheme = async (scheme: ColorSchemeOptionType): Promise<void> => {
+	/**
+	 * Publish the active color scheme so platform windows can match it.
+	 * @param scheme The scheme to publish.
+	 */
+	async function publishScheme(scheme: ColorSchemeOptionType): Promise<void> {
 		await fin.InterApplicationBus.publish(THEME_TOPIC, { scheme });
-	};
+	}
 
 	// The platform may report "system", so track the scheme we apply explicitly
 	let currentScheme = ColorSchemeOptionType.Light;
@@ -131,7 +135,9 @@ async function setupThemeToggle(): Promise<void> {
 		// Existing notifications keep their colors, so replace the sample one with the new scheme colors
 		await showThemedNotification(currentScheme);
 	});
-	await fin.InterApplicationBus.subscribe(appIdentity, REQUEST_TOPIC, async () => publishScheme(currentScheme));
+	await fin.InterApplicationBus.subscribe(appIdentity, REQUEST_TOPIC, async () =>
+		publishScheme(currentScheme)
+	);
 	await fin.InterApplicationBus.subscribe(appIdentity, EXIT_TOPIC, async () => exitPlatform());
 }
 

@@ -23,12 +23,12 @@ This example assumes you have already [set up your development environment](http
 
 The window page runs in its own window, so it publishes messages on the `fin.InterApplicationBus` and the platform provider ([provider.ts](client/src/provider.ts)) listens for them:
 
-| Topic                                 | Direction        | Purpose                                        |
-| ------------------------------------- | ---------------- | ---------------------------------------------- |
-| `notification-center-theming-toggle`  | window → provider | Light bulb clicked, toggle the scheme          |
-| `notification-center-theming-exit`    | window → provider | Exit clicked, tear down and quit the platform  |
-| `notification-center-theming-request` | window → provider | Window loaded, request the current scheme      |
-| `notification-center-theming-scheme`  | provider → window | Current scheme (`light` or `dark`)             |
+| Topic                                 | Direction         | Purpose                                       |
+| ------------------------------------- | ----------------- | --------------------------------------------- |
+| `notification-center-theming-toggle`  | window → provider | Light bulb clicked, toggle the scheme         |
+| `notification-center-theming-exit`    | window → provider | Exit clicked, tear down and quit the platform |
+| `notification-center-theming-request` | window → provider | Window loaded, request the current scheme     |
+| `notification-center-theming-scheme`  | provider → window | Current scheme (`light` or `dark`)            |
 
 The provider changes the scheme with `platform.Theme.setSelectedScheme`, which is what updates the Notification Center.
 
