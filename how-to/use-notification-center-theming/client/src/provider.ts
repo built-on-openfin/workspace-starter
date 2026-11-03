@@ -1,9 +1,11 @@
+import type OpenFin from "@openfin/core";
 import {
 	ColorSchemeOptionType,
 	getCurrentSync,
 	init,
 	WindowType,
-	type CustomThemeOptionsWithScheme
+	type ThemeOptions,
+	type WorkspacePlatformProvider
 } from "@openfin/workspace-platform";
 import * as Notifications from "@openfin/workspace/notifications";
 
@@ -12,6 +14,7 @@ const TOGGLE_TOPIC = "notification-center-theming-toggle";
 const REQUEST_TOPIC = "notification-center-theming-request";
 const NOTIFICATION_ID = "themed-notification";
 const EXIT_TOPIC = "notification-center-theming-exit";
+const SNAPSHOT_TOPIC = "notification-center-theming-snapshot";
 
 const PLATFORM_ID = "use-notification-center-theming";
 const PLATFORM_TITLE = "Use Notification Center Theming";
@@ -19,50 +22,44 @@ const PLATFORM_ICON = "http://localhost:8080/favicon.ico";
 const OPEN_NOTIFICATION_CENTER_TASK = "open-notification-center";
 
 /**
- * The theme used by the platform and passed on to the Notification Center.
- * The Notification Center does not start with its own theme, when the platform registers
- * with it the theme defined during platform initialization is sent to it, so this is where
- * we define the Notification Center look and feel. It defaults to the light scheme.
+ * The platform theme that Workspace turns into CSS for the Notification Center.
+ * It defaults to the light scheme and provides generated palettes for the sample notification.
  */
-const notificationCenterTheme: CustomThemeOptionsWithScheme = {
-	label: "Notification Center Light",
-	default: "light",
-	palettes: {
+const notificationCenterTheme: ThemeOptions = {
+	label: "Notification Center Theme",
+	default: ColorSchemeOptionType.Light,
+	seed: {
+		"brand.base.dark": "#111214",
+		"brand.base.light": "#FFFFFF",
+		"brand.accent.dark": "#0A76D3",
+		"brand.accent.light": "#0A76D3"
+	},
+	overrides: {
 		light: {
-			brandPrimary: "#0A76D3",
-			brandSecondary: "#DDDFE4",
-			backgroundPrimary: "#FAFBFE",
-			background1: "#FFFFFF",
-			background2: "#FAFBFE",
-			background3: "#F3F5F8",
-			background4: "#ECEEF1",
-			background5: "#DDDFE4",
-			background6: "#C9CBD2",
-			textDefault: "#1E1F23",
-			textHelp: "#2F3136",
-			textInactive: "#7D808A",
-			statusSuccess: "#207735",
-			statusWarning: "#F48F00",
-			statusCritical: "#F31818",
-			statusActive: "#0A76D3"
+			"color.role.background.1": "#FFFFFF",
+			"color.role.background.2": "#FAFBFE",
+			"color.role.background.3": "#F3F5F8",
+			"color.role.background.4": "#ECEEF1",
+			"color.role.background.5": "#DDDFE4",
+			"color.role.background.6": "#C9CBD2",
+			"color.role.foreground.base": "#1E1F23",
+			"color.role.foreground.soft": "#2F3136",
+			"color.role.background.positive.base": "#207735",
+			"color.role.background.warning.base": "#F48F00",
+			"color.role.background.critical.base": "#F31818"
 		},
 		dark: {
-			brandPrimary: "#0A76D3",
-			brandSecondary: "#383A40",
-			backgroundPrimary: "#1E1F23",
-			background1: "#111214",
-			background2: "#1E1F23",
-			background3: "#24262B",
-			background4: "#2F3136",
-			background5: "#383A40",
-			background6: "#53565F",
-			textDefault: "#FFFFFF",
-			textHelp: "#C9CBD2",
-			textInactive: "#7D808A",
-			statusSuccess: "#207735",
-			statusWarning: "#F48F00",
-			statusCritical: "#F31818",
-			statusActive: "#0A76D3"
+			"color.role.background.1": "#111214",
+			"color.role.background.2": "#1E1F23",
+			"color.role.background.3": "#24262B",
+			"color.role.background.4": "#2F3136",
+			"color.role.background.5": "#383A40",
+			"color.role.background.6": "#53565F",
+			"color.role.foreground.base": "#FFFFFF",
+			"color.role.foreground.soft": "#C9CBD2",
+			"color.role.background.positive.base": "#207735",
+			"color.role.background.warning.base": "#F48F00",
+			"color.role.background.critical.base": "#F31818"
 		}
 	},
 	// Only used by the Notification Center, custom colors notifications can target for their indicator
@@ -89,6 +86,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 async function initializeWorkspacePlatform(): Promise<void> {
 	console.log("Initializing HERE Core UI Platform");
 	await init({
+		overrideCallback,
 		browser: {
 			defaultWindowOptions: {
 				// Replaces the default browser window with our own page (no min/max, theme toggle button)
@@ -105,6 +103,32 @@ async function initializeWorkspacePlatform(): Promise<void> {
 		theme: [notificationCenterTheme]
 	});
 	await setupThemeToggle();
+}
+
+/**
+ * Override methods in the platform.
+ * @param WorkspacePlatformProvider The HERE Core UI Platform class to extend.
+ * @returns The overridden class.
+ */
+function overrideCallback(
+	WorkspacePlatformProvider: OpenFin.Constructor<WorkspacePlatformProvider>
+): WorkspacePlatformProvider {
+	/**
+	 * Create a class which overrides the platform provider.
+	 */
+	class Override extends WorkspacePlatformProvider {
+		/**
+		 * Override getSnapshot to log a message before calling the default implementation.
+		 * @param payload The payload for the snapshot.
+		 * @param identity Identity of the entity that called getSnapshot.
+		 * @returns The snapshot.
+		 */
+		public async getSnapshot(payload: undefined, identity: OpenFin.Identity): Promise<OpenFin.Snapshot> {
+			console.log("Platform override: getSnapshot called");
+			return super.getSnapshot(payload, identity);
+		}
+	}
+	return new Override();
 }
 
 /**
@@ -139,6 +163,23 @@ async function setupThemeToggle(): Promise<void> {
 		publishScheme(currentScheme)
 	);
 	await fin.InterApplicationBus.subscribe(appIdentity, EXIT_TOPIC, async () => exitPlatform());
+	// Platform.getSnapshot is routed through the platform provider, so this hits the getSnapshot override
+	await fin.InterApplicationBus.subscribe(appIdentity, SNAPSHOT_TOPIC, async () => {
+		console.log("Save Snapshot requested");
+		try {
+			const snapshot = await platform.getSnapshot();
+			console.log("Snapshot saved", snapshot);
+			await Notifications.create({
+				id: "snapshot-saved",
+				platform: PLATFORM_ID,
+				title: "Snapshot Saved",
+				toast: "transient",
+				body: `Captured ${snapshot.windows.length} window(s).`
+			});
+		} catch (error) {
+			console.error("Error saving snapshot", error);
+		}
+	});
 }
 
 /**
@@ -189,10 +230,8 @@ async function initializeNotifications(): Promise<void> {
  * @param scheme The scheme to take the colors from.
  */
 async function showThemedNotification(scheme: ColorSchemeOptionType): Promise<void> {
-	const palette =
-		scheme === ColorSchemeOptionType.Dark
-			? notificationCenterTheme.palettes.dark
-			: notificationCenterTheme.palettes.light;
+	const { light, dark } = await getCurrentSync().Theme.getGeneratedPalettes();
+	const palette = scheme === ColorSchemeOptionType.Dark ? dark : light;
 	const schemeName = scheme === ColorSchemeOptionType.Dark ? "dark" : "light";
 
 	try {
@@ -219,14 +258,14 @@ async function showThemedNotification(scheme: ColorSchemeOptionType): Promise<vo
 								flexDirection: "column",
 								padding: "10px",
 								borderRadius: "4px",
-								backgroundColor: palette.background1 ?? "#FFFFFF",
-								color: palette.textDefault ?? "#1E1F23"
+								backgroundColor: palette["color.role.background.1"],
+								color: palette["color.role.foreground.base"]
 							},
 							children: [
 								{
 									type: "text",
 									dataKey: "content",
-									style: { color: palette.textDefault ?? "#1E1F23" }
+									style: { color: palette["color.role.foreground.base"] }
 								}
 							]
 						}
