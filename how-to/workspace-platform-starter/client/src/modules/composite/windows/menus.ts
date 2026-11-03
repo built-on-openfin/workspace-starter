@@ -8,7 +8,7 @@ import type {
 } from "workspace-platform-starter/shapes/menu-shapes";
 import type { ModuleDefinition, ModuleHelpers } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
-import { getAllUserWindows } from "./helper";
+import { getAllUserWindows, getPlatformHostedIdentities } from "./helper";
 import type { WindowMenuSettings } from "./shapes";
 
 /**
@@ -26,6 +26,11 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 	private _settings?: WindowMenuSettings;
 
 	/**
+	 * The helper methods to use.
+	 */
+	private _helpers?: ModuleHelpers;
+
+	/**
 	 * Initialize the module.
 	 * @param definition The definition of the module from configuration include custom options.
 	 * @param loggerCreator For logging entries.
@@ -39,6 +44,7 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 	): Promise<void> {
 		this._logger = loggerCreator("WindowMenus");
 		this._settings = definition.data;
+		this._helpers = helpers;
 	}
 
 	/**
@@ -59,7 +65,7 @@ export class WindowMenus implements Menus<WindowMenuSettings> {
 			const includeHideAllWindows = this._settings?.hideAllWindows?.include ?? true;
 			const includeHideOtherWindows = this._settings?.hideOtherWindows?.include ?? true;
 
-			const userWindows = await getAllUserWindows();
+			const userWindows = await getAllUserWindows(getPlatformHostedIdentities(this._helpers));
 
 			const showAllWindowsEntry: MenuEntry = {
 				label: this._settings?.showAllWindows?.menuLabel ?? "Show All Windows",

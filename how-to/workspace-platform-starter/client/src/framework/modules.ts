@@ -26,6 +26,7 @@ import type { FavoriteClient } from "./shapes/favorite-shapes";
 import type { Logger } from "./shapes/logger-shapes";
 import type { MenuClient } from "./shapes/menu-shapes";
 import type {
+	ComponentIdentity,
 	Module,
 	ModuleDefinition,
 	ModuleEntry,
@@ -43,7 +44,10 @@ import * as util from "./utils";
 import { objectClone } from "./utils";
 import * as utilPosition from "./utils-position";
 import { getVersionInfo } from "./version";
+import * as dockProvider from "./workspace/dock";
+import * as homeProvider from "./workspace/home";
 import { getNotificationClient } from "./workspace/notifications";
+import * as storeProvider from "./workspace/store";
 
 const logger = createLogger("Modules");
 let passedSessionId: string;
@@ -371,8 +375,33 @@ export function getDefaultHelpers(): ModuleHelpers {
 		unsubscribeLifecycleEvent,
 		getUtilClient: () => ({ general: util, position: utilPosition }),
 		getConnectionClient: async () => connectionProvider.getConnectionClient(),
-		getAuthClient
+		getAuthClient,
+		getComponentIdentities
 	};
+}
+
+/**
+ * Get the identities of the registered workspace components and where they are hosted.
+ * @returns The list of registered component identities.
+ */
+function getComponentIdentities(): ComponentIdentity[] {
+	const components: [
+		ComponentIdentity["componentType"],
+		typeof homeProvider | typeof storeProvider | typeof dockProvider
+	][] = [
+		["home", homeProvider],
+		["store", storeProvider],
+		["dock", dockProvider]
+	];
+	const componentIdentities: ComponentIdentity[] = [];
+	for (const [componentType, provider] of components) {
+		const identity = provider.getIdentity();
+		const host = provider.getHost();
+		if (!util.isEmpty(identity) && !util.isEmpty(host)) {
+			componentIdentities.push({ componentType, host, identity });
+		}
+	}
+	return componentIdentities;
 }
 
 /**

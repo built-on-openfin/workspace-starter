@@ -17,6 +17,7 @@ const logger = createLogger("Store");
 
 let activeImplementation: StorefrontImplementation | undefined;
 let registrationInfo: RegistrationMetaInfo | undefined;
+let activeHost: "workspace" | "platform" | undefined;
 
 /**
  * Register the store component.
@@ -34,6 +35,7 @@ export async function register(
 		registrationInfo = await implementation.register(options);
 		if (!isEmpty(registrationInfo)) {
 			activeImplementation = implementation;
+			activeHost = options.storeType ?? "workspace";
 		}
 	}
 
@@ -54,6 +56,7 @@ export async function deregister(): Promise<void> {
 
 	const implementation = activeImplementation;
 	activeImplementation = undefined;
+	activeHost = undefined;
 	registrationInfo = undefined;
 	return implementation.deregister();
 }
@@ -86,4 +89,12 @@ export async function hide(): Promise<void> {
  */
 export function getIdentity(): OpenFin.Identity | undefined {
 	return activeImplementation?.getIdentity();
+}
+
+/**
+ * Get where the active store implementation is hosted.
+ * @returns The host of the store component, or undefined if the store was never registered.
+ */
+export function getHost(): "workspace" | "platform" | undefined {
+	return activeHost;
 }
