@@ -20,6 +20,7 @@ const logger = createLogger("Dock");
 
 let activeImplementation: DockImplementation | undefined;
 let registrationInfo: DockProviderRegistration | undefined;
+let activeHost: "workspace" | "platform" | undefined;
 
 /**
  * Register the dock component.
@@ -36,6 +37,7 @@ export async function register(
 
 		registrationInfo = await implementation.register(options, bootstrapOptions);
 		activeImplementation = implementation;
+		activeHost = options.dockType ?? "workspace";
 	}
 
 	return registrationInfo;
@@ -53,6 +55,7 @@ export async function deregister(): Promise<void> {
 
 	const implementation = activeImplementation;
 	activeImplementation = undefined;
+	activeHost = undefined;
 	registrationInfo = undefined;
 	return implementation.deregister();
 }
@@ -85,4 +88,12 @@ export async function minimize(): Promise<void> {
  */
 export function getIdentity(): OpenFin.Identity | undefined {
 	return activeImplementation?.getIdentity();
+}
+
+/**
+ * Get where the active dock implementation is hosted.
+ * @returns The host of the dock component, or undefined if the dock was never registered.
+ */
+export function getHost(): "workspace" | "platform" | undefined {
+	return activeHost;
 }

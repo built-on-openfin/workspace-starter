@@ -12,7 +12,7 @@ import {
 import type { Logger, LoggerCreator } from "workspace-platform-starter/shapes/logger-shapes";
 import type { ModuleDefinition } from "workspace-platform-starter/shapes/module-shapes";
 import { isEmpty } from "workspace-platform-starter/utils";
-import { getAllUserWindows } from "./helper";
+import { getAllUserWindows, getPlatformHostedIdentities } from "./helper";
 
 /**
  * Implement the actions.
@@ -57,7 +57,7 @@ export class WindowActions implements Actions {
 				payload.callerType !== CustomActionCallerType.API &&
 				payload.callerType !== CustomActionCallerType.SaveButtonContextMenu
 			) {
-				const userWindows = await getAllUserWindows();
+				const userWindows = await getAllUserWindows(getPlatformHostedIdentities(this._helpers));
 				let windowInitiator: OpenFin.Window | undefined;
 				for (const visibleWindow of userWindows) {
 					if (
@@ -80,7 +80,7 @@ export class WindowActions implements Actions {
 		};
 
 		actionMap["window-hide-all"] = async (payload: CustomActionPayload): Promise<void> => {
-			const userWindows = await getAllUserWindows();
+			const userWindows = await getAllUserWindows(getPlatformHostedIdentities(this._helpers));
 			for (const userWindow of userWindows) {
 				await userWindow.minimize();
 			}
@@ -91,7 +91,7 @@ export class WindowActions implements Actions {
 				payload.callerType !== CustomActionCallerType.API &&
 				payload.callerType !== CustomActionCallerType.SaveButtonContextMenu
 			) {
-				const userWindows = await getAllUserWindows();
+				const userWindows = await getAllUserWindows(getPlatformHostedIdentities(this._helpers));
 				for (const userWindow of userWindows) {
 					if (userWindow.identity.name !== payload.windowIdentity.name) {
 						await userWindow.minimize();
