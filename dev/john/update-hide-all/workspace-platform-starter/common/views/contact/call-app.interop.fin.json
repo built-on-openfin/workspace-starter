@@ -1,0 +1,19 @@
+{
+	"intents": {
+		"listensFor": {
+			"StartCall": {
+				"displayName": "Start Call",
+				"contexts": ["fdc3.contact"]
+			},
+			"OpenApp": {
+				"displayName": "Open App",
+				"contexts": ["fdc3.contact"]
+			}
+		}
+	},
+	"userChannels": {
+		"broadcasts": [],
+		"listensFor": ["fdc3.contact"]
+	},
+	"appChannels": []
+}
