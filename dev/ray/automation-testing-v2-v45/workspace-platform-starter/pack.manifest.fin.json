@@ -3,7 +3,7 @@
 	"licenseKey": "openfin-demo-license-key",
 	"runtime": {
 		"arguments": "",
-		"version": "45.150.101.1"
+		"version": "45.150.102.10"
 	},
 	"platform": {
 		"name": "default-workspace-platform",
@@ -882,7 +882,7 @@
 			"enabled": false,
 			"id": "workspace-platform-starter",
 			"serverAssetInfo": {
-				"src": "https://cdn.openfin.co/release/snap/1.6.4/snap.zip",
+				"src": "https://cdn.openfin.co/release/snap/1.7.0/snap.zip",
 				"alias": "openfin-snap",
 				"version": "1.0.0",
 				"target": "OpenFinSnap.exe"
