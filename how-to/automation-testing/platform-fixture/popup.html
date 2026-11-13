@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Popup Menu</title>
+		<style>
+			body {
+				background: #1e1f23;
+				color: #fff;
+				font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+				margin: 0;
+				padding: 16px;
+			}
+			h1 {
+				font-size: 16px;
+				font-weight: 600;
+				margin: 0 0 12px;
+			}
+			#popup-action {
+				background: #0a76f4;
+				border: 0;
+				border-radius: 4px;
+				color: #fff;
+				cursor: pointer;
+				font: inherit;
+				font-size: 14px;
+				padding: 8px 16px;
+			}
+			#popup-action:hover {
+				background: #3d93f8;
+			}
+			#popup-action:focus-visible {
+				outline: 2px solid #fff;
+				outline-offset: 2px;
+			}
+			#popup-status {
+				color: #a0a4ad;
+				font-size: 12px;
+				margin-top: 12px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 id="popup-heading">Popup Menu</h1>
+		<button id="popup-action" type="button">Choose</button>
+		<div id="popup-status">idle</div>
+		<script>
+			document.getElementById('popup-action').addEventListener('click', () => {
+				document.getElementById('popup-status').textContent = 'clicked';
+				// The caller receives this through the showPopupWindow() promise.
+				fin.me.dispatchPopupResult({ choice: 'row-action' });
+			});
+		</script>
+	</body>
+</html>
