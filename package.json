@@ -32,7 +32,8 @@
     "how-to/integrate-with-openid-connect",
     "how-to/integrate-with-rss",
     "how-to/integrate-with-salesforce-basic",
-    "how-to/migrate-from-a-previous-version"
+    "how-to/migrate-from-a-previous-version",
+    "how-to/automation-testing/platform-fixture"
   ],
   "packageCustomFolder": "",
   "contributors": [
@@ -40,7 +41,8 @@
     "ameet.jayawant@here.io",
     "john.mandia@here.io",
     "richard.browne@here.io",
-    "joe.ransegnola@here.io"
+    "joe.ransegnola@here.io",
+    "ray.cashmore@here.io"
   ],
   "license": "SEE LICENSE IN LICENSE.MD",
   "devDependencies": {
@@ -52,7 +54,8 @@
   },
   "overrides": {
     "eslint-module-utils": "2.7.4",
-    "glob": "^13.0.0",
+    "minimatch@>=7.0.0 <11.0.1": "^11.0.1",
+    "glob@>=9.0.0 <14.0.2": "^14.0.2",
     "test-exclude": "^8.0.0",
     "rimraf": "^6.0.0",
     "parse-bmfont-xml": {
