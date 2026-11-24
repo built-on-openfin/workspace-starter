@@ -1,7 +1,7 @@
 {
 	"versions": {
 		"runtime": "45.150.102.10",
-		"workspace": "45.2.11",
+		"workspace": "45.2.12",
 		"notifications": "45.2.5"
 	},
 	"cli": {

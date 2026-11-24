@@ -204,7 +204,7 @@ manifest is and how to serve it:
 {
   "versions": {
     "runtime": "45.150.102.10",
-    "workspace": "45.2.11",
+    "workspace": "45.2.12",
     "notifications": "45.2.5"
   },
   "cli": {
@@ -243,7 +243,7 @@ touching the shared config:
 {
   "scripts": {
     "test": "here-automation ./tests/**/*.spec.ts --testRetryCount 2",
-    "test-hosted": "here-automation https://example.com/manifest.fin.json ./tests/**/*.spec.ts --workspace 45.2.11"
+    "test-hosted": "here-automation https://example.com/manifest.fin.json ./tests/**/*.spec.ts --workspace 45.2.12"
   }
 }
 ```
