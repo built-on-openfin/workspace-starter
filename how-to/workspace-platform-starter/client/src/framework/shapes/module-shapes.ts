@@ -78,6 +78,27 @@ export interface ModuleDefinition<O = unknown> {
 }
 
 /**
+ * The identity of a registered workspace component (home, store or dock) and where it is hosted.
+ */
+export interface ComponentIdentity {
+	/**
+	 * The type of component.
+	 */
+	componentType: "home" | "store" | "dock";
+
+	/**
+	 * Where the component is hosted. "workspace" components run outside of the platform, "platform"
+	 * components run as windows within the platform.
+	 */
+	host: "workspace" | "platform";
+
+	/**
+	 * The identity of the component window.
+	 */
+	identity: OpenFin.Identity;
+}
+
+/**
  * Helper methods and data to pass to the modules during initialization.
  */
 export interface ModuleHelpers {
@@ -287,6 +308,14 @@ export interface ModuleHelpers {
 	 * @returns The auth client.
 	 */
 	getAuthClient?(): Promise<AuthClient | undefined>;
+
+	/**
+	 * Get the identities of the registered workspace components (home, store and dock) along with where
+	 * they are hosted. Components that have not been registered are not included, so call this when the
+	 * information is needed rather than during initialization.
+	 * @returns The list of registered component identities.
+	 */
+	getComponentIdentities?(): ComponentIdentity[];
 }
 
 /**

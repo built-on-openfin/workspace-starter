@@ -32,7 +32,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm ci
 
-      - name: Run JavaScript Tests with Mocha
+      - name: Run tests with here-automation
         run: |
-          npx fkill-cli OpenFin OpenFinRVM --force --silent
-          npm run test-remote-mocha --prefix how-to/automation-testing/register-with-home-js
+          npm run kill --prefix how-to/automation-testing/default
+          npm run test --prefix how-to/automation-testing/default

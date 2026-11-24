@@ -22,8 +22,8 @@
 	"author": "martyn.janes@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "45.2.11",
-		"@openfin/workspace-platform": "45.2.11",
+		"@openfin/workspace": "45.2.12",
+		"@openfin/workspace-platform": "45.2.12",
 		"cookie-parser": "^1.4.6",
 		"csrf-csrf": "^4.0.3",
 		"express-rate-limit": "^8.1.0",

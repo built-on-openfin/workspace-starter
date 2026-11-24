@@ -19,7 +19,7 @@ async function run(packageDir, configFile, buildTarget) {
 	const configModule = await import(`file://${fullConfigFilename}`);
 	console.log('numberConfigurations:', configModule.default.length);
 
-	const chunkSize = Math.max(1, os.cpus().length / 2);
+	const chunkSize = Math.max(1, Math.floor(os.cpus().length / 2));
 	console.log('numberCpus:', chunkSize);
 
 	const numChunks = Math.ceil(configModule.default.length / chunkSize);
