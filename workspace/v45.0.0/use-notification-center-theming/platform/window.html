@@ -94,6 +94,12 @@
 						<path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z" />
 					</svg>
 				</button>
+				<button class="button" id="snapshot-button" title="Save Snapshot">
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+						<path d="M17 21v-8H7v8M7 3v5h8" />
+					</svg>
+				</button>
 				<button class="button" id="exit-button" title="Exit Platform">
 					<svg viewBox="0 0 24 24" aria-hidden="true">
 						<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -111,6 +117,7 @@
 			const TOGGLE_TOPIC = 'notification-center-theming-toggle';
 			const REQUEST_TOPIC = 'notification-center-theming-request';
 			const EXIT_TOPIC = 'notification-center-theming-exit';
+			const SNAPSHOT_TOPIC = 'notification-center-theming-snapshot';
 
 			function applyScheme(scheme) {
 				document.documentElement.dataset.scheme = scheme === 'dark' ? 'dark' : 'light';
@@ -127,6 +134,11 @@
 				document
 					.querySelector('#theme-button')
 					.addEventListener('click', () => fin.InterApplicationBus.publish(TOGGLE_TOPIC, {}));
+
+				// The provider requests a platform snapshot
+				document
+					.querySelector('#snapshot-button')
+					.addEventListener('click', () => fin.InterApplicationBus.publish(SNAPSHOT_TOPIC, {}));
 
 				// The provider tears down the Notification Center registration and quits the platform
 				document
